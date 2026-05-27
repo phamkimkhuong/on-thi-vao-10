@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { mathTopics, mathQuestionTypes } from '../../data/mathData';
@@ -7,7 +8,8 @@ import { Card, CardContent } from '../../components/ui/card';
 import { Star, ArrowRight, StarOff, Sparkles, Lock } from 'lucide-react';
 
 export const Roadmap: React.FC = () => {
-  const { selectedSubject, selectQuestionType, setView } = useAppStore();
+  const navigate = useNavigate();
+  const { selectedSubject } = useAppStore();
   const [progress] = useState<Record<string, number>>(() => storageService.getProgress().masteryLevels);
 
   const topics = selectedSubject === 'math' ? mathTopics : englishTopics;
@@ -42,8 +44,7 @@ export const Roadmap: React.FC = () => {
       alert('🔒 Dạng bài này đang được khóa!\n\nHãy tập trung luyện tập đạt từ 2⭐ ở các dạng bài của chặng trước để mở khóa nhé. Học căn bản trước sẽ giúp bạn nắm chắc điểm 5 dễ dàng!');
       return;
     }
-    selectQuestionType(id);
-    setView('question-type');
+    navigate(`/question-types/${id}`);
   };
 
   const getDifficultyLabel = (difficulty: 'easy' | 'medium' | 'hard') => {

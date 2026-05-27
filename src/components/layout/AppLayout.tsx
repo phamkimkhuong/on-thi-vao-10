@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAppStore, ActiveView } from '../../services/store';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { useAppStore } from '../../services/store';
 import {
   BookOpen,
   Map,
@@ -16,14 +17,10 @@ import {
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 
-interface AppLayoutProps {
-  children: React.ReactNode;
-}
-
-export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+export const AppLayout: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
-    activeView,
-    setView,
     darkMode,
     toggleDarkMode,
     selectedSubject,
@@ -35,11 +32,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const menuItems = [
-    { id: 'dashboard' as ActiveView, label: 'Bảng điều khiển', icon: GraduationCap },
-    { id: 'roadmap' as ActiveView, label: 'Lộ trình học', icon: Map },
-    { id: 'practice' as ActiveView, label: 'Luyện tập', icon: BookOpen },
-    { id: 'mistakes' as ActiveView, label: 'Sổ lỗi sai', icon: Bookmark },
-    { id: 'exam' as ActiveView, label: 'Thi thử vào 10', icon: Award, isLocked: true }
+    { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
+    { path: '/roadmap', label: 'Lộ trình học', icon: Map },
+    { path: '/practice', label: 'Luyện tập', icon: BookOpen },
+    { path: '/mistakes', label: 'Sổ lỗi sai', icon: Bookmark },
+    { path: '/exam', label: 'Thi thử vào 10', icon: Award, isLocked: true }
   ];
 
   // Tính toán nhanh tiến độ tổng quát
@@ -50,12 +47,23 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const mathPercent = Math.round((mathCompleted / 6) * 100); // 6 dạng toán chính
   const englishPercent = Math.round((englishCompleted / 5) * 100); // 5 dạng tiếng anh chính
 
+  const getHeaderTitle = () => {
+    const path = location.pathname;
+    if (path.startsWith('/dashboard')) return 'Bảng điều khiển';
+    if (path.startsWith('/roadmap')) return 'Lộ trình học';
+    if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
+    if (path.startsWith('/practice')) return 'Luyện tập';
+    if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
+    if (path.startsWith('/exam')) return 'Thi thử vào 10';
+    return 'Bảng điều khiển';
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
 
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
-        <div className="flex items-center gap-2" onClick={() => setView('dashboard')}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/dashboard')}>
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-lg shadow-sm">
             10
           </div>
@@ -97,7 +105,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Logo */}
-        <div className="p-6 border-b border-border/50 hidden md:flex items-center gap-3 cursor-pointer" onClick={() => setView('dashboard')}>
+        <div className="p-6 border-b border-border/50 hidden md:flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/20">
             10
           </div>
@@ -115,7 +123,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <div className="px-4 py-5 border-b border-border/30">
           <div className="bg-secondary p-1 rounded-xl flex gap-1 border border-border/10">
             <button
-              onClick={() => { setSubject('math'); setIsSidebarOpen(false); }}
+              onClick={() => { setSubject('math'); setIsSidebarOpen(false); navigate('/roadmap'); }}
               className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedSubject === 'math'
                   ? 'bg-card text-primary shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -124,7 +132,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               📐 Toán học
             </button>
             <button
-              onClick={() => { setSubject('english'); setIsSidebarOpen(false); }}
+              onClick={() => { setSubject('english'); setIsSidebarOpen(false); navigate('/roadmap'); }}
               className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedSubject === 'english'
                   ? 'bg-card text-primary shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -139,17 +147,18 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <nav className="flex-1 px-3 py-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeView === item.id;
+            const isActive = location.pathname === item.path || 
+              (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
             const isLocked = 'isLocked' in item && item.isLocked;
 
             return (
               <button
-                key={item.id}
+                key={item.path}
                 onClick={() => {
                   if (isLocked) {
                     return;
                   }
-                  setView(item.id);
+                  navigate(item.path);
                   setIsSidebarOpen(false);
                 }}
                 className={`
@@ -213,7 +222,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 <span className="text-xs font-extrabold truncate text-foreground leading-none">{user.displayName || 'Học sinh'}</span>
                 <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1">{user.email}</span>
                 <button
-                  onClick={() => { logout(); setIsSidebarOpen(false); }}
+                  onClick={() => { logout(); setIsSidebarOpen(false); navigate('/auth'); }}
                   className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer"
                 >
                   Đăng xuất
@@ -229,7 +238,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 <span className="text-[11px] font-bold text-muted-foreground">Chế độ Guest</span>
               </div>
               <button
-                onClick={() => { setView('auth'); setIsSidebarOpen(false); }}
+                onClick={() => { navigate('/auth'); setIsSidebarOpen(false); }}
                 className="text-[10px] font-bold text-primary hover:underline cursor-pointer bg-primary/5 px-2.5 py-1.5 rounded-lg border border-primary/10"
               >
                 Đăng nhập
@@ -258,7 +267,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <header className="hidden md:flex items-center justify-between px-8 py-4 bg-card border-b border-border shadow-sm sticky top-0 z-20">
           <div className="flex flex-col">
             <h1 className="text-xl font-bold tracking-tight text-foreground capitalize">
-              {menuItems.find(item => item.id === activeView)?.label || 'Dạng bài chi tiết'}
+              {getHeaderTitle()}
             </h1>
             <p className="text-xs text-muted-foreground font-semibold">
               Môn đang chọn: {selectedSubject === 'math' ? '📐 Toán học lớp 9' : '🗣️ Tiếng Anh ôn thi vào 10'}
@@ -286,7 +295,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   <div className="flex flex-col">
                     <span className="text-xs font-extrabold leading-none">{user.displayName || 'Học sinh'}</span>
                     <button
-                      onClick={() => logout()}
+                      onClick={() => { logout(); navigate('/auth'); }}
                       className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"
                     >
                       Đăng xuất
@@ -301,7 +310,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   <div className="flex flex-col">
                     <span className="text-xs font-bold leading-none">Khách (Guest)</span>
                     <button
-                      onClick={() => setView('auth')}
+                      onClick={() => navigate('/auth')}
                       className="text-[9px] text-primary font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"
                     >
                       Đăng nhập / Đăng ký
@@ -315,7 +324,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
         {/* ⚡ Content Wrapper */}
         <div className="flex-1 p-4 md:p-8 animate-fade-in">
-          {children}
+          <Outlet />
         </div>
       </main>
     </div>

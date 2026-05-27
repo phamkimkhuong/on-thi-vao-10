@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
@@ -22,7 +23,8 @@ import {
 import confetti from 'canvas-confetti';
 
 export const ExamEngine: React.FC = () => {
-  const { selectedSubject, setView, selectQuestionType, user } = useAppStore();
+  const navigate = useNavigate();
+  const { selectedSubject, user } = useAppStore();
 
   const [examState, setExamState] = useState<'intro' | 'testing' | 'result'>('intro');
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -378,8 +380,7 @@ export const ExamEngine: React.FC = () => {
                       {isWeak ? (
                         <Button
                           onClick={() => {
-                            selectQuestionType(item.typeId);
-                            setView('question-type');
+                            navigate(`/question-types/${item.typeId}`);
                           }}
                           variant="outline"
                           size="sm"
@@ -398,7 +399,7 @@ export const ExamEngine: React.FC = () => {
 
             {/* Thoát phòng thi */}
             <Button
-              onClick={() => { setExamState('intro'); setView('dashboard'); }}
+              onClick={() => { setExamState('intro'); navigate('/dashboard'); }}
               className="w-full font-bold py-3 text-xs active:scale-[0.98] mt-4"
             >
               Quay lại Bảng điều khiển

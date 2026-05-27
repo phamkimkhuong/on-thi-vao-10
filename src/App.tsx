@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { useAppStore } from './services/store';
 import AppLayout from './components/layout/AppLayout';
 import Dashboard from './features/dashboard/Dashboard';
@@ -12,22 +13,42 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './services/firebase';
 import { Loader } from 'lucide-react';
 
+const router = createBrowserRouter([
+  {
+    path: '/auth',
+    element: <AuthPage />
+  },
+  {
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      { path: 'dashboard', element: <Dashboard /> },
+      { path: 'roadmap', element: <Roadmap /> },
+      { path: 'question-types/:questionTypeId', element: <QuestionTypeDetail /> },
+      { path: 'practice', element: <PracticeEngine /> },
+      { path: 'practice/:questionTypeId', element: <PracticeEngine /> },
+      { path: 'mistakes', element: <MistakeNotebook /> },
+      { path: 'exam', element: <ExamEngine /> },
+    ]
+  },
+  {
+    path: '*',
+    element: <Navigate to="/dashboard" replace />
+  }
+]);
+
 export const App: React.FC = () => {
-  const { activeView, authLoading, setUser, setAuthLoading, setView } = useAppStore();
+  const { authLoading, setUser, setAuthLoading } = useAppStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setAuthLoading(false);
-      
-      // Nếu đã đăng nhập thành công và đang ở trang login, tự động chuyển về dashboard
-      if (user && useAppStore.getState().activeView === 'auth') {
-        setView('dashboard');
-      }
     });
 
     return () => unsubscribe();
-  }, [setUser, setAuthLoading, setView]);
+  }, [setUser, setAuthLoading]);
 
   if (authLoading) {
     return (
@@ -38,34 +59,7 @@ export const App: React.FC = () => {
     );
   }
 
-  if (activeView === 'auth') {
-    return <AuthPage />;
-  }
-
-  const renderView = () => {
-    switch (activeView) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'roadmap':
-        return <Roadmap />;
-      case 'question-type':
-        return <QuestionTypeDetail />;
-      case 'practice':
-        return <PracticeEngine />;
-      case 'mistakes':
-        return <MistakeNotebook />;
-      case 'exam':
-        return <ExamEngine />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
-  return (
-    <AppLayout>
-      {renderView()}
-    </AppLayout>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

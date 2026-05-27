@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
@@ -23,7 +24,9 @@ import confetti from 'canvas-confetti';
 const getNow = () => Date.now();
 
 export const PracticeEngine: React.FC = () => {
-  const { selectedSubject, selectedQuestionTypeId, selectQuestionType, setView, user } = useAppStore();
+  const { questionTypeId } = useParams<{ questionTypeId: string }>();
+  const navigate = useNavigate();
+  const { selectedSubject, user } = useAppStore();
   const [progress] = useState<Record<string, number>>(() => storageService.getProgress().masteryLevels);
 
   // Xác định xem một dạng bài có bị khóa theo chặng học tập hay không
@@ -76,8 +79,8 @@ export const PracticeEngine: React.FC = () => {
   const isMath = selectedSubject === 'math';
   const qList = isMath ? mathQuestions : englishQuestions;
 
-  const questions: Question[] = selectedQuestionTypeId
-    ? qList.filter(q => q.questionTypeId === selectedQuestionTypeId)
+  const questions: Question[] = questionTypeId
+    ? qList.filter(q => q.questionTypeId === questionTypeId)
     : qList;
 
   const questionAtIdx = questions[currentIdx] || null;
@@ -99,7 +102,7 @@ export const PracticeEngine: React.FC = () => {
   useEffect(() => {
     setCurrentIdx(0);
     resetQuestionState();
-  }, [selectedSubject, selectedQuestionTypeId]);
+  }, [selectedSubject, questionTypeId]);
 
   const handleOptionSelect = (optLetter: string) => {
     if (isSubmitted) return;
@@ -172,7 +175,7 @@ export const PracticeEngine: React.FC = () => {
     } else {
       // Khi đã làm hết các câu hỏi
       alert('Tuyệt vời! Bạn đã hoàn thành toàn bộ bài tập trong lượt luyện này.');
-      setView('dashboard');
+      navigate('/dashboard');
     }
   };
 
@@ -182,9 +185,9 @@ export const PracticeEngine: React.FC = () => {
     setHintLevel(prev => Math.min(maxSteps, prev + 1));
   };
 
-  // Nếu không có selectedQuestionTypeId và học sinh vào thẳng Practice từ Menu
+  // Nếu không có questionTypeId và học sinh vào thẳng Practice từ Menu
   // Hãy hiển thị danh sách dạng bài để học sinh chọn dạng để luyện
-  if (!selectedQuestionTypeId) {
+  if (!questionTypeId) {
     const allTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
     const types = allTypes.filter(type => !isTypeLocked(type.id));
 
@@ -205,7 +208,7 @@ export const PracticeEngine: React.FC = () => {
               <Card
                 key={type.id}
                 className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card"
-                onClick={() => selectQuestionType(type.id)}
+                onClick={() => navigate(`/practice/${type.id}`)}
               >
                 <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
                   <div className="space-y-1.5">
@@ -261,7 +264,7 @@ export const PracticeEngine: React.FC = () => {
         <AlertTriangle size={40} className="mx-auto text-amber-500" />
         <h3 className="text-lg font-bold text-foreground">Chưa có câu hỏi luyện tập</h3>
         <p className="text-xs text-muted-foreground">Hiện tại hệ thống đang cập nhật ngân hàng đề cho dạng bài này. Vui lòng chọn dạng bài khác.</p>
-        <Button onClick={() => selectQuestionType(null)} variant="outline" className="text-xs font-bold border border-border/50">
+        <Button onClick={() => navigate('/practice')} variant="outline" className="text-xs font-bold border border-border/50">
           Quay lại danh sách dạng bài
         </Button>
       </div>
@@ -276,7 +279,7 @@ export const PracticeEngine: React.FC = () => {
       {/* Header trạng thái luyện tập */}
       <div className="flex items-center justify-between">
         <button
-          onClick={() => selectQuestionType(null)}
+          onClick={() => navigate('/practice')}
           className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
         >
           ← Đổi dạng bài ôn tập
@@ -291,7 +294,7 @@ export const PracticeEngine: React.FC = () => {
         <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30">
           <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2">
             <BookOpen size={16} className="text-primary" />
-            Luyện tập: {mathQuestionTypes.find(t => t.id === selectedQuestionTypeId)?.name || englishQuestionTypes.find(t => t.id === selectedQuestionTypeId)?.name}
+            Luyện tập: {mathQuestionTypes.find(t => t.id === questionTypeId)?.name || englishQuestionTypes.find(t => t.id === questionTypeId)?.name}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
@@ -17,7 +18,8 @@ import {
 } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
-  const { setView, selectQuestionType, setSubject } = useAppStore();
+  const navigate = useNavigate();
+  const { setSubject } = useAppStore();
 
   const progress = storageService.getProgress();
   const mistakes = storageService.getMistakes().filter(m => m.reviewStatus !== 'fixed');
@@ -117,8 +119,7 @@ export const Dashboard: React.FC = () => {
 
   const handleFixWeakType = (typeId: string, subjectCode: 'math' | 'english') => {
     setSubject(subjectCode);
-    selectQuestionType(typeId);
-    setView('question-type');
+    navigate(`/question-types/${typeId}`);
   };
 
   return (
@@ -138,7 +139,7 @@ export const Dashboard: React.FC = () => {
             </p>
             <div className="pt-2">
               <Button 
-                onClick={() => setView('roadmap')}
+                onClick={() => navigate('/roadmap')}
                 variant="secondary"
                 className="font-extrabold text-xs px-4 py-2 bg-white hover:bg-indigo-50 text-primary active:scale-[0.98] rounded-xl flex items-center gap-1 cursor-pointer"
               >
@@ -175,8 +176,7 @@ export const Dashboard: React.FC = () => {
             <Button
               onClick={() => {
                 setSubject(lastActiveSubject);
-                selectQuestionType(lastActiveType.id);
-                setView('question-type');
+                navigate(`/question-types/${lastActiveType.id}`);
               }}
               className="w-full font-black py-2 mt-1 text-[11px] bg-amber-400 hover:bg-amber-300 text-slate-900 border-none shadow-sm active:scale-[0.98] rounded-lg flex items-center justify-center gap-1 cursor-pointer"
             >
@@ -374,7 +374,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <Button 
-              onClick={() => setView('roadmap')}
+              onClick={() => navigate('/roadmap')}
               className="w-full font-bold py-2.5 mt-auto text-xs active:scale-[0.98]"
             >
               Mở bản đồ lộ trình chi tiết

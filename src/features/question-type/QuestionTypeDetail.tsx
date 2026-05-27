@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppStore } from '../../services/store';
+import { useParams, useNavigate } from 'react-router-dom';
 import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
 import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Tabs, TabItem } from '../../components/ui/tabs';
@@ -17,12 +17,13 @@ import {
 } from 'lucide-react';
 
 export const QuestionTypeDetail: React.FC = () => {
-  const { selectedQuestionTypeId, selectQuestionType, setView } = useAppStore();
+  const { questionTypeId } = useParams<{ questionTypeId: string }>();
+  const navigate = useNavigate();
 
   // Tìm dạng bài trực tiếp trong quá trình render (Derived State)
-  const detail: QuestionType | null = selectedQuestionTypeId
-    ? (mathQuestionTypes.find(t => t.id === selectedQuestionTypeId) || 
-       englishQuestionTypes.find(t => t.id === selectedQuestionTypeId) || null)
+  const detail: QuestionType | null = questionTypeId
+    ? (mathQuestionTypes.find(t => t.id === questionTypeId) || 
+       englishQuestionTypes.find(t => t.id === questionTypeId) || null)
     : null;
 
   // Tìm câu hỏi mẫu đi kèm trực tiếp (Derived State)
@@ -206,7 +207,7 @@ export const QuestionTypeDetail: React.FC = () => {
       
       {/* Nút Back về lộ trình */}
       <button 
-        onClick={() => { selectQuestionType(null); setView('roadmap'); }}
+        onClick={() => navigate('/roadmap')}
         className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
       >
         <ChevronLeft size={16} /> Quay lại Lộ trình học
@@ -234,7 +235,7 @@ export const QuestionTypeDetail: React.FC = () => {
         </div>
 
         <Button 
-          onClick={() => setView('practice')}
+          onClick={() => navigate(`/practice/${detail.id}`)}
           className="font-bold text-xs px-5 py-3 shrink-0 active:scale-[0.98] w-full md:w-auto shadow-md"
         >
           <PlayCircle size={16} /> Bắt đầu Luyện tập ngay

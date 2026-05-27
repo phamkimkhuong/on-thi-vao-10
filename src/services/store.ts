@@ -1,26 +1,18 @@
 import { create } from 'zustand';
 import { SubjectCode } from '../types';
 
-export type ActiveView = 'dashboard' | 'roadmap' | 'question-type' | 'practice' | 'mistakes' | 'exam' | 'auth';
-
 interface AppState {
-  activeView: ActiveView;
   darkMode: boolean;
   selectedSubject: SubjectCode;
-  selectedQuestionTypeId: string | null;
-  selectedExamId: string | null;
 
   // Auth state
   user: any | null;
   authLoading: boolean;
 
   // Actions
-  setView: (view: ActiveView) => void;
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
   setSubject: (subject: SubjectCode) => void;
-  selectQuestionType: (id: string | null) => void;
-  selectExam: (id: string | null) => void;
 
   // Auth actions
   setUser: (user: any | null) => void;
@@ -42,17 +34,12 @@ export const useAppStore = create<AppState>((set) => {
   }
 
   return {
-    activeView: 'dashboard',
     darkMode: initialDarkMode,
     selectedSubject: 'math',
-    selectedQuestionTypeId: null,
-    selectedExamId: null,
 
     // Auth initial state
     user: null,
     authLoading: true,
-
-    setView: (view) => set({ activeView: view, selectedQuestionTypeId: null, selectedExamId: null }),
 
     toggleDarkMode: () => set((state) => {
       const newDark = !state.darkMode;
@@ -76,10 +63,6 @@ export const useAppStore = create<AppState>((set) => {
     }),
 
     setSubject: (subject) => set({ selectedSubject: subject }),
-
-    selectQuestionType: (id) => set({ selectedQuestionTypeId: id, activeView: id ? 'question-type' : 'roadmap' }),
-
-    selectExam: (id) => set({ selectedExamId: id, activeView: id ? 'exam' : 'dashboard' }),
 
     setUser: (user) => set({ user }),
     setAuthLoading: (loading) => set({ authLoading: loading }),
