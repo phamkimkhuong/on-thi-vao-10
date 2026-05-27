@@ -13,7 +13,7 @@ import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
 import { Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
 import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
-import { LocalProofImage } from '../../utils/proofImages';
+import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
 import { 
   Award, 
@@ -37,6 +37,29 @@ export const ExamEngine: React.FC = () => {
   const [answers, setAnswers] = useState<Record<string, string>>({}); // Lưu trữ câu trả lời của học sinh
   const [finalAnswers, setFinalAnswers] = useState<Record<string, StructuredAnswer>>({});
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
+
+  const proofImagesByQuestionRef = React.useRef(proofImagesByQuestion);
+  useEffect(() => {
+    proofImagesByQuestionRef.current = proofImagesByQuestion;
+  }, [proofImagesByQuestion]);
+
+  // Thu hồi toàn bộ Blob URL của đề thi khi component unmount để tránh rò rỉ bộ nhớ
+  useEffect(() => {
+    return () => {
+      Object.values(proofImagesByQuestionRef.current).forEach(images => {
+        revokeLocalProofImages(images);
+      });
+    };
+  }, []);
+
+  const clearAllProofImages = () => {
+    setProofImagesByQuestion(prev => {
+      Object.values(prev).forEach(images => {
+        revokeLocalProofImages(images);
+      });
+      return {};
+    });
+  };
   
   // Đếm ngược thời gian (giây)
   const [timeLeft, setTimeLeft] = useState(0);
@@ -163,11 +186,11 @@ export const ExamEngine: React.FC = () => {
   }, [examState, timeLeft, handleSubmitExam]);
 
   const handleStartExam = () => {
+    clearAllProofImages();
     // Đề thi thử MVP sẽ bốc toàn bộ ngân hàng câu hỏi để kiểm tra toàn diện
     setExamQuestions(availableExamQuestions);
     setAnswers({});
     setFinalAnswers({});
-    setProofImagesByQuestion({});
     setIsSubmittingExam(false);
     setExamSubmitError(null);
     setTimeLeft(durationMinutes * 60);
@@ -492,7 +515,7 @@ export const ExamEngine: React.FC = () => {
 
             {/* Thoát phòng thi */}
             <Button
-              onClick={() => { setExamState('intro'); navigate('/dashboard'); }}
+              onClick={() => { clearAllProofImages(); setExamState('intro'); navigate('/dashboard'); }}
               className="w-full font-bold py-3 text-xs active:scale-[0.98] mt-4"
             >
               Quay lại Bảng điều khiển

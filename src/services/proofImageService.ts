@@ -1,10 +1,30 @@
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { firebaseStorage } from './firebase';
 import type { ProofImage } from '../types';
 
 export interface ProofImageUploadInput {
   id: string;
   file: File;
+}
+
+export interface ProofImageUploadProgress {
+  id: string;
+  bytesTransferred: number;
+  totalBytes: number;
+  progressPercent: number; // 0 to 100
+  state: 'running' | 'paused' | 'success' | 'error' | 'canceled';
+  error?: Error;
+}
+
+export interface UploadControl {
+  pause: () => void;
+  resume: () => void;
+  cancel: () => void;
+}
+
+export interface ProofImageUploadOptions {
+  onProgress?: (progresses: Record<string, ProofImageUploadProgress>) => void;
+  onTasksCreated?: (controls: Record<string, UploadControl>) => void;
 }
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -105,14 +125,34 @@ const safePathSegment = (value: string): string => {
 };
 
 export const proofImageService = {
-  async uploadProofImages(
+  uploadProofImages(
     userId: string,
     attemptId: string,
-    images: ProofImageUploadInput[]
+    images: ProofImageUploadInput[],
+    options?: ProofImageUploadOptions
   ): Promise<ProofImage[]> {
     const uploadedAt = new Date().toISOString();
+    const progresses: Record<string, ProofImageUploadProgress> = {};
+    const controls: Record<string, UploadControl> = {};
 
-    return Promise.all(images.map(async (image, index) => {
+    const triggerProgress = () => {
+      if (options?.onProgress) {
+        options.onProgress({ ...progresses });
+      }
+    };
+
+    const uploadPromises = images.map(async (image, index) => {
+      const imageId = safePathSegment(image.id || `proof-${index}`);
+      
+      // Khởi tạo trạng thái progress ban đầu
+      progresses[imageId] = {
+        id: imageId,
+        bytesTransferred: 0,
+        totalBytes: image.file.size,
+        progressPercent: 0,
+        state: 'running'
+      };
+
       // Tự động nén ảnh phía client trước khi upload
       let fileToUpload = image.file;
       try {
@@ -123,12 +163,11 @@ export const proofImageService = {
 
       assertImageFile(fileToUpload);
 
-      const imageId = safePathSegment(image.id || `proof-${index}`);
       const extension = getImageExtension(fileToUpload);
       const storagePath = `users/${userId}/attempts/${attemptId}/proof-${imageId}.${extension}`;
       const imageRef = ref(firebaseStorage, storagePath);
 
-      await uploadBytes(imageRef, fileToUpload, {
+      const uploadTask = uploadBytesResumable(imageRef, fileToUpload, {
         contentType: fileToUpload.type,
         customMetadata: {
           userId,
@@ -137,17 +176,83 @@ export const proofImageService = {
         }
       });
 
-      const downloadUrl = await getDownloadURL(imageRef);
-
-      return {
-        id: imageId,
-        storagePath,
-        downloadUrl,
-        fileName: fileToUpload.name,
-        contentType: fileToUpload.type,
-        sizeBytes: fileToUpload.size,
-        uploadedAt
+      // Tạo controls tương tác cho task này
+      controls[imageId] = {
+        pause: () => uploadTask.pause(),
+        resume: () => uploadTask.resume(),
+        cancel: () => uploadTask.cancel()
       };
-    }));
+
+      return new Promise<ProofImage>((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const bytesTransferred = snapshot.bytesTransferred;
+            const totalBytes = snapshot.totalBytes;
+            const progressPercent = totalBytes > 0 ? Math.round((bytesTransferred / totalBytes) * 100) : 0;
+            
+            let state: ProofImageUploadProgress['state'] = 'running';
+            if (snapshot.state === 'paused') {
+              state = 'paused';
+            } else if (snapshot.state === 'running') {
+              state = 'running';
+            }
+
+            progresses[imageId] = {
+              id: imageId,
+              bytesTransferred,
+              totalBytes,
+              progressPercent,
+              state
+            };
+            triggerProgress();
+          },
+          (error) => {
+            const isCanceled = error.code === 'storage/canceled';
+            progresses[imageId] = {
+              ...progresses[imageId],
+              state: isCanceled ? 'canceled' : 'error',
+              error
+            };
+            triggerProgress();
+            reject(new Error(isCanceled ? 'Tải ảnh lên đã bị hủy.' : `Không thể tải ảnh: ${error.message}`));
+          },
+          async () => {
+            try {
+              const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+              progresses[imageId] = {
+                ...progresses[imageId],
+                progressPercent: 100,
+                state: 'success'
+              };
+              triggerProgress();
+
+              resolve({
+                id: imageId,
+                storagePath,
+                downloadUrl,
+                fileName: fileToUpload.name,
+                contentType: fileToUpload.type,
+                sizeBytes: fileToUpload.size,
+                uploadedAt
+              });
+            } catch (err) {
+              reject(err);
+            }
+          }
+        );
+      });
+    });
+
+    // Gửi controls ra ngoài sau khi khởi tạo thành công
+    if (options?.onTasksCreated) {
+      setTimeout(() => {
+        if (options.onTasksCreated) {
+          options.onTasksCreated(controls);
+        }
+      }, 0);
+    }
+
+    return Promise.all(uploadPromises);
   }
 };

@@ -26,7 +26,8 @@ import { getStarsFromScore, getSubjectTheme } from '../../utils/theme';
 import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId } from '../../utils/subject';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
-import { proofImageService } from '../../services/proofImageService';
+import { proofImageService, ProofImageUploadProgress, UploadControl } from '../../services/proofImageService';
+import { useMemo } from 'react';
 import confetti from 'canvas-confetti';
 
 const getNow = () => Date.now();
@@ -86,9 +87,72 @@ export const PracticeEngine: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [existingAttempt, setExistingAttempt] = useState<UserAttempt | null>(null);
 
+  // Quản lý trạng thái upload tiến trình & điều khiển
+  const [uploadProgress, setUploadProgress] = useState<Record<string, ProofImageUploadProgress>>({});
+  const [uploadControls, setUploadControls] = useState<Record<string, UploadControl>>({});
+
+  const proofImagesRef = React.useRef(proofImages);
+  useEffect(() => {
+    proofImagesRef.current = proofImages;
+  }, [proofImages]);
+
+  // Thu hồi các Object URL khi component unmount để tránh rò rỉ bộ nhớ
+  useEffect(() => {
+    return () => {
+      revokeLocalProofImages(proofImagesRef.current);
+    };
+  }, []);
+
   // Quản lý mức độ gợi ý (0: không gợi ý, 1: hiện gợi ý bước 1, 2: hiện gợi ý bước 2,...)
   const [hintLevel, setHintLevel] = useState(0);
   const [questionStartAt, setQuestionStartAt] = useState(() => Date.now());
+
+  const totalUploadStats = useMemo(() => {
+    const values = Object.values(uploadProgress);
+    if (values.length === 0) return null;
+    
+    let totalBytes = 0;
+    let bytesTransferred = 0;
+    let runningCount = 0;
+    let pausedCount = 0;
+    let errorCount = 0;
+    let canceledCount = 0;
+    
+    values.forEach(v => {
+      totalBytes += v.totalBytes;
+      bytesTransferred += v.bytesTransferred;
+      if (v.state === 'running') runningCount++;
+      else if (v.state === 'paused') pausedCount++;
+      else if (v.state === 'error') errorCount++;
+      else if (v.state === 'canceled') canceledCount++;
+    });
+    
+    const percent = totalBytes > 0 ? Math.round((bytesTransferred / totalBytes) * 100) : 0;
+    
+    return {
+      percent,
+      bytesTransferred,
+      totalBytes,
+      runningCount,
+      pausedCount,
+      errorCount,
+      canceledCount,
+      isPaused: pausedCount > 0 && runningCount === 0,
+      isAllCompleted: bytesTransferred === totalBytes && totalBytes > 0
+    };
+  }, [uploadProgress]);
+
+  const handlePauseUpload = () => {
+    Object.values(uploadControls).forEach(ctrl => ctrl.pause());
+  };
+
+  const handleResumeUpload = () => {
+    Object.values(uploadControls).forEach(ctrl => ctrl.resume());
+  };
+
+  const handleCancelUpload = () => {
+    Object.values(uploadControls).forEach(ctrl => ctrl.cancel());
+  };
 
   // Derived States - Tính toán trực tiếp trong lúc render
   const isMath = routeSubject === 'math';
@@ -108,13 +172,18 @@ export const PracticeEngine: React.FC = () => {
 
   const resetQuestionState = useCallback(() => {
     setStructuredAnswer({});
-    setProofImages([]);
+    setProofImages(prev => {
+      revokeLocalProofImages(prev);
+      return [];
+    });
     setSelectedOption(null);
     setIsSubmitted(false);
     setIsSubmitting(false);
     setSubmitError(null);
     setHintLevel(0);
     setQuestionStartAt(Date.now());
+    setUploadProgress({});
+    setUploadControls({});
   }, []);
 
   useEffect(() => {
@@ -202,7 +271,10 @@ export const PracticeEngine: React.FC = () => {
 
   const handleRetry = () => {
     setExistingAttempt(null);
-    setProofImages([]);
+    setProofImages(prev => {
+      revokeLocalProofImages(prev);
+      return [];
+    });
     setIsSubmitted(false);
     setIsCorrect(false);
     setStructuredAnswer({});
@@ -210,6 +282,8 @@ export const PracticeEngine: React.FC = () => {
     setSubmitError(null);
     setHintLevel(0);
     setQuestionStartAt(Date.now());
+    setUploadProgress({});
+    setUploadControls({});
   };
 
   const handleOptionSelect = (optLetter: string) => {
@@ -241,7 +315,15 @@ export const PracticeEngine: React.FC = () => {
         uploadedProofImages = await proofImageService.uploadProofImages(
           user.uid,
           attemptId,
-          proofImages.map(image => ({ id: image.id, file: image.file }))
+          proofImages.map(image => ({ id: image.id, file: image.file })),
+          {
+            onProgress: (prog) => {
+              setUploadProgress(prog);
+            },
+            onTasksCreated: (ctrls) => {
+              setUploadControls(ctrls);
+            }
+          }
         );
       }
     } catch (error) {
@@ -527,8 +609,73 @@ export const PracticeEngine: React.FC = () => {
                 />
               )}
 
+              {/* Vùng hiển thị tiến độ tải lên (Upload Progress UI) */}
+              {isSubmitting && totalUploadStats && (
+                <div className="bg-indigo-500/5 border border-indigo-500/20 p-4 rounded-xl space-y-3 animate-fade-in my-3">
+                  <div className="flex items-center justify-between text-xs font-bold text-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <span className="relative flex h-2 w-2">
+                        {totalUploadStats.isPaused ? (
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        ) : (
+                          <>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                          </>
+                        )}
+                      </span>
+                      {totalUploadStats.isPaused ? 'Đã tạm dừng tải ảnh' : 'Đang tải lên ảnh bài làm...'}
+                    </span>
+                    <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">{totalUploadStats.percent}%</span>
+                  </div>
+
+                  {/* Thanh tiến độ */}
+                  <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className={cn(
+                        "h-full rounded-full transition-all duration-300",
+                        totalUploadStats.isPaused ? "bg-amber-400" : "bg-indigo-500"
+                      )} 
+                      style={{ width: `${totalUploadStats.percent}%` }} 
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] font-semibold text-muted-foreground">
+                    <span>
+                      Đã gửi {((totalUploadStats.bytesTransferred) / (1024 * 1024)).toFixed(2)} MB / {((totalUploadStats.totalBytes) / (1024 * 1024)).toFixed(2)} MB
+                    </span>
+                    <div className="flex items-center gap-3">
+                      {totalUploadStats.isPaused ? (
+                        <button
+                          type="button"
+                          onClick={handleResumeUpload}
+                          className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+                        >
+                          ▶️ Tiếp tục
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={handlePauseUpload}
+                          className="text-[10px] font-black text-amber-600 dark:text-amber-400 hover:underline cursor-pointer"
+                        >
+                          ⏸️ Tạm dừng
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={handleCancelUpload}
+                        className="text-[10px] font-black text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
+                      >
+                        ⏹️ Hủy bỏ
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {submitError && (
-                <p className="text-xs font-bold text-rose-600 dark:text-rose-400">
+                <p className="text-xs font-bold text-rose-600 dark:text-rose-400 my-2">
                   {submitError}
                 </p>
               )}
