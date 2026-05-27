@@ -232,31 +232,31 @@ export const mathSolutions: Solution[] = [
         title: 'Phân tích và rút gọn ngoặc thứ nhất (ngoặc chia)',
         explanation: 'Xét ngoặc thứ nhất: \\(A = \\frac{\\sqrt{x}}{\\sqrt{x}-1} - \\frac{1}{x-\\sqrt{x}}\\). Nhận thấy mẫu thức thứ hai là \\(x-\\sqrt{x} = \\sqrt{x}(\\sqrt{x}-1)\\). Mẫu thức chung là \\(MTC = \\sqrt{x}(\\sqrt{x}-1)\\). Quy đồng tử thức:',
         formula: 'A = \\frac{\\sqrt{x} \\cdot \\sqrt{x}}{\\sqrt{x}(\\sqrt{x}-1)} - \\frac{1}{\\sqrt{x}(\\sqrt{x}-1)} = \\frac{x-1}{\\sqrt{x}(\\sqrt{x}-1)}',
-        result: 'A = \\frac{(\\sqrt{x}-1)(\\sqrt{x}+1)}{\\sqrt{x}(\\sqrt{x}-1)} = \\frac{\\sqrt{x}+1}{\\sqrt{x}}'
+        result: '\\(A = \\frac{(\\sqrt{x}-1)(\\sqrt{x}+1)}{\\sqrt{x}(\\sqrt{x}-1)} = \\frac{\\sqrt{x}+1}{\\sqrt{x}}\\)'
       },
       {
         order: 2,
         title: 'Phân tích và rút gọn ngoặc thứ hai (ngoặc bị chia)',
         explanation: 'Xét ngoặc thứ hai: \\(B = \\frac{1}{\\sqrt{x}+1} + \\frac{2}{x-1}\\). Nhận thấy mẫu thức thứ hai là \\(x-1 = (\\sqrt{x}-1)(\\sqrt{x}+1)\\). MTC là \\((\\sqrt{x}-1)(\\sqrt{x}+1)\\). Quy đồng tử thức:',
         formula: 'B = \\frac{\\sqrt{x}-1 + 2}{(\\sqrt{x}-1)(\\sqrt{x}+1)} = \\frac{\\sqrt{x}+1}{(\\sqrt{x}-1)(\\sqrt{x}+1)}',
-        result: 'B = \\frac{1}{\\sqrt{x}-1}'
+        result: '\\(B = \\frac{1}{\\sqrt{x}-1}\\)'
       },
       {
         order: 3,
         title: 'Thực hiện phép chia P = A / B',
         explanation: 'Lấy biểu thức rút gọn của ngoặc thứ nhất chia cho ngoặc thứ hai (nhân nghịch đảo):',
         formula: 'P = \\frac{\\sqrt{x}+1}{\\sqrt{x}} \\div \\frac{1}{\\sqrt{x}-1} = \\frac{\\sqrt{x}+1}{\\sqrt{x}} \\cdot (\\sqrt{x}-1)',
-        result: 'P = \\frac{x-1}{\\sqrt{x}}'
+        result: '\\(P = \\frac{x-1}{\\sqrt{x}}\\)'
       },
       {
         order: 4,
         title: 'Giải phần b) Tìm x để P = 1/2',
         explanation: 'Cho biểu thức \\(P = \\frac{x-1}{\\sqrt{x}} = \\frac{1}{2}\\). Quy đồng chéo ta được phương trình:',
         formula: '2(x-1) = \\sqrt{x} \\Leftrightarrow 2x - \\sqrt{x} - 2 = 0',
-        result: 'Đặt t = \\sqrt{x} (t > 0, t \\neq 1) \\Rightarrow 2t^2 - t - 2 = 0. Giải phương trình bậc hai tìm t, ta thu được nghiệm thỏa mãn là t = 1/2 (ứng với x = 1/4).'
+        result: 'Đặt \\(t = \\sqrt{x}\\) \\((t > 0, t \\neq 1)\\) \\(\\Rightarrow 2t^2 - t - 2 = 0\\). Giải phương trình bậc hai tìm \\(t\\), ta thu được nghiệm thỏa mãn là \\(t = 1/2\\) (ứng với \\(x = 1/4\\)).'
       }
     ],
-    finalAnswer: 'a) P = \\frac{x-1}{\\sqrt{x}}, b) x = 1/4',
+    finalAnswer: 'a) \\(P = \\frac{x-1}{\\sqrt{x}}\\), b) \\(x = 1/4\\)',
     commonMistakes: [
       'Quên điều kiện xác định khi quy đồng chéo hoặc quên đối chiếu nghiệm x = 1/4 với điều kiện đề bài',
       'Phân tích mẫu thức \\(x - \\sqrt{x}\\) sai thành \\(x(\\sqrt{x}-1)\\)'
@@ -276,7 +276,7 @@ export const mathSolutions: Solution[] = [
         title: 'Tìm điều kiện để phương trình có hai nghiệm phân biệt',
         explanation: 'Xác định các hệ số: \\(a = 1, b\' = -(m+1), c = m^2 + 4\\). Tính biệt thức \\(\\Delta\'\\):',
         formula: '\\Delta\' = (m+1)^2 - (m^2+4) = m^2 + 2m + 1 - m^2 - 4 = 2m - 3',
-        result: 'Để phương trình có hai nghiệm phân biệt, ta cần \\Delta\' > 0 \\Leftrightarrow 2m - 3 > 0 \\Leftrightarrow m > 1.5'
+        result: 'Để phương trình có hai nghiệm phân biệt, ta cần \\(\\Delta\' > 0 \\Leftrightarrow 2m - 3 > 0 \\Leftrightarrow m > 1.5\\)'
       },
       {
         order: 2,
@@ -290,17 +290,17 @@ export const mathSolutions: Solution[] = [
         title: 'Biến đổi và giải tìm tham số m',
         explanation: 'Xét biểu thức đề bài: \\(x_1^2 + x_2^2 - x_1 x_2 = 7\\). Biến đổi hằng đẳng thức để đưa về tổng và tích:',
         formula: '(x_1 + x_2)^2 - 3x_1 x_2 = 7 \\Rightarrow [2(m+1)]^2 - 3(m^2+4) = 7',
-        result: '\\Leftrightarrow 4(m^2 + 2m + 1) - 3m^2 - 12 - 7 = 0 \\Leftrightarrow m^2 + 8m - 15 = 0'
+        result: '\\(\\Leftrightarrow 4(m^2 + 2m + 1) - 3m^2 - 12 - 7 = 0 \\Leftrightarrow m^2 + 8m - 15 = 0\\)'
       },
       {
         order: 4,
         title: 'Giải phương trình ẩn m và đối chiếu điều kiện',
         explanation: 'Giải phương trình bậc hai \\(m^2 + 8m - 15 = 0\\) ta tìm được nghiệm: \\(m = -4 + \\sqrt{31}\\) (khoảng 1.56) hoặc \\(m = -4 - \\sqrt{31}\\) (khoảng -9.56).',
         formula: 'm = -4 \\pm \\sqrt{31}',
-        result: 'Đối chiếu với điều kiện m > 1.5, chỉ có m = -4 + \\sqrt{31} thỏa mãn. Kết luận giá trị m cần tìm.'
+        result: 'Đối chiếu với điều kiện \\(m > 1.5\\), chỉ có \\(m = -4 + \\sqrt{31}\\) thỏa mãn. Kết luận giá trị \\(m\\) cần tìm.'
       }
     ],
-    finalAnswer: 'm = -4 + \\sqrt{31}',
+    finalAnswer: '\\(m = -4 + \\sqrt{31}\\)',
     commonMistakes: [
       'Quên điều kiện có nghiệm m > 1.5 dẫn đến kết luận nhận cả hai giá trị m tìm được',
       'Tính sai hằng đẳng thức từ \\(x_1^2 + x_2^2\\) thành \\((x_1+x_2)^2 - x_1x_2\\) dẫn đến phương trình sai'
@@ -341,7 +341,7 @@ export const mathSolutions: Solution[] = [
         title: 'Giải hệ phương trình và kết luận',
         explanation: 'Từ (1) và (2) ta lập hệ phương trình: \\(\\begin{cases} x + y = 25 \\\\ 0.9x + 0.8y = 21 \\end{cases}\\). Giải bằng phương pháp thế hoặc cộng đại số:',
         formula: 'x = 25 - y \\Rightarrow 0.9(25-y) + 0.8y = 21 \\Leftrightarrow 22.5 - 0.9y + 0.8y = 21 \\Leftrightarrow 0.1y = 1.5',
-        result: 'y = 15 (thỏa mãn) \\Rightarrow x = 10 (thỏa mãn). Kết luận giá niêm yết tivi là 10 triệu đồng, tủ lạnh là 15 triệu đồng.'
+        result: '\\(y = 15\\) (thỏa mãn) \\(\\Rightarrow x = 10\\) (thỏa mãn). Kết luận giá niêm yết tivi là 10 triệu đồng, tủ lạnh là 15 triệu đồng.'
       }
     ],
     finalAnswer: 'Tivi: 10 triệu đồng, Tủ lạnh: 15 triệu đồng',

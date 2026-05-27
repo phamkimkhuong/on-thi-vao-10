@@ -166,14 +166,16 @@ export const QuestionTypeDetail: React.FC = () => {
                             {step.title}
                           </h5>
                           <div className="pl-7 space-y-2 text-xs font-semibold text-muted-foreground leading-relaxed">
-                            <p>{step.explanation}</p>
+                            <LatexRenderer text={step.explanation} />
                             {step.formula && (
                               <div className="p-2.5 bg-secondary/50 rounded-lg text-foreground border border-border/5">
                                 <LatexRenderer text={step.formula} block={true} />
                               </div>
                             )}
                             {step.result && (
-                              <p className="text-primary font-bold">👉 Kết quả bước: {step.result}</p>
+                              <p className="text-primary font-bold">
+                                👉 Kết quả bước: <LatexRenderer text={step.result} />
+                              </p>
                             )}
                           </div>
                         </div>

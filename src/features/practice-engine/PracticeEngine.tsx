@@ -354,7 +354,7 @@ export const PracticeEngine: React.FC = () => {
                         <div key={sIdx} className="text-xs font-semibold text-muted-foreground leading-relaxed flex gap-2">
                           <span className="text-amber-500 shrink-0 font-extrabold">• Bước {step.order}:</span>
                           <div className="flex-1">
-                            <p>{step.explanation}</p>
+                            <LatexRenderer text={step.explanation} />
                             {step.formula && (
                               <div className="mt-1 bg-secondary/30 p-1.5 rounded text-foreground inline-block">
                                 <LatexRenderer text={step.formula} />
@@ -425,14 +425,16 @@ export const PracticeEngine: React.FC = () => {
                           {step.title}
                         </h5>
                         <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed">
-                          <p>{step.explanation}</p>
+                          <LatexRenderer text={step.explanation} />
                           {step.formula && (
                             <div className="my-2 p-2 bg-secondary/50 rounded-lg text-foreground border border-border/5 overflow-x-auto">
                               <LatexRenderer text={step.formula} block={true} />
                             </div>
                           )}
                           {step.result && (
-                            <p className="text-primary font-bold mt-1">👉 Kết quả bước: {step.result}</p>
+                            <p className="text-primary font-bold mt-1">
+                              👉 Kết quả bước: <LatexRenderer text={step.result} />
+                            </p>
                           )}
                         </div>
                       </div>

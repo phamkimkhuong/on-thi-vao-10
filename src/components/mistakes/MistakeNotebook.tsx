@@ -408,14 +408,16 @@ export const MistakeNotebook: React.FC = () => {
                             {step.title}
                           </h5>
                           <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed">
-                            <p>{step.explanation}</p>
+                            <LatexRenderer text={step.explanation} />
                             {step.formula && (
                               <div className="my-1.5 p-2 bg-secondary/30 rounded text-foreground overflow-x-auto">
                                 <LatexRenderer text={step.formula} block={true} />
                               </div>
                             )}
                             {step.result && (
-                              <p className="text-primary font-bold mt-1">👉 Kết quả bước: {step.result}</p>
+                              <p className="text-primary font-bold mt-1">
+                                👉 Kết quả bước: <LatexRenderer text={step.result} />
+                              </p>
                             )}
                           </div>
                         </div>
