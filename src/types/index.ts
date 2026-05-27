@@ -13,6 +13,7 @@ export interface Topic {
   name: string;
   slug: string;
   orderIndex: number;
+  tier: 1 | 2 | 3; // Chặng học tập: 1 (điểm 5), 2 (điểm 7-8), 3 (điểm 9-10)
 }
 
 export interface QuestionType {
