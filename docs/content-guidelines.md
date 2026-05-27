@@ -1,222 +1,290 @@
-# Quy Chuẩn Viết Học Liệu (Content Guidelines)
+# Quy chuẩn biên soạn học liệu
 
-> **Nguyên tắc tối thượng**: Viết như một **giáo viên đang ngồi bên học sinh yếu**, giải thích từng bước tại sao, không viết kiểu sách giáo khoa học thuật.
+Tài liệu này định nghĩa cách viết nội dung học tập cho hệ thống **Dạng Bài 10**.
 
----
-
-## 1. Cấu Trúc Bắt Buộc Của Một Dạng Bài (`QuestionType`)
-
-```typescript
-{
-  id: 'math-qt1',
-  topicId: 'math-t1',
-  name: 'Tên dạng bài',
-  slug: 'slug-dang-bai',
-  description: '...',         // Mô tả ngắn, rõ ràng — xem §2
-  recognitionSigns: [...],    // Dấu hiệu nhận dạng — xem §3
-  solvingSteps: [...],        // Quy trình giải — xem §4
-  commonMistakes: [...],      // Lỗi thường gặp — xem §5
-  difficulty: 'easy' | 'medium' | 'hard',
-  examFrequency: 'high' | 'medium' | 'low',
-  exampleQuestionId: '...',   // ID câu hỏi dùng làm ví dụ mẫu
-}
-```
+Mục tiêu là đảm bảo mọi bài học, dạng bài, câu hỏi và lời giải có cùng một chuẩn: rõ ràng, dễ học, không nhảy bước và phù hợp với học sinh lớp 9 ôn thi vào 10.
 
 ---
 
-## 2. Viết `description` (Mô Tả Dạng Bài)
+## 1. Nguyên tắc viết nội dung
 
-**Công thức**: [Vị trí trong đề] + [Dạng biểu thức/phương trình] + [Yêu cầu thường gặp] + [Câu phụ điển hình]
+### 1.1. Viết cho học sinh lớp 9
 
-**Ví dụ tốt**:
-> "Dạng toán thường xuất hiện ở câu 1 đề thi vào 10. Đề cho biểu thức P chứa căn bậc hai và phân thức, yêu cầu rút gọn P, rồi làm thêm câu phụ như tìm x để P bằng giá trị cho trước, so sánh P với số, hoặc tìm x nguyên để P nguyên."
+Nội dung phải ngắn gọn, trực tiếp, dễ hiểu. Không viết theo kiểu hàn lâm hoặc quá nhiều thuật ngữ nếu không giải thích.
 
-**Ví dụ xấu**:
-> "Rút gọn biểu thức chứa căn là dạng đại số." ← Quá ngắn, không có ngữ cảnh thi cử.
+Không nên viết:
 
----
+> Ta tiến hành biến đổi biểu thức theo các phép toán đại số tương đương để đạt được dạng tối giản.
 
-## 3. Viết `recognitionSigns` (Dấu Hiệu Nhận Dạng)
+Nên viết:
 
-Mỗi dấu hiệu phải trả lời câu hỏi: **"Học sinh nhìn vào đề thấy gì thì đoán được đây là dạng này?"**
-
-**Quy tắc**:
-- Ít nhất 3 dấu hiệu, không quá 6
-- Viết cụ thể, có ví dụ thực tế từ đề thi
-- Tránh viết chung chung kiểu "có chứa toán học"
-
-**Ví dụ tốt**:
-```
-"Biểu thức có √x, x, x-1, x-√x, √x-1, √x+1 xuất hiện ở tử hoặc mẫu"
-"Đề cho điều kiện như x > 0, x ≠ 1, x ≠ 4"
-"Yêu cầu rút gọn P hoặc B rồi có câu phụ (tìm x, so sánh, tìm x nguyên)"
-```
-
-**Ví dụ xấu**:
-```
-"Bài có căn thức" ← Quá chung
-"Phương trình phức tạp" ← Không có giá trị nhận dạng
-```
+> Ta phân tích mẫu trước, sau đó quy đồng và rút gọn từng ngoặc.
 
 ---
 
-## 4. Viết `solvingSteps` (Quy Trình Giải)
+### 1.2. Không nhảy bước
 
-Mỗi bước phải:
-1. Bắt đầu bằng **động từ hành động** (Xác định, Phân tích, Quy đồng, Rút gọn, Đối chiếu...)
-2. Nêu **tại sao làm bước này** (ngắn gọn, 1 câu)
-3. Nếu bước có bẫy/lỗi thường gặp → ghi chú ngay
+Mỗi lời giải phải cho học sinh thấy vì sao đi từ dòng này sang dòng tiếp theo.
 
-**Ví dụ tốt**:
-```
-"Bước 1: Ghi điều kiện xác định — Bước này bắt buộc vì nghiệm tìm được cuối cùng phải đối chiếu lại điều kiện"
-"Bước 2: Phân tích các mẫu thức — Nhận biết: x-1=(√x-1)(√x+1), x-√x=√x(√x-1)"
-"Bước 3: Quy đồng từng cụm ngoặc riêng — Không nên quy đồng toàn bộ biểu thức ngay, dễ sai"
-"Bước 4: Rút gọn nhân tử chung giữa tử và mẫu"
-"Bước 5: Làm câu phụ bằng biểu thức đã rút gọn"
-"Bước 6: Đối chiếu nghiệm với điều kiện ban đầu"
-```
+Ví dụ không tốt:
 
-**Số bước**: 4–8 bước. Ít hơn 4 = quá đơn giản hoặc nhảy bước. Nhiều hơn 8 = quá chi tiết, gây rối.
+\[
+A = \frac{x - 1}{\sqrt{x}(\sqrt{x}-1)} = \frac{\sqrt{x}+1}{\sqrt{x}}
+\]
 
----
+Ví dụ tốt:
 
-## 5. Viết `commonMistakes` (Lỗi Thường Gặp)
+\[
+x - 1 = (\sqrt{x}-1)(\sqrt{x}+1)
+\]
 
-**Công thức cho mỗi lỗi**: [Mô tả lỗi cụ thể] + [Vì sao sai] + [Cách nhớ để tránh]
+nên:
 
-Nhưng trong `commonMistakes[]` chỉ ghi **mô tả lỗi + tại sao sai** (phần "cách tránh" sẽ ở tab UI).
+\[
+A = \frac{(\sqrt{x}-1)(\sqrt{x}+1)}{\sqrt{x}(\sqrt{x}-1)}
+\]
 
-**Ví dụ tốt**:
-```
-"Phân tích sai x-√x thành x(√x-1) — đúng phải là √x(√x-1) vì x=(√x)²"
-"Khi chia hai phân thức, quên nhân nghịch đảo thay vì chia trực tiếp"
-"Tìm được nghiệm nhưng không đối chiếu với điều kiện xác định"
-```
+Vì \(x \ne 1\), ta có \(\sqrt{x}-1 \ne 0\), do đó rút gọn được:
 
-**Ví dụ xấu**:
-```
-"Tính sai" ← Không có giá trị học
-"Quên làm" ← Không phải lỗi kỹ thuật
-```
+\[
+A = \frac{\sqrt{x}+1}{\sqrt{x}}
+\]
 
 ---
 
-## 6. Cấu Trúc Bắt Buộc Của Một Lời Giải (`Solution`)
+### 1.3. Mỗi bước phải có mục đích
 
-```typescript
-{
-  id: 'math-s1',
-  questionId: 'math-q1',
-  recognition: '...',         // Phân tích đề — học sinh nhìn vào thấy gì → xem §7
-  detailedSteps: [            // Lời giải từng bước — xem §8
-    {
-      order: 1,
-      title: 'Tên bước ngắn gọn',
-      explanation: '...',     // Giải thích TẠI SAO làm bước này
-      formula: '...',         // Công thức/biểu thức LaTeX (raw, không có delimiters)
-      result: '...',          // Kết quả bước này là gì (có thể dùng \\(...\\))
-    }
-  ],
-  finalAnswer: '...',         // Đáp án cuối, dùng \\(...\\)
-  commonMistakes: [...],      // Lỗi hay mắc ở bài này cụ thể
-  reviewSuggestions: [...]    // Kiến thức cần ôn thêm
-}
+Không chỉ viết công thức. Cần nói học sinh đang làm gì.
+
+Ví dụ:
+
+- Bước 1: Tìm điều kiện xác định.
+- Bước 2: Phân tích mẫu thức.
+- Bước 3: Quy đồng ngoặc thứ nhất.
+- Bước 4: Rút gọn và làm câu phụ.
+
+---
+
+### 1.4. Luôn chỉ ra lỗi thường gặp
+
+Mỗi dạng bài phải có lỗi thường gặp. Mỗi câu hỏi khó hoặc trung bình nên có lỗi riêng.
+
+Lỗi thường gặp phải thực tế, ví dụ:
+
+- Quên điều kiện xác định.
+- Phân tích sai \(x - \sqrt{x}\).
+- Nhầm giảm 10% thành nhân \(0.1\) thay vì nhân \(0.9\).
+- Đảo đáp án của hai đại lượng trong bài lập hệ.
+
+---
+
+## 2. Cấu trúc một dạng bài
+
+Mỗi dạng bài cần có đủ các phần sau:
+
+1. Tên dạng bài.
+2. Mục tiêu học xong.
+3. Dạng này thường xuất hiện ở đâu trong đề.
+4. Kiến thức cần nhớ.
+5. Cách nhận biết.
+6. Quy trình giải.
+7. Ví dụ mẫu.
+8. Lỗi thường gặp.
+9. Checklist trước khi nộp bài.
+10. Bộ câu luyện tập.
+
+---
+
+## 3. Cấu trúc phần “Cách nhận biết”
+
+Phần này giúp học sinh đọc đề và nhận ra dạng bài.
+
+Nên viết theo dạng dấu hiệu:
+
+- Đề có yếu tố nào?
+- Đề yêu cầu gì?
+- Có công thức hoặc biểu thức đặc trưng nào?
+- Có từ khóa nào thường gặp?
+
+Ví dụ với rút gọn căn:
+
+- Có \(\sqrt{x}\).
+- Có phân thức.
+- Có mẫu \(x - 1\), \(x - \sqrt{x}\), \(\sqrt{x} - 1\).
+- Có yêu cầu rút gọn biểu thức.
+
+---
+
+## 4. Cấu trúc phần “Quy trình giải”
+
+Quy trình giải phải viết thành các bước rõ ràng.
+
+Mỗi bước nên có:
+
+- Tên bước.
+- Việc cần làm.
+- Lý do phải làm bước đó.
+
+Ví dụ:
+
+### Bước 1: Ghi điều kiện xác định
+
+Việc cần làm: tìm điều kiện để căn thức xác định và mẫu thức khác 0.
+
+Lý do: nghiệm cuối cùng phải đối chiếu với điều kiện. Nếu nghiệm không thỏa điều kiện thì phải loại.
+
+---
+
+## 5. Cấu trúc phần “Lỗi thường gặp”
+
+Mỗi lỗi nên viết theo format:
+
+```txt
+Lỗi:
+...
+
+Vì sao sai:
+...
+
+Cách tránh:
+...
 ```
 
----
+Ví dụ:
 
-## 7. Viết `recognition` (Phân Tích Đề)
+```txt
+Lỗi:
+Phân tích sai x - √x.
 
-Đây là **đoạn học sinh đọc đầu tiên**. Phải trả lời:
-- Đây là dạng bài gì? (1 câu)
-- Nhận biết bằng dấu hiệu nào? (1–2 câu)
-- Hướng giải tổng quát là gì? (1 câu)
+Vì sao sai:
+Vì x = √x · √x, nên phải đặt √x làm nhân tử chung.
 
-**Ví dụ tốt**:
-> "Biểu thức có phân thức với √x ở tử và mẫu, đề đã cho điều kiện xác định. Đây là dạng rút gọn biểu thức chứa căn. Ta cần phân tích mẫu thức thành nhân tử để tìm MTC, quy đồng từng cụm ngoặc, rồi thực hiện phép chia."
-
----
-
-## 8. Viết `detailedSteps` (Lời Giải Từng Bước)
-
-Mỗi bước gồm 3 phần:
-
-| Trường | Vai trò | Định dạng |
-|--------|---------|-----------|
-| `title` | Tên bước ngắn gọn | Text thuần |
-| `explanation` | Giải thích tại sao + dẫn dắt | Text + LaTeX inline `\\(...\\)` |
-| `formula` | Biểu thức toán học chính | **Raw LaTeX** (không delimiter) |
-| `result` | Kết quả/kết luận bước này | Text + LaTeX inline `\\(...\\)` |
-
-**Quy tắc cho `formula`**:
-- Viết raw LaTeX: `A = \frac{\sqrt{x}+1}{\sqrt{x}}` (không có `\\(` hay `\\[`)
-- Component `LatexRenderer` với `block={true}` sẽ tự render thành block toán học
-- Giữ trên **1 dòng logic** nếu có thể — nếu cần xuống dòng dùng `\\\\`
-
-**Quy tắc cho `explanation` và `result`**:
-- Dùng `\\(...\\)` cho inline math
-- Ưu tiên ngôn ngữ bình thường, toán chỉ xuất hiện khi cần
-
----
-
-## 9. Cấu Trúc Câu Hỏi (`Question`)
-
-```typescript
-{
-  id: 'math-q5',
-  subjectId: 'math',
-  topicId: 'math-t1',
-  questionTypeId: 'math-qt1',
-  content: '...',             // Đề bài — xem §10
-  difficulty: 'easy' | 'medium' | 'hard',
-  sourceType: 'mock_exam' | 'official_exam' | 'practice',
-  province: '...',            // Nếu là đề chính thức
-  year: 2024,                 // Năm đề
-  correctAnswer: '...',       // Đáp án dạng text (hiển thị)
-  acceptedAnswers: [...],     // Các dạng chấp nhận
-  validatorType: 'number' | 'exact' | 'multi-number' | 'manual',
-  answerSchema: { ... },      // Cấu trúc form nhập đáp án
-  correctFinalAnswer: { ... } // Đáp án chuẩn theo key
-}
+Cách tránh:
+Khi gặp x - √x, hãy viết lại là √x · √x - √x.
 ```
 
 ---
 
-## 10. Viết `content` (Đề Bài)
+## 6. Cấu trúc một câu hỏi luyện tập
 
-**Quy tắc**:
-- Dùng `\\(...\\)` cho mọi công thức inline
-- Dùng `\\n\\n` để xuống đoạn (giữa phần a) và b))
-- Ghi rõ điều kiện: `với \\(x > 0, x \\neq 1\\)`
-- Phần a), b) viết rõ ràng, không viết dính vào đề
+Mỗi câu hỏi cần có:
 
-**Ví dụ tốt**:
-```
-"Cho biểu thức \\(P = ...\\) với \\(x > 0, x \\neq 1\\).\\n\\na) Rút gọn biểu thức \\(P\\).\\n\\nb) Tìm \\(x\\) để \\(P = \\frac{1}{2}\\)."
-```
-
----
-
-## 11. Chọn `difficulty` (Mức Độ Câu Hỏi)
-
-| Mức | Tiêu chí |
-|-----|----------|
-| `easy` | Rút gọn trực tiếp, 1–2 bước phân tích, không có câu phụ phức tạp |
-| `medium` | Có câu phụ (tìm x, so sánh), cần đối chiếu điều kiện, 3–4 bước |
-| `hard` | Có tham số, bất đẳng thức, hoặc tìm điều kiện nguyên/chia hết |
+- Đề bài.
+- Dạng bài.
+- Mức độ.
+- Đáp án cuối.
+- Schema nhập đáp án.
+- Lời giải từng bước.
+- Lỗi thường gặp.
+- Gợi ý nếu cần.
+- Checklist tự đối chiếu.
 
 ---
 
-## 12. Checklist Trước Khi Thêm Câu Hỏi Vào `mathData.ts`
+## 7. Quy chuẩn độ khó
 
-```
-[ ] Đề bài đúng về mặt toán học (tính lại kết quả thủ công)
-[ ] Đáp án cuối đã kiểm tra
-[ ] LaTeX trong `content` render đúng (test trong app)
-[ ] `answerSchema` phù hợp với loại đáp án
-[ ] Có `correctFinalAnswer` nếu dùng validator tự động
-[ ] Có `Solution` tương ứng với `detailedSteps` đầy đủ
-[ ] Độ khó phù hợp với chặng học đang nhắm đến
-[ ] `exampleQuestionId` trong `QuestionType` đã trỏ đến câu hỏi tốt nhất
-```
+### easy
+
+Câu chỉ kiểm tra một kỹ năng chính.
+
+Ví dụ:
+
+- Chỉ rút gọn biểu thức.
+- Chỉ giải phương trình bậc hai cơ bản.
+- Chỉ giải hệ phương trình cơ bản.
+
+### medium
+
+Câu có từ hai kỹ năng trở lên hoặc có câu phụ.
+
+Ví dụ:
+
+- Rút gọn biểu thức rồi tìm \(x\).
+- Lập hệ phương trình từ bài toán thực tế.
+- Dùng Viète để tìm tham số.
+
+### hard
+
+Câu có bẫy, điều kiện phức tạp hoặc cần lập luận nâng cao.
+
+Ví dụ:
+
+- Rút gọn biểu thức rồi tìm \(x\) nguyên để biểu thức nguyên.
+- Bất đẳng thức có biến đổi nhiều bước.
+- Hình học chứng minh cần nhiều ý phụ.
+
+---
+
+## 8. Quy chuẩn viết lời giải
+
+Lời giải phải tuân thủ:
+
+- Không nhảy bước.
+- Không chỉ ghi đáp án.
+- Dòng biến đổi phải hợp lý.
+- Có kết luận cuối cùng.
+- Nếu có điều kiện, phải đối chiếu điều kiện.
+- Nếu là bài thực tế, phải trả lời bằng lời và có đơn vị.
+
+---
+
+## 9. Quy chuẩn cho bài Toán tự luận có upload ảnh
+
+Với bài Toán tự luận, học sinh nên:
+
+1. Làm bài ra giấy.
+2. Nhập đáp án cuối vào form.
+3. Upload ảnh bài làm.
+4. Đối chiếu lời giải mẫu.
+5. Nếu sai, lưu vào Sổ lỗi sai.
+
+Không yêu cầu học sinh gõ toàn bộ lời giải bằng text.
+
+---
+
+## 10. Quy chuẩn checklist
+
+Checklist phải giúp học sinh tự soi bài trước khi nộp.
+
+Ví dụ:
+
+- [ ] Tôi đã ghi điều kiện xác định.
+- [ ] Tôi đã phân tích mẫu thức.
+- [ ] Tôi đã quy đồng đúng.
+- [ ] Tôi đã đối chiếu nghiệm với điều kiện.
+
+Checklist không nên quá dài. Mỗi dạng bài nên có 5 đến 8 mục chính.
+
+---
+
+## 11. Quy chuẩn ngôn ngữ
+
+Nên dùng:
+
+- “Ta cần...”
+- “Hãy kiểm tra...”
+- “Lỗi dễ mắc là...”
+- “Cách tránh là...”
+
+Không nên dùng:
+
+- Câu quá dài.
+- Thuật ngữ không giải thích.
+- Lời giải chỉ dành cho học sinh khá giỏi.
+
+---
+
+## 12. Tiêu chuẩn hoàn thành một dạng bài
+
+Một dạng bài được xem là hoàn thành khi có đủ:
+
+- Nội dung nhận biết.
+- Quy trình giải.
+- Lỗi thường gặp.
+- Ví dụ mẫu.
+- Ít nhất 3 câu luyện tập.
+- Lời giải chi tiết cho từng câu.
+- Answer schema đúng với từng câu.
+- Checklist tự kiểm tra.
+
+Nếu thiếu một trong các phần trên, dạng bài chưa sẵn sàng để đưa vào lộ trình chính.
