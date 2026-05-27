@@ -9,7 +9,8 @@ import { Star, ArrowRight, StarOff, Sparkles, Lock } from 'lucide-react';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject, user } = useAppStore();
+  const { selectedSubject, user, progressVersion } = useAppStore();
+  void progressVersion;
   const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
 
   const topics = selectedSubject === 'math' ? mathTopics : englishTopics;

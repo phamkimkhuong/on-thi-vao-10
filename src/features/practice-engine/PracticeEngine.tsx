@@ -26,7 +26,8 @@ const getNow = () => Date.now();
 export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, user } = useAppStore();
+  const { selectedSubject, user, progressVersion } = useAppStore();
+  void progressVersion;
   const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
 
   // Xác định xem một dạng bài có bị khóa theo chặng học tập hay không
@@ -73,7 +74,7 @@ export const PracticeEngine: React.FC = () => {
 
   // Quản lý mức độ gợi ý (0: không gợi ý, 1: hiện gợi ý bước 1, 2: hiện gợi ý bước 2,...)
   const [hintLevel, setHintLevel] = useState(0);
-  const [timeStart] = useState(() => Date.now());
+  const [questionStartAt, setQuestionStartAt] = useState(() => Date.now());
 
   // Derived States - Tính toán trực tiếp trong lúc render
   const isMath = selectedSubject === 'math';
@@ -96,6 +97,7 @@ export const PracticeEngine: React.FC = () => {
     setSelectedOption(null);
     setIsSubmitted(false);
     setHintLevel(0);
+    setQuestionStartAt(Date.now());
   };
 
   // Reset index và state khi chuyển đổi dạng bài hoặc môn học
@@ -148,7 +150,7 @@ export const PracticeEngine: React.FC = () => {
       questionTypeId: currentQ.questionTypeId,
       userAnswer: finalAnswer,
       isCorrect: correct,
-      timeSpent: Math.round((getNow() - timeStart) / 1000),
+      timeSpent: Math.round((getNow() - questionStartAt) / 1000),
       createdAt: new Date().toISOString()
     };
 

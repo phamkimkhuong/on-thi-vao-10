@@ -19,7 +19,8 @@ import {
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { setSubject, user } = useAppStore();
+  const { setSubject, user, progressVersion } = useAppStore();
+  void progressVersion;
 
   const currentUserId = user?.uid ?? 'guest';
   const progress = storageService.getProgress(currentUserId);

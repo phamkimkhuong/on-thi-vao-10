@@ -40,7 +40,7 @@ const router = createBrowserRouter([
 ]);
 
 export const App: React.FC = () => {
-  const { authLoading, setUser, setAuthLoading } = useAppStore();
+  const { authLoading, setUser, setAuthLoading, refreshProgress } = useAppStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -48,12 +48,13 @@ export const App: React.FC = () => {
       if (user) {
         // Tự động tải dữ liệu từ Firestore xuống LocalStorage khi đăng nhập
         await progressService.hydrateFirestoreDataToLocal(user.uid);
+        refreshProgress();
       }
       setAuthLoading(false);
     });
 
     return () => unsubscribe();
-  }, [setUser, setAuthLoading]);
+  }, [setUser, setAuthLoading, refreshProgress]);
 
   if (authLoading) {
     return (

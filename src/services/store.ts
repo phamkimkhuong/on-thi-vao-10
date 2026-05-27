@@ -9,10 +9,14 @@ interface AppState {
   user: any | null;
   authLoading: boolean;
 
+  // Reactivity trigger for LocalStorage progress changes
+  progressVersion: number;
+
   // Actions
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
   setSubject: (subject: SubjectCode) => void;
+  refreshProgress: () => void;
 
   // Auth actions
   setUser: (user: any | null) => void;
@@ -40,6 +44,7 @@ export const useAppStore = create<AppState>((set) => {
     // Auth initial state
     user: null,
     authLoading: true,
+    progressVersion: 0,
 
     toggleDarkMode: () => set((state) => {
       const newDark = !state.darkMode;
@@ -63,6 +68,7 @@ export const useAppStore = create<AppState>((set) => {
     }),
 
     setSubject: (subject) => set({ selectedSubject: subject }),
+    refreshProgress: () => set((state) => ({ progressVersion: state.progressVersion + 1 })),
 
     setUser: (user) => set({ user }),
     setAuthLoading: (loading) => set({ authLoading: loading }),

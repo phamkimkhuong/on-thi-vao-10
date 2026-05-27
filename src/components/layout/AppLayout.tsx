@@ -26,8 +26,10 @@ export const AppLayout: React.FC = () => {
     selectedSubject,
     setSubject,
     user,
-    logout
+    logout,
+    progressVersion
   } = useAppStore();
+  void progressVersion;
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

@@ -18,7 +18,8 @@ import {
 import confetti from 'canvas-confetti';
 
 export const MistakeNotebook: React.FC = () => {
-  const { selectedSubject, user } = useAppStore();
+  const { selectedSubject, user, progressVersion } = useAppStore();
+  void progressVersion;
 
   const [mistakes, setMistakes] = useState<any[]>([]);
 
