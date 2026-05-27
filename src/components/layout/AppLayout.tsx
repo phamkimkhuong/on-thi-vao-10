@@ -16,6 +16,8 @@ import {
   Lock
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
+import { mathQuestionTypes } from '../../data/mathData';
+import { englishQuestionTypes } from '../../data/englishData';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -47,8 +49,8 @@ export const AppLayout: React.FC = () => {
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
 
-  const mathPercent = Math.round((mathCompleted / 6) * 100); // 6 dạng toán chính
-  const englishPercent = Math.round((englishCompleted / 5) * 100); // 5 dạng tiếng anh chính
+  const mathPercent = Math.round((mathCompleted / mathQuestionTypes.length) * 100);
+  const englishPercent = Math.round((englishCompleted / englishQuestionTypes.length) * 100);
 
   const getHeaderTitle = () => {
     const path = location.pathname;

@@ -16,22 +16,30 @@ import {
   ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { UserMistake, Question, Solution, SolutionStep } from '../../types';
+import { cn } from '../../utils/cn';
+import { getSubjectTheme } from '../../utils/theme';
+
+interface EnrichedMistake extends UserMistake {
+  question: Question;
+  typeName: string;
+}
 
 export const MistakeNotebook: React.FC = () => {
   const { selectedSubject, user, progressVersion } = useAppStore();
   void progressVersion;
 
-  const [mistakes, setMistakes] = useState<any[]>([]);
+  const [mistakes, setMistakes] = useState<EnrichedMistake[]>([]);
 
   const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
 
   // Trạng thái cho việc luyện lại câu sai cụ thể
-  const [activeMistake, setActiveMistake] = useState<any | null>(null);
+  const [activeMistake, setActiveMistake] = useState<EnrichedMistake | null>(null);
   const [reAnswer, setReAnswer] = useState('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [reSubmitted, setReSubmitted] = useState(false);
   const [reCorrect, setReCorrect] = useState(false);
-  const [reSolution, setReSolution] = useState<any>(null);
+  const [reSolution, setReSolution] = useState<Solution | null>(null);
 
   const loadMistakes = useCallback(() => {
     const currentUserId = user?.uid ?? 'guest';
@@ -56,7 +64,7 @@ export const MistakeNotebook: React.FC = () => {
           typeName: type?.name || 'Chưa phân loại'
         };
       })
-      .filter(m => m.question !== undefined); // Loại bỏ các câu không tìm thấy câu hỏi gốc
+      .filter((m): m is EnrichedMistake => m.question !== undefined); // Loại bỏ các câu không tìm thấy câu hỏi gốc
 
     setMistakes(filtered);
   }, [selectedSubject, user]);
@@ -67,7 +75,7 @@ export const MistakeNotebook: React.FC = () => {
     setActiveMistake(null);
   }, [selectedSubject, loadMistakes]);
 
-  const startReview = (mistake: any) => {
+  const startReview = (mistake: EnrichedMistake) => {
     setActiveMistake(mistake);
     setReAnswer('');
     setSelectedOption(null);
@@ -258,10 +266,10 @@ export const MistakeNotebook: React.FC = () => {
                   }
                   acc[typeId].mistakes.push(mistake);
                   return acc;
-                }, {} as Record<string, { typeId: string; typeName: string; mistakes: any[] }>)
-              ).map((group: any) => {
+                }, {} as Record<string, { typeId: string; typeName: string; mistakes: EnrichedMistake[] }>)
+              ).map((group) => {
                 const count = group.mistakes.length;
-                const totalWrongAttempts = group.mistakes.reduce((sum: number, m: any) => sum + (m.reviewCount || 1), 0);
+                const totalWrongAttempts = group.mistakes.reduce((sum: number, m) => sum + (m.reviewCount || 1), 0);
                 const isMath = group.typeId.startsWith('math');
 
                 return (
@@ -273,8 +281,10 @@ export const MistakeNotebook: React.FC = () => {
                     <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
-                            }`}>
+                          <span className={cn(
+                            'text-[9px] font-bold px-2 py-0.5 rounded-full',
+                            getSubjectTheme(isMath ? 'math' : 'english').badge
+                          )}>
                             {isMath ? '📐 Toán' : '🗣️ Anh'}
                           </span>
                           <span className="text-[10px] font-extrabold text-red-500 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full">
@@ -401,7 +411,7 @@ export const MistakeNotebook: React.FC = () => {
                   <div className="space-y-4 border-t border-border/30 pt-6">
                     <h4 className="font-extrabold text-sm text-foreground">🔬 Quy trình giải chi tiết:</h4>
                     <div className="space-y-4 pl-1">
-                      {reSolution.detailedSteps.map((step: any, sIdx: number) => (
+                      {reSolution.detailedSteps.map((step: SolutionStep, sIdx: number) => (
                         <div key={sIdx} className="space-y-1">
                           <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
                             <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-bold">

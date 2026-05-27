@@ -1,4 +1,5 @@
 import { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
+import { calculateMasteryScore } from '../utils/theme';
 
 const KEYS = {
   ATTEMPTS: 'otv10_attempts',
@@ -97,7 +98,7 @@ export const storageService = {
     writeToStorage(KEYS.ATTEMPTS, map);
 
     // Tự động cập nhật tiến độ học tập và sổ lỗi sai tương ứng với userId
-    this.updateProgress(userId, attempt.questionTypeId, attempt.isCorrect);
+    this.updateProgress(userId, attempt.questionTypeId);
 
     if (!attempt.isCorrect) {
       this.addOrUpdateMistake(userId, attempt);
@@ -213,7 +214,7 @@ export const storageService = {
     return progressMap[userId];
   },
 
-  updateProgress(userId: string = 'guest', questionTypeId: string, isCorrect: boolean): void {
+  updateProgress(userId: string = 'guest', questionTypeId: string): void {
     const progressMap = readProgressMap();
     if (!progressMap[userId]) {
       progressMap[userId] = {
@@ -224,19 +225,22 @@ export const storageService = {
       };
     }
 
-    const currentLevel = progressMap[userId].masteryLevels[questionTypeId] || 0;
-    let newLevel: number;
+    // Lấy danh sách attempts của user cho dạng bài này
+    const attempts = this.getAttempts(userId).filter(a => a.questionTypeId === questionTypeId);
+    const newScore = calculateMasteryScore(attempts);
 
-    if (isCorrect) {
-      newLevel = Math.min(3, currentLevel + 1); // Tăng dần cấp bậc tối đa lên 3 (Master)
-      if (newLevel >= 2 && !progressMap[userId].completedLessons.includes(questionTypeId)) {
-        progressMap[userId].completedLessons.push(questionTypeId);
-      }
-    } else {
-      newLevel = Math.max(0, currentLevel - 1); // Làm sai sẽ bị giảm nhẹ điểm mastery để kích hoạt nhắc nhở ôn lại
+    progressMap[userId].masteryLevels[questionTypeId] = newScore;
+
+    // Xem như hoàn thành (completed) nếu masteryScore đạt >= 60 (tương đương 2 sao trở lên)
+    const isCompleted = newScore >= 60;
+    const completedIndex = progressMap[userId].completedLessons.indexOf(questionTypeId);
+    
+    if (isCompleted && completedIndex === -1) {
+      progressMap[userId].completedLessons.push(questionTypeId);
+    } else if (!isCompleted && completedIndex !== -1) {
+      progressMap[userId].completedLessons.splice(completedIndex, 1);
     }
 
-    progressMap[userId].masteryLevels[questionTypeId] = newLevel;
     progressMap[userId].lastUpdatedAt = new Date().toISOString();
     writeToStorage(KEYS.PROGRESS, progressMap);
   },

@@ -15,6 +15,8 @@ import {
   Lightbulb,
   CornerDownRight
 } from 'lucide-react';
+import { cn } from '../../utils/cn';
+import { getSubjectTheme } from '../../utils/theme';
 
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
@@ -56,7 +58,7 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'recognition',
       label: '💡 Cách nhận biết',
       content: (
-        <Card className="border-indigo-500/10">
+        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
           <CardContent className="p-6 space-y-4">
             <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
               <Lightbulb size={16} className="text-amber-500" /> Dấu hiệu xuất hiện trong đề bài:
@@ -77,7 +79,7 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'method',
       label: '📝 Quy trình giải',
       content: (
-        <Card className="border-indigo-500/10">
+        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
           <CardContent className="p-6 space-y-4">
             <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
               <Activity size={16} className="text-primary" /> Các bước thực hiện chuẩn chỉ:
@@ -127,7 +129,7 @@ export const QuestionTypeDetail: React.FC = () => {
           {exampleQuestion ? (
             <>
               {/* Đề bài ví dụ */}
-              <Card className="border-indigo-500/10">
+              <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
                 <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-4">
                   <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Đề bài ví dụ</span>
                 </CardHeader>
@@ -147,12 +149,16 @@ export const QuestionTypeDetail: React.FC = () => {
 
               {/* Lời giải mẫu */}
               {exampleSolution && (
-                <Card className="border-indigo-500/10">
+                <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
                   <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-4">
                     <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Lời giải phân tích từng bước</span>
                   </CardHeader>
                   <CardContent className="p-5 space-y-6">
-                    <div className="text-xs font-semibold text-muted-foreground bg-indigo-50/30 dark:bg-indigo-950/10 p-3.5 rounded-xl border border-indigo-500/10">
+                    <div className={cn(
+                      "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
+                      getSubjectTheme(isMath ? 'math' : 'english').bg,
+                      getSubjectTheme(isMath ? 'math' : 'english').border
+                    )}>
                       <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận diện:</span>
                       <LatexRenderer text={exampleSolution.recognition} />
                     </div>
@@ -217,9 +223,10 @@ export const QuestionTypeDetail: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-card border border-border p-6 rounded-2xl shadow-sm">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-              isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
-            }`}>
+            <span className={cn(
+              'text-[10px] font-bold px-2 py-0.5 rounded-full',
+              getSubjectTheme(isMath ? 'math' : 'english').badge
+            )}>
               {isMath ? '📐 Toán học lớp 9' : '🗣️ Tiếng Anh ôn thi'}
             </span>
             <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-muted-foreground font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">

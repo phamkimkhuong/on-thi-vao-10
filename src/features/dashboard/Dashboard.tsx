@@ -16,6 +16,8 @@ import {
   Sparkles,
   Zap
 } from 'lucide-react';
+import { cn } from '../../utils/cn';
+import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -39,15 +41,15 @@ export const Dashboard: React.FC = () => {
   const allQuestionTypes = [...mathQuestionTypes, ...englishQuestionTypes];
   const lastActiveType = allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0];
   const lastActiveSubject = lastActiveType.id.startsWith('math') ? 'math' : 'english';
-  const lastActiveLevel = progress.masteryLevels[lastActiveType.id] ?? 0;
+  const lastActiveLevel = getStarsFromScore(progress.masteryLevels[lastActiveType.id] ?? 0);
   const lastActivePercent = Math.round((lastActiveLevel / 3) * 100);
 
   // Tính toán số dạng đã master/hoàn thành
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
   
-  const mathProgress = Math.round((mathCompleted / 6) * 100);
-  const englishProgress = Math.round((englishCompleted / 5) * 100);
+  const mathProgress = Math.round((mathCompleted / mathQuestionTypes.length) * 100);
+  const englishProgress = Math.round((englishCompleted / englishQuestionTypes.length) * 100);
 
   // Điểm thi thử gần nhất
   const examScore = exams.length > 0 ? `${exams[exams.length - 1].score}/10` : 'Chưa thi';
@@ -72,17 +74,17 @@ export const Dashboard: React.FC = () => {
     if (tierId === 2) {
       const tier1Topics = topicsList.filter(t => t.tier === 1);
       const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      return !tier1QTs.every(qt => (mastery[qt.id] ?? 0) >= 2);
+      return !tier1QTs.every(qt => getStarsFromScore(mastery[qt.id] ?? 0) >= 2);
     }
 
     if (tierId === 3) {
       const tier1Topics = topicsList.filter(t => t.tier === 1);
       const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      const tier1Ok = tier1QTs.every(qt => (mastery[qt.id] ?? 0) >= 2);
+      const tier1Ok = tier1QTs.every(qt => getStarsFromScore(mastery[qt.id] ?? 0) >= 2);
 
       const tier2Topics = topicsList.filter(t => t.tier === 2);
       const tier2QTs = qTypesList.filter(qt => tier2Topics.some(t => t.id === qt.topicId));
-      const tier2Ok = tier2QTs.every(qt => (mastery[qt.id] ?? 0) >= 2);
+      const tier2Ok = tier2QTs.every(qt => getStarsFromScore(mastery[qt.id] ?? 0) >= 2);
 
       return !tier1Ok || !tier2Ok;
     }
@@ -94,7 +96,7 @@ export const Dashboard: React.FC = () => {
   const allTypes = [...mathQuestionTypes, ...englishQuestionTypes];
   const weakTypes = allTypes
     .map(type => {
-      const level = progress.masteryLevels[type.id] ?? 0;
+      const level = getStarsFromScore(progress.masteryLevels[type.id] ?? 0);
       // Đếm xem làm sai bao nhiêu câu trong dạng này
       const wrongAttempts = storageService.getAttempts(currentUserId).filter(a => a.questionTypeId === type.id && !a.isCorrect).length;
       return {
@@ -227,7 +229,7 @@ export const Dashboard: React.FC = () => {
 
         <Card className="hover:translate-y-[-2px] transition-all">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-500 flex items-center justify-center">
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor)}>
               📐
             </div>
             <div className="flex-1 min-w-0">
@@ -242,7 +244,7 @@ export const Dashboard: React.FC = () => {
 
         <Card className="hover:translate-y-[-2px] transition-all">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-violet-500/10 dark:bg-violet-500/20 text-violet-500 flex items-center justify-center">
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", getSubjectTheme('english').iconBg, getSubjectTheme('english').iconColor)}>
               🗣️
             </div>
             <div className="flex-1 min-w-0">
@@ -293,9 +295,10 @@ export const Dashboard: React.FC = () => {
                     <div key={type.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/50 dark:hover:bg-slate-900/10 transition-colors">
                       <div className="space-y-1.5 flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
-                          }`}>
+                          <span className={cn(
+                            'text-[10px] font-bold px-2 py-0.5 rounded-full',
+                            getSubjectTheme(subjectCode).badge
+                          )}>
                             {isMath ? '📐 Toán' : '🗣️ Anh'}
                           </span>
                           <span className="text-xs text-muted-foreground font-bold flex items-center gap-1">
@@ -338,7 +341,7 @@ export const Dashboard: React.FC = () => {
             <div className="space-y-3 flex-1">
               
               <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-border/30">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-primary flex items-center justify-center font-bold text-sm shrink-0 border border-indigo-500/10">
+                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 border", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor, getSubjectTheme('math').border)}>
                   1
                 </div>
                 <div className="min-w-0">
@@ -350,7 +353,7 @@ export const Dashboard: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-border/30">
-                <div className="w-8 h-8 rounded-lg bg-violet-500/10 text-violet-500 flex items-center justify-center font-bold text-sm shrink-0 border border-violet-500/10">
+                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 border", getSubjectTheme('english').iconBg, getSubjectTheme('english').iconColor, getSubjectTheme('english').border)}>
                   2
                 </div>
                 <div className="min-w-0">

@@ -19,6 +19,8 @@ import {
   Star,
   Sparkles
 } from 'lucide-react';
+import { cn } from '../../utils/cn';
+import { getSubjectTheme } from '../../utils/theme';
 import confetti from 'canvas-confetti';
 
 const getNow = () => Date.now();
@@ -215,8 +217,10 @@ export const PracticeEngine: React.FC = () => {
                 <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
-                        }`}>
+                      <span className={cn(
+                        'text-[9px] font-bold px-2 py-0.5 rounded-full',
+                        getSubjectTheme(isMath ? 'math' : 'english').badge
+                      )}>
                         {isMath ? '📐 Toán' : '🗣️ Anh'}
                       </span>
                       <div className="flex gap-0.5">
@@ -347,7 +351,12 @@ export const PracticeEngine: React.FC = () => {
                 <div className="flex flex-col gap-2 pt-2">
                   <button
                     onClick={triggerNextHint}
-                    className="self-start text-[11px] font-bold text-indigo-500 hover:text-indigo-600 flex items-center gap-1 cursor-pointer bg-indigo-50/50 dark:bg-indigo-950/20 px-3 py-1.5 rounded-lg border border-indigo-500/10"
+                    className={cn(
+                      "self-start text-[11px] font-bold flex items-center gap-1 cursor-pointer px-3 py-1.5 rounded-lg border transition-colors",
+                      selectedSubject === 'math' ? "text-indigo-500 hover:text-indigo-600" : "text-violet-500 hover:text-violet-600",
+                      getSubjectTheme(selectedSubject).bg,
+                      getSubjectTheme(selectedSubject).border
+                    )}
                   >
                     <Lightbulb size={14} className="text-amber-500 animate-pulse" />
                     {hintLevel === 0 ? 'Gợi ý giải từng bước' : `Gợi ý tiếp theo (Bước ${hintLevel + 1})`}
@@ -415,7 +424,11 @@ export const PracticeEngine: React.FC = () => {
                 <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
                   <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
 
-                  <div className="text-xs font-semibold text-muted-foreground bg-indigo-50/30 dark:bg-indigo-950/10 p-3.5 rounded-xl border border-indigo-500/10">
+                  <div className={cn(
+                    "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
+                    getSubjectTheme(selectedSubject).bg,
+                    getSubjectTheme(selectedSubject).border
+                  )}>
                     <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
                     <LatexRenderer text={solutionDetail.recognition} />
                   </div>

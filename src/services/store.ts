@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { User } from 'firebase/auth';
 import { SubjectCode } from '../types';
 
 interface AppState {
@@ -6,7 +7,7 @@ interface AppState {
   selectedSubject: SubjectCode;
 
   // Auth state
-  user: any | null;
+  user: User | null;
   authLoading: boolean;
 
   // Reactivity trigger for LocalStorage progress changes
@@ -19,7 +20,7 @@ interface AppState {
   refreshProgress: () => void;
 
   // Auth actions
-  setUser: (user: any | null) => void;
+  setUser: (user: User | null) => void;
   setAuthLoading: (loading: boolean) => void;
   logout: () => Promise<void>;
 }

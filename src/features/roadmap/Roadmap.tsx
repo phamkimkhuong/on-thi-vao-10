@@ -6,6 +6,8 @@ import { mathTopics, mathQuestionTypes } from '../../data/mathData';
 import { englishTopics, englishQuestionTypes } from '../../data/englishData';
 import { Card, CardContent } from '../../components/ui/card';
 import { Star, ArrowRight, StarOff, Sparkles, Lock } from 'lucide-react';
+import { cn } from '../../utils/cn';
+import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
@@ -48,13 +50,7 @@ export const Roadmap: React.FC = () => {
     navigate(`/question-types/${id}`);
   };
 
-  const getDifficultyLabel = (difficulty: 'easy' | 'medium' | 'hard') => {
-    switch (difficulty) {
-      case 'easy': return { text: 'Cơ bản', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400' };
-      case 'medium': return { text: 'Trung bình', color: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400' };
-      case 'hard': return { text: 'Nâng cao', color: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400' };
-    }
-  };
+
 
   const renderMasteryStars = (level: number, isLocked: boolean) => {
     if (isLocked) {
@@ -87,27 +83,21 @@ export const Roadmap: React.FC = () => {
       title: '🎯 CHẶNG 1: ĐẢM BẢO ĐIỂM 5 (Vững vàng nền tảng)',
       description: selectedSubject === 'math'
         ? 'Luyện thật chắc Đại số nền tảng & Căn thức để nắm chắc 5 điểm đầu tiên của đề thi.'
-        : 'Ôn tập nhuần nhuyễn phần Ngữ âm cơ bản để quét trọn vẹn điểm phần phát âm/trọng âm.',
-      badgeStyle: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400',
-      lineStyle: 'border-emerald-200 dark:border-emerald-950'
+        : 'Ôn tập nhuần nhuyễn phần Ngữ âm cơ bản để quét trọn vẹn điểm phần phát âm/trọng âm.'
     },
     {
       id: 2,
       title: '🚀 CHẶNG 2: MỤC TIÊU ĐIỂM 7-8 (Tăng tốc bứt phá)',
       description: selectedSubject === 'math'
         ? 'Tăng tốc với Hệ phương trình, Toán thực tế và Hàm số & Đồ thị để đạt điểm 7-8.'
-        : 'Nắm chắc kiến thức Từ vựng & Ngữ pháp nâng cao (Bị động, Điều kiện, Mệnh đề quan hệ).',
-      badgeStyle: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400',
-      lineStyle: 'border-indigo-200 dark:border-indigo-950'
+        : 'Nắm chắc kiến thức Từ vựng & Ngữ pháp nâng cao (Bị động, Điều kiện, Mệnh đề quan hệ).'
     },
     {
       id: 3,
       title: '👑 CHẶNG 3: CHINH PHỤC ĐIỂM 9-10 (Thủ khoa bứt phá)',
       description: selectedSubject === 'math'
         ? 'Chinh phục chuyên đề Hình học đường tròn để hoàn thiện điểm 9 và vươn tới điểm 10.'
-        : 'Làm quen với các dạng bài Đọc hiểu chuyên sâu và Viết lại câu nâng cao.',
-      badgeStyle: 'bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400',
-      lineStyle: 'border-violet-200 dark:border-violet-950'
+        : 'Làm quen với các dạng bài Đọc hiểu chuyên sâu và Viết lại câu nâng cao.'
     }
   ];
 
@@ -157,10 +147,12 @@ export const Roadmap: React.FC = () => {
           return (
             <div key={tier.id} className="space-y-6">
               {/* Tiêu đề Chặng */}
-              <div className={`p-5 rounded-2xl border transition-all duration-300 ${isLocked
-                ? 'bg-slate-100/50 dark:bg-slate-900/10 border-border/40 opacity-60'
-                : tier.badgeStyle
-                }`}>
+              <div className={cn(
+                'p-5 rounded-2xl border transition-all duration-300',
+                isLocked
+                  ? 'bg-slate-100/50 dark:bg-slate-900/10 border-border/40 opacity-60'
+                  : getTierTheme(tier.id).badgeStyle
+              )}>
                 <div className="flex items-center gap-3">
                   <h3 className="text-base font-black tracking-tight">{tier.title}</h3>
                   {isLocked && (
@@ -175,8 +167,10 @@ export const Roadmap: React.FC = () => {
               </div>
 
               {/* Danh sách các chuyên đề trong chặng */}
-              <div className={`relative border-l-2 pl-6 ml-4 space-y-10 ${isLocked ? 'border-border/30 opacity-60' : tier.lineStyle
-                }`}>
+              <div className={cn(
+                'relative border-l-2 pl-6 ml-4 space-y-10',
+                isLocked ? 'border-border/30 opacity-60' : getTierTheme(tier.id).lineStyle
+              )}>
                 {tierTopics.map((topic, topicIdx) => {
                   const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
 
@@ -223,7 +217,7 @@ export const Roadmap: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {filteredTypes.map((type) => {
                             const level = progress[type.id] ?? 0;
-                            const diff = getDifficultyLabel(type.difficulty);
+                            const diff = getDifficultyTheme(type.difficulty);
 
                             return (
                               <Card
@@ -239,8 +233,10 @@ export const Roadmap: React.FC = () => {
                                 <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
                                   <div className="space-y-2 flex-1">
                                     <div className="flex items-center justify-between gap-2">
-                                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isLocked ? 'bg-secondary text-muted-foreground' : diff.color
-                                        }`}>
+                                      <span className={cn(
+                                        'text-[9px] font-bold px-2 py-0.5 rounded-full',
+                                        isLocked ? 'bg-secondary text-muted-foreground' : diff.color
+                                      )}>
                                         {diff.text}
                                       </span>
                                       {renderMasteryStars(level, isLocked)}
