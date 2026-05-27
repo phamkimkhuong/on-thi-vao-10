@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
-import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
-import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
+import { mathTopics, mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
+import { englishTopics, englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -25,6 +25,42 @@ const getNow = () => Date.now();
 export const PracticeEngine: React.FC = () => {
   const { selectedSubject, selectedQuestionTypeId, selectQuestionType, setView, user } = useAppStore();
   const [progress] = useState<Record<string, number>>(() => storageService.getProgress().masteryLevels);
+
+  // Xác định xem một dạng bài có bị khóa theo chặng học tập hay không
+  const isTypeLocked = (questionTypeId: string): boolean => {
+    const isMath = questionTypeId.startsWith('math');
+    const topicsList = isMath ? mathTopics : englishTopics;
+    const qTypesList = isMath ? mathQuestionTypes : englishQuestionTypes;
+
+    const type = qTypesList.find(qt => qt.id === questionTypeId);
+    if (!type) return true;
+
+    const topic = topicsList.find(t => t.id === type.topicId);
+    if (!topic) return true;
+
+    const tierId = topic.tier;
+    if (tierId === 1) return false;
+
+    if (tierId === 2) {
+      const tier1Topics = topicsList.filter(t => t.tier === 1);
+      const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
+      return !tier1QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+    }
+
+    if (tierId === 3) {
+      const tier1Topics = topicsList.filter(t => t.tier === 1);
+      const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
+      const tier1Ok = tier1QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+
+      const tier2Topics = topicsList.filter(t => t.tier === 2);
+      const tier2QTs = qTypesList.filter(qt => tier2Topics.some(t => t.id === qt.topicId));
+      const tier2Ok = tier2QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+
+      return !tier1Ok || !tier2Ok;
+    }
+
+    return false;
+  };
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
@@ -149,7 +185,8 @@ export const PracticeEngine: React.FC = () => {
   // Nếu không có selectedQuestionTypeId và học sinh vào thẳng Practice từ Menu
   // Hãy hiển thị danh sách dạng bài để học sinh chọn dạng để luyện
   if (!selectedQuestionTypeId) {
-    const types = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
+    const allTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
+    const types = allTypes.filter(type => !isTypeLocked(type.id));
 
     return (
       <div className="space-y-6 max-w-4xl mx-auto">
@@ -167,7 +204,7 @@ export const PracticeEngine: React.FC = () => {
             return (
               <Card
                 key={type.id}
-                className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px]"
+                className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card"
                 onClick={() => selectQuestionType(type.id)}
               >
                 <CardContent className="p-5 flex flex-col justify-between h-full gap-4">

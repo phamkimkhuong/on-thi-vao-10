@@ -22,6 +22,8 @@ export const MistakeNotebook: React.FC = () => {
 
   const [mistakes, setMistakes] = useState<any[]>([]);
 
+  const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
+
   // Trạng thái cho việc luyện lại câu sai cụ thể
   const [activeMistake, setActiveMistake] = useState<any | null>(null);
   const [reAnswer, setReAnswer] = useState('');
@@ -59,7 +61,9 @@ export const MistakeNotebook: React.FC = () => {
 
   useEffect(() => {
     loadMistakes();
-  }, [loadMistakes]);
+    setSelectedTypeId(null);
+    setActiveMistake(null);
+  }, [selectedSubject, loadMistakes]);
 
   const startReview = (mistake: any) => {
     setActiveMistake(mistake);
@@ -101,7 +105,7 @@ export const MistakeNotebook: React.FC = () => {
       });
       // Đánh dấu là đã sửa đổi (fixed)
       storageService.resolveMistakeIfCorrect(activeMistake.questionId);
-      
+
       // Đồng bộ Firestore
       if (user) {
         const localMistakes = storageService.getMistakes();
@@ -123,7 +127,7 @@ export const MistakeNotebook: React.FC = () => {
       };
       // Làm sai tiếp, cập nhật số lần sai
       storageService.addOrUpdateMistake(attemptData);
-      
+
       // Đồng bộ Firestore
       if (user) {
         const localMistakes = storageService.getMistakes();
@@ -164,9 +168,6 @@ export const MistakeNotebook: React.FC = () => {
           <Bookmark className="text-primary fill-primary" size={24} />
           Sổ lỗi sai cá nhân (Mistake Notebook)
         </h2>
-        <p className="text-xs text-muted-foreground max-w-xl mx-auto leading-relaxed font-semibold">
-          Nơi lưu giữ toàn bộ các câu hỏi bạn từng làm sai. Hãy tận dụng thuật toán **Spaced Repetition (Luyện tập ngắt quãng)** để giải lại, khắc phục triệt để lỗ hổng kiến thức trước khi bước vào phòng thi thật!
-        </p>
       </div>
 
       {/* Giao diện chính */}
@@ -182,45 +183,123 @@ export const MistakeNotebook: React.FC = () => {
               </p>
             </CardContent>
           </Card>
-        ) : (
-          <div className="grid grid-cols-1 gap-4">
-            {mistakes.map((mistake) => (
-              <Card
-                key={mistake.id}
-                className="hover:border-primary/30 border transition-all duration-200"
+        ) : selectedTypeId ? (
+          // NHÁNH 1: HIỂN THỊ CHI TIẾT CÁC CÂU SAI CỦA DẠNG BÀI ĐÃ CHỌN
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setSelectedTypeId(null)}
+                className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
               >
-                <CardContent className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="space-y-2 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-muted-foreground">
-                        {mistake.typeName}
-                      </span>
-                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 flex items-center gap-0.5">
-                        <AlertTriangle size={10} /> Đã sai: {mistake.reviewCount} lần
-                      </span>
-                      <span className="text-[9px] font-semibold">
-                        {formatReviewTime(mistake.nextReviewAt)}
-                      </span>
-                    </div>
+                ← Quay lại danh sách dạng bài
+              </button>
+              <span className="text-xs font-bold text-muted-foreground bg-secondary px-3 py-1.5 rounded-full border border-border/10">
+                Dạng bài: {mistakes.find(m => m.questionTypeId === selectedTypeId)?.typeName || ''}
+              </span>
+            </div>
 
-                    <div className="text-xs font-semibold text-foreground line-clamp-2 leading-relaxed bg-slate-50/50 dark:bg-slate-900/5 p-3 rounded-xl border border-border/10">
-                      <LatexRenderer text={mistake.question.content} />
-                    </div>
-
-                    <div className="text-[10px] text-muted-foreground font-semibold">
-                      Đáp án bạn đã điền: <span className="text-red-500 font-extrabold">{mistake.wrongAnswer || 'Trống'}</span>
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => startReview(mistake)}
-                    className="self-start md:self-center font-bold text-xs py-2 px-4 shadow-sm shrink-0 cursor-pointer"
+            <div className="grid grid-cols-1 gap-4">
+              {mistakes
+                .filter(m => m.questionTypeId === selectedTypeId)
+                .map((mistake) => (
+                  <Card
+                    key={mistake.id}
+                    className="hover:border-primary/30 border transition-all duration-200"
                   >
-                    Luyện lại câu này
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                    <CardContent className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="space-y-2 flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 flex items-center gap-0.5">
+                            <AlertTriangle size={10} /> Đã sai: {mistake.reviewCount} lần
+                          </span>
+                          <span className="text-[9px] font-semibold">
+                            {formatReviewTime(mistake.nextReviewAt)}
+                          </span>
+                        </div>
+
+                        <div className="text-xs font-semibold text-foreground line-clamp-2 leading-relaxed bg-slate-50/50 dark:bg-slate-900/5 p-3 rounded-xl border border-border/10">
+                          <LatexRenderer text={mistake.question.content} />
+                        </div>
+
+                        <div className="text-[10px] text-muted-foreground font-semibold">
+                          Đáp án bạn đã điền: <span className="text-red-500 font-extrabold">{mistake.wrongAnswer || 'Trống'}</span>
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => startReview(mistake)}
+                        className="self-start md:self-center font-bold text-xs py-2 px-4 shadow-sm shrink-0 cursor-pointer"
+                      >
+                        Luyện lại câu này
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+            </div>
+          </div>
+        ) : (
+          // NHÁNH 2: HIỂN THỊ GOM NHÓM THEO DẠNG BÀI
+          <div className="space-y-4">
+            <div className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wider">
+              Chọn dạng bài để khắc phục lỗi sai:
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Object.values(
+                mistakes.reduce((acc, mistake) => {
+                  const typeId = mistake.questionTypeId;
+                  if (!acc[typeId]) {
+                    acc[typeId] = {
+                      typeId,
+                      typeName: mistake.typeName,
+                      mistakes: []
+                    };
+                  }
+                  acc[typeId].mistakes.push(mistake);
+                  return acc;
+                }, {} as Record<string, { typeId: string; typeName: string; mistakes: any[] }>)
+              ).map((group: any) => {
+                const count = group.mistakes.length;
+                const totalWrongAttempts = group.mistakes.reduce((sum: number, m: any) => sum + (m.reviewCount || 1), 0);
+                const isMath = group.typeId.startsWith('math');
+
+                return (
+                  <Card
+                    key={group.typeId}
+                    className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card"
+                    onClick={() => setSelectedTypeId(group.typeId)}
+                  >
+                    <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
+                            }`}>
+                            {isMath ? '📐 Toán' : '🗣️ Anh'}
+                          </span>
+                          <span className="text-[10px] font-extrabold text-red-500 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full">
+                            {count} câu sai
+                          </span>
+                        </div>
+
+                        <h4 className="font-extrabold text-sm text-foreground leading-tight">
+                          {group.typeName}
+                        </h4>
+
+                        <p className="text-[11px] text-muted-foreground leading-relaxed font-semibold">
+                          Tổng số lần làm sai: <span className="font-bold text-red-500">{totalWrongAttempts} lần</span>
+                        </p>
+                      </div>
+
+                      <div className="border-t border-border/20 pt-3 flex items-center justify-between text-[10px] font-bold text-primary">
+                        <span>Lịch sử lỗi sai chi tiết</span>
+                        <span className="flex items-center gap-0.5 hover:underline">
+                          Khắc phục ngay →
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         )
       ) : (
