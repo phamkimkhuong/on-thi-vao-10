@@ -11,6 +11,7 @@ import ExamEngine from './features/exam-engine/ExamEngine';
 import { AuthPage } from './features/auth/AuthPage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './services/firebase';
+import { progressService } from './services/progressService';
 import { Loader } from 'lucide-react';
 
 const router = createBrowserRouter([
@@ -42,8 +43,12 @@ export const App: React.FC = () => {
   const { authLoading, setUser, setAuthLoading } = useAppStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      if (user) {
+        // Tự động tải dữ liệu từ Firestore xuống LocalStorage khi đăng nhập
+        await progressService.hydrateFirestoreDataToLocal(user.uid);
+      }
       setAuthLoading(false);
     });
 

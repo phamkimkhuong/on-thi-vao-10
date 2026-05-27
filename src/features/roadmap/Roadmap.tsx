@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
@@ -9,8 +9,8 @@ import { Star, ArrowRight, StarOff, Sparkles, Lock } from 'lucide-react';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject } = useAppStore();
-  const [progress] = useState<Record<string, number>>(() => storageService.getProgress().masteryLevels);
+  const { selectedSubject, user } = useAppStore();
+  const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
 
   const topics = selectedSubject === 'math' ? mathTopics : englishTopics;
   const questionTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;

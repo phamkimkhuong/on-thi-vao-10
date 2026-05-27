@@ -47,10 +47,9 @@ export const progressService = {
     try {
       const batch = writeBatch(db);
 
-      // 1. Đồng bộ Attempts
-      const localAttempts = storageService.getAttempts();
+      // 1. Đồng bộ Attempts của Guest
+      const localAttempts = storageService.getAttempts('guest');
       localAttempts.forEach(attempt => {
-        // Chỉ đồng bộ những attempt chưa được liên kết với user thực
         const attemptRef = doc(db, `users/${userId}/attempts`, attempt.id);
         batch.set(attemptRef, {
           ...attempt,
@@ -59,8 +58,8 @@ export const progressService = {
         });
       });
 
-      // 2. Đồng bộ Mistakes
-      const localMistakes = storageService.getMistakes();
+      // 2. Đồng bộ Mistakes của Guest
+      const localMistakes = storageService.getMistakes('guest');
       localMistakes.forEach(mistake => {
         const mistakeRef = doc(db, `users/${userId}/mistakes`, mistake.id);
         batch.set(mistakeRef, {
@@ -70,7 +69,7 @@ export const progressService = {
         });
       });
 
-      // 3. Đồng bộ Progress
+      // 3. Đồng bộ Progress của Guest
       const localProgress = storageService.getProgress('guest');
       Object.entries(localProgress.masteryLevels).forEach(([questionTypeId, level]) => {
         const progressRef = doc(db, `users/${userId}/progress`, questionTypeId);
@@ -81,8 +80,8 @@ export const progressService = {
         });
       });
 
-      // 4. Đồng bộ Lịch sử Thi thử
-      const localExams = storageService.getExamResults();
+      // 4. Đồng bộ Lịch sử Thi thử của Guest
+      const localExams = storageService.getExamResults('guest');
       localExams.forEach((exam, idx) => {
         const examRef = doc(db, `users/${userId}/exam_results`, `exam-${idx}-${Date.now()}`);
         batch.set(examRef, {
@@ -98,6 +97,39 @@ export const progressService = {
     }
   },
 
+  // Tải dữ liệu từ Firestore về và ghi đè vào LocalStorage (Hydration)
+  async hydrateFirestoreDataToLocal(userId: string): Promise<void> {
+    try {
+      // 1. Tải Progress
+      const progress = await this.getUserProgressFromFirestore(userId);
+      if (progress) {
+        storageService.saveProgressLocal(userId, progress);
+      }
+
+      // 2. Tải Attempts
+      const attempts = await this.getAttempts(userId);
+      if (attempts.length > 0) {
+        storageService.saveAttemptsLocal(userId, attempts);
+      }
+
+      // 3. Tải Mistakes
+      const mistakes = await this.getMistakes(userId);
+      if (mistakes.length > 0) {
+        storageService.saveMistakesLocal(userId, mistakes);
+      }
+
+      // 4. Tải Exam Results
+      const exams = await this.getExamResults(userId);
+      if (exams.length > 0) {
+        storageService.saveExamResultsLocal(userId, exams);
+      }
+
+      console.log(`Đã hydrate thành công dữ liệu từ Firestore xuống LocalStorage cho user: ${userId}`);
+    } catch (e) {
+      console.error('Lỗi khi hydrate dữ liệu từ Firestore xuống local:', e);
+    }
+  },
+
   // Lưu một Attempt lên Firestore
   async saveAttempt(userId: string, attempt: UserAttempt): Promise<void> {
     try {
@@ -110,22 +142,10 @@ export const progressService = {
 
       // Đồng thời cập nhật progress tương ứng
       const progressRef = doc(db, `users/${userId}/progress`, attempt.questionTypeId);
-      // Đọc progress cục bộ để biết level hiện tại
-      const progressMap = localStorage.getItem('otv10_progress');
-      let currentLevel = 0;
-      let completedLessons: string[] = [];
-      if (progressMap) {
-        try {
-          const parsed = JSON.parse(progressMap);
-          const userProg = parsed[userId] || parsed['guest'];
-          if (userProg) {
-            currentLevel = userProg.masteryLevels[attempt.questionTypeId] || 0;
-            completedLessons = userProg.completedLessons || [];
-          }
-        } catch (err) {
-          console.warn('Lỗi khi phân tích dữ liệu tiến trình cục bộ:', err);
-        }
-      }
+      // Đọc progress cục bộ để biết level hiện tại (sử dụng storageService thay vì parse localStorage thô)
+      const userProg = storageService.getProgress(userId);
+      const currentLevel = userProg.masteryLevels[attempt.questionTypeId] || 0;
+      const completedLessons = userProg.completedLessons || [];
 
       await setDoc(progressRef, {
         masteryLevel: currentLevel,

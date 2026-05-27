@@ -40,7 +40,8 @@ export const AppLayout: React.FC = () => {
   ];
 
   // Tính toán nhanh tiến độ tổng quát
-  const progress = storageService.getProgress();
+  const currentUserId = user?.uid ?? 'guest';
+  const progress = storageService.getProgress(currentUserId);
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
 

@@ -33,7 +33,8 @@ export const MistakeNotebook: React.FC = () => {
   const [reSolution, setReSolution] = useState<any>(null);
 
   const loadMistakes = useCallback(() => {
-    const list = storageService.getMistakes();
+    const currentUserId = user?.uid ?? 'guest';
+    const list = storageService.getMistakes(currentUserId);
     const isMath = selectedSubject === 'math';
 
     // Lọc lỗi sai theo môn đang chọn và trạng thái chưa fixed
@@ -57,7 +58,7 @@ export const MistakeNotebook: React.FC = () => {
       .filter(m => m.question !== undefined); // Loại bỏ các câu không tìm thấy câu hỏi gốc
 
     setMistakes(filtered);
-  }, [selectedSubject]);
+  }, [selectedSubject, user]);
 
   useEffect(() => {
     loadMistakes();
@@ -104,11 +105,11 @@ export const MistakeNotebook: React.FC = () => {
         origin: { y: 0.7 }
       });
       // Đánh dấu là đã sửa đổi (fixed)
-      storageService.resolveMistakeIfCorrect(activeMistake.questionId);
+      storageService.resolveMistakeIfCorrect(user?.uid ?? 'guest', activeMistake.questionId);
 
       // Đồng bộ Firestore
       if (user) {
-        const localMistakes = storageService.getMistakes();
+        const localMistakes = storageService.getMistakes(user.uid);
         const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
         if (updated) {
           progressService.saveMistake(user.uid, updated);
@@ -126,11 +127,11 @@ export const MistakeNotebook: React.FC = () => {
         createdAt: new Date().toISOString()
       };
       // Làm sai tiếp, cập nhật số lần sai
-      storageService.addOrUpdateMistake(attemptData);
+      storageService.addOrUpdateMistake(user?.uid ?? 'guest', attemptData);
 
       // Đồng bộ Firestore
       if (user) {
-        const localMistakes = storageService.getMistakes();
+        const localMistakes = storageService.getMistakes(user.uid);
         const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
         if (updated) {
           progressService.saveMistake(user.uid, updated);

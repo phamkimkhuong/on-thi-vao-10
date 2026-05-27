@@ -7,14 +7,68 @@ const KEYS = {
   EXAM_RESULTS: 'otv10_exam_results'
 };
 
-// Helper để đọc từ localStorage an toàn
-const readFromStorage = <T>(key: string, defaultValue: T): T => {
+// Helper để đọc từ localStorage và tự động migrate dữ liệu cũ nếu là Array
+const readAttemptsMap = (): Record<string, UserAttempt[]> => {
   try {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : defaultValue;
+    const data = localStorage.getItem(KEYS.ATTEMPTS);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    if (Array.isArray(parsed)) {
+      const migrated = { guest: parsed };
+      localStorage.setItem(KEYS.ATTEMPTS, JSON.stringify(migrated));
+      return migrated;
+    }
+    return parsed;
   } catch (e) {
-    console.error(`Error reading ${key} from localStorage`, e);
-    return defaultValue;
+    console.error('Lỗi khi đọc attempts từ localStorage', e);
+    return {};
+  }
+};
+
+const readMistakesMap = (): Record<string, UserMistake[]> => {
+  try {
+    const data = localStorage.getItem(KEYS.MISTAKES);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    if (Array.isArray(parsed)) {
+      const migrated = { guest: parsed };
+      localStorage.setItem(KEYS.MISTAKES, JSON.stringify(migrated));
+      return migrated;
+    }
+    return parsed;
+  } catch (e) {
+    console.error('Lỗi khi đọc mistakes từ localStorage', e);
+    return {};
+  }
+};
+
+const readExamResultsMap = (): Record<string, ExamResult[]> => {
+  try {
+    const data = localStorage.getItem(KEYS.EXAM_RESULTS);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    if (Array.isArray(parsed)) {
+      const migrated = { guest: parsed };
+      localStorage.setItem(KEYS.EXAM_RESULTS, JSON.stringify(migrated));
+      return migrated;
+    }
+    return parsed;
+  } catch (e) {
+    console.error('Lỗi khi đọc exam results từ localStorage', e);
+    return {};
+  }
+};
+
+const readProgressMap = (): Record<string, UserProgress> => {
+  try {
+    const data = localStorage.getItem(KEYS.PROGRESS);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    // Progress ban đầu đã được thiết kế dạng Map
+    return parsed;
+  } catch (e) {
+    console.error('Lỗi khi đọc progress từ localStorage', e);
+    return {};
   }
 };
 
@@ -29,32 +83,44 @@ const writeToStorage = <T>(key: string, value: T): void => {
 
 export const storageService = {
   // ATTEMPTS
-  getAttempts(): UserAttempt[] {
-    return readFromStorage<UserAttempt[]>(KEYS.ATTEMPTS, []);
+  getAttempts(userId: string = 'guest'): UserAttempt[] {
+    const map = readAttemptsMap();
+    return map[userId] || [];
   },
 
-  saveAttempt(attempt: UserAttempt): void {
-    const attempts = this.getAttempts();
-    attempts.push(attempt);
-    writeToStorage(KEYS.ATTEMPTS, attempts);
+  saveAttempt(userId: string = 'guest', attempt: UserAttempt): void {
+    const map = readAttemptsMap();
+    if (!map[userId]) {
+      map[userId] = [];
+    }
+    map[userId].push(attempt);
+    writeToStorage(KEYS.ATTEMPTS, map);
 
-    // Tự động cập nhật tiến độ học tập và sổ lỗi sai
-    this.updateProgress(attempt.questionTypeId, attempt.isCorrect);
+    // Tự động cập nhật tiến độ học tập và sổ lỗi sai tương ứng với userId
+    this.updateProgress(userId, attempt.questionTypeId, attempt.isCorrect);
 
     if (!attempt.isCorrect) {
-      this.addOrUpdateMistake(attempt);
+      this.addOrUpdateMistake(userId, attempt);
     } else {
-      this.resolveMistakeIfCorrect(attempt.questionId);
+      this.resolveMistakeIfCorrect(userId, attempt.questionId);
     }
   },
 
-  // MISTAKES (Sổ lỗi sai)
-  getMistakes(): UserMistake[] {
-    return readFromStorage<UserMistake[]>(KEYS.MISTAKES, []);
+  saveAttemptsLocal(userId: string, attempts: UserAttempt[]): void {
+    const map = readAttemptsMap();
+    map[userId] = attempts;
+    writeToStorage(KEYS.ATTEMPTS, map);
   },
 
-  addOrUpdateMistake(attempt: UserAttempt): void {
-    const mistakes = this.getMistakes();
+  // MISTAKES (Sổ lỗi sai)
+  getMistakes(userId: string = 'guest'): UserMistake[] {
+    const map = readMistakesMap();
+    return map[userId] || [];
+  },
+
+  addOrUpdateMistake(userId: string = 'guest', attempt: UserAttempt): void {
+    const map = readMistakesMap();
+    const mistakes = map[userId] || [];
     const existingIndex = mistakes.findIndex(m => m.questionId === attempt.questionId);
 
     if (existingIndex > -1) {
@@ -72,7 +138,7 @@ export const storageService = {
     } else {
       const newMistake: UserMistake = {
         id: `mistake-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        userId: attempt.userId,
+        userId: userId,
         questionId: attempt.questionId,
         questionTypeId: attempt.questionTypeId,
         wrongAnswer: attempt.userAnswer,
@@ -83,11 +149,14 @@ export const storageService = {
       };
       mistakes.push(newMistake);
     }
-    writeToStorage(KEYS.MISTAKES, mistakes);
+
+    map[userId] = mistakes;
+    writeToStorage(KEYS.MISTAKES, map);
   },
 
-  resolveMistakeIfCorrect(questionId: string): void {
-    const mistakes = this.getMistakes();
+  resolveMistakeIfCorrect(userId: string = 'guest', questionId: string): void {
+    const map = readMistakesMap();
+    const mistakes = map[userId] || [];
     const index = mistakes.findIndex(m => m.questionId === questionId);
 
     if (index > -1) {
@@ -98,17 +167,26 @@ export const storageService = {
         reviewStatus: 'fixed',
         nextReviewAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 ngày sau ôn lại
       };
-      writeToStorage(KEYS.MISTAKES, mistakes);
+      map[userId] = mistakes;
+      writeToStorage(KEYS.MISTAKES, map);
     }
   },
 
-  updateMistakeStatus(mistakeId: string, status: 'new' | 'reviewing' | 'fixed'): void {
-    const mistakes = this.getMistakes();
+  updateMistakeStatus(userId: string = 'guest', mistakeId: string, status: 'new' | 'reviewing' | 'fixed'): void {
+    const map = readMistakesMap();
+    const mistakes = map[userId] || [];
     const index = mistakes.findIndex(m => m.id === mistakeId);
     if (index > -1) {
       mistakes[index].reviewStatus = status;
-      writeToStorage(KEYS.MISTAKES, mistakes);
+      map[userId] = mistakes;
+      writeToStorage(KEYS.MISTAKES, map);
     }
+  },
+
+  saveMistakesLocal(userId: string, mistakes: UserMistake[]): void {
+    const map = readMistakesMap();
+    map[userId] = mistakes;
+    writeToStorage(KEYS.MISTAKES, map);
   },
 
   calculateNextReviewDate(reviewCount: number): string {
@@ -122,7 +200,7 @@ export const storageService = {
 
   // PROGRESS (Tiến độ học tập)
   getProgress(userId: string = 'guest'): UserProgress {
-    const progressMap = readFromStorage<Record<string, UserProgress>>(KEYS.PROGRESS, {});
+    const progressMap = readProgressMap();
     if (!progressMap[userId]) {
       progressMap[userId] = {
         userId,
@@ -135,8 +213,8 @@ export const storageService = {
     return progressMap[userId];
   },
 
-  updateProgress(questionTypeId: string, isCorrect: boolean, userId: string = 'guest'): void {
-    const progressMap = readFromStorage<Record<string, UserProgress>>(KEYS.PROGRESS, {});
+  updateProgress(userId: string = 'guest', questionTypeId: string, isCorrect: boolean): void {
+    const progressMap = readProgressMap();
     if (!progressMap[userId]) {
       progressMap[userId] = {
         userId,
@@ -163,15 +241,31 @@ export const storageService = {
     writeToStorage(KEYS.PROGRESS, progressMap);
   },
 
-  // EXAM RESULTS (Kết quả thi thử)
-  getExamResults(): ExamResult[] {
-    return readFromStorage<ExamResult[]>(KEYS.EXAM_RESULTS, []);
+  saveProgressLocal(userId: string, progress: UserProgress): void {
+    const progressMap = readProgressMap();
+    progressMap[userId] = progress;
+    writeToStorage(KEYS.PROGRESS, progressMap);
   },
 
-  saveExamResult(result: ExamResult): void {
-    const results = this.getExamResults();
-    results.push(result);
-    writeToStorage(KEYS.EXAM_RESULTS, results);
+  // EXAM RESULTS (Kết quả thi thử)
+  getExamResults(userId: string = 'guest'): ExamResult[] {
+    const map = readExamResultsMap();
+    return map[userId] || [];
+  },
+
+  saveExamResult(userId: string = 'guest', result: ExamResult): void {
+    const map = readExamResultsMap();
+    if (!map[userId]) {
+      map[userId] = [];
+    }
+    map[userId].push(result);
+    writeToStorage(KEYS.EXAM_RESULTS, map);
+  },
+
+  saveExamResultsLocal(userId: string, exams: ExamResult[]): void {
+    const map = readExamResultsMap();
+    map[userId] = exams;
+    writeToStorage(KEYS.EXAM_RESULTS, map);
   },
 
   // RESET ALL DATA

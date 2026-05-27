@@ -27,7 +27,7 @@ export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
   const { selectedSubject, user } = useAppStore();
-  const [progress] = useState<Record<string, number>>(() => storageService.getProgress().masteryLevels);
+  const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
 
   // Xác định xem một dạng bài có bị khóa theo chặng học tập hay không
   const isTypeLocked = (questionTypeId: string): boolean => {
@@ -153,13 +153,13 @@ export const PracticeEngine: React.FC = () => {
     };
 
     // Lưu vào LocalStorage
-    storageService.saveAttempt(attemptData);
+    storageService.saveAttempt(user?.uid ?? 'guest', attemptData);
 
     // Đồng bộ Firestore
     if (user) {
       progressService.saveAttempt(user.uid, attemptData);
       if (!correct) {
-        const localMistakes = storageService.getMistakes();
+        const localMistakes = storageService.getMistakes(user.uid);
         const activeMistake = localMistakes.find(m => m.questionId === currentQ.id);
         if (activeMistake) {
           progressService.saveMistake(user.uid, activeMistake);

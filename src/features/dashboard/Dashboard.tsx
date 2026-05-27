@@ -19,14 +19,15 @@ import {
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { setSubject } = useAppStore();
+  const { setSubject, user } = useAppStore();
 
-  const progress = storageService.getProgress();
-  const mistakes = storageService.getMistakes().filter(m => m.reviewStatus !== 'fixed');
-  const exams = storageService.getExamResults();
+  const currentUserId = user?.uid ?? 'guest';
+  const progress = storageService.getProgress(currentUserId);
+  const mistakes = storageService.getMistakes(currentUserId).filter(m => m.reviewStatus !== 'fixed');
+  const exams = storageService.getExamResults(currentUserId);
   
   // Tìm dạng bài dang dở gần nhất
-  const attempts = storageService.getAttempts();
+  const attempts = storageService.getAttempts(currentUserId);
   let lastActiveTypeId: string | null = null;
   if (attempts.length > 0) {
     lastActiveTypeId = attempts[attempts.length - 1].questionTypeId;
@@ -94,7 +95,7 @@ export const Dashboard: React.FC = () => {
     .map(type => {
       const level = progress.masteryLevels[type.id] ?? 0;
       // Đếm xem làm sai bao nhiêu câu trong dạng này
-      const wrongAttempts = storageService.getAttempts().filter(a => a.questionTypeId === type.id && !a.isCorrect).length;
+      const wrongAttempts = storageService.getAttempts(currentUserId).filter(a => a.questionTypeId === type.id && !a.isCorrect).length;
       return {
         ...type,
         level,

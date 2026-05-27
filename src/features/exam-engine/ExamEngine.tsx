@@ -63,9 +63,10 @@ export const ExamEngine: React.FC = () => {
       };
 
       // Tự động ghi nhận lịch sử làm bài vào LocalStorage để đồng bộ tiến độ
-      storageService.saveAttempt({
+      const currentUserId = user?.uid ?? 'guest';
+      storageService.saveAttempt(currentUserId, {
         id: `exam-attempt-${Date.now()}-${q.id}`,
-        userId: 'guest',
+        userId: currentUserId,
         questionId: q.id,
         questionTypeId: q.questionTypeId,
         userAnswer: userAns,
@@ -87,8 +88,9 @@ export const ExamEngine: React.FC = () => {
       attempts: attemptResults
     };
 
+    const currentUserId = user?.uid ?? 'guest';
     setExamResult(result);
-    storageService.saveExamResult(result);
+    storageService.saveExamResult(currentUserId, result);
 
     // Đồng bộ Firestore
     if (user) {
