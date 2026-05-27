@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { SubjectCode } from '../types';
 
-export type ActiveView = 'dashboard' | 'roadmap' | 'question-type' | 'practice' | 'mistakes' | 'exam';
+export type ActiveView = 'dashboard' | 'roadmap' | 'question-type' | 'practice' | 'mistakes' | 'exam' | 'auth';
 
 interface AppState {
   activeView: ActiveView;
@@ -10,6 +10,10 @@ interface AppState {
   selectedQuestionTypeId: string | null;
   selectedExamId: string | null;
 
+  // Auth state
+  user: any | null;
+  authLoading: boolean;
+
   // Actions
   setView: (view: ActiveView) => void;
   toggleDarkMode: () => void;
@@ -17,6 +21,11 @@ interface AppState {
   setSubject: (subject: SubjectCode) => void;
   selectQuestionType: (id: string | null) => void;
   selectExam: (id: string | null) => void;
+
+  // Auth actions
+  setUser: (user: any | null) => void;
+  setAuthLoading: (loading: boolean) => void;
+  logout: () => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set) => {
@@ -38,6 +47,10 @@ export const useAppStore = create<AppState>((set) => {
     selectedSubject: 'math',
     selectedQuestionTypeId: null,
     selectedExamId: null,
+
+    // Auth initial state
+    user: null,
+    authLoading: true,
 
     setView: (view) => set({ activeView: view, selectedQuestionTypeId: null, selectedExamId: null }),
 
@@ -66,7 +79,16 @@ export const useAppStore = create<AppState>((set) => {
 
     selectQuestionType: (id) => set({ selectedQuestionTypeId: id, activeView: id ? 'question-type' : 'roadmap' }),
 
-    selectExam: (id) => set({ selectedExamId: id, activeView: id ? 'exam' : 'dashboard' })
+    selectExam: (id) => set({ selectedExamId: id, activeView: id ? 'exam' : 'dashboard' }),
+
+    setUser: (user) => set({ user }),
+    setAuthLoading: (loading) => set({ authLoading: loading }),
+    logout: async () => {
+      const { signOut } = await import('firebase/auth');
+      const { auth } = await import('./firebase');
+      await signOut(auth);
+      set({ user: null });
+    }
   };
 });
 export default useAppStore;

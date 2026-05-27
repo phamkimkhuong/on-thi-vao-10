@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
+import { progressService } from '../../services/progressService';
 import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
 import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
@@ -20,7 +21,7 @@ import confetti from 'canvas-confetti';
 const getNow = () => Date.now();
 
 export const PracticeEngine: React.FC = () => {
-  const { selectedSubject, selectedQuestionTypeId, selectQuestionType, setView } = useAppStore();
+  const { selectedSubject, selectedQuestionTypeId, selectQuestionType, setView, user } = useAppStore();
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
@@ -98,17 +99,31 @@ export const PracticeEngine: React.FC = () => {
       });
     }
 
-    // Lưu vào LocalStorage
-    storageService.saveAttempt({
+    const attemptData = {
       id: `attempt-${getNow()}`,
-      userId: 'guest',
+      userId: user ? user.uid : 'guest',
       questionId: currentQ.id,
       questionTypeId: currentQ.questionTypeId,
       userAnswer: finalAnswer,
       isCorrect: correct,
       timeSpent: Math.round((getNow() - timeStart) / 1000),
       createdAt: new Date().toISOString()
-    });
+    };
+
+    // Lưu vào LocalStorage
+    storageService.saveAttempt(attemptData);
+
+    // Đồng bộ Firestore
+    if (user) {
+      progressService.saveAttempt(user.uid, attemptData);
+      if (!correct) {
+        const localMistakes = storageService.getMistakes();
+        const activeMistake = localMistakes.find(m => m.questionId === currentQ.id);
+        if (activeMistake) {
+          progressService.saveMistake(user.uid, activeMistake);
+        }
+      }
+    }
   };
 
   const handleNext = () => {

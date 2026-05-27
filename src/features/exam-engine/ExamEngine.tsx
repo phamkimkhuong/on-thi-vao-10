@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
+import { progressService } from '../../services/progressService';
 import { mathQuestions, mathQuestionTypes } from '../../data/mathData';
 import { englishQuestions, englishQuestionTypes } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
@@ -21,7 +22,7 @@ import {
 import confetti from 'canvas-confetti';
 
 export const ExamEngine: React.FC = () => {
-  const { selectedSubject, setView, selectQuestionType } = useAppStore();
+  const { selectedSubject, setView, selectQuestionType, user } = useAppStore();
 
   const [examState, setExamState] = useState<'intro' | 'testing' | 'result'>('intro');
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -87,6 +88,11 @@ export const ExamEngine: React.FC = () => {
     setExamResult(result);
     storageService.saveExamResult(result);
 
+    // Đồng bộ Firestore
+    if (user) {
+      progressService.saveExamResult(user.uid, result);
+    }
+
     if (score >= 8.0) {
       confetti({
         particleCount: 100,
@@ -94,7 +100,7 @@ export const ExamEngine: React.FC = () => {
         origin: { y: 0.6 }
       });
     }
-  }, [examQuestions, answers, selectedSubject, timeSpent]);
+  }, [examQuestions, answers, selectedSubject, timeSpent, user]);
 
   useEffect(() => {
     let timer: any;

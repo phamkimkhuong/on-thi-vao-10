@@ -26,7 +26,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     darkMode, 
     toggleDarkMode, 
     selectedSubject, 
-    setSubject 
+    setSubject,
+    user,
+    logout
   } = useAppStore();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -189,9 +191,47 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </div>
         </div>
 
+        {/* Account Sidebar Section */}
+        <div className="p-4 border-t border-border/50 bg-slate-50/20 dark:bg-slate-900/5">
+          {user ? (
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+                <span className="text-xs font-black text-primary">
+                  {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+                </span>
+              </div>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-xs font-extrabold truncate text-foreground leading-none">{user.displayName || 'Học sinh'}</span>
+                <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1">{user.email}</span>
+                <button 
+                  onClick={() => { logout(); setIsSidebarOpen(false); }}
+                  className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer"
+                >
+                  Đăng xuất
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-xs text-muted-foreground font-bold shrink-0">
+                  K
+                </div>
+                <span className="text-[11px] font-bold text-muted-foreground">Chế độ Guest</span>
+              </div>
+              <button 
+                onClick={() => { setView('auth'); setIsSidebarOpen(false); }}
+                className="text-[10px] font-bold text-primary hover:underline cursor-pointer bg-primary/5 px-2.5 py-1.5 rounded-lg border border-primary/10"
+              >
+                Đăng nhập
+              </button>
+            </div>
+          )}
+        </div>
+
         {/* Dark Mode Toggle & Footer */}
         <div className="p-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-semibold">
-          <span>Version MVP V1</span>
+          <span>Version MVP V2</span>
           <button 
             onClick={toggleDarkMode}
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
@@ -226,14 +266,40 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             </div>
 
             {/* Account Status */}
-            <div className="flex items-center gap-2 pl-2 border-l border-border/50">
-              <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-                <span className="text-xs font-bold text-primary">HS</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold leading-none">Học sinh lớp 9</span>
-                <span className="text-[10px] text-muted-foreground font-semibold leading-none mt-1">Guest Mode</span>
-              </div>
+            <div className="flex items-center gap-2.5 pl-2 border-l border-border/50">
+              {user ? (
+                <>
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+                    <span className="text-xs font-black text-primary">
+                      {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-extrabold leading-none">{user.displayName || 'Học sinh'}</span>
+                    <button 
+                      onClick={() => logout()}
+                      className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center border border-border/20 shrink-0">
+                    <span className="text-xs font-bold text-muted-foreground">K</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold leading-none">Khách (Guest)</span>
+                    <button 
+                      onClick={() => setView('auth')}
+                      className="text-[9px] text-primary font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"
+                    >
+                      Đăng nhập / Đăng ký
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </header>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
+import { progressService } from '../../services/progressService';
 import { mathQuestions, mathQuestionTypes, mathSolutions } from '../../data/mathData';
 import { englishQuestions, englishQuestionTypes, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
@@ -17,7 +18,7 @@ import {
 import confetti from 'canvas-confetti';
 
 export const MistakeNotebook: React.FC = () => {
-  const { selectedSubject } = useAppStore();
+  const { selectedSubject, user } = useAppStore();
 
   const [mistakes, setMistakes] = useState<any[]>([]);
 
@@ -100,18 +101,37 @@ export const MistakeNotebook: React.FC = () => {
       });
       // Đánh dấu là đã sửa đổi (fixed)
       storageService.resolveMistakeIfCorrect(activeMistake.questionId);
+      
+      // Đồng bộ Firestore
+      if (user) {
+        const localMistakes = storageService.getMistakes();
+        const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
+        if (updated) {
+          progressService.saveMistake(user.uid, updated);
+        }
+      }
     } else {
-      // Làm sai tiếp, cập nhật số lần sai
-      storageService.addOrUpdateMistake({
+      const attemptData = {
         id: activeMistake.id,
-        userId: 'guest',
+        userId: user ? user.uid : 'guest',
         questionId: activeMistake.questionId,
         questionTypeId: activeMistake.questionTypeId,
         userAnswer: finalAns,
         isCorrect: false,
         timeSpent: 30, // Mock time
         createdAt: new Date().toISOString()
-      });
+      };
+      // Làm sai tiếp, cập nhật số lần sai
+      storageService.addOrUpdateMistake(attemptData);
+      
+      // Đồng bộ Firestore
+      if (user) {
+        const localMistakes = storageService.getMistakes();
+        const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
+        if (updated) {
+          progressService.saveMistake(user.uid, updated);
+        }
+      }
     }
   };
 
