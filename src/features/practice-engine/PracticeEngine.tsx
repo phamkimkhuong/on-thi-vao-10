@@ -84,6 +84,7 @@ export const PracticeEngine: React.FC = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [existingAttempt, setExistingAttempt] = useState<UserAttempt | null>(null);
 
   // Quản lý mức độ gợi ý (0: không gợi ý, 1: hiện gợi ý bước 1, 2: hiện gợi ý bước 2,...)
   const [hintLevel, setHintLevel] = useState(0);
@@ -128,6 +129,88 @@ export const PracticeEngine: React.FC = () => {
     setCurrentIdx(0);
     resetQuestionState();
   }, [routeSubject, questionTypeId, resetQuestionState]);
+
+  // Tự động kiểm tra và tải bài làm cũ của học sinh đối với câu hỏi này để tránh bắt làm lại từ đầu
+  useEffect(() => {
+    if (questions.length === 0) return;
+    const currentQ = questions[currentIdx];
+    if (!currentQ) return;
+
+    let isMounted = true;
+
+    const checkAttempt = async () => {
+      // 1. Xem trước trong LocalStorage để render tức thì
+      const userAttemptsLocal = storageService.getAttempts(user?.uid ?? 'guest');
+      const attemptsForQLocal = userAttemptsLocal
+        .filter(a => a.questionId === currentQ.id)
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+      const latestAttemptLocal = attemptsForQLocal[0] || null;
+
+      if (latestAttemptLocal) {
+        if (isMounted) {
+          setExistingAttempt(latestAttemptLocal);
+          setIsSubmitted(true);
+          setIsCorrect(latestAttemptLocal.isCorrect);
+        }
+      }
+
+      // 2. Luôn đồng bộ và fetch trực tiếp từ Firestore nếu đã đăng nhập để có dữ liệu chính xác nhất
+      if (user) {
+        try {
+          const remoteAttempts = await progressService.getAttempts(user.uid);
+          // Lưu ngược lại Local để sử dụng offline/cached
+          storageService.saveAttemptsLocal(user.uid, remoteAttempts);
+          
+          const attemptsForQRemote = remoteAttempts
+            .filter(a => a.questionId === currentQ.id)
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          
+          const latestAttemptRemote = attemptsForQRemote[0] || null;
+          
+          if (isMounted) {
+            if (latestAttemptRemote) {
+              setExistingAttempt(latestAttemptRemote);
+              setIsSubmitted(true);
+              setIsCorrect(latestAttemptRemote.isCorrect);
+            } else {
+              setExistingAttempt(null);
+              setIsSubmitted(false);
+              setIsCorrect(false);
+              setProofImages([]);
+            }
+          }
+        } catch (err) {
+          console.error("Lỗi khi tải bài làm mới nhất từ Firestore:", err);
+        }
+      } else if (!latestAttemptLocal) {
+        if (isMounted) {
+          setExistingAttempt(null);
+          setIsSubmitted(false);
+          setIsCorrect(false);
+          setProofImages([]);
+        }
+      }
+    };
+
+    checkAttempt();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentIdx, questionTypeId, questions, user]);
+
+  const handleRetry = () => {
+    setExistingAttempt(null);
+    setProofImages([]);
+    setIsSubmitted(false);
+    setIsCorrect(false);
+    setStructuredAnswer({});
+    setSelectedOption(null);
+    setSubmitError(null);
+    setHintLevel(0);
+    setQuestionStartAt(Date.now());
+  };
 
   const handleOptionSelect = (optLetter: string) => {
     if (isSubmitted) return;
@@ -209,6 +292,7 @@ export const PracticeEngine: React.FC = () => {
         }
       }
     }
+    setExistingAttempt(attemptData);
   };
 
   const handleNext = () => {
@@ -466,13 +550,41 @@ export const PracticeEngine: React.FC = () => {
                 : 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400'
                 }`}>
                 {isMath ? (
-                  <>
-                    <CheckCircle size={24} className="text-emerald-500 shrink-0" />
-                    <div>
-                      <h4 className="font-extrabold text-sm">Đã nộp bài giải thành công!</h4>
-                      <p className="text-xs font-semibold opacity-90">Ảnh bài làm đã được lưu. Giáo viên sẽ chấm và phản hồi lại sau.</p>
-                    </div>
-                  </>
+                  existingAttempt && existingAttempt.gradingMode === 'auto' ? (
+                    existingAttempt.isCorrect ? (
+                      <>
+                        <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                        <div>
+                          <h4 className="font-extrabold text-sm">Kết quả: Đạt yêu cầu (Giáo viên đã duyệt) ✅</h4>
+                          {existingAttempt.teacherFeedback && (
+                            <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
+                              💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle size={24} className="text-rose-500 shrink-0" />
+                        <div>
+                          <h4 className="font-extrabold text-sm">Kết quả: Cần sửa lại (Chấm sai) ❌</h4>
+                          {existingAttempt.teacherFeedback && (
+                            <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
+                              💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    )
+                  ) : (
+                    <>
+                      <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                      <div>
+                        <h4 className="font-extrabold text-sm">Đã nộp bài giải thành công!</h4>
+                        <p className="text-xs font-semibold opacity-90">Ảnh bài làm đã được lưu. Thầy cô sẽ sớm review và chấm bài cho bạn.</p>
+                      </div>
+                    </>
+                  )
                 ) : isCorrect ? (
                   <>
                     <CheckCircle size={24} className="text-emerald-500 shrink-0" />
@@ -494,7 +606,38 @@ export const PracticeEngine: React.FC = () => {
                 )}
               </div>
 
-              {/* Lời giải chi tiết hiện lên */}
+              {/* Ảnh bài làm đã nộp */}
+              {isMath && (proofImages.length > 0 || (existingAttempt?.proofImages && existingAttempt.proofImages.length > 0)) && (
+                <div className="space-y-3 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in">
+                  <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
+                    🖼️ Ảnh bài làm bạn đã gửi:
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                    {proofImages.length > 0
+                      ? proofImages.map((img) => (
+                          <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
+                            <img 
+                              src={img.previewUrl} 
+                              alt="Bài làm đã nộp" 
+                              className="max-h-[300px] object-contain rounded-lg p-1"
+                            />
+                          </div>
+                        ))
+                      : existingAttempt?.proofImages?.map((img) => (
+                          <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
+                            <img 
+                              src={img.downloadUrl || img.storagePath} 
+                              alt="Bài làm đã nộp" 
+                              className="max-h-[300px] object-contain rounded-lg p-1"
+                            />
+                          </div>
+                        ))
+                    }
+                  </div>
+                </div>
+              )}
+
+                            {/* Lời giải chi tiết hiện lên */}
               {solutionDetail && (
                 <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
                   <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
@@ -550,13 +693,22 @@ export const PracticeEngine: React.FC = () => {
                 </div>
               )}
 
-              {/* Tiếp tục / Đổi câu */}
-              <Button
-                onClick={handleNext}
-                className="w-full font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5"
-              >
-                Câu tiếp theo <ArrowRight size={16} />
-              </Button>
+              {/* Tiếp tục / Làm lại / Đổi câu */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <Button
+                  onClick={handleRetry}
+                  variant="outline"
+                  className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
+                >
+                  🔄 Làm lại bài này
+                </Button>
+                <Button
+                  onClick={handleNext}
+                  className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer h-10"
+                >
+                  Câu tiếp theo <ArrowRight size={16} />
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>

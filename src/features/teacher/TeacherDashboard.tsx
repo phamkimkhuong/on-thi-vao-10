@@ -166,7 +166,7 @@ export const TeacherDashboard: React.FC = () => {
 
           <div className="shrink-0 bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/20 flex items-center gap-2 text-xs font-extrabold shadow-sm text-white select-none">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>Đang kết nối Firestore</span>
+            <span>Hệ thống: Trực tuyến</span>
           </div>
         </div>
         {/* Decor */}
@@ -210,7 +210,7 @@ export const TeacherDashboard: React.FC = () => {
       {isLoading ? (
         <div className="h-64 flex flex-col items-center justify-center gap-4 bg-card border border-border/40 rounded-2xl">
           <Loader size={36} className="animate-spin text-emerald-600" />
-          <p className="text-xs font-bold text-muted-foreground animate-pulse">Đang đồng bộ dữ liệu với Firestore...</p>
+          <p className="text-xs font-bold text-muted-foreground animate-pulse">Đang tải thông tin học tập của học sinh...</p>
         </div>
       ) : activeTab === 'students' ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
