@@ -8,6 +8,7 @@ import QuestionTypeDetail from './features/question-type/QuestionTypeDetail';
 import PracticeEngine from './features/practice-engine/PracticeEngine';
 import MistakeNotebook from './components/mistakes/MistakeNotebook';
 import ExamEngine from './features/exam-engine/ExamEngine';
+import TeacherDashboard from './features/teacher/TeacherDashboard';
 import { AuthPage } from './features/auth/AuthPage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './services/firebase';
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: 'practice/:questionTypeId', element: <PracticeEngine /> },
       { path: 'mistakes', element: <MistakeNotebook /> },
       { path: 'exam', element: <ExamEngine /> },
+      { path: 'teacher', element: <TeacherDashboard /> },
     ]
   },
   {

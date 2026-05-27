@@ -8,6 +8,59 @@ export type ValidatorType =
   | 'text-includes'
   | 'manual';
 
+export type AnswerFieldType =
+  | 'number'
+  | 'fraction'
+  | 'expression'
+  | 'text'
+  | 'choice'
+  | 'boolean';
+
+export type AnswerSchemaType =
+  | 'single-number'
+  | 'equation-roots'
+  | 'system-solution'
+  | 'expression'
+  | 'proof-upload'
+  | 'self-check';
+
+export type AutoCheckMode =
+  | 'exact'
+  | 'numeric'
+  | 'unordered-numeric'
+  | 'keyed-numeric'
+  | 'expression-loose'
+  | 'manual';
+
+export type StructuredAnswer = Record<string, string>;
+
+export interface AnswerField {
+  key: string;
+  label: string;
+  valueType: AnswerFieldType;
+  placeholder?: string;
+  hint?: string;
+  required?: boolean;
+}
+
+export interface AnswerSchema {
+  type: AnswerSchemaType;
+  fields: AnswerField[];
+  proofImageRequired: boolean;
+  orderMatters?: boolean;
+  autoCheckMode: AutoCheckMode;
+}
+
+export interface ProofImage {
+  id: string;
+  storagePath: string;
+  downloadUrl?: string;
+  fileName: string;
+  contentType: string;
+  sizeBytes: number;
+  uploadedAt: string;
+}
+
 export interface Subject {
   id: string;
   code: SubjectCode;
@@ -51,6 +104,9 @@ export interface Question {
   correctAnswer: string;
   acceptedAnswers?: string[];
   validatorType?: ValidatorType;
+  answerSchema?: AnswerSchema;
+  correctFinalAnswer?: StructuredAnswer;
+  acceptedFinalAnswers?: StructuredAnswer[];
 }
 
 export interface SolutionStep {
@@ -77,9 +133,13 @@ export interface UserAttempt {
   questionId: string;
   questionTypeId: string;
   userAnswer: string;
+  finalAnswer?: StructuredAnswer;
+  proofImages?: ProofImage[];
+  gradingMode?: 'auto' | 'self-check' | 'manual';
   isCorrect: boolean;
   timeSpent: number; // đơn vị: giây
   createdAt: string; // ISO String
+  teacherFeedback?: string;
 }
 
 export interface UserMistake {
@@ -88,10 +148,12 @@ export interface UserMistake {
   questionId: string;
   questionTypeId: string;
   wrongAnswer: string;
+  proofImages?: ProofImage[];
   reviewStatus: 'new' | 'reviewing' | 'fixed';
   reviewCount: number;
   nextReviewAt: string; // ISO String
   lastAttemptedAt: string; // ISO String
+  teacherFeedback?: string;
 }
 
 export interface UserProgress {
@@ -121,6 +183,15 @@ export interface ExamResult {
   completedAt: string;
   attempts: Record<string, {
     userAnswer: string;
+    finalAnswer?: StructuredAnswer;
+    proofImages?: ProofImage[];
     isCorrect: boolean;
   }>;
+}
+
+export interface SimulatedStudent {
+  id: string;
+  name: string;
+  avatar: string;
+  email: string;
 }

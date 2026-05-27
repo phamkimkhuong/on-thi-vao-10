@@ -8,8 +8,13 @@ import { englishQuestions, englishQuestionTypes } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { Question, ExamResult, UserAttempt } from '../../types';
-import { validateAnswer } from '../../utils/answerValidator';
+import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
+import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+import { ProofImageUploader } from '../../components/common/ProofImageUploader';
+import { Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
+import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
+import { LocalProofImage } from '../../utils/proofImages';
+import { proofImageService } from '../../services/proofImageService';
 import { 
   Award, 
   Timer, 
@@ -30,43 +35,74 @@ export const ExamEngine: React.FC = () => {
   const [examState, setExamState] = useState<'intro' | 'testing' | 'result'>('intro');
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({}); // Lưu trữ câu trả lời của học sinh
+  const [finalAnswers, setFinalAnswers] = useState<Record<string, StructuredAnswer>>({});
+  const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
   
   // Đếm ngược thời gian (giây)
   const [timeLeft, setTimeLeft] = useState(0);
   const [timeSpent, setTimeSpent] = useState(0);
   const [examResult, setExamResult] = useState<ExamResult | null>(null);
+  const [isSubmittingExam, setIsSubmittingExam] = useState(false);
+  const [examSubmitError, setExamSubmitError] = useState<string | null>(null);
 
   const durationMinutes = selectedSubject === 'math' ? 120 : 60;
   const availableExamQuestions = selectedSubject === 'math' ? mathQuestions : englishQuestions;
 
-  const handleSubmitExam = useCallback(() => {
-    setExamState('result');
+  const handleSubmitExam = useCallback(async () => {
+    if (isSubmittingExam) return;
+
+    setIsSubmittingExam(true);
+    setExamSubmitError(null);
 
     let correctCount = 0;
     const totalCount = examQuestions.length;
-    const attemptResults: Record<string, { userAnswer: string, isCorrect: boolean }> = {};
+    const attemptResults: ExamResult['attempts'] = {};
     const currentUserId = user?.uid ?? 'guest';
     const completedAt = new Date().toISOString();
     const examId = `exam-${selectedSubject}-${Date.now()}`;
     const examAttempts: UserAttempt[] = [];
 
-    examQuestions.forEach(q => {
-      const userAns = answers[q.id] || '';
-      const isCorrect = validateAnswer(q, userAns);
+    for (const q of examQuestions) {
+      const answerInput = q.answerSchema ? (finalAnswers[q.id] ?? {}) : answers[q.id] || '';
+      const userAns = formatAnswerForDisplay(q, answerInput);
+      const isCorrect = validateAnswer(q, answerInput);
+      const attemptId = `attempt-${examId}-${q.id}`;
+      const localProofImages = proofImagesByQuestion[q.id] ?? [];
+      let uploadedProofImages: UserAttempt['proofImages'] = [];
+
+      try {
+        if (user && localProofImages.length > 0) {
+          uploadedProofImages = await proofImageService.uploadProofImages(
+            user.uid,
+            attemptId,
+            localProofImages.map(image => ({ id: image.id, file: image.file }))
+          );
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Không thể upload ảnh bài làm. Vui lòng thử lại.';
+        setExamSubmitError(message);
+        setIsSubmittingExam(false);
+        return;
+      }
 
       if (isCorrect) correctCount++;
       attemptResults[q.id] = {
         userAnswer: userAns,
+        ...(q.answerSchema ? { finalAnswer: finalAnswers[q.id] ?? {} } : {}),
+        ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
         isCorrect
       };
 
       // Tự động ghi nhận lịch sử làm bài vào LocalStorage để đồng bộ tiến độ
       const attemptData: UserAttempt = {
-        id: `attempt-${examId}-${q.id}`,
+        id: attemptId,
         userId: currentUserId,
         questionId: q.id,
         questionTypeId: q.questionTypeId,
         userAnswer: userAns,
+        ...(q.answerSchema ? { finalAnswer: finalAnswers[q.id] ?? {} } : {}),
+        ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
+        gradingMode: q.answerSchema?.autoCheckMode === 'manual' ? 'manual' : 'auto',
         isCorrect,
         timeSpent: Math.round(timeSpent / totalCount),
         createdAt: completedAt
@@ -74,7 +110,7 @@ export const ExamEngine: React.FC = () => {
 
       examAttempts.push(attemptData);
       storageService.saveAttempt(currentUserId, attemptData);
-    });
+    }
 
     const score = Math.round((correctCount / totalCount) * 10 * 10) / 10; // Thang điểm 10 làm tròn 1 chữ số
 
@@ -89,6 +125,8 @@ export const ExamEngine: React.FC = () => {
     };
 
     setExamResult(result);
+    setExamState('result');
+    setIsSubmittingExam(false);
     storageService.saveExamResult(currentUserId, result);
 
     // Đồng bộ Firestore
@@ -108,7 +146,7 @@ export const ExamEngine: React.FC = () => {
         origin: { y: 0.6 }
       });
     }
-  }, [examQuestions, answers, selectedSubject, timeSpent, user]);
+  }, [examQuestions, answers, finalAnswers, proofImagesByQuestion, selectedSubject, timeSpent, user, isSubmittingExam]);
 
   useEffect(() => {
     let timer: any;
@@ -118,7 +156,7 @@ export const ExamEngine: React.FC = () => {
         setTimeSpent(prev => prev + 1);
       }, 1000);
     } else if (timeLeft === 0 && examState === 'testing') {
-      handleSubmitExam(); // Tự động nộp bài khi hết giờ
+      void handleSubmitExam(); // Tự động nộp bài khi hết giờ
     }
 
     return () => clearInterval(timer);
@@ -128,6 +166,10 @@ export const ExamEngine: React.FC = () => {
     // Đề thi thử MVP sẽ bốc toàn bộ ngân hàng câu hỏi để kiểm tra toàn diện
     setExamQuestions(availableExamQuestions);
     setAnswers({});
+    setFinalAnswers({});
+    setProofImagesByQuestion({});
+    setIsSubmittingExam(false);
+    setExamSubmitError(null);
     setTimeLeft(durationMinutes * 60);
     setTimeSpent(0);
     setExamState('testing');
@@ -137,6 +179,20 @@ export const ExamEngine: React.FC = () => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: val
+    }));
+  };
+
+  const handleFinalAnswerChange = (questionId: string, value: StructuredAnswer) => {
+    setFinalAnswers(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
+  };
+
+  const handleProofImagesChange = (questionId: string, images: LocalProofImage[]) => {
+    setProofImagesByQuestion(prev => ({
+      ...prev,
+      [questionId]: images
     }));
   };
 
@@ -195,6 +251,15 @@ export const ExamEngine: React.FC = () => {
       percent: Math.round((data.correct / data.total) * 100)
     }));
   };
+
+  if (selectedSubject === 'math' && !user) {
+    return (
+      <MathLoginRequired
+        title="Đăng nhập để làm đề Toán"
+        description="Đề Toán có phần tự luận và ảnh bài làm cần lưu theo tài khoản. Hãy đăng nhập trước khi bắt đầu làm bài Toán."
+      />
+    );
+  }
 
   // RENDER GIAO DIỆN GIỚI THIỆU ĐỀ THI
   if (examState === 'intro') {
@@ -282,16 +347,24 @@ export const ExamEngine: React.FC = () => {
                 {/* Phần trả lời */}
                 {selectedSubject === 'math' ? (
                   // Nhập tự luận cho Toán
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-muted-foreground block">Đáp số của bạn:</label>
-                    <input
-                      type="text"
-                      value={answers[q.id] || ''}
-                      onChange={(e) => handleInputChange(q.id, e.target.value)}
-                      placeholder="Nhập câu trả lời..."
-                      className="w-full sm:max-w-md bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold"
+                  q.answerSchema ? (
+                    <AnswerFormRenderer
+                      question={q}
+                      value={finalAnswers[q.id] ?? {}}
+                      onChange={(value) => handleFinalAnswerChange(q.id, value)}
                     />
-                  </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-muted-foreground block">Đáp số của bạn:</label>
+                      <input
+                        type="text"
+                        value={answers[q.id] || ''}
+                        onChange={(e) => handleInputChange(q.id, e.target.value)}
+                        placeholder="Nhập câu trả lời..."
+                        className="w-full sm:max-w-md bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold"
+                      />
+                    </div>
+                  )
                 ) : (
                   // Chọn trắc nghiệm cho Anh
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -314,17 +387,34 @@ export const ExamEngine: React.FC = () => {
                     })}
                   </div>
                 )}
+
+                {selectedSubject === 'math' && (
+                  <ProofImageUploader
+                    images={proofImagesByQuestion[q.id] ?? []}
+                    onChange={(images) => handleProofImagesChange(q.id, images)}
+                    disabled={isSubmittingExam}
+                    required={q.answerSchema?.proofImageRequired ?? false}
+                    cloudEnabled={Boolean(user)}
+                  />
+                )}
               </CardContent>
             </Card>
           ))}
         </div>
 
+        {examSubmitError && (
+          <p className="text-xs font-bold text-rose-600 dark:text-rose-400">
+            {examSubmitError}
+          </p>
+        )}
+
         {/* Nộp bài thi */}
         <Button 
           onClick={handleSubmitExam}
+          disabled={isSubmittingExam}
           className="w-full font-bold py-4 text-xs bg-red-500 hover:bg-red-600 active:scale-[0.98] shadow-md shadow-red-500/10 flex items-center justify-center gap-1.5"
         >
-          <CheckSquare size={16} /> Nộp bài thi thử &amp; Xem kết quả
+          <CheckSquare size={16} /> {isSubmittingExam ? 'Đang lưu bài thi...' : 'Nộp bài thi thử & Xem kết quả'}
         </Button>
       </div>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
@@ -8,7 +8,9 @@ import { englishTopics, englishQuestionTypes, englishQuestions, englishSolutions
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { Question, Solution } from '../../types';
+import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+import { ProofImageUploader } from '../../components/common/ProofImageUploader';
+import { Question, Solution, StructuredAnswer, UserAttempt } from '../../types';
 import {
   BookOpen,
   CheckCircle,
@@ -21,8 +23,10 @@ import {
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore, getSubjectTheme } from '../../utils/theme';
-import { validateAnswer } from '../../utils/answerValidator';
+import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId } from '../../utils/subject';
+import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
+import { proofImageService } from '../../services/proofImageService';
 import confetti from 'canvas-confetti';
 
 const getNow = () => Date.now();
@@ -73,10 +77,13 @@ export const PracticeEngine: React.FC = () => {
   };
 
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
+  const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
+  const [proofImages, setProofImages] = useState<LocalProofImage[]>([]);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Quản lý mức độ gợi ý (0: không gợi ý, 1: hiện gợi ý bước 1, 2: hiện gợi ý bước 2,...)
   const [hintLevel, setHintLevel] = useState(0);
@@ -98,13 +105,16 @@ export const PracticeEngine: React.FC = () => {
       : englishSolutions.find(s => s.questionId === questionAtIdx.id)) || null
     : null;
 
-  const resetQuestionState = () => {
-    setUserAnswer('');
+  const resetQuestionState = useCallback(() => {
+    setStructuredAnswer({});
+    setProofImages([]);
     setSelectedOption(null);
     setIsSubmitted(false);
+    setIsSubmitting(false);
+    setSubmitError(null);
     setHintLevel(0);
     setQuestionStartAt(Date.now());
-  };
+  }, []);
 
   useEffect(() => {
     const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);
@@ -117,22 +127,50 @@ export const PracticeEngine: React.FC = () => {
   useEffect(() => {
     setCurrentIdx(0);
     resetQuestionState();
-  }, [routeSubject, questionTypeId]);
+  }, [routeSubject, questionTypeId, resetQuestionState]);
 
   const handleOptionSelect = (optLetter: string) => {
     if (isSubmitted) return;
     setSelectedOption(optLetter);
   };
 
-  const handleSubmit = () => {
-    if (questions.length === 0 || isSubmitted) return;
+  const handleSubmit = async () => {
+    if (questions.length === 0 || isSubmitted || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError(null);
 
     const currentQ = questions[currentIdx];
-    const finalAnswer = routeSubject === 'math' ? userAnswer : selectedOption || '';
-    const correct = validateAnswer(currentQ, finalAnswer);
+    const isMath = routeSubject === 'math';
+
+    const answerInput = isMath
+      ? "(Đã nộp ảnh bài làm)"
+      : selectedOption || '';
+    const finalAnswer = isMath
+      ? "(Đã nộp ảnh bài làm)"
+      : formatAnswerForDisplay(currentQ, answerInput);
+    const correct = isMath ? true : validateAnswer(currentQ, answerInput);
+    const attemptId = `attempt-${getNow()}`;
+    let uploadedProofImages: UserAttempt['proofImages'] = [];
+
+    try {
+      if (user && proofImages.length > 0) {
+        uploadedProofImages = await proofImageService.uploadProofImages(
+          user.uid,
+          attemptId,
+          proofImages.map(image => ({ id: image.id, file: image.file }))
+        );
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Không thể upload ảnh bài làm. Vui lòng thử lại.';
+      setSubmitError(message);
+      setIsSubmitting(false);
+      return;
+    }
 
     setIsCorrect(correct);
     setIsSubmitted(true);
+    setIsSubmitting(false);
 
     if (correct) {
       confetti({
@@ -142,12 +180,15 @@ export const PracticeEngine: React.FC = () => {
       });
     }
 
-    const attemptData = {
-      id: `attempt-${getNow()}`,
+    const attemptData: UserAttempt = {
+      id: attemptId,
       userId: user ? user.uid : 'guest',
       questionId: currentQ.id,
       questionTypeId: currentQ.questionTypeId,
       userAnswer: finalAnswer,
+      ...(!isMath && currentQ.answerSchema ? { finalAnswer: structuredAnswer } : {}),
+      ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
+      gradingMode: isMath ? 'manual' : (currentQ.answerSchema?.autoCheckMode === 'manual' ? 'manual' : 'auto'),
       isCorrect: correct,
       timeSpent: Math.round((getNow() - questionStartAt) / 1000),
       createdAt: new Date().toISOString()
@@ -158,6 +199,7 @@ export const PracticeEngine: React.FC = () => {
 
     // Đồng bộ Firestore
     if (user) {
+      progressService.saveUserProfile(user);
       progressService.saveAttempt(user.uid, attemptData);
       if (!correct) {
         const localMistakes = storageService.getMistakes(user.uid);
@@ -171,6 +213,7 @@ export const PracticeEngine: React.FC = () => {
 
   const handleNext = () => {
     if (currentIdx < questions.length - 1) {
+      revokeLocalProofImages(proofImages);
       setCurrentIdx(currentIdx + 1);
       resetQuestionState();
     } else {
@@ -185,6 +228,15 @@ export const PracticeEngine: React.FC = () => {
     const maxSteps = solutionDetail.detailedSteps.length;
     setHintLevel(prev => Math.min(maxSteps, prev + 1));
   };
+
+  if (isMath && !user) {
+    return (
+      <MathLoginRequired
+        title="Đăng nhập để luyện tập môn Toán"
+        description="Bài Toán cần lưu ảnh lời giải và tiến độ cá nhân theo tài khoản. Bạn cần đăng nhập trước khi chọn dạng bài hoặc nộp bài Toán."
+      />
+    );
+  }
 
   // Nếu không có questionTypeId và học sinh vào thẳng Practice từ Menu
   // Hãy hiển thị danh sách dạng bài để học sinh chọn dạng để luyện
@@ -276,6 +328,9 @@ export const PracticeEngine: React.FC = () => {
   }
 
   const currentQuestion = questions[currentIdx];
+  const submitDisabled = isMath
+    ? proofImages.length === 0
+    : !selectedOption;
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto pb-12">
@@ -311,16 +366,14 @@ export const PracticeEngine: React.FC = () => {
           {!isSubmitted ? (
             <div className="space-y-4">
               {isMath ? (
-                // Tự luận cho môn Toán
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground block">Nhập đáp số của bạn (Ví dụ: x = 1/4):</label>
-                  <input
-                    type="text"
-                    value={userAnswer}
-                    onChange={(e) => setUserAnswer(e.target.value)}
-                    placeholder="Nhập câu trả lời ngắn tại đây..."
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold placeholder:text-muted-foreground/50 placeholder:font-normal"
-                  />
+                // Trình bày hướng dẫn nộp ảnh giải cho môn Toán
+                <div className="bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-500/10 p-4 rounded-xl space-y-2">
+                  <h4 className="text-xs font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                    📝 Trình bày lời giải tự luận:
+                  </h4>
+                  <p className="text-xs text-muted-foreground font-medium leading-relaxed">
+                    Hãy làm bài giải chi tiết ra giấy hoặc vở ghi của bạn. Sau đó, **chụp ảnh bài giải** và tải lên bên dưới để nộp bài làm.
+                  </p>
                 </div>
               ) : (
                 // Trắc nghiệm cho môn Anh
@@ -380,13 +433,29 @@ export const PracticeEngine: React.FC = () => {
                 </div>
               )}
 
+              {isMath && (
+                <ProofImageUploader
+                  images={proofImages}
+                  onChange={setProofImages}
+                  disabled={isSubmitting}
+                  required={true}
+                  cloudEnabled={Boolean(user)}
+                />
+              )}
+
+              {submitError && (
+                <p className="text-xs font-bold text-rose-600 dark:text-rose-400">
+                  {submitError}
+                </p>
+              )}
+
               {/* Bấm nộp bài */}
               <Button
                 onClick={handleSubmit}
-                disabled={isMath ? !userAnswer.trim() : !selectedOption}
+                disabled={submitDisabled || isSubmitting}
                 className="w-full font-bold py-3 mt-4 text-xs active:scale-[0.98]"
               >
-                Nộp bài tập
+                {isSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài tập'}
               </Button>
             </div>
           ) : (
@@ -396,7 +465,15 @@ export const PracticeEngine: React.FC = () => {
                 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
                 : 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400'
                 }`}>
-                {isCorrect ? (
+                {isMath ? (
+                  <>
+                    <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                    <div>
+                      <h4 className="font-extrabold text-sm">Đã nộp bài giải thành công!</h4>
+                      <p className="text-xs font-semibold opacity-90">Ảnh bài làm đã được lưu. Giáo viên sẽ chấm và phản hồi lại sau.</p>
+                    </div>
+                  </>
+                ) : isCorrect ? (
                   <>
                     <CheckCircle size={24} className="text-emerald-500 shrink-0" />
                     <div>

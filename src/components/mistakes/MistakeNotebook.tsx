@@ -7,6 +7,9 @@ import { englishQuestions, englishQuestionTypes, englishSolutions } from '../../
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
+import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
+import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+import { ProofImageUploader } from '../../components/common/ProofImageUploader';
 import {
   Bookmark,
   CheckCircle,
@@ -16,10 +19,12 @@ import {
   ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { UserMistake, Question, Solution, SolutionStep, UserAttempt } from '../../types';
+import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer } from '../../types';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme } from '../../utils/theme';
-import { validateAnswer } from '../../utils/answerValidator';
+import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../utils/answerValidator';
+import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
+import { proofImageService } from '../../services/proofImageService';
 
 interface EnrichedMistake extends UserMistake {
   question: Question;
@@ -37,10 +42,14 @@ export const MistakeNotebook: React.FC = () => {
   // Trạng thái cho việc luyện lại câu sai cụ thể
   const [activeMistake, setActiveMistake] = useState<EnrichedMistake | null>(null);
   const [reAnswer, setReAnswer] = useState('');
+  const [reStructuredAnswer, setReStructuredAnswer] = useState<StructuredAnswer>({});
+  const [reProofImages, setReProofImages] = useState<LocalProofImage[]>([]);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [reSubmitted, setReSubmitted] = useState(false);
   const [reCorrect, setReCorrect] = useState(false);
   const [reSolution, setReSolution] = useState<Solution | null>(null);
+  const [isReSubmitting, setIsReSubmitting] = useState(false);
+  const [reSubmitError, setReSubmitError] = useState<string | null>(null);
 
   const loadMistakes = useCallback(() => {
     const currentUserId = user?.uid ?? 'guest';
@@ -77,10 +86,15 @@ export const MistakeNotebook: React.FC = () => {
   }, [selectedSubject, loadMistakes]);
 
   const startReview = (mistake: EnrichedMistake) => {
+    revokeLocalProofImages(reProofImages);
     setActiveMistake(mistake);
     setReAnswer('');
+    setReStructuredAnswer({});
+    setReProofImages([]);
     setSelectedOption(null);
     setReSubmitted(false);
+    setIsReSubmitting(false);
+    setReSubmitError(null);
 
     // Tìm giải pháp
     const isMath = selectedSubject === 'math';
@@ -89,19 +103,48 @@ export const MistakeNotebook: React.FC = () => {
     setReSolution(sol || null);
   };
 
-  const handleReSubmit = () => {
-    if (!activeMistake || reSubmitted) return;
+  const handleReSubmit = async () => {
+    if (!activeMistake || reSubmitted || isReSubmitting) return;
 
-    const finalAns = selectedSubject === 'math' ? reAnswer : selectedOption || '';
-    const correct = validateAnswer(activeMistake.question, finalAns);
+    setIsReSubmitting(true);
+    setReSubmitError(null);
+
+    const answerInput = selectedSubject === 'math' && activeMistake.question.answerSchema
+      ? reStructuredAnswer
+      : selectedSubject === 'math'
+        ? reAnswer
+        : selectedOption || '';
+    const finalAns = formatAnswerForDisplay(activeMistake.question, answerInput);
+    const correct = validateAnswer(activeMistake.question, answerInput);
     const currentUserId = user?.uid ?? 'guest';
     const submittedAt = new Date().toISOString();
+    const attemptId = `attempt-review-${activeMistake.questionId}-${Date.now()}`;
+    let uploadedProofImages: UserAttempt['proofImages'] = [];
+
+    try {
+      if (user && reProofImages.length > 0) {
+        uploadedProofImages = await proofImageService.uploadProofImages(
+          user.uid,
+          attemptId,
+          reProofImages.map(image => ({ id: image.id, file: image.file }))
+        );
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Không thể upload ảnh bài làm. Vui lòng thử lại.';
+      setReSubmitError(message);
+      setIsReSubmitting(false);
+      return;
+    }
+
     const attemptData: UserAttempt = {
-      id: `attempt-review-${activeMistake.questionId}-${Date.now()}`,
+      id: attemptId,
       userId: currentUserId,
       questionId: activeMistake.questionId,
       questionTypeId: activeMistake.questionTypeId,
       userAnswer: finalAns,
+      ...(activeMistake.question.answerSchema ? { finalAnswer: reStructuredAnswer } : {}),
+      ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
+      gradingMode: activeMistake.question.answerSchema?.autoCheckMode === 'manual' ? 'manual' : 'auto',
       isCorrect: correct,
       timeSpent: 30, // Mock time
       createdAt: submittedAt
@@ -109,6 +152,7 @@ export const MistakeNotebook: React.FC = () => {
 
     setReCorrect(correct);
     setReSubmitted(true);
+    setIsReSubmitting(false);
 
     storageService.saveAttempt(currentUserId, attemptData);
     refreshProgress();
@@ -133,9 +177,20 @@ export const MistakeNotebook: React.FC = () => {
   };
 
   const closeReview = () => {
+    revokeLocalProofImages(reProofImages);
+    setReProofImages([]);
     setActiveMistake(null);
     loadMistakes(); // Load lại danh sách
   };
+
+  const reviewProofImageRequired = activeMistake?.question.answerSchema?.proofImageRequired ?? false;
+  const reviewSubmitDisabled = activeMistake
+    ? selectedSubject === 'math'
+      ? activeMistake.question.answerSchema
+        ? !isAnswerComplete(activeMistake.question, reStructuredAnswer) || (reviewProofImageRequired && reProofImages.length === 0)
+        : !reAnswer.trim()
+      : !selectedOption
+    : true;
 
   const formatReviewTime = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -151,6 +206,15 @@ export const MistakeNotebook: React.FC = () => {
       </span>
     );
   };
+
+  if (selectedSubject === 'math' && !user) {
+    return (
+      <MathLoginRequired
+        title="Đăng nhập để xem và luyện lại lỗi sai Toán"
+        description="Sổ lỗi sai Toán cần gắn với tài khoản để lưu ảnh bài làm, lịch sử khắc phục và tiến độ mastery chính xác."
+      />
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-12">
@@ -217,6 +281,21 @@ export const MistakeNotebook: React.FC = () => {
                         <div className="text-[10px] text-muted-foreground font-semibold">
                           Đáp án bạn đã điền: <span className="text-red-500 font-extrabold">{mistake.wrongAnswer || 'Trống'}</span>
                         </div>
+                        {mistake.proofImages?.[0]?.downloadUrl && (
+                          <a
+                            href={mistake.proofImages[0].downloadUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 text-[10px] font-bold text-primary hover:underline"
+                          >
+                            <img
+                              src={mistake.proofImages[0].downloadUrl}
+                              alt="Ảnh bài làm đã lưu"
+                              className="h-10 w-14 rounded-lg object-cover border border-border"
+                            />
+                            Xem ảnh bài làm cũ
+                          </a>
+                        )}
                       </div>
 
                       <Button
@@ -323,16 +402,24 @@ export const MistakeNotebook: React.FC = () => {
               <div className="space-y-4">
                 {selectedSubject === 'math' ? (
                   // Nhập đáp án cho Toán
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-muted-foreground block">Giải lại và nhập đáp số mới của bạn:</label>
-                    <input
-                      type="text"
-                      value={reAnswer}
-                      onChange={(e) => setReAnswer(e.target.value)}
-                      placeholder="Nhập câu trả lời tại đây..."
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold placeholder:text-muted-foreground/50"
+                  activeMistake.question.answerSchema ? (
+                    <AnswerFormRenderer
+                      question={activeMistake.question}
+                      value={reStructuredAnswer}
+                      onChange={setReStructuredAnswer}
                     />
-                  </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-muted-foreground block">Giải lại và nhập đáp số mới của bạn:</label>
+                      <input
+                        type="text"
+                        value={reAnswer}
+                        onChange={(e) => setReAnswer(e.target.value)}
+                        placeholder="Nhập câu trả lời tại đây..."
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold placeholder:text-muted-foreground/50"
+                      />
+                    </div>
+                  )
                 ) : (
                   // Chọn đáp án cho Tiếng Anh
                   <div className="grid grid-cols-1 gap-3">
@@ -355,12 +442,28 @@ export const MistakeNotebook: React.FC = () => {
                   </div>
                 )}
 
+                {selectedSubject === 'math' && (
+                  <ProofImageUploader
+                    images={reProofImages}
+                    onChange={setReProofImages}
+                    disabled={isReSubmitting}
+                    required={reviewProofImageRequired}
+                    cloudEnabled={Boolean(user)}
+                  />
+                )}
+
+                {reSubmitError && (
+                  <p className="text-xs font-bold text-rose-600 dark:text-rose-400">
+                    {reSubmitError}
+                  </p>
+                )}
+
                 <Button
                   onClick={handleReSubmit}
-                  disabled={selectedSubject === 'math' ? !reAnswer.trim() : !selectedOption}
+                  disabled={reviewSubmitDisabled || isReSubmitting}
                   className="w-full font-bold py-3 mt-4 text-xs active:scale-[0.98]"
                 >
-                  Nộp bài giải lại
+                  {isReSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài giải lại'}
                 </Button>
               </div>
             ) : (

@@ -182,7 +182,21 @@ export const mathQuestions: Question[] = [
     sourceType: 'mock_exam',
     correctAnswer: 'x = 1/4',
     acceptedAnswers: ['x=1/4', '1/4', 'x = 0.25', '0.25'],
-    validatorType: 'number'
+    validatorType: 'number',
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'x', label: 'x =', valueType: 'number', placeholder: '1/4' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'numeric'
+    },
+    correctFinalAnswer: {
+      x: '1/4'
+    },
+    acceptedFinalAnswers: [
+      { x: '0.25' }
+    ]
   },
   // Hệ thức Vi-ét
   {
@@ -195,14 +209,36 @@ export const mathQuestions: Question[] = [
     sourceType: 'official_exam',
     province: 'Bình Định',
     year: 2024,
-    correctAnswer: 'm = -4 + sqrt(31)',
+    correctAnswer: 'm = -4 + √31',
     acceptedAnswers: [
       'm = -4 + \\sqrt{31}',
       '-4 + sqrt(31)',
       '-4 + \\sqrt{31}',
       'm=-4+sqrt(31)'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        {
+          key: 'm',
+          label: 'm =',
+          valueType: 'expression',
+          placeholder: 'Ví dụ: -4 + √31',
+          hint: 'Có thể nhập √31 hoặc căn 31.'
+        }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      m: '-4 + √31'
+    },
+    acceptedFinalAnswers: [
+      { m: '-4 + \\sqrt{31}' },
+      { m: '-4+sqrt(31)' },
+      { m: '-4 + căn 31' }
+    ]
   },
   // Lập hệ phương trình thực tế
   {
@@ -222,7 +258,21 @@ export const mathQuestions: Question[] = [
       'Tủ lạnh 15 triệu, Tivi 10 triệu',
       'Tủ lạnh 15 Tivi 10'
     ],
-    validatorType: 'multi-number'
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'tivi', label: 'Tivi =', valueType: 'number', placeholder: '10' },
+        { key: 'tuLanh', label: 'Tủ lạnh =', valueType: 'number', placeholder: '15' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      tivi: '10',
+      tuLanh: '15'
+    }
   },
   // Tứ giác nội tiếp
   {

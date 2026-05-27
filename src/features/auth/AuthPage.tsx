@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { auth } from '../../services/firebase';
 import { 
   signInWithEmailAndPassword, 
@@ -16,19 +16,24 @@ import { GraduationCap, Mail, Lock, User, ArrowRight, AlertCircle, Loader } from
 
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, refreshProgress } = useAppStore();
+  const location = useLocation();
+  const { user, refreshProgress, setSubject } = useAppStore();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const locationState = location.state as { returnTo?: string } | null;
+  const returnTo = locationState?.returnTo && locationState.returnTo.startsWith('/') && locationState.returnTo !== '/auth'
+    ? locationState.returnTo
+    : '/dashboard';
 
   useEffect(() => {
     if (user) {
-      navigate('/dashboard', { replace: true });
+      navigate(returnTo, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, returnTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +46,9 @@ export const AuthPage: React.FC = () => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const loggedUser = userCredential.user;
         
+        // Lưu hồ sơ lên Firestore
+        await progressService.saveUserProfile(loggedUser);
+
         // Merge an toàn Cloud + Guest, không cho tiến độ cục bộ ghi đè tiến độ remote.
         await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
       } else {
@@ -54,14 +62,16 @@ export const AuthPage: React.FC = () => {
         // Cập nhật tên hiển thị
         await updateProfile(loggedUser, { displayName: name });
         
+        // Lưu hồ sơ lên Firestore
+        await progressService.saveUserProfile(loggedUser, name);
+
         // Khởi tạo và merge dữ liệu Guest với tài khoản mới.
         await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
       }
 
       refreshProgress();
       
-      // Chuyển về màn hình Dashboard sau khi đăng nhập thành công
-      navigate('/dashboard');
+      navigate(returnTo);
     } catch (err: any) {
       console.error(err);
       let friendlyMessage = 'Đã có lỗi xảy ra. Vui lòng thử lại.';
@@ -85,7 +95,7 @@ export const AuthPage: React.FC = () => {
       setLoading(false);
     }
   };
-
+ 
   const handleGoogleSignIn = async () => {
     setError('');
     setLoading(true);
@@ -94,12 +104,14 @@ export const AuthPage: React.FC = () => {
       const userCredential = await signInWithPopup(auth, provider);
       const loggedUser = userCredential.user;
       
+      // Lưu hồ sơ lên Firestore
+      await progressService.saveUserProfile(loggedUser);
+
       // Merge an toàn Cloud + Guest, không cho tiến độ cục bộ ghi đè tiến độ remote.
       await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
       refreshProgress();
       
-      // Chuyển về màn hình Dashboard sau khi đăng nhập thành công
-      navigate('/dashboard');
+      navigate(returnTo);
     } catch (err: any) {
       console.error(err);
       if (err.code !== 'auth/popup-closed-by-user') {
@@ -235,10 +247,13 @@ export const AuthPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => navigate('/dashboard')}
+                onClick={() => {
+                  setSubject('english');
+                  navigate('/dashboard');
+                }}
                 className="w-full text-center py-2 bg-secondary/50 hover:bg-secondary border border-border/30 rounded-xl text-xs font-bold text-foreground transition-all duration-150 active:scale-[0.98] cursor-pointer"
               >
-                Tiếp tục học ở chế độ Khách (Guest)
+                Tiếp tục học Tiếng Anh ở chế độ Khách
               </button>
 
               <button

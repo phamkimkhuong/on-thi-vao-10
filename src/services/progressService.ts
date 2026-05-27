@@ -1,6 +1,7 @@
 import { db } from './firebase';
 import { doc, setDoc, collection, writeBatch, getDocs, query } from 'firebase/firestore';
-import { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
+import { UserAttempt, UserMistake, UserProgress, ExamResult, SimulatedStudent } from '../types';
+import { User } from 'firebase/auth';
 import { storageService } from './storage';
 import { calculateMasteryScore, getStarsFromScore } from '../utils/theme';
 
@@ -522,6 +523,142 @@ export const progressService = {
     } catch (e) {
       console.error('Lỗi khi lấy kết quả thi thử từ Firestore:', e);
       return [];
+    }
+  },
+
+  // TEACHER REAL DATA INTEGRATION
+  async saveUserProfile(user: User, name?: string): Promise<void> {
+    try {
+      await setDoc(doc(db, 'users', user.uid), {
+        id: user.uid,
+        name: user.displayName || name || 'Học sinh mới',
+        avatar: user.photoURL || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.uid}`,
+        email: user.email,
+        lastActiveAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (e) {
+      console.error('Lỗi khi lưu thông tin user lên Firestore:', e);
+    }
+  },
+
+  async getRealStudents(): Promise<SimulatedStudent[]> {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'users'));
+      const students: SimulatedStudent[] = [];
+      
+      await Promise.all(querySnapshot.docs.map(async (docRef) => {
+        const data = docRef.data();
+        if (data.email !== 'phamkhuong436@gmail.com') { // Ẩn tài khoản giáo viên
+          let completedCount = 0;
+          try {
+            const progSnapshot = await getDocs(collection(db, `users/${docRef.id}/progress`));
+            progSnapshot.forEach(pDoc => {
+              if (pDoc.data().isCompleted) {
+                completedCount++;
+              }
+            });
+          } catch (pe) {
+            console.error("Lỗi khi load completed progress count cho học sinh:", docRef.id, pe);
+          }
+
+          students.push({
+            id: docRef.id,
+            name: data.name || 'Học sinh mới',
+            avatar: data.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${docRef.id}`,
+            email: data.email || '',
+            completedCount
+          } as any);
+        }
+      }));
+      
+      return students;
+    } catch (e) {
+      console.error('Lỗi khi lấy danh sách học sinh từ Firestore:', e);
+      return [];
+    }
+  },
+
+  async getRealPendingManualAttempts(students: SimulatedStudent[]): Promise<Array<{ student: SimulatedStudent; attempt: UserAttempt }>> {
+    try {
+      const pending: Array<{ student: SimulatedStudent; attempt: UserAttempt }> = [];
+      await Promise.all(students.map(async (student) => {
+        const attempts = await this.getAttempts(student.id);
+        attempts.forEach(attempt => {
+          if (attempt.gradingMode === 'manual') {
+            pending.push({ student, attempt });
+          }
+        });
+      }));
+      return pending.sort((a, b) => new Date(b.attempt.createdAt).getTime() - new Date(a.attempt.createdAt).getTime());
+    } catch (e) {
+      console.error('Lỗi khi lấy danh sách bài chờ chấm từ Firestore:', e);
+      return [];
+    }
+  },
+
+  async gradeRealAttempt(studentId: string, attempt: UserAttempt, isCorrect: boolean, feedback?: string): Promise<void> {
+    try {
+      const attemptId = attempt.id;
+      const attemptRef = doc(db, `users/${studentId}/attempts`, attemptId);
+      
+      const updatedAttempt = {
+        ...attempt,
+        isCorrect,
+        gradingMode: 'auto' as const,
+        teacherFeedback: feedback,
+        syncedAt: new Date().toISOString()
+      };
+      
+      await setDoc(attemptRef, updatedAttempt, { merge: true });
+
+      // Lấy toàn bộ attempts của học sinh này để recalculate progress
+      const allAttempts = await this.getAttempts(studentId);
+      const index = allAttempts.findIndex(a => a.id === attemptId);
+      if (index > -1) {
+        allAttempts[index] = updatedAttempt;
+      } else {
+        allAttempts.push(updatedAttempt);
+      }
+
+      const typeAttempts = allAttempts.filter(a => a.questionTypeId === attempt.questionTypeId);
+      const newScore = calculateMasteryScore(typeAttempts);
+      const isCompleted = newScore >= 60;
+
+      // Cập nhật progress trên Firestore
+      const progressRef = doc(db, `users/${studentId}/progress`, attempt.questionTypeId);
+      await setDoc(progressRef, {
+        masteryLevel: newScore,
+        isCompleted,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+
+      // Cập nhật Sổ lỗi sai trên Firestore
+      const mistakeId = `mistake-${attempt.questionId}`;
+      const mistakeRef = doc(db, `users/${studentId}/mistakes`, mistakeId);
+
+      if (!isCorrect) {
+        await setDoc(mistakeRef, {
+          id: mistakeId,
+          userId: studentId,
+          questionId: attempt.questionId,
+          questionTypeId: attempt.questionTypeId,
+          wrongAnswer: attempt.userAnswer,
+          reviewStatus: 'new',
+          reviewCount: 1,
+          lastAttemptedAt: attempt.createdAt,
+          nextReviewAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          teacherFeedback: feedback,
+          syncedAt: new Date().toISOString()
+        }, { merge: true });
+      } else {
+        await setDoc(mistakeRef, {
+          reviewStatus: 'fixed',
+          nextReviewAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          syncedAt: new Date().toISOString()
+        }, { merge: true });
+      }
+    } catch (e) {
+      console.error('Lỗi khi chấm điểm lên Firestore:', e);
     }
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import {
@@ -13,9 +13,12 @@ import {
   X,
   ChevronRight,
   TrendingUp,
-  Lock
+  Lock,
+  Users
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
+import { progressService } from '../../services/progressService';
+import { cn } from '../../utils/cn';
 import { mathQuestionTypes } from '../../data/mathData';
 import { englishQuestionTypes } from '../../data/englishData';
 
@@ -34,6 +37,34 @@ export const AppLayout: React.FC = () => {
   void progressVersion;
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [realPendingCount, setRealPendingCount] = useState(0);
+
+  // Tự động đảm bảo thông tin hồ sơ của học sinh tồn tại trong Firestore collection 'users'
+  useEffect(() => {
+    if (user) {
+      progressService.saveUserProfile(user);
+    }
+  }, [user]);
+
+  // Lấy số lượng bài chờ chấm thực tế trên Firestore để hiển thị Badge ở góc Giáo viên
+  useEffect(() => {
+    if (user?.email === 'phamkhuong436@gmail.com') {
+      const fetchRealPendingCount = async () => {
+        try {
+          const studentsList = await progressService.getRealStudents();
+          const pending = await progressService.getRealPendingManualAttempts(studentsList);
+          setRealPendingCount(pending.length);
+        } catch (e) {
+          console.error("Lỗi khi load real pending count ở sidebar:", e);
+        }
+      };
+      fetchRealPendingCount();
+      
+      // Tự động tải lại mỗi 15 giây để báo bài mới cho Giáo viên
+      const interval = setInterval(fetchRealPendingCount, 15000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   const menuItems = [
     { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
@@ -60,6 +91,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/practice')) return 'Luyện tập';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return 'Thi thử vào 10';
+    if (path.startsWith('/teacher')) return 'Góc Giáo viên';
     return 'Bảng điều khiển';
   };
 
@@ -185,6 +217,31 @@ export const AppLayout: React.FC = () => {
               </button>
             );
           })}
+
+          {user?.email === 'phamkhuong436@gmail.com' && (
+            <div className="pt-3 border-t border-border/20 mt-3">
+              <button
+                onClick={() => {
+                  navigate('/teacher');
+                  setIsSidebarOpen(false);
+                }}
+                className={cn(
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all duration-200 cursor-pointer border border-dashed",
+                  location.pathname === '/teacher'
+                    ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/40 dark:text-emerald-400"
+                    : "text-emerald-600 hover:bg-emerald-500/5 hover:text-emerald-700 border-emerald-500/20 dark:text-emerald-400"
+                )}
+              >
+                <Users size={18} className="text-emerald-500 animate-pulse" />
+                <span>Góc Giáo viên 👩‍🏫</span>
+                {realPendingCount > 0 && (
+                  <span className="ml-auto bg-rose-500 text-white font-black text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center animate-bounce">
+                    {realPendingCount}
+                  </span>
+                )}
+              </button>
+            </div>
+          )}
         </nav>
 
         {/* Tiến Độ Thu Gọn */}

@@ -1,4 +1,4 @@
-import { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
+import type { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
 import { calculateMasteryScore } from '../utils/theme';
 
 const KEYS = {
@@ -129,6 +129,7 @@ export const storageService = {
       const updated: UserMistake = {
         ...existing,
         wrongAnswer: attempt.userAnswer,
+        proofImages: attempt.proofImages ?? existing.proofImages,
         reviewStatus: existing.reviewStatus === 'fixed' ? 'reviewing' : existing.reviewStatus,
         reviewCount: existing.reviewCount + 1,
         lastAttemptedAt: attempt.createdAt,
@@ -143,6 +144,7 @@ export const storageService = {
         questionId: attempt.questionId,
         questionTypeId: attempt.questionTypeId,
         wrongAnswer: attempt.userAnswer,
+        proofImages: attempt.proofImages,
         reviewStatus: 'new',
         reviewCount: 1,
         lastAttemptedAt: attempt.createdAt,
@@ -234,7 +236,7 @@ export const storageService = {
     // Xem như hoàn thành (completed) nếu masteryScore đạt >= 60 (tương đương 2 sao trở lên)
     const isCompleted = newScore >= 60;
     const completedIndex = progressMap[userId].completedLessons.indexOf(questionTypeId);
-    
+
     if (isCompleted && completedIndex === -1) {
       progressMap[userId].completedLessons.push(questionTypeId);
     } else if (!isCompleted && completedIndex !== -1) {
@@ -289,7 +291,6 @@ export const storageService = {
     delete examResultsMap.guest;
     writeToStorage(KEYS.EXAM_RESULTS, examResultsMap);
   },
-
   // RESET ALL DATA
   resetData(): void {
     localStorage.removeItem(KEYS.ATTEMPTS);
