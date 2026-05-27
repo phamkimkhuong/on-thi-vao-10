@@ -288,6 +288,147 @@ export const mathQuestions: Question[] = [
     correctAnswer: 'Chứng minh thành công',
     acceptedAnswers: ['Chứng minh thành công'],
     validatorType: 'manual'
+  },
+  // Rút gọn trực tiếp - Đề TPHCM 2023
+  {
+    id: 'math-q5',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt1',
+    content: 'Rút gọn biểu thức \\(A = \\frac{\\sqrt{x} + 1}{\\sqrt{x} - 1} - \\frac{2}{\\sqrt{x}+1} - \\frac{2}{x-1}\\) với \\(x \\ge 0, x \\neq 1\\).',
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'TP.HCM',
+    year: 2023,
+    correctAnswer: 'A = (x + 1)/(x - 1)',
+    acceptedAnswers: [
+      '(x+1)/(x-1)',
+      '(x + 1)/(x - 1)',
+      'A = (x+1)/(x-1)'
+    ],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        {
+          key: 'A',
+          label: 'A =',
+          valueType: 'expression',
+          placeholder: 'Ví dụ: (x+1)/(x-1)',
+          hint: 'Nhập biểu thức đã rút gọn'
+        }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      A: '(x+1)/(x-1)'
+    }
+  },
+  // Rút gọn trực tiếp - Tự biên soạn
+  {
+    id: 'math-q6',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt1',
+    content: 'Cho biểu thức \\(B = \\left(\\frac{1}{\\sqrt{x}+1} - \\frac{2}{x+2\\sqrt{x}+1}\\right) \\div \\frac{\\sqrt{x}-1}{x-1}\\) với \\(x \\ge 0, x \\neq 1\\).\n\nRút gọn biểu thức \\(B\\).',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'B = (√x - 1)/(√x + 1)',
+    acceptedAnswers: [
+      '(√x-1)/(√x+1)',
+      '(sqrt(x)-1)/(sqrt(x)+1)',
+      'B = (√x-1)/(√x+1)',
+      'B = (sqrt(x)-1)/(sqrt(x)+1)'
+    ],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        {
+          key: 'B',
+          label: 'B =',
+          valueType: 'expression',
+          placeholder: 'Ví dụ: (√x-1)/(√x+1)',
+          hint: 'Nhập biểu thức đã rút gọn'
+        }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      B: '(√x-1)/(√x+1)'
+    },
+    acceptedFinalAnswers: [
+      { B: '(sqrt(x)-1)/(sqrt(x)+1)' }
+    ]
+  },
+  // Rút gọn + Tìm x - Đề Bình Định 2024 (Biến thể)
+  {
+    id: 'math-q7',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt1',
+    content: 'Cho biểu thức \\(Q = \\left(\\frac{1}{\\sqrt{x}-1} - \\frac{1}{\\sqrt{x}+1}\\right) \\div \\frac{2\\sqrt{x}}{x-1}\\) với \\(x > 0, x \\neq 1\\).\n\na) Rút gọn biểu thức \\(Q\\).\n\nb) Tìm tất cả các giá trị của \\(x\\) để \\(Q < 1\\).',
+    difficulty: 'medium',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2024,
+    correctAnswer: 'x > 1',
+    acceptedAnswers: ['x > 1', 'x>1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        {
+          key: 'x',
+          label: 'Điều kiện x:',
+          valueType: 'expression',
+          placeholder: 'Ví dụ: x > 1',
+          hint: 'Nhập kết quả tìm x'
+        }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      x: 'x > 1'
+    },
+    acceptedFinalAnswers: [
+      { x: 'x>1' }
+    ]
+  },
+  // Rút gọn + Tìm x nguyên để biểu thức nguyên - Tự biên soạn
+  {
+    id: 'math-q8',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt1',
+    content: 'Cho biểu thức \\(M = \\frac{x + 2\\sqrt{x} - 3}{x - \\sqrt{x}} \\div \\frac{\\sqrt{x}-1}{\\sqrt{x}}\\) với \\(x > 0, x \\neq 1\\).\n\na) Rút gọn biểu thức \\(M\\).\n\nb) Tìm tất cả các giá trị nguyên của \\(x\\) để \\(M\\) nhận giá trị nguyên.',
+    difficulty: 'hard',
+    sourceType: 'manual',
+    correctAnswer: 'x ∈ {4, 9, 25}',
+    acceptedAnswers: [
+      'x ∈ {4, 9, 25}',
+      'x = 4, x = 9, x = 25',
+      '4, 9, 25',
+      'x = 4, 9, 25'
+    ],
+    validatorType: 'manual',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        {
+          key: 'x',
+          label: 'Các giá trị x:',
+          valueType: 'expression',
+          placeholder: 'Ví dụ: 4, 9, 25',
+          hint: 'Nhập các giá trị nguyên của x cách nhau bằng dấu phẩy'
+        }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'manual'
+    }
   }
 ];
 
@@ -422,6 +563,182 @@ export const mathSolutions: Solution[] = [
     reviewSuggestions: [
       'Ôn tập các bài toán phần trăm trong chương trình THCS',
       'Luyện tập giải nhanh hệ phương trình bậc nhất hai ẩn'
+    ]
+  },
+  {
+    id: 'math-s5',
+    questionId: 'math-q5',
+    recognition: 'Biểu thức A gồm ba phân thức với các mẫu thức lần lượt là \\(\\sqrt{x}-1\\), \\(\\sqrt{x}+1\\) và \\(x-1\\). Nhận thấy mẫu thức thứ ba có thể phân tích thành \\(x-1 = (\\sqrt{x}-1)(\\sqrt{x}+1)\\). Đây cũng chính là mẫu thức chung (MTC) của cả ba phân thức.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định Mẫu thức chung (MTC)',
+        explanation: 'Phân tích mẫu thức thứ ba ta được: \\(x-1 = (\\sqrt{x}-1)(\\sqrt{x}+1)\\). Do đó, Mẫu thức chung của biểu thức là \\(MTC = (\\sqrt{x}-1)(\\sqrt{x}+1)\\).',
+        formula: 'MTC = (\\sqrt{x}-1)(\\sqrt{x}+1)'
+      },
+      {
+        order: 2,
+        title: 'Quy đồng và thực hiện phép tính trên tử số',
+        explanation: 'Quy đồng tử số của các phân thức thành phần theo MTC và đưa về cùng một mẫu số:',
+        formula: 'A = \\frac{(\\sqrt{x}+1)(\\sqrt{x}+1) - 2(\\sqrt{x}-1) - 2}{(\\sqrt{x}-1)(\\sqrt{x}+1)}',
+        result: 'Ta thu được biểu thức dạng chung có tử số là: \\((\\sqrt{x}+1)^2 - 2(\\sqrt{x}-1) - 2\\)'
+      },
+      {
+        order: 3,
+        title: 'Khai triển và thu gọn tử số',
+        explanation: 'Khai triển các hằng đẳng thức và nhân phân phối ở tử số:',
+        formula: 'Tử = (x + 2\\sqrt{x} + 1) - 2\\sqrt{x} + 2 - 2 = x + 1',
+        result: 'Tử số sau khi thu gọn là: \\(x + 1\\)'
+      },
+      {
+        order: 4,
+        title: 'Viết kết quả rút gọn cuối cùng',
+        explanation: 'Ghép tử số đã rút gọn vào mẫu thức chung để được biểu thức thu gọn:',
+        formula: 'A = \\frac{x+1}{(\\sqrt{x}-1)(\\sqrt{x}+1)} = \\frac{x+1}{x-1}',
+        result: '\\(A = \\frac{x+1}{x-1}\\) với điều kiện \\(x \\ge 0, x \\neq 1\\)'
+      }
+    ],
+    finalAnswer: '\\(A = \\frac{x+1}{x-1}\\)',
+    commonMistakes: [
+      'Phân tích sai mẫu thức x - 1 thành x(\\sqrt{x}-1)',
+      'Sai dấu khi nhân phá ngoặc ở tử số, đặc biệt là cụm -2(\\sqrt{x}-1) thành -2\\sqrt{x}-2'
+    ],
+    reviewSuggestions: [
+      'Ôn tập hằng đẳng thức hiệu hai bình phương',
+      'Luyện tập nhân chia đa thức chứa căn'
+    ]
+  },
+  {
+    id: 'math-s6',
+    questionId: 'math-q6',
+    recognition: 'Biểu thức B có dạng một ngoặc nhân chia với một phân thức. Ta cần rút gọn cụm trong ngoặc trước bằng cách quy đồng mẫu thức. Nhận thấy mẫu thức thứ hai là \\(x+2\\sqrt{x}+1 = (\\sqrt{x}+1)^2\\). Mẫu thức chung trong ngoặc là \\((\\sqrt{x}+1)^2\\).',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Quy đồng và rút gọn cụm trong ngoặc',
+        explanation: 'Trong ngoặc thứ nhất, ta có MTC là \\((\\sqrt{x}+1)^2\\). Tiến hành quy đồng và trừ tử số:',
+        formula: 'C_{1} = \\frac{1(\\sqrt{x}+1) - 2}{(\\sqrt{x}+1)^2} = \\frac{\\sqrt{x}-1}{(\\sqrt{x}+1)^2}',
+        result: 'Kết quả rút gọn ngoặc thứ nhất là \\(\\frac{\\sqrt{x}-1}{(\\sqrt{x}+1)^2}\\)'
+      },
+      {
+        order: 2,
+        title: 'Phân tích phân thức bị chia',
+        explanation: 'Phân thức chia ở ngoài ngoặc là \\(\\frac{\\sqrt{x}-1}{x-1}\\). Phân tích mẫu thức \\(x-1 = (\\sqrt{x}-1)(\\sqrt{x}+1)\\) ta được:',
+        formula: 'C_{2} = \\frac{\\sqrt{x}-1}{(\\sqrt{x}-1)(\\sqrt{x}+1)} = \\frac{1}{\\sqrt{x}+1}',
+        result: 'Kết quả phân tích cụm chia là \\(\\frac{1}{\\sqrt{x}+1}\\)'
+      },
+      {
+        order: 3,
+        title: 'Thực hiện phép chia B = Cụm_1 / Cụm_2',
+        explanation: 'Phép chia tương đương với nhân nghịch đảo phân thức chia:',
+        formula: 'B = \\frac{\\sqrt{x}-1}{(\\sqrt{x}+1)^2} \\div \\frac{1}{\\sqrt{x}+1} = \\frac{\\sqrt{x}-1}{(\\sqrt{x}+1)^2} \\cdot (\\sqrt{x}+1)',
+        result: 'Rút gọn thừa số chung \\(\\sqrt{x}+1\\) ở tử và mẫu ta được: \\(B = \\frac{\\sqrt{x}-1}{\\sqrt{x}+1}\\)'
+      }
+    ],
+    finalAnswer: '\\(B = \\frac{\\sqrt{x}-1}{\\sqrt{x}+1}\\)',
+    commonMistakes: [
+      'Không nhận ra hằng đẳng thức x + 2\\sqrt{x} + 1 = (\\sqrt{x}+1)^2 dẫn đến quy đồng mẫu thức phức tạp',
+      'Quên nhân nghịch đảo khi thực hiện phép chia phân thức'
+    ],
+    reviewSuggestions: [
+      'Luyện tập hằng đẳng thức bình phương của một tổng',
+      'Ôn tập phép toán nhân chia phân thức đại số'
+    ]
+  },
+  {
+    id: 'math-s7',
+    questionId: 'math-q7',
+    recognition: 'Bài toán yêu cầu rút gọn biểu thức Q rồi giải bất phương trình Q < 1. Để rút gọn Q, ta quy đồng cụm ngoặc thứ nhất với MTC là \\(x-1 = (\\sqrt{x}-1)(\\sqrt{x}+1)\\), sau đó nhân nghịch đảo với phân thức chia.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Rút gọn biểu thức trong ngoặc thứ nhất',
+        explanation: 'Quy đồng hai phân thức trong ngoặc với MTC là \\((\\sqrt{x}-1)(\\sqrt{x}+1) = x-1\\):',
+        formula: 'A_{Q} = \\frac{1(\\sqrt{x}+1) - 1(\\sqrt{x}-1)}{x-1} = \\frac{\\sqrt{x}+1-\\sqrt{x}+1}{x-1} = \\frac{2}{x-1}',
+        result: 'Cụm trong ngoặc được rút gọn thành \\(\\frac{2}{x-1}\\)'
+      },
+      {
+        order: 2,
+        title: 'Thực hiện phép chia để rút gọn Q',
+        explanation: 'Nhân cụm trong ngoặc đã rút gọn với nghịch đảo của phân thức chia:',
+        formula: 'Q = \\frac{2}{x-1} \\cdot \\frac{x-1}{2\\sqrt{x}} = \\frac{1}{\\sqrt{x}}',
+        result: 'Kết quả rút gọn biểu thức là \\(Q = \\frac{1}{\\sqrt{x}}\\)'
+      },
+      {
+        order: 3,
+        title: 'Giải bất phương trình Q < 1',
+        explanation: 'Thay biểu thức Q đã rút gọn vào bất phương trình đề bài cho:',
+        formula: '\\frac{1}{\\sqrt{x}} < 1 \\Leftrightarrow \\sqrt{x} > 1 \\Leftrightarrow x > 1',
+        result: 'Tìm được điều kiện là \\(x > 1\\)'
+      },
+      {
+        order: 4,
+        title: 'Đối chiếu điều kiện xác định và kết luận',
+        explanation: 'Đối chiếu giá trị tìm được với điều kiện xác định ban đầu của bài toán là \\(x > 0, x \\neq 1\\):',
+        formula: 'x > 1 \\cap (x > 0, x \\neq 1) \\Rightarrow x > 1',
+        result: 'Kết luận: Giá trị x thỏa mãn là \\(x > 1\\)'
+      }
+    ],
+    finalAnswer: 'a) \\(Q = \\frac{1}{\\sqrt{x}}\\), b) \\(x > 1\\)',
+    commonMistakes: [
+      'Quy đồng sai tử số trong ngoặc: nhầm \\(\\sqrt{x}+1 - (\\sqrt{x}-1) = 0\\) thay vì 2',
+      'Khi giải bất phương trình chứa mẫu thức quên điều kiện xác định x > 0'
+    ],
+    reviewSuggestions: [
+      'Luyện tập giải bất phương trình chứa ẩn ở mẫu thức',
+      'Ôn tập các phép biến đổi căn thức cơ bản'
+    ]
+  },
+  {
+    id: 'math-s8',
+    questionId: 'math-q8',
+    recognition: 'Yêu cầu rút gọn biểu thức M trước, sau đó tìm các giá trị nguyên của x để M nhận giá trị nguyên. Ở phần rút gọn, phân tích tử thức thứ nhất thành nhân tử bằng cách tách hạng tử hoặc nhẩm nghiệm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Phân tích các đa thức thành nhân tử',
+        explanation: 'Nhận thấy tử số của phân thức thứ nhất \\(x + 2\\sqrt{x} - 3\\) có thể tách thành \\((\\sqrt{x}-1)(\\sqrt{x}+3)\\). Mẫu số \\(x-\\sqrt{x} = \\sqrt{x}(\\sqrt{x}-1)\\).',
+        formula: '\\frac{x+2\\sqrt{x}-3}{x-\\sqrt{x}} = \\frac{(\\sqrt{x}-1)(\\sqrt{x}+3)}{\\sqrt{x}(\\sqrt{x}-1)} = \\frac{\\sqrt{x}+3}{\\sqrt{x}}',
+        result: 'Phân thức thứ nhất rút gọn thành \\(\\frac{\\sqrt{x}+3}{\\sqrt{x}}\\)'
+      },
+      {
+        order: 2,
+        title: 'Thực hiện phép chia để rút gọn M',
+        explanation: 'Nhân nghịch đảo với phân thức chia:',
+        formula: 'M = \\frac{\\sqrt{x}+3}{\\sqrt{x}} \\cdot \\frac{\\sqrt{x}}{\\sqrt{x}-1} = \\frac{\\sqrt{x}+3}{\\sqrt{x}-1}',
+        result: 'Biểu thức rút gọn là \\(M = \\frac{\\sqrt{x}+3}{\\sqrt{x}-1}\\)'
+      },
+      {
+        order: 3,
+        title: 'Phân tích M để tìm x nguyên',
+        explanation: 'Biến đổi biểu thức M về dạng có phần nguyên và phần phân thức có tử số là một hằng số:',
+        formula: 'M = \\frac{(\\sqrt{x}-1) + 4}{\\sqrt{x}-1} = 1 + \\frac{4}{\\sqrt{x}-1}',
+        result: 'Để M nhận giá trị nguyên với x nguyên, thì \\(\\frac{4}{\\sqrt{x}-1}\\) phải là số nguyên.'
+      },
+      {
+        order: 4,
+        title: 'Tìm các giá trị x thỏa mãn',
+        explanation: 'Từ lập luận trên, \\(\\sqrt{x}-1\\) phải là ước của 4. Ước của 4 là \\(\\{\\pm 1, \\pm 2, \\pm 4\\}\\). Lập bảng giá trị:',
+        formula: '\\sqrt{x}-1 \\in \\{-1, 1, -2, 2, -4, 4\\}',
+        result: 'Tính toán tìm x: với \\(\\sqrt{x}-1=-1\\) thì \\(x=0\\). Với \\(\\sqrt{x}-1=1\\) thì \\(x=4\\). Với \\(\\sqrt{x}-1=2\\) thì \\(x=9\\). Với \\(\\sqrt{x}-1=4\\) thì \\(x=25\\). Các trường hợp khác loại do căn thức âm.'
+      },
+      {
+        order: 5,
+        title: 'Đối chiếu điều kiện xác định và kết luận',
+        explanation: 'Đối chiếu với điều kiện xác định của đề bài là \\(x > 0, x \\neq 1\\). Giá trị \\(x = 0\\) không thỏa mãn.',
+        formula: 'x \\in \\{4, 9, 25\\}',
+        result: 'Kết luận: Các giá trị x nguyên cần tìm là x = 4, x = 9, x = 25.'
+      }
+    ],
+    finalAnswer: 'a) \\(M = \\frac{\\sqrt{x}+3}{\\sqrt{x}-1}\\), b) \\(x \\in \\{4, 9, 25\\}\\)',
+    commonMistakes: [
+      'Không đặt điều kiện x > 0 dẫn đến nhận cả giá trị x = 0 trong đáp số cuối',
+      'Không rút gọn biểu thức M trước khi đi tìm x nguyên',
+      'Tính sai các ước của 4 hoặc giải sai phương trình \\(\\sqrt{x}-1 = k\\)'
+    ],
+    reviewSuggestions: [
+      'Luyện tập chuyên đề Tìm giá trị của ẩn để biểu thức nhận giá trị nguyên',
+      'Ôn tập các phương pháp phân tích đa thức chứa căn thành nhân tử'
     ]
   }
 ];

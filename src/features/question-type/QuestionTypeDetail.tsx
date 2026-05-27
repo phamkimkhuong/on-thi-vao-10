@@ -41,9 +41,13 @@ export const QuestionTypeDetail: React.FC = () => {
 
   // Tìm câu hỏi mẫu đi kèm trực tiếp (Derived State)
   const exampleQuestion: Question | null = detail
-    ? (detail.id.startsWith('math') 
-       ? mathQuestions.find(item => item.questionTypeId === detail.id)
-       : englishQuestions.find(item => item.questionTypeId === detail.id)) || null
+    ? (detail.exampleQuestionId
+       ? (detail.id.startsWith('math')
+          ? mathQuestions.find(item => item.id === detail.exampleQuestionId)
+          : englishQuestions.find(item => item.id === detail.exampleQuestionId))
+       : (detail.id.startsWith('math') 
+          ? mathQuestions.find(item => item.questionTypeId === detail.id)
+          : englishQuestions.find(item => item.questionTypeId === detail.id))) || null
     : null;
 
   // Tìm lời giải mẫu đi kèm trực tiếp (Derived State)

@@ -587,8 +587,8 @@ export const PracticeEngine: React.FC = () => {
                           <div className="flex-1">
                             <LatexRenderer text={step.explanation} />
                             {step.formula && (
-                              <div className="mt-1 bg-secondary/30 p-1.5 rounded text-foreground inline-block">
-                                <LatexRenderer text={step.formula} />
+                              <div className="mt-1 bg-secondary/30 p-1.5 rounded text-foreground overflow-x-auto">
+                                <LatexRenderer text={step.formula} block={true} />
                               </div>
                             )}
                           </div>

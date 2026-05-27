@@ -88,7 +88,9 @@ export interface QuestionType {
   commonMistakes: string[];
   difficulty: 'easy' | 'medium' | 'hard';
   examFrequency: 'low' | 'medium' | 'high';
+  exampleQuestionId?: string; // ID câu hỏi dùng làm ví dụ mẫu trong tab "Ví dụ mẫu"
 }
+
 
 export interface Question {
   id: string;
