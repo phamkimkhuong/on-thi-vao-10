@@ -1,8 +1,132 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function isBootstrapTeacher() {
+      return signedIn()
+        && request.auth.uid in [
+          'hzSKwkaroTR1LKcXp09E5wL7F6f1'
+        ];
+    }
+
+    // Bootstrap teacher access by creating:
+    // /teachers/{teacherUid} => { active: true, role: "teacher" }
+    // from Firebase Console or Admin SDK. Client writes are intentionally blocked.
+    function isTeacher() {
+      return isBootstrapTeacher()
+        || (
+          signedIn()
+          && exists(/databases/$(database)/documents/teachers/$(request.auth.uid))
+          && get(/databases/$(database)/documents/teachers/$(request.auth.uid)).data.active == true
+        );
+    }
+
+    function isTeacherAttemptReview(userId) {
+      return isTeacher()
+        && resource.data.userId == userId
+        && request.resource.data.userId == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'isCorrect',
+          'gradingMode',
+          'teacherFeedback',
+          'syncedAt'
+        ])
+        && request.resource.data.isCorrect is bool
+        && request.resource.data.gradingMode == 'auto';
+    }
+
+    function isTeacherProgressWrite() {
+      return isTeacher()
+        && request.resource.data.keys().hasOnly([
+          'masteryLevel',
+          'isCompleted',
+          'updatedAt'
+        ])
+        && request.resource.data.masteryLevel is number
+        && request.resource.data.masteryLevel >= 0
+        && request.resource.data.masteryLevel <= 100
+        && request.resource.data.isCompleted is bool
+        && request.resource.data.updatedAt is string;
+    }
+
+    function isTeacherMistakeCreate(userId) {
+      return isTeacher()
+        && request.resource.data.userId == userId
+        && request.resource.data.keys().hasOnly([
+          'id',
+          'userId',
+          'questionId',
+          'questionTypeId',
+          'wrongAnswer',
+          'proofImages',
+          'reviewStatus',
+          'reviewCount',
+          'lastAttemptedAt',
+          'nextReviewAt',
+          'teacherFeedback',
+          'syncedAt'
+        ])
+        && request.resource.data.reviewStatus in ['new', 'reviewing', 'fixed'];
+    }
+
+    function isTeacherMistakeUpdate(userId) {
+      return isTeacher()
+        && resource.data.userId == userId
+        && request.resource.data.userId == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'reviewStatus',
+          'nextReviewAt',
+          'teacherFeedback',
+          'syncedAt'
+        ])
+        && request.resource.data.reviewStatus in ['new', 'reviewing', 'fixed'];
+    }
+
+    match /teachers/{teacherId} {
+      allow get: if signedIn() && request.auth.uid == teacherId;
+      allow list, create, update, delete: if false;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isTeacher();
+      allow list: if isTeacher();
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+
+      match /progress/{progressId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
+        allow create, update: if isTeacherProgressWrite();
+        allow delete: if false;
+      }
+
+      match /attempts/{attemptId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
+        allow update: if isTeacherAttemptReview(userId);
+        allow create, delete: if false;
+      }
+
+      match /mistakes/{mistakeId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
+        allow create: if isTeacherMistakeCreate(userId);
+        allow update: if isTeacherMistakeUpdate(userId);
+        allow delete: if false;
+      }
+
+      match /exam_results/{examResultId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
+        allow create, update, delete: if false;
+      }
     }
   }
 }

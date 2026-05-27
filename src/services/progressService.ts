@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { doc, setDoc, collection, writeBatch, getDocs, query } from 'firebase/firestore';
+import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc } from 'firebase/firestore';
 import { UserAttempt, UserMistake, UserProgress, ExamResult, SimulatedStudent } from '../types';
 import { User } from 'firebase/auth';
 import { storageService } from './storage';
@@ -541,14 +541,15 @@ export const progressService = {
     }
   },
 
-  async getRealStudents(): Promise<SimulatedStudent[]> {
+  async getRealStudents(excludedUserIds: string[] = []): Promise<SimulatedStudent[]> {
     try {
       const querySnapshot = await getDocs(collection(db, 'users'));
       const students: SimulatedStudent[] = [];
+      const excludedIds = new Set(excludedUserIds);
       
       await Promise.all(querySnapshot.docs.map(async (docRef) => {
         const data = docRef.data();
-        if (data.email !== 'phamkhuong436@gmail.com') { // Ẩn tài khoản giáo viên
+        if (!excludedIds.has(docRef.id)) {
           let completedCount = 0;
           try {
             const progSnapshot = await getDocs(collection(db, `users/${docRef.id}/progress`));
@@ -600,16 +601,21 @@ export const progressService = {
     try {
       const attemptId = attempt.id;
       const attemptRef = doc(db, `users/${studentId}/attempts`, attemptId);
+      const syncedAt = new Date().toISOString();
       
-      const updatedAttempt = {
-        ...attempt,
+      const reviewPatch = {
         isCorrect,
         gradingMode: 'auto' as const,
         teacherFeedback: feedback,
-        syncedAt: new Date().toISOString()
+        syncedAt
+      };
+
+      const updatedAttempt = {
+        ...attempt,
+        ...reviewPatch
       };
       
-      await setDoc(attemptRef, updatedAttempt, { merge: true });
+      await setDoc(attemptRef, reviewPatch, { merge: true });
 
       // Lấy toàn bộ attempts của học sinh này để recalculate progress
       const allAttempts = await this.getAttempts(studentId);
@@ -651,11 +657,14 @@ export const progressService = {
           syncedAt: new Date().toISOString()
         }, { merge: true });
       } else {
-        await setDoc(mistakeRef, {
-          reviewStatus: 'fixed',
-          nextReviewAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-          syncedAt: new Date().toISOString()
-        }, { merge: true });
+        const existingMistake = await getDoc(mistakeRef);
+        if (existingMistake.exists()) {
+          await setDoc(mistakeRef, {
+            reviewStatus: 'fixed',
+            nextReviewAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            syncedAt: new Date().toISOString()
+          }, { merge: true });
+        }
       }
     } catch (e) {
       console.error('Lỗi khi chấm điểm lên Firestore:', e);

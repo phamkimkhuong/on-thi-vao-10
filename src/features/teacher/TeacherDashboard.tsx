@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
+import { teacherAccessService } from '../../services/teacherAccessService';
 import { mathQuestionTypes } from '../../data/mathData';
 import { englishQuestionTypes } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
@@ -35,6 +36,7 @@ export const TeacherDashboard: React.FC = () => {
   const [pendingAttempts, setPendingAttempts] = useState<Array<{ student: SimulatedStudent; attempt: UserAttempt }>>([]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [accessStatus, setAccessStatus] = useState<'checking' | 'allowed' | 'role-missing' | 'denied'>('checking');
 
   // Trạng thái chọn học sinh xem tiến độ
   const [selectedStudent, setSelectedStudent] = useState<SimulatedStudent | null>(null);
@@ -47,30 +49,103 @@ export const TeacherDashboard: React.FC = () => {
   const [feedbackText, setFeedbackText] = useState('');
   const [gradingSuccessMsg, setGradingSuccessMsg] = useState<string | null>(null);
 
-  const loadData = async () => {
+  const loadData = useCallback(async (teacherUserId = user?.uid) => {
     setIsLoading(true);
     setSelectedStudent(null);
     setStudentProgress(null);
 
     try {
-      const list = await progressService.getRealStudents();
+      const list = await progressService.getRealStudents(teacherUserId ? [teacherUserId] : []);
       setStudents(list);
       const pending = await progressService.getRealPendingManualAttempts(list);
       setPendingAttempts(pending);
     } catch (e) {
-      console.error("Lỗi khi load dữ liệu giáo viên từ Firestore:", e);
+      console.error(
+        `Lỗi khi load dữ liệu giáo viên từ Firestore. UID hiện tại: "${user?.uid}". ` +
+        `Nếu bị permission-denied, hãy kiểm tra UID này có nằm trong firestore.rules/isBootstrapTeacher() không.`,
+        e
+      );
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user?.uid]);
 
   useEffect(() => {
-    if (user?.email === 'phamkhuong436@gmail.com') {
-      loadData();
-    }
-  }, [user]);
+    let cancelled = false;
+    setAccessStatus('checking');
 
-  if (user?.email !== 'phamkhuong436@gmail.com') {
+    if (!user) {
+      setAccessStatus('denied');
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    teacherAccessService.isTeacher(user).then((allowed) => {
+      if (cancelled) return;
+
+      if (!allowed) {
+        setAccessStatus(teacherAccessService.isBootstrapTeacher(user) ? 'role-missing' : 'denied');
+        return;
+      }
+
+      setAccessStatus('allowed');
+      loadData(user.uid);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, loadData]);
+
+  if (accessStatus === 'checking') {
+    return (
+      <div className="max-w-md mx-auto my-12 text-center space-y-6 p-8 rounded-2xl bg-card border border-border shadow-lg animate-fade-in">
+        <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
+          <Loader size={34} className="animate-spin" />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Đang kiểm tra quyền giáo viên</h3>
+          <p className="text-xs font-semibold text-muted-foreground">
+            Hệ thống đang xác thực role giáo viên từ Firestore.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (accessStatus === 'role-missing') {
+    return (
+      <div className="max-w-lg mx-auto my-12 text-center space-y-6 p-8 rounded-2xl bg-card border border-amber-500/25 shadow-lg shadow-amber-500/5 animate-fade-in">
+        <div className="w-16 h-16 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto">
+          <XCircle size={40} />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Chưa đọc được role giáo viên</h3>
+          <p className="text-xs font-semibold text-muted-foreground leading-relaxed">
+            Email hiện tại đúng tài khoản giáo viên, nhưng app chưa đọc được document
+            {' '}teachers/{user?.uid}. Hãy kiểm tra Firestore Rules đã Publish/Deploy và tải lại trang.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Button
+            onClick={() => window.location.reload()}
+            className="w-full font-bold py-2.5 text-xs bg-amber-500 hover:bg-amber-600 text-white cursor-pointer"
+          >
+            Tải lại quyền
+          </Button>
+          <Button
+            onClick={() => navigate('/dashboard')}
+            className="w-full font-bold py-2.5 text-xs border border-border bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 cursor-pointer"
+          >
+            Về Bảng điều khiển
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (accessStatus !== 'allowed') {
     return (
       <div className="max-w-md mx-auto my-12 text-center space-y-6 p-8 rounded-2xl bg-card border border-rose-500/20 shadow-lg shadow-rose-500/5 animate-fade-in">
         <div className="w-16 h-16 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto">
@@ -78,6 +153,9 @@ export const TeacherDashboard: React.FC = () => {
         </div>
         <div className="space-y-2">
           <h3 className="text-lg font-black text-foreground">Không có quyền truy cập</h3>
+          <p className="text-xs font-semibold text-muted-foreground">
+            Tài khoản này chưa được cấp role giáo viên trên Firestore.
+          </p>
         </div>
         <Button
           onClick={() => navigate('/dashboard')}

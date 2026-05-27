@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
+import { teacherAccessService } from '../../services/teacherAccessService';
 import { cn } from '../../utils/cn';
 import { mathQuestionTypes } from '../../data/mathData';
 import { englishQuestionTypes } from '../../data/englishData';
@@ -37,6 +38,7 @@ export const AppLayout: React.FC = () => {
   void progressVersion;
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isTeacher, setIsTeacher] = useState(false);
   const [realPendingCount, setRealPendingCount] = useState(0);
 
   // Tự động đảm bảo thông tin hồ sơ của học sinh tồn tại trong Firestore collection 'users'
@@ -46,25 +48,51 @@ export const AppLayout: React.FC = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    let cancelled = false;
+    setIsTeacher(false);
+    setRealPendingCount(0);
+
+    if (!user) {
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    teacherAccessService.isTeacher(user).then((allowed) => {
+      if (!cancelled) {
+        setIsTeacher(allowed);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
   // Lấy số lượng bài chờ chấm thực tế trên Firestore để hiển thị Badge ở góc Giáo viên
   useEffect(() => {
-    if (user?.email === 'phamkhuong436@gmail.com') {
-      const fetchRealPendingCount = async () => {
-        try {
-          const studentsList = await progressService.getRealStudents();
-          const pending = await progressService.getRealPendingManualAttempts(studentsList);
-          setRealPendingCount(pending.length);
-        } catch (e) {
-          console.error("Lỗi khi load real pending count ở sidebar:", e);
-        }
-      };
-      fetchRealPendingCount();
-      
-      // Tự động tải lại mỗi 15 giây để báo bài mới cho Giáo viên
-      const interval = setInterval(fetchRealPendingCount, 15000);
-      return () => clearInterval(interval);
+    if (!user || !isTeacher) {
+      setRealPendingCount(0);
+      return;
     }
-  }, [user]);
+
+    const fetchRealPendingCount = async () => {
+      try {
+        const studentsList = await progressService.getRealStudents([user.uid]);
+        const pending = await progressService.getRealPendingManualAttempts(studentsList);
+        setRealPendingCount(pending.length);
+      } catch (e) {
+        console.error("Lỗi khi load real pending count ở sidebar:", e);
+      }
+    };
+
+    fetchRealPendingCount();
+
+    // Tự động tải lại mỗi 15 giây để báo bài mới cho Giáo viên
+    const interval = setInterval(fetchRealPendingCount, 15000);
+    return () => clearInterval(interval);
+  }, [user, isTeacher]);
 
   const menuItems = [
     { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
@@ -82,6 +110,7 @@ export const AppLayout: React.FC = () => {
 
   const mathPercent = Math.round((mathCompleted / mathQuestionTypes.length) * 100);
   const englishPercent = Math.round((englishCompleted / englishQuestionTypes.length) * 100);
+  const canShowTeacherMenu = isTeacher || teacherAccessService.isBootstrapTeacher(user);
 
   const getHeaderTitle = () => {
     const path = location.pathname;
@@ -218,7 +247,7 @@ export const AppLayout: React.FC = () => {
             );
           })}
 
-          {user?.email === 'phamkhuong436@gmail.com' && (
+          {canShowTeacherMenu && (
             <div className="pt-3 border-t border-border/20 mt-3">
               <button
                 onClick={() => {
