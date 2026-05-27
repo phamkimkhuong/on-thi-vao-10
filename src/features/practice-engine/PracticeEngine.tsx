@@ -16,6 +16,7 @@ import {
   CheckCircle,
   XCircle,
   ArrowRight,
+  ArrowLeft,
   AlertTriangle,
   Lightbulb,
   Star,
@@ -110,14 +111,14 @@ export const PracticeEngine: React.FC = () => {
   const totalUploadStats = useMemo(() => {
     const values = Object.values(uploadProgress);
     if (values.length === 0) return null;
-    
+
     let totalBytes = 0;
     let bytesTransferred = 0;
     let runningCount = 0;
     let pausedCount = 0;
     let errorCount = 0;
     let canceledCount = 0;
-    
+
     values.forEach(v => {
       totalBytes += v.totalBytes;
       bytesTransferred += v.bytesTransferred;
@@ -126,9 +127,9 @@ export const PracticeEngine: React.FC = () => {
       else if (v.state === 'error') errorCount++;
       else if (v.state === 'canceled') canceledCount++;
     });
-    
+
     const percent = totalBytes > 0 ? Math.round((bytesTransferred / totalBytes) * 100) : 0;
-    
+
     return {
       percent,
       bytesTransferred,
@@ -169,6 +170,16 @@ export const PracticeEngine: React.FC = () => {
       ? mathSolutions.find(s => s.questionId === questionAtIdx.id)
       : englishSolutions.find(s => s.questionId === questionAtIdx.id)) || null
     : null;
+
+  const completedQuestionIds = useMemo(() => {
+    const userId = user?.uid ?? 'guest';
+    const attempts = storageService.getAttempts(userId);
+    return new Set(
+      attempts
+        .filter(a => a.questionTypeId === questionTypeId)
+        .map(a => a.questionId)
+    );
+  }, [user, questionTypeId, currentIdx, isSubmitted]);
 
   const resetQuestionState = useCallback(() => {
     setStructuredAnswer({});
@@ -230,13 +241,13 @@ export const PracticeEngine: React.FC = () => {
           const remoteAttempts = await progressService.getAttempts(user.uid);
           // Lưu ngược lại Local để sử dụng offline/cached
           storageService.saveAttemptsLocal(user.uid, remoteAttempts);
-          
+
           const attemptsForQRemote = remoteAttempts
             .filter(a => a.questionId === currentQ.id)
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-          
+
           const latestAttemptRemote = attemptsForQRemote[0] || null;
-          
+
           if (isMounted) {
             if (latestAttemptRemote) {
               setExistingAttempt(latestAttemptRemote);
@@ -502,16 +513,44 @@ export const PracticeEngine: React.FC = () => {
     <div className="space-y-6 max-w-3xl mx-auto pb-12">
 
       {/* Header trạng thái luyện tập */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
         <button
           onClick={() => navigate('/practice')}
-          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
+          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all"
         >
           ← Đổi dạng bài ôn tập
         </button>
-        <span className="text-xs font-bold text-muted-foreground bg-secondary px-3 py-1 rounded-full">
-          Câu {currentIdx + 1} / {questions.length}
-        </span>
+
+        {/* Bộ chọn câu hỏi thông minh, linh hoạt */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 max-w-full">
+          <span className="text-xs font-bold text-muted-foreground mr-1 hidden sm:inline">Bài tập:</span>
+          {questions.map((q, idx) => {
+            const isActive = idx === currentIdx;
+            const isCompleted = completedQuestionIds.has(q.id);
+
+            return (
+              <button
+                key={q.id}
+                onClick={() => {
+                  revokeLocalProofImages(proofImages);
+                  setCurrentIdx(idx);
+                  resetQuestionState();
+                }}
+                className={cn(
+                  "w-8 h-8 rounded-xl flex items-center justify-center text-xs font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
+                  isActive
+                    ? "bg-primary border-primary text-white shadow-sm shadow-primary/20 scale-105"
+                    : isCompleted
+                      ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
+                      : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"
+                )}
+                title={isCompleted ? `Câu ${idx + 1} (Đã nộp bài)` : `Câu ${idx + 1} (Chưa làm)`}
+              >
+                {idx + 1}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Card câu hỏi chính */}
@@ -631,12 +670,12 @@ export const PracticeEngine: React.FC = () => {
 
                   {/* Thanh tiến độ */}
                   <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={cn(
                         "h-full rounded-full transition-all duration-300",
                         totalUploadStats.isPaused ? "bg-amber-400" : "bg-indigo-500"
-                      )} 
-                      style={{ width: `${totalUploadStats.percent}%` }} 
+                      )}
+                      style={{ width: `${totalUploadStats.percent}%` }}
                     />
                   </div>
 
@@ -680,14 +719,45 @@ export const PracticeEngine: React.FC = () => {
                 </p>
               )}
 
-              {/* Bấm nộp bài */}
-              <Button
-                onClick={handleSubmit}
-                disabled={submitDisabled || isSubmitting}
-                className="w-full font-bold py-3 mt-4 text-xs active:scale-[0.98]"
-              >
-                {isSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài tập'}
-              </Button>
+              {/* Bấm nộp bài & Điều hướng chuyển câu */}
+              <div className="space-y-3 mt-4">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={submitDisabled || isSubmitting}
+                  className="w-full font-bold py-3 text-xs active:scale-[0.98]"
+                >
+                  {isSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài tập'}
+                </Button>
+
+                <div className="flex gap-3 w-full">
+                  <Button
+                    type="button"
+                    disabled={currentIdx === 0}
+                    onClick={() => {
+                      revokeLocalProofImages(proofImages);
+                      setCurrentIdx(currentIdx - 1);
+                      resetQuestionState();
+                    }}
+                    variant="outline"
+                    className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-9 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <ArrowLeft size={14} /> Câu trước
+                  </Button>
+                  <Button
+                    type="button"
+                    disabled={currentIdx === questions.length - 1}
+                    onClick={() => {
+                      revokeLocalProofImages(proofImages);
+                      setCurrentIdx(currentIdx + 1);
+                      resetQuestionState();
+                    }}
+                    variant="outline"
+                    className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-9 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Câu sau <ArrowRight size={14} />
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : (
             // Vùng hiển thị kết quả sau khi nộp bài
@@ -762,29 +832,29 @@ export const PracticeEngine: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                     {proofImages.length > 0
                       ? proofImages.map((img) => (
-                          <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
-                            <img 
-                              src={img.previewUrl} 
-                              alt="Bài làm đã nộp" 
-                              className="max-h-[300px] object-contain rounded-lg p-1"
-                            />
-                          </div>
-                        ))
+                        <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
+                          <img
+                            src={img.previewUrl}
+                            alt="Bài làm đã nộp"
+                            className="max-h-[300px] object-contain rounded-lg p-1"
+                          />
+                        </div>
+                      ))
                       : existingAttempt?.proofImages?.map((img) => (
-                          <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
-                            <img 
-                              src={img.downloadUrl || img.storagePath} 
-                              alt="Bài làm đã nộp" 
-                              className="max-h-[300px] object-contain rounded-lg p-1"
-                            />
-                          </div>
-                        ))
+                        <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
+                          <img
+                            src={img.downloadUrl || img.storagePath}
+                            alt="Bài làm đã nộp"
+                            className="max-h-[300px] object-contain rounded-lg p-1"
+                          />
+                        </div>
+                      ))
                     }
                   </div>
                 </div>
               )}
 
-                            {/* Lời giải chi tiết hiện lên */}
+              {/* Lời giải chi tiết hiện lên */}
               {solutionDetail && (
                 <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
                   <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
@@ -843,6 +913,18 @@ export const PracticeEngine: React.FC = () => {
               {/* Tiếp tục / Làm lại / Đổi câu */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <Button
+                  disabled={currentIdx === 0}
+                  onClick={() => {
+                    revokeLocalProofImages(proofImages);
+                    setCurrentIdx(currentIdx - 1);
+                    resetQuestionState();
+                  }}
+                  variant="outline"
+                  className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-muted-foreground hover:bg-secondary/40 cursor-pointer h-10 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <ArrowLeft size={16} /> Câu trước
+                </Button>
+                <Button
                   onClick={handleRetry}
                   variant="outline"
                   className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
@@ -860,7 +942,6 @@ export const PracticeEngine: React.FC = () => {
           )}
         </CardContent>
       </Card>
-
     </div>
   );
 };
