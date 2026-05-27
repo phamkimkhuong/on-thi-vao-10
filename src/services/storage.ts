@@ -272,6 +272,24 @@ export const storageService = {
     writeToStorage(KEYS.EXAM_RESULTS, map);
   },
 
+  clearGuestData(): void {
+    const attemptsMap = readAttemptsMap();
+    delete attemptsMap.guest;
+    writeToStorage(KEYS.ATTEMPTS, attemptsMap);
+
+    const mistakesMap = readMistakesMap();
+    delete mistakesMap.guest;
+    writeToStorage(KEYS.MISTAKES, mistakesMap);
+
+    const progressMap = readProgressMap();
+    delete progressMap.guest;
+    writeToStorage(KEYS.PROGRESS, progressMap);
+
+    const examResultsMap = readExamResultsMap();
+    delete examResultsMap.guest;
+    writeToStorage(KEYS.EXAM_RESULTS, examResultsMap);
+  },
+
   // RESET ALL DATA
   resetData(): void {
     localStorage.removeItem(KEYS.ATTEMPTS);

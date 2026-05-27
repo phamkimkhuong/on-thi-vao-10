@@ -7,7 +7,7 @@ import { englishTopics, englishQuestionTypes } from '../../data/englishData';
 import { Card, CardContent } from '../../components/ui/card';
 import { Star, ArrowRight, StarOff, Sparkles, Lock } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
+import { getDifficultyTheme, getStarsFromScore, getTierTheme } from '../../utils/theme';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ export const Roadmap: React.FC = () => {
 
   const topics = selectedSubject === 'math' ? mathTopics : englishTopics;
   const questionTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
+  const getMasteryStars = (questionTypeId: string) => getStarsFromScore(progress[questionTypeId] ?? 0);
 
   const isTierLocked = (tierId: number): boolean => {
     if (tierId === 1) return false;
@@ -24,17 +25,17 @@ export const Roadmap: React.FC = () => {
     if (tierId === 2) {
       const tier1Topics = topics.filter(t => t.tier === 1);
       const tier1QTs = questionTypes.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      return !tier1QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+      return !tier1QTs.every(qt => getMasteryStars(qt.id) >= 2);
     }
 
     if (tierId === 3) {
       const tier1Topics = topics.filter(t => t.tier === 1);
       const tier1QTs = questionTypes.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      const tier1Ok = tier1QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+      const tier1Ok = tier1QTs.every(qt => getMasteryStars(qt.id) >= 2);
 
       const tier2Topics = topics.filter(t => t.tier === 2);
       const tier2QTs = questionTypes.filter(qt => tier2Topics.some(t => t.id === qt.topicId));
-      const tier2Ok = tier2QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+      const tier2Ok = tier2QTs.every(qt => getMasteryStars(qt.id) >= 2);
 
       return !tier1Ok || !tier2Ok;
     }
@@ -52,7 +53,7 @@ export const Roadmap: React.FC = () => {
 
 
 
-  const renderMasteryStars = (level: number, isLocked: boolean) => {
+  const renderMasteryStars = (starsCount: number, isLocked: boolean) => {
     if (isLocked) {
       return (
         <div className="flex gap-0.5 opacity-40">
@@ -64,14 +65,14 @@ export const Roadmap: React.FC = () => {
     }
     const stars = [];
     for (let i = 1; i <= 3; i++) {
-      if (i <= level) {
+      if (i <= starsCount) {
         stars.push(<Star key={i} size={15} className="fill-amber-400 text-amber-400 animate-pulse" />);
       } else {
         stars.push(<StarOff key={i} size={15} className="text-slate-300 dark:text-slate-700" />);
       }
     }
     return (
-      <div className="flex gap-0.5" title={`Mức độ thành thạo: ${level}/3 (Master)`}>
+      <div className="flex gap-0.5" title={`Mức độ thành thạo: ${starsCount}/3 (Master)`}>
         {stars}
       </div>
     );
@@ -187,7 +188,7 @@ export const Roadmap: React.FC = () => {
                       {/* Chi tiết chuyên đề */}
                       <div className="space-y-4">
                         {(() => {
-                          const completedCount = filteredTypes.filter(type => (progress[type.id] ?? 0) >= 2).length;
+                          const completedCount = filteredTypes.filter(type => getMasteryStars(type.id) >= 2).length;
                           const percent = filteredTypes.length > 0 ? Math.round((completedCount / filteredTypes.length) * 100) : 0;
 
                           return (
@@ -216,7 +217,7 @@ export const Roadmap: React.FC = () => {
                         {/* Danh sách dạng bài */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {filteredTypes.map((type) => {
-                            const level = progress[type.id] ?? 0;
+                            const stars = getMasteryStars(type.id);
                             const diff = getDifficultyTheme(type.difficulty);
 
                             return (
@@ -224,7 +225,7 @@ export const Roadmap: React.FC = () => {
                                 key={type.id}
                                 className={`transition-all duration-200 border bg-card ${isLocked
                                   ? 'border-border/20 opacity-70 cursor-not-allowed hover:bg-slate-50/10'
-                                  : level === 3
+                                  : stars === 3
                                     ? 'border-emerald-500/20 shadow-sm shadow-emerald-500/5 hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
                                     : 'hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
                                   }`}
@@ -239,12 +240,12 @@ export const Roadmap: React.FC = () => {
                                       )}>
                                         {diff.text}
                                       </span>
-                                      {renderMasteryStars(level, isLocked)}
+                                      {renderMasteryStars(stars, isLocked)}
                                     </div>
 
                                     <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5 leading-snug">
                                       {type.name}
-                                      {level === 3 && !isLocked && (
+                                      {stars === 3 && !isLocked && (
                                         <span title="Đã Master hoàn hảo!">
                                           <Sparkles size={14} className="text-emerald-500 fill-emerald-500 shrink-0 animate-pulse" />
                                         </span>

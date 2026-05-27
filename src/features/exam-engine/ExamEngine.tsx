@@ -8,7 +8,8 @@ import { englishQuestions, englishQuestionTypes } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { Question, ExamResult } from '../../types';
+import { Question, ExamResult, UserAttempt } from '../../types';
+import { validateAnswer } from '../../utils/answerValidator';
 import { 
   Award, 
   Timer, 
@@ -36,6 +37,7 @@ export const ExamEngine: React.FC = () => {
   const [examResult, setExamResult] = useState<ExamResult | null>(null);
 
   const durationMinutes = selectedSubject === 'math' ? 120 : 60;
+  const availableExamQuestions = selectedSubject === 'math' ? mathQuestions : englishQuestions;
 
   const handleSubmitExam = useCallback(() => {
     setExamState('result');
@@ -43,18 +45,14 @@ export const ExamEngine: React.FC = () => {
     let correctCount = 0;
     const totalCount = examQuestions.length;
     const attemptResults: Record<string, { userAnswer: string, isCorrect: boolean }> = {};
+    const currentUserId = user?.uid ?? 'guest';
+    const completedAt = new Date().toISOString();
+    const examId = `exam-${selectedSubject}-${Date.now()}`;
+    const examAttempts: UserAttempt[] = [];
 
     examQuestions.forEach(q => {
       const userAns = answers[q.id] || '';
-      let isCorrect: boolean;
-
-      if (selectedSubject === 'math') {
-        const cleanUser = userAns.trim().toLowerCase().replace(/\s+/g, '');
-        const cleanCorrect = q.correctAnswer.trim().toLowerCase().replace(/\s+/g, '');
-        isCorrect = cleanUser === cleanCorrect || cleanCorrect.includes(cleanUser) && cleanUser.length > 1;
-      } else {
-        isCorrect = userAns === q.correctAnswer;
-      }
+      const isCorrect = validateAnswer(q, userAns);
 
       if (isCorrect) correctCount++;
       attemptResults[q.id] = {
@@ -63,38 +61,44 @@ export const ExamEngine: React.FC = () => {
       };
 
       // Tự động ghi nhận lịch sử làm bài vào LocalStorage để đồng bộ tiến độ
-      const currentUserId = user?.uid ?? 'guest';
-      storageService.saveAttempt(currentUserId, {
-        id: `exam-attempt-${Date.now()}-${q.id}`,
+      const attemptData: UserAttempt = {
+        id: `attempt-${examId}-${q.id}`,
         userId: currentUserId,
         questionId: q.id,
         questionTypeId: q.questionTypeId,
         userAnswer: userAns,
         isCorrect,
         timeSpent: Math.round(timeSpent / totalCount),
-        createdAt: new Date().toISOString()
-      });
+        createdAt: completedAt
+      };
+
+      examAttempts.push(attemptData);
+      storageService.saveAttempt(currentUserId, attemptData);
     });
 
     const score = Math.round((correctCount / totalCount) * 10 * 10) / 10; // Thang điểm 10 làm tròn 1 chữ số
 
     const result: ExamResult = {
-      examId: `exam-${selectedSubject}-${Date.now()}`,
+      examId,
       score,
       correctCount,
       totalCount,
       timeSpent,
-      completedAt: new Date().toISOString(),
+      completedAt,
       attempts: attemptResults
     };
 
-    const currentUserId = user?.uid ?? 'guest';
     setExamResult(result);
     storageService.saveExamResult(currentUserId, result);
 
     // Đồng bộ Firestore
     if (user) {
-      progressService.saveExamResult(user.uid, result);
+      const examQuestionIds = new Set(examQuestions.map(q => q.id));
+      const examMistakes = storageService
+        .getMistakes(user.uid)
+        .filter(mistake => examQuestionIds.has(mistake.questionId));
+
+      progressService.saveExamSubmission(user.uid, result, examAttempts, examMistakes);
     }
 
     if (score >= 8.0) {
@@ -121,11 +125,8 @@ export const ExamEngine: React.FC = () => {
   }, [examState, timeLeft, handleSubmitExam]);
 
   const handleStartExam = () => {
-    const isMath = selectedSubject === 'math';
     // Đề thi thử MVP sẽ bốc toàn bộ ngân hàng câu hỏi để kiểm tra toàn diện
-    const qList = isMath ? mathQuestions : englishQuestions;
-
-    setExamQuestions(qList);
+    setExamQuestions(availableExamQuestions);
     setAnswers({});
     setTimeLeft(durationMinutes * 60);
     setTimeSpent(0);
@@ -220,7 +221,7 @@ export const ExamEngine: React.FC = () => {
               <div className="p-4 bg-secondary rounded-xl border border-border/10">
                 <span className="text-[10px] font-bold text-muted-foreground block mb-1">SỐ CÂU HỎI TRỰC CHIẾN</span>
                 <span className="text-sm font-extrabold text-foreground">
-                  {selectedSubject === 'math' ? '4 câu tự luận tổng hợp' : '4 câu trắc nghiệm điển hình'}
+                  {availableExamQuestions.length} câu
                 </span>
               </div>
             </div>

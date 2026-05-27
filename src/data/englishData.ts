@@ -154,7 +154,8 @@ export const englishQuestions: Question[] = [
     sourceType: 'official_exam',
     province: 'Bình Định',
     year: 2024,
-    correctAnswer: 'D'
+    correctAnswer: 'D',
+    validatorType: 'choice'
   },
   // Phát âm đuôi -ed
   {
@@ -166,7 +167,8 @@ export const englishQuestions: Question[] = [
     options: ['A. washed', 'B. worked', 'C. played', 'D. watched'],
     difficulty: 'easy',
     sourceType: 'mock_exam',
-    correctAnswer: 'C'
+    correctAnswer: 'C',
+    validatorType: 'choice'
   },
   // Câu bị động
   {
@@ -183,7 +185,8 @@ export const englishQuestions: Question[] = [
     ],
     difficulty: 'medium',
     sourceType: 'mock_exam',
-    correctAnswer: 'B'
+    correctAnswer: 'B',
+    validatorType: 'choice'
   },
   // Câu điều kiện
   {
@@ -202,7 +205,8 @@ export const englishQuestions: Question[] = [
     sourceType: 'official_exam',
     province: 'Hà Nội',
     year: 2023,
-    correctAnswer: 'C'
+    correctAnswer: 'C',
+    validatorType: 'choice'
   }
 ];
 

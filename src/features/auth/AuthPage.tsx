@@ -16,7 +16,7 @@ import { GraduationCap, Mail, Lock, User, ArrowRight, AlertCircle, Loader } from
 
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAppStore();
+  const { user, refreshProgress } = useAppStore();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,8 +41,8 @@ export const AuthPage: React.FC = () => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const loggedUser = userCredential.user;
         
-        // Đồng bộ dữ liệu cục bộ lên đám mây (Guest -> Member)
-        await progressService.syncLocalDataToFirestore(loggedUser.uid);
+        // Merge an toàn Cloud + Guest, không cho tiến độ cục bộ ghi đè tiến độ remote.
+        await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
       } else {
         // Đăng ký
         if (!name.trim()) {
@@ -54,9 +54,11 @@ export const AuthPage: React.FC = () => {
         // Cập nhật tên hiển thị
         await updateProfile(loggedUser, { displayName: name });
         
-        // Khởi tạo và đồng bộ dữ liệu cục bộ lên Firestore
-        await progressService.syncLocalDataToFirestore(loggedUser.uid);
+        // Khởi tạo và merge dữ liệu Guest với tài khoản mới.
+        await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
       }
+
+      refreshProgress();
       
       // Chuyển về màn hình Dashboard sau khi đăng nhập thành công
       navigate('/dashboard');
@@ -92,8 +94,9 @@ export const AuthPage: React.FC = () => {
       const userCredential = await signInWithPopup(auth, provider);
       const loggedUser = userCredential.user;
       
-      // Đồng bộ dữ liệu cục bộ lên đám mây (Guest -> Member)
-      await progressService.syncLocalDataToFirestore(loggedUser.uid);
+      // Merge an toàn Cloud + Guest, không cho tiến độ cục bộ ghi đè tiến độ remote.
+      await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
+      refreshProgress();
       
       // Chuyển về màn hình Dashboard sau khi đăng nhập thành công
       navigate('/dashboard');

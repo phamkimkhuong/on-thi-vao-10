@@ -180,7 +180,9 @@ export const mathQuestions: Question[] = [
     content: 'Cho biểu thức \\(P = \\left(\\frac{\\sqrt{x}}{\\sqrt{x}-1} - \\frac{1}{x-\\sqrt{x}}\\right) \\div \\left(\\frac{1}{\\sqrt{x}+1} + \\frac{2}{x-1}\\right)\\) với \\(x > 0, x \\neq 1\\).\n\na) Rút gọn biểu thức \\(P\\).\n\nb) Tìm giá trị của \\(x\\) để \\(P = \\frac{1}{2}\\).',
     difficulty: 'easy',
     sourceType: 'mock_exam',
-    correctAnswer: 'x = 1/4'
+    correctAnswer: 'x = 1/4',
+    acceptedAnswers: ['x=1/4', '1/4', 'x = 0.25', '0.25'],
+    validatorType: 'number'
   },
   // Hệ thức Vi-ét
   {
@@ -193,7 +195,14 @@ export const mathQuestions: Question[] = [
     sourceType: 'official_exam',
     province: 'Bình Định',
     year: 2024,
-    correctAnswer: 'm = 1'
+    correctAnswer: 'm = -4 + sqrt(31)',
+    acceptedAnswers: [
+      'm = -4 + \\sqrt{31}',
+      '-4 + sqrt(31)',
+      '-4 + \\sqrt{31}',
+      'm=-4+sqrt(31)'
+    ],
+    validatorType: 'exact'
   },
   // Lập hệ phương trình thực tế
   {
@@ -204,7 +213,16 @@ export const mathQuestions: Question[] = [
     content: 'Một cửa hàng bán tivi và tủ lạnh. Tổng giá niêm yết ban đầu của một chiếc tivi và một chiếc tủ lạnh là 25 triệu đồng. Nhân dịp lễ, cửa hàng giảm giá 10% cho tivi và giảm giá 20% cho tủ lạnh, do đó một khách hàng chỉ phải trả tổng cộng 21 triệu đồng để mua cả hai mặt hàng trên. Hỏi giá niêm yết ban đầu của mỗi mặt hàng là bao nhiêu?',
     difficulty: 'medium',
     sourceType: 'mock_exam',
-    correctAnswer: 'Tivi: 10 triệu, Tủ lạnh: 15 triệu'
+    correctAnswer: 'Tivi: 10 triệu, Tủ lạnh: 15 triệu',
+    acceptedAnswers: [
+      'Tivi 10 triệu, Tủ lạnh 15 triệu',
+      'Tivi: 10, Tủ lạnh: 15',
+      '10 15',
+      'Tủ lạnh: 15 triệu, Tivi: 10 triệu',
+      'Tủ lạnh 15 triệu, Tivi 10 triệu',
+      'Tủ lạnh 15 Tivi 10'
+    ],
+    validatorType: 'multi-number'
   },
   // Tứ giác nội tiếp
   {
@@ -217,7 +235,9 @@ export const mathQuestions: Question[] = [
     sourceType: 'official_exam',
     province: 'Hà Nội',
     year: 2023,
-    correctAnswer: 'Chứng minh thành công'
+    correctAnswer: 'Chứng minh thành công',
+    acceptedAnswers: ['Chứng minh thành công'],
+    validatorType: 'manual'
   }
 ];
 

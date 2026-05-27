@@ -1,5 +1,13 @@
 export type SubjectCode = 'math' | 'english';
 
+export type ValidatorType =
+  | 'exact'
+  | 'choice'
+  | 'number'
+  | 'multi-number'
+  | 'text-includes'
+  | 'manual';
+
 export interface Subject {
   id: string;
   code: SubjectCode;
@@ -41,6 +49,8 @@ export interface Question {
   year?: number;
   options?: string[]; // Dùng cho trắc nghiệm (Tiếng Anh)
   correctAnswer: string;
+  acceptedAnswers?: string[];
+  validatorType?: ValidatorType;
 }
 
 export interface SolutionStep {
@@ -86,7 +96,8 @@ export interface UserMistake {
 
 export interface UserProgress {
   userId: string;
-  // Map từ questionTypeId -> mức độ master (0: chưa học, 1: đang học, 2: đã học, 3: master)
+  // Map từ questionTypeId -> mastery score 0-100.
+  // Chuyển sang sao 0-3 bằng getStarsFromScore trước khi render/unlock UI.
   masteryLevels: Record<string, number>;
   completedLessons: string[]; // Danh sách các bài/dạng bài đã hoàn thành
   lastUpdatedAt: string;

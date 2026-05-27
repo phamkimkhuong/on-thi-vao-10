@@ -284,7 +284,9 @@ export const AppLayout: React.FC = () => {
             <div className="flex items-center gap-1 bg-secondary px-3 py-1.5 rounded-xl border border-border/10">
               <span className="text-xs font-bold text-muted-foreground">Mastery:</span>
               <span className="text-xs font-extrabold text-primary">
-                {selectedSubject === 'math' ? `${mathCompleted}/6 dạng` : `${englishCompleted}/5 dạng`}
+                {selectedSubject === 'math'
+                  ? `${mathCompleted}/${mathQuestionTypes.length} dạng`
+                  : `${englishCompleted}/${englishQuestionTypes.length} dạng`}
               </span>
             </div>
 

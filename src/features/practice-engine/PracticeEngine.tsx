@@ -20,7 +20,9 @@ import {
   Sparkles
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { getSubjectTheme } from '../../utils/theme';
+import { getStarsFromScore, getSubjectTheme } from '../../utils/theme';
+import { validateAnswer } from '../../utils/answerValidator';
+import { getSubjectFromQuestionTypeId } from '../../utils/subject';
 import confetti from 'canvas-confetti';
 
 const getNow = () => Date.now();
@@ -28,9 +30,11 @@ const getNow = () => Date.now();
 export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, user, progressVersion } = useAppStore();
+  const { selectedSubject, setSubject, user, progressVersion } = useAppStore();
   void progressVersion;
+  const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
   const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
+  const getMasteryStars = (questionTypeId: string) => getStarsFromScore(progress[questionTypeId] ?? 0);
 
   // Xác định xem một dạng bài có bị khóa theo chặng học tập hay không
   const isTypeLocked = (questionTypeId: string): boolean => {
@@ -50,17 +54,17 @@ export const PracticeEngine: React.FC = () => {
     if (tierId === 2) {
       const tier1Topics = topicsList.filter(t => t.tier === 1);
       const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      return !tier1QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+      return !tier1QTs.every(qt => getMasteryStars(qt.id) >= 2);
     }
 
     if (tierId === 3) {
       const tier1Topics = topicsList.filter(t => t.tier === 1);
       const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      const tier1Ok = tier1QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+      const tier1Ok = tier1QTs.every(qt => getMasteryStars(qt.id) >= 2);
 
       const tier2Topics = topicsList.filter(t => t.tier === 2);
       const tier2QTs = qTypesList.filter(qt => tier2Topics.some(t => t.id === qt.topicId));
-      const tier2Ok = tier2QTs.every(qt => (progress[qt.id] ?? 0) >= 2);
+      const tier2Ok = tier2QTs.every(qt => getMasteryStars(qt.id) >= 2);
 
       return !tier1Ok || !tier2Ok;
     }
@@ -79,7 +83,7 @@ export const PracticeEngine: React.FC = () => {
   const [questionStartAt, setQuestionStartAt] = useState(() => Date.now());
 
   // Derived States - Tính toán trực tiếp trong lúc render
-  const isMath = selectedSubject === 'math';
+  const isMath = routeSubject === 'math';
   const qList = isMath ? mathQuestions : englishQuestions;
 
   const questions: Question[] = questionTypeId
@@ -102,11 +106,18 @@ export const PracticeEngine: React.FC = () => {
     setQuestionStartAt(Date.now());
   };
 
+  useEffect(() => {
+    const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);
+    if (subjectFromRoute && subjectFromRoute !== selectedSubject) {
+      setSubject(subjectFromRoute);
+    }
+  }, [questionTypeId, selectedSubject, setSubject]);
+
   // Reset index và state khi chuyển đổi dạng bài hoặc môn học
   useEffect(() => {
     setCurrentIdx(0);
     resetQuestionState();
-  }, [selectedSubject, questionTypeId]);
+  }, [routeSubject, questionTypeId]);
 
   const handleOptionSelect = (optLetter: string) => {
     if (isSubmitted) return;
@@ -117,22 +128,8 @@ export const PracticeEngine: React.FC = () => {
     if (questions.length === 0 || isSubmitted) return;
 
     const currentQ = questions[currentIdx];
-    const isMath = selectedSubject === 'math';
-
-    let correct: boolean;
-    let finalAnswer = userAnswer;
-
-    if (isMath) {
-      // Chuẩn hóa câu trả lời tự luận để so sánh tương đối
-      const cleanUser = userAnswer.trim().toLowerCase().replace(/\s+/g, '');
-      const cleanCorrect = currentQ.correctAnswer.trim().toLowerCase().replace(/\s+/g, '');
-
-      // So sánh trực tiếp hoặc bán trực tiếp
-      correct = cleanUser === cleanCorrect || cleanCorrect.includes(cleanUser) && cleanUser.length > 1;
-    } else {
-      correct = selectedOption === currentQ.correctAnswer;
-      finalAnswer = selectedOption || '';
-    }
+    const finalAnswer = routeSubject === 'math' ? userAnswer : selectedOption || '';
+    const correct = validateAnswer(currentQ, finalAnswer);
 
     setIsCorrect(correct);
     setIsSubmitted(true);
@@ -192,7 +189,7 @@ export const PracticeEngine: React.FC = () => {
   // Nếu không có questionTypeId và học sinh vào thẳng Practice từ Menu
   // Hãy hiển thị danh sách dạng bài để học sinh chọn dạng để luyện
   if (!questionTypeId) {
-    const allTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
+    const allTypes = routeSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
     const types = allTypes.filter(type => !isTypeLocked(type.id));
 
     return (
@@ -205,8 +202,9 @@ export const PracticeEngine: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {types.map((type) => {
             const isMath = type.id.startsWith('math');
-            const level = progress[type.id] ?? 0;
-            const percent = Math.round((level / 3) * 100);
+            const score = progress[type.id] ?? 0;
+            const stars = getStarsFromScore(score);
+            const percent = Math.max(0, Math.min(100, score));
 
             return (
               <Card
@@ -228,7 +226,7 @@ export const PracticeEngine: React.FC = () => {
                           <Star
                             key={starIdx}
                             size={10}
-                            className={starIdx <= level ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-slate-700"}
+                            className={starIdx <= stars ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-slate-700"}
                           />
                         ))}
                       </div>
@@ -236,7 +234,7 @@ export const PracticeEngine: React.FC = () => {
 
                     <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
                       {type.name}
-                      {level === 3 && (
+                      {stars === 3 && (
                         <Sparkles size={12} className="text-emerald-500 fill-emerald-500 animate-pulse" />
                       )}
                     </h4>
@@ -353,9 +351,9 @@ export const PracticeEngine: React.FC = () => {
                     onClick={triggerNextHint}
                     className={cn(
                       "self-start text-[11px] font-bold flex items-center gap-1 cursor-pointer px-3 py-1.5 rounded-lg border transition-colors",
-                      selectedSubject === 'math' ? "text-indigo-500 hover:text-indigo-600" : "text-violet-500 hover:text-violet-600",
-                      getSubjectTheme(selectedSubject).bg,
-                      getSubjectTheme(selectedSubject).border
+                      routeSubject === 'math' ? "text-indigo-500 hover:text-indigo-600" : "text-violet-500 hover:text-violet-600",
+                      getSubjectTheme(routeSubject).bg,
+                      getSubjectTheme(routeSubject).border
                     )}
                   >
                     <Lightbulb size={14} className="text-amber-500 animate-pulse" />
@@ -426,8 +424,8 @@ export const PracticeEngine: React.FC = () => {
 
                   <div className={cn(
                     "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
-                    getSubjectTheme(selectedSubject).bg,
-                    getSubjectTheme(selectedSubject).border
+                    getSubjectTheme(routeSubject).bg,
+                    getSubjectTheme(routeSubject).border
                   )}>
                     <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
                     <LatexRenderer text={solutionDetail.recognition} />

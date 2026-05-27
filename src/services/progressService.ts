@@ -2,6 +2,192 @@ import { db } from './firebase';
 import { doc, setDoc, collection, writeBatch, getDocs, query } from 'firebase/firestore';
 import { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
 import { storageService } from './storage';
+import { calculateMasteryScore, getStarsFromScore } from '../utils/theme';
+
+type MistakeSource = {
+  mistake: UserMistake;
+  source: 'remote' | 'guest';
+};
+
+const authMergePromises = new Map<string, Promise<void>>();
+
+const toTime = (dateValue?: string): number => {
+  if (!dateValue) return 0;
+  const time = new Date(dateValue).getTime();
+  return Number.isFinite(time) ? time : 0;
+};
+
+const safeDocId = (rawId: string, fallback: string): string => {
+  const id = rawId.trim() || fallback;
+  return encodeURIComponent(id).replace(/\./g, '%2E');
+};
+
+const createEmptyProgress = (userId: string): UserProgress => ({
+  userId,
+  masteryLevels: {},
+  completedLessons: [],
+  lastUpdatedAt: new Date().toISOString()
+});
+
+const normalizeAttemptForUser = (attempt: UserAttempt, userId: string): UserAttempt => ({
+  ...attempt,
+  userId
+});
+
+const normalizeMistakeForUser = (mistake: UserMistake, userId: string): UserMistake => ({
+  ...mistake,
+  userId
+});
+
+const mergeAttempts = (
+  remoteAttempts: UserAttempt[],
+  guestAttempts: UserAttempt[],
+  userId: string
+): UserAttempt[] => {
+  const byId = new Map<string, UserAttempt>();
+
+  remoteAttempts.forEach(attempt => {
+    byId.set(attempt.id, normalizeAttemptForUser(attempt, userId));
+  });
+
+  guestAttempts.forEach(attempt => {
+    const normalized = normalizeAttemptForUser(attempt, userId);
+    const existing = byId.get(normalized.id);
+    if (!existing || toTime(normalized.createdAt) >= toTime(existing.createdAt)) {
+      byId.set(normalized.id, normalized);
+    }
+  });
+
+  return [...byId.values()].sort((a, b) => toTime(a.createdAt) - toTime(b.createdAt));
+};
+
+const mergeMistakeGroup = (items: MistakeSource[], userId: string): UserMistake => {
+  const sorted = [...items].sort((a, b) => toTime(b.mistake.lastAttemptedAt) - toTime(a.mistake.lastAttemptedAt));
+  const latest = sorted[0].mistake;
+  const remoteMistake = items.find(item => item.source === 'remote')?.mistake;
+  const activeMistakes = items.filter(item => item.mistake.reviewStatus !== 'fixed').map(item => item.mistake);
+  const nextReviewCandidates = latest.reviewStatus === 'fixed'
+    ? items.map(item => item.mistake.nextReviewAt)
+    : activeMistakes.map(item => item.nextReviewAt);
+
+  const nextReviewAt = nextReviewCandidates
+    .filter(Boolean)
+    .sort((a, b) => toTime(a) - toTime(b))[0] ?? latest.nextReviewAt;
+
+  return {
+    ...latest,
+    id: remoteMistake?.id ?? latest.id,
+    userId,
+    reviewCount: Math.max(...items.map(item => item.mistake.reviewCount || 1)),
+    nextReviewAt
+  };
+};
+
+const mergeMistakes = (
+  remoteMistakes: UserMistake[],
+  guestMistakes: UserMistake[],
+  userId: string
+): UserMistake[] => {
+  const groups = new Map<string, MistakeSource[]>();
+
+  const addToGroup = (mistake: UserMistake, source: MistakeSource['source']) => {
+    const key = mistake.questionId || mistake.id;
+    const group = groups.get(key) ?? [];
+    group.push({ mistake: normalizeMistakeForUser(mistake, userId), source });
+    groups.set(key, group);
+  };
+
+  remoteMistakes.forEach(mistake => addToGroup(mistake, 'remote'));
+  guestMistakes.forEach(mistake => addToGroup(mistake, 'guest'));
+
+  return [...groups.values()]
+    .map(group => mergeMistakeGroup(group, userId))
+    .sort((a, b) => toTime(b.lastAttemptedAt) - toTime(a.lastAttemptedAt));
+};
+
+const mergeExamResults = (
+  remoteExams: ExamResult[],
+  guestExams: ExamResult[]
+): ExamResult[] => {
+  const byExamId = new Map<string, ExamResult>();
+
+  remoteExams.forEach((exam, index) => {
+    byExamId.set(exam.examId || `remote-${index}`, exam);
+  });
+
+  guestExams.forEach((exam, index) => {
+    const key = exam.examId || `guest-${index}`;
+    const existing = byExamId.get(key);
+    if (!existing || toTime(exam.completedAt) >= toTime(existing.completedAt)) {
+      byExamId.set(key, exam);
+    }
+  });
+
+  return [...byExamId.values()].sort((a, b) => toTime(a.completedAt) - toTime(b.completedAt));
+};
+
+const mergeProgressFromAttempts = (
+  userId: string,
+  attempts: UserAttempt[],
+  remoteProgress: UserProgress | null,
+  guestProgress: UserProgress
+): UserProgress => {
+  const attemptsByQuestionType = new Map<string, UserAttempt[]>();
+
+  attempts.forEach(attempt => {
+    const list = attemptsByQuestionType.get(attempt.questionTypeId) ?? [];
+    list.push(attempt);
+    attemptsByQuestionType.set(attempt.questionTypeId, list);
+  });
+
+  const masteryLevels: Record<string, number> = {};
+
+  attemptsByQuestionType.forEach((typeAttempts, questionTypeId) => {
+    masteryLevels[questionTypeId] = calculateMasteryScore(typeAttempts);
+  });
+
+  const applyFallbackProgress = (progress?: UserProgress | null) => {
+    if (!progress) return;
+
+    progress.completedLessons.forEach(questionTypeId => {
+      if (!attemptsByQuestionType.has(questionTypeId) && masteryLevels[questionTypeId] === undefined) {
+        masteryLevels[questionTypeId] = 60;
+      }
+    });
+
+    Object.entries(progress.masteryLevels).forEach(([questionTypeId, score]) => {
+      if (attemptsByQuestionType.has(questionTypeId)) return;
+      masteryLevels[questionTypeId] = Math.max(masteryLevels[questionTypeId] ?? 0, score);
+    });
+  };
+
+  applyFallbackProgress(remoteProgress);
+  applyFallbackProgress(guestProgress);
+
+  const completedLessons = Object.entries(masteryLevels)
+    .filter(([, score]) => getStarsFromScore(score) >= 2)
+    .map(([questionTypeId]) => questionTypeId);
+
+  return {
+    userId,
+    masteryLevels,
+    completedLessons,
+    lastUpdatedAt: new Date().toISOString()
+  };
+};
+
+const hasGuestData = (
+  attempts: UserAttempt[],
+  mistakes: UserMistake[],
+  progress: UserProgress,
+  exams: ExamResult[]
+): boolean => {
+  return attempts.length > 0
+    || mistakes.length > 0
+    || exams.length > 0
+    || Object.keys(progress.masteryLevels).length > 0
+    || progress.completedLessons.length > 0;
+};
 
 export const progressService = {
   // Lấy hoặc khởi tạo Progress của người dùng từ Firestore
@@ -42,58 +228,121 @@ export const progressService = {
     }
   },
 
-  // Đồng bộ toàn bộ dữ liệu từ LocalStorage (Guest Mode) lên Firestore sau khi Đăng nhập/Đăng ký
+  // Backwards-compatible wrapper. Luồng mới luôn merge remote + guest, không ghi đè tiến độ remote.
   async syncLocalDataToFirestore(userId: string): Promise<void> {
-    try {
-      const batch = writeBatch(db);
+    return this.mergeGuestDataWithFirestore(userId);
+  },
 
-      // 1. Đồng bộ Attempts của Guest
-      const localAttempts = storageService.getAttempts('guest');
-      localAttempts.forEach(attempt => {
+  async mergeGuestDataWithFirestore(userId: string): Promise<void> {
+    const runningMerge = authMergePromises.get(userId);
+    if (runningMerge) {
+      return runningMerge;
+    }
+
+    const mergePromise = this.mergeGuestDataWithFirestoreInternal(userId)
+      .finally(() => {
+        authMergePromises.delete(userId);
+      });
+
+    authMergePromises.set(userId, mergePromise);
+    return mergePromise;
+  },
+
+  async mergeGuestDataWithFirestoreInternal(userId: string): Promise<void> {
+    try {
+      const [
+        remoteProgress,
+        remoteAttempts,
+        remoteMistakes,
+        remoteExams
+      ] = await Promise.all([
+        this.getUserProgressFromFirestore(userId),
+        this.getAttempts(userId),
+        this.getMistakes(userId),
+        this.getExamResults(userId)
+      ]);
+
+      const guestAttempts = storageService.getAttempts('guest');
+      const guestMistakes = storageService.getMistakes('guest');
+      const guestProgress = storageService.getProgress('guest');
+      const guestExams = storageService.getExamResults('guest');
+      const shouldClearGuest = hasGuestData(guestAttempts, guestMistakes, guestProgress, guestExams);
+
+      if (!shouldClearGuest) {
+        const hydratedAttempts = mergeAttempts(remoteAttempts, [], userId);
+        const hydratedMistakes = mergeMistakes(remoteMistakes, [], userId);
+        const hydratedExams = mergeExamResults(remoteExams, []);
+        const hydratedProgress = mergeProgressFromAttempts(userId, hydratedAttempts, remoteProgress, createEmptyProgress(userId));
+
+        storageService.saveAttemptsLocal(userId, hydratedAttempts);
+        storageService.saveMistakesLocal(userId, hydratedMistakes);
+        storageService.saveProgressLocal(userId, hydratedProgress);
+        storageService.saveExamResultsLocal(userId, hydratedExams);
+
+        console.log(`Đã hydrate dữ liệu Cloud xuống LocalStorage cho user: ${userId}`);
+        return;
+      }
+
+      const mergedAttempts = mergeAttempts(remoteAttempts, guestAttempts, userId);
+      const mergedMistakes = mergeMistakes(remoteMistakes, guestMistakes, userId);
+      const mergedExams = mergeExamResults(remoteExams, guestExams);
+      const mergedProgress = mergeProgressFromAttempts(userId, mergedAttempts, remoteProgress, guestProgress);
+
+      const batch = writeBatch(db);
+      const syncedAt = new Date().toISOString();
+
+      mergedAttempts.forEach(attempt => {
         const attemptRef = doc(db, `users/${userId}/attempts`, attempt.id);
         batch.set(attemptRef, {
           ...attempt,
-          userId, // chuyển quyền sở hữu sang user mới đăng nhập
-          syncedAt: new Date().toISOString()
+          userId,
+          syncedAt
         });
       });
 
-      // 2. Đồng bộ Mistakes của Guest
-      const localMistakes = storageService.getMistakes('guest');
-      localMistakes.forEach(mistake => {
+      mergedMistakes.forEach(mistake => {
         const mistakeRef = doc(db, `users/${userId}/mistakes`, mistake.id);
         batch.set(mistakeRef, {
           ...mistake,
           userId,
-          syncedAt: new Date().toISOString()
+          syncedAt
         });
       });
 
-      // 3. Đồng bộ Progress của Guest
-      const localProgress = storageService.getProgress('guest');
-      Object.entries(localProgress.masteryLevels).forEach(([questionTypeId, level]) => {
+      Object.entries(mergedProgress.masteryLevels).forEach(([questionTypeId, score]) => {
         const progressRef = doc(db, `users/${userId}/progress`, questionTypeId);
         batch.set(progressRef, {
-          masteryLevel: level,
-          isCompleted: localProgress.completedLessons.includes(questionTypeId),
-          updatedAt: localProgress.lastUpdatedAt || new Date().toISOString()
-        });
+          masteryLevel: score,
+          isCompleted: mergedProgress.completedLessons.includes(questionTypeId),
+          updatedAt: syncedAt
+        }, { merge: true });
       });
 
-      // 4. Đồng bộ Lịch sử Thi thử của Guest
-      const localExams = storageService.getExamResults('guest');
-      localExams.forEach((exam, idx) => {
-        const examRef = doc(db, `users/${userId}/exam_results`, `exam-${idx}-${Date.now()}`);
-        batch.set(examRef, {
-          ...exam,
-          syncedAt: new Date().toISOString()
+      const remoteExamIds = new Set(remoteExams.map(exam => exam.examId).filter(Boolean));
+      guestExams
+        .filter(exam => !remoteExamIds.has(exam.examId))
+        .forEach((exam, idx) => {
+          const examRef = doc(db, `users/${userId}/exam_results`, safeDocId(exam.examId, `exam-${idx}`));
+          batch.set(examRef, {
+            ...exam,
+            syncedAt
+          }, { merge: true });
         });
-      });
 
       await batch.commit();
-      console.log('Đã gộp thành công toàn bộ dữ liệu Guest vào tài khoản thành viên!');
+
+      storageService.saveAttemptsLocal(userId, mergedAttempts);
+      storageService.saveMistakesLocal(userId, mergedMistakes);
+      storageService.saveProgressLocal(userId, mergedProgress);
+      storageService.saveExamResultsLocal(userId, mergedExams);
+
+      if (shouldClearGuest) {
+        storageService.clearGuestData();
+      }
+
+      console.log('Đã merge an toàn dữ liệu Guest + Cloud vào tài khoản thành viên!');
     } catch (e) {
-      console.error('Lỗi đồng bộ dữ liệu cục bộ lên đám mây:', e);
+      console.error('Lỗi merge dữ liệu Guest với Cloud:', e);
     }
   },
 
@@ -102,27 +351,19 @@ export const progressService = {
     try {
       // 1. Tải Progress
       const progress = await this.getUserProgressFromFirestore(userId);
-      if (progress) {
-        storageService.saveProgressLocal(userId, progress);
-      }
+      storageService.saveProgressLocal(userId, progress ?? createEmptyProgress(userId));
 
       // 2. Tải Attempts
       const attempts = await this.getAttempts(userId);
-      if (attempts.length > 0) {
-        storageService.saveAttemptsLocal(userId, attempts);
-      }
+      storageService.saveAttemptsLocal(userId, attempts);
 
       // 3. Tải Mistakes
       const mistakes = await this.getMistakes(userId);
-      if (mistakes.length > 0) {
-        storageService.saveMistakesLocal(userId, mistakes);
-      }
+      storageService.saveMistakesLocal(userId, mistakes);
 
       // 4. Tải Exam Results
       const exams = await this.getExamResults(userId);
-      if (exams.length > 0) {
-        storageService.saveExamResultsLocal(userId, exams);
-      }
+      storageService.saveExamResultsLocal(userId, exams);
 
       console.log(`Đã hydrate thành công dữ liệu từ Firestore xuống LocalStorage cho user: ${userId}`);
     } catch (e) {
@@ -158,6 +399,57 @@ export const progressService = {
     }
   },
 
+  async saveExamSubmission(
+    userId: string,
+    result: ExamResult,
+    attempts: UserAttempt[],
+    mistakes: UserMistake[]
+  ): Promise<void> {
+    try {
+      const batch = writeBatch(db);
+      const syncedAt = new Date().toISOString();
+
+      attempts.forEach(attempt => {
+        const attemptRef = doc(db, `users/${userId}/attempts`, attempt.id);
+        batch.set(attemptRef, {
+          ...attempt,
+          userId,
+          syncedAt
+        }, { merge: true });
+      });
+
+      const progress = storageService.getProgress(userId);
+      const affectedQuestionTypeIds = new Set(attempts.map(attempt => attempt.questionTypeId));
+      affectedQuestionTypeIds.forEach(questionTypeId => {
+        const progressRef = doc(db, `users/${userId}/progress`, questionTypeId);
+        batch.set(progressRef, {
+          masteryLevel: progress.masteryLevels[questionTypeId] || 0,
+          isCompleted: progress.completedLessons.includes(questionTypeId),
+          updatedAt: syncedAt
+        }, { merge: true });
+      });
+
+      mistakes.forEach(mistake => {
+        const mistakeRef = doc(db, `users/${userId}/mistakes`, mistake.id);
+        batch.set(mistakeRef, {
+          ...mistake,
+          userId,
+          syncedAt
+        }, { merge: true });
+      });
+
+      const examRef = doc(db, `users/${userId}/exam_results`, safeDocId(result.examId, `exam-${Date.now()}`));
+      batch.set(examRef, {
+        ...result,
+        syncedAt
+      }, { merge: true });
+
+      await batch.commit();
+    } catch (e) {
+      console.error('Lỗi khi đồng bộ bài thi thử lên Firestore:', e);
+    }
+  },
+
   // Lưu hoặc cập nhật một Mistake lên Firestore
   async saveMistake(userId: string, mistake: UserMistake): Promise<void> {
     try {
@@ -175,11 +467,11 @@ export const progressService = {
   // Lưu kết quả thi thử lên Firestore
   async saveExamResult(userId: string, result: ExamResult): Promise<void> {
     try {
-      const examRef = doc(db, `users/${userId}/exam_results`, `exam-${Date.now()}`);
+      const examRef = doc(db, `users/${userId}/exam_results`, safeDocId(result.examId, `exam-${Date.now()}`));
       await setDoc(examRef, {
         ...result,
         syncedAt: new Date().toISOString()
-      });
+      }, { merge: true });
     } catch (e) {
       console.error('Lỗi khi lưu kết quả thi thử lên Firestore:', e);
     }

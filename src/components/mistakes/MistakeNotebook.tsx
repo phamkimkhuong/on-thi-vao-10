@@ -16,9 +16,10 @@ import {
   ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { UserMistake, Question, Solution, SolutionStep } from '../../types';
+import { UserMistake, Question, Solution, SolutionStep, UserAttempt } from '../../types';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme } from '../../utils/theme';
+import { validateAnswer } from '../../utils/answerValidator';
 
 interface EnrichedMistake extends UserMistake {
   question: Question;
@@ -26,7 +27,7 @@ interface EnrichedMistake extends UserMistake {
 }
 
 export const MistakeNotebook: React.FC = () => {
-  const { selectedSubject, user, progressVersion } = useAppStore();
+  const { selectedSubject, user, progressVersion, refreshProgress } = useAppStore();
   void progressVersion;
 
   const [mistakes, setMistakes] = useState<EnrichedMistake[]>([]);
@@ -91,21 +92,26 @@ export const MistakeNotebook: React.FC = () => {
   const handleReSubmit = () => {
     if (!activeMistake || reSubmitted) return;
 
-    const isMath = selectedSubject === 'math';
-    let correct: boolean;
-    let finalAns = reAnswer;
-
-    if (isMath) {
-      const cleanUser = reAnswer.trim().toLowerCase().replace(/\s+/g, '');
-      const cleanCorrect = activeMistake.question.correctAnswer.trim().toLowerCase().replace(/\s+/g, '');
-      correct = cleanUser === cleanCorrect || cleanCorrect.includes(cleanUser) && cleanUser.length > 1;
-    } else {
-      correct = selectedOption === activeMistake.question.correctAnswer;
-      finalAns = selectedOption || '';
-    }
+    const finalAns = selectedSubject === 'math' ? reAnswer : selectedOption || '';
+    const correct = validateAnswer(activeMistake.question, finalAns);
+    const currentUserId = user?.uid ?? 'guest';
+    const submittedAt = new Date().toISOString();
+    const attemptData: UserAttempt = {
+      id: `attempt-review-${activeMistake.questionId}-${Date.now()}`,
+      userId: currentUserId,
+      questionId: activeMistake.questionId,
+      questionTypeId: activeMistake.questionTypeId,
+      userAnswer: finalAns,
+      isCorrect: correct,
+      timeSpent: 30, // Mock time
+      createdAt: submittedAt
+    };
 
     setReCorrect(correct);
     setReSubmitted(true);
+
+    storageService.saveAttempt(currentUserId, attemptData);
+    refreshProgress();
 
     if (correct) {
       confetti({
@@ -113,38 +119,15 @@ export const MistakeNotebook: React.FC = () => {
         spread: 60,
         origin: { y: 0.7 }
       });
-      // Đánh dấu là đã sửa đổi (fixed)
-      storageService.resolveMistakeIfCorrect(user?.uid ?? 'guest', activeMistake.questionId);
+    }
 
-      // Đồng bộ Firestore
-      if (user) {
-        const localMistakes = storageService.getMistakes(user.uid);
-        const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
-        if (updated) {
-          progressService.saveMistake(user.uid, updated);
-        }
-      }
-    } else {
-      const attemptData = {
-        id: activeMistake.id,
-        userId: user ? user.uid : 'guest',
-        questionId: activeMistake.questionId,
-        questionTypeId: activeMistake.questionTypeId,
-        userAnswer: finalAns,
-        isCorrect: false,
-        timeSpent: 30, // Mock time
-        createdAt: new Date().toISOString()
-      };
-      // Làm sai tiếp, cập nhật số lần sai
-      storageService.addOrUpdateMistake(user?.uid ?? 'guest', attemptData);
-
-      // Đồng bộ Firestore
-      if (user) {
-        const localMistakes = storageService.getMistakes(user.uid);
-        const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
-        if (updated) {
-          progressService.saveMistake(user.uid, updated);
-        }
+    // Đồng bộ Firestore sau khi LocalStorage đã tự cập nhật progress/mistake qua saveAttempt.
+    if (user) {
+      progressService.saveAttempt(user.uid, attemptData);
+      const localMistakes = storageService.getMistakes(user.uid);
+      const updated = localMistakes.find(m => m.questionId === activeMistake.questionId);
+      if (updated) {
+        progressService.saveMistake(user.uid, updated);
       }
     }
   };

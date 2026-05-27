@@ -46,8 +46,8 @@ export const App: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
-        // Tự động tải dữ liệu từ Firestore xuống LocalStorage khi đăng nhập
-        await progressService.hydrateFirestoreDataToLocal(user.uid);
+        // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập.
+        await progressService.mergeGuestDataWithFirestore(user.uid);
         refreshProgress();
       }
       setAuthLoading(false);

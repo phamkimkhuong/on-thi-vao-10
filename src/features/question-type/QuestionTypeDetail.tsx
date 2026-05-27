@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
 import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
+import { useAppStore } from '../../services/store';
 import { Tabs, TabItem } from '../../components/ui/tabs';
 import { QuestionType, Question, Solution } from '../../types';
 import { Card, CardHeader, CardContent } from '../../components/ui/card';
@@ -17,10 +18,19 @@ import {
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme } from '../../utils/theme';
+import { getSubjectFromQuestionTypeId } from '../../utils/subject';
 
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
+  const { selectedSubject, setSubject } = useAppStore();
+
+  useEffect(() => {
+    const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);
+    if (subjectFromRoute && subjectFromRoute !== selectedSubject) {
+      setSubject(subjectFromRoute);
+    }
+  }, [questionTypeId, selectedSubject, setSubject]);
 
   // Tìm dạng bài trực tiếp trong quá trình render (Derived State)
   const detail: QuestionType | null = questionTypeId
