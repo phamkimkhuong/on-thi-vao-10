@@ -23,6 +23,21 @@ export const Dashboard: React.FC = () => {
   const mistakes = storageService.getMistakes().filter(m => m.reviewStatus !== 'fixed');
   const exams = storageService.getExamResults();
   
+  // Tìm dạng bài dang dở gần nhất
+  const attempts = storageService.getAttempts();
+  let lastActiveTypeId: string | null = null;
+  if (attempts.length > 0) {
+    lastActiveTypeId = attempts[attempts.length - 1].questionTypeId;
+  } else {
+    lastActiveTypeId = 'math-qt1'; // mặc định chuyên đề 1 Toán
+  }
+
+  const allQuestionTypes = [...mathQuestionTypes, ...englishQuestionTypes];
+  const lastActiveType = allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0];
+  const lastActiveSubject = lastActiveType.id.startsWith('math') ? 'math' : 'english';
+  const lastActiveLevel = progress.masteryLevels[lastActiveType.id] ?? 0;
+  const lastActivePercent = Math.round((lastActiveLevel / 3) * 100);
+
   // Tính toán số dạng đã master/hoàn thành
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
@@ -110,24 +125,64 @@ export const Dashboard: React.FC = () => {
     <div className="space-y-6 max-w-5xl mx-auto">
       
       {/* 🌟 Welcome Card & Motivational Quote */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-indigo-600 p-6 md:p-8 text-primary-foreground shadow-lg shadow-primary/10">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-extrabold tracking-tight flex items-center gap-2">
-              <Sparkles className="animate-pulse" size={24} />
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 p-6 md:p-8 text-primary-foreground shadow-lg shadow-primary/10">
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          {/* Cột trái: Lời chào và Quotes */}
+          <div className="space-y-3 md:col-span-2">
+            <h2 className="text-xl md:text-2xl font-black tracking-tight flex items-center gap-2">
+              <Sparkles className="animate-pulse text-amber-400" size={24} />
               Chào bạn, người chiến binh ôn thi vào 10!
             </h2>
-            <p className="text-sm text-indigo-100 font-medium italic max-w-2xl leading-relaxed">
+            <p className="text-xs md:text-sm text-indigo-100 font-semibold italic max-w-2xl leading-relaxed">
               "{quote}"
             </p>
+            <div className="pt-2">
+              <Button 
+                onClick={() => setView('roadmap')}
+                variant="secondary"
+                className="font-extrabold text-xs px-4 py-2 bg-white hover:bg-indigo-50 text-primary active:scale-[0.98] rounded-xl flex items-center gap-1 cursor-pointer"
+              >
+                Khám phá bản đồ lộ trình <ArrowRight size={12} />
+              </Button>
+            </div>
           </div>
-          <Button 
-            onClick={() => setView('roadmap')}
-            variant="secondary"
-            className="md:self-center font-bold px-5 py-3 shrink-0 bg-white hover:bg-indigo-50 text-primary active:scale-[0.98]"
-          >
-            Học bài mới ngay <ArrowRight size={16} />
-          </Button>
+
+          {/* Cột phải: Thẻ "Học tiếp nhanh" (Quick Resume) dạng Glassmorphism */}
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4.5 rounded-xl space-y-3 shadow-md">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-200 flex items-center gap-1.5">
+              <Zap size={12} className="text-amber-300 animate-pulse fill-amber-300" /> HỌC TIẾP DẠNG BÀI
+            </div>
+            
+            <div className="space-y-1">
+              <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-white/20 text-white">
+                {lastActiveSubject === 'math' ? '📐 Toán' : '🗣️ Anh'}
+              </span>
+              <h4 className="font-extrabold text-xs text-white truncate mt-1">
+                {lastActiveType.name}
+              </h4>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[9px] font-bold text-indigo-100">
+                <span>Thành thạo: {lastActivePercent}%</span>
+                <span>{lastActiveLevel}/3⭐</span>
+              </div>
+              <div className="h-1 w-full bg-white/25 rounded-full overflow-hidden">
+                <div className="h-full bg-amber-400 rounded-full" style={{ width: `${lastActivePercent}%` }} />
+              </div>
+            </div>
+
+            <Button
+              onClick={() => {
+                setSubject(lastActiveSubject);
+                selectQuestionType(lastActiveType.id);
+                setView('question-type');
+              }}
+              className="w-full font-black py-2 mt-1 text-[11px] bg-amber-400 hover:bg-amber-300 text-slate-900 border-none shadow-sm active:scale-[0.98] rounded-lg flex items-center justify-center gap-1 cursor-pointer"
+            >
+              Luyện tiếp tục <ArrowRight size={12} />
+            </Button>
+          </div>
         </div>
         
         {/* Background decorative bubbles */}

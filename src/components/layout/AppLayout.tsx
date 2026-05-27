@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useAppStore, ActiveView } from '../../services/store';
-import { 
-  BookOpen, 
-  Map, 
-  Bookmark, 
-  GraduationCap, 
-  Award, 
-  Moon, 
-  Sun, 
-  Menu, 
-  X, 
+import {
+  BookOpen,
+  Map,
+  Bookmark,
+  GraduationCap,
+  Award,
+  Moon,
+  Sun,
+  Menu,
+  X,
   ChevronRight,
-  TrendingUp
+  TrendingUp,
+  Lock
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 
@@ -20,12 +21,12 @@ interface AppLayoutProps {
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  const { 
-    activeView, 
-    setView, 
-    darkMode, 
-    toggleDarkMode, 
-    selectedSubject, 
+  const {
+    activeView,
+    setView,
+    darkMode,
+    toggleDarkMode,
+    selectedSubject,
     setSubject,
     user,
     logout
@@ -38,20 +39,20 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     { id: 'roadmap' as ActiveView, label: 'Lộ trình học', icon: Map },
     { id: 'practice' as ActiveView, label: 'Luyện tập', icon: BookOpen },
     { id: 'mistakes' as ActiveView, label: 'Sổ lỗi sai', icon: Bookmark },
-    { id: 'exam' as ActiveView, label: 'Thi thử vào 10', icon: Award }
+    { id: 'exam' as ActiveView, label: 'Thi thử vào 10', icon: Award, isLocked: true }
   ];
 
   // Tính toán nhanh tiến độ tổng quát
   const progress = storageService.getProgress();
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
-  
+
   const mathPercent = Math.round((mathCompleted / 6) * 100); // 6 dạng toán chính
   const englishPercent = Math.round((englishCompleted / 5) * 100); // 5 dạng tiếng anh chính
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
-      
+
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
         <div className="flex items-center gap-2" onClick={() => setView('dashboard')}>
@@ -62,16 +63,16 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             ÔN THI VÀO 10
           </span>
         </div>
-        
+
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
           >
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          
-          <button 
+
+          <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
           >
@@ -82,7 +83,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
       {/* 🚪 Mobile Navigation Sidebar Drawer */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -115,21 +116,19 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           <div className="bg-secondary p-1 rounded-xl flex gap-1 border border-border/10">
             <button
               onClick={() => { setSubject('math'); setIsSidebarOpen(false); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                selectedSubject === 'math' 
-                  ? 'bg-card text-primary shadow-sm' 
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedSubject === 'math'
+                  ? 'bg-card text-primary shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
             >
               📐 Toán học
             </button>
             <button
               onClick={() => { setSubject('english'); setIsSidebarOpen(false); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                selectedSubject === 'english' 
-                  ? 'bg-card text-primary shadow-sm' 
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedSubject === 'english'
+                  ? 'bg-card text-primary shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
             >
               🗣️ Tiếng Anh
             </button>
@@ -141,24 +140,34 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeView === item.id;
+            const isLocked = 'isLocked' in item && item.isLocked;
+
             return (
               <button
                 key={item.id}
                 onClick={() => {
+                  if (isLocked) {
+                    return;
+                  }
                   setView(item.id);
                   setIsSidebarOpen(false);
                 }}
                 className={`
                   w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer
-                  ${isActive 
-                    ? 'bg-primary/10 text-primary border-l-4 border-primary pl-3' 
-                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                  ${isActive
+                    ? 'bg-primary/10 text-primary border-l-4 border-primary pl-3'
+                    : isLocked
+                      ? 'text-muted-foreground/40 hover:bg-secondary/20 cursor-not-allowed'
+                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                   }
                 `}
               >
-                <Icon size={18} className={isActive ? 'text-primary' : 'text-muted-foreground'} />
-                {item.label}
-                {isActive && <ChevronRight size={14} className="ml-auto text-primary" />}
+                <Icon size={18} className={isActive ? 'text-primary' : isLocked ? 'text-muted-foreground/30' : 'text-muted-foreground'} />
+                <span className={isLocked ? 'line-through opacity-60' : ''}>
+                  {item.label}
+                </span>
+                {isLocked && <Lock size={12} className="ml-auto text-muted-foreground/30" />}
+                {isActive && !isLocked && <ChevronRight size={14} className="ml-auto text-primary" />}
               </button>
             );
           })}
@@ -203,7 +212,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="text-xs font-extrabold truncate text-foreground leading-none">{user.displayName || 'Học sinh'}</span>
                 <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1">{user.email}</span>
-                <button 
+                <button
                   onClick={() => { logout(); setIsSidebarOpen(false); }}
                   className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer"
                 >
@@ -219,7 +228,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 </div>
                 <span className="text-[11px] font-bold text-muted-foreground">Chế độ Guest</span>
               </div>
-              <button 
+              <button
                 onClick={() => { setView('auth'); setIsSidebarOpen(false); }}
                 className="text-[10px] font-bold text-primary hover:underline cursor-pointer bg-primary/5 px-2.5 py-1.5 rounded-lg border border-primary/10"
               >
@@ -232,7 +241,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         {/* Dark Mode Toggle & Footer */}
         <div className="p-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-semibold">
           <span>Version MVP V2</span>
-          <button 
+          <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             title="Đổi giao diện Sáng/Tối"
@@ -244,7 +253,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
       {/* 🖥️ Main Workspace (Content Area) */}
       <main className="flex-1 flex flex-col min-h-screen md:max-h-screen md:overflow-y-auto bg-background">
-        
+
         {/* 💻 Desktop Header */}
         <header className="hidden md:flex items-center justify-between px-8 py-4 bg-card border-b border-border shadow-sm sticky top-0 z-20">
           <div className="flex flex-col">
@@ -276,7 +285,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs font-extrabold leading-none">{user.displayName || 'Học sinh'}</span>
-                    <button 
+                    <button
                       onClick={() => logout()}
                       className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"
                     >
@@ -291,7 +300,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs font-bold leading-none">Khách (Guest)</span>
-                    <button 
+                    <button
                       onClick={() => setView('auth')}
                       className="text-[9px] text-primary font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"
                     >

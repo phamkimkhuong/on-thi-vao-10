@@ -14,7 +14,9 @@ import {
   XCircle,
   ArrowRight,
   AlertTriangle,
-  Lightbulb
+  Lightbulb,
+  Star,
+  Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -22,6 +24,7 @@ const getNow = () => Date.now();
 
 export const PracticeEngine: React.FC = () => {
   const { selectedSubject, selectedQuestionTypeId, selectQuestionType, setView, user } = useAppStore();
+  const [progress] = useState<Record<string, number>>(() => storageService.getProgress().masteryLevels);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
@@ -158,24 +161,54 @@ export const PracticeEngine: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {types.map((type) => {
             const isMath = type.id.startsWith('math');
+            const level = progress[type.id] ?? 0;
+            const percent = Math.round((level / 3) * 100);
+
             return (
               <Card
                 key={type.id}
-                className="hover:border-primary/50 cursor-pointer transition-all duration-200"
+                className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px]"
                 onClick={() => selectQuestionType(type.id)}
               >
-                <CardContent className="p-5 flex justify-between items-center gap-4">
-                  <div className="space-y-1.5 flex-1 min-w-0">
-                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
-                      }`}>
-                      {isMath ? '📐 Toán' : '🗣️ Anh'}
-                    </span>
-                    <h4 className="font-extrabold text-sm text-foreground truncate">{type.name}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-1">{type.description}</p>
+                <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isMath ? 'bg-indigo-100 dark:bg-indigo-950 text-primary' : 'bg-violet-100 dark:bg-violet-950 text-violet-500'
+                        }`}>
+                        {isMath ? '📐 Toán' : '🗣️ Anh'}
+                      </span>
+                      <div className="flex gap-0.5">
+                        {[1, 2, 3].map((starIdx) => (
+                          <Star
+                            key={starIdx}
+                            size={10}
+                            className={starIdx <= level ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-slate-700"}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
+                      {type.name}
+                      {level === 3 && (
+                        <Sparkles size={12} className="text-emerald-500 fill-emerald-500 animate-pulse" />
+                      )}
+                    </h4>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{type.description}</p>
                   </div>
-                  <Button variant="outline" size="sm" className="font-bold text-xs shrink-0 border border-border/50">
-                    Luyện tập
-                  </Button>
+
+                  <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
+                    <div className="flex items-center gap-1.5 flex-1 max-w-[60%]">
+                      <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
+                        <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+                      </div>
+                      <span className="text-[9px] text-primary shrink-0">{percent}%</span>
+                    </div>
+
+                    <Button variant="outline" size="sm" className="font-bold text-[10px] py-1 px-3 shrink-0 border border-border/50 cursor-pointer h-7">
+                      Luyện tập →
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             );

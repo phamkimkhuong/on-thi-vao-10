@@ -156,8 +156,8 @@ export const Roadmap: React.FC = () => {
             <div key={tier.id} className="space-y-6">
               {/* Tiêu đề Chặng */}
               <div className={`p-5 rounded-2xl border transition-all duration-300 ${isLocked
-                  ? 'bg-slate-100/50 dark:bg-slate-900/10 border-border/40 opacity-60'
-                  : tier.badgeStyle
+                ? 'bg-slate-100/50 dark:bg-slate-900/10 border-border/40 opacity-60'
+                : tier.badgeStyle
                 }`}>
                 <div className="flex items-center gap-3">
                   <h3 className="text-base font-black tracking-tight">{tier.title}</h3>
@@ -182,23 +182,40 @@ export const Roadmap: React.FC = () => {
                     <div key={topic.id} className="relative">
                       {/* Điểm nút trên trục thời gian */}
                       <div className={`absolute -left-[35px] top-0.5 w-6 h-6 rounded-full border-4 border-background flex items-center justify-center text-[10px] font-black shadow-sm transition-colors ${isLocked
-                          ? 'bg-slate-300 dark:bg-slate-700 text-slate-500'
-                          : 'bg-primary text-white'
+                        ? 'bg-slate-300 dark:bg-slate-700 text-slate-500'
+                        : 'bg-primary text-white'
                         }`}>
                         {topicIdx + 1}
                       </div>
 
                       {/* Chi tiết chuyên đề */}
                       <div className="space-y-4">
-                        <div className="flex flex-col gap-1">
-                          <h4 className="text-sm font-black text-foreground flex items-center gap-2">
-                            {topic.name}
-                            {isLocked && <Lock size={12} className="text-muted-foreground" />}
-                          </h4>
-                          <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
-                            {filteredTypes.length} dạng bài thi cốt lõi
-                          </span>
-                        </div>
+                        {(() => {
+                          const completedCount = filteredTypes.filter(type => (progress[type.id] ?? 0) >= 2).length;
+                          const percent = filteredTypes.length > 0 ? Math.round((completedCount / filteredTypes.length) * 100) : 0;
+
+                          return (
+                            <div className="flex flex-col gap-1.5">
+                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                <h4 className="text-sm font-black text-foreground flex items-center gap-2">
+                                  {topic.name}
+                                  {isLocked && <Lock size={12} className="text-muted-foreground" />}
+                                </h4>
+                                {!isLocked && (
+                                  <div className="flex items-center gap-1.5">
+                                    <div className="h-1.5 w-16 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
+                                      <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+                                    </div>
+                                    <span className="text-[9px] text-primary font-black">{percent}% hoàn thành</span>
+                                  </div>
+                                )}
+                              </div>
+                              <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                                {filteredTypes.length} dạng bài thi cốt lõi
+                              </span>
+                            </div>
+                          );
+                        })()}
 
                         {/* Danh sách dạng bài */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -210,10 +227,10 @@ export const Roadmap: React.FC = () => {
                               <Card
                                 key={type.id}
                                 className={`transition-all duration-200 border bg-card ${isLocked
-                                    ? 'border-border/20 opacity-70 cursor-not-allowed hover:bg-slate-50/10'
-                                    : level === 3
-                                      ? 'border-emerald-500/20 shadow-sm shadow-emerald-500/5 hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
-                                      : 'hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
+                                  ? 'border-border/20 opacity-70 cursor-not-allowed hover:bg-slate-50/10'
+                                  : level === 3
+                                    ? 'border-emerald-500/20 shadow-sm shadow-emerald-500/5 hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
+                                    : 'hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
                                   }`}
                                 onClick={() => handleSelectType(type.id, isLocked)}
                               >
