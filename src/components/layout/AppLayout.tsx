@@ -13,7 +13,6 @@ import {
   X,
   ChevronRight,
   TrendingUp,
-  Lock,
   Users
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
@@ -110,7 +109,7 @@ export const AppLayout: React.FC = () => {
     { path: '/roadmap', label: 'Lộ trình học', icon: Map },
     { path: '/practice', label: 'Luyện tập', icon: BookOpen },
     { path: '/mistakes', label: 'Sổ lỗi sai', icon: Bookmark },
-    { path: '/exam', label: 'Thi thử vào 10', icon: Award, isLocked: true }
+    { path: '/exam', label: 'Thi thử vào 10', icon: Award }
   ];
 
   // Tính toán nhanh tiến độ tổng quát
@@ -243,15 +242,11 @@ export const AppLayout: React.FC = () => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path || 
               (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
-            const isLocked = 'isLocked' in item && item.isLocked;
 
             return (
               <button
                 key={item.path}
                 onClick={() => {
-                  if (isLocked) {
-                    return;
-                  }
                   navigate(item.path);
                   setIsSidebarOpen(false);
                 }}
@@ -260,20 +255,17 @@ export const AppLayout: React.FC = () => {
                   isSidebarCollapsed && "justify-center px-2 py-3 gap-0",
                   isActive
                     ? 'bg-primary/10 text-primary border-l-4 border-primary pl-3'
-                    : isLocked
-                      ? 'text-muted-foreground/40 hover:bg-secondary/20 cursor-not-allowed'
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                 )}
                 title={isSidebarCollapsed ? item.label : undefined}
               >
-                <Icon size={18} className={cn("shrink-0", isActive ? 'text-primary' : isLocked ? 'text-muted-foreground/30' : 'text-muted-foreground')} />
+                <Icon size={18} className={cn("shrink-0", isActive ? 'text-primary' : 'text-muted-foreground')} />
                 {!isSidebarCollapsed && (
-                  <span className={cn(isLocked ? 'line-through opacity-60' : '')}>
+                  <span>
                     {item.label}
                   </span>
                 )}
-                {!isSidebarCollapsed && isLocked && <Lock size={12} className="ml-auto text-muted-foreground/30" />}
-                {!isSidebarCollapsed && isActive && !isLocked && <ChevronRight size={14} className="ml-auto text-primary" />}
+                {!isSidebarCollapsed && isActive && <ChevronRight size={14} className="ml-auto text-primary" />}
               </button>
             );
           })}

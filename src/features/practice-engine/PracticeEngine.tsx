@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
-import { mathTopics, mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
-import { englishTopics, englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
+import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
+import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -40,43 +40,7 @@ export const PracticeEngine: React.FC = () => {
   void progressVersion;
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
   const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
-  const getMasteryStars = (questionTypeId: string) => getStarsFromScore(progress[questionTypeId] ?? 0);
 
-  // Xác định xem một dạng bài có bị khóa theo chặng học tập hay không
-  const isTypeLocked = (questionTypeId: string): boolean => {
-    const isMath = questionTypeId.startsWith('math');
-    const topicsList = isMath ? mathTopics : englishTopics;
-    const qTypesList = isMath ? mathQuestionTypes : englishQuestionTypes;
-
-    const type = qTypesList.find(qt => qt.id === questionTypeId);
-    if (!type) return true;
-
-    const topic = topicsList.find(t => t.id === type.topicId);
-    if (!topic) return true;
-
-    const tierId = topic.tier;
-    if (tierId === 1) return false;
-
-    if (tierId === 2) {
-      const tier1Topics = topicsList.filter(t => t.tier === 1);
-      const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      return !tier1QTs.every(qt => getMasteryStars(qt.id) >= 2);
-    }
-
-    if (tierId === 3) {
-      const tier1Topics = topicsList.filter(t => t.tier === 1);
-      const tier1QTs = qTypesList.filter(qt => tier1Topics.some(t => t.id === qt.topicId));
-      const tier1Ok = tier1QTs.every(qt => getMasteryStars(qt.id) >= 2);
-
-      const tier2Topics = topicsList.filter(t => t.tier === 2);
-      const tier2QTs = qTypesList.filter(qt => tier2Topics.some(t => t.id === qt.topicId));
-      const tier2Ok = tier2QTs.every(qt => getMasteryStars(qt.id) >= 2);
-
-      return !tier1Ok || !tier2Ok;
-    }
-
-    return false;
-  };
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
@@ -418,8 +382,7 @@ export const PracticeEngine: React.FC = () => {
   // Nếu không có questionTypeId và học sinh vào thẳng Practice từ Menu
   // Hãy hiển thị danh sách dạng bài để học sinh chọn dạng để luyện
   if (!questionTypeId) {
-    const allTypes = routeSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
-    const types = allTypes.filter(type => !isTypeLocked(type.id));
+    const types = routeSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
 
     return (
       <div className="space-y-6 max-w-4xl mx-auto">
