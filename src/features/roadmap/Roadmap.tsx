@@ -177,6 +177,13 @@ export const Roadmap: React.FC = () => {
                                     <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
                                       {type.description}
                                     </p>
+                                    {type.subTypes && type.subTypes.length > 0 && (
+                                      <div className="pt-1.5">
+                                        <span className="text-[9px] font-bold text-primary bg-primary/10 dark:bg-primary/20 px-2 py-0.5 rounded-md inline-block select-none">
+                                          🎯 Gồm {type.subTypes.length} dạng bài con
+                                        </span>
+                                      </div>
+                                    )}
                                   </div>
 
                                   <div className="flex items-center justify-between border-t border-border/30 pt-3 text-[10px] font-bold text-muted-foreground">

@@ -89,6 +89,7 @@ export interface QuestionType {
   difficulty: 'easy' | 'medium' | 'hard';
   examFrequency: 'low' | 'medium' | 'high';
   exampleQuestionId?: string; // ID câu hỏi dùng làm ví dụ mẫu trong tab "Ví dụ mẫu"
+  subTypes?: string[]; // Phân dạng bài tập con chi tiết
 }
 
 

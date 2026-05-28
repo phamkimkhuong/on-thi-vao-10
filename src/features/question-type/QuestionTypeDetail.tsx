@@ -69,7 +69,37 @@ export const QuestionTypeDetail: React.FC = () => {
   const requiresLoginForMathPractice = isMath && !user;
 
   // Xây dựng tab items
-  const tabItems: TabItem[] = [
+  const tabItems: TabItem[] = [];
+
+  if (detail.subTypes && detail.subTypes.length > 0) {
+    tabItems.push({
+      id: 'subtypes',
+      label: '🎯 Các dạng toán con',
+      content: (
+        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
+          <CardContent className="p-6 space-y-4">
+            <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
+              <PlayCircle size={16} className="text-primary animate-pulse" /> Phân dạng chi tiết thường gặp trong đề thi:
+            </h4>
+            <div className="grid grid-cols-1 gap-3">
+              {detail.subTypes.map((sub: string, idx: number) => (
+                <div key={idx} className="flex gap-3 items-start bg-secondary/50 dark:bg-slate-900/40 p-4 rounded-xl border border-border/10">
+                  <div className="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                    {idx + 1}
+                  </div>
+                  <div className="text-xs font-semibold text-foreground leading-relaxed pt-0.5">
+                    <LatexRenderer text={sub} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )
+    });
+  }
+
+  tabItems.push(
     {
       id: 'recognition',
       label: '💡 Cách nhận biết',
@@ -222,7 +252,7 @@ export const QuestionTypeDetail: React.FC = () => {
         </div>
       )
     }
-  ];
+  );
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">

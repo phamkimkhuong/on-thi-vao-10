@@ -14,34 +14,43 @@ export const mathQuestionTypes: QuestionType[] = [
     topicId: 'math-t1',
     name: 'Rút gọn biểu thức chứa căn',
     slug: 'rut-gon-bieu-thuc-chua-can',
-    description: 'Dạng toán đại số thường xuất hiện ở phần đầu đề thi vào 10. Đề thường cho biểu thức chứa căn bậc hai và phân thức, yêu cầu rút gọn rồi xử lý câu phụ như tính giá trị, tìm x hoặc so sánh.',
+    description: 'Dạng toán đại số kinh điển luôn chiếm 2 điểm (20% tổng số điểm) ở vị trí Câu 1 trong mọi đề thi tuyển sinh vào 10. Đề bài thường cho một biểu thức phức tạp gồm các phân thức đại số chứa căn bậc hai (thường là biến x), yêu cầu học sinh thực hiện rút gọn chính xác, sau đó vận dụng biểu thức rút gọn để giải quyết các câu hỏi phụ nâng cao như giải phương trình, tìm giá trị nguyên, so sánh hoặc tìm GTLN/GTNN.',
     exampleQuestionId: 'math-q1',
     recognitionSigns: [
-      'Có √x hoặc biểu thức chứa căn bậc hai.',
-      'Có nhiều phân thức cần quy đồng.',
-      'Mẫu thức thường có dạng √x - 1, √x + 1, x - 1, x - √x hoặc x + √x.',
-      'Đề yêu cầu rút gọn biểu thức A, B, P hoặc Q.',
-      'Sau phần rút gọn thường có câu phụ như tính giá trị, tìm x hoặc tìm điều kiện của x.'
+      'Đề bài cho biểu thức chứa các căn thức bậc hai của biến \\( x \\) (ví dụ: \\( \\sqrt{x} \\)) kèm theo các phân thức đại số.',
+      'Có nhiều phân thức phức tạp nằm trong ngoặc đơn nối với nhau bởi các phép toán cộng, trừ, nhân, chia.',
+      'Các mẫu thức chứa biến thường có mối quan hệ nhân tử với nhau, ví dụ: \\( x - 1 = (\\sqrt{x} - 1)(\\sqrt{x} + 1) \\), \\( x - \\sqrt{x} = \\sqrt{x}(\\sqrt{x} - 1) \\), hoặc \\( x + 2\\sqrt{x} = \\sqrt{x}(\\sqrt{x} + 2) \\).',
+      'Yêu cầu đầu tiên luôn là: "Rút gọn biểu thức \\( A \\), \\( B \\), hoặc \\( P \\)".',
+      'Các yêu cầu tiếp theo là các bài toán ứng dụng kết quả rút gọn: tính giá trị biểu thức, giải phương trình/bất phương trình, tìm giá trị nguyên của \\( x \\) để biểu thức nguyên, so sánh biểu thức với một số.'
     ],
     solvingSteps: [
-      'Ghi điều kiện xác định trước khi biến đổi.',
-      'Phân tích các mẫu thức thành nhân tử để tìm mẫu thức chung.',
-      'Rút gọn từng cụm riêng nếu biểu thức có nhiều ngoặc.',
-      'Quy đồng, thu gọn tử số và chỉ rút gọn khi tử và mẫu ở dạng tích.',
-      'Nếu có phép chia, đổi thành nhân với phân thức nghịch đảo.',
-      'Dùng biểu thức đã rút gọn để làm câu phụ.',
-      'Đối chiếu nghiệm hoặc đáp án cuối với điều kiện xác định.'
+      'Bước 1: Tìm điều kiện xác định (ĐKXĐ). Biểu thức dưới căn phải không âm (\\( x \\ge 0 \\)) và các mẫu thức phải khác 0.',
+      'Bước 2: Phân tích các mẫu thức thành nhân tử để xác định Mẫu thức chung (MTC). Các hằng đẳng thức thường dùng: \\( a - b = (\\sqrt{a} - \\sqrt{b})(\\sqrt{a} + \\sqrt{b}) \\).',
+      'Bước 3: Quy đồng mẫu thức các phân thức trong từng cụm ngoặc. Thực hiện nhân cả tử và mẫu với nhân tử phụ tương ứng.',
+      'Bước 4: Quy đồng mẫu thức, thực hiện phép tính ở tử số (phá ngoặc, nhân đơn thức/đa thức) giữ nguyên mẫu thức chung. Thu gọn tử số bằng cách nhóm các hạng tử đồng dạng.',
+      'Bước 5: Phân tích tử số vừa thu gọn thành nhân tử để triệt tiêu các nhân tử chung với mẫu thức (nếu có).',
+      'Bước 6: Thực hiện các phép toán nhân/chia ngoài ngoặc (nhân trực tiếp hoặc nhân nghịch đảo đối với phép chia phân thức) để thu được kết quả tối giản nhất.',
+      'Bước 7: Sử dụng kết quả rút gọn tối giản để thực hiện câu phụ, đối chiếu kỹ kết quả tìm được với ĐKXĐ ban đầu trước khi kết luận.'
     ],
     commonMistakes: [
-      'Quên điều kiện xác định.',
-      'Phân tích sai x - √x thành x(√x - 1).',
-      'Phân tích sai x - 1 hoặc quên dùng x - 1 = (√x - 1)(√x + 1).',
-      'Chia phân thức nhưng quên nhân với phân thức nghịch đảo.',
-      'Rút gọn khi tử và mẫu chưa ở dạng tích.',
-      'Tìm được nghiệm nhưng không đối chiếu điều kiện.'
+      'Bỏ sót hoặc không viết điều kiện xác định dẫn đến mất điểm trình bày hoặc lấy nhầm nghiệm không thỏa mãn.',
+      'Sai dấu khi quy đồng mẫu thức, đặc biệt khi trước phân thức có dấu trừ \\( - \\) (quên đổi dấu toàn bộ tử số khi phá ngoặc).',
+      'Rút gọn vội vã bằng cách triệt tiêu các số hạng đơn lẻ ở tử và mẫu khi chúng chưa được đưa về dạng tích (ví dụ: triệt tiêu \\( \\sqrt{x} \\) trong biểu thức \\( \\frac{\\sqrt{x}+1}{\\sqrt{x}} \\)).',
+      'Phép chia phân thức nhưng quên đảo ngược tử và mẫu của phân thức chia khi thực hiện phép nhân nghịch đảo.',
+      'Khi làm câu phụ tìm giá trị nguyên của \\( x \\) để biểu thức nguyên, quên không đối chiếu giá trị \\( x \\) tìm được với điều kiện \\( x \\ge 0 \\) và các điều kiện mẫu khác 0.'
     ],
     difficulty: 'medium',
-    examFrequency: 'high'
+    examFrequency: 'high',
+    subTypes: [
+      'Dạng 1: Tính giá trị biểu thức căn không chứa biến (ví dụ: rút gọn biểu thức số như \\( A = \\sqrt{18} - 2\\sqrt{50} + 3\\sqrt{8} \\))',
+      'Dạng 2: Tìm điều kiện xác định của biểu thức phân thức chứa căn (ví dụ: tìm điều kiện để biểu thức mẫu thức khác 0 và biểu thức dưới căn không âm)',
+      'Dạng 3: Rút gọn biểu thức đơn giản có hai mẫu liên hợp (ví dụ: rút gọn phân thức quy đồng mẫu có dạng \\( \\sqrt{x}-1 \\) và \\( \\sqrt{x}+1 \\))',
+      'Dạng 4: Rút gọn biểu thức có chứa phép tính nhân hoặc chia (nhân với phân thức hoặc chia phân thức bằng cách đổi thành nhân nghịch đảo)',
+      'Dạng 5: Rút gọn rồi tính giá trị của biểu thức tại một giá trị \\( x = x_0 \\) cụ thể (chú ý rút gọn trước, kiểm tra ĐKXĐ rồi thế vào)',
+      'Dạng 6: Rút gọn rồi giải phương trình hoặc bất phương trình theo biểu thức (ví dụ: tìm \\( x \\) để biểu thức rút gọn bằng một số \\( k \\) hoặc lớn/nhỏ hơn \\( k \\))',
+      'Dạng 7: Rút gọn rồi tìm giá trị nguyên của biến \\( x \\) để biểu thức nhận giá trị nguyên (sử dụng phương pháp chia tử cho mẫu và tìm ước của tử số)',
+      'Dạng 8: Rút gọn rồi so sánh biểu thức với một số hoặc chứng minh bất đẳng thức, tìm GTLN/GTNN (áp dụng so sánh hiệu, bất đẳng thức Cô-si)'
+    ]
   },
   {
     id: 'math-qt2',
