@@ -81,14 +81,30 @@ export const QuestionTypeDetail: React.FC = () => {
             <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
               <PlayCircle size={16} className="text-primary animate-pulse" /> Phân dạng chi tiết thường gặp trong đề thi:
             </h4>
-            <div className="grid grid-cols-1 gap-3">
-              {detail.subTypes.map((sub: string, idx: number) => (
-                <div key={idx} className="flex gap-3 items-start bg-secondary/50 dark:bg-slate-900/40 p-4 rounded-xl border border-border/10">
-                  <div className="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
-                    {idx + 1}
+            <div className="grid grid-cols-1 gap-4.5">
+              {detail.subTypes.map((sub, idx: number) => (
+                <div key={idx} className="flex flex-col bg-secondary/50 dark:bg-slate-900/40 p-4.5 rounded-xl border border-border/10">
+                  <div className="flex gap-3 items-start">
+                    <div className="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                      {idx + 1}
+                    </div>
+                    <div className="text-xs font-black text-foreground pt-0.5">
+                      {sub.name}
+                    </div>
                   </div>
-                  <div className="text-xs font-semibold text-foreground leading-relaxed pt-0.5">
-                    <LatexRenderer text={sub} />
+                  
+                  <div className="mt-3 pl-9 space-y-2.5">
+                    <div className="p-3.5 bg-card border border-border/40 rounded-xl text-xs font-semibold text-foreground shadow-sm">
+                      <span className="text-amber-500 font-extrabold block mb-1.5">
+                        🔬 Ví dụ đề minh họa:
+                      </span>
+                      <LatexRenderer text={sub.example} />
+                    </div>
+                    {sub.note && (
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">
+                        <span className="font-extrabold text-foreground">💡 Phương pháp giải:</span> <LatexRenderer text={sub.note} />
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}

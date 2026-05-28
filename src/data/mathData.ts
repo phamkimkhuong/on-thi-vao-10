@@ -42,14 +42,46 @@ export const mathQuestionTypes: QuestionType[] = [
     difficulty: 'medium',
     examFrequency: 'high',
     subTypes: [
-      'Dạng 1: Tính giá trị biểu thức căn không chứa biến (ví dụ: rút gọn biểu thức số như \\( A = \\sqrt{18} - 2\\sqrt{50} + 3\\sqrt{8} \\))',
-      'Dạng 2: Tìm điều kiện xác định của biểu thức phân thức chứa căn (ví dụ: tìm điều kiện để biểu thức mẫu thức khác 0 và biểu thức dưới căn không âm)',
-      'Dạng 3: Rút gọn biểu thức đơn giản có hai mẫu liên hợp (ví dụ: rút gọn phân thức quy đồng mẫu có dạng \\( \\sqrt{x}-1 \\) và \\( \\sqrt{x}+1 \\))',
-      'Dạng 4: Rút gọn biểu thức có chứa phép tính nhân hoặc chia (nhân với phân thức hoặc chia phân thức bằng cách đổi thành nhân nghịch đảo)',
-      'Dạng 5: Rút gọn rồi tính giá trị của biểu thức tại một giá trị \\( x = x_0 \\) cụ thể (chú ý rút gọn trước, kiểm tra ĐKXĐ rồi thế vào)',
-      'Dạng 6: Rút gọn rồi giải phương trình hoặc bất phương trình theo biểu thức (ví dụ: tìm \\( x \\) để biểu thức rút gọn bằng một số \\( k \\) hoặc lớn/nhỏ hơn \\( k \\))',
-      'Dạng 7: Rút gọn rồi tìm giá trị nguyên của biến \\( x \\) để biểu thức nhận giá trị nguyên (sử dụng phương pháp chia tử cho mẫu và tìm ước của tử số)',
-      'Dạng 8: Rút gọn rồi so sánh biểu thức với một số hoặc chứng minh bất đẳng thức, tìm GTLN/GTNN (áp dụng so sánh hiệu, bất đẳng thức Cô-si)'
+      {
+        name: 'Dạng 1: Tính giá trị biểu thức căn không chứa biến',
+        example: 'Tính giá trị biểu thức: \\( A = \\sqrt{18} - 2\\sqrt{50} + 3\\sqrt{8} \\)',
+        note: 'Phân tích các số dưới căn thành tích có chứa số chính phương để đưa ra ngoài dấu căn, sau đó thực hiện cộng trừ các căn thức đồng dạng.'
+      },
+      {
+        name: 'Dạng 2: Tìm điều kiện xác định của biểu thức phân thức chứa căn',
+        example: 'Tìm điều kiện xác định của biểu thức: \\( P = \\left(\\frac{1}{\\sqrt{x}-1} + \\frac{1}{\\sqrt{x}+1}\\right) \\cdot \\frac{x-1}{\\sqrt{x}} \\)',
+        note: 'Đặt điều kiện cho các biểu thức dưới căn không âm (\\( x \\ge 0 \\)) và tất cả các mẫu thức khác 0 (\\( \\sqrt{x}-1 \\neq 0 \\), \\( \\sqrt{x}+1 \\neq 0 \\), và \\( \\sqrt{x} \\neq 0 \\)).'
+      },
+      {
+        name: 'Dạng 3: Rút gọn biểu thức đơn giản có hai mẫu liên hợp',
+        example: 'Rút gọn biểu thức: \\( A = \\frac{1}{\\sqrt{x}-1} - \\frac{1}{\\sqrt{x}+1} \\)',
+        note: 'Quy đồng mẫu thức với mẫu chung là tích hai mẫu liên hợp \\( (\\sqrt{x}-1)(\\sqrt{x}+1) = x-1 \\), quy đồng tử số rồi rút gọn.'
+      },
+      {
+        name: 'Dạng 4: Rút gọn biểu thức chứa phép nhân hoặc chia phân thức',
+        example: 'Rút gọn biểu thức: \\( P = \\frac{x-4}{\\sqrt{x}-2} : \\frac{\\sqrt{x}+2}{\\sqrt{x}} \\)',
+        note: 'Phân tích tử và mẫu thành nhân tử (áp dụng hằng đẳng thức hiệu hai bình phương \\( x-4 = (\\sqrt{x}-2)(\\sqrt{x}+2) \\)), sau đó chuyển phép chia thành nhân với phân thức nghịch đảo.'
+      },
+      {
+        name: 'Dạng 5: Rút gọn rồi tính giá trị của biểu thức tại một điểm cụ thể',
+        example: 'Cho biểu thức \\( P = \\frac{\\sqrt{x}}{\\sqrt{x}-3} \\). Tính giá trị của \\( P \\) tại \\( x = 4 \\).',
+        note: 'Thay giá trị \\( x = 4 \\) (đã kiểm tra thỏa mãn ĐKXĐ \\( x \\ge 0, x \\neq 9 \\)) vào biểu thức rút gọn để tính ra kết quả số cụ thể.'
+      },
+      {
+        name: 'Dạng 6: Rút gọn rồi giải phương trình hoặc bất phương trình theo biểu thức',
+        example: 'Tìm giá trị của \\( x \\) để biểu thức rút gọn \\( P = \\frac{\\sqrt{x}-1}{\\sqrt{x}+2} \\) bằng \\( \\frac{1}{3} \\) (tức là giải phương trình \\( P = \\frac{1}{3} \\)).',
+        note: 'Cho biểu thức rút gọn bằng giá trị \\( k \\), quy đồng khử mẫu giải phương trình tìm \\( x \\), sau đó đối chiếu nghiêm ngặt kết quả với ĐKXĐ ban đầu.'
+      },
+      {
+        name: 'Dạng 7: Rút gọn rồi tìm x nguyên để biểu thức nhận giá trị nguyên',
+        example: 'Tìm các số nguyên \\( x \\) để biểu thức \\( P = \\frac{\\sqrt{x}+3}{\\sqrt{x}-1} \\) nhận giá trị nguyên.',
+        note: 'Tách tử số theo mẫu số thành dạng \\( P = 1 + \\frac{4}{\\sqrt{x}-1} \\). Để \\( P \\) nguyên thì mẫu thức \\( \\sqrt{x}-1 \\) phải là ước nguyên của tử số \\( 4 \\). Lập bảng tìm ước số để giải tìm \\( x \\) nguyên.'
+      },
+      {
+        name: 'Dạng 8: Rút gọn rồi so sánh hoặc chứng minh bất đẳng thức, tìm GTLN/GTNN',
+        example: 'Chứng minh biểu thức \\( P = \\frac{\\sqrt{x}-1}{\\sqrt{x}+2} < 1 \\) với mọi \\( x \\ge 0, x \\neq 1 \\).',
+        note: 'Xét hiệu \\( P - 1 = \\frac{-3}{\\sqrt{x}+2} \\). Vì tử số luôn âm (\\( -3 < 0 \\)) và mẫu số luôn dương (\\( \\sqrt{x}+2 > 0 \\)), nên hiệu luôn âm, suy ra \\( P < 1 \\). Hoặc áp dụng bất đẳng thức Cô-si để tìm GTLN/GTNN.'
+      }
     ]
   },
   {

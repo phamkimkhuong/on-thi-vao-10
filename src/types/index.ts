@@ -77,6 +77,12 @@ export interface Topic {
   tier: 1 | 2 | 3; // Chặng học tập: 1 (điểm 5), 2 (điểm 7-8), 3 (điểm 9-10)
 }
 
+export interface SubType {
+  name: string;
+  example: string;
+  note?: string;
+}
+
 export interface QuestionType {
   id: string;
   topicId: string;
@@ -89,7 +95,7 @@ export interface QuestionType {
   difficulty: 'easy' | 'medium' | 'hard';
   examFrequency: 'low' | 'medium' | 'high';
   exampleQuestionId?: string; // ID câu hỏi dùng làm ví dụ mẫu trong tab "Ví dụ mẫu"
-  subTypes?: string[]; // Phân dạng bài tập con chi tiết
+  subTypes?: SubType[]; // Phân dạng bài tập con chi tiết
 }
 
 
