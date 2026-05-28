@@ -160,7 +160,34 @@ export const mathQuestionTypes: QuestionType[] = [
       'Giải đúng hệ nhưng trả lời sai yêu cầu đề bài.'
     ],
     difficulty: 'medium',
-    examFrequency: 'high'
+    examFrequency: 'high',
+    subTypes: [
+      {
+        name: 'Dạng 1: Mua bán, giảm giá, phần trăm',
+        example: 'Một tivi và một tủ lạnh có tổng giá niêm yết là 25 triệu đồng. Tivi giảm 10%, tủ lạnh giảm 20%. Sau giảm, tổng tiền là 21 triệu đồng. Tìm giá ban đầu mỗi món.',
+        note: 'Gọi ẩn \\( x, y \\) là giá niêm yết của hai món. Lập hệ phương trình gồm tổng giá niêm yết ban đầu \\( x+y=25 \\) và tổng tiền thực tế sau giảm giá \\( 0,9x+0,8y=21 \\).'
+      },
+      {
+        name: 'Dạng 2: Tổng số lượng và tỉ lệ phần trăm',
+        example: 'Hai trường A và B có tổng 380 thí sinh dự thi. Tổng số thí sinh trúng tuyển là 191. Trường A có tỉ lệ trúng tuyển 55%, trường B có tỉ lệ trúng tuyển 45%. Hỏi mỗi trường có bao nhiêu thí sinh dự thi?',
+        note: 'Gọi ẩn \\( x, y \\) là số thí sinh của mỗi trường. Lập hệ phương trình gồm tổng số thí sinh dự thi \\( x+y=380 \\) và tổng số thí sinh đỗ của hai trường \\( 0,55x+0,45y=191 \\).'
+      },
+      {
+        name: 'Dạng 3: Vận chuyển, số xe và khối lượng mỗi xe',
+        example: 'Một đội xe dự định chở 120 tấn hàng, mỗi xe chở như nhau. Sau đó đội phải chở thêm 40 tấn hàng nên điều thêm 2 xe, và mỗi xe lúc sau chở thêm 1 tấn so với dự định. Hỏi ban đầu đội có bao nhiêu xe?',
+        note: 'Gọi ẩn \\( x \\) là số xe ban đầu. Thiết lập phương trình so sánh khối lượng chở của mỗi xe lúc sau với lúc đầu: \\( \\frac{160}{x+2} = \\frac{120}{x} + 1 \\).'
+      },
+      {
+        name: 'Dạng 4: Chuyển động đường bộ (Xe máy, Ô tô)',
+        example: 'Hai địa điểm A và B cách nhau 150 km. Một xe máy đi từ A đến B. Sau đó 1 giờ, một ô tô đi từ B về A. Hai xe gặp nhau tại C, biết C cách B 60 km. Vận tốc ô tô lớn hơn vận tốc xe máy 20 km/h. Tính vận tốc mỗi xe.',
+        note: 'Gọi vận tốc xe máy là \\( x \\) (km/h) thì vận tốc ô tô là \\( x+20 \\) (km/h). Lập phương trình cân bằng thời gian đi của hai xe dựa trên quãng đường thực tế di chuyển.'
+      },
+      {
+        name: 'Dạng 5: Năng suất, làm chung – làm riêng',
+        example: 'Hai vòi nước cùng chảy vào một bể thì đầy bể sau 6 giờ. Nếu chảy riêng, vòi thứ nhất chảy đầy bể nhanh hơn vòi thứ hai 5 giờ. Hỏi mỗi vòi chảy riêng thì sau bao lâu đầy bể?',
+        note: 'Gọi thời gian vòi một chảy riêng đầy bể là \\( x \\) (giờ) thì vòi hai là \\( x+5 \\) (giờ). Lập phương trình cộng công suất chảy trong 1 giờ của cả hai vòi: \\( \\frac{1}{x} + \\frac{1}{x+5} = \\frac{1}{6} \\).'
+      }
+    ]
   },
   {
     id: 'math-qt5',
@@ -211,6 +238,58 @@ export const mathQuestionTypes: QuestionType[] = [
     ],
     difficulty: 'medium',
     examFrequency: 'high'
+  },
+  {
+    id: 'math-qt7',
+    topicId: 'math-t1',
+    name: 'Giải bất phương trình & Bất đẳng thức cơ bản',
+    slug: 'giai-bat-phuong-trinh-va-bat-dang-thuc',
+    description: 'Chuyên đề tổng hợp phương pháp giải bất phương trình bậc nhất một ẩn, bất phương trình quy về bậc nhất (chứa ngoặc, chứa mẫu thức, chú ý đổi chiều dấu khi nhân/chia số âm) và bài toán tìm GTLN/GTNN cơ bản sau khi rút gọn biểu thức',
+    recognitionSigns: [
+      'Đề bài yêu cầu giải bất phương trình chứa các dấu so sánh: \\( > \\), \\( < \\), \\( \\ge \\), \\( \\le \\).',
+      'Đề bài yêu cầu tìm giá trị lớn nhất (GTLN) hoặc giá trị nhỏ nhất (GTNN) của một biểu thức sau khi rút gọn.'
+    ],
+    solvingSteps: [
+      'Bước 1: Chuyển vế, đổi dấu các hạng tử chứa biến sang một vế, các hạng tử tự do sang vế còn lại.',
+      'Bước 2: Thu gọn hai vế để đưa về dạng cơ bản \\( ax > b \\), \\( ax < b \\), \\( ax \\ge b \\) hoặc \\( ax \\le b \\). Chú ý quy đồng mẫu thức rồi khử mẫu nếu bất phương trình có mẫu số là hằng số dương.',
+      'Bước 3: Chia cả hai vế cho hệ số \\( a \\). Nếu \\( a > 0 \\), giữ nguyên chiều bất phương trình; nếu \\( a < 0 \\), bắt buộc phải ĐỔI CHIỀU bất phương trình.',
+      'Bước 4: Đối với bài toán tìm GTLN/GTNN, xuất phát từ điều kiện xác định của biến (thường là \\( x \\ge 0 \\)), đánh giá mẫu số hoặc các biểu thức trung gian để đưa ra bất đẳng thức chặn cho biểu thức P. Chỉ rõ dấu bằng xảy ra khi nào và kết luận.'
+    ],
+    commonMistakes: [
+      'Quên không đổi chiều bất phương trình khi nhân hoặc chia cả hai vế cho một số âm.',
+      'Khử mẫu số chứa biến mà chưa xác định rõ dấu của mẫu số đó là dương hay âm.',
+      'Tìm được giá trị cực trị nhưng quên chỉ ra dấu bằng xảy ra khi nào hoặc giá trị đó không thỏa mãn điều kiện xác định ban đầu.'
+    ],
+    difficulty: 'medium',
+    examFrequency: 'high',
+    exampleQuestionId: 'math-q22',
+    subTypes: [
+      {
+        name: 'Dạng 1: Giải bất phương trình bậc nhất một ẩn',
+        example: 'Giải bất phương trình: \\( 4x \\ge x + 3 \\)',
+        note: 'Chuyển các hạng tử chứa x sang một vế và thu gọn: \\( 3x \\ge 3 \\Rightarrow x \\ge 1 \\).'
+      },
+      {
+        name: 'Dạng 2: Bất phương trình có hệ số âm (Đổi chiều)',
+        example: 'Giải bất phương trình: \\( -3x + 6 < 0 \\)',
+        note: 'Chuyển vế được \\( -3x < -6 \\). Chia cả hai vế cho \\( -3 \\) và đổi chiều ta được \\( x > 2 \\).'
+      },
+      {
+        name: 'Dạng 3: Bất phương trình có ngoặc, quy về bậc nhất',
+        example: 'Giải bất phương trình: \\( 2(x - 3) \\le x + 4 \\)',
+        note: 'Khai triển ngoặc, chuyển vế thu gọn để đưa về bất phương trình bậc nhất: \\( 2x - 6 \\le x + 4 \\Rightarrow x \\le 10 \\).'
+      },
+      {
+        name: 'Dạng 4: Bất phương trình có phân số (Khử mẫu)',
+        example: 'Giải bất phương trình: \\( \\frac{x - 1}{2} > \\frac{x + 3}{3} \\)',
+        note: 'Quy đồng mẫu thức với mẫu chung là 6 (số dương) rồi khử mẫu: \\( 3(x - 1) > 2(x + 3) \\Rightarrow 3x - 3 > 2x + 6 \\Rightarrow x > 9 \\).'
+      },
+      {
+        name: 'Dạng 5: Tìm GTLN/GTNN sau khi rút gọn',
+        example: 'Cho biểu thức \\( P = \\frac{2}{\\sqrt{x} + 1} \\) với \\( x \\ge 0 \\). Tìm giá trị lớn nhất (GTLN) của biểu thức \\( P \\).',
+        note: 'Đánh giá mẫu số: vì \\( x \\ge 0 \\Rightarrow \\sqrt{x} + 1 \\ge 1 \\Rightarrow P = \\frac{2}{\\sqrt{x}+1} \\le 2 \\). Dấu bằng xảy ra khi \\( x = 0 \\). GTLN của P là 2.'
+      }
+    ]
   }
 ];
 
@@ -397,7 +476,7 @@ export const mathQuestions: Question[] = [
     subjectId: 'math',
     topicId: 'math-t3',
     questionTypeId: 'math-qt3',
-    content: 'Giải hệ phương trình: \\(2x + y = 7\\) và \\(x - y = 2\\).',
+    content: 'Giải hệ phương trình: \\(\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}\\)',
     difficulty: 'easy',
     sourceType: 'manual',
     correctAnswer: 'x = 3; y = 1',
@@ -516,6 +595,472 @@ export const mathQuestions: Question[] = [
     correctFinalAnswer: {
       compare: 'Q < 1',
       range: '0 <= x < 1'
+    }
+  },
+  {
+    id: 'math-q13',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Một máy giặt và một tủ lạnh có tổng giá niêm yết là 30 triệu đồng. Nhân dịp ngày lễ, máy giặt được giảm giá 15% và tủ lạnh được giảm giá 20%, nên tổng số tiền thực tế khách hàng phải trả để mua cả hai sản phẩm là 24,75 triệu đồng. Tìm giá niêm yết của mỗi sản phẩm.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'Máy giặt: 15 triệu đồng, Tủ lạnh: 15 triệu đồng',
+    acceptedAnswers: ['Máy giặt 15, Tủ lạnh 15', '15 15', 'Máy giặt: 15 triệu, Tủ lạnh: 15 triệu', '15', '15 triệu'],
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'mayGiat', label: 'Máy giặt =', valueType: 'number', placeholder: '15', hint: 'Nhập giá niêm yết của máy giặt (triệu đồng).' },
+        { key: 'tuLanh', label: 'Tủ lạnh =', valueType: 'number', placeholder: '15', hint: 'Nhập giá niêm yết của tủ lạnh (triệu đồng).' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      mayGiat: '15',
+      tuLanh: '15'
+    }
+  },
+  {
+    id: 'math-q14',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Hai lớp 9A và 9B có tổng số 82 học sinh. Cuối năm học, lớp 9A có 75% học sinh đạt danh hiệu học sinh khá giỏi, lớp 9B có 80% học sinh đạt danh hiệu học sinh khá giỏi. Biết tổng số học sinh khá giỏi của cả hai lớp là 64 em. Hỏi mỗi lớp có bao nhiêu học sinh?',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'Lớp 9A: 32 học sinh, Lớp 9B: 50 học sinh',
+    acceptedAnswers: ['Lớp 9A 32, Lớp 9B 50', '32 50', '32', '50'],
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'lop9A', label: 'Lớp 9A =', valueType: 'number', placeholder: '32', hint: 'Nhập số học sinh của lớp 9A.' },
+        { key: 'lop9B', label: 'Lớp 9B =', valueType: 'number', placeholder: '50', hint: 'Nhập số học sinh của lớp 9B.' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      lop9A: '32',
+      lop9B: '50'
+    }
+  },
+  {
+    id: 'math-q15',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Một đội xe dự định chở 120 tấn hàng, mỗi xe chở một khối lượng hàng như nhau. Sau đó đội phải chở thêm 40 tấn hàng nên điều thêm 2 xe, và mỗi xe lúc sau phải chở thêm 1 tấn hàng so với dự định. Hỏi ban đầu đội có bao nhiêu xe?',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '8 xe hoặc 30 xe',
+    acceptedAnswers: ['8 xe hoặc 30 xe', '8 hoặc 30', '8', '30', '8;30', '8, 30'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'soXe', label: 'Số xe ban đầu =', valueType: 'number', placeholder: '8 hoặc 30', hint: 'Nhập số xe ban đầu (chấp nhận 8 hoặc 30).' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      soXe: '8'
+    },
+    acceptedFinalAnswers: [
+      { soXe: '30' }
+    ]
+  },
+  {
+    id: 'math-q16',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Hai địa điểm A và B cách nhau 140 km. Một xe máy khởi hành từ A đi đến B. Sau đó 1 giờ, một ô tô khởi hành từ B đi về A. Hai xe gặp nhau tại địa điểm C cách B là 60 km. Biết vận tốc của ô tô lớn hơn vận tốc của xe máy là 20 km/h. Tính vận tốc của mỗi xe.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'Xe máy: 40 km/h, Ô tô: 60 km/h',
+    acceptedAnswers: ['Xe máy 40, Ô tô 60', '40 60', 'Xe máy: 40, Ô tô: 60', '40', '60'],
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'xeMay', label: 'Vận tốc xe máy =', valueType: 'number', placeholder: '40', hint: 'Nhập vận tốc xe máy (km/h).' },
+        { key: 'oTo', label: 'Vận tốc ô tô =', valueType: 'number', placeholder: '60', hint: 'Nhập vận tốc ô tô (km/h).' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      xeMay: '40',
+      oTo: '60'
+    }
+  },
+  {
+    id: 'math-q17',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Hai vòi nước cùng chảy vào một bể không có nước thì đầy bể sau 6 giờ. Nếu chảy riêng một mình, vòi thứ nhất chảy đầy bể nhanh hơn vòi thứ hai là 5 giờ. Hỏi nếu chảy riêng một mình, mỗi vòi chảy đầy bể sau bao lâu?',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'Vòi thứ nhất: 10 giờ, Vòi thứ hai: 15 giờ',
+    acceptedAnswers: ['Vòi 1: 10, Vòi 2: 15', '10 15', 'Vòi thứ nhất: 10, Vòi thứ hai: 15', '10', '15'],
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'voi1', label: 'Vòi thứ nhất =', valueType: 'number', placeholder: '10', hint: 'Nhập thời gian vòi thứ nhất chảy riêng (giờ).' },
+        { key: 'voi2', label: 'Vòi thứ hai =', valueType: 'number', placeholder: '15', hint: 'Nhập thời gian vòi thứ hai chảy riêng (giờ).' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      voi1: '10',
+      voi2: '15'
+    }
+  },
+  {
+    id: 'math-q18',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Hai tổ sản xuất theo kế hoạch phải làm tổng cộng 700 sản phẩm. Nhưng khi thực hiện, tổ I đã làm vượt mức 15% và tổ II đã làm vượt mức 20% so với kế hoạch, do đó cả hai tổ đã làm được 820 sản phẩm. Hỏi theo kế hoạch, mỗi tổ phải làm bao nhiêu sản phẩm?',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'Tổ I: 400 sản phẩm, Tổ II: 300 sản phẩm',
+    acceptedAnswers: ['Tổ I 400, Tổ II 300', '400 300', '400', '300'],
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'toI', label: 'Tổ I =', valueType: 'number', placeholder: '400', hint: 'Nhập số sản phẩm theo kế hoạch của tổ I.' },
+        { key: 'toII', label: 'Tổ II =', valueType: 'number', placeholder: '300', hint: 'Nhập số sản phẩm theo kế hoạch của tổ II.' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      toI: '400',
+      toII: '300'
+    }
+  },
+  {
+    id: 'math-q19',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Một đoàn xe cần vận chuyển 40 tấn hàng. Khi chuẩn bị khởi hành thì có 2 xe bị hỏng nên mỗi xe còn lại phải chở thêm 1 tấn hàng so với dự định để hoàn thành việc vận chuyển. Hỏi ban đầu đoàn xe có bao nhiêu xe? (Giả định mỗi xe chở một lượng hàng như nhau).',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '10 xe',
+    acceptedAnswers: ['10', '10 xe'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'soXe', label: 'Số xe ban đầu =', valueType: 'number', placeholder: '10', hint: 'Nhập số xe dự định ban đầu.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      soXe: '10'
+    }
+  },
+  {
+    id: 'math-q20',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Một người đi xe máy từ A đến B cách nhau 90 km. Khi từ B về A, người đó tăng vận tốc thêm 5 km/h nên thời gian về ít hơn thời gian đi là 15 phút. Tính vận tốc lúc đi của xe máy.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '40 km/h',
+    acceptedAnswers: ['40', '40 km/h'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'vDi', label: 'Vận tốc lúc đi =', valueType: 'number', placeholder: '40', hint: 'Nhập vận tốc lúc đi của xe máy (km/h).' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      vDi: '40'
+    }
+  },
+  {
+    id: 'math-q21',
+    subjectId: 'math',
+    topicId: 'math-t3',
+    questionTypeId: 'math-qt4',
+    content: 'Hai tổ sản xuất cùng làm chung một công việc thì hoàn thành sau 12 giờ. Nếu tổ I làm riêng một mình trong 3 giờ rồi nghỉ, sau đó tổ II làm riêng một mình trong 6 giờ thì cả hai tổ hoàn thành được 40% công việc. Hỏi nếu làm riêng một mình, mỗi tổ cần bao nhiêu thời gian để hoàn thành công việc đó?',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'Tổ I: 30 giờ, Tổ II: 20 giờ',
+    acceptedAnswers: ['Tổ I 30, Tổ II 20', '30 20', '30', '20'],
+    validatorType: 'multi-number',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'to1', label: 'Tổ I =', valueType: 'number', placeholder: '30', hint: 'Nhập thời gian tổ I hoàn thành công việc (giờ).' },
+        { key: 'to2', label: 'Tổ II =', valueType: 'number', placeholder: '20', hint: 'Nhập thời gian tổ II hoàn thành công việc (giờ).' }
+      ],
+      proofImageRequired: true,
+      orderMatters: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      to1: '30',
+      to2: '20'
+    }
+  },
+  {
+    id: 'math-q22',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau:\n\n\\(4x \\ge x + 3\\)',
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2025,
+    correctAnswer: 'x \\ge 1',
+    acceptedAnswers: ['x>=1', 'x >= 1', '>=1', '>= 1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x >= 1', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x >= 1'
+    }
+  },
+  {
+    id: 'math-q23',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau:\n\n\\(5x + 2 > 2x - 7\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'x > -3',
+    acceptedAnswers: ['x>-3', 'x > -3', '>-3', '>- 3'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x > -3', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x > -3'
+    }
+  },
+  {
+    id: 'math-q24',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau (chú ý đổi chiều khi chia số âm):\n\n\\(-3x + 6 < 0\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'x > 2',
+    acceptedAnswers: ['x>2', 'x > 2', '>2', '> 2'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x > 2', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x > 2'
+    }
+  },
+  {
+    id: 'math-q25',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau (chú ý đổi chiều khi chia số âm):\n\n\\(5 - 2x < 1\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'x > 2',
+    acceptedAnswers: ['x>2', 'x > 2', '>2', '> 2'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x > 2', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x > 2'
+    }
+  },
+  {
+    id: 'math-q26',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau:\n\n\\(2(x - 3) \\le x + 4\\)',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'x \\le 10',
+    acceptedAnswers: ['x<=10', 'x <= 10', '<=10', '<= 10'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x <= 10', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x <= 10'
+    }
+  },
+  {
+    id: 'math-q27',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau:\n\n\\(3(x - 2) > x + 4\\)',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'x > 5',
+    acceptedAnswers: ['x>5', 'x > 5', '>5', '> 5'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x > 5', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x > 5'
+    }
+  },
+  {
+    id: 'math-q28',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau:\n\n\\(\\frac{x - 1}{2} > \\frac{x + 3}{3}\\)',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'x > 9',
+    acceptedAnswers: ['x>9', 'x > 9', '>9', '> 9'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x > 9', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x > 9'
+    }
+  },
+  {
+    id: 'math-q29',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Giải bất phương trình sau:\n\n\\(\\frac{x + 1}{2} \\le \\frac{x + 5}{3}\\)',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'x \\le 7',
+    acceptedAnswers: ['x<=7', 'x <= 7', '<=7', '<= 7'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'nghiem', label: 'Tập nghiệm:', valueType: 'text', placeholder: 'x <= 7', hint: 'Nhập tập nghiệm của bất phương trình.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'expression-loose'
+    },
+    correctFinalAnswer: {
+      nghiem: 'x <= 7'
+    }
+  },
+  {
+    id: 'math-q30',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Cho biểu thức \\(P = \\frac{2}{\\sqrt{x} + 1}\\) với \\(x \\ge 0\\).\n\nTìm giá trị lớn nhất (GTLN) của biểu thức \\(P\\).',
+    difficulty: 'medium',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2023,
+    correctAnswer: '2',
+    acceptedAnswers: ['2', 'max = 2', 'GTLN = 2'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'gtln', label: 'GTLN =', valueType: 'number', placeholder: '2', hint: 'Nhập giá trị lớn nhất của biểu thức P.' },
+        { key: 'xDatDuoc', label: 'đạt được khi x =', valueType: 'number', placeholder: '0', hint: 'Nhập giá trị x để dấu bằng xảy ra.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      gtln: '2',
+      xDatDuoc: '0'
+    }
+  },
+  {
+    id: 'math-q31',
+    subjectId: 'math',
+    topicId: 'math-t1',
+    questionTypeId: 'math-qt7',
+    content: 'Cho biểu thức \\(P = 5 - \\frac{2}{\\sqrt{x} + 1}\\) với \\(x \\ge 0\\).\n\nTìm giá trị nhỏ nhất (GTNN) của biểu thức \\(P\\).',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '3',
+    acceptedAnswers: ['3', 'min = 3', 'GTNN = 3'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'gtnn', label: 'GTNN =', valueType: 'number', placeholder: '3', hint: 'Nhập giá trị nhỏ nhất của biểu thức P.' },
+        { key: 'xDatDuoc', label: 'đạt được khi x =', valueType: 'number', placeholder: '0', hint: 'Nhập giá trị x để dấu bằng xảy ra.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      gtnn: '3',
+      xDatDuoc: '0'
     }
   }
 ];
@@ -1008,6 +1553,761 @@ export const mathSolutions: Solution[] = [
     reviewSuggestions: [
       'Phương pháp so sánh an toàn nhất luôn luôn là xét hiệu.',
       'Luôn chú ý điều kiện tập xác định khi viết khoảng giá trị cuối cùng.'
+    ]
+  },
+  {
+    id: 'math-s13',
+    questionId: 'math-q13',
+    recognition: 'Đề có các cụm từ "giá niêm yết", "giảm giá 15% và 20%", "tổng tiền thực tế". Đây là dạng toán thực tế mua bán, giảm giá, phần trăm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi giá niêm yết của máy giặt là \\(x\\) (triệu đồng) và giá niêm yết của tủ lạnh là \\(y\\) (triệu đồng).',
+        formula: 'x > 0, \\quad y > 0',
+        result: 'Điều kiện: cả hai ẩn đều phải là số dương.'
+      },
+      {
+        order: 2,
+        title: 'Lập phương trình tổng giá niêm yết',
+        explanation: 'Vì tổng giá niêm yết ban đầu của máy giặt và tủ lạnh là 30 triệu đồng, ta có phương trình:',
+        formula: 'x + y = 30',
+        result: 'Ta được phương trình thứ nhất (1).'
+      },
+      {
+        order: 3,
+        title: 'Lập phương trình tổng tiền thực tế sau giảm giá',
+        explanation: 'Máy giặt giảm giá 15% nên giá bán thực tế là \\(x \\cdot (100\\% - 15\\%) = 0,85x\\).\nTủ lạnh giảm giá 20% nên giá bán thực tế là \\(y \\cdot (100\\% - 20\\%) = 0,8y\\).\nTổng số tiền thực tế khách phải trả là 24,75 triệu đồng, ta có phương trình:',
+        formula: '0,85x + 0,8y = 24,75',
+        result: 'Ta được phương trình thứ hai (2).'
+      },
+      {
+        order: 4,
+        title: 'Giải hệ phương trình và đối chiếu điều kiện',
+        explanation: 'Từ (1) ta có \\(y = 30 - x\\). Thay vào (2) ta được:',
+        formula: '0,85x + 0,8(30 - x) = 24,75 \\Rightarrow 0,05x + 24 = 24,75 \\Rightarrow 0,05x = 0,75 \\Rightarrow x = 15',
+        result: 'Từ đó suy ra \\(y = 30 - 15 = 15\\). Cả hai giá trị đều thỏa mãn điều kiện dương.'
+      }
+    ],
+    finalAnswer: 'Giá niêm yết của máy giặt là 15 triệu đồng, tủ lạnh là 15 triệu đồng.',
+    commonMistakes: [
+      'Nhầm lẫn số tiền được giảm với số tiền phải trả (ví dụ viết phương trình là 0,15x + 0,20y = 24,75 là sai).',
+      'Quên đối chiếu điều kiện hoặc thiếu đơn vị triệu đồng.'
+    ],
+    reviewSuggestions: [
+      'Luyện thêm cách lập phương trình biểu diễn giá tiền sau khi tăng/giảm phần trăm.',
+      'Chú ý phân biệt rõ ràng giữa "số tiền giảm giá" và "số tiền sau giảm giá".'
+    ]
+  },
+  {
+    id: 'math-s14',
+    questionId: 'math-q14',
+    recognition: 'Đề bài cho tổng số học sinh của hai lớp và tỉ lệ phần trăm đạt học sinh khá giỏi của từng lớp để tính tổng số học sinh khá giỏi. Đây là dạng toán tổng số lượng và tỉ lệ phần trăm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi số học sinh của lớp 9A là \\(x\\) (học sinh) và số học sinh của lớp 9B là \\(y\\) (học sinh).',
+        formula: 'x, y \\in \\mathbb{N}^*, \\quad x, y < 82',
+        result: 'Điều kiện: số học sinh phải là số nguyên dương và nhỏ hơn tổng số học sinh 82.'
+      },
+      {
+        order: 2,
+        title: 'Lập phương trình tổng số học sinh',
+        explanation: 'Vì tổng số học sinh của cả hai lớp là 82 học sinh, ta có phương trình:',
+        formula: 'x + y = 82',
+        result: 'Ta thu được phương trình thứ nhất (1).'
+      },
+      {
+        order: 3,
+        title: 'Lập phương trình tổng số học sinh khá giỏi',
+        explanation: 'Số học sinh khá giỏi lớp 9A là \\(75\\%x = 0,75x\\) học sinh.\nSố học sinh khá giỏi lớp 9B là \\(80\\%y = 0,80y\\) học sinh.\nVì tổng số học sinh khá giỏi của hai lớp là 64 học sinh, ta có phương trình:',
+        formula: '0,75x + 0,8y = 64',
+        result: 'Ta thu được phương trình thứ hai (2).'
+      },
+      {
+        order: 4,
+        title: 'Giải hệ phương trình và kết luận',
+        explanation: 'Nhân phương trình (1) với 0,8 ta được \\(0,8x + 0,8y = 65,6\\). Trừ phương trình này cho phương trình (2):',
+        formula: '(0,8x + 0,8y) - (0,75x + 0,8y) = 65,6 - 64 \\Rightarrow 0,05x = 1,6 \\Rightarrow x = 32',
+        result: 'Thay \\(x = 32\\) vào (1) suy ra \\(y = 82 - 32 = 50\\). Cả hai đều thỏa mãn điều kiện là số nguyên dương.'
+      }
+    ],
+    finalAnswer: 'Lớp 9A có 32 học sinh, lớp 9B có 50 học sinh.',
+    commonMistakes: [
+      'Đặt điều kiện cho ẩn chưa chặt chẽ (học sinh phải là số nguyên dương \\(\\mathbb{N}^*\\)).',
+      'Tính toán nhầm lẫn khi nhân hệ số thập phân.'
+    ],
+    reviewSuggestions: [
+      'Thực hành các bài toán có lời văn liên quan đến số học sinh, số sản phẩm đạt chuẩn.',
+      'Nhớ quy đồng hệ số thành số nguyên (nhân cả hai vế với 100) để giải hệ dễ dàng hơn.'
+    ]
+  },
+  {
+    id: 'math-s15',
+    questionId: 'math-q15',
+    recognition: 'Đề bài có các chi tiết "dự định chở một lượng hàng", "sau đó chở thêm", "điều thêm xe" và "mỗi xe chở thêm/bớt hàng". Đây là dạng toán vận chuyển, số xe và khối lượng mỗi xe.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi số xe ban đầu của đội là \\(x\\) (xe).',
+        formula: 'x \\in \\mathbb{N}^*',
+        result: 'Điều kiện: số xe phải là số nguyên dương.'
+      },
+      {
+        order: 2,
+        title: 'Biểu diễn lượng hàng mỗi xe chở theo dự định',
+        explanation: 'Theo dự định, đội xe chở 120 tấn hàng, chia đều cho \\(x\\) xe. Khối lượng hàng mỗi xe dự định chở là:',
+        formula: '\\frac{120}{x} \\text{ (tấn)}',
+        result: 'Biểu thức biểu diễn lượng hàng mỗi xe lúc đầu.'
+      },
+      {
+        order: 3,
+        title: 'Biểu diễn lượng hàng mỗi xe chở thực tế',
+        explanation: 'Thực tế đội phải chở thêm 40 tấn hàng nên tổng khối lượng hàng là \\(120 + 40 = 160\\) tấn.\nSố xe thực tế là \\(x + 2\\) xe. Khối lượng hàng mỗi xe chở thực tế là:',
+        formula: '\\frac{160}{x + 2} \\text{ (tấn)}',
+        result: 'Biểu thức biểu diễn lượng hàng mỗi xe lúc sau.'
+      },
+      {
+        order: 4,
+        title: 'Lập phương trình',
+        explanation: 'Vì mỗi xe lúc sau phải chở thêm 1 tấn so với dự định, ta có phương trình:',
+        formula: '\\frac{160}{x + 2} - \\frac{120}{x} = 1',
+        result: 'Ta lập được phương trình chứa ẩn ở mẫu.'
+      },
+      {
+        order: 5,
+        title: 'Giải phương trình và đối chiếu điều kiện',
+        explanation: 'Quy đồng và khử mẫu phương trình (với điều kiện \\(x > 0\\)):',
+        formula: '160x - 120(x + 2) = x(x + 2) \\Rightarrow 40x - 240 = x^2 + 2x \\Rightarrow x^2 - 38x + 240 = 0',
+        result: 'Giải phương trình bậc hai ta được: \\(x = 8\\) hoặc \\(x = 30\\). Cả hai đều thỏa mãn điều kiện nguyên dương.'
+      }
+    ],
+    finalAnswer: 'Ban đầu đội có 8 xe hoặc 30 xe.',
+    commonMistakes: [
+      'Quên không cộng thêm lượng hàng phát sinh (lấy 120 + 40 = 160 tấn) mà vẫn dùng 120 tấn cho lúc sau.',
+      'Quy đồng mẫu thức và nhân phá ngoặc bị sai dấu.',
+      'Chỉ lấy một nghiệm nguyên dương nhỏ hơn mà loại nghiệm lớn hơn khi không có điều kiện ràng buộc thêm.'
+    ],
+    reviewSuggestions: [
+      'Luyện tập giải phương trình chứa ẩn ở mẫu bằng cách quy đồng tỉ mỉ.',
+      'Cần đọc kỹ đề để xác định đúng lượng hàng thực tế chở (hàng ban đầu + hàng thêm).'
+    ]
+  },
+  {
+    id: 'math-s16',
+    questionId: 'math-q16',
+    recognition: 'Bài toán mô tả hai xe đi ngược chiều, xuất phát lệch giờ nhau và gặp nhau tại một điểm. Đây là dạng toán chuyển động đường bộ.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và biểu diễn các vận tốc',
+        explanation: 'Gọi vận tốc của xe máy là \\(x\\) (km/h). Vì vận tốc ô tô lớn hơn xe máy 20 km/h, nên vận tốc ô tô là \\(x + 20\\) (km/h).',
+        formula: 'x > 0',
+        result: 'Điều kiện: vận tốc xe máy phải là số dương.'
+      },
+      {
+        order: 2,
+        title: 'Tính quãng đường mỗi xe đã đi đến điểm gặp nhau',
+        explanation: 'Hai xe gặp nhau tại C. C cách B là 60 km, do đó:\nQuãng đường ô tô đi được (từ B đến C) là 60 km.\nQuãng đường xe máy đi được (từ A đến C) là \\(140 - 60 = 80\\) km.',
+        formula: 'S_{\\text{xe máy}} = 80 \\text{ km}, \\quad S_{\\text{ô tô}} = 60 \\text{ km}',
+        result: 'Quãng đường hai xe lần lượt đi là 80 km và 60 km.'
+      },
+      {
+        order: 3,
+        title: 'Biểu diễn thời gian đi của mỗi xe',
+        explanation: 'Thời gian xe máy đi từ A đến C là \\(\\frac{80}{x}\\) (giờ).\nThời gian ô tô đi từ B đến C là \\(\\frac{60}{x + 20}\\) (giờ).',
+        formula: 't_{\\text{xe máy}} = \\frac{80}{x}, \\quad t_{\\text{ô tô}} = \\frac{60}{x + 20}',
+        result: 'Biểu thức thời gian đi của hai xe.'
+      },
+      {
+        order: 4,
+        title: 'Lập phương trình và giải',
+        explanation: 'Vì ô tô đi sau xe máy 1 giờ, thời gian xe máy đi đến khi gặp nhau nhiều hơn thời gian ô tô đi là 1 giờ:',
+        formula: '\\frac{80}{x} - \\frac{60}{x + 20} = 1',
+        result: 'Quy đồng mẫu thức ta được phương trình: \\(80(x + 20) - 60x = x(x + 20)\\).'
+      },
+      {
+        order: 5,
+        title: 'Thu gọn phương trình và kết luận',
+        explanation: 'Biến đổi phương trình bậc hai:',
+        formula: '80x + 1600 - 60x = x^2 + 20x \\Rightarrow x^2 = 1600 \\Rightarrow x = 40 \\text{ (vì } x > 0\\text{)}',
+        result: 'Vận tốc xe máy là 40 km/h. Vận tốc ô tô là \\(40 + 20 = 60\\) km/h. Cả hai đều thỏa mãn.'
+      }
+    ],
+    finalAnswer: 'Vận tốc xe máy: 40 km/h, vận tốc ô tô: 60 km/h.',
+    commonMistakes: [
+      'Xác định sai quãng đường đi được của xe máy (lấy nhầm 140 km thay vì trừ đi khoảng cách 60 km).',
+      'Thiết lập sai phương trình hiệu thời gian (lấy thời gian ô tô trừ xe máy thay vì ngược lại).'
+    ],
+    reviewSuggestions: [
+      'Vẽ sơ đồ chuyển động ngược chiều để hình dung rõ quãng đường của mỗi xe.',
+      'Sử dụng bảng ba cột (Quãng đường, Vận tốc, Thời gian) để lập hệ thức chính xác.'
+    ]
+  },
+  {
+    id: 'math-s17',
+    questionId: 'math-q17',
+    recognition: 'Đề bài yêu cầu tìm thời gian chảy riêng của mỗi vòi khi biết thời gian chảy chung và hiệu số thời gian chảy riêng. Đây là dạng toán năng suất, làm chung – làm riêng.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi thời gian vòi thứ nhất chảy một mình đầy bể là \\(x\\) (giờ).',
+        formula: 'x > 6',
+        result: 'Điều kiện: thời gian chảy riêng phải lớn hơn thời gian chảy chung là 6 giờ.'
+      },
+      {
+        order: 2,
+        title: 'Biểu diễn thời gian vòi thứ hai',
+        explanation: 'Vì vòi thứ nhất chảy đầy bể nhanh hơn vòi thứ hai 5 giờ, nên vòi thứ hai cần nhiều thời gian hơn vòi thứ nhất là 5 giờ:',
+        formula: 'x + 5 \\text{ (giờ)}',
+        result: 'Thời gian vòi hai chảy một mình đầy bể là \\(x + 5\\) giờ.'
+      },
+      {
+        order: 3,
+        title: 'Tính năng suất trong 1 giờ',
+        explanation: 'Trong 1 giờ:\nVòi thứ nhất chảy được \\(\\frac{1}{x}\\) bể.\nVòi thứ hai chảy được \\(\\frac{1}{x + 5}\\) bể.\nCả hai vòi cùng chảy đầy bể trong 6 giờ nên trong 1 giờ cả hai chảy được \\(\\frac{1}{6}\\) bể.',
+        formula: '\\frac{1}{x} + \\frac{1}{x + 5} = \\frac{1}{6}',
+        result: 'Ta có phương trình cộng năng suất trong 1 giờ.'
+      },
+      {
+        order: 4,
+        title: 'Giải phương trình và đối chiếu',
+        explanation: 'Quy đồng mẫu thức và khử mẫu phương trình:',
+        formula: '6(x + 5) + 6x = x(x + 5) \\Rightarrow 12x + 30 = x^2 + 5x \\Rightarrow x^2 - 7x - 30 = 0',
+        result: 'Giải phương trình bậc hai ta được: \\(x = 10\\) (nhận) hoặc \\(x = -3\\) (loại do điều kiện \\(x > 6\\)).'
+      },
+      {
+        order: 5,
+        title: 'Kết luận',
+        explanation: 'Thời gian vòi một chảy riêng đầy bể là 10 giờ. Thời gian vòi hai chảy riêng đầy bể là \\(10 + 5 = 15\\) giờ.',
+        formula: 'x = 10, \\quad x + 5 = 15',
+        result: 'Cả hai giá trị đều thỏa mãn các điều kiện thực tế.'
+      }
+    ],
+    finalAnswer: 'Vòi thứ nhất chảy riêng đầy bể trong 10 giờ, vòi thứ hai trong 15 giờ.',
+    commonMistakes: [
+      'Nhầm lẫn thời gian chảy nhanh hơn: vòi một nhanh hơn vòi hai tức là thời gian vòi hai lớn hơn vòi một (đặt vòi hai là \\(x-5\\) khi đặt vòi một là \\(x\\) là sai điều kiện).',
+      'Cộng trực tiếp thời gian \\(x + (x + 5) = 6\\) thay vì cộng năng suất (lượng công việc trong một đơn vị thời gian).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ nguyên tắc: không được cộng trực tiếp thời gian hoàn thành công việc, mà phải quy về năng suất làm việc trong 1 giờ.',
+      'Luyện tập giải phương trình bậc hai bằng cách phân tích đa thức thành nhân tử.'
+    ]
+  },
+  {
+    id: 'math-s18',
+    questionId: 'math-q18',
+    recognition: 'Đề bài yêu cầu tìm số lượng sản phẩm mỗi tổ sản xuất theo kế hoạch khi biết tổng số sản phẩm dự định và tỉ lệ phần trăm vượt mức của mỗi tổ. Đây là dạng toán tổng số lượng và tỉ lệ phần trăm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi số sản phẩm tổ I phải làm theo kế hoạch là \\(x\\) (sản phẩm) và tổ II phải làm là \\(y\\) (sản phẩm).',
+        formula: 'x, y \\in \\mathbb{N}^*, \\quad x, y < 700',
+        result: 'Điều kiện: Số sản phẩm phải là số nguyên dương và nhỏ hơn 700.'
+      },
+      {
+        order: 2,
+        title: 'Lập phương trình theo kế hoạch',
+        explanation: 'Theo kế hoạch, hai tổ dự định làm tổng cộng 700 sản phẩm, ta có phương trình:',
+        formula: 'x + y = 700',
+        result: 'Ta thu được phương trình thứ nhất (1).'
+      },
+      {
+        order: 3,
+        title: 'Lập phương trình theo thực tế thực hiện',
+        explanation: 'Tổ I làm vượt mức 15% nên số sản phẩm thực tế làm được là \\(115\\%x = 1,15x\\).\nTổ II làm vượt mức 20% nên số sản phẩm thực tế làm được là \\(120\\%y = 1,2y\\).\nVì thực tế cả hai tổ làm được 820 sản phẩm, ta có phương trình:',
+        formula: '1,15x + 1,2y = 820',
+        result: 'Ta thu được phương trình thứ hai (2).'
+      },
+      {
+        order: 4,
+        title: 'Giải hệ phương trình và kết luận',
+        explanation: 'Từ (1) ta có \\(y = 700 - x\\). Thế vào phương trình (2) ta được:',
+        formula: '1,15x + 1,2(700 - x) = 820 \\Rightarrow -0,05x + 840 = 820 \\Rightarrow 0,05x = 20 \\Rightarrow x = 400',
+        result: 'Từ đó suy ra \\(y = 700 - 400 = 300\\). Cả hai đều thỏa mãn điều kiện số nguyên dương.'
+      }
+    ],
+    finalAnswer: 'Tổ I phải làm 400 sản phẩm, Tổ II phải làm 300 sản phẩm theo kế hoạch.',
+    commonMistakes: [
+      'Nhầm lẫn giữa số lượng làm vượt mức (15%x) và số lượng làm thực tế (115%x). Nếu viết phương trình là 0,15x + 0,2y = 820 là sai.',
+      'Thiếu đơn vị sản phẩm hoặc quên đối chiếu điều kiện nguyên dương.'
+    ],
+    reviewSuggestions: [
+      'Luyện tập chuyển đổi các khái niệm "vượt mức", "tăng thêm" thành hệ số phần trăm tương ứng.',
+      'Sử dụng phương pháp thế để giải nhanh hệ phương trình khi có tổng đơn giản.'
+    ]
+  },
+  {
+    id: 'math-s19',
+    questionId: 'math-q19',
+    recognition: 'Đề bài có các chi tiết "dự định chở một lượng hàng cố định", "có một số xe bị hỏng", và "mỗi xe còn lại chở thêm hàng". Đây là dạng toán vận chuyển, số xe và khối lượng mỗi xe.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi số xe ban đầu của đoàn xe là \\(x\\) (xe).',
+        formula: 'x \\in \\mathbb{N}^*, \\quad x > 2',
+        result: 'Điều kiện: Số xe phải là số nguyên lớn hơn 2 (vì có 2 xe bị hỏng).'
+      },
+      {
+        order: 2,
+        title: 'Biểu diễn lượng hàng mỗi xe chở theo dự định',
+        explanation: 'Dự định đoàn chở 40 tấn hàng chia đều cho \\(x\\) xe, nên mỗi xe dự định chở:',
+        formula: '\\frac{40}{x} \\text{ (tấn)}',
+        result: 'Lượng hàng chở mỗi xe theo dự kiến là \\(\\frac{40}{x}\\) tấn.'
+      },
+      {
+        order: 3,
+        title: 'Biểu diễn lượng hàng mỗi xe chở thực tế',
+        explanation: 'Thực tế có 2 xe bị hỏng nên số xe còn lại là \\(x - 2\\) xe. Mỗi xe thực tế chở:',
+        formula: '\\frac{40}{x - 2} \\text{ (tấn)}',
+        result: 'Lượng hàng chở mỗi xe thực tế là \\(\\frac{40}{x - 2}\\) tấn.'
+      },
+      {
+        order: 4,
+        title: 'Lập phương trình',
+        explanation: 'Vì thực tế mỗi xe còn lại phải chở thêm 1 tấn hàng so với dự định, ta có phương trình:',
+        formula: '\\frac{40}{x - 2} - \\frac{40}{x} = 1',
+        result: 'Phương trình chứa ẩn ở mẫu biểu diễn hiệu lượng chở.'
+      },
+      {
+        order: 5,
+        title: 'Giải phương trình và kết luận',
+        explanation: 'Quy đồng mẫu thức và khử mẫu (với điều kiện \\(x > 2\\)):',
+        formula: '40x - 40(x - 2) = x(x - 2) \\Rightarrow 80 = x^2 - 2x \\Rightarrow x^2 - 2x - 80 = 0',
+        result: 'Giải phương trình bậc hai ta được \\(x = 10\\) (nhận) hoặc \\(x = -8\\) (loại). Vậy ban đầu có 10 xe.'
+      }
+    ],
+    finalAnswer: 'Ban đầu đoàn xe có 10 xe.',
+    commonMistakes: [
+      'Quên điều kiện số xe phải lớn hơn 2 dẫn đến việc không loại trừ chặt chẽ nghiệm âm.',
+      'Nhầm lẫn phép tính trừ khi quy đồng khử mẫu.'
+    ],
+    reviewSuggestions: [
+      'Luyện tập kỹ năng phân tích phương trình bậc hai thành nhân tử để tìm nghiệm nhanh chóng.',
+      'Phát hiện mối liên hệ nghịch tỷ lệ giữa số lượng xe và khối lượng hàng trên mỗi xe.'
+    ]
+  },
+  {
+    id: 'math-s20',
+    questionId: 'math-q20',
+    recognition: 'Đề bài cho quãng đường cố định, thay đổi vận tốc lúc đi và lúc về dẫn đến chênh lệch thời gian. Đây là dạng toán chuyển động.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi vận tốc lúc đi của xe máy là \\(x\\) (km/h).',
+        formula: 'x > 0',
+        result: 'Điều kiện: Vận tốc lúc đi phải là số dương.'
+      },
+      {
+        order: 2,
+        title: 'Biểu diễn các đại lượng lúc đi và lúc về',
+        explanation: 'Quãng đường đi và về đều là 90 km.\nVận tốc lúc về tăng thêm 5 km/h nên vận tốc lúc về là \\(x + 5\\) (km/h).\nThời gian lúc đi là \\(\\frac{90}{x}\\) (giờ).\nThời gian lúc về là \\(\\frac{90}{x + 5}\\) (giờ).',
+        formula: 't_{\\text{đi}} = \\frac{90}{x}, \\quad t_{\\text{về}} = \\frac{90}{x + 5}',
+        result: 'Biểu thức thời gian đi và về.'
+      },
+      {
+        order: 3,
+        title: 'Đổi đơn vị và lập phương trình',
+        explanation: 'Đổi 15 phút = \\(\\frac{15}{60} = \\frac{1}{4}\\) giờ.\nVì thời gian về ít hơn thời gian đi là 15 phút, ta có phương trình:',
+        formula: '\\frac{90}{x} - \\frac{90}{x + 5} = \\frac{1}{4}',
+        result: 'Phương trình cân bằng thời gian đi và về.'
+      },
+      {
+        order: 4,
+        title: 'Giải phương trình và kết luận',
+        explanation: 'Quy đồng và khử mẫu phương trình (với \\(x > 0\\)):',
+        formula: '360(x + 5) - 360x = x(x + 5) \\Rightarrow 1800 = x^2 + 5x \\Rightarrow x^2 + 5x - 1800 = 0',
+        result: 'Tính biệt thức \\(\\Delta = 5^2 - 4 \\cdot (-1800) = 7225 = 85^2\\).\nNghiệm dương của phương trình là \\(x = \\frac{-5 + 85}{2} = 40\\) (nhận). Nghiệm âm bị loại.'
+      }
+    ],
+    finalAnswer: 'Vận tốc lúc đi của xe máy là 40 km/h.',
+    commonMistakes: [
+      'Quên không đổi đơn vị thời gian từ phút sang giờ trước khi đưa vào phương trình.',
+      'Lập sai hiệu thời gian (lấy thời gian về trừ đi thời gian đi).'
+    ],
+    reviewSuggestions: [
+      'Nhớ công thức: Thời gian = Quãng đường / Vận tốc.',
+      'Kiểm tra lại đơn vị đo lường trước khi đặt bút tính toán.'
+    ]
+  },
+  {
+    id: 'math-s21',
+    questionId: 'math-q21',
+    recognition: 'Đề bài cho thời gian hoàn thành khi hai tổ cùng làm chung và lượng phần trăm công việc hoàn thành khi làm riêng rẽ theo từng khoảng thời gian lệch nhau. Đây là dạng toán năng suất, làm chung – làm riêng.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt ẩn và điều kiện xác định',
+        explanation: 'Gọi thời gian tổ I làm riêng một mình hoàn thành công việc là \\(x\\) (giờ) và tổ II làm riêng một mình hoàn thành công việc là \\(y\\) (giờ).',
+        formula: 'x, y > 12',
+        result: 'Điều kiện: Thời gian hoàn thành riêng phải lớn hơn thời gian làm chung là 12 giờ.'
+      },
+      {
+        order: 2,
+        title: 'Lập phương trình năng suất làm chung',
+        explanation: 'Trong 1 giờ, tổ I làm được \\(\\frac{1}{x}\\) công việc, tổ II làm được \\(\\frac{1}{y}\\) công việc.\nVì cả hai tổ cùng làm thì hoàn thành sau 12 giờ, ta có phương trình:',
+        formula: '\\frac{1}{x} + \\frac{1}{y} = \\frac{1}{12}',
+        result: 'Ta thu được phương trình thứ nhất (1).'
+      },
+      {
+        order: 3,
+        title: 'Lập phương trình năng suất làm riêng lẻ',
+        explanation: 'Tổ I làm riêng lẻ trong 3 giờ được \\(\\frac{3}{x}\\) công việc.\nTổ II làm riêng lẻ trong 6 giờ được \\(\\frac{6}{y}\\) công việc.\nCả hai tổ hoàn thành được 40% (tức là \\(\\frac{2}{5}\\)) công việc, ta có phương trình:',
+        formula: '\\frac{3}{x} + \\frac{6}{y} = \\frac{2}{5}',
+        result: 'Ta thu được phương trình thứ hai (2).'
+      },
+      {
+        order: 4,
+        title: 'Giải hệ phương trình bằng đặt ẩn phụ',
+        explanation: 'Đặt \\(u = \\frac{1}{x}\\) và \\(v = \\frac{1}{y}\\) (với \\(u, v > 0\\)). Hệ phương trình trở thành:',
+        formula: '\\begin{cases} u + v = \\frac{1}{12} \\\\ 3u + 6v = \\frac{2}{5} \\end{cases} \\Rightarrow \\begin{cases} 3u + 3v = \\frac{1}{4} \\\\ 3u + 6v = \\frac{2}{5} \\end{cases}',
+        result: 'Trừ từng vế hai phương trình ta được: \\(3v = \\frac{2}{5} - \\frac{1}{4} = \\frac{3}{20} \\Rightarrow v = \\frac{1}{20}\\).'
+      },
+      {
+        order: 5,
+        title: 'Tính toán kết quả và đối chiếu',
+        explanation: 'Từ \\(v = \\frac{1}{20}\\) suy ra \\(u = \\frac{1}{12} - \\frac{1}{20} = \\frac{1}{30}\\).\nThay lại ẩn ban đầu:',
+        formula: '\\frac{1}{x} = \\frac{1}{30} \\Rightarrow x = 30; \\quad \\frac{1}{y} = \\frac{1}{20} \\Rightarrow y = 20',
+        result: 'Cả hai nghiệm đều thỏa mãn điều kiện lớn hơn 12.'
+      }
+    ],
+    finalAnswer: 'Tổ I làm một mình xong trong 30 giờ, Tổ II trong 20 giờ.',
+    commonMistakes: [
+      'Không dùng phương pháp đặt ẩn phụ mà quy đồng trực tiếp hệ phương trình hai ẩn ở mẫu gây phức tạp hóa bài toán.',
+      'Cộng trực tiếp thời gian \\(3 + 6 = 9\\) giờ là hoàn toàn sai bản chất.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ phương pháp đặt ẩn phụ \\(u = 1/x\\), \\(v = 1/y\\) để giải quyết các hệ phương trình chứa ẩn dưới mẫu.',
+      'Ôn lại cách đổi từ phần trăm sang phân số tối giản.'
+    ]
+  },
+  {
+    id: 'math-s22',
+    questionId: 'math-q22',
+    recognition: 'Đây là bất phương trình bậc nhất một ẩn cơ bản. Ta dùng quy tắc chuyển vế đổi dấu và chia cả hai vế cho hệ số dương.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chuyển vế đổi dấu',
+        explanation: 'Ta chuyển hạng tử chứa biến \\(x\\) sang vế trái và đổi dấu:',
+        formula: '4x \\ge x + 3 \\Rightarrow 4x - x \\ge 3',
+        result: 'Được bất phương trình: \\(3x \\ge 3\\).'
+      },
+      {
+        order: 2,
+        title: 'Chia cả hai vế cho hệ số x',
+        explanation: 'Chia cả hai vế cho \\(3\\) (vì \\(3 > 0\\) nên giữ nguyên chiều bất phương trình):',
+        formula: 'x \\ge \\frac{3}{3} \\Rightarrow x \\ge 1',
+        result: 'Tập nghiệm là \\(x \\ge 1\\).'
+      }
+    ],
+    finalAnswer: 'x \\ge 1',
+    commonMistakes: [
+      'Chuyển vế nhưng quên đổi dấu (ví dụ chuyển x sang thành 4x + x là sai).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ quy tắc chuyển vế: khi chuyển một số hạng từ vế này sang vế kia phải đổi dấu số hạng đó.'
+    ]
+  },
+  {
+    id: 'math-s23',
+    questionId: 'math-q23',
+    recognition: 'Bất phương trình bậc nhất một ẩn cơ bản. Ta chuyển vế thu gọn và chia cả hai vế cho hệ số dương.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chuyển vế đổi dấu',
+        explanation: 'Chuyển hạng tử chứa \\(x\\) sang vế trái và các số tự do sang vế phải:',
+        formula: '5x - 2x > -7 - 2',
+        result: 'Được bất phương trình: \\(3x > -9\\).'
+      },
+      {
+        order: 2,
+        title: 'Chia cả hai vế cho 3',
+        explanation: 'Chia cả hai vế cho \\(3\\) (vì \\(3 > 0\\) nên giữ nguyên chiều):',
+        formula: 'x > \\frac{-9}{3} \\Rightarrow x > -3',
+        result: 'Tập nghiệm là \\(x > -3\\).'
+      }
+    ],
+    finalAnswer: 'x > -3',
+    commonMistakes: [
+      'Nhầm lẫn dấu khi cộng trừ số âm ở vế phải (-7 - 2 = -9).'
+    ],
+    reviewSuggestions: [
+      'Luyện tập cộng trừ các số nguyên âm.'
+    ]
+  },
+  {
+    id: 'math-s24',
+    questionId: 'math-q24',
+    recognition: 'Bất phương trình bậc nhất có hệ số x âm. Khi chia hai vế cho số âm, cần đặc biệt lưu ý đổi chiều bất phương trình.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chuyển vế hạng tử tự do',
+        explanation: 'Chuyển số 6 sang vế phải và đổi dấu:',
+        formula: '-3x + 6 < 0 \\Rightarrow -3x < -6',
+        result: 'Được bất phương trình: \\(-3x < -6\\).'
+      },
+      {
+        order: 2,
+        title: 'Chia cả hai vế cho -3 và đổi chiều',
+        explanation: 'Chia cả hai vế cho \\(-3\\). Vì \\(-3 < 0\\) nên ta phải đổi chiều dấu \\( < \\) thành \\( > \\):',
+        formula: 'x > \\frac{-6}{-3} \\Rightarrow x > 2',
+        result: 'Tập nghiệm là \\(x > 2\\).'
+      }
+    ],
+    finalAnswer: 'x > 2',
+    commonMistakes: [
+      'Quên không đổi chiều bất phương trình khi chia cho số âm -3 (dẫn tới kết quả sai x < 2).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ quy tắc: khi nhân hoặc chia cả hai vế của bất phương trình với một số âm, ta phải đổi chiều bất phương trình.'
+    ]
+  },
+  {
+    id: 'math-s25',
+    questionId: 'math-q25',
+    recognition: 'Bất phương trình có hệ số x âm. Ta chuyển vế và đổi chiều khi chia số âm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chuyển vế số tự do',
+        explanation: 'Chuyển số 5 sang vế phải:',
+        formula: '-2x < 1 - 5 \\Rightarrow -2x < -4',
+        result: 'Bất phương trình thu gọn là \\(-2x < -4\\).'
+      },
+      {
+        order: 2,
+        title: 'Chia cho -2 và đổi chiều',
+        explanation: 'Chia hai vế cho \\(-2\\) và đổi chiều dấu từ \\( < \\) thành \\( > \\):',
+        formula: 'x > \\frac{-4}{-2} \\Rightarrow x > 2',
+        result: 'Tập nghiệm là \\(x > 2\\).'
+      }
+    ],
+    finalAnswer: 'x > 2',
+    commonMistakes: [
+      'Quên đổi chiều dấu bất phương trình khi chia cho số âm -2.'
+    ],
+    reviewSuggestions: [
+      'Thực hành quy tắc đổi chiều khi nhân/chia số âm.'
+    ]
+  },
+  {
+    id: 'math-s26',
+    questionId: 'math-q26',
+    recognition: 'Bất phương trình có chứa ngoặc đơn. Ta thực hiện khai triển dấu ngoặc trước rồi thu gọn đưa về bất phương trình bậc nhất.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Khai triển ngoặc',
+        explanation: 'Nhân phân phối để phá ngoặc ở vế trái:',
+        formula: '2(x - 3) \\le x + 4 \\Rightarrow 2x - 6 \\le x + 4',
+        result: 'Bất phương trình sau phá ngoặc là \\(2x - 6 \\le x + 4\\).'
+      },
+      {
+        order: 2,
+        title: 'Chuyển vế và thu gọn',
+        explanation: 'Chuyển các hạng tử chứa x sang vế trái, hằng số sang vế phải:',
+        formula: '2x - x \\le 4 + 6',
+        result: 'Tập nghiệm thu được là \\(x \\le 10\\).'
+      }
+    ],
+    finalAnswer: 'x \\le 10',
+    commonMistakes: [
+      'Phá ngoặc bị sai dấu (ví dụ nhân 2 với -3 thành +6 hoặc giữ nguyên -3).'
+    ],
+    reviewSuggestions: [
+      'Ôn tập quy tắc nhân phân phối đơn thức với đa thức.'
+    ]
+  },
+  {
+    id: 'math-s27',
+    questionId: 'math-q27',
+    recognition: 'Bất phương trình có chứa ngoặc. Thực hiện phá ngoặc rồi thu gọn chuyển vế.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Khai triển ngoặc',
+        explanation: 'Nhân phân phối phá ngoặc:',
+        formula: '3x - 6 > x + 4',
+        result: 'Được bất phương trình: \\(3x - 6 > x + 4\\).'
+      },
+      {
+        order: 2,
+        title: 'Chuyển vế và thu gọn',
+        explanation: 'Chuyển vế đổi dấu các hạng tử:',
+        formula: '3x - x > 4 + 6 \\Rightarrow 2x > 10 \\Rightarrow x > 5',
+        result: 'Tập nghiệm là \\(x > 5\\).'
+      }
+    ],
+    finalAnswer: 'x > 5',
+    commonMistakes: [
+      'Nhầm dấu khi chuyển vế hằng số (-6 chuyển vế thành -6 thay vì +6).'
+    ],
+    reviewSuggestions: [
+      'Luyện tập cẩn thận quy tắc chuyển vế đổi dấu.'
+    ]
+  },
+  {
+    id: 'math-s28',
+    questionId: 'math-q28',
+    recognition: 'Bất phương trình có phân số với mẫu số là hằng số dương. Ta tìm mẫu số chung, quy đồng rồi khử mẫu.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Quy đồng mẫu thức hai vế',
+        explanation: 'Mẫu thức chung là \\(6\\) (vì \\(6\\) chia hết cho 2 và 3). Quy đồng hai vế:',
+        formula: '\\frac{3(x - 1)}{6} > \\frac{2(x + 3)}{6}',
+        result: 'Ta có hai vế có cùng mẫu thức dương là 6.'
+      },
+      {
+        order: 2,
+        title: 'Khử mẫu và khai triển',
+        explanation: 'Nhân cả hai vế với 6 (vì 6 > 0 nên giữ nguyên chiều) để khử mẫu, sau đó khai triển:',
+        formula: '3(x - 1) > 2(x + 3) \\Rightarrow 3x - 3 > 2x + 6',
+        result: 'Được bất phương trình: \\(3x - 3 > 2x + 6\\).'
+      },
+      {
+        order: 3,
+        title: 'Chuyển vế thu gọn',
+        explanation: 'Chuyển các hạng tử chứa x sang vế trái, hằng số sang vế phải:',
+        formula: '3x - 2x > 6 + 3 \\Rightarrow x > 9',
+        result: 'Tập nghiệm của bất phương trình là \\(x > 9\\).'
+      }
+    ],
+    finalAnswer: 'x > 9',
+    commonMistakes: [
+      'Khi nhân khử mẫu, quên không nhân phân phối toàn bộ tử số (ví dụ viết nhầm thành 3x - 1 > 2x + 3).'
+    ],
+    reviewSuggestions: [
+      'Chú ý bọc tử số trong dấu ngoặc đơn khi quy đồng khử mẫu để tránh nhân thiếu hạng tử.'
+    ]
+  },
+  {
+    id: 'math-s29',
+    questionId: 'math-q29',
+    recognition: 'Bất phương trình có phân số với mẫu số là hằng số dương. Ta tìm mẫu số chung là 6, quy đồng rồi khử mẫu.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Quy đồng mẫu thức',
+        explanation: 'Quy đồng hai vế với mẫu chung là 6:',
+        formula: '\\frac{3(x + 1)}{6} \\le \\frac{2(x + 5)}{6}',
+        result: 'Hai vế quy đồng mẫu số chung là 6.'
+      },
+      {
+        order: 2,
+        title: 'Khử mẫu và khai triển',
+        explanation: 'Nhân 6 ở cả hai vế để khử mẫu, sau đó phá ngoặc:',
+        formula: '3(x + 1) \\le 2(x + 5) \\Rightarrow 3x + 3 \\le 2x + 10',
+        result: 'Được bất phương trình: \\(3x + 3 \\le 2x + 10\\).'
+      },
+      {
+        order: 3,
+        title: 'Chuyển vế thu gọn',
+        explanation: 'Chuyển vế thu gọn ta được:',
+        formula: '3x - 2x \\le 10 - 3 \\Rightarrow x \\le 7',
+        result: 'Tập nghiệm là \\(x \\le 7\\).'
+      }
+    ],
+    finalAnswer: 'x \\le 7',
+    commonMistakes: [
+      'Quên nhân hệ số vào hằng số trong tử số khi quy đồng.'
+    ],
+    reviewSuggestions: [
+      'Rèn luyện kỹ năng quy đồng mẫu thức đa thức.'
+    ]
+  },
+  {
+    id: 'math-s30',
+    questionId: 'math-q30',
+    recognition: 'Dạng toán tìm giá trị lớn nhất (GTLN) của biểu thức phân thức sau khi rút gọn. Ta xuất phát từ điều kiện xác định của biến để đánh giá mẫu thức.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đánh giá mẫu thức',
+        explanation: 'Ta có điều kiện xác định là \\(x \\ge 0\\). Do đó:',
+        formula: 'x \\ge 0 \\Rightarrow \\sqrt{x} \\ge 0 \\Rightarrow \\sqrt{x} + 1 \\ge 1',
+        result: 'Mẫu thức luôn lớn hơn hoặc bằng 1.'
+      },
+      {
+        order: 2,
+        title: 'Đánh giá biểu thức P',
+        explanation: 'Vì tử số \\(2 > 0\\) và mẫu số \\(\\sqrt{x} + 1 \\ge 1\\), khi nghịch đảo mẫu số và nhân với tử số, chiều của bất đẳng thức sẽ đổi:',
+        formula: '\\sqrt{x} + 1 \\ge 1 \\Rightarrow \\frac{1}{\\sqrt{x} + 1} \\le 1 \\Rightarrow P = \\frac{2}{\\sqrt{x} + 1} \\le 2',
+        result: 'Biểu thức P luôn nhỏ hơn hoặc bằng 2.'
+      },
+      {
+        order: 3,
+        title: 'Tìm điều kiện xảy ra dấu bằng',
+        explanation: 'Dấu bằng xảy ra khi và chỉ khi mẫu thức đạt giá trị nhỏ nhất bằng 1:',
+        formula: '\\sqrt{x} + 1 = 1 \\Leftrightarrow \\sqrt{x} = 0 \\Leftrightarrow x = 0 \\quad (\\text{thỏa mãn ĐKXĐ})',
+        result: 'Dấu bằng đạt được tại \\(x = 0\\).'
+      },
+      {
+        order: 4,
+        title: 'Kết luận',
+        explanation: 'Từ các bước đánh giá trên, ta kết luận:',
+        formula: '\\text{GTLN của } P \\text{ là } 2 \\text{ khi } x = 0.',
+        result: 'Giá trị lớn nhất của P là 2.'
+      }
+    ],
+    finalAnswer: 'GTLN của P là 2 khi x = 0.',
+    commonMistakes: [
+      'Tìm được GTLN là 2 nhưng không chỉ ra dấu bằng xảy ra tại x = 0.',
+      'Đánh giá sai chiều của phân thức khi mẫu lớn hơn hoặc bằng 1.'
+    ],
+    reviewSuggestions: [
+      'Ôn tập các bất đẳng thức cơ bản và tính chất của phân số (mẫu càng lớn thì phân số càng nhỏ với tử số dương).'
+    ]
+  },
+  {
+    id: 'math-s31',
+    questionId: 'math-q31',
+    recognition: 'Dạng toán tìm giá trị nhỏ nhất (GTNN) của biểu thức có dạng hiệu. Ta đánh giá phần phân thức rồi lập hiệu để tìm cực trị.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đánh giá phân thức',
+        explanation: 'Với điều kiện \\(x \\ge 0\\), ta đánh giá mẫu thức và phân thức trước:',
+        formula: 'x \\ge 0 \\Rightarrow \\sqrt{x} + 1 \\ge 1 \\Rightarrow \\frac{2}{\\sqrt{x} + 1} \\le 2',
+        result: 'Lượng phân thức bị trừ luôn nhỏ hơn hoặc bằng 2.'
+      },
+      {
+        order: 2,
+        title: 'Đánh giá biểu thức P',
+        explanation: 'Vì lượng phân thức nhỏ hơn hoặc bằng 2, nên khi lấy 5 trừ đi lượng đó, giá trị nhận được sẽ lớn hơn hoặc bằng 5 - 2:',
+        formula: 'P = 5 - \\frac{2}{\\sqrt{x} + 1} \\ge 5 - 2 = 3',
+        result: 'Biểu thức P luôn lớn hơn hoặc bằng 3.'
+      },
+      {
+        order: 3,
+        title: 'Tìm điều kiện xảy ra dấu bằng',
+        explanation: 'Dấu bằng xảy ra khi và chỉ khi phân thức đạt giá trị lớn nhất bằng 2:',
+        formula: '\\frac{2}{\\sqrt{x} + 1} = 2 \\Leftrightarrow \\sqrt{x} + 1 = 1 \\Leftrightarrow x = 0 \\quad (\\text{thỏa mãn})',
+        result: 'Dấu bằng đạt được tại \\(x = 0\\).'
+      },
+      {
+        order: 4,
+        title: 'Kết luận',
+        explanation: 'Từ kết quả đánh giá trên, ta kết luận:',
+        formula: '\\text{GTNN của } P \\text{ là } 3 \\text{ khi } x = 0.',
+        result: 'Giá trị nhỏ nhất của P là 3.'
+      }
+    ],
+    finalAnswer: 'GTNN của P là 3 khi x = 0.',
+    commonMistakes: [
+      'Đánh giá sai dấu khi thực hiện phép trừ (lầm tưởng P nhỏ hơn hoặc bằng 3).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: \\( A \\le B \\Rightarrow C - A \\ge C - B \\) (khi lấy một số trừ đi số nhỏ hơn thì hiệu sẽ lớn hơn).'
     ]
   }
 ];

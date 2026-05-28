@@ -332,7 +332,7 @@ export const QuestionTypeDetail: React.FC = () => {
       </div>
 
       {/* Tabs nội dung chi tiết */}
-      <Tabs items={tabItems} defaultTabId="recognition" />
+      <Tabs items={tabItems} defaultTabId={detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition'} />
 
     </div>
   );
