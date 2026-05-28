@@ -38,8 +38,19 @@ export const AppLayout: React.FC = () => {
   void progressVersion;
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('otv10_sidebar_collapsed') === 'true';
+  });
   const [isTeacher, setIsTeacher] = useState(false);
   const [realPendingCount, setRealPendingCount] = useState(0);
+
+  const toggleSidebarCollapse = () => {
+    setIsSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem('otv10_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   // Tự động đảm bảo thông tin hồ sơ của học sinh tồn tại trong Firestore collection 'users'
   useEffect(() => {
@@ -125,7 +136,7 @@ export const AppLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
+    <div className="min-h-screen md:h-screen md:overflow-hidden bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
 
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
@@ -166,45 +177,62 @@ export const AppLayout: React.FC = () => {
       {/* 🧭 Sidebar (Desktop & Mobile Panel) */}
       <aside className={`
         fixed md:sticky top-0 left-0 bottom-0 z-50 md:z-30
-        w-64 bg-card border-r border-border flex flex-col h-screen
+        bg-card border-r border-border flex flex-col h-screen
         transition-all duration-300 md:translate-x-0
+        ${isSidebarCollapsed ? 'w-64 md:w-20' : 'w-64 md:w-64'}
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Logo */}
-        <div className="p-6 border-b border-border/50 hidden md:flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/20">
+        <div className={cn(
+          "p-6 border-b border-border/50 hidden md:flex items-center gap-3 cursor-pointer",
+          isSidebarCollapsed && "justify-center p-4"
+        )} onClick={() => navigate('/dashboard')}>
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/20 shrink-0">
             10
           </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-base tracking-tight leading-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-              DẠNG BÀI 10
-            </span>
-            <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
-              Lộ trình &amp; Luyện tập
-            </span>
-          </div>
+          {!isSidebarCollapsed && (
+            <div className="flex flex-col animate-fade-in">
+              <span className="font-extrabold text-base tracking-tight leading-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
+                DẠNG BÀI 10
+              </span>
+              <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                Lộ trình &amp; Luyện tập
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Môn Học Toggle */}
-        <div className="px-4 py-5 border-b border-border/30">
-          <div className="bg-secondary p-1 rounded-xl flex gap-1 border border-border/10">
+        <div className={cn("px-4 py-5 border-b border-border/30", isSidebarCollapsed && "px-2 py-4")}>
+          <div className={cn(
+            "bg-secondary p-1 rounded-xl flex border border-border/10",
+            isSidebarCollapsed ? "flex-col gap-1.5 p-1" : "flex-row gap-1"
+          )}>
             <button
               onClick={() => { setSubject('math'); setIsSidebarOpen(false); navigate('/roadmap'); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedSubject === 'math'
+              className={cn(
+                "py-2 text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center",
+                isSidebarCollapsed ? "w-full aspect-square text-sm" : "flex-1",
+                selectedSubject === 'math'
                   ? 'bg-card text-primary shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
-                }`}
+              )}
+              title={isSidebarCollapsed ? "Toán học" : undefined}
             >
-              📐 Toán học
+              {isSidebarCollapsed ? '📐' : '📐 Toán học'}
             </button>
             <button
               onClick={() => { setSubject('english'); setIsSidebarOpen(false); navigate('/roadmap'); }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedSubject === 'english'
+              className={cn(
+                "py-2 text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center",
+                isSidebarCollapsed ? "w-full aspect-square text-sm" : "flex-1",
+                selectedSubject === 'english'
                   ? 'bg-card text-primary shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
-                }`}
+              )}
+              title={isSidebarCollapsed ? "Tiếng Anh" : undefined}
             >
-              🗣️ Tiếng Anh
+              {isSidebarCollapsed ? '🗣️' : '🗣️ Tiếng Anh'}
             </button>
           </div>
         </div>
@@ -227,44 +255,54 @@ export const AppLayout: React.FC = () => {
                   navigate(item.path);
                   setIsSidebarOpen(false);
                 }}
-                className={`
-                  w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer
-                  ${isActive
+                className={cn(
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer",
+                  isSidebarCollapsed && "justify-center px-2 py-3 gap-0",
+                  isActive
                     ? 'bg-primary/10 text-primary border-l-4 border-primary pl-3'
                     : isLocked
                       ? 'text-muted-foreground/40 hover:bg-secondary/20 cursor-not-allowed'
                       : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }
-                `}
+                )}
+                title={isSidebarCollapsed ? item.label : undefined}
               >
-                <Icon size={18} className={isActive ? 'text-primary' : isLocked ? 'text-muted-foreground/30' : 'text-muted-foreground'} />
-                <span className={isLocked ? 'line-through opacity-60' : ''}>
-                  {item.label}
-                </span>
-                {isLocked && <Lock size={12} className="ml-auto text-muted-foreground/30" />}
-                {isActive && !isLocked && <ChevronRight size={14} className="ml-auto text-primary" />}
+                <Icon size={18} className={cn("shrink-0", isActive ? 'text-primary' : isLocked ? 'text-muted-foreground/30' : 'text-muted-foreground')} />
+                {!isSidebarCollapsed && (
+                  <span className={cn(isLocked ? 'line-through opacity-60' : '')}>
+                    {item.label}
+                  </span>
+                )}
+                {!isSidebarCollapsed && isLocked && <Lock size={12} className="ml-auto text-muted-foreground/30" />}
+                {!isSidebarCollapsed && isActive && !isLocked && <ChevronRight size={14} className="ml-auto text-primary" />}
               </button>
             );
           })}
 
           {canShowTeacherMenu && (
-            <div className="pt-3 border-t border-border/20 mt-3">
+            <div className={cn("pt-3 border-t border-border/20 mt-3", isSidebarCollapsed && "pt-2 border-t border-border/10 mt-2")}>
               <button
                 onClick={() => {
                   navigate('/teacher');
                   setIsSidebarOpen(false);
                 }}
                 className={cn(
-                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all duration-200 cursor-pointer border border-dashed",
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all duration-200 cursor-pointer border border-dashed relative",
+                  isSidebarCollapsed && "justify-center px-2 py-3 gap-0",
                   location.pathname === '/teacher'
                     ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/40 dark:text-emerald-400"
                     : "text-emerald-600 hover:bg-emerald-500/5 hover:text-emerald-700 border-emerald-500/20 dark:text-emerald-400"
                 )}
+                title={isSidebarCollapsed ? "Góc Giáo viên 👩‍🏫" : undefined}
               >
-                <Users size={18} className="text-emerald-500 animate-pulse" />
-                <span>Góc Giáo viên 👩‍🏫</span>
+                <Users size={18} className="text-emerald-500 animate-pulse shrink-0" />
+                {!isSidebarCollapsed && <span>Góc Giáo viên 👩‍🏫</span>}
                 {realPendingCount > 0 && (
-                  <span className="ml-auto bg-rose-500 text-white font-black text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center animate-bounce">
+                  <span className={cn(
+                    "bg-rose-500 text-white font-black text-[9px] rounded-full flex items-center justify-center animate-bounce shrink-0",
+                    isSidebarCollapsed 
+                      ? "absolute top-1 right-1.5 w-3.5 h-3.5 text-[8px]" 
+                      : "ml-auto w-4.5 h-4.5"
+                  )}>
                     {realPendingCount}
                   </span>
                 )}
@@ -274,73 +312,107 @@ export const AppLayout: React.FC = () => {
         </nav>
 
         {/* Tiến Độ Thu Gọn */}
-        <div className="p-4 border-t border-border/50 bg-slate-50/50 dark:bg-slate-900/10">
-          <div className="text-xs font-bold text-muted-foreground mb-3 flex items-center gap-1.5">
-            <TrendingUp size={14} /> TIẾN ĐỘ THỰC TẾ
-          </div>
-          <div className="space-y-3">
-            <div>
-              <div className="flex justify-between text-[11px] font-semibold mb-1">
-                <span>📐 Toán học</span>
-                <span>{mathPercent}%</span>
+        {!isSidebarCollapsed && (
+          <div className="p-4 border-t border-border/50 bg-slate-50/50 dark:bg-slate-900/10">
+            <div className="text-xs font-bold text-muted-foreground mb-3 flex items-center gap-1.5">
+              <TrendingUp size={14} /> TIẾN ĐỘ THỰC TẾ
+            </div>
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between text-[11px] font-semibold mb-1">
+                  <span>📐 Toán học</span>
+                  <span>{mathPercent}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${mathPercent}%` }} />
+                </div>
               </div>
-              <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${mathPercent}%` }} />
+              <div>
+                <div className="flex justify-between text-[11px] font-semibold mb-1">
+                  <span>🗣️ Tiếng Anh</span>
+                  <span>{englishPercent}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${englishPercent}%` }} />
+                </div>
               </div>
             </div>
-            <div>
-              <div className="flex justify-between text-[11px] font-semibold mb-1">
-                <span>🗣️ Tiếng Anh</span>
-                <span>{englishPercent}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${englishPercent}%` }} />
-              </div>
-            </div>
           </div>
-        </div>
+        )}
 
         {/* Account Sidebar Section */}
-        <div className="p-4 border-t border-border/50 bg-slate-50/20 dark:bg-slate-900/5">
+        <div className={cn("p-4 border-t border-border/50 bg-slate-50/20 dark:bg-slate-900/5", isSidebarCollapsed && "p-2.5")}>
           {user ? (
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+            <div className={cn("flex items-center gap-2.5", isSidebarCollapsed && "flex-col gap-1 justify-center")}>
+              <div 
+                className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0 cursor-pointer"
+                title={`${user.displayName || 'Học sinh'} (${user.email})`}
+                onClick={() => {
+                  if (isSidebarCollapsed && window.confirm("Đăng xuất tài khoản?")) {
+                    logout();
+                    navigate('/auth');
+                  }
+                }}
+              >
                 <span className="text-xs font-black text-primary">
                   {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
                 </span>
               </div>
-              <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-xs font-extrabold truncate text-foreground leading-none">{user.displayName || 'Học sinh'}</span>
-                <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1">{user.email}</span>
+              {!isSidebarCollapsed ? (
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-xs font-extrabold truncate text-foreground leading-none">{user.displayName || 'Học sinh'}</span>
+                  <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1">{user.email}</span>
+                  <button
+                    onClick={() => { logout(); setIsSidebarOpen(false); navigate('/auth'); }}
+                    className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer"
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              ) : (
                 <button
-                  onClick={() => { logout(); setIsSidebarOpen(false); navigate('/auth'); }}
-                  className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer"
+                  onClick={() => { logout(); navigate('/auth'); }}
+                  className="text-[9px] text-rose-500 font-extrabold hover:underline cursor-pointer"
+                  title="Đăng xuất"
                 >
-                  Đăng xuất
+                  Thoát
                 </button>
-              </div>
+              )}
             </div>
           ) : (
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+            <div className={cn("flex items-center justify-between gap-2", isSidebarCollapsed && "flex-col justify-center gap-1.5")}>
+              <div className="flex items-center gap-2" title="Chế độ Guest">
                 <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-xs text-muted-foreground font-bold shrink-0">
                   K
                 </div>
-                <span className="text-[11px] font-bold text-muted-foreground">Chế độ Guest</span>
+                {!isSidebarCollapsed && <span className="text-[11px] font-bold text-muted-foreground">Chế độ Guest</span>}
               </div>
-              <button
-                onClick={() => { navigate('/auth'); setIsSidebarOpen(false); }}
-                className="text-[10px] font-bold text-primary hover:underline cursor-pointer bg-primary/5 px-2.5 py-1.5 rounded-lg border border-primary/10"
-              >
-                Đăng nhập
-              </button>
+              {!isSidebarCollapsed ? (
+                <button
+                  onClick={() => { navigate('/auth'); setIsSidebarOpen(false); }}
+                  className="text-[10px] font-bold text-primary hover:underline cursor-pointer bg-primary/5 px-2.5 py-1.5 rounded-lg border border-primary/10"
+                >
+                  Đăng nhập
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="text-[9px] font-bold text-primary hover:underline cursor-pointer"
+                  title="Đăng nhập"
+                >
+                  Vào
+                </button>
+              )}
             </div>
           )}
         </div>
 
         {/* Dark Mode Toggle & Footer */}
-        <div className="p-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-semibold">
-          <span>Version MVP V2</span>
+        <div className={cn(
+          "p-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-semibold",
+          isSidebarCollapsed && "justify-center p-2"
+        )}>
+          {!isSidebarCollapsed && <span>Version MVP V2</span>}
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
@@ -356,13 +428,22 @@ export const AppLayout: React.FC = () => {
 
         {/* 💻 Desktop Header */}
         <header className="hidden md:flex items-center justify-between px-8 py-4 bg-card border-b border-border shadow-sm sticky top-0 z-20">
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold tracking-tight text-foreground capitalize">
-              {getHeaderTitle()}
-            </h1>
-            <p className="text-xs text-muted-foreground font-semibold">
-              Môn đang chọn: {selectedSubject === 'math' ? '📐 Toán học lớp 9' : '🗣️ Tiếng Anh ôn thi vào 10'}
-            </p>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={toggleSidebarCollapse}
+              className="p-2 rounded-xl bg-secondary text-muted-foreground hover:text-foreground border border-border/30 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer hidden md:flex items-center justify-center shrink-0"
+              title={isSidebarCollapsed ? "Mở rộng menu" : "Thu gọn menu"}
+            >
+              {isSidebarCollapsed ? <Menu size={18} /> : <X size={18} />}
+            </button>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold tracking-tight text-foreground capitalize leading-tight">
+                {getHeaderTitle()}
+              </h1>
+              <p className="text-xs text-muted-foreground font-semibold mt-0.5">
+                Môn đang chọn: {selectedSubject === 'math' ? '📐 Toán học lớp 9' : '🗣️ Tiếng Anh ôn thi vào 10'}
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
