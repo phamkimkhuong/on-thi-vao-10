@@ -89,26 +89,69 @@ export const mathQuestionTypes: QuestionType[] = [
     topicId: 'math-t2',
     name: 'Biện luận nghiệm phương trình bậc hai & Hệ thức Vi-ét',
     slug: 'bien-luan-nghiem-va-vi-et',
-    description: 'Dạng toán yêu cầu tìm tham số để phương trình bậc hai có nghiệm thỏa mãn điều kiện về tổng, tích hoặc biểu thức liên quan đến hai nghiệm.',
+    description: 'Chuyên đề trọng tâm ôn thi vào 10 (không chuyên), bao gồm các dạng toán biện luận số nghiệm của phương trình bậc hai bằng biệt thức \\( \\Delta \\) và vận dụng Hệ thức Vi-ét để tính biểu thức nghiệm hoặc tìm tham số thỏa mãn điều kiện.',
     recognitionSigns: [
-      'Xuất hiện phương trình bậc hai có tham số m.',
-      'Đề nhắc đến hai nghiệm x1, x2.',
-      'Có yêu cầu dùng tổng nghiệm, tích nghiệm hoặc biểu thức đối xứng của nghiệm.'
+      'Đề bài cho phương trình bậc hai có chứa tham số \\( m \\) (dạng \\( ax^2 + bx + c = 0 \\) với \\( a \\neq 0 \\)).',
+      'Yêu cầu tìm \\( m \\) để phương trình có 2 nghiệm phân biệt, có nghiệm kép, vô nghiệm, hoặc có nghiệm.',
+      'Yêu cầu tính giá trị biểu thức đối xứng của hai nghiệm \\( x_1, x_2 \\) (ví dụ: \\( x_1^2 + x_2^2 \\), \\( \\frac{1}{x_1} + \\frac{1}{x_2} \\), \\( (x_1 - x_2)^2 \\), \\( x_1^3 + x_2^3 \\)).',
+      'Yêu cầu tìm \\( m \\) để nghiệm thỏa mãn các hệ thức liên hệ (đối xứng hoặc không đối xứng) hoặc xét dấu các nghiệm (cùng dấu, trái dấu, cùng dương, cùng âm).',
+      'Yêu cầu tìm hai số khi biết tổng \\( S \\) và tích \\( P \\) của chúng.'
     ],
     solvingSteps: [
-      'Xác định hệ số a, b, c.',
-      'Đặt điều kiện có nghiệm hoặc có hai nghiệm phân biệt.',
-      'Áp dụng hệ thức Vi-ét để biểu diễn x1 + x2 và x1x2.',
-      'Biến đổi điều kiện đề bài theo tổng và tích nghiệm.',
-      'Giải tìm tham số và đối chiếu điều kiện ban đầu.'
+      'Bước 1: Xác định các hệ số \\( a, b, c \\). Tính biệt thức \\( \\Delta = b^2 - 4ac \\) (hoặc \\( \\Delta\' = (b\')^2 - ac \\) nếu \\( b \\) chẵn).',
+      'Bước 2: Đặt điều kiện số nghiệm theo yêu cầu: \\( \\Delta > 0 \\) (2 nghiệm phân biệt), \\( \\Delta = 0 \\) (nghiệm kép), \\( \\Delta < 0 \\) (vô nghiệm), hoặc \\( \\Delta \\ge 0 \\) (có nghiệm).',
+      'Bước 3: Áp dụng hệ thức Vi-ét gốc để lập tổng và tích nghiệm: \\( S = x_1 + x_2 = -\\frac{b}{a} \\) và \\( P = x_1x_2 = \\frac{c}{a} \\) (lưu ý chỉ áp dụng khi phương trình có nghiệm).',
+      'Bước 4: Biến đổi biểu thức nghiệm của đề bài theo tổng \\( S \\) và tích \\( P \\) dựa trên các công thức phụ cần nhớ:\n  • \\( x_1^2 + x_2^2 = (x_1 + x_2)^2 - 2x_1x_2 \\)\n  • \\( \\frac{1}{x_1} + \\frac{1}{x_2} = \\frac{x_1 + x_2}{x_1x_2} \\)\n  • \\( (x_1 - x_2)^2 = (x_1 + x_2)^2 - 4x_1x_2 \\)\n  • \\( x_1^3 + x_2^3 = (x_1 + x_2)^3 - 3x_1x_2(x_1 + x_2) \\)',
+      'Bước 5: Giải điều kiện để tìm tham số \\( m \\), sau đó đối chiếu nghiêm ngặt với điều kiện có nghiệm ở Bước 2 trước khi kết luận.',
+      'Bước 6: Đối với toán xét dấu nghiệm, áp dụng các bộ điều kiện tương ứng:\n  • Trái dấu: \\( ac < 0 \\) (không cần tính \\( \\Delta \\)).\n  • Cùng dấu phân biệt: \\( \\Delta > 0 \\) và \\( P > 0 \\).\n  • Cùng dương phân biệt: \\( \\Delta > 0 \\), \\( S > 0 \\), \\( P > 0 \\).\n  • Cùng âm phân biệt: \\( \\Delta > 0 \\), \\( S < 0 \\), \\( P > 0 \\).',
+      'Bước 7: Đối với dạng tìm hai số biết tổng \\( S \\) và tích \\( P \\), hai số đó là nghiệm của phương trình \\( X^2 - SX + P = 0 \\) (điều kiện tồn tại là \\( S^2 \\ge 4P \\)).'
     ],
     commonMistakes: [
-      'Quên điều kiện có nghiệm trước khi dùng Vi-ét.',
-      'Biến đổi sai x1^2 + x2^2.',
-      'Không đối chiếu tham số tìm được với điều kiện Delta.'
+      'Lỗi nghiêm trọng: Áp dụng hệ thức Vi-ét để tìm tham số \\( m \\) nhưng quên không đặt điều kiện phương trình có nghiệm (\\( \\Delta \\ge 0 \\) hoặc \\( \\Delta > 0 \\)), dẫn đến kết luận cả các giá trị \\( m \\) làm phương trình vô nghiệm.',
+      'Nhầm lẫn dấu trong công thức Vi-ét (ví dụ viết nhầm thành \\( x_1 + x_2 = \\frac{b}{a} \\) thay vị \\( -\\frac{b}{a} \\)).',
+      'Khai triển sai các biểu thức phụ đối xứng, đặc biệt hay quên hệ số trong \\( (x_1 + x_2)^2 - 2x_1x_2 \\) hoặc nhầm dấu khi phá ngoặc.',
+      'Mất thời gian tính toán điều kiện \\( \\Delta > 0 \\) đối với phương trình có hai nghiệm trái dấu (chỉ cần điều kiện ngắn gọn là \\( ac < 0 \\)).'
     ],
     difficulty: 'medium',
-    examFrequency: 'high'
+    examFrequency: 'high',
+    exampleQuestionId: 'math-q2',
+    subTypes: [
+      {
+        name: 'Dạng 1: Biện luận số nghiệm bằng Δ (Phân biệt, nghiệm kép, vô nghiệm)',
+        example: 'Cho phương trình \\( x^2 - 2x + m = 0 \\). Tìm m để phương trình có hai nghiệm phân biệt.',
+        note: 'Phương trình có hai nghiệm phân biệt khi \\( \\Delta > 0 \\Leftrightarrow (-2)^2 - 4 \\cdot 1 \\cdot m > 0 \\Leftrightarrow 4 - 4m > 0 \\Leftrightarrow m < 1 \\).'
+      },
+      {
+        name: 'Dạng 2: Tìm m để phương trình có nghiệm kép',
+        example: 'Cho phương trình \\( x^2 - 2(m + 1)x + m^2 = 0 \\). Tìm m để phương trình có nghiệm kép.',
+        note: 'Tính \\( \\Delta\' = (m + 1)^2 - m^2 = 2m + 1 \\). Phương trình có nghiệm kép khi \\( \\Delta\' = 0 \\Leftrightarrow 2m + 1 = 0 \\Leftrightarrow m = -\\frac{1}{2} \\).'
+      },
+      {
+        name: 'Dạng 3: Dùng Vi-ét tính biểu thức nghiệm đối xứng',
+        example: 'Cho phương trình \\( x^2 - 5x + 3 = 0 \\) có hai nghiệm \\( x_1, x_2 \\). Tính \\( A = x_1^2 + x_2^2 \\).',
+        note: 'Theo hệ thức Vi-ét: \\( x_1 + x_2 = 5 \\) và \\( x_1x_2 = 3 \\). Ta biến đổi đối xứng: \\( A = (x_1 + x_2)^2 - 2x_1x_2 = 5^2 - 2 \\cdot 3 = 19 \\).'
+      },
+      {
+        name: 'Dạng 4: Tìm m để nghiệm thỏa mãn điều kiện',
+        example: 'Cho phương trình \\( x^2 - 2mx + m - 1 = 0 \\). Tìm m để phương trình có hai nghiệm \\( x_1, x_2 \\) thỏa mãn \\( x_1 + x_2 = 4 \\).',
+        note: 'Áp dụng Vi-ét ta được \\( x_1 + x_2 = 2m \\). Yêu cầu bài toán tương đương \\( 2m = 4 \\Leftrightarrow m = 2 \\). Chú ý thử lại hoặc đặt điều kiện \\( \\Delta \\ge 0 \\) để đảm bảo phương trình có nghiệm.'
+      },
+      {
+        name: 'Dạng 5: Xét dấu hai nghiệm (Cùng dấu, trái dấu, dương, âm)',
+        example: 'Cho phương trình \\( x^2 - 2(m - 1)x - m + 2 = 0 \\). Tìm m để phương trình có hai nghiệm trái dấu.',
+        note: 'Phương trình có hai nghiệm trái dấu khi hệ số \\( a \\) và \\( c \\) trái dấu, tức là \\( ac < 0 \\Leftrightarrow 1 \\cdot (-m + 2) < 0 \\Leftrightarrow m > 2 \\).'
+      },
+      {
+        name: 'Dạng 6: Tìm hai số khi biết tổng và tích',
+        example: 'Tìm hai số biết tổng của chúng bằng 7 và tích của chúng bằng 12.',
+        note: 'Hai số cần tìm là nghiệm của phương trình \\( X^2 - SX + P = 0 \\Rightarrow X^2 - 7X + 12 = 0 \\Rightarrow (X - 3)(X - 4) = 0 \\). Hai số đó là 3 và 4.'
+      },
+      {
+        name: 'Dạng 7: Nhẩm nghiệm bằng a + b + c = 0 hoặc a - b + c = 0',
+        example: 'Giải nhanh phương trình: \\( 2x^2 - 5x + 3 = 0 \\)',
+        note: 'Ta có \\( a + b + c = 2 - 5 + 3 = 0 \\). Theo hệ quả hệ thức Vi-ét, phương trình có hai nghiệm: \\( x_1 = 1 \\) và \\( x_2 = \\frac{c}{a} = \\frac{3}{2} \\).'
+      }
+    ]
   },
   {
     id: 'math-qt3',
@@ -1061,6 +1104,213 @@ export const mathQuestions: Question[] = [
     correctFinalAnswer: {
       gtnn: '3',
       xDatDuoc: '0'
+    }
+  },
+  {
+    id: 'math-q32',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Tìm giá trị của tham số \\( m \\) để phương trình sau có hai nghiệm phân biệt:\n\n\\(x^2 - 2x + m = 0\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'm < 1',
+    acceptedAnswers: ['m<1', 'm < 1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'm <', valueType: 'number', placeholder: '1', hint: 'Nhập giá trị giới hạn của m.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '1'
+    }
+  },
+  {
+    id: 'math-q33',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Tìm giá trị của tham số \\( m \\) để phương trình sau có nghiệm kép:\n\n\\(x^2 - 2(m + 1)x + m^2 = 0\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'm = -1/2',
+    acceptedAnswers: ['m=-1/2', 'm = -0.5', '-1/2', '-0.5'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'm =', valueType: 'fraction', placeholder: '-1/2', hint: 'Nhập giá trị m.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '-1/2'
+    }
+  },
+  {
+    id: 'math-q34',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Tìm giá trị của tham số \\( m \\) để phương trình sau vô nghiệm:\n\n\\(x^2 - 4x + m = 0\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'm > 4',
+    acceptedAnswers: ['m>4', 'm > 4'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'm >', valueType: 'number', placeholder: '4', hint: 'Nhập giá trị giới hạn của m.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '4'
+    }
+  },
+  {
+    id: 'math-q35',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Cho phương trình: \\(x^2 - 6x + 5 = 0\\) có hai nghiệm \\( x_1, x_2 \\).\n\nTính giá trị của biểu thức: \\(A = x_1^2 + x_2^2\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '26',
+    acceptedAnswers: ['26', 'A=26'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'A', label: 'A =', valueType: 'number', placeholder: '26', hint: 'Nhập giá trị tính được.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      A: '26'
+    }
+  },
+  {
+    id: 'math-q36',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Cho phương trình: \\(2x^2 - 5x + 1 = 0\\) có hai nghiệm \\( x_1, x_2 \\).\n\nTính giá trị của biểu thức: \\(B = \\frac{1}{x_1} + \\frac{1}{x_2}\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '5',
+    acceptedAnswers: ['5', 'B=5'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'B', label: 'B =', valueType: 'number', placeholder: '5', hint: 'Nhập giá trị tính được.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      B: '5'
+    }
+  },
+  {
+    id: 'math-q37',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Cho phương trình: \\(x^2 - 3x - 2 = 0\\) có hai nghiệm \\( x_1, x_2 \\).\n\nTính giá trị của biểu thức: \\(C = (x_1 - x_2)^2\\)',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '17',
+    acceptedAnswers: ['17', 'C=17'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'C', label: 'C =', valueType: 'number', placeholder: '17', hint: 'Nhập giá trị tính được.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      C: '17'
+    }
+  },
+  {
+    id: 'math-q38',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Tìm giá trị của tham số \\( m \\) để phương trình: \\(x^2 - 2mx + m - 1 = 0\\) có hai nghiệm \\( x_1, x_2 \\) thỏa mãn: \\(x_1 + x_2 = 6\\)',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'm = 3',
+    acceptedAnswers: ['m=3', '3'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'm =', valueType: 'number', placeholder: '3', hint: 'Nhập giá trị m tìm được.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '3'
+    }
+  },
+  {
+    id: 'math-q39',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Tìm giá trị của tham số \\( m \\) để phương trình: \\(x^2 - 2(m + 1)x + m = 0\\) có hai nghiệm dương phân biệt.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'm > 0',
+    acceptedAnswers: ['m>0', 'm > 0'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'm >', valueType: 'number', placeholder: '0', hint: 'Nhập giá trị giới hạn của m.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '0'
+    }
+  },
+  {
+    id: 'math-q40',
+    subjectId: 'math',
+    topicId: 'math-t2',
+    questionTypeId: 'math-qt2',
+    content: 'Tìm giá trị của tham số \\( m \\) để phương trình: \\(x^2 - 2(m - 1)x - m + 2 = 0\\) có hai nghiệm trái dấu.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'm > 2',
+    acceptedAnswers: ['m>2', 'm > 2'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'm >', valueType: 'number', placeholder: '2', hint: 'Nhập giá trị giới hạn của m.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '2'
     }
   }
 ];
@@ -2304,10 +2554,271 @@ export const mathSolutions: Solution[] = [
     ],
     finalAnswer: 'GTNN của P là 3 khi x = 0.',
     commonMistakes: [
-      'Đánh giá sai dấu khi thực hiện phép trừ (lầm tưởng P nhỏ hơn hoặc bằng 3).'
+      'Nhầm lẫn chiều bất đẳng thức khi thực hiện phép trừ (nghĩ rằng phân thức nhỏ hơn hoặc bằng 2 thì hiệu 5 trừ phân thức cũng nhỏ hơn hoặc bằng 3 là sai).',
+      'Quên chỉ ra điều kiện dấu bằng xảy ra tại x = 0.'
     ],
     reviewSuggestions: [
       'Ghi nhớ: \\( A \\le B \\Rightarrow C - A \\ge C - B \\) (khi lấy một số trừ đi số nhỏ hơn thì hiệu sẽ lớn hơn).'
+    ]
+  },
+  {
+    id: 'math-s32',
+    questionId: 'math-q32',
+    recognition: 'Đề bài yêu cầu tìm tham số để phương trình bậc hai có hai nghiệm phân biệt. Ta tính Delta và đặt điều kiện Delta > 0.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định hệ số và tính Delta',
+        explanation: 'Phương trình \\(x^2 - 2x + m = 0\\) có hệ số \\(a = 1, b = -2, c = m\\). Ta tính biệt thức \\(\\Delta\\):',
+        formula: '\\Delta = b^2 - 4ac = (-2)^2 - 4 \\cdot 1 \\cdot m = 4 - 4m',
+        result: 'Biệt thức thu gọn là \\(\\Delta = 4 - 4m\\).'
+      },
+      {
+        order: 2,
+        title: 'Biện luận điều kiện nghiệm phân biệt',
+        explanation: 'Phương trình có hai nghiệm phân biệt khi và chỉ khi \\(\\Delta > 0\\):',
+        formula: '4 - 4m > 0 \\Leftrightarrow 4m < 4 \\Leftrightarrow m < 1',
+        result: 'Kết quả tìm được là \\(m < 1\\).'
+      }
+    ],
+    finalAnswer: 'm < 1',
+    commonMistakes: [
+      'Nhầm lẫn chiều bất phương trình khi chia cho số âm -4 (chia -4m > -4 phải đổi chiều thành m < 1).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: phương trình bậc hai có hai nghiệm phân biệt khi và chỉ khi \\(\\Delta > 0\\).'
+    ]
+  },
+  {
+    id: 'math-s33',
+    questionId: 'math-q33',
+    recognition: 'Đề bài yêu cầu tìm tham số để phương trình bậc hai có nghiệm kép. Ta dùng Delta phẩy để rút gọn biểu thức và đặt Delta phẩy bằng 0.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính biệt thức Delta phẩy',
+        explanation: 'Phương trình \\(x^2 - 2(m + 1)x + m^2 = 0\\) có hệ số \\(a = 1, b\' = -(m + 1), c = m^2\\):',
+        formula: '\\Delta\' = (b\')^2 - ac = [-(m + 1)]^2 - 1 \\cdot m^2 = m^2 + 2m + 1 - m^2 = 2m + 1',
+        result: 'Biệt thức Delta phẩy là \\(\\Delta\' = 2m + 1\\).'
+      },
+      {
+        order: 2,
+        title: 'Đặt điều kiện để có nghiệm kép',
+        explanation: 'Phương trình có nghiệm kép khi và chỉ khi \\(\\Delta\' = 0\\):',
+        formula: '2m + 1 = 0 \\Leftrightarrow 2m = -1 \\Leftrightarrow m = -\\frac{1}{2}',
+        result: 'Kết quả là \\(m = -\\frac{1}{2}\\).'
+      }
+    ],
+    finalAnswer: 'm = -1/2',
+    commonMistakes: [
+      'Khai triển hằng đẳng thức sai, quên không nhân đôi hệ số giữa \\((m+1)^2 = m^2 + 2m + 1\\).'
+    ],
+    reviewSuggestions: [
+      'Ôn lại công thức tính Delta và Delta phẩy cùng hằng đẳng thức đáng nhớ.'
+    ]
+  },
+  {
+    id: 'math-s34',
+    questionId: 'math-q34',
+    recognition: 'Đề bài yêu cầu tìm tham số để phương trình bậc hai vô nghiệm. Ta tính Delta và đặt điều kiện Delta < 0.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính Delta phẩy',
+        explanation: 'Phương trình \\(x^2 - 4x + m = 0\\) có hệ số \\(a = 1, b\' = -2, c = m\\):',
+        formula: '\\Delta\' = (b\')^2 - ac = (-2)^2 - 1 \\cdot m = 4 - m',
+        result: 'Biệt thức Delta phẩy là \\(\\Delta\' = 4 - m\\).'
+      },
+      {
+        order: 2,
+        title: 'Đặt điều kiện phương trình vô nghiệm',
+        explanation: 'Phương trình vô nghiệm khi và chỉ khi biệt thức âm:',
+        formula: '\\Delta\' < 0 \\Leftrightarrow 4 - m < 0 \\Leftrightarrow m > 4',
+        result: 'Kết quả tìm được là \\(m > 4\\).'
+      }
+    ],
+    finalAnswer: 'm > 4',
+    commonMistakes: [
+      'Chuyển vế nhưng quên đổi dấu hoặc sai dấu của bất phương trình.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: phương trình bậc hai vô nghiệm khi và chỉ khi \\(\\Delta < 0\\).'
+    ]
+  },
+  {
+    id: 'math-s35',
+    questionId: 'math-q35',
+    recognition: 'Bài toán yêu cầu tính giá trị biểu thức nghiệm đối xứng của phương trình bậc hai cụ thể. Ta áp dụng hệ thức Vi-ét để tính tổng, tích rồi thế vào biểu thức biến đổi.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Áp dụng hệ thức Vi-ét',
+        explanation: 'Với phương trình \\(x^2 - 6x + 5 = 0\\), do \\(a = 1 \\neq 0\\) và \\(\\Delta\' = (-3)^2 - 1 \\cdot 5 = 4 > 0\\), phương trình luôn có 2 nghiệm. Theo hệ thức Vi-ét:',
+        formula: 'x_1 + x_2 = -\\frac{b}{a} = 6; \\quad x_1x_2 = \\frac{c}{a} = 5',
+        result: 'Tổng nghiệm bằng 6, tích nghiệm bằng 5.'
+      },
+      {
+        order: 2,
+        title: 'Biến đổi biểu thức và thay số',
+        explanation: 'Biến đổi biểu thức đối xứng \\(A = x_1^2 + x_2^2\\) theo tổng và tích nghiệm:',
+        formula: 'A = (x_1 + x_2)^2 - 2x_1x_2 = 6^2 - 2 \\cdot 5 = 36 - 10 = 26',
+        result: 'Giá trị biểu thức là \\(A = 26\\).'
+      }
+    ],
+    finalAnswer: 'A = 26',
+    commonMistakes: [
+      'Biến đổi nhầm lẫn công thức đối xứng thành \\(x_1^2+x_2^2 = (x_1+x_2)^2 + 2x_1x_2\\) (sai dấu).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ hằng đẳng thức phụ: \\(x_1^2 + x_2^2 = (x_1 + x_2)^2 - 2x_1x_2\\).'
+    ]
+  },
+  {
+    id: 'math-s36',
+    questionId: 'math-q36',
+    recognition: 'Bài toán yêu cầu tính giá trị biểu thức phân số đối xứng của hai nghiệm. Quy đồng mẫu thức biểu thức cần tính rồi thế tổng và tích nghiệm theo Vi-ét.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Áp dụng hệ thức Vi-ét',
+        explanation: 'Phương trình \\(2x^2 - 5x + 1 = 0\\) có \\(\\Delta = (-5)^2 - 4 \\cdot 2 \\cdot 1 = 17 > 0\\) nên luôn có 2 nghiệm. Theo Vi-ét:',
+        formula: 'x_1 + x_2 = \\frac{5}{2}; \\quad x_1x_2 = \\frac{1}{2}',
+        result: 'Tổng nghiệm là 5/2, tích nghiệm là 1/2.'
+      },
+      {
+        order: 2,
+        title: 'Quy đồng biểu thức B và thay số',
+        explanation: 'Quy đồng biểu thức B về mẫu thức chung là \\(x_1x_2\\):',
+        formula: 'B = \\frac{x_1 + x_2}{x_1x_2} = \\frac{5/2}{1/2} = 5',
+        result: 'Giá trị biểu thức là \\(B = 5\\).'
+      }
+    ],
+    finalAnswer: 'B = 5',
+    commonMistakes: [
+      'Xác định sai dấu của tổng nghiệm (nhầm lẫn công thức Vi-ét thành \\(x_1+x_2 = b/a\\)).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: công thức tổng nghiệm theo Vi-ét có dấu trừ đằng trước: \\(S = -b/a\\).'
+    ]
+  },
+  {
+    id: 'math-s37',
+    questionId: 'math-q37',
+    recognition: 'Bài toán yêu cầu tính hiệu bình phương hai nghiệm. Ta biến đổi biểu thức về dạng tổng và tích nghiệm theo Vi-ét.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Áp dụng hệ thức Vi-ét',
+        explanation: 'Phương trình \\(x^2 - 3x - 2 = 0\\) có 2 nghiệm vì \\(\\Delta = (-3)^2 - 4 \\cdot 1 \\cdot (-2) = 17 > 0\\). Theo Vi-ét:',
+        formula: 'x_1 + x_2 = 3; \\quad x_1x_2 = -2',
+        result: 'Tổng nghiệm là 3, tích nghiệm là -2.'
+      },
+      {
+        order: 2,
+        title: 'Biến đổi biểu thức C và thay số',
+        explanation: 'Khai triển hiệu bình phương \\(C = (x_1 - x_2)^2\\) để làm xuất hiện tổng và tích:',
+        formula: 'C = x_1^2 - 2x_1x_2 + x_2^2 = (x_1 + x_2)^2 - 4x_1x_2 = 3^2 - 4 \\cdot (-2) = 9 + 8 = 17',
+        result: 'Giá trị biểu thức là \\(C = 17\\).'
+      }
+    ],
+    finalAnswer: 'C = 17',
+    commonMistakes: [
+      'Nhầm lẫn giữa hiệu bình phương \\((x_1-x_2)^2\\) với tổng bình phương \\(x_1^2+x_2^2\\).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ hệ thức biến đổi: \\((x_1 - x_2)^2 = (x_1 + x_2)^2 - 4x_1x_2\\).'
+    ]
+  },
+  {
+    id: 'math-s38',
+    questionId: 'math-q38',
+    recognition: 'Đề bài yêu cầu tìm m để tổng nghiệm thỏa mãn một hằng số. Ta dùng hệ thức Vi-ét để biểu diễn tổng nghiệm theo tham số m, sau đó giải phương trình tìm m và kiểm tra điều kiện tồn tại nghiệm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt điều kiện có nghiệm',
+        explanation: 'Phương trình \\(x^2 - 2mx + m - 1 = 0\\) có nghiệm khi và chỉ khi \\(\\Delta\' \\ge 0\\):',
+        formula: '\\Delta\' = (-m)^2 - 1 \\cdot (m - 1) = m^2 - m + 1 = \\left(m - \\frac{1}{2}\\right)^2 + \\frac{3}{4} > 0 \\quad \\forall m',
+        result: 'Do Delta phẩy luôn dương, phương trình luôn có hai nghiệm phân biệt với mọi m.'
+      },
+      {
+        order: 2,
+        title: 'Áp dụng Vi-ét và giải tìm m',
+        explanation: 'Theo hệ thức Vi-ét, tổng hai nghiệm là \\(x_1 + x_2 = -\\frac{b}{a} = 2m\\). Theo đề bài:',
+        formula: 'x_1 + x_2 = 6 \\Rightarrow 2m = 6 \\Rightarrow m = 3',
+        result: 'Giá trị tham số tìm được là \\(m = 3\\) (thỏa mãn điều kiện có nghiệm).'
+      }
+    ],
+    finalAnswer: 'm = 3',
+    commonMistakes: [
+      'Quên không kiểm tra biệt thức Delta, đối với một số bài toán tham số, nếu Delta âm với giá trị m tìm được thì giá trị đó sẽ bị loại.'
+    ],
+    reviewSuggestions: [
+      'Luôn duy trì thói quen xét hoặc kiểm tra lại điều kiện có nghiệm \\(\\Delta \\ge 0\\) khi dùng hệ thức Vi-ét.'
+    ]
+  },
+  {
+    id: 'math-s39',
+    questionId: 'math-q39',
+    recognition: 'Đề bài yêu cầu tìm tham số m để phương trình bậc hai có hai nghiệm dương phân biệt. Ta đặt đồng thời 3 điều kiện: Delta phẩy dương, Tổng nghiệm dương, và Tích nghiệm dương.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính biệt thức và các hệ số Vi-ét',
+        explanation: 'Phương trình \\(x^2 - 2(m + 1)x + m = 0\\) có hệ số \\(a = 1, b = -2(m+1), c = m\\):',
+        formula: '\\Delta\' = (m + 1)^2 - m = m^2 + 2m + 1 - m = m^2 + m + 1',
+        result: 'Biệt thức \\(\\Delta\' = m^2 + m + 1 = (m + 1/2)^2 + 3/4 > 0\\) với mọi m.'
+      },
+      {
+        order: 2,
+        title: 'Lập hệ điều kiện có hai nghiệm dương phân biệt',
+        explanation: 'Phương trình có hai nghiệm dương phân biệt khi và chỉ khi:',
+        formula: '\\begin{cases} \\Delta\' > 0 \\\\ S = x_1 + x_2 > 0 \\\\ P = x_1x_2 > 0 \\end{cases} \\Leftrightarrow \\begin{cases} m^2+m+1 > 0 \\text{ (luôn đúng)} \\\\ 2(m + 1) > 0 \\\\ m > 0 \\end{cases}',
+        result: 'Hệ điều kiện thu gọn là \\(m > -1\\) và \\(m > 0\\).'
+      },
+      {
+        order: 3,
+        title: 'Giao nghiệm kết luận',
+        explanation: 'Kết hợp hai điều kiện trên ta thu được kết quả cuối cùng:',
+        formula: 'm > 0',
+        result: 'Giá trị m cần tìm là \\(m > 0\\).'
+      }
+    ],
+    finalAnswer: 'm > 0',
+    commonMistakes: [
+      'Quên không xét điều kiện biệt thức Delta, hoặc kết hợp sai các điều kiện dấu nghiệm.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: hai nghiệm phân biệt cùng dương khi \\(\\Delta > 0\\), \\(S > 0\\) và \\(P > 0\\).'
+    ]
+  },
+  {
+    id: 'math-s40',
+    questionId: 'math-q40',
+    recognition: 'Đề bài yêu cầu tìm m để phương trình bậc hai có hai nghiệm trái dấu. Điều kiện để phương trình bậc hai có hai nghiệm trái dấu là hệ số a và c trái dấu, tức là ac < 0.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Thiết lập điều kiện hai nghiệm trái dấu',
+        explanation: 'Phương trình \\(x^2 - 2(m - 1)x - m + 2 = 0\\) có hệ số \\(a = 1, c = -m + 2\\). Để phương trình có hai nghiệm trái dấu:',
+        formula: 'a \\cdot c < 0 \\Leftrightarrow 1 \\cdot (-m + 2) < 0',
+        result: 'Bất phương trình là \\(-m + 2 < 0\\).'
+      },
+      {
+        order: 2,
+        title: 'Giải bất phương trình tìm m',
+        explanation: 'Giải bất phương trình trên ta được:',
+        formula: '-m < -2 \\Leftrightarrow m > 2',
+        result: 'Giá trị tìm được là \\(m > 2\\).'
+      }
+    ],
+    finalAnswer: 'm > 2',
+    commonMistakes: [
+      'Đặt thêm điều kiện Delta phức tạp không cần thiết (khi ac < 0 thì phương trình luôn có 2 nghiệm phân biệt vì Delta = b² - 4ac luôn lớn hơn 0).',
+      'Giải sai bất phương trình có hệ số âm.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ quy tắc nhanh: phương trình bậc hai có hai nghiệm trái dấu khi và chỉ khi \\(ac < 0\\).'
     ]
   }
 ];
