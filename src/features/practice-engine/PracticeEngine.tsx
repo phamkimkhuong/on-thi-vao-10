@@ -57,6 +57,7 @@ export const PracticeEngine: React.FC = () => {
   const [uploadControls, setUploadControls] = useState<Record<string, UploadControl>>({});
 
   const proofImagesRef = React.useRef(proofImages);
+  const loadedQuestionIdRef = React.useRef<string | null>(null);
   useEffect(() => {
     proofImagesRef.current = proofImages;
   }, [proofImages]);
@@ -123,9 +124,11 @@ export const PracticeEngine: React.FC = () => {
   const isMath = routeSubject === 'math';
   const qList = isMath ? mathQuestions : englishQuestions;
 
-  const questions: Question[] = questionTypeId
-    ? qList.filter(q => q.questionTypeId === questionTypeId)
-    : qList;
+  const questions: Question[] = useMemo(() => {
+    return questionTypeId
+      ? qList.filter(q => q.questionTypeId === questionTypeId)
+      : qList;
+  }, [questionTypeId, qList]);
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -146,6 +149,7 @@ export const PracticeEngine: React.FC = () => {
   }, [user, questionTypeId, currentIdx, isSubmitted]);
 
   const resetQuestionState = useCallback(() => {
+    loadedQuestionIdRef.current = null;
     setStructuredAnswer({});
     setProofImages(prev => {
       revokeLocalProofImages(prev);
@@ -180,7 +184,13 @@ export const PracticeEngine: React.FC = () => {
     const currentQ = questions[currentIdx];
     if (!currentQ) return;
 
+    // Tránh việc click "Làm lại" bị ghi đè bởi useEffect khi re-render
+    if (loadedQuestionIdRef.current === currentQ.id) {
+      return;
+    }
+
     let isMounted = true;
+    loadedQuestionIdRef.current = currentQ.id;
 
     const checkAttempt = async () => {
       // 1. Xem trước trong LocalStorage để render tức thì

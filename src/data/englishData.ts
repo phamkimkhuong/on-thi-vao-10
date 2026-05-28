@@ -138,6 +138,60 @@ export const englishQuestionTypes: QuestionType[] = [
     ],
     difficulty: 'medium',
     examFrequency: 'high'
+  },
+  {
+    id: 'eng-qt6',
+    topicId: 'eng-t2',
+    name: 'Trắc nghiệm Ngữ pháp & Từ vựng',
+    slug: 'trac-nghiem-ngu-phap-va-tu-vung',
+    description: 'Chuyên đề ôn luyện 8 câu hỏi trắc nghiệm khách quan (chiếm 2 điểm) luôn đứng đầu cấu trúc đề thi Tiếng Anh tuyển sinh vào 10 Bình Định. Chuyên đề tập trung giúp học sinh củng cố và ăn chắc điểm các mảng ngữ pháp và từ vựng nền tảng bao gồm thì động từ, dạng động từ (to V/V-ing/V0), giới từ & phrasal verbs thông dụng, câu so sánh, và vị trí của danh - động - tính - trạng trong câu.',
+    recognitionSigns: [
+      'Đề bài cho một câu đơn có chứa một chỗ trống cần điền.',
+      'Cung cấp 4 lựa chọn trả lời dạng trắc nghiệm A, B, C, D.',
+      'Câu chứa các dấu hiệu thời gian đặc trưng, động từ thái độ hoặc các liên từ so sánh.'
+    ],
+    solvingSteps: [
+      'Bước 1: Quét nhanh câu hỏi để tìm các "tín hiệu trực quan" (ví dụ: trạng từ chỉ thời gian như yesterday, ago, since...; động từ đứng trước chỗ trống như enjoy, decide, should...; hoặc các từ so sánh như than, as, the...).',
+      'Bước 2: Xác định mảng kiến thức tương ứng với tín hiệu đó (ví dụ: thấy "three years ago" -> Quá khứ đơn; thấy "interested" -> tìm giới từ "in"; thấy "than" -> tìm So sánh hơn).',
+      'Bước 3: Thực hiện loại trừ các phương án sai cấu trúc ngữ pháp (ví dụ: chia động từ sai ngôi, dùng sai dạng từ loại đứng trước/sau danh từ).',
+      'Bước 4: Chọn đáp án đúng nhất và điền vào phiếu trả lời.'
+    ],
+    commonMistakes: [
+      'Lỗi bỏ sót từ tín hiệu ở cuối câu dẫn đến chia sai thì động từ.',
+      'Dịch nghĩa cảm tính giới từ từ tiếng Việt sang dẫn đến dùng sai giới từ cố định (ví dụ chọn interested with/at thay vì interested in).',
+      'Không phân biệt được vị trí của tính từ và trạng từ trong mối quan hệ với danh từ và động từ thường.',
+      'Chia động từ không hòa hợp với chủ ngữ số ít/số nhiều ở thì hiện tại đơn.'
+    ],
+    difficulty: 'easy',
+    examFrequency: 'high',
+    exampleQuestionId: 'eng-q5',
+    subTypes: [
+      {
+        name: 'Dạng 1: Thì động từ cơ bản (Hiện tại đơn, Quá khứ đơn, Hiện tại tiếp diễn, Hiện tại hoàn thành, Tương lai đơn)',
+        example: 'He has lived in Binh Dinh since he was a child.',
+        note: 'Căn cứ vào tín hiệu "since + mệnh đề quá khứ đơn" để chọn thì Hiện tại hoàn thành.'
+      },
+      {
+        name: 'Dạng 2: Cấu trúc động từ (to V, V-ing, V0)',
+        example: 'We enjoy playing football after school.',
+        note: 'Nhìn động từ "enjoy" đứng trước chỗ trống để áp dụng công thức enjoy + V-ing.'
+      },
+      {
+        name: 'Dạng 3: Giới từ & Phrasal verbs cơ bản',
+        example: 'She is interested in learning English.',
+        note: 'Ghi nhớ cụm giới từ cố định: be interested in (thích thú/quan tâm cái gì).'
+      },
+      {
+        name: 'Dạng 4: So sánh hơn, so sánh nhất và so sánh bằng',
+        example: 'This exam is more difficult than the last one.',
+        note: 'Dựa vào từ khóa "than" để xác định cấu trúc so sánh hơn của tính từ.'
+      },
+      {
+        name: 'Dạng 5: Vị trí của các loại từ (Danh - Động - Tính - Trạng)',
+        example: 'My uncle is a careful driver.',
+        note: 'Nhận diện vị trí tính từ đứng trước bổ nghĩa cho danh từ: a + Adj + Noun.'
+      }
+    ]
   }
 ];
 
@@ -206,6 +260,181 @@ export const englishQuestions: Question[] = [
     province: 'Hà Nội',
     year: 2023,
     correctAnswer: 'C',
+    validatorType: 'choice'
+  },
+  // Trắc nghiệm Ngữ pháp & Từ vựng tổng hợp
+  {
+    id: 'eng-q5',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'He ________ in Binh Dinh since he was a child.',
+    options: [
+      'A. lives',
+      'B. lived',
+      'C. has lived',
+      'D. is living'
+    ],
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2025,
+    correctAnswer: 'C',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q6',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'My sister ________ high school three years ago.',
+    options: [
+      'A. finishes',
+      'B. finished',
+      'C. has finished',
+      'D. was finishing'
+    ],
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q7',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'We really enjoy ________ football with our friends at the weekend.',
+    options: [
+      'A. play',
+      'B. playing',
+      'C. to play',
+      'D. played'
+    ],
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q8',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'They decided ________ a new laptop for their son\'s online study.',
+    options: [
+      'A. buy',
+      'B. buying',
+      'C. to buy',
+      'D. bought'
+    ],
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'C',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q9',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'She is very interested ________ learning English because she wants to study abroad.',
+    options: [
+      'A. in',
+      'B. at',
+      'C. on',
+      'D. for'
+    ],
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    correctAnswer: 'A',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q10',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'Remember to ________ the lights before you leave the classroom to save energy.',
+    options: [
+      'A. turn on',
+      'B. turn off',
+      'C. look after',
+      'D. take part in'
+    ],
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q11',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'This English exam is ________ than the one we took last month.',
+    options: [
+      'A. difficult',
+      'B. more difficult',
+      'C. most difficult',
+      'D. the most difficult'
+    ],
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2025,
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q12',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'An is the ________ student in my class. He always gets good marks in English.',
+    options: [
+      'A. good',
+      'B. better',
+      'C. best',
+      'D. well'
+    ],
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    correctAnswer: 'C',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q13',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'My uncle is a ________ driver. He never drives fast or causes accidents.',
+    options: [
+      'A. care',
+      'B. careful',
+      'C. carefully',
+      'D. careless'
+    ],
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  {
+    id: 'eng-q14',
+    subjectId: 'english',
+    topicId: 'eng-t2',
+    questionTypeId: 'eng-qt6',
+    content: 'If you want to pass the entrance exam to high school, you must study ________.',
+    options: [
+      'A. hard',
+      'B. hardly',
+      'C. good',
+      'D. careful'
+    ],
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'A',
     validatorType: 'choice'
   }
 ];
@@ -328,6 +557,366 @@ export const englishSolutions: Solution[] = [
     reviewSuggestions: [
       'Ôn tập các thì ngữ pháp cơ bản trong Tiếng Anh',
       'Luyện tập chuyển đổi câu bị động với nhiều thì khác nhau'
+    ]
+  },
+  {
+    id: 'eng-s4',
+    questionId: 'eng-q4',
+    recognition: 'Câu gốc chỉ thực tế ở hiện tại: "Anh ấy không có đủ tiền (hiện tại đơn phủ định), vì vậy anh ấy không thể mua điện thoại (hiện tại đơn phủ định)". Để chuyển sang câu điều kiện, ta phải dùng câu điều kiện loại 2 (trái với thực tế ở hiện tại) và chuyển thể khẳng định/phủ định tương ứng.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định loại câu điều kiện',
+        explanation: 'Sự thật ở hiện tại không có tiền và không mua được điện thoại, giả thiết trái thực tế hiện tại yêu cầu câu điều kiện loại 2.',
+        result: 'Điều kiện loại 2: If + S + V2/ed (were), S + would/could + V0'
+      },
+      {
+        order: 2,
+        title: 'Biến đổi mệnh đề If (giả thiết)',
+        explanation: 'Câu gốc phủ định "doesn\'t have" chuyển sang khẳng định quá khứ đơn "had".',
+        result: 'If he had enough money,'
+      },
+      {
+        order: 3,
+        title: 'Biến đổi mệnh đề chính (kết quả)',
+        explanation: 'Câu gốc phủ định "cannot buy" chuyển sang khẳng định "could buy".',
+        result: 'he could buy that smartphone.'
+      },
+      {
+        order: 4,
+        title: 'Kết hợp câu và loại trừ đáp án',
+        explanation: 'Câu hoàn chỉnh: "If he had enough money, he could buy that smartphone." Đối chiếu: A sai loại 1; B dùng "can" ở mệnh đề chính (sai cấu trúc); D giữ nguyên phủ định.',
+        result: 'Đáp án đúng là C'
+      }
+    ],
+    finalAnswer: 'C',
+    commonMistakes: [
+      'Quên không đổi thể khẳng định sang phủ định và ngược lại.',
+      'Nhầm lẫn cấu trúc mệnh đề chính loại 2 dùng could/would thành can/will.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ cấu trúc điều kiện loại 2 trái ngược thực tế hiện tại.',
+      'Ôn lại các biến đổi khẳng định/phủ định giữa câu gốc và câu điều kiện.'
+    ]
+  },
+  {
+    id: 'eng-s5',
+    questionId: 'eng-q5',
+    recognition: 'Nhìn nhanh câu hỏi thấy có trạng từ liên kết "since" đi kèm một mệnh đề chia ở quá khứ đơn ("since he was a child"). Đây là dấu hiệu kinh điển của thì Hiện tại hoàn thành.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm từ khóa tín hiệu thời gian',
+        explanation: 'Trạng từ "since" (từ khi) liên kết một mốc thời gian trong quá khứ là dấu hiệu nhận biết của thì Hiện tại hoàn thành.',
+        result: 'Tín hiệu: since he was a child'
+      },
+      {
+        order: 2,
+        title: 'Áp dụng công thức tương ứng',
+        explanation: 'Chủ ngữ "He" (ngôi thứ ba số ít) đi kèm với trợ động từ "has" và động từ chính ở dạng phân từ hai V3/ed ("lived").',
+        result: 'Cấu trúc: He + has + lived'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ phương án sai',
+        explanation: 'A (lives) là Hiện tại đơn; B (lived) là Quá khứ đơn; D (is living) là Hiện tại tiếp diễn.',
+        result: 'Đáp án đúng là C'
+      }
+    ],
+    finalAnswer: 'C',
+    commonMistakes: [
+      'Nhầm lẫn giữa since và for dẫn đến việc chọn sai cách dùng.',
+      'Chọn Quá khứ đơn B do thấy mệnh đề was ở sau, nhưng thực tế mệnh đề trước since phải là Hiện tại hoàn thành.'
+    ],
+    reviewSuggestions: [
+      'Học thuộc công thức: S + has/have + V3/ed + since + S + V2/ed.'
+    ]
+  },
+  {
+    id: 'eng-s6',
+    questionId: 'eng-q6',
+    recognition: 'Nhìn nhanh ở cuối câu thấy trạng từ chỉ thời gian "three years ago" (3 năm trước). Đây là dấu hiệu nhận biết đặc trưng của thì Quá khứ đơn.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm từ khóa tín hiệu thời gian',
+        explanation: 'Trạng từ "ago" (trước đây) là tín hiệu xác định một hành động đã xảy ra và kết thúc trong quá khứ.',
+        result: 'Tín hiệu: ago'
+      },
+      {
+        order: 2,
+        title: 'Xác định thì động từ và chia',
+        explanation: 'Chia động từ "finish" ở quá khứ đơn bằng cách thêm đuôi -ed ta được "finished".',
+        result: 'finished'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ đáp án',
+        explanation: 'A là Hiện tại đơn; C là Hiện tại hoàn thành; D là Quá khứ tiếp diễn.',
+        result: 'Đáp án đúng là B'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: [
+      'Bỏ sót từ ago ở cuối câu dẫn đến chia nhầm thì hiện tại.',
+      'Nhầm lẫn dạng bất quy tắc của động từ (từ finish là động từ có quy tắc, chỉ cần thêm -ed).'
+    ],
+    reviewSuggestions: [
+      'Học thuộc danh sách trạng từ quá khứ đơn: yesterday, ago, last week/month/year.'
+    ]
+  },
+  {
+    id: 'eng-s7',
+    questionId: 'eng-q7',
+    recognition: 'Nhìn trực diện động từ đứng ngay trước chỗ trống là "enjoy" (thích thú). Ta áp dụng ngay cấu trúc động từ đi kèm sau enjoy.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định từ khóa đứng trước chỗ trống',
+        explanation: 'Động từ "enjoy" yêu cầu động từ theo sau nó phải ở dạng V-ing.',
+        result: 'Công thức: enjoy + V-ing'
+      },
+      {
+        order: 2,
+        title: 'Chọn đáp án phù hợp',
+        explanation: 'Động từ "play" thêm đuôi -ing thành "playing".',
+        result: 'playing'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ đáp án',
+        explanation: 'A (play) là V0; C (to play) là to V; D (played) là V2/ed.',
+        result: 'Đáp án đúng là B'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: [
+      'Chọn to play (C) do thói quen dịch nghĩa thích "để làm gì". Ghi nhớ enjoy chỉ đi với V-ing.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ nhóm từ đi với V-ing thông dụng: enjoy, avoid, dislike, mind, practice, spend time.'
+    ]
+  },
+  {
+    id: 'eng-s8',
+    questionId: 'eng-q8',
+    recognition: 'Nhìn trực diện động từ đứng ngay trước chỗ trống là "decided" (đã quyết định - quá khứ của decide). Ta áp dụng cấu trúc động từ đi kèm sau decide.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định từ khóa đứng trước chỗ trống',
+        explanation: 'Động từ "decide" yêu cầu động từ theo sau nó phải ở dạng to V.',
+        result: 'Công thức: decide + to V'
+      },
+      {
+        order: 2,
+        title: 'Chọn đáp án phù hợp',
+        explanation: 'Động từ "buy" chuyển sang dạng "to buy".',
+        result: 'to buy'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ các phương án còn lại',
+        explanation: 'A (buy) là V0; B (buying) là V-ing; D (bought) là V2/ed.',
+        result: 'Đáp án đúng là C'
+      }
+    ],
+    finalAnswer: 'C',
+    commonMistakes: [
+      'Nhầm lẫn giữa nhóm từ đi kèm to V và V-ing dẫn đến việc chọn buying (B).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ nhóm từ đi với to V thông dụng: decide, want, hope, promise, would like.'
+    ]
+  },
+  {
+    id: 'eng-s9',
+    questionId: 'eng-q9',
+    recognition: 'Chỗ trống đứng sau tính từ "interested". Đây là cụm từ chỉ sở thích cố định trong Tiếng Anh.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm cụm từ cố định liên kết',
+        explanation: 'Tính từ "interested" (quan tâm/thích thú) luôn đi với giới từ "in".',
+        result: 'Cấu trúc: be interested in'
+      },
+      {
+        order: 2,
+        title: 'Loại trừ các giới từ khác',
+        explanation: 'Các giới từ B (at), C (on), D (for) đều không đi với interested trong ngữ cảnh này.',
+        result: 'Đáp án đúng là A'
+      }
+    ],
+    finalAnswer: 'A',
+    commonMistakes: [
+      'Dịch nghĩa cảm tính sang tiếng Việt thích "với" cái gì nên chọn interested with hoặc interested at.'
+    ],
+    reviewSuggestions: [
+      'Học thuộc các cặp tính từ + giới từ kinh điển lớp 9: good/bad at, interested in, proud of, famous for, different from.'
+    ]
+  },
+  {
+    id: 'eng-s10',
+    questionId: 'eng-q10',
+    recognition: 'Câu kiểm tra phrasal verb của động từ "turn". Cần đọc kỹ ngữ cảnh phía sau: "trước khi rời lớp học" (before you leave) và "để tiết kiệm điện" (to save energy).',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Dịch ngữ cảnh của câu',
+        explanation: 'Để tiết kiệm điện trước khi ra khỏi phòng học, ta cần phải tắt đèn.',
+        result: 'Hành động: Tắt đèn'
+      },
+      {
+        order: 2,
+        title: 'Tìm phrasal verb tương ứng',
+        explanation: 'Ta có cụm "turn off" nghĩa là tắt (thiết bị điện), còn "turn on" là bật.',
+        result: 'turn off'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ phương án khác',
+        explanation: 'A (turn on) trái nghĩa; C (look after) là chăm sóc; D (take part in) là tham gia.',
+        result: 'Đáp án đúng là B'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: [
+      'Không đọc hết câu nên nhầm lẫn giữa bật (turn on) và tắt (turn off).'
+    ],
+    reviewSuggestions: [
+      'Ôn tập các cụm động từ cơ bản sách giáo khoa: turn on/off, look after, look for, go on, give up.'
+    ]
+  },
+  {
+    id: 'eng-s11',
+    questionId: 'eng-q11',
+    recognition: 'Nhìn nhanh câu hỏi, ta phát hiện từ khóa so sánh "than" (hơn) đứng sau chỗ trống. Đây là dấu hiệu của câu so sánh hơn.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm từ khóa so sánh',
+        explanation: 'Từ "than" chỉ ra đây là cấu trúc so sánh hơn giữa đề thi này và đề thi tháng trước.',
+        result: 'Tín hiệu: than'
+      },
+      {
+        order: 2,
+        title: 'Xác định loại tính từ',
+        explanation: 'Tính từ "difficult" (khó) là tính từ dài (3 âm tiết), cấu trúc so sánh hơn của tính từ dài là "more + adj".',
+        result: 'Công thức: more difficult than'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ các đáp án khác',
+        explanation: 'A là tính từ thường; C và D là dạng so sánh nhất.',
+        result: 'Đáp án đúng là B'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: [
+      'Chọn the most difficult (D) do bỏ sót từ than phía sau.',
+      'Nhầm lẫn tính từ ngắn và tính từ dài khi thêm đuôi -er.'
+    ],
+    reviewSuggestions: [
+      'Nắm chắc công thức: short adj + er + than / more + long adj + than.'
+    ]
+  },
+  {
+    id: 'eng-s12',
+    questionId: 'eng-q12',
+    recognition: 'Ta thấy mạo từ "the" đứng ngay trước chỗ trống và ngữ cảnh "trong lớp tôi" (in my class). Đây là dấu hiệu của so sánh nhất.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm từ khóa so sánh',
+        explanation: 'Mạo từ "the" đứng trước chỗ trống và phạm vi so sánh "in my class" chỉ ra cấu trúc so sánh nhất.',
+        result: 'Tín hiệu: the + so sánh nhất'
+      },
+      {
+        order: 2,
+        title: 'Chia dạng so sánh nhất của tính từ đặc biệt',
+        explanation: 'Tính từ "good" biến đổi đặc biệt ở dạng so sánh nhất là "best" (tốt nhất).',
+        result: 'best'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ các phương án',
+        explanation: 'A (good) là tính từ gốc; B (better) là so sánh hơn; D (well) là trạng từ.',
+        result: 'Đáp án đúng là C'
+      }
+    ],
+    finalAnswer: 'C',
+    commonMistakes: [
+      'Nhầm lẫn giữa so sánh hơn better và so sánh nhất best.',
+      'Nhầm sang trạng từ well khi bổ nghĩa cho danh từ student.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ các tính từ biến đổi đặc biệt: good -> better -> best, bad -> worse -> worst, far -> further -> furthest.'
+    ]
+  },
+  {
+    id: 'eng-s13',
+    questionId: 'eng-q13',
+    recognition: 'Chỗ trống đứng sau mạo từ "a" và đứng trước danh từ "driver" (tài xế). Ta cần xác định loại từ phù hợp để điền vào chỗ trống này.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định loại từ cần điền',
+        explanation: 'Theo trật tự từ, đứng trước danh từ để bổ nghĩa cho danh từ đó phải là một tính từ.',
+        result: 'Công thức: a/an/the + Adj + Noun'
+      },
+      {
+        order: 2,
+        title: 'Chọn tính từ phù hợp ngữ cảnh',
+        explanation: 'Xét hậu tố từ: "careful" là tính từ (cẩn thận). Phù hợp với nghĩa vế sau "never drives fast" (không lái nhanh).',
+        result: 'careful'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ các phương án',
+        explanation: 'A (care) là danh/động từ; C (carefully) là trạng từ; D (careless) là bất cẩn (trái nghĩa vế sau).',
+        result: 'Đáp án đúng là B'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: [
+      'Chọn trạng từ carefully (C) vì nghĩ động từ drive đứng sau, nhưng ở đây driver là danh từ.',
+      'Chọn careless (D) do nhầm nghĩa tính từ phản nghĩa với ngữ cảnh cẩn thận.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ quy tắc vị trí tính từ: đứng trước danh từ và đứng sau động từ to-be.'
+    ]
+  },
+  {
+    id: 'eng-s14',
+    questionId: 'eng-q14',
+    recognition: 'Chỗ trống đứng sau động từ thường "study" (học tập). Ta cần xác định từ loại phù hợp để bổ nghĩa cho động từ thường này.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định loại từ cần điền',
+        explanation: 'Bổ nghĩa cho động từ thường "study" phải là một trạng từ.',
+        result: 'Cấu trúc: Verb + Adverb'
+      },
+      {
+        order: 2,
+        title: 'Chọn trạng từ và dịch nghĩa từ đặc biệt',
+        explanation: 'Từ "hard" vừa là tính từ và trạng từ (chăm chỉ). Trạng từ "hardly" nghĩa là "hầu như không" (sai nghĩa).',
+        result: 'hard'
+      },
+      {
+        order: 3,
+        title: 'Loại trừ phương án sai',
+        explanation: 'B (hardly) sai nghĩa; C (good) là tính từ; D (careful) là tính từ.',
+        result: 'Đáp án đúng là A'
+      }
+    ],
+    finalAnswer: 'A',
+    commonMistakes: [
+      'Chọn hardly (B) vì nghĩ mọi trạng từ đều phải thêm đuôi -ly (hardly mang nghĩa phủ định gần như không làm gì).',
+      'Chọn good (C) do thói quen nói tốt nhưng good là tính từ, trạng từ của nó phải là well.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ các trạng từ đặc biệt giữ nguyên dạng tính từ: hard, fast, late, early.'
     ]
   }
 ];
