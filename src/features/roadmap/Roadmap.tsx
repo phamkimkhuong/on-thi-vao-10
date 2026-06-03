@@ -47,21 +47,21 @@ export const Roadmap: React.FC = () => {
       title: '🎯 CHẶNG 1: ĐẢM BẢO ĐIỂM 5 (Vững vàng nền tảng)',
       description: selectedSubject === 'math'
         ? 'Luyện thật chắc Đại số nền tảng & Căn thức để nắm chắc 5 điểm đầu tiên của đề thi.'
-        : 'Ôn tập nhuần nhuyễn phần Ngữ âm cơ bản để quét trọn vẹn điểm phần phát âm/trọng âm.'
+        : 'Ôn tập Ngữ âm và Trắc nghiệm Ngữ pháp & Từ vựng nền tảng để nắm chắc 5 điểm đầu tiên.'
     },
     {
       id: 2,
       title: '🚀 CHẶNG 2: MỤC TIÊU ĐIỂM 7-8 (Tăng tốc bứt phá)',
       description: selectedSubject === 'math'
         ? 'Tăng tốc với Hệ phương trình, Toán thực tế và Hàm số & Đồ thị để đạt điểm 7-8.'
-        : 'Nắm chắc kiến thức Từ vựng & Ngữ pháp nâng cao (Bị động, Điều kiện, Mệnh đề quan hệ).'
+        : 'Luyện đọc quảng cáo, đọc True/False và các cấu trúc biến đổi câu cơ bản (Bị động, Điều kiện...).'
     },
     {
       id: 3,
       title: '👑 CHẶNG 3: CHINH PHỤC ĐIỂM 9-10 (Thủ khoa bứt phá)',
       description: selectedSubject === 'math'
         ? 'Chinh phục chuyên đề Hình học đường tròn để hoàn thiện điểm 9 và vươn tới điểm 10.'
-        : 'Làm quen với các dạng bài Đọc hiểu chuyên sâu và Viết lại câu nâng cao.'
+        : 'Làm chủ viết lại câu nâng cao/giới hạn từ, tìm và sửa lỗi sai, sắp xếp câu và đọc hiểu trắc nghiệm.'
     }
   ];
 

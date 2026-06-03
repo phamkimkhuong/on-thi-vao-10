@@ -52,6 +52,9 @@ export const PracticeEngine: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [existingAttempt, setExistingAttempt] = useState<UserAttempt | null>(null);
 
+  // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
+  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | null>(null);
+
   // Quản lý trạng thái upload tiến trình & điều khiển
   const [uploadProgress, setUploadProgress] = useState<Record<string, ProofImageUploadProgress>>({});
   const [uploadControls, setUploadControls] = useState<Record<string, UploadControl>>({});
@@ -125,10 +128,35 @@ export const PracticeEngine: React.FC = () => {
   const qList = isMath ? mathQuestions : englishQuestions;
 
   const questions: Question[] = useMemo(() => {
-    return questionTypeId
+    let filtered = questionTypeId
       ? qList.filter(q => q.questionTypeId === questionTypeId)
       : qList;
-  }, [questionTypeId, qList]);
+
+    if (questionTypeId === 'eng-qt6' && selectedSubTense && selectedSubTense !== 'all') {
+      if (selectedSubTense === 'present_simple') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 5 && num <= 24;
+        });
+      } else if (selectedSubTense === 'past_simple') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 25 && num <= 44;
+        });
+      } else if (selectedSubTense === 'present_continuous') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 45 && num <= 64;
+        });
+      } else if (selectedSubTense === 'past_continuous') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 65 && num <= 84;
+        });
+      }
+    }
+    return filtered;
+  }, [questionTypeId, qList, selectedSubTense]);
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -147,6 +175,11 @@ export const PracticeEngine: React.FC = () => {
         .map(a => a.questionId)
     );
   }, [user, questionTypeId, currentIdx, isSubmitted]);
+
+  const getSubTenseProgress = useCallback((qIds: string[]) => {
+    const done = qIds.filter(id => completedQuestionIds.has(id)).length;
+    return Math.round((done / qIds.length) * 100);
+  }, [completedQuestionIds]);
 
   const resetQuestionState = useCallback(() => {
     loadedQuestionIdRef.current = null;
@@ -176,7 +209,14 @@ export const PracticeEngine: React.FC = () => {
   useEffect(() => {
     setCurrentIdx(0);
     resetQuestionState();
+    setSelectedSubTense(null);
   }, [routeSubject, questionTypeId, resetQuestionState]);
+
+  // Reset index và state khi chuyển đổi dạng thì động từ cơ bản
+  useEffect(() => {
+    setCurrentIdx(0);
+    resetQuestionState();
+  }, [selectedSubTense, resetQuestionState]);
 
   // Tự động kiểm tra và tải bài làm cũ của học sinh đối với câu hỏi này để tránh bắt làm lại từ đầu
   useEffect(() => {
@@ -471,6 +511,99 @@ export const PracticeEngine: React.FC = () => {
     );
   }
 
+  // Màn hình chọn dạng thì con cho "Thì động từ cơ bản" (eng-qt6) dưới dạng Card
+  if (questionTypeId === 'eng-qt6' && selectedSubTense === null) {
+    const subTenseCards = [
+      {
+        id: 'all',
+        name: '📑 Tổng ôn',
+        description: 'Luyện tập tổng hợp tất cả 80 câu hỏi của 4 dạng thì để rèn luyện phản xạ và củng cố kiến thức.',
+        qIds: Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`)
+      },
+      {
+        id: 'present_simple',
+        name: '⏱️ Thì Hiện tại đơn (Present Simple)',
+        description: 'Tập trung luyện các câu chia thì Hiện tại đơn với các dấu hiệu nhận biết quen thuộc: usually, often, always, every day...',
+        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 5}`)
+      },
+      {
+        id: 'past_simple',
+        name: '🗓️ Thì Quá khứ đơn (Past Simple)',
+        description: 'Tập trung luyện các câu chia thì Quá khứ đơn với các dấu hiệu thời gian quá khứ: yesterday, last summer, ago...',
+        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 25}`)
+      },
+      {
+        id: 'present_continuous',
+        name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)',
+        description: 'Tập trung luyện các câu chia thì Hiện tại tiếp diễn với các dấu hiệu thời điểm hoặc cảm thán: now, at the moment, Look!...',
+        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`)
+      },
+      {
+        id: 'past_continuous',
+        name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
+        description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
+        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`)
+      }
+    ];
+
+    return (
+      <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+        <button
+          onClick={() => navigate('/practice')}
+          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start"
+        >
+          ← Quay lại danh sách dạng bài
+        </button>
+
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-black text-foreground tracking-tight">Chọn dạng thì cần rèn luyện</h2>
+          <p className="text-xs text-muted-foreground font-semibold">Tập trung rèn luyện chuyên sâu từng thì sẽ giúp tăng điểm số nhanh hơn.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {subTenseCards.map((card) => {
+            const percent = getSubTenseProgress(card.qIds);
+            return (
+              <Card
+                key={card.id}
+                className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card flex flex-col justify-between"
+                onClick={() => setSelectedSubTense(card.id as any)}
+              >
+                <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
+                        🗣️ Anh
+                      </span>
+                    </div>
+
+                    <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
+                      {card.name}
+                    </h4>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{card.description}</p>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
+                    <div className="flex items-center gap-1.5 flex-1 max-w-[60%]">
+                      <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
+                        <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+                      </div>
+                      <span className="text-[9px] text-primary shrink-0">{percent}%</span>
+                    </div>
+
+                    <Button variant="outline" size="sm" className="font-bold text-[10px] py-1 px-3 shrink-0 border border-border/50 cursor-pointer h-7">
+                      Luyện tập →
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   if (questions.length === 0) {
     return (
       <div className="p-8 text-center max-w-lg mx-auto space-y-4">
@@ -495,10 +628,16 @@ export const PracticeEngine: React.FC = () => {
       {/* Header trạng thái luyện tập */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
         <button
-          onClick={() => navigate('/practice')}
+          onClick={() => {
+            if (questionTypeId === 'eng-qt6') {
+              setSelectedSubTense(null);
+            } else {
+              navigate('/practice');
+            }
+          }}
           className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all"
         >
-          ← Đổi dạng bài ôn tập
+          {questionTypeId === 'eng-qt6' ? '← Đổi dạng thì ôn tập' : '← Đổi dạng bài ôn tập'}
         </button>
 
         {/* Bộ chọn câu hỏi thông minh, linh hoạt */}

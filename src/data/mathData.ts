@@ -5,7 +5,8 @@ export const mathTopics: Topic[] = [
   { id: 'math-t2', subjectId: 'math', name: 'Phương trình & Hệ thức Vi-ét', slug: 'phuong-trinh-va-vi-et', orderIndex: 2, tier: 1 },
   { id: 'math-t3', subjectId: 'math', name: 'Hệ phương trình & Toán thực tế', slug: 'he-phuong-trinh-toan-thuc-te', orderIndex: 3, tier: 2 },
   { id: 'math-t4', subjectId: 'math', name: 'Hàm số & Đồ thị', slug: 'ham-so-va-do-thi', orderIndex: 4, tier: 2 },
-  { id: 'math-t5', subjectId: 'math', name: 'Hình học đường tròn', slug: 'hinh-hoc-duong-tron', orderIndex: 5, tier: 3 }
+  { id: 'math-t5', subjectId: 'math', name: 'Hình học đường tròn', slug: 'hinh-hoc-duong-tron', orderIndex: 5, tier: 3 },
+  { id: 'math-t6', subjectId: 'math', name: 'Thống kê & Xác suất cơ bản', slug: 'thong-ke-va-xac-suat', orderIndex: 6, tier: 1 }
 ];
 
 export const mathQuestionTypes: QuestionType[] = [
@@ -235,27 +236,67 @@ export const mathQuestionTypes: QuestionType[] = [
   {
     id: 'math-qt5',
     topicId: 'math-t4',
-    name: 'Sự tương giao giữa Parabol & Đường thẳng',
-    slug: 'tuong-giao-parabol-va-duong-thang',
-    description: 'Dạng toán nghiên cứu số giao điểm và tọa độ giao điểm giữa parabol và đường thẳng.',
+    name: 'Hàm số y = ax² & Tương giao Parabol với Đường thẳng',
+    slug: 'ham-so-va-tuong-giao-parabol-duong-thang',
+    description: 'Chuyên đề trọng tâm ôn thi vào 10 (đặc biệt bám sát cấu trúc đề thi tuyển sinh Bình Định). Chuyên đề bao gồm các dạng bài xác định hệ số của Parabol/Đường thẳng khi biết điểm đi qua, tìm giao điểm với các trục tọa độ, tính diện tích tam giác tạo bởi đường thẳng và hai trục tọa độ, vẽ đồ thị Parabol và biện luận tương giao giữa Parabol và Đường thẳng.',
+    exampleQuestionId: 'math-q41',
     recognitionSigns: [
-      'Cho parabol y = ax^2 và đường thẳng y = mx + n.',
-      'Yêu cầu xét số giao điểm hoặc tìm tham số để tiếp xúc/cắt nhau.',
-      'Có thể cần dùng Delta và Vi-ét cho phương trình hoành độ giao điểm.'
+      'Đề bài cho hàm số y = ax² hoặc parabol (P): y = ax² và yêu cầu tìm hệ số a khi biết điểm đi qua.',
+      'Yêu cầu vẽ đồ thị parabol (P): y = ax².',
+      'Đề bài cho đường thẳng (d): y = kx + b, yêu cầu tìm giao điểm với trục hoành Ox (y = 0) hoặc trục tung Oy (x = 0).',
+      'Đề bài yêu cầu tìm tham số m để đường thẳng (d) cắt hai trục tọa độ tại A, B tạo thành tam giác OAB có diện tích cho trước.',
+      'Đề bài yêu cầu tìm tọa độ giao điểm của parabol (P) và đường thẳng (d).',
+      'Yêu cầu tìm tham số để đường thẳng (d) cắt, tiếp xúc hoặc không cắt parabol (P).'
     ],
     solvingSteps: [
-      'Lập phương trình hoành độ giao điểm.',
-      'Xét số nghiệm bằng Delta.',
-      'Dùng Vi-ét nếu đề hỏi điều kiện liên quan đến tọa độ giao điểm.',
-      'Kết luận theo yêu cầu đề bài.'
+      'Bước 1: Để tìm hệ số a khi đồ thị đi qua điểm A(x₀; y₀), thay x = x₀ và y = y₀ vào phương trình đồ thị để giải tìm a.',
+      'Bước 2: Để vẽ parabol y = ax², lập bảng giá trị với ít nhất 5 điểm đối xứng qua Oy (thường lấy x = -2, -1, 0, 1, 2), biểu diễn các điểm trên mặt phẳng tọa độ Oxy rồi vẽ đường cong mềm đi qua các điểm đó.',
+      'Bước 3: Để tìm giao điểm của đường thẳng y = kx + b với trục hoành Ox, cho y = 0 giải tìm x. Để tìm giao điểm với trục tung Oy, cho x = 0 giải tìm y.',
+      'Bước 4: Để tính diện tích tam giác OAB tạo bởi đường thẳng và hai trục tọa độ Ox, Oy: xác định giao điểm A(x_A; 0) và B(0; y_B). Khi đó độ dài các cạnh là OA = |x_A|, OB = |y_B|. Diện tích tam giác vuông OAB là S = 1/2 * OA * OB.',
+      'Bước 5: Để tìm giao điểm của parabol y = ax² và đường thẳng y = kx + b, lập phương trình hoành độ giao điểm: ax² = kx + b ⇔ ax² - kx - b = 0. Giải phương trình bậc hai tìm x, sau đó thay vào một trong hai công thức đồ thị để tính y tương ứng.',
+      'Bước 6: Để biện luận số giao điểm: Xét biệt thức Δ (hoặc Δ\') của phương trình hoành độ giao điểm. Cắt tại 2 điểm phân biệt ⇔ Δ > 0; Tiếp xúc nhau ⇔ Δ = 0; Không cắt nhau ⇔ Δ < 0.'
     ],
     commonMistakes: [
-      'Lập sai phương trình hoành độ giao điểm.',
-      'Nhầm điều kiện Delta cho cắt và tiếp xúc.',
-      'Không kiểm tra điều kiện tồn tại giao điểm.'
+      'Thay sai tọa độ điểm (nhầm lẫn giữa hoành độ x và tung độ y khi thay vào công thức).',
+      'Vẽ đồ thị parabol bằng thước thẳng (nối các điểm bằng các đoạn thẳng thay vì vẽ đường cong Parabol trơn mềm).',
+      'Quên dấu giá trị tuyệt đối khi tính độ dài các đoạn thẳng giao điểm với các trục tọa độ (ví dụ viết OA = x_A thay vì OA = |x_A|), dẫn đến việc giải thiếu trường hợp khi tham số m có thể âm.',
+      'Sai dấu khi chuyển vế để lập phương trình hoành độ giao điểm.',
+      'Quên đối chiếu điều kiện có nghiệm của phương trình hoành độ giao điểm trước khi kết luận tham số.'
     ],
     difficulty: 'medium',
-    examFrequency: 'high'
+    examFrequency: 'high',
+    subTypes: [
+      {
+        name: 'Dạng 1: Xác định hệ số a của parabol y = ax² khi biết điểm đi qua',
+        example: 'Xác định hệ số a của parabol (P): \\( y = ax^2 \\) biết (P) đi qua điểm A(1; 1).',
+        note: 'Thay tọa độ điểm A vào phương trình: \\( 1 = a \\cdot 1^2 \\Rightarrow a = 1 \\). Vậy parabol là \\( y = x^2 \\).'
+      },
+      {
+        name: 'Dạng 2: Vẽ đồ thị parabol y = ax²',
+        example: 'Vẽ đồ thị parabol (P): \\( y = x^2 \\).',
+        note: 'Lập bảng giá trị với 5 điểm: \\( (-2; 4), (-1; 1), (0; 0), (1; 1), (2; 4) \\), biểu diễn trên hệ trục Oxy và nối đường cong mềm đối xứng qua Oy.'
+      },
+      {
+        name: 'Dạng 3: Xác định giao điểm của đường thẳng với các trục tọa độ',
+        example: 'Tìm giao điểm của đường thẳng (d): \\( y = -3x + 2 \\) với trục hoành Ox và trục tung Oy.',
+        note: 'Giao với Oy: cho \\( x = 0 \\Rightarrow y = 2 \\Rightarrow B(0; 2) \\). Giao với Ox: cho \\( y = 0 \\Rightarrow -3x + 2 = 0 \\Rightarrow x = \\frac{2}{3} \\Rightarrow A(\\frac{2}{3}; 0) \\).'
+      },
+      {
+        name: 'Dạng 4: Bài toán diện tích tam giác tạo bởi đường thẳng và hai trục tọa độ',
+        example: 'Cho đường thẳng (d): \\( y = x + m \\). Tìm m để (d) cắt Ox tại A, cắt Oy tại B sao cho diện tích tam giác OAB bằng 8.',
+        note: 'A(-m; 0) và B(0; m) suy ra \\( OA = |-m| = |m| \\), \\( OB = |m| \\). Diện tích \\( S = \\frac{1}{2} OA \\cdot OB = \\frac{1}{2} m^2 = 8 \\Rightarrow m^2 = 16 \\Rightarrow m = \\pm 4 \\).'
+      },
+      {
+        name: 'Dạng 5: Tìm giao điểm của parabol và đường thẳng',
+        example: 'Tìm tọa độ giao điểm của parabol (P): \\( y = x^2 \\) và đường thẳng (d): \\( y = x + 2 \\).',
+        note: 'Lập phương trình hoành độ giao điểm: \\( x^2 - x - 2 = 0 \\). Giải phương trình có hai nghiệm \\( x = 2 \\) (suy ra \\( y = 4 \\)) và \\( x = -1 \\) (suy ra \\( y = 1 \\)). Tọa độ giao điểm là \\( A(2; 4) \\) và \\( B(-1; 1) \\).'
+      },
+      {
+        name: 'Dạng 6: Tìm tham số m để đường thẳng và parabol cắt, tiếp xúc, không cắt',
+        example: 'Cho (P): \\( y = x^2 \\) và (d): \\( y = 2x + m \\). Tìm m để (d) cắt (P) tại hai điểm phân biệt.',
+        note: 'Phương trình hoành độ giao điểm: \\( x^2 - 2x - m = 0 \\). Cắt tại hai điểm phân biệt khi \\( \\Delta\' = 1 + m > 0 \\Rightarrow m > -1 \\).'
+      }
+    ]
   },
   {
     id: 'math-qt6',
@@ -331,6 +372,60 @@ export const mathQuestionTypes: QuestionType[] = [
         name: 'Dạng 5: Tìm GTLN/GTNN sau khi rút gọn',
         example: 'Cho biểu thức \\( P = \\frac{2}{\\sqrt{x} + 1} \\) với \\( x \\ge 0 \\). Tìm giá trị lớn nhất (GTLN) của biểu thức \\( P \\).',
         note: 'Đánh giá mẫu số: vì \\( x \\ge 0 \\Rightarrow \\sqrt{x} + 1 \\ge 1 \\Rightarrow P = \\frac{2}{\\sqrt{x}+1} \\le 2 \\). Dấu bằng xảy ra khi \\( x = 0 \\). GTLN của P là 2.'
+      }
+    ]
+  },
+  {
+    id: 'math-qt8',
+    topicId: 'math-t6',
+    name: 'Xác suất của biến cố trong phép thử ngẫu nhiên',
+    slug: 'xac-suat-cua-bien-co',
+    description: 'Chuyên đề ôn luyện xác suất cổ điển cơ bản (bám sát cấu trúc đề thi tuyển sinh Bình Định). Tập trung vào các kỹ năng viết không gian mẫu, xác định tập hợp các kết quả thuận lợi dựa trên tính chất số học hoặc phương trình đại số, và tính xác suất biến cố.',
+    exampleQuestionId: 'math-q51',
+    recognitionSigns: [
+      'Đề bài có các cụm từ: "rút ngẫu nhiên", "chọn ngẫu nhiên", "gieo xúc xắc", "không gian mẫu", "tính xác suất".',
+      'Yêu cầu viết không gian mẫu của phép thử ngẫu nhiên.',
+      'Yêu cầu tính xác suất của một biến cố liên quan đến một tập hợp hữu hạn các kết quả đồng khả năng.'
+    ],
+    solvingSteps: [
+      'Bước 1: Xác định phép thử ngẫu nhiên và viết tập hợp không gian mẫu Ω. Đếm số phần tử n(Ω).',
+      'Bước 2: Xác định biến cố A theo yêu cầu của đề bài. Viết tập hợp các kết quả thuận lợi cho biến cố A.',
+      'Bước 3: Đếm số phần tử kết quả thuận lợi n(A).',
+      'Bước 4: Tính xác suất của biến cố A bằng công thức P(A) = n(A) / n(Ω). Rút gọn phân số kết quả (nếu có).'
+    ],
+    commonMistakes: [
+      'Chỉ ghi số lượng phần tử n(Ω) = 15 mà quên không liệt kê cụ thể các phần tử của tập hợp không gian mẫu Ω khi đề bài yêu cầu "viết không gian mẫu".',
+      'Liệt kê thiếu hoặc thừa các kết quả thuận lợi của biến cố (đặc biệt khi đếm các số chia hết, số nguyên tố, số chính phương...).',
+      'Không rút gọn phân số kết quả xác suất về phân số tối giản.',
+      'Nhầm lẫn giữa điều kiện số học (ví dụ: "chia hết cho 5" nhầm thành "có chữ số 5").'
+    ],
+    difficulty: 'easy',
+    examFrequency: 'high',
+    subTypes: [
+      {
+        name: 'Dạng 1: Rút ngẫu nhiên 1 thẻ / chọn 1 số từ tập hữu hạn',
+        example: 'Một hộp đựng 15 tấm thẻ ghi số từ 1 đến 15. Rút ngẫu nhiên một tấm thẻ. Viết không gian mẫu và tính xác suất biến cố A: "Rút được thẻ ghi số chia hết cho 5".',
+        note: 'Không gian mẫu là tập gồm các số từ 1 đến 15. Tập hợp biến cố gồm các số {5, 10, 15}. Tính tỉ số xác suất.'
+      },
+      {
+        name: 'Dạng 2: Phép thử gieo con xúc xắc hoặc tung đồng xu',
+        example: 'Gieo một con xúc xắc cân đối và đồng chất. Tính xác suất để xuất hiện mặt có số chấm là số chẵn.',
+        note: 'Không gian mẫu Ω = {1; 2; 3; 4; 5; 6}. Biến cố A = {2; 4; 6}. Xác suất P(A) = 3/6 = 1/2.'
+      },
+      {
+        name: 'Dạng 3: Chọn ngẫu nhiên 1 vật từ một nhóm vật',
+        example: 'Một hộp có 5 viên bi đỏ, 3 viên bi xanh, 2 viên bi vàng. Lấy ngẫu nhiên 1 viên bi. Tính xác suất lấy được viên bi xanh.',
+        note: 'Tính tổng số bi là 10. Số bi xanh là 3. Xác suất P = 3/10.'
+      },
+      {
+        name: 'Dạng 4: Xác suất gắn với các tính chất số học',
+        example: 'Chọn ngẫu nhiên một số tự nhiên từ 1 đến 20. Tính xác suất chọn được số là số nguyên tố.',
+        note: 'Các số nguyên tố từ 1 đến 20 gồm: {2, 3, 5, 7, 11, 13, 17, 19} (có 8 số). Xác suất P = 8/20 = 2/5.'
+      },
+      {
+        name: 'Dạng 5: Xác suất kết hợp với điều kiện đại số',
+        example: 'Một hộp chứa 50 tấm thẻ ghi số từ 1 đến 50. Rút ngẫu nhiên một tấm thẻ ghi số c. Tính xác suất để phương trình \\( x^2 - 8x + c = 0 \\) có hai nghiệm phân biệt.',
+        note: 'Phương trình có hai nghiệm phân biệt khi \\( \\Delta\' = 16 - c > 0 \\Rightarrow c < 16 \\). Các giá trị c thỏa mãn là từ 1 đến 15 (có 15 số). Xác suất P = 15/50 = 3/10.'
       }
     ]
   }
@@ -1311,6 +1406,394 @@ export const mathQuestions: Question[] = [
     },
     correctFinalAnswer: {
       m: '2'
+    }
+  },
+  {
+    id: 'math-q41',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho hàm số \\( y = ax^2 \\) có đồ thị là parabol \\( (P) \\).\n\n1. Xác định hệ số \\( a \\) biết đồ thị \\( (P) \\) đi qua điểm \\( A(1; 1) \\).\n\n2. Tính giá trị của hàm số khi \\( x = -3 \\).',
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2025,
+    correctAnswer: 'a = 1; y = 9',
+    acceptedAnswers: ['a=1, y=9', 'a=1', '1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'a', label: 'Hệ số a =', valueType: 'number', placeholder: '1', hint: 'Nhập giá trị của hệ số a.' },
+        { key: 'yVal', label: 'Giá trị y khi x = -3:', valueType: 'number', placeholder: '9', hint: 'Nhập giá trị y tính được.' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      a: '1',
+      yVal: '9'
+    }
+  },
+  {
+    id: 'math-q42',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho đường thẳng \\( (d): y = -3x + 2 \\).\n\n1. Tìm tọa độ giao điểm \\( B \\) của đường thẳng \\( (d) \\) với trục tung \\( Oy \\).\n\n2. Tìm tọa độ giao điểm \\( A \\) của đường thẳng \\( (d) \\) với trục hoành \\( Ox \\).',
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2023,
+    correctAnswer: 'B(0; 2); A(2/3; 0)',
+    acceptedAnswers: ['(0;2) và (2/3;0)', 'B(0;2), A(2/3;0)'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'x_A', label: 'Hoành độ giao điểm A với Ox:', valueType: 'fraction', placeholder: '2/3', hint: 'Nhập hoành độ x của A.' },
+        { key: 'y_B', label: 'Tung độ giao điểm B với Oy:', valueType: 'number', placeholder: '2', hint: 'Nhập tung độ y của B.' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      x_A: '2/3',
+      y_B: '2'
+    }
+  },
+  {
+    id: 'math-q43',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho đường thẳng \\( (d): y = x + m \\) (với \\( m \\neq 0 \\)). Tìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) cắt trục hoành tại điểm \\( A \\), cắt trục tung tại điểm \\( B \\) sao cho diện tích tam giác \\( OAB \\) bằng 8 (với \\( O \\) là gốc tọa độ).',
+    difficulty: 'medium',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2024,
+    correctAnswer: 'm = 4 hoặc m = -4',
+    acceptedAnswers: ['m = 4, m = -4', '4, -4', '4 hoặc -4', '±4', 'm=4; m=-4'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm1', label: 'Giá trị m thứ nhất:', valueType: 'number', placeholder: '4' },
+        { key: 'm2', label: 'Giá trị m thứ hai:', valueType: 'number', placeholder: '-4' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m1: '4',
+      m2: '-4'
+    },
+    acceptedFinalAnswers: [
+      { m1: '-4', m2: '4' }
+    ]
+  },
+  {
+    id: 'math-q44',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho parabol \\( (P): y = x^2 \\) và đường thẳng \\( (d): y = x + 2 \\).\n\nTìm tọa độ các giao điểm của \\( (P) \\) và \\( (d) \\).',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: 'A(-1; 1) và B(2; 4)',
+    acceptedAnswers: ['(-1;1) và (2;4)', '(-1; 1), (2; 4)'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'x1', label: 'Hoành độ giao điểm 1:', valueType: 'number', placeholder: '-1' },
+        { key: 'y1', label: 'Tung độ giao điểm 1:', valueType: 'number', placeholder: '1' },
+        { key: 'x2', label: 'Hoành độ giao điểm 2:', valueType: 'number', placeholder: '2' },
+        { key: 'y2', label: 'Tung độ giao điểm 2:', valueType: 'number', placeholder: '4' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      x1: '-1',
+      y1: '1',
+      x2: '2',
+      y2: '4'
+    },
+    acceptedFinalAnswers: [
+      { x1: '2', y1: '4', x2: '-1', y2: '1' }
+    ]
+  },
+  {
+    id: 'math-q45',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho parabol \\( (P): y = x^2 \\) và đường thẳng \\( (d): y = 2x + m \\).\n\nTìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) cắt parabol \\( (P) \\) tại hai điểm phân biệt.',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: 'm > -1',
+    acceptedAnswers: ['m>-1', 'm > -1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'Điều kiện m >', valueType: 'number', placeholder: '-1', hint: 'Nhập giá trị giới hạn của m.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '-1'
+    }
+  },
+  {
+    id: 'math-q46',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho parabol \\( (P): y = ax^2 \\).\n\n1. Xác định hệ số \\( a \\) biết \\( (P) \\) đi qua điểm \\( M(2; 4) \\).\n\n2. Điểm \\( N(-1; 2) \\) có thuộc parabol \\( (P) \\) vừa tìm được hay không? Giải thích.',
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    correctAnswer: 'a = 1; N không thuộc (P)',
+    acceptedAnswers: ['a=1', '1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'a', label: 'Hệ số a =', valueType: 'number', placeholder: '1' },
+        { key: 'belong', label: 'N thuộc (P) không? (ghi "có" hoặc "không"):', valueType: 'text', placeholder: 'không' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      a: '1',
+      belong: 'không'
+    }
+  },
+  {
+    id: 'math-q47',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho hàm số \\( y = -0.5x^2 \\) có đồ thị là parabol \\( (P) \\).\n\n1. Lập bảng giá trị tính các giá trị của \\( y \\) tương ứng với \\( x \\in \\{-2, -1, 0, 1, 2\\} \\).\n\n2. Tìm các điểm thuộc parabol \\( (P) \\) có tung độ bằng \\( -8 \\).',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'Các điểm (-4; -8) và (4; -8)',
+    acceptedAnswers: ['(-4;-8) và (4;-8)', '(-4; -8), (4; -8)', 'x=±4'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'x1', label: 'Hoành độ điểm thứ nhất (x1 < 0):', valueType: 'number', placeholder: '-4' },
+        { key: 'x2', label: 'Hoành độ điểm thứ hai (x2 > 0):', valueType: 'number', placeholder: '4' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      x1: '-4',
+      x2: '4'
+    }
+  },
+  {
+    id: 'math-q48',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho đường thẳng \\( (d): y = 2x - 4 \\).\n\n1. Tìm tọa độ giao điểm \\( A \\) của \\( (d) \\) với trục hoành \\( Ox \\).\n\n2. Tìm tọa độ giao điểm \\( B \\) của \\( (d) \\) với trục tung \\( Oy \\).',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'A(2; 0) và B(0; -4)',
+    acceptedAnswers: ['A(2;0), B(0;-4)', 'A(2; 0), B(0; -4)'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'system-solution',
+      fields: [
+        { key: 'x_A', label: 'Hoành độ giao điểm A với Ox:', valueType: 'number', placeholder: '2' },
+        { key: 'y_B', label: 'Tung độ giao điểm B với Oy:', valueType: 'number', placeholder: '-4' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      x_A: '2',
+      y_B: '-4'
+    }
+  },
+  {
+    id: 'math-q49',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho đường thẳng \\( (d): y = x + m \\) (với \\( m \\neq 0 \\)). Tìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) cắt trục hoành tại điểm \\( A \\), cắt trục tung tại điểm \\( B \\) sao cho diện tích tam giác \\( OAB \\) bằng 18.',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: 'm = 6 hoặc m = -6',
+    acceptedAnswers: ['m=6, m=-6', '6, -6', '6 hoặc -6', '±6'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm1', label: 'm1 =', valueType: 'number', placeholder: '6' },
+        { key: 'm2', label: 'm2 =', valueType: 'number', placeholder: '-6' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m1: '6',
+      m2: '-6'
+    },
+    acceptedFinalAnswers: [
+      { m1: '-6', m2: '6' }
+    ]
+  },
+  {
+    id: 'math-q50',
+    subjectId: 'math',
+    topicId: 'math-t4',
+    questionTypeId: 'math-qt5',
+    content: 'Cho parabol \\( (P): y = x^2 \\) và đường thẳng \\( (d): y = 2x + m \\).\n\nTìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) tiếp xúc với parabol \\( (P) \\).',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: 'm = -1',
+    acceptedAnswers: ['m=-1', '-1'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'm', label: 'Hệ số m =', valueType: 'number', placeholder: '-1', hint: 'Nhập giá trị m để d tiếp xúc với P.' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      m: '-1'
+    }
+  },
+  {
+    id: 'math-q51',
+    subjectId: 'math',
+    topicId: 'math-t6',
+    questionTypeId: 'math-qt8',
+    content: 'Một hộp đựng 15 tấm thẻ cùng loại được ghi số từ 1 đến 15, hai thẻ khác nhau thì ghi hai số khác nhau. Xét phép thử "Rút ngẫu nhiên một tấm thẻ trong hộp".\n\n1. Viết không gian mẫu \\( \\Omega \\) của phép thử.\n\n2. Tính xác suất của biến cố \\( A \\): "Rút được thẻ ghi số chia hết cho 5".',
+    difficulty: 'easy',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2025,
+    correctAnswer: 'Ω = {1; 2; ...; 15}; P(A) = 1/5',
+    acceptedAnswers: ['1/5', '0.2', 'P(A)=1/5'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'n_omega', label: 'Số phần tử không gian mẫu n(Ω):', valueType: 'number', placeholder: '15' },
+        { key: 'prob', label: 'Xác suất P(A):', valueType: 'fraction', placeholder: '1/5' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      n_omega: '15',
+      prob: '1/5'
+    }
+  },
+  {
+    id: 'math-q52',
+    subjectId: 'math',
+    topicId: 'math-t6',
+    questionTypeId: 'math-qt8',
+    content: 'Gieo một con xúc xắc cân đối và đồng chất.\n\nTính xác suất của biến cố \\( B \\): "Mặt xuất hiện có số chấm là số nguyên tố".',
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    correctAnswer: 'P(B) = 1/2',
+    acceptedAnswers: ['1/2', '0.5', 'P(B)=1/2'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'prob', label: 'Xác suất P(B):', valueType: 'fraction', placeholder: '1/2' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      prob: '1/2'
+    }
+  },
+  {
+    id: 'math-q53',
+    subjectId: 'math',
+    topicId: 'math-t6',
+    questionTypeId: 'math-qt8',
+    content: 'Một hộp chứa 5 viên bi màu đỏ, 3 viên bi màu xanh và 2 viên bi màu vàng có cùng kích thước và khối lượng. Lấy ngẫu nhiên 1 viên bi trong hộp.\n\nTính xác suất để lấy được viên bi màu xanh.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '3/10',
+    acceptedAnswers: ['3/10', '0.3', 'P=3/10'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'prob', label: 'Xác suất lấy bi xanh:', valueType: 'fraction', placeholder: '3/10' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      prob: '3/10'
+    }
+  },
+  {
+    id: 'math-q54',
+    subjectId: 'math',
+    topicId: 'math-t6',
+    questionTypeId: 'math-qt8',
+    content: 'Chọn ngẫu nhiên một số tự nhiên có hai chữ số (từ 10 đến 99).\n\nTính xác suất để số được chọn là số chính phương.',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: '1/15',
+    acceptedAnswers: ['1/15', 'P=1/15'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'n_omega', label: 'Số các số có 2 chữ số n(Ω):', valueType: 'number', placeholder: '90' },
+        { key: 'prob', label: 'Xác suất để chọn số chính phương:', valueType: 'fraction', placeholder: '1/15' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      n_omega: '90',
+      prob: '1/15'
+    }
+  },
+  {
+    id: 'math-q55',
+    subjectId: 'math',
+    topicId: 'math-t6',
+    questionTypeId: 'math-qt8',
+    content: 'Một hộp chứa 50 tấm thẻ cùng loại được ghi số từ 1 đến 50. Rút ngẫu nhiên một tấm thẻ ghi số \\( c \\).\n\nTính xác suất của biến cố để phương trình \\( x^2 - 8x + c = 0 \\) có hai nghiệm phân biệt.',
+    difficulty: 'hard',
+    sourceType: 'official_exam',
+    province: 'Bình Định',
+    year: 2025,
+    correctAnswer: '3/10',
+    acceptedAnswers: ['3/10', '0.3', 'P=3/10'],
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'prob', label: 'Xác suất cần tính:', valueType: 'fraction', placeholder: '3/10' }
+      ],
+      proofImageRequired: true,
+      autoCheckMode: 'keyed-numeric'
+    },
+    correctFinalAnswer: {
+      prob: '3/10'
     }
   }
 ];
@@ -2819,6 +3302,518 @@ export const mathSolutions: Solution[] = [
     ],
     reviewSuggestions: [
       'Ghi nhớ quy tắc nhanh: phương trình bậc hai có hai nghiệm trái dấu khi và chỉ khi \\(ac < 0\\).'
+    ]
+  },
+  {
+    id: 'math-s41',
+    questionId: 'math-q41',
+    recognition: 'Đề bài cho biết đồ thị parabol đi qua điểm A(1; 1), đây là dạng toán thay tọa độ để xác định hệ số a của parabol y = ax².',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Thay tọa độ điểm A(1; 1) để tìm a',
+        explanation: 'Vì điểm A(1; 1) thuộc đồ thị hàm số \\( y = ax^2 \\) nên khi thay \\( x = 1 \\) và \\( y = 1 \\) vào phương trình, ta được:',
+        formula: '1 = a \\cdot 1^2 \\Rightarrow a = 1',
+        result: 'Tìm được hệ số \\( a = 1 \\). Hàm số là \\( y = x^2 \\).'
+      },
+      {
+        order: 2,
+        title: 'Tính giá trị hàm số khi x = -3',
+        explanation: 'Thay \\( x = -3 \\) vào phương trình hàm số vừa tìm được \\( y = x^2 \\):',
+        formula: 'y = (-3)^2 = 9',
+        result: 'Giá trị hàm số là 9.'
+      }
+    ],
+    finalAnswer: 'a = 1; y = 9',
+    commonMistakes: [
+      'Nhầm lẫn thứ tự tọa độ thay hoành độ và tung độ.',
+      'Tính sai bình phương của số âm: \\( (-3)^2 \\) ra -9 thay vì 9.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: điểm thuộc đồ thị thì tọa độ của nó phải thỏa mãn phương trình đồ thị.'
+    ]
+  },
+  {
+    id: 'math-s42',
+    questionId: 'math-q42',
+    recognition: 'Đề bài yêu cầu tìm tọa độ giao điểm của đường thẳng với các trục tọa độ Ox và Oy.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm giao điểm với trục tung Oy',
+        explanation: 'Mọi điểm nằm trên trục tung Oy đều có hoành độ \\( x = 0 \\). Thay \\( x = 0 \\) vào phương trình đường thẳng \\( y = -3x + 2 \\):',
+        formula: 'y = -3 \\cdot 0 + 2 = 2',
+        result: 'Tung độ giao điểm là \\( y = 2 \\). Vậy tọa độ giao điểm với trục tung là \\( B(0; 2) \\).'
+      },
+      {
+        order: 2,
+        title: 'Tìm giao điểm với trục hoành Ox',
+        explanation: 'Mọi điểm nằm trên trục hoành Ox đều có tung độ \\( y = 0 \\). Thay \\( y = 0 \\) vào phương trình đường thẳng \\( y = -3x + 2 \\):',
+        formula: '0 = -3x + 2 \\Rightarrow 3x = 2 \\Rightarrow x = \\frac{2}{3}',
+        result: 'Hoành độ giao điểm là \\( x = \\frac{2}{3} \\). Vậy tọa độ giao điểm với trục hoành là \\( A(\\frac{2}{3}; 0) \\).'
+      }
+    ],
+    finalAnswer: 'B(0; 2) và A(2/3; 0)',
+    commonMistakes: [
+      'Nhầm lẫn hoành độ và tung độ (ví dụ viết giao điểm với Ox là (0; 2/3)).',
+      'Giải sai phương trình bậc nhất cơ bản.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: Giao với Oy thì cho x = 0; Giao với Ox thì cho y = 0.'
+    ]
+  },
+  {
+    id: 'math-s43',
+    questionId: 'math-q43',
+    recognition: 'Đề bài yêu cầu tìm tham số m để diện tích tam giác OAB tạo bởi đường thẳng và hai trục tọa độ bằng 8. Đây là bài toán giao điểm kết hợp hình học Oxy.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm tọa độ giao điểm của (d) với hai trục tọa độ',
+        explanation: 'Đường thẳng \\( (d): y = x + m \\).\n- Giao với Oy: Cho \\( x = 0 \\Rightarrow y = m \\Rightarrow B(0; m) \\).\n- Giao với Ox: Cho \\( y = 0 \\Rightarrow x + m = 0 \\Rightarrow x = -m \\Rightarrow A(-m; 0) \\).',
+        formula: 'A(-m; 0) \\quad B(0; m)',
+        result: 'Giao điểm với Ox là A(-m; 0) và giao điểm với Oy là B(0; m).'
+      },
+      {
+        order: 2,
+        title: 'Tính độ dài hai cạnh góc vuông OA, OB',
+        explanation: 'Tam giác OAB vuông tại O. Độ dài hai cạnh góc vuông là trị tuyệt đối hoành độ của A và tung độ của B:',
+        formula: 'OA = |-m| = |m|; \\quad OB = |m|',
+        result: 'OA = |m| và OB = |m|.'
+      },
+      {
+        order: 3,
+        title: 'Lập phương trình diện tích và giải tìm m',
+        explanation: 'Diện tích tam giác vuông OAB là:\n\\( S_{OAB} = \\frac{1}{2} OA \\cdot OB = 8 \\)',
+        formula: '\\frac{1}{2} |m| \\cdot |m| = 8 \\Rightarrow m^2 = 16 \\Rightarrow m = \\pm 4',
+        result: 'Tìm được \\( m = 4 \\) hoặc \\( m = -4 \\) (thỏa mãn điều kiện \\( m \\neq 0 \\)).'
+      }
+    ],
+    finalAnswer: 'm = 4 hoặc m = -4',
+    commonMistakes: [
+      'Quên dấu trị tuyệt đối khi tính độ dài đoạn thẳng, dẫn đến viết OA = -m và giải thiếu trường hợp khi m âm.',
+      'Tính sai diện tích tam giác vuông (quên hệ số 1/2).'
+    ],
+    reviewSuggestions: [
+      'Luôn dùng trị tuyệt đối khi tính độ dài đoạn thẳng trên các trục tọa độ Oxy: \\( OA = |x_A|, OB = |y_B| \\).'
+    ]
+  },
+  {
+    id: 'math-s44',
+    questionId: 'math-q44',
+    recognition: 'Đây là bài toán tìm giao điểm của parabol và đường thẳng bằng cách lập phương trình hoành độ giao điểm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Lập phương trình hoành độ giao điểm',
+        explanation: 'Hoành độ giao điểm của parabol (P) và đường thẳng (d) là nghiệm của phương trình:',
+        formula: 'x^2 = x + 2 \\Leftrightarrow x^2 - x - 2 = 0',
+        result: 'Ta thu được phương trình bậc hai: \\( x^2 - x - 2 = 0 \\).'
+      },
+      {
+        order: 2,
+        title: 'Giải phương trình tìm hoành độ x',
+        explanation: 'Phương trình \\( x^2 - x - 2 = 0 \\) có dạng \\( a - b + c = 1 - (-1) + (-2) = 0 \\), nên có hai nghiệm:',
+        formula: 'x_1 = -1; \\quad x_2 = -\\frac{c}{a} = 2',
+        result: 'Tìm được hai hoành độ giao điểm là \\( x = -1 \\) và \\( x = 2 \\).'
+      },
+      {
+        order: 3,
+        title: 'Tìm tung độ y tương ứng và kết luận tọa độ giao điểm',
+        explanation: 'Thay các hoành độ vừa tìm được vào phương trình \\( y = x^2 \\):\n- Với \\( x = -1 \\Rightarrow y = (-1)^2 = 1 \\Rightarrow A(-1; 1) \\).\n- Với \\( x = 2 \\Rightarrow y = 2^2 = 4 \\Rightarrow B(2; 4) \\).',
+        formula: 'y_1 = 1; \\quad y_2 = 4',
+        result: 'Tọa độ hai giao điểm là \\( A(-1; 1) \\) và \\( B(2; 4) \\).'
+      }
+    ],
+    finalAnswer: 'A(-1; 1) và B(2; 4)',
+    commonMistakes: [
+      'Chuyển vế sai dấu dẫn đến giải sai nghiệm của phương trình hoành độ giao điểm.',
+      'Chỉ tìm hoành độ x mà quên tính tung độ y để đưa ra tọa độ giao điểm dạng (x; y).'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: Giao parabol và đường thẳng luôn đưa về giải phương trình hoành độ giao điểm.'
+    ]
+  },
+  {
+    id: 'math-s45',
+    questionId: 'math-q45',
+    recognition: 'Đề bài yêu cầu tìm tham số m để đường thẳng cắt parabol tại hai điểm phân biệt. Ta lập phương trình hoành độ giao điểm và đặt điều kiện cho biệt thức Delta dương.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Lập phương trình hoành độ giao điểm',
+        explanation: 'Phương trình hoành độ giao điểm của (P) và (d) là:',
+        formula: 'x^2 = 2x + m \\Leftrightarrow x^2 - 2x - m = 0',
+        result: 'Phương trình hoành độ giao điểm: \\( x^2 - 2x - m = 0 \\) (1).'
+      },
+      {
+        order: 2,
+        title: 'Tìm điều kiện có hai điểm phân biệt',
+        explanation: 'Đường thẳng (d) cắt parabol (P) tại hai điểm phân biệt khi và chỉ khi phương trình (1) có hai nghiệm phân biệt, tức là biệt thức \\( \\Delta\' > 0 \\):',
+        formula: '\\Delta\' = (-1)^2 - 1 \\cdot (-m) = 1 + m',
+        result: 'Ta cần \\( 1 + m > 0 \\).'
+      },
+      {
+        order: 3,
+        title: 'Giải bất phương trình và kết luận',
+        explanation: 'Giải bất phương trình điều kiện:',
+        formula: '1 + m > 0 \\Rightarrow m > -1',
+        result: 'Điều kiện của m là \\( m > -1 \\).'
+      }
+    ],
+    finalAnswer: 'm > -1',
+    commonMistakes: [
+      'Tính sai biệt thức Delta (quên nhân 4 hoặc nhầm dấu ở tích ac).',
+      'Nhầm điều kiện cắt tại hai điểm phân biệt thành có nghiệm kép hoặc vô nghiệm.'
+    ],
+    reviewSuggestions: [
+      'Xem lại mối quan hệ: Số nghiệm phương trình hoành độ giao điểm = số giao điểm của hai đồ thị.'
+    ]
+  },
+  {
+    id: 'math-s46',
+    questionId: 'math-q46',
+    recognition: 'Đề bài yêu cầu xác định hệ số a của parabol y = ax² đi qua điểm M(2; 4) và kiểm tra tính thuộc đồ thị của điểm N(-1; 2).',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Thay tọa độ điểm M(2; 4) để tìm a',
+        explanation: 'Vì M(2; 4) thuộc parabol \\( y = ax^2 \\), thay \\( x = 2 \\) và \\( y = 4 \\) vào phương trình ta được:',
+        formula: '4 = a \\cdot 2^2 \\Rightarrow 4 = 4a \\Rightarrow a = 1',
+        result: 'Tìm được hệ số \\( a = 1 \\). Phương trình parabol là \\( y = x^2 \\).'
+      },
+      {
+        order: 2,
+        title: 'Kiểm tra điểm N(-1; 2) có thuộc parabol hay không',
+        explanation: 'Thay tọa độ điểm \\( N(-1; 2) \\) tức là \\( x = -1, y = 2 \\) vào phương trình \\( y = x^2 \\):',
+        formula: '\\text{Vế trái: } y = 2; \\quad \\text{Vế phải: } x^2 = (-1)^2 = 1 \\neq 2',
+        result: 'Do vế trái khác vế phải (2 ≠ 1), điểm N(-1; 2) không thuộc parabol \\( y = x^2 \\).'
+      }
+    ],
+    finalAnswer: 'a = 1; N không thuộc (P)',
+    commonMistakes: [
+      'Tính sai bình phương \\( (-1)^2 = -1 \\) dẫn đến kết luận nhầm.',
+      'Khẳng định điểm N thuộc đồ thị mà không thay số kiểm tra.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: điểm thuộc đồ thị khi và chỉ khi tọa độ của nó thỏa mãn phương trình đồ thị.'
+    ]
+  },
+  {
+    id: 'math-s47',
+    questionId: 'math-q47',
+    recognition: 'Đây là bài toán lập bảng giá trị vẽ parabol y = ax² (với a = -0.5) và tìm điểm có tung độ cho trước.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính các giá trị y tương ứng',
+        explanation: 'Thay các giá trị x vào công thức \\( y = -0.5x^2 \\):\n- Với \\( x = 0 \\Rightarrow y = 0 \\).\n- Với \\( x = \\pm 1 \\Rightarrow y = -0.5 \\cdot 1 = -0.5 \\).\n- Với \\( x = \\pm 2 \\Rightarrow y = -0.5 \\cdot 4 = -2 \\).',
+        formula: '\\begin{array}{|c|c|c|c|c|c|} \\hline x & -2 & -1 & 0 & 1 & 2 \\\\ \\hline y & -2 & -0.5 & 0 & -0.5 & -2 \\\\ \\hline \\end{array}',
+        result: 'Bảng giá trị tương ứng là: (0;0), (±1; -0.5), (±2; -2).'
+      },
+      {
+        order: 2,
+        title: 'Tìm các điểm có tung độ bằng -8',
+        explanation: 'Thay \\( y = -8 \\) vào phương trình đồ thị \\( y = -0.5x^2 \\) để tìm hoành độ x:',
+        formula: '-8 = -0.5x^2 \\Rightarrow x^2 = 16 \\Rightarrow x = \\pm 4',
+        result: 'Ta tìm được hai giá trị hoành độ \\( x = -4 \\) và \\( x = 4 \\). Tọa độ các điểm là \\( (-4; -8) \\) và \\( (4; -8) \\).'
+      }
+    ],
+    finalAnswer: 'Các điểm (-4; -8) và (4; -8)',
+    commonMistakes: [
+      'Nhầm lẫn dấu khi giải phương trình \\( -8 = -0.5x^2 \\) dẫn đến \\( x^2 = -16 \\) (vô nghiệm).',
+      'Quên lấy giá trị âm khi giải \\( x^2 = 16 \\) (chỉ kết luận x = 4).'
+    ],
+    reviewSuggestions: [
+      'Lưu ý parabol luôn đối xứng qua trục tung nên nếu điểm (x; y) thuộc đồ thị thì (-x; y) cũng thuộc đồ thị.'
+    ]
+  },
+  {
+    id: 'math-s48',
+    questionId: 'math-q48',
+    recognition: 'Đề bài yêu cầu tìm giao điểm của đường thẳng d: y = 2x - 4 với hai trục tọa độ Ox và Oy.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm giao điểm A với trục hoành Ox',
+        explanation: 'Giao điểm với trục hoành Ox có tung độ \\( y = 0 \\). Thay \\( y = 0 \\) vào phương trình đường thẳng:',
+        formula: '0 = 2x - 4 \\Rightarrow 2x = 4 \\Rightarrow x = 2',
+        result: 'Hoành độ giao điểm là \\( x = 2 \\). Vậy tọa độ giao điểm A là \\( A(2; 0) \\).'
+      },
+      {
+        order: 2,
+        title: 'Tìm giao điểm B với trục tung Oy',
+        explanation: 'Giao điểm với trục tung Oy có hoành độ \\( x = 0 \\). Thay \\( x = 0 \\) vào phương trình đường thẳng:',
+        formula: 'y = 2 \\cdot 0 - 4 = -4',
+        result: 'Tung độ giao điểm là \\( y = -4 \\). Vậy tọa độ giao điểm B là \\( B(0; -4) \\).'
+      }
+    ],
+    finalAnswer: 'A(2; 0) và B(0; -4)',
+    commonMistakes: [
+      'Nhầm tọa độ A(2; 0) thành (0; 2) và B(0; -4) thành (-4; 0).',
+      'Tính sai phép chia đơn giản.'
+    ],
+    reviewSuggestions: [
+      'Nắm chắc nguyên lý: Ox luôn đi với y = 0; Oy luôn đi với x = 0.'
+    ]
+  },
+  {
+    id: 'math-s49',
+    questionId: 'math-q49',
+    recognition: 'Đề bài yêu cầu tìm m để đường thẳng cắt hai trục tọa độ tạo thành tam giác có diện tích bằng 18. Phương pháp giải giống bài toán thi thử Bình Định 2024.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định giao điểm với hai trục tọa độ',
+        explanation: 'Đường thẳng \\( (d): y = x + m \\) cắt Oy tại \\( B(0; m) \\), cắt Ox tại \\( A(-m; 0) \\).',
+        formula: 'A(-m; 0), \\quad B(0; m)',
+        result: 'Giao điểm là A(-m; 0) và B(0; m).'
+      },
+      {
+        order: 2,
+        title: 'Tính độ dài OA, OB theo m',
+        explanation: 'OA, OB là khoảng cách từ O đến điểm giao, luôn mang giá trị không âm:',
+        formula: 'OA = |-m| = |m|; \\quad OB = |m|',
+        result: 'OA = |m| và OB = |m|.'
+      },
+      {
+        order: 3,
+        title: 'Lập phương trình diện tích giải tìm m',
+        explanation: 'Diện tích tam giác vuông OAB vuông tại O:',
+        formula: 'S_{OAB} = \\frac{1}{2} OA \\cdot OB = 18 \\Rightarrow \\frac{1}{2} m^2 = 18 \\Rightarrow m^2 = 36 \\Rightarrow m = \\pm 6',
+        result: 'Tìm được hai giá trị thỏa mãn: \\( m = 6 \\) hoặc \\( m = -6 \\) (thỏa mãn \\( m \\neq 0 \\)).'
+      }
+    ],
+    finalAnswer: 'm = 6 hoặc m = -6',
+    commonMistakes: [
+      'Quên trị tuyệt đối làm mất nghiệm âm m = -6.',
+      'Quên hệ số 1/2 của công thức diện tích tam giác vuông.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: khoảng cách tọa độ luôn luôn không âm, phải có trị tuyệt đối.'
+    ]
+  },
+  {
+    id: 'math-s50',
+    questionId: 'math-q50',
+    recognition: 'Đề bài yêu cầu tìm tham số m để đường thẳng và parabol tiếp xúc nhau. Điều kiện tiếp xúc là phương trình hoành độ giao điểm có nghiệm kép (Delta bằng 0).',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Lập phương trình hoành độ giao điểm',
+        explanation: 'Phương trình hoành độ giao điểm của (P) và (d) là:',
+        formula: 'x^2 = 2x + m \\Leftrightarrow x^2 - 2x - m = 0 \\quad (1)',
+        result: 'Phương trình hoành độ giao điểm: \\( x^2 - 2x - m = 0 \\).'
+      },
+      {
+        order: 2,
+        title: 'Tính Delta phẩy và đặt điều kiện tiếp xúc',
+        explanation: 'Đường thẳng (d) tiếp xúc với parabol (P) khi và chỉ khi phương trình (1) có nghiệm kép, tức là biệt thức \\( \\Delta\' = 0 \\):',
+        formula: '\\Delta\' = (-1)^2 - 1 \\cdot (-m) = 1 + m = 0',
+        result: 'Ta có phương trình: \\( 1 + m = 0 \\).'
+      },
+      {
+        order: 3,
+        title: 'Giải tìm m và kết luận',
+        explanation: 'Giải phương trình đơn giản:',
+        formula: '1 + m = 0 \\Rightarrow m = -1',
+        result: 'Hệ số m cần tìm là \\( m = -1 \\).'
+      }
+    ],
+    finalAnswer: 'm = -1',
+    commonMistakes: [
+      'Nhầm điều kiện tiếp xúc thành cắt nhau (Delta > 0) hoặc không cắt (Delta < 0).',
+      'Tính sai Delta phẩy hoặc nhầm dấu tham số m.'
+    ],
+    reviewSuggestions: [
+      'Ghi nhớ: Tiếp xúc ⇔ Phương trình hoành độ giao điểm có nghiệm kép ⇔ Delta = 0.'
+    ]
+  },
+  {
+    id: 'math-s51',
+    questionId: 'math-q51',
+    recognition: 'Đây là bài toán xác định không gian mẫu và tính xác suất của biến cố chia hết, bám sát đề thi tuyển sinh Bình Định 2025.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định phép thử và viết không gian mẫu Ω',
+        explanation: 'Phép thử là: "Rút ngẫu nhiên một tấm thẻ trong hộp chứa 15 thẻ từ 1 đến 15". Không gian mẫu Ω gồm tập hợp tất cả các số từ 1 đến 15:',
+        formula: '\\Omega = \\{1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; 14; 15\\}',
+        result: 'Số phần tử của không gian mẫu là \\( n(\\Omega) = 15 \\).'
+      },
+      {
+        order: 2,
+        title: 'Xác định tập hợp kết quả thuận lợi cho biến cố A',
+        explanation: 'Biến cố A: "Rút được thẻ ghi số chia hết cho 5". Trong không gian mẫu, các số chia hết cho 5 là bội của 5:',
+        formula: 'A = \\{5; 10; 15\\}',
+        result: 'Số kết quả thuận lợi là \\( n(A) = 3 \\).'
+      },
+      {
+        order: 3,
+        title: 'Tính xác suất của biến cố A',
+        explanation: 'Công thức tính xác suất cổ điển là tỉ số giữa số kết quả thuận lợi và tổng số kết quả có thể xảy ra:',
+        formula: 'P(A) = \\frac{n(A)}{n(\\Omega)} = \\frac{3}{15} = \\frac{1}{5}',
+        result: 'Xác suất cần tìm là \\( P(A) = \\frac{1}{5} \\) (hoặc 0.2).'
+      }
+    ],
+    finalAnswer: 'Ω = {1; 2; ...; 15}; P(A) = 1/5',
+    commonMistakes: [
+      'Chỉ ghi số lượng phần tử n(Ω) = 15 mà quên viết cụ thể tập hợp Ω khi đề bài yêu cầu "viết không gian mẫu".',
+      'Đếm thiếu phần tử (ví dụ quên số 15 hoặc số 10 trong biến cố A).'
+    ],
+    reviewSuggestions: [
+      'Luôn đọc kỹ yêu cầu đề bài xem có bắt viết cụ thể tập hợp không gian mẫu và biến cố ra hay không.'
+    ]
+  },
+  {
+    id: 'math-s52',
+    questionId: 'math-q52',
+    recognition: 'Đây là bài toán tính xác suất khi gieo một con xúc xắc liên quan đến tập hợp số nguyên tố.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định không gian mẫu Ω',
+        explanation: 'Một con xúc xắc có 6 mặt từ 1 đến 6 chấm:',
+        formula: '\\Omega = \\{1; 2; 3; 4; 5; 6\\}',
+        result: 'Số phần tử của không gian mẫu là \\( n(\\Omega) = 6 \\).'
+      },
+      {
+        order: 2,
+        title: 'Xác định biến cố B và đếm số thuận lợi',
+        explanation: 'Biến cố B: "Mặt xuất hiện là số nguyên tố". Các số nguyên tố từ 1 đến 6 là các số lớn hơn 1 và chỉ chia hết cho 1 và chính nó:',
+        formula: 'B = \\{2; 3; 5\\}',
+        result: 'Các số nguyên tố gồm 2, 3, 5. Số kết quả thuận lợi là \\( n(B) = 3 \\).'
+      },
+      {
+        order: 3,
+        title: 'Tính xác suất biến cố B',
+        explanation: 'Áp dụng công thức tính xác suất:',
+        formula: 'P(B) = \\frac{n(B)}{n(\\Omega)} = \\frac{3}{6} = \\frac{1}{2}',
+        result: 'Xác suất của biến cố B là \\( P(B) = \\frac{1}{2} \\) (hoặc 0.5).'
+      }
+    ],
+    finalAnswer: 'P(B) = 1/2',
+    commonMistakes: [
+      'Nhầm lẫn số 1 là số nguyên tố dẫn đến đếm B = {1, 2, 3, 5} (sai).',
+      'Không coi số 2 là số nguyên tố (2 là số nguyên tố chẵn duy nhất).'
+    ],
+    reviewSuggestions: [
+      'Nhớ kỹ định nghĩa số nguyên tố: là số tự nhiên lớn hơn 1, chỉ có hai ước là 1 và chính nó. Số 1 KHÔNG PHẢI là số nguyên tố.'
+    ]
+  },
+  {
+    id: 'math-s53',
+    questionId: 'math-q53',
+    recognition: 'Đây là dạng toán chọn ngẫu nhiên một vật từ nhóm vật (không ghi số), tính xác suất theo số lượng vật phẩm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính tổng số kết quả có thể xảy ra n(Ω)',
+        explanation: 'Tổng số bi trong hộp là tổng số bi đỏ, xanh và vàng:',
+        formula: 'n(\\Omega) = 5 + 3 + 2 = 10',
+        result: 'Có tất cả 10 viên bi, tương ứng 10 kết quả có thể xảy ra.'
+      },
+      {
+        order: 2,
+        title: 'Xác định số kết quả thuận lợi cho biến cố lấy bi xanh',
+        explanation: 'Số viên bi màu xanh trong hộp là 3, nên số kết quả thuận lợi cho biến cố là 3:',
+        formula: 'n(A) = 3',
+        result: 'Có 3 kết quả thuận lợi.'
+      },
+      {
+        order: 3,
+        title: 'Tính xác suất và kết luận',
+        explanation: 'Xác suất lấy được viên bi màu xanh:',
+        formula: 'P(A) = \\frac{n(A)}{n(\\Omega)} = \\frac{3}{10}',
+        result: 'Xác suất là \\( P(A) = \\frac{3}{10} \\) (hoặc 0.3).'
+      }
+    ],
+    finalAnswer: '3/10',
+    commonMistakes: [
+      'Tính sai tổng số bi ở mẫu số.',
+      'Không rút gọn kết quả (nếu phân số chưa tối giản, tuy nhiên 3/10 đã tối giản).'
+    ],
+    reviewSuggestions: [
+      'Dạng chọn vật này cực kì cơ bản, chỉ cần đếm đúng số lượng vật nhóm cần chọn chia cho tổng số lượng.'
+    ]
+  },
+  {
+    id: 'math-s54',
+    questionId: 'math-q54',
+    recognition: 'Đây là bài toán chọn một số tự nhiên có 2 chữ số thỏa mãn điều kiện số học là số chính phương.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính số các số tự nhiên có hai chữ số',
+        explanation: 'Các số tự nhiên có hai chữ số là các số từ 10 đến 99. Số lượng các số này là:',
+        formula: 'n(\\Omega) = 99 - 10 + 1 = 90',
+        result: 'Số phần tử không gian mẫu là \\( n(\\Omega) = 90 \\).'
+      },
+      {
+        order: 2,
+        title: 'Liệt kê các số chính phương có hai chữ số',
+        explanation: 'Số chính phương là bình phương của một số tự nhiên. Ta tìm các số chính phương nằm trong khoảng từ 10 đến 99:\n- \\( 3^2 = 9 \\) (loại)\n- \\( 4^2 = 16 \\) (nhận)\n- \\( 5^2 = 25 \\) (nhận)\n- \\( 6^2 = 36 \\) (nhận)\n- \\( 7^2 = 49 \\) (nhận)\n- \\( 8^2 = 64 \\) (nhận)\n- \\( 9^2 = 81 \\) (nhận)\n- \\( 10^2 = 100 \\) (loại)',
+        formula: 'C = \\{16; 25; 36; 49; 64; 81\\}',
+        result: 'Có 6 số chính phương thỏa mãn. Số kết quả thuận lợi là \\( n(C) = 6 \\).'
+      },
+      {
+        order: 3,
+        title: 'Tính xác suất chọn được số chính phương',
+        explanation: 'Xác suất cần tính:',
+        formula: 'P(C) = \\frac{n(C)}{n(\\Omega)} = \\frac{6}{90} = \\frac{1}{15}',
+        result: 'Xác suất là \\( \\frac{1}{15} \\).'
+      }
+    ],
+    finalAnswer: '1/15',
+    commonMistakes: [
+      'Tính sai số lượng các số có 2 chữ số (ví dụ đếm ra 89 hoặc 99 số).',
+      'Liệt kê thiếu số chính phương (ví dụ quên 16 hoặc 81), hoặc đếm nhầm cả số có 1 chữ số (như 9) hoặc 3 chữ số (như 100).'
+    ],
+    reviewSuggestions: [
+      'Nhớ cách tính số lượng số trong đoạn [a, b]: Số lượng = b - a + 1.'
+    ]
+  },
+  {
+    id: 'math-s55',
+    questionId: 'math-q55',
+    recognition: 'Đây là bài toán xác suất kết hợp điều kiện phương trình bậc hai có 2 nghiệm phân biệt (Đề thi Chuyên Toán/Tin Bình Định 2025).',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định không gian mẫu',
+        explanation: 'Thẻ ghi số từ 1 đến 50, rút ngẫu nhiên 1 thẻ ghi số c. Số kết quả có thể xảy ra là:',
+        formula: 'n(\\Omega) = 50',
+        result: 'Không gian mẫu có 50 phần tử.'
+      },
+      {
+        order: 2,
+        title: 'Tìm điều kiện để phương trình bậc hai có hai nghiệm phân biệt',
+        explanation: 'Phương trình \\( x^2 - 8x + c = 0 \\) có hai nghiệm phân biệt khi và chỉ khi biệt thức \\( \\Delta\' > 0 \\):',
+        formula: '\\Delta\' = (-4)^2 - 1 \\cdot c = 16 - c > 0 \\Rightarrow c < 16',
+        result: 'Ta cần điều kiện của tham số c là \\( c < 16 \\).'
+      },
+      {
+        order: 3,
+        title: 'Đếm số kết quả thuận lợi của c',
+        explanation: 'Vì c là số được ghi trên thẻ từ 1 đến 50 nên các giá trị c nguyên thỏa mãn \\( c < 16 \\) là các số từ 1 đến 15:',
+        formula: 'c \\in \\{1; 2; 3; ...; 15\\}',
+        result: 'Có 15 kết quả thuận lợi cho biến cố.'
+      },
+      {
+        order: 4,
+        title: 'Tính xác suất của biến cố',
+        explanation: 'Xác suất cần tìm:',
+        formula: 'P = \\frac{15}{50} = \\frac{3}{10}',
+        result: 'Xác suất là \\( P = \\frac{3}{10} \\) (hoặc 0.3).'
+      }
+    ],
+    finalAnswer: '3/10',
+    commonMistakes: [
+      'Giải sai bất phương trình \\( 16 - c > 0 \\) (ví dụ ra \\( c > 16 \\)).',
+      'Đếm sai số giá trị c thỏa mãn (ví dụ lấy cả giá trị c = 16 vì nhầm điều kiện có nghiệm kép).'
+    ],
+    reviewSuggestions: [
+      'Học chắc điều kiện nghiệm phương trình bậc hai: 2 nghiệm phân biệt ⇔ Delta > 0.'
     ]
   }
 ];
