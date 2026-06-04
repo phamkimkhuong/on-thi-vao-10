@@ -38,6 +38,8 @@ const getSubTenseName = (subId: string): string => {
     case 'past_simple': return 'Thì Quá khứ đơn';
     case 'present_continuous': return 'Thì Hiện tại tiếp diễn';
     case 'past_continuous': return 'Thì Quá khứ tiếp diễn';
+    case 'present_perfect': return 'Thì Hiện tại hoàn thành';
+    case 'future_simple': return 'Thì Tương lai đơn';
     case 'all': return 'Tổng ôn thông minh';
     default: return '';
   }
@@ -56,6 +58,10 @@ const detectSubTense = (attempt: UserAttempt): string => {
     return 'present_continuous';
   } else if ((num >= 65 && num <= 84) || (num >= 162 && num <= 181)) {
     return 'past_continuous';
+  } else if (num >= 182 && num <= 201) {
+    return 'present_perfect';
+  } else if (num >= 202 && num <= 221) {
+    return 'future_simple';
   }
   return '';
 };
@@ -73,6 +79,10 @@ const getQuestionSubTenseName = (questionId: string): string => {
     return 'Thì Hiện tại tiếp diễn';
   } else if ((num >= 65 && num <= 84) || (num >= 162 && num <= 181)) {
     return 'Thì Quá khứ tiếp diễn';
+  } else if (num >= 182 && num <= 201) {
+    return 'Thì Hiện tại hoàn thành';
+  } else if (num >= 202 && num <= 221) {
+    return 'Thì Tương lai đơn';
   }
   return '';
 };
@@ -92,11 +102,62 @@ export const TeacherDashboard: React.FC = () => {
   const [selectedStudent, setSelectedStudent] = useState<SimulatedStudent | null>(null);
   const [studentProgress, setStudentProgress] = useState<UserProgress | null>(null);
 
-  // Trạng thái xem bài làm để chấm
   const [reviewingItem, setReviewingItem] = useState<PendingGroup | null>(null);
   const [grades, setGrades] = useState<Record<string, { isCorrect: boolean; feedback: string }>>({});
+  const [reviewingStudentAttempts, setReviewingStudentAttempts] = useState<UserAttempt[]>([]);
 
   const [gradingSuccessMsg, setGradingSuccessMsg] = useState<string | null>(null);
+
+  const reviewingStudentStats = useMemo(() => {
+    if (!reviewingItem) return { correct: 0, incorrect: 0 };
+    
+    // Lọc các attempt của học sinh này cho questionTypeId đang duyệt
+    const filtered = reviewingStudentAttempts.filter(
+      a => a.questionTypeId === reviewingItem.questionTypeId
+    );
+    
+    // Nhóm theo questionId và tìm lần làm mới nhất
+    const latestAttemptsByQId: Record<string, UserAttempt> = {};
+    filtered.forEach(a => {
+      const existing = latestAttemptsByQId[a.questionId];
+      if (!existing || new Date(a.createdAt).getTime() > new Date(existing.createdAt).getTime()) {
+        latestAttemptsByQId[a.questionId] = a;
+      }
+    });
+
+    let correct = 0;
+    let incorrect = 0;
+
+    Object.values(latestAttemptsByQId).forEach(attempt => {
+      if (attempt.isCorrect) {
+        correct++;
+      } else {
+        incorrect++;
+      }
+    });
+
+    return { correct, incorrect };
+  }, [reviewingItem, reviewingStudentAttempts]);
+
+  useEffect(() => {
+    if (!reviewingItem) {
+      setReviewingStudentAttempts([]);
+      return;
+    }
+    
+    let active = true;
+    progressService.getAttempts(reviewingItem.student.id).then((attempts) => {
+      if (active) {
+        setReviewingStudentAttempts(attempts);
+      }
+    }).catch(err => {
+      console.error("Error loading attempts for student in review:", err);
+    });
+    
+    return () => {
+      active = false;
+    };
+  }, [reviewingItem]);
 
   const pendingGroups = useMemo(() => {
     const groupsMap = new Map<string, PendingGroup>();
@@ -659,6 +720,17 @@ export const TeacherDashboard: React.FC = () => {
                       Chuyên đề: {mathQuestionTypes.find(t => t.id === reviewingItem.questionTypeId)?.name || englishQuestionTypes.find(t => t.id === reviewingItem.questionTypeId)?.name}
                       {reviewingItem.selectedSubTense && ` (${reviewingItem.selectedSubTense === 'all' ? 'Tổng ôn thông minh' : getSubTenseName(reviewingItem.selectedSubTense)})`}
                     </p>
+                    
+                    {/* Thống kê số câu đúng/sai của học sinh */}
+                    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold mt-1.5 text-muted-foreground bg-slate-50 dark:bg-slate-900/40 px-2.5 py-1.5 rounded-lg border border-border/30 w-fit">
+                      <span className="flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400">
+                        ✅ Đúng/Đạt: <span className="text-foreground font-black">{reviewingStudentStats.correct}</span>
+                      </span>
+                      <span className="text-border">|</span>
+                      <span className="flex items-center gap-0.5 text-rose-600 dark:text-rose-400">
+                        ❌ Sai/Chưa đạt: <span className="text-foreground font-black">{reviewingStudentStats.incorrect}</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
 

@@ -55,13 +55,15 @@ export const PracticeEngine: React.FC = () => {
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
-  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | null>(null);
+  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | null>(null);
   const [customQuestions, setCustomQuestions] = useState<Question[] | null>(null);
   const [selectedTensesForCombo, setSelectedTensesForCombo] = useState<string[]>([
     'present_simple',
     'past_simple',
     'present_continuous',
-    'past_continuous'
+    'past_continuous',
+    'present_perfect',
+    'future_simple'
   ]);
   const [isConfiguringAll, setIsConfiguringAll] = useState(false);
 
@@ -166,6 +168,16 @@ export const PracticeEngine: React.FC = () => {
         filtered = filtered.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
           return (num >= 65 && num <= 84) || (num >= 162 && num <= 181);
+        });
+      } else if (selectedSubTense === 'present_perfect') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 182 && num <= 201;
+        });
+      } else if (selectedSubTense === 'future_simple') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 202 && num <= 221;
         });
       }
     }
@@ -603,6 +615,16 @@ export const PracticeEngine: React.FC = () => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
           return q.questionTypeId === 'eng-qt6' && ((num >= 65 && num <= 84) || (num >= 162 && num <= 181));
         });
+      } else if (tense === 'present_perfect') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && (num >= 182 && num <= 201);
+        });
+      } else if (tense === 'future_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && (num >= 202 && num <= 221);
+        });
       }
       pool = [...pool, ...filtered];
     });
@@ -629,6 +651,8 @@ export const PracticeEngine: React.FC = () => {
       { id: 'past_simple', name: '🗓️ Thì Quá khứ đơn (Past Simple)', desc: 'Tập trung các dấu hiệu thời gian trong quá khứ: yesterday, ago, last summer...' },
       { id: 'present_continuous', name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)', desc: 'Tập trung hành động đang xảy ra: now, at the moment, Look!...' },
       { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)', desc: 'Diễn tả hành động đang xảy ra tại thời điểm quá khứ với liên từ: while...' },
+      { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành (Present Perfect)', desc: 'Tập trung chia has/have + V3/ed với: since, for, just, already, yet, ever, never...' },
+      { id: 'future_simple', name: '🔮 Thì Tương lai đơn & câu điều kiện loại 1 (Future Simple)', desc: 'Tập trung chia will + V nguyên mẫu, won\'t và cấu trúc câu điều kiện loại 1...' },
     ];
 
     const toggleTense = (id: string) => {
@@ -738,7 +762,9 @@ export const PracticeEngine: React.FC = () => {
           ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
           ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
           ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
         ]
       },
       {
@@ -764,6 +790,18 @@ export const PracticeEngine: React.FC = () => {
         name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
         description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
         qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)]
+      },
+      {
+        id: 'present_perfect',
+        name: '✨ Thì Hiện tại hoàn thành (Present Perfect)',
+        description: 'Tập trung chia động từ ở thì Hiện tại hoàn thành (has/have + V3/ed) và phân biệt với Quá khứ đơn.',
+        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`)
+      },
+      {
+        id: 'future_simple',
+        name: '🔮 Thì Tương lai đơn (Future Simple / Will)',
+        description: 'Tập trung chia động từ ở thì Tương lai đơn (will + V) và cấu trúc câu điều kiện loại 1.',
+        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
       }
     ];
 

@@ -2841,5 +2841,686 @@ export const grammarQuestions: Question[] = [
     "difficulty": "hard",
     "sourceType": "manual",
     "validatorType": "choice"
+  },
+  {
+    "id": "eng-q182",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "We ______ each other since we were in primary school.",
+    "options": [
+      "A. know",
+      "B. knew",
+      "C. have known",
+      "D. are knowing"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q183",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "She ______ in Quy Nhon city for five years.",
+    "options": [
+      "A. lives",
+      "B. lived",
+      "C. has lived",
+      "D. is living"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q184",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I ______ my homework yet. Can you wait for a few minutes?",
+    "options": [
+      "A. don't finish",
+      "B. haven't finished",
+      "C. didn't finish",
+      "D. won't finish"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q185",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "They ______ a new house recently.",
+    "options": [
+      "A. buy",
+      "B. bought",
+      "C. have bought",
+      "D. are buying"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q186",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "______ you ever ______ to Da Lat city?",
+    "options": [
+      "A. Did / be",
+      "B. Have / been",
+      "C. Do / be",
+      "D. Are / being"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q187",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "My father ______ just ______ home from work.",
+    "options": [
+      "A. is / arriving",
+      "B. did / arrive",
+      "C. has / arrived",
+      "D. will / arrive"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q188",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "We ______ this film three times already.",
+    "options": [
+      "A. see",
+      "B. saw",
+      "C. have seen",
+      "D. are seeing"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q189",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "She has studied English ______ 2018.",
+    "options": [
+      "A. since",
+      "B. for",
+      "C. ago",
+      "D. in"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q190",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "He has worked as a teacher ______ ten years.",
+    "options": [
+      "A. since",
+      "B. for",
+      "C. ago",
+      "D. already"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q191",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I have ______ eaten traditional Vietnamese Pho before. This is my first time.",
+    "options": [
+      "A. ever",
+      "B. never",
+      "C. already",
+      "D. yet"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q192",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "He ______ his keys. He can't get into his room now.",
+    "options": [
+      "A. loses",
+      "B. lost",
+      "C. has lost",
+      "D. was losing"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q193",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "They ______ Da Nang last summer, but they ______ there since then.",
+    "options": [
+      "A. visited / haven't returned",
+      "B. have visited / didn't return",
+      "C. visited / didn't return",
+      "D. have visited / haven't returned"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q194",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "He ______ his car last week. He has ______ it for only a few days.",
+    "options": [
+      "A. bought / owned",
+      "B. has bought / owned",
+      "C. bought / has owned",
+      "D. has bought / has owned"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q195",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I ______ my teacher yet, but I ______ her yesterday.",
+    "options": [
+      "A. haven't met / saw",
+      "B. didn't meet / have seen",
+      "C. don't meet / saw",
+      "D. haven't met / have seen"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q196",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "How long ______ you ______ this book?",
+    "options": [
+      "A. did / read",
+      "B. have / read",
+      "C. do / read",
+      "D. are / reading"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q197",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "She ______ a letter to her penfriend already.",
+    "options": [
+      "A. writes",
+      "B. wrote",
+      "C. has written",
+      "D. is writing"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q198",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "They ______ that house since they moved to Binh Dinh.",
+    "options": [
+      "A. live",
+      "B. lived",
+      "C. have lived",
+      "D. are living"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q199",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I ______ Quy Nhon beach twice this week.",
+    "options": [
+      "A. visit",
+      "B. visited",
+      "C. have visited",
+      "D. am visiting"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q200",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "She has ______ finished her dinner and is now watching TV.",
+    "options": [
+      "A. already",
+      "B. yet",
+      "C. since",
+      "D. ever"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q201",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "The match ______ already. We are late.",
+    "options": [
+      "A. starts",
+      "B. started",
+      "C. has started",
+      "D. is starting"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q202",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I think more people ______ public transport in the future.",
+    "options": [
+      "A. use",
+      "B. used",
+      "C. will use",
+      "D. are using"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q203",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If you study hard, you ______ the entrance exam.",
+    "options": [
+      "A. pass",
+      "B. passed",
+      "C. will pass",
+      "D. are passing"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q204",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If it rains tomorrow, we ______ the picnic.",
+    "options": [
+      "A. cancel",
+      "B. canceled",
+      "C. will cancel",
+      "D. are canceling"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q205",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "They ______ to Da Lat next week.",
+    "options": [
+      "A. travel",
+      "B. traveled",
+      "C. will travel",
+      "D. are traveling"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q206",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I hope that my health ______ soon.",
+    "options": [
+      "A. improves",
+      "B. improved",
+      "C. will improve",
+      "D. is improving"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q207",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "Your health will improve if you ______ exercise regularly.",
+    "options": [
+      "A. do",
+      "B. did",
+      "C. will do",
+      "D. are doing"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q208",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If she ______ up early, she will catch the bus.",
+    "options": [
+      "A. get",
+      "B. gets",
+      "C. will get",
+      "D. got"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q209",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If he doesn't work hard, he ______ the project.",
+    "options": [
+      "A. fails",
+      "B. failed",
+      "C. will fail",
+      "D. won't fail"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q210",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "We ______ our house tomorrow morning.",
+    "options": [
+      "A. clean",
+      "B. cleaned",
+      "C. will clean",
+      "D. are cleaning"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q211",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I promise I ______ you with your homework tonight.",
+    "options": [
+      "A. help",
+      "B. helped",
+      "C. will help",
+      "D. am helping"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q212",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "She ______ there on time, probably.",
+    "options": [
+      "A. arrives",
+      "B. arrived",
+      "C. will arrive",
+      "D. is arriving"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q213",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "______ you ______ the English club tomorrow?",
+    "options": [
+      "A. Do / join",
+      "B. Will / join",
+      "C. Did / join",
+      "D. Are / joining"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q214",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I think it ______ tomorrow afternoon, so take an umbrella.",
+    "options": [
+      "A. rains",
+      "B. rained",
+      "C. will rain",
+      "D. is raining"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q215",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If you ______ now, you will be late for the train.",
+    "options": [
+      "A. don't leave",
+      "B. won't leave",
+      "C. didn't leave",
+      "D. aren't leaving"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q216",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "They ______ to school by bus tomorrow.",
+    "options": [
+      "A. go",
+      "B. went",
+      "C. will go",
+      "D. are going"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q217",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If they buy a new car, they ______ a lot of money.",
+    "options": [
+      "A. spend",
+      "B. spent",
+      "C. will spend",
+      "D. are spending"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q218",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I hope they ______ more trees in this area soon.",
+    "options": [
+      "A. plant",
+      "B. planted",
+      "C. will plant",
+      "D. are planting"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q219",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If it is sunny this weekend, we ______ to the beach.",
+    "options": [
+      "A. go",
+      "B. went",
+      "C. will go",
+      "D. would go"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q220",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "I ______ you back the money as soon as I get paid.",
+    "options": [
+      "A. pay",
+      "B. paid",
+      "C. will pay",
+      "D. would pay"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
+  },
+  {
+    "id": "eng-q221",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "They ______ late if the traffic is heavy.",
+    "options": [
+      "A. are",
+      "B. were",
+      "C. will be",
+      "D. would be"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "validatorType": "choice"
   }
 ];
+

@@ -5376,5 +5376,1376 @@ export const grammarSolutions: Solution[] = [
     "reviewSuggestions": [
       "Ghi nhớ các danh từ số nhiều đặc biệt: child -> children (trẻ em), person -> people (mọi người), foot -> feet (bàn chân)."
     ]
+  },
+  {
+    "id": "eng-s182",
+    "questionId": "eng-q182",
+    "recognition": "Dấu hiệu nhận biết qua giới từ \"since\" kết hợp mệnh đề quá khứ đơn \"since we were in primary school\", yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Câu có chứa liên từ 'since' (từ khi) đi kèm với một mốc thời gian/mệnh đề quá khứ đơn 'we were in primary school'. Quy tắc ngữ pháp quy định hành động kéo dài từ quá khứ đến hiện tại đi với 'since' phải chia ở thì Hiện tại hoàn thành. Loại phương án A (know - Hiện tại đơn), B (knew - Quá khứ đơn) và D (are knowing - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'We' (chúng tôi) - ngôi thứ nhất số nhiều, đi kèm với trợ động từ 'have'.",
+        "result": "Chủ ngữ số nhiều -> dùng 'have'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc: S + has/have + V3/ed. Động từ 'know' là động từ bất quy tắc, có dạng quá khứ phân từ V3 là 'known' (know -> knew -> known). Kết hợp lại ta được 'have known'.",
+        "result": "Động từ chia đúng: 'have known'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (have known) chia đúng công thức thì Hiện tại hoàn thành cho chủ ngữ 'we'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. have known",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm B (knew) vì chỉ tập trung vào mệnh đề quá khứ 'were' mà quên mất sự hiện diện của giới từ 'since'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ công thức: S + have/has + V3/ed + since + S + V2/ed (quá khứ đơn)."
+    ]
+  },
+  {
+    "id": "eng-s183",
+    "questionId": "eng-q183",
+    "recognition": "Dấu hiệu nhận biết qua cụm giới từ chỉ khoảng thời gian \"for five years\" (trong vòng 5 năm), yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cụm 'for five years' chỉ một khoảng thời gian kéo dài từ quá khứ đến hiện tại. Đây là dấu hiệu nhận biết đặc trưng của thì Hiện tại hoàn thành. Loại phương án A (lives - Hiện tại đơn), B (lived - Quá khứ đơn) và D (is living - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'She' (cô ấy) - ngôi thứ ba số ít, đi kèm với trợ động từ 'has'.",
+        "result": "Chủ ngữ số ít -> dùng 'has'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'live' là động từ có quy tắc, chỉ cần thêm đuôi '-d' thành 'lived'. Kết hợp lại ta có 'has lived'.",
+        "result": "Động từ chia đúng: 'has lived'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (has lived) chia đúng công thức thì Hiện tại hoàn thành cho chủ ngữ 'she'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. has lived",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm B (lived) hoặc A (lives) do thói quen dịch nghĩa mà không để ý mốc thời gian 'for five years'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ sự khác biệt: since + mốc thời gian (since 2020), for + khoảng thời gian (for 5 years)."
+    ]
+  },
+  {
+    "id": "eng-s184",
+    "questionId": "eng-q184",
+    "recognition": "Dấu hiệu nhận biết qua từ \"yet\" ở cuối câu phủ định, yêu cầu chia động từ ở dạng phủ định của thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ 'yet' (chưa) thường đứng cuối câu phủ định hoặc câu nghi vấn của thì Hiện tại hoàn thành. Loại phương án A (don't finish - Hiện tại đơn phủ định), C (didn't finish - Quá khứ đơn phủ định) và D (won't finish - Tương lai đơn phủ định).",
+        "result": "Thì Hiện tại hoàn thành dạng phủ định"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'I' (tôi) - ngôi thứ nhất số ít, đi với trợ động từ phủ định 'haven't' (have not).",
+        "result": "Chủ ngữ 'I' -> dùng 'haven't'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'finish' là động từ có quy tắc, thêm đuôi '-ed' thành 'finished'. Kết hợp lại ta được 'haven't finished'.",
+        "result": "Động từ chia đúng: 'haven't finished'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (haven't finished) chia đúng dạng phủ định thì Hiện tại hoàn thành cho ngôi 'I'.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. haven't finished",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm C (didn't finish) do thói quen dùng quá khứ đơn cho các câu phủ định ngắn."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: 'yet' dùng ở cuối câu phủ định và câu hỏi của thì Hiện tại hoàn thành."
+    ]
+  },
+  {
+    "id": "eng-s185",
+    "questionId": "eng-q185",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ \"recently\" (gần đây) ở cuối câu, yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ 'recently' (gần đây) là dấu hiệu nhận biết điển hình của thì Hiện tại hoàn thành, diễn tả hành động vừa xảy ra gần đây. Loại phương án A (buy - Hiện tại đơn), B (bought - Quá khứ đơn) và D (are buying - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'They' (họ) - ngôi thứ ba số nhiều, đi kèm với trợ động từ 'have'.",
+        "result": "Chủ ngữ số nhiều -> dùng 'have'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'buy' là động từ bất quy tắc, có dạng quá khứ phân từ V3 là 'bought' (buy -> bought -> bought). Kết hợp lại ta được 'have bought'.",
+        "result": "Động từ chia đúng: 'have bought'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (have bought) chia đúng công thức thì Hiện tại hoàn thành cho chủ ngữ 'they'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. have bought",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm B (bought) vì nhầm 'recently' chỉ mốc thời gian quá khứ đơn xác định."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: recently / lately (gần đây) -> Hiện tại hoàn thành."
+    ]
+  },
+  {
+    "id": "eng-s186",
+    "questionId": "eng-q186",
+    "recognition": "Dấu hiệu nhận biết qua từ \"ever\" (đã từng) trong câu hỏi nghi vấn, yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect) dạng nghi vấn.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Từ 'ever' (đã từng) thường được sử dụng trong các câu hỏi kinh nghiệm của thì Hiện tại hoàn thành. Loại phương án A (Did / be - Quá khứ đơn), C (Do / be - Hiện tại đơn) và D (Are / being - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành dạng nghi vấn"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và trợ động từ đảo ngữ",
+        "explanation": "Chủ ngữ là đại từ 'you' (bạn) - ngôi thứ hai, đi kèm với trợ động từ 'have'. Trong câu hỏi, ta đảo 'Have' lên trước chủ ngữ.",
+        "result": "Chủ ngữ 'you' -> đảo 'Have' lên đầu"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'be' có dạng quá khứ phân từ V3 là 'been'. Ta được cấu trúc hoàn chỉnh: 'Have you ever been'.",
+        "result": "Động từ chia đúng: 'Have / been'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (Have / been) là phương án duy nhất chia đúng thì Hiện tại hoàn thành dạng câu hỏi với 'ever'.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. Have / been",
+    "commonMistakes": [
+      "Học sinh chọn A (Did / be) do nhầm câu hỏi kinh nghiệm quá khứ đơn, tuy nhiên 'Did' không đi với 'be' nguyên mẫu trong trường hợp này."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm từ hỏi kinh nghiệm: Have you ever been to + địa điểm? (Bạn đã từng đến ... chưa?)."
+    ]
+  },
+  {
+    "id": "eng-s187",
+    "questionId": "eng-q187",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ \"just\" (vừa mới) xen giữa trợ động từ và động từ chính, yêu cầu chia thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Từ 'just' (vừa mới) diễn tả một hành động vừa mới xảy ra tức thì, là dấu hiệu nhận biết điển hình của thì Hiện tại hoàn thành. Loại phương án A (Hiện tại tiếp diễn), B (Quá khứ đơn) và D (Tương lai đơn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'My father' (bố tôi) - danh từ số ít, đi kèm với trợ động từ 'has'.",
+        "result": "Chủ ngữ số ít -> dùng 'has'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'arrive' là động từ có quy tắc, chỉ cần thêm đuôi '-d' thành 'arrived'. Kết hợp lại ta được cấu trúc 'has just arrived'.",
+        "result": "Động từ chia đúng: 'has / arrived'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (has / arrived) chia đúng trợ động từ số ít 'has' và động từ V3 'arrived'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. has / arrived",
+    "commonMistakes": [
+      "Học sinh chọn B (did / arrive) do nhầm 'just' với 'just now' (vốn đi với Quá khứ đơn)."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ vị trí: just đứng giữa has/have và V3/ed (S + has/have + just + V3/ed)."
+    ]
+  },
+  {
+    "id": "eng-s188",
+    "questionId": "eng-q188",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ chỉ tần suất \"three times\" (ba lần) kết hợp \"already\" (đã rồi), diễn tả số lần thực hiện hành động, yêu cầu chia thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Khi muốn diễn tả số lần một hành động đã được thực hiện tính đến thời điểm hiện tại (ví dụ: twice, three times, many times), ta bắt buộc phải sử dụng thì Hiện tại hoàn thành. Loại phương án A (see - Hiện tại đơn), B (saw - Quá khứ đơn) và D (are seeing - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'We' (chúng tôi) - ngôi thứ nhất số nhiều, đi kèm với trợ động từ 'have'.",
+        "result": "Chủ ngữ số nhiều -> dùng 'have'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'see' là động từ bất quy tắc, có dạng quá khứ phân từ V3 là 'seen' (see -> saw -> seen). Kết hợp lại ta được 'have seen'.",
+        "result": "Động từ chia đúng: 'have seen'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (have seen) chia đúng công thức thì Hiện tại hoàn thành cho chủ ngữ 'we'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. have seen",
+    "commonMistakes": [
+      "Học sinh chọn B (saw) vì nghĩ đây là hành động đã kết thúc, nhưng vì có số lần làm cụ thể nên bắt buộc phải dùng Hiện tại hoàn thành."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Diễn tả kinh nghiệm, số lần làm việc gì đó -> Hiện tại hoàn thành."
+    ]
+  },
+  {
+    "id": "eng-s189",
+    "questionId": "eng-q189",
+    "recognition": "Chọn giới từ chỉ thời gian phù hợp đi với mốc thời gian cụ thể \"2018\" trong câu chia ở thì Hiện tại hoàn thành.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Phân tích mốc thời gian",
+        "explanation": "Từ '2018' là một năm cụ thể - tức là một mốc thời gian (point of time).",
+        "result": "Mốc thời gian"
+      },
+      {
+        "order": 2,
+        "title": "Chọn giới từ tương ứng trong thì Hiện tại hoàn thành",
+        "explanation": "Trong thì Hiện tại hoàn thành, giới từ 'since' đi với mốc thời gian (since 2018 - từ năm 2018), còn giới từ 'for' đi với khoảng thời gian. Loại phương án B (for).",
+        "result": "Chọn giới từ 'since'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án còn lại",
+        "explanation": "Phương án C (ago) đi sau khoảng thời gian và chỉ dùng trong Quá khứ đơn. Phương án D (in) dùng cho năm trong Quá khứ đơn (in 2018), không đi với Hiện tại hoàn thành trong cấu trúc kéo dài này.",
+        "result": "Đáp án đúng là A"
+      }
+    ],
+    "finalAnswer": "A. since",
+    "commonMistakes": [
+      "Học sinh chọn D (in) do thói quen thấy năm thì điền 'in', không để ý câu đang chia ở Hiện tại hoàn thành 'has studied'."
+    ],
+    "reviewSuggestions": [
+      "Mẹo nhớ: 'Since' + mốc thời gian (như năm, tháng, ngày, thứ, một sự kiện cụ thể)."
+    ]
+  },
+  {
+    "id": "eng-s190",
+    "questionId": "eng-q190",
+    "recognition": "Chọn giới từ chỉ thời gian phù hợp đi với khoảng thời gian \"ten years\" (10 năm) trong câu chia ở thì Hiện tại hoàn thành.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Phân tích khoảng thời gian",
+        "explanation": "Cụm 'ten years' (10 năm) là một khoảng thời gian (period of time), không phải mốc thời gian cụ thể.",
+        "result": "Khoảng thời gian"
+      },
+      {
+        "order": 2,
+        "title": "Chọn giới từ tương ứng trong thì Hiện tại hoàn thành",
+        "explanation": "Trong thì Hiện tại hoàn thành, giới từ 'for' đi với khoảng thời gian (for ten years - trong vòng 10 năm). Loại phương án A (since - chỉ đi với mốc thời gian).",
+        "result": "Chọn giới từ 'for'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án còn lại",
+        "explanation": "Phương án C (ago) dùng trong Quá khứ đơn. Phương án D (already) là trạng từ đứng cuối câu hoặc giữa trợ động từ, không đóng vai trò giới từ chỉ thời gian.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. for",
+    "commonMistakes": [
+      "Học sinh chọn A (since) do nhầm lẫn giữa cách dùng của since và for cho khoảng thời gian."
+    ],
+    "reviewSuggestions": [
+      "Mẹo nhớ: 'For' + khoảng thời gian (for 2 days, for 5 months, for a long time)."
+    ]
+  },
+  {
+    "id": "eng-s191",
+    "questionId": "eng-q191",
+    "recognition": "Dựa vào ngữ cảnh câu thứ hai \"This is my first time\" (Đây là lần đầu tiên của tôi) để chọn trạng từ phủ định phù hợp cho câu chia ở thì Hiện tại hoàn thành.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Phân tích ngữ cảnh câu",
+        "explanation": "Vế sau nói: 'This is my first time' (Đây là lần đầu tiên). Điều này có nghĩa là trước đây người nói 'chưa từng' (never) ăn món Phở truyền thống Việt Nam.",
+        "result": "Ngữ cảnh phủ định: chưa từng làm"
+      },
+      {
+        "order": 2,
+        "title": "Chọn trạng từ tương ứng",
+        "explanation": "Trạng từ 'never' mang nghĩa phủ định (chưa bao giờ), kết hợp với thì Hiện tại hoàn thành khẳng định để tạo câu phủ định về kinh nghiệm. Loại phương án A (ever - đã từng, dùng trong câu hỏi) và C (already - đã rồi, mâu thuẫn ngữ cảnh).",
+        "result": "Chọn trạng từ 'never'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu phương án còn lại",
+        "explanation": "Phương án D (yet - chưa) thường đứng cuối câu phủ định, không đứng giữa trợ động từ và V3/ed như vị trí chỗ trống trong đề.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. never",
+    "commonMistakes": [
+      "Học sinh chọn A (ever) do nhầm lẫn vị trí hoặc chọn D (yet) do không để ý vị trí đứng của từ trong câu."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: S + has/have + never + V3/ed dùng để diễn tả trải nghiệm chưa từng làm việc gì tính đến nay."
+    ]
+  },
+  {
+    "id": "eng-s192",
+    "questionId": "eng-q192",
+    "recognition": "Nhận biết qua kết quả ở hiện tại \"He can't get into his room now\" (Bây giờ anh ấy không thể vào phòng) để chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Phân tích mối liên hệ Quá khứ - Hiện tại",
+        "explanation": "Hành động mất chìa khóa xảy ra trong quá khứ nhưng kết quả của nó vẫn còn lưu lại ở hiện tại (bây giờ không thể vào phòng). Quy tắc ngữ pháp quy định: hành động xảy ra trong quá khứ nhưng để lại kết quả/ảnh hưởng ở hiện tại phải chia ở thì Hiện tại hoàn thành. Loại phương án A (loses - Hiện tại đơn) và D (was losing - Quá khứ tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'He' (anh ấy) - ngôi thứ ba số ít, đi kèm với trợ động từ 'has'.",
+        "result": "Chủ ngữ số ít -> dùng 'has'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'lose' là động từ bất quy tắc, có dạng quá khứ phân từ V3 là 'lost' (lose -> lost -> lost). Kết hợp lại ta được 'has lost'.",
+        "result": "Động từ chia đúng: 'has lost'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (has lost) chia đúng thì Hiện tại hoàn thành. Phương án B (lost - Quá khứ đơn) chỉ kể lại sự việc trong quá khứ, không nhấn mạnh mối liên hệ với hiện tại bằng 'has lost'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. has lost",
+    "commonMistakes": [
+      "Học sinh chọn B (lost) do thói quen chia quá khứ đơn cho các hành động đã xảy ra, bỏ qua mối liên hệ kết quả hiện tại."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Dùng Hiện tại hoàn thành khi hành động trong quá khứ dẫn đến kết quả thấy rõ ở hiện tại."
+    ]
+  },
+  {
+    "id": "eng-s193",
+    "questionId": "eng-q193",
+    "recognition": "Phối hợp thì dựa vào các trạng ngữ chỉ thời gian: vế 1 có mốc quá khứ rõ ràng \"last summer\" (Quá khứ đơn), vế 2 có cụm \"since then\" (Hiện tại hoàn thành).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Chia động từ vế thứ nhất",
+        "explanation": "Vế thứ nhất có cụm trạng từ chỉ thời gian xác định trong quá khứ là 'last summer' (mùa hè năm ngoái). Do đó, động từ 'visit' phải chia ở thì Quá khứ đơn -> 'visited'. Loại phương án B và D.",
+        "result": "Vế 1: Quá khứ đơn ('visited')"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ vế thứ hai",
+        "explanation": "Vế thứ hai chứa cụm 'since then' (từ đó đến nay). Đây là dấu hiệu của thì Hiện tại hoàn thành. Chủ ngữ là đại từ 'they' (số nhiều), động từ dạng phủ định -> 'haven't returned'.",
+        "result": "Vế 2: Hiện tại hoàn thành ('haven't returned')"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (visited / haven't returned) kết hợp đúng thì Quá khứ đơn và Hiện tại hoàn thành phủ định.",
+        "result": "Đáp án đúng là A"
+      }
+    ],
+    "finalAnswer": "A. visited / haven't returned",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm D do chia Hiện tại hoàn thành cho cả hai vế hoặc chọn C do chia Quá khứ đơn cho cả hai vế."
+    ],
+    "reviewSuggestions": [
+      "Luyện tập: Nhận diện mốc thời gian quá khứ đơn (last summer, ago) vs mốc thời gian hiện tại hoàn thành (since then, recently)."
+    ]
+  },
+  {
+    "id": "eng-s194",
+    "questionId": "eng-q194",
+    "recognition": "Phối hợp thì dựa vào trạng từ chỉ thời gian: vế 1 có \"last week\" (Quá khứ đơn), vế 2 có khoảng thời gian \"for only a few days\" (Hiện tại hoàn thành).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Chia động từ vế thứ nhất",
+        "explanation": "Vế thứ nhất có cụm trạng từ chỉ thời gian trong quá khứ là 'last week' (tuần trước). Do đó, động từ 'buy' phải chia ở thì Quá khứ đơn (dạng bất quy tắc là 'bought'). Loại phương án B và D.",
+        "result": "Vế 1: Quá khứ đơn ('bought')"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ vế thứ hai",
+        "explanation": "Vế thứ hai có cụm 'for only a few days' (chỉ trong vài ngày nay) - chỉ một khoảng thời gian kéo dài đến hiện tại. Do đó, động từ 'own' phải chia ở thì Hiện tại hoàn thành -> 'has owned' (vì chủ ngữ là 'He' số ít).",
+        "result": "Vế 2: Hiện tại hoàn thành ('has owned')"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (bought / has owned) là phương án duy nhất chia đúng thì cho cả hai vế.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. bought / has owned",
+    "commonMistakes": [
+      "Học sinh dễ chọn D do lạm dụng thì Hiện tại hoàn thành hoặc A do chia Quá khứ đơn cho cả hai vế."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Hành động xảy ra tại một thời điểm đã chấm dứt (last week) -> Quá khứ đơn; hành động kéo dài đến hiện tại (for...) -> Hiện tại hoàn thành."
+    ]
+  },
+  {
+    "id": "eng-s195",
+    "questionId": "eng-q195",
+    "recognition": "Phối hợp thì dựa vào trạng từ chỉ thời gian: vế 1 có \"yet\" (Hiện tại hoàn thành phủ định), vế 2 có mốc thời gian quá khứ \"yesterday\" (Quá khứ đơn).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Chia động từ vế thứ nhất",
+        "explanation": "Vế thứ nhất kết thúc bằng trạng từ 'yet' (chưa). Do đó, động từ phải chia ở thì Hiện tại hoàn thành dạng phủ định. Với chủ ngữ 'I', ta chia là 'haven't met'. Loại phương án B và C.",
+        "result": "Vế 1: Hiện tại hoàn thành phủ định ('haven't met')"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ vế thứ hai",
+        "explanation": "Vế thứ hai có từ chỉ thời gian quá khứ rõ ràng là 'yesterday' (hôm qua). Do đó, động từ 'see' phải chia ở thì Quá khứ đơn (dạng bất quy tắc là 'saw').",
+        "result": "Vế 2: Quá khứ đơn ('saw')"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (haven't met / saw) kết hợp chính xác thì Hiện tại hoàn thành phủ định và Quá khứ đơn.",
+        "result": "Đáp án đúng là A"
+      }
+    ],
+    "finalAnswer": "A. haven't met / saw",
+    "commonMistakes": [
+      "Học sinh chọn D vì thói quen dùng Hiện tại hoàn thành cho động từ 'see' khi đi với đại từ chỉ kinh nghiệm, quên mất trạng từ chỉ thời gian xác định 'yesterday'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Cứ có yesterday, ago, last... thì bắt buộc chia Quá khứ đơn, không được chia Hiện tại hoàn thành."
+    ]
+  },
+  {
+    "id": "eng-s196",
+    "questionId": "eng-q196",
+    "recognition": "Câu hỏi nghi vấn bắt đầu bằng cụm từ hỏi khoảng thời gian \"How long\" (Bao lâu), yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cụm từ hỏi 'How long' (bao lâu) dùng để hỏi về khoảng thời gian của một hành động kéo dài đến hiện tại, là từ hỏi đặc trưng của thì Hiện tại hoàn thành. Loại phương án A (did / read - Quá khứ đơn), C (do / read - Hiện tại đơn) và D (are / reading - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và trợ động từ đảo ngữ",
+        "explanation": "Chủ ngữ là đại từ 'you' (bạn) - ngôi thứ hai, đi kèm với trợ động từ 'have'. Trong câu hỏi, ta đảo 'have' lên trước chủ ngữ.",
+        "result": "Chủ ngữ 'you' -> đảo 'have' lên trước"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'read' có dạng phân từ V3 viết giống nguyên mẫu nhưng phát âm khác (read /riːd/ -> read /red/ -> read /red/). Ta được cấu trúc hoàn chỉnh: 'have you read'.",
+        "result": "Động từ chia đúng: 'have / read'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (have / read) là phương án duy nhất chia đúng thì Hiện tại hoàn thành dạng câu hỏi.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. have / read",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm A (did / read) do nhầm tưởng đây là câu hỏi về hành động trong quá khứ đơn thuần."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc câu hỏi: How long + have/has + S + V3/ed? (Ai đó đã làm gì được bao lâu rồi?)."
+    ]
+  },
+  {
+    "id": "eng-s197",
+    "questionId": "eng-q197",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ \"already\" (đã rồi) ở cuối câu, yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ 'already' (đã rồi) là dấu hiệu của thì Hiện tại hoàn thành, diễn tả một hành động đã hoàn tất. Loại phương án A (writes - Hiện tại đơn), B (wrote - Quá khứ đơn) và D (is writing - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'She' (cô ấy) - ngôi thứ ba số ít, đi kèm với trợ động từ 'has'.",
+        "result": "Chủ ngữ số ít -> dùng 'has'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'write' là động từ bất quy tắc, có dạng quá khứ phân từ V3 là 'written' (write -> wrote -> written). Kết hợp lại ta được 'has written'.",
+        "result": "Động từ chia đúng: 'has written'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (has written) chia đúng công thức thì Hiện tại hoàn thành cho chủ ngữ 'she'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. has written",
+    "commonMistakes": [
+      "Học sinh chọn B (wrote) do thói quen dùng quá khứ đơn cho các hành động đã kết thúc, bỏ qua trạng từ 'already'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ dạng V3 của động từ bất quy tắc thông dụng: write -> wrote -> written."
+    ]
+  },
+  {
+    "id": "eng-s198",
+    "questionId": "eng-q198",
+    "recognition": "Dấu hiệu nhận biết qua liên từ \"since\" kết hợp mệnh đề chia ở thì Quá khứ đơn (\"since they moved to Binh Dinh\"), yêu cầu chia mệnh đề chính ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Theo quy tắc phối hợp thì với 'since': Mệnh đề đi sau 'since' chia thì Quá khứ đơn (moved), còn mệnh đề chính đứng trước 'since' phải chia ở thì Hiện tại hoàn thành. Loại phương án A (live - Hiện tại đơn), B (lived - Quá khứ đơn) và D (are living - Hiện tại tiếp diễn).",
+        "result": "Mệnh đề chính chia thì Hiện tại hoàn thành"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'They' (họ) - ngôi thứ ba số nhiều, đi kèm với trợ động từ 'have'.",
+        "result": "Chủ ngữ số nhiều -> dùng 'have'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'live' là động từ có quy tắc, thêm đuôi '-d' thành 'lived'. Kết hợp lại ta có 'have lived'.",
+        "result": "Động từ chia đúng: 'have lived'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (have lived) chia đúng thì Hiện tại hoàn thành cho chủ ngữ 'they'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. have lived",
+    "commonMistakes": [
+      "Học sinh dễ chọn nhầm B (lived) do thấy mệnh đề sau chia quá khứ đơn, dẫn đến chia quá khứ đơn cho cả hai vế."
+    ],
+    "reviewSuggestions": [
+      "Thuộc lòng cấu trúc: S + have/has + V3/ed + since + S + V2/ed."
+    ]
+  },
+  {
+    "id": "eng-s199",
+    "questionId": "eng-q199",
+    "recognition": "Dấu hiệu nhận biết qua từ chỉ tần suất kết hợp khoảng thời gian chưa kết thúc \"twice this week\" (hai lần trong tuần này), yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cụm từ 'twice this week' chỉ tần suất của hành động diễn ra trong một khoảng thời gian chưa kết thúc hẳn (tuần này vẫn còn). Do đó, ta phải dùng thì Hiện tại hoàn thành. Loại phương án A (visit - Hiện tại đơn) và D (am visiting - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'I' (tôi) - ngôi thứ nhất số ít, đi kèm với trợ động từ 'have'.",
+        "result": "Chủ ngữ 'I' -> dùng 'have'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'visit' là động từ có quy tắc, thêm đuôi '-ed' thành 'visited'. Kết hợp lại ta được 'have visited'.",
+        "result": "Động từ chia đúng: 'have visited'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (have visited) chia đúng thì Hiện tại hoàn thành. Phương án B (visited - Quá khứ đơn) không chính xác vì khoảng thời gian 'this week' chưa kết thúc.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. have visited",
+    "commonMistakes": [
+      "Học sinh chọn B (visited) do thấy hành động đã diễn ra trong tuần, quên mất 'this week' là khoảng thời gian chưa kết thúc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Dùng Hiện tại hoàn thành cho các hành động xảy ra trong khoảng thời gian chưa qua hẳn (this week, this month, this year)."
+    ]
+  },
+  {
+    "id": "eng-s200",
+    "questionId": "eng-q200",
+    "recognition": "Chọn trạng từ liên kết phù hợp đứng giữa trợ động từ \"has\" và quá khứ phân từ \"finished\" trong câu khẳng định thì Hiện tại hoàn thành.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định từ loại và vị trí",
+        "explanation": "Vị trí trống nằm giữa trợ động từ 'has' và V3 'finished'. Đây là vị trí đặc trưng của các trạng từ như 'already', 'just' trong câu khẳng định. Loại phương án B (yet - thường đứng cuối câu phủ định/câu hỏi).",
+        "result": "Trạng từ đứng giữa has/have và V3"
+      },
+      {
+        "order": 2,
+        "title": "Phân tích ý nghĩa ngữ cảnh",
+        "explanation": "Câu nói: 'She has already finished her dinner...' (Cô ấy đã ăn tối xong rồi và bây giờ đang xem TV). Trạng từ 'already' (đã rồi) diễn tả hành động đã xảy ra trước một thời điểm, rất phù hợp ngữ cảnh. Loại phương án C (since - giới từ chỉ thời gian) và D (ever - dùng trong câu hỏi).",
+        "result": "Chọn trạng từ 'already'"
+      },
+      {
+        "order": 3,
+        "title": "Kết luận đáp án",
+        "explanation": "Phương án A (already) điền vào chỗ trống tạo thành cấu trúc 'has already finished' chia đúng ngữ pháp và ngữ nghĩa.",
+        "result": "Đáp án đúng là A"
+      }
+    ],
+    "finalAnswer": "A. already",
+    "commonMistakes": [
+      "Học sinh chọn B (yet) do thói quen nhớ các trạng từ thì hoàn thành mà không để ý vị trí và thể của câu (khẳng định vs phủ định)."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ vị trí: already đứng giữa has/have và V3/ed trong câu khẳng định; yet đứng cuối câu phủ định hoặc câu nghi vấn."
+    ]
+  },
+  {
+    "id": "eng-s201",
+    "questionId": "eng-q201",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ \"already\" (đã rồi) kết hợp với kết quả ở hiện tại \"We are late\" (Chúng ta bị muộn rồi), yêu cầu chia động từ ở thì Hiện tại hoàn thành (Present Perfect).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Từ 'already' diễn tả hành động đã xảy ra và để lại kết quả ảnh hưởng đến hiện tại (bị muộn rồi). Do đó, ta phải chia động từ ở thì Hiện tại hoàn thành. Loại phương án A (starts - Hiện tại đơn), B (started - Quá khứ đơn) và D (is starting - Hiện tại tiếp diễn).",
+        "result": "Thì Hiện tại hoàn thành (Present Perfect)"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The match' (trận đấu) - danh từ số ít, đi kèm với trợ động từ 'has'.",
+        "result": "Chủ ngữ số ít -> dùng 'has'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'start' là động từ có quy tắc, thêm đuôi '-ed' thành 'started'. Kết hợp lại ta có 'has started'.",
+        "result": "Động từ chia đúng: 'has started' (already đứng giữa)"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (has started) chia đúng công thức trợ động từ 'has' cho danh từ số ít 'the match'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. has started",
+    "commonMistakes": [
+      "Học sinh chọn B (started) do nghĩ trận đấu đã bắt đầu trong quá khứ nên chia quá khứ đơn, quên mất mối liên hệ kết quả hiện tại 'we are late'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Hành động trong quá khứ có kết quả trực tiếp ở hiện tại -> ưu tiên Hiện tại hoàn thành."
+    ]
+  },
+  {
+    "id": "eng-s202",
+    "questionId": "eng-q202",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ chỉ thời gian tương lai \"in the future\" (trong tương lai) kết hợp từ chỉ quan điểm \"I think\" (Tôi nghĩ), yêu cầu chia động từ ở thì Tương lai đơn (Future Simple / will).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cụm từ 'in the future' chỉ thời gian trong tương lai, kết hợp với động từ chỉ ý kiến cá nhân 'I think' (tôi nghĩ) là cấu trúc điển hình để đưa ra một dự đoán không có căn cứ chắc chắn ở tương lai, dùng thì Tương lai đơn. Loại phương án A (use - Hiện tại đơn), B (used - Quá khứ đơn) và D (are using - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Cấu trúc động từ",
+        "explanation": "Cấu trúc tương lai đơn: will + V nguyên mẫu. Với động từ 'use', ta chia là 'will use'.",
+        "result": "Động từ chia đúng: 'will use'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will use) chia đúng công thức tương lai đơn will + V nguyên mẫu.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will use",
+    "commonMistakes": [
+      "Học sinh chọn A (use) do dịch nghĩa thói quen chung hoặc nhầm lẫn cấu trúc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Dự đoán tương lai bắt đầu bằng I think / I hope / I believe... + will + V nguyên mẫu."
+    ]
+  },
+  {
+    "id": "eng-s203",
+    "questionId": "eng-q203",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 diễn tả sự việc có thể xảy ra ở tương lai, mệnh đề If chia thì Hiện tại đơn (\"If you study hard\"), yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề If có động từ 'study' chia ở thì Hiện tại đơn, chỉ một điều kiện có thật ở hiện tại/tương lai. Đây là cấu trúc câu điều kiện loại 1. Quy tắc ngữ pháp yêu cầu mệnh đề chính phải chia ở thì Tương lai đơn: will + V nguyên mẫu. Loại phương án A (pass - Hiện tại đơn), B (passed - Quá khứ đơn) và D (are passing - Hiện tại tiếp diễn).",
+        "result": "Câu điều kiện loại 1 -> mệnh đề chính dùng 'will + V'"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc mệnh đề chính: will + V nguyên mẫu. Với động từ 'pass', ta chia là 'will pass'.",
+        "result": "Động từ chia đúng: 'will pass'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will pass) chia đúng công thức tương lai đơn trong câu điều kiện loại 1.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will pass",
+    "commonMistakes": [
+      "Học sinh chọn A (pass) do nhầm tưởng đây là câu điều kiện loại 0 diễn tả sự thật hiển nhiên, hoặc nhầm sang điều kiện loại 2."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ công thức điều kiện loại 1: If + S + V(hiện tại đơn), S + will/can + V(nguyên mẫu)."
+    ]
+  },
+  {
+    "id": "eng-s204",
+    "questionId": "eng-q204",
+    "recognition": "Nhận dạng câu điều kiện loại 1 với mốc thời gian tương lai \"tomorrow\" và mệnh đề If chia ở hiện tại đơn (\"If it rains\"), yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề If chia ở hiện tại đơn ('rains') kết hợp trạng từ chỉ tương lai 'tomorrow' cho biết đây là câu điều kiện loại 1. Mệnh đề chính phải chia ở dạng will + V nguyên mẫu. Loại phương án A (cancel), B (canceled) và D (are canceling).",
+        "result": "Mệnh đề chính dùng 'will + V'"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'cancel' đi sau 'will' giữ ở dạng nguyên mẫu -> 'will cancel'.",
+        "result": "Động từ chia đúng: 'will cancel'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will cancel) chia đúng cấu trúc câu điều kiện loại 1.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will cancel",
+    "commonMistakes": [
+      "Học sinh chọn A (cancel) do chia thì hiện tại đơn cho cả hai mệnh đề."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Trong câu điều kiện loại 1, mệnh đề chính dùng will + V để chỉ kết quả xảy ra trong tương lai."
+    ]
+  },
+  {
+    "id": "eng-s205",
+    "questionId": "eng-q205",
+    "recognition": "Dấu hiệu nhận biết qua trạng ngữ chỉ thời gian tương lai \"next week\" (tuần tới), yêu cầu chia động từ ở thì Tương lai đơn (Future Simple / will).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ 'next week' chỉ một thời điểm trong tương lai. Do đó, động từ phải chia ở thì Tương lai đơn. Loại phương án A (travel - Hiện tại đơn), B (traveled - Quá khứ đơn) và D (are traveling - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Động từ 'travel' nguyên mẫu đi sau 'will' -> 'will travel'.",
+        "result": "Động từ chia đúng: 'will travel'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will travel) chia đúng cấu trúc tương lai đơn.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will travel",
+    "commonMistakes": [
+      "Học sinh chọn B (traveled) do đọc lướt qua từ 'next' thành 'last', dẫn đến chia quá khứ đơn."
+    ],
+    "reviewSuggestions": [
+      "Phân biệt từ khóa: next week (tương lai đơn) vs last week (quá khứ đơn)."
+    ]
+  },
+  {
+    "id": "eng-s206",
+    "questionId": "eng-q206",
+    "recognition": "Dấu hiệu nhận biết qua động từ hy vọng \"I hope\" (Tôi hy vọng) kết hợp trạng từ \"soon\" (sớm thôi), yêu cầu chia thì Tương lai đơn (Future Simple / will).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cấu trúc với động từ 'hope' (hy vọng) chỉ mong muốn về một sự việc xảy ra trong tương lai, thường đi kèm với trạng từ 'soon'. Quy tắc ngữ pháp yêu cầu chia mệnh đề sau 'hope' ở thì Tương lai đơn. Loại phương án A (improves - Hiện tại đơn), B (improved - Quá khứ đơn) và D (is improving - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'improve' thành 'will improve'.",
+        "result": "Động từ chia đúng: 'will improve'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will improve) chia đúng trợ động từ 'will' và động từ nguyên mẫu.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will improve",
+    "commonMistakes": [
+      "Học sinh dễ chọn A (improves) do chia thì hiện tại đơn theo thói quen chia động từ sau các mệnh đề danh từ."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: S + hope + (that) + S + will + V(nguyên mẫu)."
+    ]
+  },
+  {
+    "id": "eng-s207",
+    "questionId": "eng-q207",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề chính chia ở tương lai đơn \"Your health will improve\", yêu cầu chia mệnh đề If ở thì Hiện tại đơn.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề chính dùng 'will improve' (Tương lai đơn) cho biết đây là câu điều kiện loại 1. Theo công thức, mệnh đề If phải chia ở thì Hiện tại đơn. Loại phương án B (did - Quá khứ đơn) và C (will do - Sai vì mệnh đề If không dùng will).",
+        "result": "Mệnh đề If chia ở thì Hiện tại đơn"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ trong mệnh đề If là đại từ 'you' (bạn) - ngôi thứ hai, đi kèm với động từ thường giữ nguyên mẫu ở thì Hiện tại đơn.",
+        "result": "Chủ ngữ 'you' -> động từ giữ nguyên mẫu"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'do' giữ nguyên mẫu là 'do'. Loại phương án D (are doing - Hiện tại tiếp diễn).",
+        "result": "Động từ chia đúng: 'do'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (do) chia đúng thì hiện tại đơn nguyên mẫu cho chủ ngữ 'you'.",
+        "result": "Đáp án đúng là A"
+      }
+    ],
+    "finalAnswer": "A. do",
+    "commonMistakes": [
+      "Học sinh chọn C (will do) do thói quen điền 'will' cho mọi câu tương lai, quên mất quy tắc tối kỵ: không dùng 'will' trong mệnh đề If của câu điều kiện loại 1."
+    ],
+    "reviewSuggestions": [
+      "Tuyệt đối ghi nhớ: Mệnh đề If của câu điều kiện loại 1 KHÔNG bao giờ dùng 'will/won't', chỉ dùng Hiện tại đơn."
+    ]
+  },
+  {
+    "id": "eng-s208",
+    "questionId": "eng-q208",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề chính chia ở tương lai đơn \"she will catch the bus\", yêu cầu chia mệnh đề If ở thì Hiện tại đơn và hòa hợp với chủ ngữ số ít.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề chính dùng 'will catch' cho biết đây là câu điều kiện loại 1. Mệnh đề If phải chia ở thì Hiện tại đơn. Loại phương án C (will get - không dùng will ở mệnh đề If) và D (got - Quá khứ đơn).",
+        "result": "Mệnh đề If chia ở thì Hiện tại đơn"
+      },
+      {
+        "order": 2,
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ trong mệnh đề If là đại từ 'she' (cô ấy) - ngôi thứ ba số ít. Ở thì hiện tại đơn, động từ thường đi sau chủ ngữ số ít phải thêm đuôi '-s/-es'.",
+        "result": "Chủ ngữ số ít 'she' -> động từ thêm '-s'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cụm động từ 'get up' thêm '-s' vào động từ chính thành 'gets up'. Loại phương án A (get - giữ nguyên mẫu).",
+        "result": "Động từ chia đúng: 'gets'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (gets) chia đúng thì hiện tại đơn số ít cho chủ ngữ 'she'.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. gets",
+    "commonMistakes": [
+      "Học sinh chọn A (get) do quên không chia động từ theo chủ ngữ số ít 'she', hoặc chọn C (will get) do nhầm cấu trúc."
+    ],
+    "reviewSuggestions": [
+      "Lưu ý: Mệnh đề If câu điều kiện loại 1 vẫn tuân thủ đầy đủ quy tắc chia động từ của thì Hiện tại đơn (S số ít -> V-s/es)."
+    ]
+  },
+  {
+    "id": "eng-s209",
+    "questionId": "eng-q209",
+    "recognition": "Nhận dạng câu điều kiện loại 1 với mệnh đề If dạng phủ định chia ở hiện tại đơn \"If he doesn't work hard\", yêu cầu chia mệnh đề chính khẳng định/phủ định tương ứng về nghĩa.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề If chia ở Hiện tại đơn phủ định ('doesn't work') cho biết đây là câu điều kiện loại 1. Mệnh đề chính phải dùng cấu trúc will/won't + V nguyên mẫu. Loại phương án A (fails) và B (failed).",
+        "result": "Mệnh đề chính dùng 'will + V' hoặc 'won't + V'"
+      },
+      {
+        "order": 2,
+        "title": "Phân tích ngữ nghĩa câu",
+        "explanation": "Câu nói: 'If he doesn't work hard, he will fail the project' (Nếu anh ấy không làm việc chăm chỉ, anh ấy sẽ thất bại/trượt dự án). Việc thất bại là kết quả khẳng định sẽ xảy ra, do đó ta dùng 'will fail' chứ không dùng phủ định 'won't fail' (sẽ không thất bại - vô lý).",
+        "result": "Chọn 'will fail' hợp nghĩa"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will fail) chia đúng ngữ pháp tương lai đơn và phù hợp ngữ nghĩa câu.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will fail",
+    "commonMistakes": [
+      "Học sinh chọn D (won't fail) do thói quen điền thể phủ định theo mệnh đề If, dẫn đến sai nghĩa hoàn toàn của câu."
+    ],
+    "reviewSuggestions": [
+      "Luôn dịch nghĩa sơ bộ câu điều kiện để quyết định mệnh đề chính dùng khẳng định (will) hay phủ định (won't)."
+    ]
+  },
+  {
+    "id": "eng-s210",
+    "questionId": "eng-q210",
+    "recognition": "Dấu hiệu nhận biết qua cụm trạng từ tương lai \"tomorrow morning\" (sáng mai), yêu cầu chia động từ ở thì Tương lai đơn (Future Simple / will).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ 'tomorrow morning' chỉ mốc thời gian trong tương lai gần. Do đó, động từ được chia ở thì Tương lai đơn. Loại phương án A (clean - Hiện tại đơn), B (cleaned - Quá khứ đơn) và D (are cleaning - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'clean' thành 'will clean'.",
+        "result": "Động từ chia đúng: 'will clean'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will clean) chia đúng cấu trúc tương lai đơn.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will clean",
+    "commonMistakes": [
+      "Học sinh chọn A (clean) do nhầm tưởng đây là lịch trình lặp lại, quên mất từ chỉ mốc thời gian cụ thể 'tomorrow'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ các từ khóa tương lai: tomorrow, next year, in the future, soon."
+    ]
+  },
+  {
+    "id": "eng-s211",
+    "questionId": "eng-q211",
+    "recognition": "Dấu hiệu nhận biết qua động từ hứa hẹn \"I promise\" (Tôi hứa) kết hợp trạng từ tương lai \"tonight\" (tối nay), yêu cầu chia động từ ở thì Tương lai đơn (Future Simple / will).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Lời hứa hẹn (promise) về một hành động sẽ thực hiện trong tương lai bắt buộc phải chia ở thì Tương lai đơn. Loại phương án A (help - Hiện tại đơn), B (helped - Quá khứ đơn) và D (am helping - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'help' thành 'will help'.",
+        "result": "Động từ chia đúng: 'will help'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will help) chia đúng công thức tương lai đơn cho câu hứa hẹn.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will help",
+    "commonMistakes": [
+      "Học sinh chọn A (help) do thói quen dịch nghĩa trực tiếp 'tôi hứa giúp...' mà không chia động từ ở thì tương lai."
+    ],
+    "reviewSuggestions": [
+      "Mẹo nhận biết: Thấy 'I promise' -> mệnh đề sau dùng 'will + V nguyên mẫu'."
+    ]
+  },
+  {
+    "id": "eng-s212",
+    "questionId": "eng-q212",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ chỉ khả năng \"probably\" (có lẽ) kết hợp mốc thời gian tương lai tự nhiên, yêu cầu chia thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ 'probably' (có lẽ) dùng để đưa ra một dự đoán mang tính phỏng đoán cá nhân về tương lai. Đây là cách dùng điển hình của thì Tương lai đơn với 'will'. Loại phương án A (arrives - Hiện tại đơn), B (arrived - Quá khứ đơn) và D (is arriving - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'arrive' thành 'will arrive'.",
+        "result": "Động từ chia đúng: 'will arrive'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will arrive) chia đúng công thức tương lai đơn phỏng đoán.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will arrive",
+    "commonMistakes": [
+      "Học sinh chọn A (arrives) do nhầm lẫn giữa dự đoán tương lai phỏng đoán và lịch trình tàu xe cố định."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Dùng 'will' khi dự đoán có các từ: probably, maybe, perhaps, possibly."
+    ]
+  },
+  {
+    "id": "eng-s213",
+    "questionId": "eng-q213",
+    "recognition": "Câu hỏi nghi vấn Yes/No Question ở thì Tương lai đơn với trạng từ tương lai \"tomorrow\" (ngày mai), yêu cầu đảo trợ động từ lên đầu câu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ chỉ thời gian 'tomorrow' chỉ ra hành động sẽ diễn ra vào ngày mai. Do đó, câu hỏi phải chia ở thì Tương lai đơn. Loại phương án A (Do / join - Hiện tại đơn), C (Did / join - Quá khứ đơn) và D (Are / joining - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Cấu trúc câu hỏi nghi vấn",
+        "explanation": "Cấu trúc: Will + S + V(nguyên mẫu)? Ta đảo trợ động từ 'Will' lên trước chủ ngữ 'you' và giữ động từ chính 'join' ở dạng nguyên mẫu.",
+        "result": "Cụm động từ chia đúng: 'Will / join'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (Will / join) chia đúng trợ động từ tương lai đơn dạng nghi vấn.",
+        "result": "Đáp án đúng là B"
+      }
+    ],
+    "finalAnswer": "B. Will / join",
+    "commonMistakes": [
+      "Học sinh chọn A (Do / join) do thói quen dùng 'do' cho mọi câu hỏi nghi vấn ngôi 'you'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ công thức câu hỏi tương lai: Will + S + V(nguyên mẫu)?"
+    ]
+  },
+  {
+    "id": "eng-s214",
+    "questionId": "eng-q214",
+    "recognition": "Dấu hiệu nhận biết qua từ chỉ quan điểm \"I think\" (Tôi nghĩ) kết hợp mốc tương lai \"tomorrow afternoon\", yêu cầu chia thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Sự kết hợp giữa từ chỉ ý kiến cá nhân 'I think' và mốc thời gian tương lai 'tomorrow afternoon' cho biết đây là một dự đoán tương lai đơn thuần, chia thì Tương lai đơn. Loại phương án A (rains - Hiện tại đơn), B (rained - Quá khứ đơn) và D (is raining - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'rain' thành 'will rain'.",
+        "result": "Động từ chia đúng: 'will rain'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will rain) chia đúng cấu trúc tương lai đơn dự đoán thời tiết.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will rain",
+    "commonMistakes": [
+      "Học sinh chọn A (rains) do nhầm tưởng đây là hiện tượng tự nhiên luôn đúng ở hiện tại đơn, quên mất từ chỉ mốc thời gian cụ thể 'tomorrow afternoon'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Dự đoán thời tiết ở một thời điểm tương lai cụ thể -> chia Tương lai đơn."
+    ]
+  },
+  {
+    "id": "eng-s215",
+    "questionId": "eng-q215",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề chính chia ở tương lai đơn \"you will be late\", yêu cầu chia mệnh đề If ở thì Hiện tại đơn dạng phủ định.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề chính dùng 'will be' cho biết đây là câu điều kiện loại 1. Do đó, mệnh đề If phải chia ở thì Hiện tại đơn. Loại phương án B (won't leave - không dùng will trong mệnh đề If) và C (didn't leave - Quá khứ đơn).",
+        "result": "Mệnh đề If chia ở thì Hiện tại đơn"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính ở thể phủ định",
+        "explanation": "Mệnh đề If có chủ ngữ 'you' - dùng trợ động từ phủ định 'don't' ở hiện tại đơn -> 'don't leave'. Loại phương án D (aren't leaving - Hiện tại tiếp diễn).",
+        "result": "Động từ chia đúng: 'don't leave'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (don't leave) chia đúng cấu trúc phủ định hiện tại đơn cho chủ ngữ 'you'.",
+        "result": "Đáp án đúng là A"
+      }
+    ],
+    "finalAnswer": "A. don't leave",
+    "commonMistakes": [
+      "Học sinh chọn B (won't leave) do thói quen điền 'will/won't' cho cả hai vế của câu điều kiện."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Mệnh đề If dùng hiện tại đơn phủ định: If + S + don't/doesn't + V(nguyên mẫu)."
+    ]
+  },
+  {
+    "id": "eng-s216",
+    "questionId": "eng-q216",
+    "recognition": "Dấu hiệu nhận biết qua trạng từ chỉ thời gian tương lai \"tomorrow\" (ngày mai), yêu cầu chia động từ ở thì Tương lai đơn (Future Simple / will).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Trạng từ chỉ thời gian 'tomorrow' chỉ ra hành động xảy ra vào ngày mai. Do đó, động từ phải chia ở thì Tương lai đơn. Loại phương án A (go - Hiện tại đơn), B (went - Quá khứ đơn) và D (are going - Hiện tại tiếp diễn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'go' thành 'will go'.",
+        "result": "Động từ chia đúng: 'will go'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will go) chia đúng cấu trúc tương lai đơn.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will go",
+    "commonMistakes": [
+      "Học sinh chọn B (went) do thói quen chia quá khứ đơn cho các câu chuyển động hoặc chọn D do nhầm cấu trúc."
+    ],
+    "reviewSuggestions": [
+      "Phân biệt rõ: go (Hiện tại đơn) - went (Quá khứ đơn) - will go (Tương lai đơn)."
+    ]
+  },
+  {
+    "id": "eng-s217",
+    "questionId": "eng-q217",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề If chia ở hiện tại đơn \"If they buy a new car\", yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề If dùng động từ 'buy' ở Hiện tại đơn chỉ điều kiện có thật, nên đây là câu điều kiện loại 1. Mệnh đề chính phải chia ở thì Tương lai đơn (will + V nguyên mẫu). Loại phương án A (spend - Hiện tại đơn) và B (spent - Quá khứ đơn).",
+        "result": "Mệnh đề chính chia thì Tương lai đơn"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'spend' thành 'will spend'.",
+        "result": "Động từ chia đúng: 'will spend'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will spend) chia đúng công thức tương lai đơn mệnh đề chính.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will spend",
+    "commonMistakes": [
+      "Học sinh chọn B (spent) do chia quá khứ đơn hoặc chọn D (are spending) do chia tiếp diễn không hợp ngữ cảnh điều kiện."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Công thức câu điều kiện loại 1 dùng will + V ở mệnh đề chính để chỉ kết quả."
+    ]
+  },
+  {
+    "id": "eng-s218",
+    "questionId": "eng-q218",
+    "recognition": "Dấu hiệu nhận biết qua từ chỉ sự hy vọng \"I hope\" kết hợp trạng từ \"soon\" (sớm thôi), yêu cầu chia động từ mệnh đề sau ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Câu diễn tả mong muốn, hy vọng xảy ra trong tương lai với động từ 'hope' và trạng từ 'soon'. Do đó, động từ trong mệnh đề sau được chia ở thì Tương lai đơn. Loại phương án A (plant - Hiện tại đơn) và B (planted - Quá khứ đơn).",
+        "result": "Thì Tương lai đơn (Future Simple)"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'plant' thành 'will plant'. Loại phương án D (are planting - Hiện tại tiếp diễn).",
+        "result": "Động từ chia đúng: 'will plant'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will plant) chia đúng cấu trúc tương lai đơn sau động từ 'hope'.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will plant",
+    "commonMistakes": [
+      "Học sinh chọn A (plant) do nhầm tưởng động từ sau hope chia hiện tại đơn."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc diễn tả hy vọng: S + hope + S + will + V."
+    ]
+  },
+  {
+    "id": "eng-s219",
+    "questionId": "eng-q219",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề If chia ở hiện tại đơn \"If it is sunny this weekend\", yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề If dùng động từ 'is' chia ở Hiện tại đơn chỉ một điều kiện có thật có thể xảy ra vào cuối tuần này. Đây là câu điều kiện loại 1. Mệnh đề chính phải dùng will + V nguyên mẫu. Loại phương án A (go - Hiện tại đơn), B (went - Quá khứ đơn) và D (would go - Dùng trong điều kiện loại 2).",
+        "result": "Mệnh đề chính dùng 'will + V'"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'go' nguyên mẫu đi sau 'will' -> 'will go'.",
+        "result": "Động từ chia đúng: 'will go'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will go) chia đúng cấu trúc câu điều kiện loại 1.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will go",
+    "commonMistakes": [
+      "Học sinh chọn D (would go) do nhầm lẫn sang câu điều kiện loại 2 không có thật ở hiện tại."
+    ],
+    "reviewSuggestions": [
+      "Mẹo nhận biết: Mốc thời gian 'this weekend' chỉ sự việc tương lai có thể xảy ra -> chọn điều kiện loại 1."
+    ]
+  },
+  {
+    "id": "eng-s220",
+    "questionId": "eng-q220",
+    "recognition": "Dấu hiệu nhận biết qua liên từ chỉ thời gian \"as soon as\" (ngay khi) kết hợp mệnh đề hiện tại đơn \"as soon as I get paid\", yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định quy tắc phối hợp thì",
+        "explanation": "Liên từ 'as soon as' dùng để nối hai hành động nối tiếp nhau trong tương lai. Theo quy tắc, mệnh đề đi sau 'as soon as' chia ở thì Hiện tại đơn (get), còn mệnh đề chính đứng trước phải chia ở thì Tương lai đơn (will + V). Loại phương án A (pay - Hiện tại đơn), B (paid - Quá khứ đơn) và D (would pay - Điều kiện loại 2).",
+        "result": "Mệnh đề chính chia thì Tương lai đơn"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Ta chia động từ 'pay' thành 'will pay'.",
+        "result": "Động từ chia đúng: 'will pay'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will pay) chia đúng thì tương lai đơn theo cấu trúc thời gian.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will pay",
+    "commonMistakes": [
+      "Học sinh chọn A (pay) do thói quen dịch từ hoặc nhầm chia hiện tại đơn cho cả hai vế."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc phối hợp thì tương lai: S + will + V + as soon as / when / after + S + V(hiện tại đơn)."
+    ]
+  },
+  {
+    "id": "eng-s221",
+    "questionId": "eng-q221",
+    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề If chia ở hiện tại đơn \"if the traffic is heavy\", yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định loại câu điều kiện",
+        "explanation": "Mệnh đề If dùng động từ 'is' chia ở Hiện tại đơn chỉ điều kiện có thật có thể xảy ra. Đây là câu điều kiện loại 1. Mệnh đề chính phải chia ở thì Tương lai đơn (will + V nguyên mẫu). Loại phương án A (are - Hiện tại đơn), B (were - Quá khứ đơn) và D (would be - Dùng trong điều kiện loại 2).",
+        "result": "Mệnh đề chính chia thì Tương lai đơn"
+      },
+      {
+        "order": 2,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức: will + V nguyên mẫu. Với động từ 'be', ta chia là 'will be'.",
+        "result": "Động từ chia đúng: 'will be'"
+      },
+      {
+        "order": 3,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (will be) chia đúng trợ động từ 'will' và động từ 'be' nguyên mẫu.",
+        "result": "Đáp án đúng là C"
+      }
+    ],
+    "finalAnswer": "C. will be",
+    "commonMistakes": [
+      "Học sinh chọn A (are) do chia hiện tại đơn cả hai vế hoặc chọn D (would be) do nhầm lẫn loại câu điều kiện."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: if + hiện tại đơn, will + V nguyên mẫu (will be)."
+    ]
   }
 ];
+
