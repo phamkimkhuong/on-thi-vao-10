@@ -158,12 +158,12 @@ export const PracticeEngine: React.FC = () => {
       } else if (selectedSubTense === 'present_continuous') {
         filtered = filtered.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 45 && num <= 64;
+          return (num >= 45 && num <= 64) || (num >= 142 && num <= 161);
         });
       } else if (selectedSubTense === 'past_continuous') {
         filtered = filtered.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 65 && num <= 84;
+          return (num >= 65 && num <= 84) || (num >= 162 && num <= 181);
         });
       }
     }
@@ -544,12 +544,12 @@ export const PracticeEngine: React.FC = () => {
       } else if (tense === 'present_continuous') {
         filtered = qList.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && num >= 45 && num <= 64;
+          return q.questionTypeId === 'eng-qt6' && ((num >= 45 && num <= 64) || (num >= 142 && num <= 161));
         });
       } else if (tense === 'past_continuous') {
         filtered = qList.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && num >= 65 && num <= 84;
+          return q.questionTypeId === 'eng-qt6' && ((num >= 65 && num <= 84) || (num >= 162 && num <= 181));
         });
       }
       pool = [...pool, ...filtered];
@@ -684,7 +684,9 @@ export const PracticeEngine: React.FC = () => {
         qIds: [
           ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
           ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`)
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)
         ]
       },
       {
@@ -703,13 +705,13 @@ export const PracticeEngine: React.FC = () => {
         id: 'present_continuous',
         name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)',
         description: 'Tập trung luyện các câu chia thì Hiện tại tiếp diễn với các dấu hiệu thời điểm hoặc cảm thán: now, at the moment, Look!...',
-        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`)
+        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`)]
       },
       {
         id: 'past_continuous',
         name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
         description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
-        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`)
+        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)]
       }
     ];
 
@@ -897,7 +899,7 @@ export const PracticeEngine: React.FC = () => {
               )}
 
               {/* Nút gợi ý thông minh */}
-              {solutionDetail && (
+              {solutionDetail && questionTypeId !== 'eng-qt6' && (
                 <div className="flex flex-col gap-2 pt-2">
                   <button
                     onClick={triggerNextHint}

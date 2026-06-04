@@ -2112,6 +2112,486 @@ export const englishQuestions: Question[] = [
     difficulty: "hard",
     sourceType: "manual",
     validatorType: "choice"
+  },
+  {
+    id: "eng-q142",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Look! The students ______ football in the school yard.",
+    options: ["A. play", "B. plays", "C. are playing", "D. played"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q143",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Listen! Someone ______ at the door.",
+    options: ["A. knocks", "B. is knocking", "C. knocked", "D. knock"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q144",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My sister ______ English now.",
+    options: ["A. studies", "B. studied", "C. is studying", "D. study"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q145",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "They ______ lunch at the moment.",
+    options: ["A. have", "B. has", "C. had", "D. are having"],
+    correctAnswer: "D",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q146",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Be quiet! The baby ______.",
+    options: ["A. sleeps", "B. is sleeping", "C. slept", "D. sleep"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q147",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "I ______ an email to my teacher right now.",
+    options: ["A. write", "B. writes", "C. am writing", "D. wrote"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q148",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ for the bus at the moment.",
+    options: ["A. wait", "B. waits", "C. waited", "D. are waiting"],
+    correctAnswer: "D",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q149",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "She ______ her homework now.",
+    options: ["A. does", "B. is doing", "C. did", "D. do"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q150",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The teacher ______ the lesson to the class now.",
+    options: ["A. explains", "B. explained", "C. is explaining", "D. explain"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q151",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The students ______ the classrooms at the moment.",
+    options: ["A. clean", "B. cleaned", "C. are cleaning", "D. cleans"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q152",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The cooks ______ teenagers how to make healthy dishes now.",
+    options: ["A. show", "B. shows", "C. showed", "D. are showing"],
+    correctAnswer: "D",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q153",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ vegetables in a nearby supermarket right now.",
+    options: ["A. buy", "B. buys", "C. bought", "D. are buying"],
+    correctAnswer: "D",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q154",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "They ______ more trees around the school this week.",
+    options: ["A. plant", "B. plants", "C. are planting", "D. planted"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q155",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The city ______ many green projects at the moment.",
+    options: ["A. develops", "B. developed", "C. is developing", "D. develop"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q156",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Many students ______ part in the clean-up activity now.",
+    options: ["A. take", "B. are taking", "C. took", "D. takes"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q157",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My brother ______ TV now; he is reading a book.",
+    options: ["A. doesn’t watch", "B. didn’t watch", "C. isn’t watching", "D. wasn’t watching"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q158",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "______ your classmates ______ for the English test at the moment?",
+    options: ["A. Do / prepare", "B. Are / preparing", "C. Did / prepare", "D. Were / preparing"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q159",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "I can’t go out now because it ______ heavily.",
+    options: ["A. rains", "B. rained", "C. is raining", "D. rain"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q160",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "These days, more people ______ public transport to reduce air pollution.",
+    options: ["A. use", "B. are using", "C. used", "D. uses"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q161",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Jane is busy now. She ______ a presentation for tomorrow’s meeting.",
+    options: ["A. prepares", "B. prepared", "C. is preparing", "D. prepare"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q162",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "I ______ a presentation when the microphone stopped working.",
+    options: ["A. make", "B. made", "C. was making", "D. am making"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q163",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "She ______ TV at 8 p.m. last night.",
+    options: ["A. watches", "B. watched", "C. was watching", "D. is watching"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q164",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "They ______ football at 5 o’clock yesterday afternoon.",
+    options: ["A. play", "B. played", "C. were playing", "D. are playing"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q165",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ dinner when the phone rang.",
+    options: ["A. have", "B. had", "C. were having", "D. are having"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q166",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "He ______ his homework at this time yesterday.",
+    options: ["A. does", "B. did", "C. was doing", "D. is doing"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q167",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The students ______ in the classroom when the teacher came in.",
+    options: ["A. talk", "B. talked", "C. were talking", "D. are talking"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q168",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My mother ______ dinner when I got home.",
+    options: ["A. cooks", "B. cooked", "C. was cooking", "D. is cooking"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q169",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "It ______ heavily when we left school.",
+    options: ["A. rains", "B. rained", "C. was raining", "D. is raining"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q170",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "James ______ photos in Japan when his phone ran out of battery.",
+    options: ["A. takes", "B. took", "C. was taking", "D. is taking"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q171",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The cooks ______ teenagers how to prepare healthy dishes when I arrived.",
+    options: ["A. show", "B. showed", "C. were showing", "D. are showing"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q172",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The students ______ the school yard when it started to rain.",
+    options: ["A. clean", "B. cleaned", "C. were cleaning", "D. are cleaning"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q173",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ for the bus when Anna saw her old friend.",
+    options: ["A. wait", "B. waited", "C. were waiting", "D. are waiting"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q174",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The city workers ______ more trees along the street when we passed by.",
+    options: ["A. plant", "B. planted", "C. were planting", "D. are planting"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q175",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "I ______ an English text when my younger brother called me.",
+    options: ["A. read", "B. reads", "C. was reading", "D. am reading"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q176",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The tourists ______ around Phu Quoc when the weather suddenly changed.",
+    options: ["A. travel", "B. travelled", "C. were travelling", "D. are travelling"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q177",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "While she ______ a book, her father came home.",
+    options: ["A. reads", "B. read", "C. was reading", "D. is reading"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q178",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "While the students ______ the passage, the teacher wrote new words on the board.",
+    options: ["A. read", "B. were reading", "C. are reading", "D. reads"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q179",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My classmates ______ attention when the teacher explained the rule.",
+    options: ["A. weren’t paying", "B. didn’t paying", "C. don’t pay", "D. aren’t paying"],
+    correctAnswer: "A",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q180",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "______ you ______ dinner when I called you last night?",
+    options: ["A. Did / have", "B. Were / having", "C. Do / have", "D. Are / having"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q181",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The children ______ loudly while their parents were talking.",
+    options: ["A. shout", "B. shouted", "C. were shouting", "D. are shouting"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
   }
 ];
 
@@ -6673,6 +7153,992 @@ export const englishSolutions: Solution[] = [
     ],
     reviewSuggestions: [
       "Lưu ý phân tích kĩ danh từ số ít hay số nhiều ở chủ ngữ trước khi chia động từ to be."
+    ]
+  },
+  {
+    id: "eng-s142",
+    questionId: "eng-q142",
+    recognition: "Nhận biết qua từ mệnh lệnh 'Look!' chỉ hành động đang xảy ra tại thời điểm nói.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian",
+        explanation: "Từ 'Look!' (Nhìn kìa!) yêu cầu sự chú ý vào một sự việc đang diễn ra ngay lúc nói.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The students' (các học sinh) là số nhiều, cấu trúc chia là 'are + V-ing'. Động từ 'play' thêm -ing thành 'playing'.",
+        result: "are playing"
+      }
+    ],
+    finalAnswer: "C. are playing",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'play' hoặc chia thêm -s như ở hiện tại đơn."
+    ],
+    reviewSuggestions: [
+      "Nhớ dấu hiệu nhận biết thì Hiện tại tiếp diễn là các từ cảm thán như Look!, Listen!, Be quiet!."
+    ]
+  },
+  {
+    id: "eng-s143",
+    questionId: "eng-q143",
+    recognition: "Nhận biết qua từ cảm thán 'Listen!' chỉ hành động đang diễn ra tại thời điểm nói.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian",
+        explanation: "Từ 'Listen!' (Nghe kìa!) là tín hiệu chỉ ra một hành động đang xảy ra ngay lúc nói.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ đại từ bất định",
+        explanation: "Chủ ngữ 'Someone' (ai đó) là đại từ bất định, luôn chia động từ ở ngôi thứ ba số ít. Cấu trúc chia là 'is + V-ing'. Động từ 'knock' thêm -ing thành 'knocking'.",
+        result: "is knocking"
+      }
+    ],
+    finalAnswer: "B. is knocking",
+    commonMistakes: [
+      "Chia động từ số nhiều 'are knocking' vì nhầm đại từ bất định là số nhiều."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ: các đại từ bất định như someone, anyone, everyone luôn đi với động từ số ít."
+    ]
+  },
+  {
+    id: "eng-s144",
+    questionId: "eng-q144",
+    recognition: "Nhận biết qua trạng từ thời gian 'now' ở hiện tại.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì của câu",
+        explanation: "Trạng từ 'now' (bây giờ) chỉ hành động đang diễn ra trực tiếp lúc nói.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số ít",
+        explanation: "Chủ ngữ 'My sister' là số ít, cấu trúc chia là 'is + V-ing'. Động từ 'study' thêm -ing thành 'studying'.",
+        result: "is studying"
+      }
+    ],
+    finalAnswer: "C. is studying",
+    commonMistakes: [
+      "Nhầm lẫn chia hiện tại đơn 'studies' do không chú ý trạng từ 'now'."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cấu trúc thì Hiện tại tiếp diễn: S + am/is/are + V-ing."
+    ]
+  },
+  {
+    id: "eng-s145",
+    questionId: "eng-q145",
+    recognition: "Nhận biết qua cụm từ chỉ thời gian 'at the moment'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì của câu",
+        explanation: "Cụm từ 'at the moment' (ngay lúc này) yêu cầu chia động từ ở thì Hiện tại tiếp diễn.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'They' (họ) là số nhiều, cấu trúc chia là 'are + V-ing'. Động từ 'have' bỏ 'e' trước khi thêm -ing thành 'having'.",
+        result: "are having"
+      }
+    ],
+    finalAnswer: "D. are having",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'have' hoặc giữ nguyên chữ 'e' khi thêm -ing (haveing)."
+    ],
+    reviewSuggestions: [
+      "Lưu ý quy tắc bỏ chữ cái 'e' ở cuối động từ trước khi thêm đuôi -ing."
+    ]
+  },
+  {
+    id: "eng-s146",
+    questionId: "eng-q146",
+    recognition: "Nhận biết qua cụm từ mệnh lệnh 'Be quiet!' yêu cầu giữ trật tự.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh thời gian",
+        explanation: "Yêu cầu 'Be quiet!' (Hãy im lặng!) được đưa ra vì có một hành động khác đang xảy ra đồng thời.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số ít",
+        explanation: "Chủ ngữ 'The baby' (đứa bé) là danh từ số ít, cấu trúc chia là 'is + V-ing'. Động từ 'sleep' thêm -ing thành 'sleeping'.",
+        result: "is sleeping"
+      }
+    ],
+    finalAnswer: "B. is sleeping",
+    commonMistakes: [
+      "Chọn hiện tại đơn 'sleeps' do thói quen chia động từ nhanh."
+    ],
+    reviewSuggestions: [
+      "Rèn luyện thói quen phân tích ngữ cảnh các câu mệnh lệnh trong giao tiếp."
+    ]
+  },
+  {
+    id: "eng-s147",
+    questionId: "eng-q147",
+    recognition: "Nhận biết qua trạng từ thời gian 'right now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Trạng từ 'right now' (ngay bây giờ) chỉ hành động đang diễn ra trực tiếp. Chủ ngữ 'I' đi với trợ động từ 'am' và động từ 'writing' (write bỏ 'e' thêm -ing).",
+        result: "am writing"
+      }
+    ],
+    finalAnswer: "C. am writing",
+    commonMistakes: [
+      "Nhầm lẫn trợ động từ đi với 'I' thành 'is' hoặc 'are'."
+    ],
+    reviewSuggestions: [
+      "Khắc sâu sự hòa hợp trợ động từ: I + am, He/She/It + is, You/We/They + are."
+    ]
+  },
+  {
+    id: "eng-s148",
+    questionId: "eng-q148",
+    recognition: "Nhận biết qua trạng ngữ thời gian 'at the moment'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Cụm 'at the moment' (ngay lúc này) chỉ hành động đang diễn ra. Chủ ngữ 'We' (chúng tôi) đi với cấu trúc 'are + V-ing'. Động từ 'wait' thêm -ing thành 'waiting'.",
+        result: "are waiting"
+      }
+    ],
+    finalAnswer: "D. are waiting",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'wait' hoặc quá khứ 'waited'."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ các trạng từ đặc trưng chỉ thời điểm hiện tại tiếp diễn."
+    ]
+  },
+  {
+    id: "eng-s149",
+    questionId: "eng-q149",
+    recognition: "Nhận biết qua trạng từ chỉ thời gian 'now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Từ 'now' chỉ hành động đang diễn ra lúc nói. Chủ ngữ 'She' số ít đi với cấu trúc 'is + V-ing'. Động từ 'do' thêm -ing thành 'doing'.",
+        result: "is doing"
+      }
+    ],
+    finalAnswer: "B. is doing",
+    commonMistakes: [
+      "Chọn hiện tại đơn 'does' của chủ ngữ số ít."
+    ],
+    reviewSuggestions: [
+      "Phân biệt rõ trạng từ tần suất hiện tại đơn và trạng từ thời điểm hiện tại tiếp diễn."
+    ]
+  },
+  {
+    id: "eng-s150",
+    questionId: "eng-q150",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian 'now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và chia động từ",
+        explanation: "Từ 'now' chỉ hành động đang diễn ra. Chủ ngữ 'The teacher' (giáo viên - số ít) đi với cấu trúc 'is + V-ing'. Động từ 'explain' thêm -ing thành 'explaining'.",
+        result: "is explaining"
+      }
+    ],
+    finalAnswer: "C. is explaining",
+    commonMistakes: [
+      "Chọn hiện tại đơn chia số ít 'explains' hoặc động từ nguyên mẫu."
+    ],
+    reviewSuggestions: [
+      "Học cách nhận diện và chia động từ cho danh từ số ít chỉ người."
+    ]
+  },
+  {
+    id: "eng-s151",
+    questionId: "eng-q151",
+    recognition: "Nhận biết qua cụm từ chỉ thời gian 'at the moment'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và chia động từ",
+        explanation: "Cụm 'at the moment' chỉ hành động đang diễn ra. Chủ ngữ 'The students' (các học sinh - số nhiều) đi với 'are + V-ing'. Động từ 'clean' thêm -ing thành 'cleaning'.",
+        result: "are cleaning"
+      }
+    ],
+    finalAnswer: "C. are cleaning",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'clean' hoặc chia số ít 'cleans'."
+    ],
+    reviewSuggestions: [
+      "Đảm bảo sự hòa hợp giữa danh từ chủ ngữ số nhiều và trợ động từ 'are'."
+    ]
+  },
+  {
+    id: "eng-s152",
+    questionId: "eng-q152",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian 'now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và chia động từ",
+        explanation: "Từ 'now' chỉ hành động đang diễn ra. Chủ ngữ 'The cooks' (các đầu bếp - số nhiều) đi với cấu trúc 'are + V-ing'. Động từ 'show' thêm -ing thành 'showing'.",
+        result: "are showing"
+      }
+    ],
+    finalAnswer: "D. are showing",
+    commonMistakes: [
+      "Nhầm lẫn cooks là động từ hoặc chia 'is showing' cho danh từ số nhiều."
+    ],
+    reviewSuggestions: [
+      "Lưu ý phân biệt danh từ số nhiều có đuôi 's' để chia trợ động từ thích hợp."
+    ]
+  },
+  {
+    id: "eng-s153",
+    questionId: "eng-q153",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian 'right now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Trạng từ 'right now' yêu cầu chia thì Hiện tại tiếp diễn. Chủ ngữ 'We' đi với 'are + V-ing'. Động từ 'buy' thêm -ing thành 'buying'.",
+        result: "are buying"
+      }
+    ],
+    finalAnswer: "D. are buying",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'buy' hoặc quá khứ 'bought'."
+    ],
+    reviewSuggestions: [
+      "Luyện tập nhận diện trạng từ chỉ thời điểm hành động đang xảy ra."
+    ]
+  },
+  {
+    id: "eng-s154",
+    questionId: "eng-q154",
+    recognition: "Nhận biết qua thời gian tạm thời trong tuần này 'this week'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh hành động",
+        explanation: "Cụm từ 'this week' (tuần này) mô tả một hành động tạm thời đang diễn ra xung quanh thời điểm nói hiện tại.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'They' đi với trợ động từ 'are' và động từ thêm -ing 'planting'.",
+        result: "are planting"
+      }
+    ],
+    finalAnswer: "C. are planting",
+    commonMistakes: [
+      "Chia hiện tại đơn 'plant' do thói quen dịch nghĩa không để ý tính tạm thời."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ: thì Hiện tại tiếp diễn dùng để tả hành động tạm thời diễn ra xung quanh hiện tại với các trạng từ như this week, this month, these days."
+    ]
+  },
+  {
+    id: "eng-s155",
+    questionId: "eng-q155",
+    recognition: "Nhận biết qua cụm từ chỉ thời gian 'at the moment'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và chia động từ",
+        explanation: "Cụm 'at the moment' yêu cầu chia hiện tại tiếp diễn. Chủ ngữ 'The city' (thành phố - số ít) đi với 'is + V-ing'. Động từ 'develop' thêm -ing thành 'developing'.",
+        result: "is developing"
+      }
+    ],
+    finalAnswer: "C. is developing",
+    commonMistakes: [
+      "Chọn hiện tại đơn 'develops' hoặc chia trợ động từ số nhiều 'are'."
+    ],
+    reviewSuggestions: [
+      "Xác định danh từ số ít chỉ địa danh để chia đúng trợ động từ 'is'."
+    ]
+  },
+  {
+    id: "eng-s156",
+    questionId: "eng-q156",
+    recognition: "Nhận biết qua trạng từ chỉ thời gian 'now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và cụm động từ",
+        explanation: "Từ 'now' chỉ hành động đang diễn ra. Chủ ngữ 'Many students' (nhiều học sinh - số nhiều) đi với 'are + V-ing'. Động từ 'take' trong cụm 'take part in' bỏ 'e' thêm -ing thành 'taking'.",
+        result: "are taking"
+      }
+    ],
+    finalAnswer: "B. are taking",
+    commonMistakes: [
+      "Nhầm lẫn chia hiện tại đơn 'take' hoặc quên bỏ 'e' trước khi thêm -ing."
+    ],
+    reviewSuggestions: [
+      "Luyện viết đúng dạng V-ing đối với các động từ có quy tắc tận cùng bằng nguyên âm câm 'e'."
+    ]
+  },
+  {
+    id: "eng-s157",
+    questionId: "eng-q157",
+    recognition: "Cấu trúc phủ định ở hiện tại tiếp diễn kết hợp với ngữ cảnh giải thích.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh câu",
+        explanation: "Vế sau ghi 'he is reading a book' (anh ấy đang đọc sách), chứng tỏ vế trước nói anh ấy không đang xem TV ở thời điểm hiện tại 'now'.",
+        result: "Phủ định thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Áp dụng cấu trúc phủ định",
+        explanation: "Công thức: S + am/is/are + not + V-ing. Chủ ngữ 'My brother' (số ít) đi với 'is not' (viết tắt là 'isn't') và động từ 'watching'.",
+        result: "isn't watching"
+      }
+    ],
+    finalAnswer: "C. isn't watching",
+    commonMistakes: [
+      "Chọn hiện tại đơn phủ định 'doesn't watch' do không chú ý trạng từ 'now' hoặc vế giải thích đằng sau."
+    ],
+    reviewSuggestions: [
+      "Đọc kỹ toàn bộ câu ghép/câu nối để tìm manh mối ngữ nghĩa hỗ trợ."
+    ]
+  },
+  {
+    id: "eng-s158",
+    questionId: "eng-q158",
+    recognition: "Cấu trúc câu hỏi nghi vấn (Yes/No Question) ở thì Hiện tại tiếp diễn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định trạng từ và chủ ngữ",
+        explanation: "Trạng từ 'at the moment' yêu cầu chia hiện tại tiếp diễn. Chủ ngữ 'your classmates' (các bạn cùng lớp của bạn - số nhiều) đi với to be số nhiều.",
+        result: "Hiện tại tiếp diễn, chủ ngữ số nhiều"
+      },
+      {
+        order: 2,
+        title: "Áp dụng cấu trúc câu hỏi",
+        explanation: "Công thức: Am/Is/Are + S + V-ing? Trợ động từ 'Are' đặt ở đầu câu, động từ 'prepare' bỏ 'e' thêm -ing thành 'preparing'.",
+        result: "Are / preparing"
+      }
+    ],
+    finalAnswer: "B. Are / preparing",
+    commonMistakes: [
+      "Chọn trợ động từ hiện tại đơn 'Do / prepare' hoặc chọn chia quá khứ."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ cấu trúc câu hỏi nghi vấn của thì Hiện tại tiếp diễn."
+    ]
+  },
+  {
+    id: "eng-s159",
+    questionId: "eng-q159",
+    recognition: "Nhận biết hành động đang diễn ra giải thích cho ngữ cảnh hiện tại.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Câu 'I can't go out now' (Tôi không thể ra ngoài bây giờ) diễn ra vì lý do trời đang mưa to ngay tại thời điểm đó.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'it' đi với cấu trúc 'is + V-ing'. Động từ 'rain' thêm -ing thành 'raining'.",
+        result: "is raining"
+      }
+    ],
+    finalAnswer: "C. is raining",
+    commonMistakes: [
+      "Chọn hiện tại đơn 'rains' mô tả thời tiết nói chung."
+    ],
+    reviewSuggestions: [
+      "Phân biệt cách dùng hiện tại đơn (sự thật chung) và hiện tại tiếp diễn (sự việc tạm thời đang xảy ra)."
+    ]
+  },
+  {
+    id: "eng-s160",
+    questionId: "eng-q160",
+    recognition: "Nhận biết xu hướng hoặc sự thay đổi đang diễn ra qua trạng từ 'These days'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ý nghĩa trạng từ",
+        explanation: "Trạng từ 'These days' (dạo này, những ngày này) dùng để mô tả một xu hướng mới hoặc sự thay đổi đang diễn ra ở hiện tại.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'more people' (nhiều người hơn - số nhiều) đi với 'are + V-ing'. Động từ 'use' bỏ 'e' thêm -ing thành 'using'.",
+        result: "are using"
+      }
+    ],
+    finalAnswer: "B. are using",
+    commonMistakes: [
+      "Chia hiện tại đơn 'use' do thói quen dịch nghĩa."
+    ],
+    reviewSuggestions: [
+      "Lưu ý: thì Hiện tại tiếp diễn còn dùng để nói về xu hướng/sự thay đổi ở hiện tại với các từ như These days, Today."
+    ]
+  },
+  {
+    id: "eng-s161",
+    questionId: "eng-q161",
+    recognition: "Nhận biết hành động đang diễn ra qua ngữ cảnh mô tả trạng thái 'Jane is busy now'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Câu 'Jane is busy now' (Jane bây giờ đang bận) vì cô ấy đang thực hiện hành động chuẩn bị cho buổi họp ngày mai.",
+        result: "Thì Hiện tại tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'She' đi với cấu trúc 'is + V-ing'. Động từ 'prepare' bỏ 'e' thêm -ing thành 'preparing'.",
+        result: "is preparing"
+      }
+    ],
+    finalAnswer: "C. is preparing",
+    commonMistakes: [
+      "Chia hiện tại đơn 'prepares' do nhầm hành động thói quen."
+    ],
+    reviewSuggestions: [
+      "Chú ý các từ trạng thái như busy, free chỉ thời điểm hành động đang diễn ra."
+    ]
+  },
+  {
+    id: "eng-s162",
+    questionId: "eng-q162",
+    recognition: "Diễn tả hành động đang xảy ra trong quá khứ thì bị một hành động khác xen vào.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích mối quan hệ giữa hai hành động",
+        explanation: "Hành động đang diễn thuyết trình đang xảy ra thì hành động cái mic bị hỏng xen vào (chia ở Quá khứ đơn: 'stopped').",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'I' đi với cấu trúc 'was + V-ing'. Động từ 'make' bỏ 'e' thêm -ing thành 'making'.",
+        result: "was making"
+      }
+    ],
+    finalAnswer: "C. was making",
+    commonMistakes: [
+      "Chia ở quá khứ đơn 'made' hoặc nhầm dùng to be hiện tại."
+    ],
+    reviewSuggestions: [
+      "Luyện cấu trúc: S + was/were + V-ing + when + S + V2/ed."
+    ]
+  },
+  {
+    id: "eng-s163",
+    questionId: "eng-q163",
+    recognition: "Nhận biết qua mốc thời gian cụ thể trong quá khứ 'at 8 p.m. last night'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thời điểm cụ thể",
+        explanation: "Thời điểm '8 giờ tối qua' là mốc thời gian cụ thể đã qua, đòi hỏi chia thì Quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'She' số ít đi với cấu trúc 'was + V-ing'. Động từ 'watch' thêm -ing thành 'watching'.",
+        result: "was watching"
+      }
+    ],
+    finalAnswer: "C. was watching",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'watched' do không chú ý giờ cụ thể 'at 8 p.m.'."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ: Quá khứ đơn dùng cho mốc thời gian chung chung (last night), còn Quá khứ tiếp diễn dùng cho giờ giấc cụ thể (at 8 p.m. last night)."
+    ]
+  },
+  {
+    id: "eng-s164",
+    questionId: "eng-q164",
+    recognition: "Nhận biết qua thời điểm cụ thể trong quá khứ 'at 5 o’clock yesterday afternoon'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thời điểm cụ thể",
+        explanation: "Mốc '5 giờ chiều ngày hôm qua' yêu cầu chia động từ ở quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'They' (họ) đi với cấu trúc số nhiều 'were + V-ing'. Động từ 'play' thêm -ing thành 'playing'.",
+        result: "were playing"
+      }
+    ],
+    finalAnswer: "C. were playing",
+    commonMistakes: [
+      "Dùng nhầm trợ động từ số ít 'was playing' cho chủ ngữ 'They'."
+    ],
+    reviewSuggestions: [
+      "Đảm bảo sự hòa hợp giữa trợ động từ was/were và chủ ngữ số ít/số nhiều."
+    ]
+  },
+  {
+    id: "eng-s165",
+    questionId: "eng-q165",
+    recognition: "Diễn tả hành động đang xảy ra (ăn tối) thì hành động khác xen vào (điện thoại reo).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Việc ăn tối đang diễn ra kéo dài thì bị cắt ngang bởi tiếng chuông điện thoại (quá khứ đơn 'rang').",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'We' (chúng tôi) đi với cấu trúc 'were + V-ing'. Động từ 'have' bỏ 'e' thêm -ing thành 'having'.",
+        result: "were having"
+      }
+    ],
+    finalAnswer: "C. were having",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'had' hoặc chia hiện tại."
+    ],
+    reviewSuggestions: [
+      "Học cách xác định hành động kéo dài (quá khứ tiếp diễn) và hành động ngắn xen vào (quá khứ đơn)."
+    ]
+  },
+  {
+    id: "eng-s166",
+    questionId: "eng-q166",
+    recognition: "Nhận biết thời điểm xác định cụ thể trong quá khứ 'at this time yesterday'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thời điểm cụ thể",
+        explanation: "Cụm 'at this time yesterday' (vào thời điểm này ngày hôm qua) yêu cầu chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'He' (ngôi số ít) đi với cấu trúc 'was + V-ing'. Động từ 'do' thêm -ing thành 'doing'.",
+        result: "was doing"
+      }
+    ],
+    finalAnswer: "C. was doing",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'did' do không chú ý cụm từ chỉ thời điểm cụ thể 'at this time'."
+    ],
+    reviewSuggestions: [
+      "Phân biệt rõ: 'yesterday' (quá khứ đơn) và 'at this time yesterday' (quá khứ tiếp diễn)."
+    ]
+  },
+  {
+    id: "eng-s167",
+    questionId: "eng-q167",
+    recognition: "Hành động đang diễn ra (nói chuyện) thì hành động khác xen vào (giáo viên bước vào).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Hành động học sinh nói chuyện đang diễn ra trong lớp thì bị cắt ngang bởi hành động giáo viên vào phòng (quá khứ đơn 'came in').",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The students' (số nhiều) đi với 'were + V-ing'. Động từ 'talk' thêm -ing thành 'talking'.",
+        result: "were talking"
+      }
+    ],
+    finalAnswer: "C. were talking",
+    commonMistakes: [
+      "Dùng trợ động từ số ít 'was talking' hoặc chia quá khứ đơn."
+    ],
+    reviewSuggestions: [
+      "Chú ý danh từ chủ ngữ có đuôi 's' để chia đúng trợ động từ số nhiều."
+    ]
+  },
+  {
+    id: "eng-s168",
+    questionId: "eng-q168",
+    recognition: "Diễn tả hành động đang xảy ra (nấu ăn) thì hành động khác xen vào (về nhà).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Mẹ đang nấu ăn thì tôi về nhà (xen vào chia quá khứ đơn 'got home'). Vế đang nấu ăn chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số ít",
+        explanation: "Chủ ngữ 'My mother' (số ít) đi với trợ động từ 'was' và động từ thêm -ing 'cooking'.",
+        result: "was cooking"
+      }
+    ],
+    finalAnswer: "C. was cooking",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'cooked' hoặc hiện tại tiếp diễn."
+    ],
+    reviewSuggestions: [
+      "Thực hành viết các câu ghép miêu tả các hành động xen ngang nhau trong quá khứ."
+    ]
+  },
+  {
+    id: "eng-s169",
+    questionId: "eng-q169",
+    recognition: "Diễn tả hành động đang xảy ra (mưa) thì hành động khác xen vào (rời trường).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Trời đang mưa to thì chúng tôi rời trường (quá khứ đơn 'left'). Hành động trời mưa chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'It' đi với cấu trúc 'was + V-ing'. Động từ 'rain' thêm -ing thành 'raining'.",
+        result: "was raining"
+      }
+    ],
+    finalAnswer: "C. was raining",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'rained'."
+    ],
+    reviewSuggestions: [
+      "Lưu ý các động từ chỉ thời tiết thường được chia tiếp diễn để mô tả khung cảnh."
+    ]
+  },
+  {
+    id: "eng-s170",
+    questionId: "eng-q170",
+    recognition: "Hành động đang xảy ra (chụp ảnh) thì hành động khác xen vào (hết pin).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "James đang chụp ảnh ở Nhật thì điện thoại bị hết pin (chia quá khứ đơn 'ran out'). Việc chụp ảnh chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'James' (số ít) đi với cấu trúc 'was + V-ing'. Động từ 'take' bỏ 'e' thêm -ing thành 'taking'.",
+        result: "was taking"
+      }
+    ],
+    finalAnswer: "C. was taking",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'took' hoặc quên bỏ 'e' trước khi thêm -ing."
+    ],
+    reviewSuggestions: [
+      "Học cách biến đổi động từ 'take -> taking'."
+    ]
+  },
+  {
+    id: "eng-s171",
+    questionId: "eng-q171",
+    recognition: "Hành động đang xảy ra (hướng dẫn nấu ăn) thì hành động khác xen vào (tôi đến).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Các đầu bếp đang hướng dẫn học sinh nấu ăn thì tôi đến (xen vào chia quá khứ đơn 'arrived'). Việc hướng dẫn chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The cooks' (số nhiều) đi với 'were + V-ing'. Động từ 'show' thêm -ing thành 'showing'.",
+        result: "were showing"
+      }
+    ],
+    finalAnswer: "C. were showing",
+    commonMistakes: [
+      "Dùng trợ động từ số ít 'was showing' cho chủ ngữ số nhiều 'The cooks'."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ sự hòa hợp chủ-vị của trợ động từ quá khứ tiếp diễn."
+    ]
+  },
+  {
+    id: "eng-s172",
+    questionId: "eng-q172",
+    recognition: "Hành động đang xảy ra (dọn sân trường) thì hành động khác xen vào (trời bắt đầu mưa).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Học sinh đang dọn dẹp thì trời bắt đầu mưa (quá khứ đơn 'started'). Việc dọn dẹp chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The students' (số nhiều) đi với 'were + V-ing'. Động từ 'clean' thêm -ing thành 'cleaning'.",
+        result: "were cleaning"
+      }
+    ],
+    finalAnswer: "C. were cleaning",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'cleaned' hoặc chia trợ động từ 'was'."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cách chia động từ theo danh từ số nhiều làm chủ ngữ."
+    ]
+  },
+  {
+    id: "eng-s173",
+    questionId: "eng-q173",
+    recognition: "Hành động đang xảy ra (đợi xe buýt) thì hành động khác xen vào (nhìn thấy bạn cũ).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Chúng tôi đang đợi xe buýt thì Anna nhìn thấy bạn cũ (xen vào chia quá khứ đơn 'saw'). Việc đợi xe chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'We' đi với trợ động từ 'were' và động từ 'waiting'.",
+        result: "were waiting"
+      }
+    ],
+    finalAnswer: "C. were waiting",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'waited' hoặc chia hiện tại tiếp diễn."
+    ],
+    reviewSuggestions: [
+      "Nhận diện liên từ 'when' thường kết nối hành động xen ngang."
+    ]
+  },
+  {
+    id: "eng-s174",
+    questionId: "eng-q174",
+    recognition: "Hành động đang xảy ra (trồng cây) thì hành động khác xen vào (chúng tôi đi ngang qua).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Công nhân đang trồng cây thì chúng tôi đi ngang qua (xen vào chia quá khứ đơn 'passed by'). Việc trồng cây chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The city workers' (số nhiều) đi với 'were + V-ing'. Động từ 'plant' thêm -ing thành 'planting'.",
+        result: "were planting"
+      }
+    ],
+    finalAnswer: "C. were planting",
+    commonMistakes: [
+      "Dùng trợ động từ số ít 'was planting' cho danh từ số nhiều 'workers'."
+    ],
+    reviewSuggestions: [
+      "Phân biệt danh từ chính trong cụm chủ ngữ dài để chia động từ."
+    ]
+  },
+  {
+    id: "eng-s175",
+    questionId: "eng-q175",
+    recognition: "Hành động đang xảy ra (đọc bài) thì hành động khác xen vào (em trai gọi).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Tôi đang đọc bài thì em trai gọi điện (xen vào chia quá khứ đơn 'called'). Việc đọc bài chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ 'I' đi với cấu trúc 'was + V-ing'. Động từ 'read' thêm -ing thành 'reading'.",
+        result: "was reading"
+      }
+    ],
+    finalAnswer: "C. was reading",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'read' (phát âm là /red/) hoặc hiện tại tiếp diễn."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ cấu trúc chia với ngôi 'I' trong quá khứ tiếp diễn dùng trợ động từ 'was'."
+    ]
+  },
+  {
+    id: "eng-s176",
+    questionId: "eng-q176",
+    recognition: "Hành động đang xảy ra (đi du lịch) thì hành động khác xen vào (thời tiết thay đổi).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh",
+        explanation: "Du khách đang đi du lịch vòng quanh Phú Quốc thì thời tiết thay đổi đột ngột (xen vào chia quá khứ đơn 'changed'). Việc đi du lịch chia quá khứ tiếp diễn.",
+        result: "Thì Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The tourists' (số nhiều) đi với cấu trúc 'were + V-ing'. Động từ 'travel' gấp đôi phụ âm 'l' trước khi thêm -ing thành 'travelling'.",
+        result: "were travelling"
+      }
+    ],
+    finalAnswer: "C. were travelling",
+    commonMistakes: [
+      "Không gấp đôi phụ âm 'l' (traveling - mặc dù tiếng Anh-Mỹ chấp nhận nhưng đề thi chuẩn thường ưu tiên Anh-Anh với 2 chữ l) hoặc chia trợ động từ 'was'."
+    ],
+    reviewSuggestions: [
+      "Lưu ý quy tắc gấp đôi phụ âm cuối của động từ có 2 âm tiết nhấn trọng âm khác nhau."
+    ]
+  },
+  {
+    id: "eng-s177",
+    questionId: "eng-q177",
+    recognition: "Nhận biết hành động đang xảy ra kéo dài sau liên từ 'While'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định vai trò của liên từ While",
+        explanation: "Mệnh đề sau 'While' (trong khi) thường diễn tả hành động đang xảy ra kéo dài trong quá khứ, làm nền cho hành động khác xen vào.",
+        result: "Mệnh đề sau While chia Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số ít",
+        explanation: "Chủ ngữ 'she' số ít đi với cấu trúc 'was + V-ing'. Động từ 'read' thêm -ing thành 'reading'.",
+        result: "was reading"
+      }
+    ],
+    finalAnswer: "C. was reading",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'read' do không chú ý liên từ 'While'."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ quy tắc: While + S + was/were + V-ing."
+    ]
+  },
+  {
+    id: "eng-s178",
+    questionId: "eng-q178",
+    recognition: "Nhận biết mệnh đề sau liên từ 'While' diễn tả hành động đang xảy ra.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chủ ngữ",
+        explanation: "Liên từ 'While' đứng đầu câu chỉ hành động đang xảy ra kéo dài. Chủ ngữ 'the students' (số nhiều) yêu cầu trợ động từ số nhiều.",
+        result: "Quá khứ tiếp diễn, chủ ngữ số nhiều"
+      },
+      {
+        order: 2,
+        title: "Chia động từ",
+        explanation: "Động từ 'read' thêm -ing đi kèm trợ động từ số nhiều là 'were reading'.",
+        result: "were reading"
+      }
+    ],
+    finalAnswer: "B. were reading",
+    commonMistakes: [
+      "Chọn 'read' quá khứ đơn hoặc nhầm chia trợ động từ số ít 'was'."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cách chia động từ sau While với danh từ số nhiều."
+    ]
+  },
+  {
+    id: "eng-s179",
+    questionId: "eng-q179",
+    recognition: "Cấu trúc phủ định ở thì Quá khứ tiếp diễn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh thời gian",
+        explanation: "Câu diễn tả hành động đang không xảy ra (không chú ý) khi giáo viên giảng giải (quá khứ đơn 'explained'). Ngữ cảnh đòi hỏi thể phủ định quá khứ tiếp diễn.",
+        result: "Thể phủ định quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Áp dụng cấu trúc phủ định",
+        explanation: "Công thức: S + wasn't/weren't + V-ing. Chủ ngữ 'My classmates' (số nhiều) đi với 'weren't paying'.",
+        result: "weren't paying"
+      }
+    ],
+    finalAnswer: "A. weren’t paying",
+    commonMistakes: [
+      "Chọn 'didn't paying' (sai cấu trúc ngữ pháp vì sau didn't phải là động từ nguyên mẫu)."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ: không được dùng V-ing ngay sau trợ động từ did/didn't."
+    ]
+  },
+  {
+    id: "eng-s180",
+    questionId: "eng-q180",
+    recognition: "Cấu trúc câu hỏi nghi vấn (Yes/No Question) ở thì Quá khứ tiếp diễn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích ngữ cảnh thời gian",
+        explanation: "Câu hỏi hỏi về hành động đang diễn ra (ăn tối) khi hành động khác gọi điện đến cắt ngang ('when I called you last night').",
+        result: "Câu hỏi quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Áp dụng cấu trúc câu hỏi",
+        explanation: "Công thức: Was/Were + S + V-ing? Chủ ngữ 'you' đi với trợ động từ 'Were'. Động từ 'have' bỏ 'e' thêm -ing thành 'having'.",
+        result: "Were / having"
+      }
+    ],
+    finalAnswer: "B. Were / having",
+    commonMistakes: [
+      "Chọn trợ động từ quá khứ đơn 'Did / have' vì nhầm lẫn hành động đã hoàn thành."
+    ],
+    reviewSuggestions: [
+      "Luyện viết và chia động từ dạng câu hỏi đối với các thì tiếp diễn."
+    ]
+  },
+  {
+    id: "eng-s181",
+    questionId: "eng-q181",
+    recognition: "Diễn tả hai hành động song song đồng thời xảy ra trong quá khứ.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Phân tích mối quan hệ hai vế câu",
+        explanation: "Hai vế được liên kết bằng liên từ 'while' (trong khi). Vế sau chia quá khứ tiếp diễn 'were talking', vế trước tả hành động hét lớn xảy ra song song cũng chia quá khứ tiếp diễn.",
+        result: "Hai hành động song song chia Quá khứ tiếp diễn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ số nhiều",
+        explanation: "Chủ ngữ 'The children' (trẻ em - số nhiều) đi với cấu trúc 'were + V-ing'. Động từ 'shout' thêm -ing thành 'shouting'.",
+        result: "were shouting"
+      }
+    ],
+    finalAnswer: "C. were shouting",
+    commonMistakes: [
+      "Chọn quá khứ đơn 'shouted' do thói quen dịch nghĩa."
+    ],
+    reviewSuggestions: [
+      "Nhớ quy tắc: Khi tả 2 hành động xảy ra song song đồng thời ở quá khứ, cả 2 vế đều chia Quá khứ tiếp diễn."
     ]
   }
 ];
