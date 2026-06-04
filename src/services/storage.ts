@@ -97,13 +97,15 @@ export const storageService = {
     map[userId].push(attempt);
     writeToStorage(KEYS.ATTEMPTS, map);
 
-    // Tự động cập nhật tiến độ học tập và sổ lỗi sai tương ứng với userId
-    this.updateProgress(userId, attempt.questionTypeId);
+    // Tự động cập nhật tiến độ học tập và sổ lỗi sai tương ứng với các bài làm được chấm tự động
+    if (attempt.gradingMode !== 'manual') {
+      this.updateProgress(userId, attempt.questionTypeId);
 
-    if (!attempt.isCorrect) {
-      this.addOrUpdateMistake(userId, attempt);
-    } else {
-      this.resolveMistakeIfCorrect(userId, attempt.questionId);
+      if (!attempt.isCorrect) {
+        this.addOrUpdateMistake(userId, attempt);
+      } else {
+        this.resolveMistakeIfCorrect(userId, attempt.questionId);
+      }
     }
   },
 

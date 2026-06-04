@@ -20,7 +20,8 @@ import {
   AlertTriangle,
   Lightbulb,
   Star,
-  Sparkles
+  Sparkles,
+  HelpCircle
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore, getSubjectTheme } from '../../utils/theme';
@@ -392,7 +393,7 @@ export const PracticeEngine: React.FC = () => {
       userAnswer: finalAnswer,
       ...(!isMath && currentQ.answerSchema ? { finalAnswer: structuredAnswer } : {}),
       ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
-      gradingMode: isMath ? 'manual' : (currentQ.answerSchema?.autoCheckMode === 'manual' ? 'manual' : 'auto'),
+      gradingMode: 'manual',
       isCorrect: correct,
       timeSpent: Math.round((getNow() - questionStartAt) / 1000),
       createdAt: new Date().toISOString()
@@ -434,11 +435,14 @@ export const PracticeEngine: React.FC = () => {
     setHintLevel(prev => Math.min(maxSteps, prev + 1));
   };
 
-  if (isMath && !user) {
+  if (!user) {
     return (
       <MathLoginRequired
-        title="Đăng nhập để luyện tập môn Toán"
-        description="Bài Toán cần lưu ảnh lời giải và tiến độ cá nhân theo tài khoản. Bạn cần đăng nhập trước khi chọn dạng bài hoặc nộp bài Toán."
+        title={isMath ? "Đăng nhập để luyện tập môn Toán" : "Đăng nhập để luyện tập Tiếng Anh"}
+        description={isMath 
+          ? "Bài Toán cần lưu ảnh lời giải và tiến độ cá nhân theo tài khoản. Bạn cần đăng nhập trước khi chọn dạng bài hoặc nộp bài Toán."
+          : "Bài tập Tiếng Anh cần gửi đáp án để thầy cô chấm và ghi nhận tiến độ. Bạn cần đăng nhập trước khi làm bài."
+        }
       />
     );
   }
@@ -1098,12 +1102,25 @@ export const PracticeEngine: React.FC = () => {
                       </div>
                     </>
                   )
+                ) : existingAttempt && existingAttempt.gradingMode === 'manual' ? (
+                  <>
+                    <HelpCircle size={24} className="text-amber-500 shrink-0 animate-pulse" />
+                    <div>
+                      <h4 className="font-extrabold text-sm">Đã nộp đáp án thành công!</h4>
+                      <p className="text-xs font-semibold opacity-90">Đáp án của bạn đang chờ thầy cô kiểm tra và phê duyệt. Bạn chưa thể làm lại câu này cho đến khi thầy cô duyệt.</p>
+                    </div>
+                  </>
                 ) : isCorrect ? (
                   <>
                     <CheckCircle size={24} className="text-emerald-500 shrink-0" />
                     <div>
                       <h4 className="font-extrabold text-sm">Chính xác! Cực kỳ xuất sắc.</h4>
                       <p className="text-xs font-semibold opacity-90">Bạn đã tăng điểm số Mastery cho dạng bài này.</p>
+                      {existingAttempt?.teacherFeedback && (
+                        <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
+                          💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                        </p>
+                      )}
                     </div>
                   </>
                 ) : (
@@ -1114,6 +1131,11 @@ export const PracticeEngine: React.FC = () => {
                       <p className="text-xs font-semibold opacity-90">
                         Câu hỏi đã được lưu vào **Sổ lỗi sai**. Hãy xem kỹ lời giải chi tiết dưới đây để khắc phục nhé!
                       </p>
+                      {existingAttempt?.teacherFeedback && (
+                        <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
+                          💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                        </p>
+                      )}
                     </div>
                   </>
                 )}
@@ -1220,13 +1242,15 @@ export const PracticeEngine: React.FC = () => {
                 >
                   <ArrowLeft size={16} /> Câu trước
                 </Button>
-                <Button
-                  onClick={handleRetry}
-                  variant="outline"
-                  className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
-                >
-                  🔄 Làm lại bài này
-                </Button>
+                {(!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
+                  <Button
+                    onClick={handleRetry}
+                    variant="outline"
+                    className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
+                  >
+                    🔄 Làm lại bài này
+                  </Button>
+                )}
                 <Button
                   onClick={handleNext}
                   className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer h-10"

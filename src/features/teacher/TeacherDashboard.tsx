@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
-import { mathQuestionTypes } from '../../data/mathData';
-import { englishQuestionTypes } from '../../data/englishData';
+import { mathQuestionTypes, mathQuestions } from '../../data/mathData';
+import { englishQuestionTypes, englishQuestions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -226,6 +226,12 @@ export const TeacherDashboard: React.FC = () => {
     }, 1500);
   };
 
+  const isMathAttempt = reviewingItem?.attempt.questionTypeId.startsWith('math') ?? false;
+  const qList = isMathAttempt ? mathQuestions : englishQuestions;
+  const currentQuestion = reviewingItem
+    ? qList.find(q => q.id === reviewingItem.attempt.questionId)
+    : null;
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
 
@@ -275,7 +281,7 @@ export const TeacherDashboard: React.FC = () => {
           )}
         >
           <UserCheck size={15} />
-          Hàng đợi Chấm bài Toán
+          Hàng đợi Phê duyệt
           {pendingAttempts.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-rose-500 text-white font-black text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center animate-bounce">
               {pendingAttempts.length}
@@ -461,19 +467,19 @@ export const TeacherDashboard: React.FC = () => {
           {!reviewingItem ? (
             <div className="space-y-4">
               <h3 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1">
-                <BookOpen size={14} /> Bài làm Toán chờ giáo viên duyệt ({pendingAttempts.length})
+                <BookOpen size={14} /> Bài làm Toán & Tiếng Anh chờ duyệt ({pendingAttempts.length})
               </h3>
 
               {pendingAttempts.length === 0 ? (
                 <div className="p-8 border border-dashed border-border rounded-2xl text-center space-y-3 bg-slate-50/10 dark:bg-slate-900/5">
                   <CheckCircle size={40} className="mx-auto text-emerald-500 animate-bounce" />
-                  <p className="text-xs font-bold text-foreground">Tuyệt vời! Đã hoàn thành chấm toàn bộ bài tự luận.</p>
-                  <p className="text-[10px] text-muted-foreground">Hiện tại không có học sinh nào có bài chờ phê duyệt ảnh giải.</p>
+                  <p className="text-xs font-bold text-foreground">Tuyệt vời! Đã hoàn thành chấm toàn bộ bài tự luận & trắc nghiệm.</p>
+                  <p className="text-[10px] text-muted-foreground">Hiện tại không có học sinh nào có bài chờ phê duyệt.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {pendingAttempts.map((item, index) => {
-                    const qType = mathQuestionTypes.find(t => t.id === item.attempt.questionTypeId);
+                    const qType = mathQuestionTypes.find(t => t.id === item.attempt.questionTypeId) || englishQuestionTypes.find(t => t.id === item.attempt.questionTypeId);
 
                     return (
                       <Card key={index} className="border-border/50 bg-card hover:border-emerald-500/30 transition-colors">
@@ -493,12 +499,25 @@ export const TeacherDashboard: React.FC = () => {
                               </span>
                             </div>
 
-                            <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-500 inline-block">
-                              📐 {qType?.name}
-                            </span>
-                            <p className="text-xs font-semibold text-foreground line-clamp-2 mt-1">
-                              Bài làm đã tải lên {item.attempt.proofImages?.length || 0} ảnh lời giải để chờ chấm.
-                            </p>
+                            {item.attempt.questionTypeId.startsWith('math') ? (
+                              <>
+                                <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-500 inline-block">
+                                  📐 {qType?.name}
+                                </span>
+                                <p className="text-xs font-semibold text-foreground line-clamp-2 mt-1">
+                                  Bài làm đã tải lên {item.attempt.proofImages?.length || 0} ảnh lời giải để chờ chấm.
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-violet-100 dark:bg-violet-950 text-violet-500 inline-block">
+                                  🗣️ {qType?.name}
+                                </span>
+                                <p className="text-xs font-semibold text-foreground line-clamp-2 mt-1">
+                                  Đã chọn đáp án: <span className="font-black text-violet-600 dark:text-violet-400">{item.attempt.userAnswer}</span>
+                                </p>
+                              </>
+                            )}
                           </div>
 
                           <Button
@@ -584,20 +603,68 @@ export const TeacherDashboard: React.FC = () => {
                   {/* Đáp án đối chiếu */}
                   <Card className="border-border/50 bg-card">
                     <CardHeader className="p-5 border-b border-border/20">
-                      <CardTitle className="text-foreground text-xs font-black">🔬 Lời giải đối chiếu chuẩn</CardTitle>
+                      <CardTitle className="text-foreground text-xs font-black">
+                        🔬 {isMathAttempt ? "Đề bài & Đáp án đối chiếu" : "Chi tiết câu hỏi & Đáp án đối chiếu"}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                       <div>
-                        <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đề bài Toán:</span>
+                        <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đề bài:</span>
                         <div className="text-xs font-semibold text-foreground p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-border/30">
-                          <LatexRenderer text="Cho biểu thức \(A = \frac{\sqrt{x} + 1}{\sqrt{x} - 1}\) với \(x \ge 0; x \neq 1\). Tính giá trị của biểu thức khi \(x = 4\)." />
+                          {currentQuestion ? (
+                            <LatexRenderer text={currentQuestion.content} />
+                          ) : (
+                            "Không tìm thấy câu hỏi"
+                          )}
                         </div>
                       </div>
+
+                      {!isMathAttempt && currentQuestion?.options && (
+                        <div>
+                          <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Lựa chọn phương án:</span>
+                          <div className="grid grid-cols-1 gap-2">
+                            {currentQuestion.options.map((opt, i) => {
+                              const optLetter = opt.trim().charAt(0);
+                              const studentLetter = reviewingItem.attempt.userAnswer?.trim().charAt(0);
+                              const correctLetter = currentQuestion.correctAnswer?.trim().charAt(0);
+                              
+                              const isStudentChoice = optLetter === studentLetter;
+                              const isCorrectChoice = optLetter === correctLetter;
+
+                              return (
+                                <div
+                                  key={i}
+                                  className={cn(
+                                    "p-2.5 rounded-lg text-xs font-semibold border",
+                                    isStudentChoice
+                                      ? "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
+                                      : "bg-card border-border text-foreground",
+                                    isCorrectChoice && "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                                  )}
+                                >
+                                  {opt}
+                                  {isStudentChoice && <span className="text-[10px] font-bold ml-1.5">(Học sinh chọn)</span>}
+                                  {isCorrectChoice && <span className="text-[10px] font-bold ml-1.5">(Đáp án đúng)</span>}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {!isMathAttempt && (
+                        <div>
+                          <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đáp án học sinh chọn:</span>
+                          <div className="text-sm font-black text-rose-500">
+                            {reviewingItem.attempt.userAnswer || "(Không có đáp án)"}
+                          </div>
+                        </div>
+                      )}
 
                       <div>
                         <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đáp số đúng:</span>
                         <div className="text-sm font-black text-emerald-500">
-                          A = 3
+                          {currentQuestion?.correctAnswer || "(Không có đáp án)"}
                         </div>
                       </div>
                     </CardContent>
