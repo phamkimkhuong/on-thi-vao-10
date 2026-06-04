@@ -2281,764 +2281,764 @@ export const grammarSolutions: Solution[] = [
       "Học kỹ nhóm Stative Verbs (like, love, think, believe, understand) không dùng ở thì tiếp diễn khi chỉ trạng thái."
     ]
   },
-  {
+    {
     "id": "eng-s65",
     "questionId": "eng-q65",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Trạng ngữ chỉ thời gian xác định cụ thể trong quá khứ \"At 8 o'clock yesterday evening\" (Vào lúc 8 giờ tối hôm qua) chỉ ra hành động đang diễn ra tại thời điểm đó, là dấu hiệu điển hình của thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Câu có thời điểm cụ thể trong quá khứ 'At 8 o'clock yesterday evening'.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Câu có mốc thời gian cụ thể trong quá khứ là 'At 8 o'clock yesterday evening' (8 giờ tối qua - một giờ cụ thể). Quy tắc ngữ pháp quy định: nếu chỉ có 'yesterday' thì dùng thì Quá khứ đơn, nhưng có giờ cụ thể trong quá khứ thì phải dùng thì Quá khứ tiếp diễn. Loại phương án A (study - Hiện tại đơn) và B (studied - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ 'we' (số nhiều).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'we' (chúng tôi) - ngôi thứ nhất số nhiều. Trong thì Quá khứ tiếp diễn, chủ ngữ số nhiều đi kèm với trợ động từ to be là 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Cấu trúc Quá khứ tiếp diễn: was/were + V-ing. Chủ ngữ số nhiều đi với 'were' -> 'were studying'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc khẳng định: S + was/were + V-ing. Động từ 'study' thêm đuôi '-ing' thành 'studying'. Ta có cụm động từ hoàn chỉnh là 'were studying'.",
+        "result": "Động từ chia đúng: 'were studying'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (were studying) chia đúng to be số nhiều ở quá khứ.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were studying) chia đúng trợ động từ 'were' cho chủ ngữ 'we'. Phương án D (was studying) sai vì 'was' đi với chủ ngữ số ít.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. were studying",
     "commonMistakes": [
-      "Dùng was studying cho chủ ngữ số nhiều we."
+      "Học sinh dễ chọn nhầm B (studied) vì chỉ chú ý đến từ 'yesterday' mà bỏ qua mốc giờ cụ thể 'At 8 o'clock', hoặc chọn D (was studying) do không để ý sự hòa hợp chủ-vị của chủ ngữ 'we'."
     ],
     "reviewSuggestions": [
-      "Xem lại cách phân biệt was (số ít) và were (số nhiều)."
+      "Ghi nhớ sự khác biệt: 1. Yesterday -> Quá khứ đơn; 2. At + giờ + yesterday -> Quá khứ tiếp diễn."
     ]
   },
-  {
+    {
     "id": "eng-s66",
     "questionId": "eng-q66",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Liên từ \"While\" (Trong khi) đứng đầu mệnh đề diễn tả một hành động kéo dài đang diễn ra trong quá khứ (đang đọc sách) thì có hành động ngắn khác xen vào (mất điện - \"went out\"), yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Câu có liên từ 'While' chỉ một hành động đang xảy ra trong quá khứ.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Sự việc mất điện ('went out' - chia ở Quá khứ đơn) đã xen ngang vào hành động đọc sách đang xảy ra trước đó. Theo ngữ pháp, hành động đang diễn ra kéo dài trong quá khứ dùng Quá khứ tiếp diễn, hành động xen vào dùng Quá khứ đơn. Do đó, mệnh đề đi sau 'While' phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (read - Quá khứ đơn) và B (is reading - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ 'she' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ của mệnh đề này là 'she' (cô ấy) - ngôi thứ ba số ít. Trong cấu trúc quá khứ tiếp diễn, chủ ngữ số ít đi với trợ động từ to be 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Chủ ngữ số ít đi với 'was' -> 'was reading'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc: S + was/were + V-ing. Động từ 'read' thêm '-ing' thành 'reading'. Cụm hoàn chỉnh là 'was reading'.",
+        "result": "Động từ chia đúng: 'was reading'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (was reading) chia đúng cho chủ ngữ she.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was reading) chia đúng trợ động từ số ít 'was'. Phương án D (were reading) dùng sai trợ động từ số nhiều 'were'.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. was reading",
     "commonMistakes": [
-      "Nhầm chia quá khứ đơn read."
+      "Học sinh chọn A (read) do thói quen dịch nghĩa hoặc nhầm lẫn cấu trúc song song quá khứ đơn, hoặc chọn D (were reading) vì không xác định rõ chủ ngữ số ít."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ cách dùng: While + S + was/were + V-ing."
+      "Nhớ công thức: While + S + was/were + V-ing, S + V2/ed (diễn tả hành động đang xảy ra thì hành động khác xen vào)."
     ]
   },
-  {
+    {
     "id": "eng-s67",
     "questionId": "eng-q67",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả một hành động đang xảy ra kéo dài trong quá khứ (mẹ đang chuẩn bị bữa tối) thì một hành động ngắn khác bất chợt xen vào (bố đi làm về - \"came back\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Câu diễn tả một hành động đang xảy ra (chuẩn bị bữa tối) thì hành động khác xen vào (bố về nhà - quá khứ đơn).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động bố đi làm về ('came back' - chia ở Quá khứ đơn) xen ngang vào hành động mẹ đang chuẩn bị bữa tối. Do đó, hành động chuẩn bị bữa tối (kéo dài hơn) phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (prepare - Hiện tại đơn), B (prepared - Quá khứ đơn) và D (is preparing - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ 'My mother' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'My mother' (mẹ tôi) - danh từ số ít chỉ một người (ngôi 'She'). Trợ động từ tương ứng ở quá khứ tiếp diễn là 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hành động kéo dài đang diễn ra dùng Quá khứ tiếp diễn: 'was preparing'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ chính là 'prepare' (chuẩn bị). Tận cùng là chữ 'e' câm, ta bỏ 'e' rồi mới thêm '-ing' thành 'preparing'. Kết hợp lại ta được 'was preparing'.",
+        "result": "Động từ chia đúng: 'was preparing'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (was preparing) chia đúng thì tiếp diễn.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was preparing) chia chính xác cấu trúc quá khứ tiếp diễn số ít và đúng quy tắc chính tả V-ing.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. was preparing",
     "commonMistakes": [
-      "Chia cả hai vế quá khứ đơn hoặc chia vế preparing ở quá khứ đơn."
+      "Học sinh chọn B (prepared) vì nhầm lẫn cả hai hành động xảy ra nối tiếp nhau, hoặc viết sai chính tả 'prepareing' (quên bỏ chữ e)."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ cấu trúc xen vào trong quá khứ: S + was/were + V-ing + when + S + V2/ed."
+      "Ghi nhớ quy tắc bỏ chữ 'e' câm trước khi thêm '-ing': prepare -> preparing, make -> making, write -> writing."
     ]
   },
-  {
+    {
     "id": "eng-s68",
     "questionId": "eng-q68",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Câu hỏi nghi vấn Wh-question chứa mốc thời gian cụ thể trong quá khứ \"at this time yesterday\" (vào thời điểm này ngày hôm qua) và hành động xen ngang \"when I called you\", yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Câu hỏi về thời điểm cụ thể trong quá khứ 'at this time yesterday'.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Sự kết hợp giữa cụm từ 'at this time yesterday' (vào lúc này hôm qua) và mệnh đề xen vào 'when I called you' (khi tôi gọi) cho biết hành động được hỏi đang diễn ra ngay tại thời điểm đó trong quá khứ. Do đó, câu hỏi phải dùng thì Quá khứ tiếp diễn. Loại phương án A (do / do - Hiện tại đơn) và B (did / do - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ câu hỏi là 'you'.",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ của câu hỏi là đại từ 'you' (bạn) - ngôi thứ hai. Theo quy tắc chia to be ở quá khứ, 'you' đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ ngôi thứ hai -> to be là 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Trợ động từ quá khứ 'were' cho chủ ngữ 'you' + động từ 'doing'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc câu hỏi: Wh-word + was/were + S + V-ing? Động từ 'do' thêm '-ing' thành 'doing'. Ta đảo trợ động từ 'were' lên trước chủ ngữ 'you' tạo thành 'were you doing'.",
+        "result": "Động từ chia đúng: 'were / doing'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (were / doing) đúng dạng nghi vấn quá khứ tiếp diễn.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were / doing) dùng đúng trợ động từ 'were' đi với 'you'. Phương án D (was / doing) sai vì 'was' chỉ dùng cho chủ ngữ số ít/I/He/She/It.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. were / doing",
     "commonMistakes": [
-      "Nhầm dùng trợ động từ did của quá khứ đơn."
+      "Học sinh chọn B (did / do) vì phản xạ thấy 'yesterday' lập tức chia quá khứ đơn, quên mất cụm 'at this time' và mệnh đề xen ngang chỉ hành động đang diễn ra."
     ],
     "reviewSuggestions": [
-      "Học thuộc công thức câu hỏi thì Quá khứ tiếp diễn: Was/Were + S + V-ing?."
+      "Thuộc lòng công thức câu hỏi thì Quá khứ tiếp diễn: Wh-word + was/were + S + V-ing?."
     ]
   },
-  {
+    {
     "id": "eng-s69",
     "questionId": "eng-q69",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Liên từ \"While\" (Trong khi) kết nối hai hành động xảy ra song song, đồng thời tại một thời điểm trong quá khứ (tôi làm bài tập và em trai chơi game), yêu cầu chia cả hai vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Liên từ 'While' chỉ hai hành động đang xảy ra song song đồng thời trong quá khứ.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hai hành động làm bài tập ('do homework') và chơi trò chơi điện tử ('play video games') diễn ra song song và không ảnh hưởng hay cắt ngang nhau trong quá khứ nhờ liên từ 'While'. Do đó, cả hai mệnh đề đều phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (chia Quá khứ đơn cả hai vế) và C (chia Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 là 'I', vế 2 là 'my little brother' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế thứ nhất chủ ngữ là 'I' - đi với trợ động từ 'was'. Vế thứ hai chủ ngữ là 'my little brother' (em trai tôi) - danh từ số ít, cũng đi với trợ động từ 'was'.",
+        "result": "Cả hai chủ ngữ đều đi với 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Cấu trúc song song quá khứ dùng Quá khứ tiếp diễn cho cả hai vế: 'was doing' và 'was playing'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc: S + was/were + V-ing. Vế 1: 'do' -> 'doing'. Vế 2: 'play' -> 'playing'. Ta có hai cụm động từ tương ứng là 'was doing' và 'was playing'.",
+        "result": "Động từ chia đúng: 'was doing / was playing'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án B (was doing / was playing) chia đúng cả hai vế.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (was doing / was playing) chia đúng quá khứ tiếp diễn cho cả hai vế. Phương án D (was doing / played) sai vì vế sau chia quá khứ đơn.",
         "result": "Đáp án đúng là B"
       }
     ],
-    "finalAnswer": "B",
+    "finalAnswer": "B. was doing / was playing",
     "commonMistakes": [
-      "Chia một vế hoặc cả hai vế ở quá khứ đơn (did / played)."
+      "Học sinh chọn D (was doing / played) vì nhầm lẫn đây là cấu trúc xen ngang, hoặc chọn A vì chia quá khứ đơn cho tất cả các hành động trong quá khứ."
     ],
     "reviewSuggestions": [
-      "Luyện tập nhận diện hai hành động diễn ra song song trong quá khứ."
+      "Ghi nhớ cách dùng của 'While': diễn tả hai hành động xảy ra song song đồng thời trong quá khứ -> cả hai vế đều chia Quá khứ tiếp diễn (was/were + V-ing)."
     ]
   },
-  {
+    {
     "id": "eng-s70",
     "questionId": "eng-q70",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Mệnh đề bối cảnh \"When I saw her...\" (Khi tôi nhìn thấy cô ấy) diễn tả thời điểm trong quá khứ mà hành động mặc váy của cô ấy đang diễn ra liên tục, làm nền cho hành động nhìn thấy, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Diễn tả trạng thái trang phục đang mặc tại thời điểm nhìn thấy trong quá khứ.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động nhìn thấy cô ấy ('saw' - chia ở Quá khứ đơn) diễn ra bất chợt và cắt ngang/chứng kiến một hành động khác đang xảy ra lúc đó là cô ấy đang mặc một chiếc váy đỏ. Hành động mô tả trạng thái trang phục tại một thời điểm trong quá khứ phải chia ở Quá khứ tiếp diễn. Loại phương án A (wears) và D (is wearing) ở hiện tại.",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ 'she' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'she' (cô ấy) - ngôi thứ ba số ít. Trong cấu trúc quá khứ tiếp diễn, chủ ngữ này đi kèm với trợ động từ 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Dùng Quá khứ tiếp diễn mô tả trạng thái trang phục: 'was wearing'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc khẳng định: S + was/were + V-ing. Động từ 'wear' (mặc) thêm đuôi '-ing' thành 'wearing'. Kết hợp thành 'was wearing'.",
+        "result": "Động từ chia đúng: 'was wearing'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (was wearing) là lựa chọn mô tả chính xác.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was wearing) chia đúng trợ động từ số ít 'was' và hình thức V-ing. Phương án B (wore) chia ở Quá khứ đơn không diễn tả được tính tiếp diễn của trạng thái lúc người nói nhìn thấy.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. was wearing",
     "commonMistakes": [
-      "Dùng quá khứ đơn wore chỉ hành động ngắn."
+      "Học sinh chọn B (wore) vì dịch nghĩa 'hôm qua cô ấy mặc' sang quá khứ đơn, quên mất đây là hành động nền đang diễn ra lúc người nói bắt gặp."
     ],
     "reviewSuggestions": [
-      "Học cách mô tả trạng thái quần áo, thời tiết tại một thời điểm trong quá khứ."
+      "Ghi nhớ: Dùng thì Quá khứ tiếp diễn để mô tả trang phục, trạng thái thời tiết, hoặc các hành động làm nền tại một thời điểm cụ thể trong quá khứ."
     ]
   },
-  {
+    {
     "id": "eng-s71",
     "questionId": "eng-q71",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Câu diễn tả hai hành động xảy ra song song đồng thời trong quá khứ mang tính chất kéo dài liên tục (học sinh đang không nghe giảng vì đang suy nghĩ chuyện khác), yêu cầu chia cả hai vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Hai hành động song song kéo dài đồng thời trong quá khứ (không nghe giảng vì đang nghĩ việc khác).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Việc học sinh không nghe giảng ('not listen') diễn ra trong suốt quá trình giáo viên nói, lý do là vì tâm trí của cậu ấy đang bận suy nghĩ về chuyện khác ('think about something else'). Cả hai hành động này đều kéo dài và xảy ra song song trong quá khứ. Do đó, cả hai vế đều phải chia ở thì Quá khứ tiếp diễn.",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 là 'The student' (số ít), vế 2 là 'he' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'The student' (học sinh) - danh từ số ít. Vế 2 chủ ngữ là 'he' - đại từ số ít. Cả hai vế đều đi với trợ động từ số ít 'was' (vế 1 có 'not' thành 'wasn't' hoặc 'was not').",
+        "result": "Cả hai chủ ngữ đều đi với trợ động từ số ít"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hai hành động song song chia quá khứ tiếp diễn: 'wasn't listening' và 'was thinking'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: động từ 'listen' thêm '-ing' thành 'listening' -> 'wasn't listening'. Vế 2: động từ 'think' thêm '-ing' thành 'thinking' -> 'was thinking'.",
+        "result": "Động từ chia đúng: 'wasn't listening / was thinking'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án B (wasn't listening / was thinking) phù hợp ngữ cảnh song song.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (wasn't listening / was thinking) chia chính xác quá khứ tiếp diễn cho cả hai vế. Các phương án A, C, D đều có vế chia quá khứ đơn không phù hợp với ngữ cảnh hai hoạt động diễn ra song song.",
         "result": "Đáp án đúng là B"
       }
     ],
-    "finalAnswer": "B",
+    "finalAnswer": "B. wasn't listening / was thinking",
     "commonMistakes": [
-      "Dùng quá khứ đơn didn't listen / thought."
+      "Học sinh dễ chọn A (didn't listen / thought) vì nghĩ rằng cứ kể chuyện trong quá khứ là dùng quá khứ đơn, hoặc nhầm lẫn động từ 'think' không chia tiếp diễn (ở đây 'think' mang nghĩa hành động 'suy nghĩ' - Action Verb nên hoàn toàn chia được tiếp diễn)."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ các liên kết chỉ hành động kéo dài đồng thời."
+      "Lưu ý: Động từ 'think' khi mang nghĩa 'tin rằng, nghĩ rằng' (quan điểm) là động từ trạng thái không chia tiếp diễn; nhưng khi mang nghĩa 'suy nghĩ, cân nhắc' (hành động trí óc) thì vẫn chia tiếp diễn bình thường."
     ]
   },
-  {
+    {
     "id": "eng-s72",
     "questionId": "eng-q72",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Cấu trúc với liên từ \"while\" chỉ hành động làm vườn đang diễn ra kéo dài trong quá khứ thì hành động làm mất chìa khóa (\"lost\") bất chợt xảy ra xen ngang, yêu cầu chia mệnh đề sau \"while\" ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Câu chứa hành động đang diễn ra (đang làm vườn) thì hành động bất chợt xen vào (mất chìa khóa - quá khứ đơn).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động mất chìa khóa ('lost' - chia ở Quá khứ đơn) xảy ra bất chợt xen ngang vào quá trình làm vườn đang diễn ra trong quá khứ. Mệnh đề sau 'while' diễn tả hành động kéo dài này nên phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (work) và D (is working) ở hiện tại.",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ sau while là 'I'.",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ sau 'while' là đại từ ngôi thứ nhất số ít 'I'. Trong thì Quá khứ tiếp diễn, chủ ngữ 'I' đi kèm với trợ động từ 'was'.",
+        "result": "Chủ ngữ ngôi thứ nhất số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Mệnh đề sau while chia Quá khứ tiếp diễn: 'was working'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc: S + was/were + V-ing. Động từ 'work' thêm đuôi '-ing' thành 'working'. Kết hợp lại ta có 'was working'.",
+        "result": "Động từ chia đúng: 'was working'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (was working) đúng công thức sau while.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was working) chia đúng trợ động từ 'was' cho ngôi 'I'. Phương án B (worked) chia ở Quá khứ đơn không phù hợp sau liên từ 'while' diễn tả hành động đang diễn ra.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. was working",
     "commonMistakes": [
-      "Chia quá khứ đơn worked sau while."
+      "Học sinh chọn B (worked) vì thấy 'yesterday morning' nên vội vàng chọn quá khứ đơn cho cả hai vế, quên mất liên từ 'while' chỉ hành động đang diễn ra kéo dài."
     ],
     "reviewSuggestions": [
-      "Luyện tập phối hợp thì Quá khứ tiếp diễn và Quá khứ đơn."
+      "Ghi nhớ quy tắc: Mệnh đề đi sau 'While' thường chia ở các thì tiếp diễn để nhấn mạnh tính liên tục của hành động làm nền."
     ]
   },
-  {
+    {
     "id": "eng-s73",
     "questionId": "eng-q73",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Mô tả ngữ cảnh nền của một câu chuyện trong quá khứ (mặt trời đang tỏa nắng, chim đang hót líu lo) tại thời điểm nhân vật thức dậy (\"when I woke up\"), yêu cầu chia các động từ ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Diễn tả các hành động mô tả ngữ cảnh nền của một câu chuyện trong quá khứ (mặt trời chiếu sáng, chim hót) khi nhân vật thức dậy.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hai hành động mặt trời chiếu sáng ('shine') và chim hót ('sing') diễn tả khung cảnh thiên nhiên làm nền cho hành động ngắn cắt ngang là tôi thức dậy ('woke up' - chia ở Quá khứ đơn). Theo quy tắc viết văn kể chuyện, các hành động nền đang diễn ra tại một thời điểm trong quá khứ phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (shines / sing - ở Hiện tại).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 là 'The sun' (số ít), vế 2 là 'the birds' (số nhiều).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'The sun' (Mặt trời) - danh từ số ít, đi với trợ động từ 'was'. Vế 2 chủ ngữ là 'the birds' (các chú chim) - danh từ số nhiều (nhận biết bằng chữ 's'), đi với trợ động từ 'were'.",
+        "result": "Vế 1: to be số ít 'was' / Vế 2: to be số nhiều 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Các hành động nền chia Quá khứ tiếp diễn: 'was shining' (bỏ e thêm ing) và 'were singing' (were đi với danh từ số nhiều).",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: Động từ 'shine' tận cùng là chữ 'e' câm, ta bỏ 'e' trước khi thêm '-ing' thành 'shining' -> 'was shining'. Vế 2: Động từ 'sing' thêm '-ing' thành 'singing' -> 'were singing'.",
+        "result": "Động từ chia đúng: 'was shining / were singing'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án C (was shining / were singing) chia đúng số ít/số nhiều cho hai chủ ngữ.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was shining / were singing) chia đúng trợ động từ số ít/số nhiều tương ứng và đúng thì tiếp diễn. Phương án A (shone / sang) chia ở Quá khứ đơn không diễn đạt được sắc thái hành động làm nền đang diễn ra.",
         "result": "Đáp án đúng là C"
       }
     ],
-    "finalAnswer": "C",
+    "finalAnswer": "C. was shining / were singing",
     "commonMistakes": [
-      "Chia quá khứ đơn cho hành động nền (shone / sang)."
+      "Học sinh chọn A (shone / sang) vì thấy đây là chuỗi hành động quá khứ đơn, quên mất sắc thái mô tả khung cảnh nền của câu chuyện."
     ],
     "reviewSuggestions": [
-      "Học cách dùng Quá khứ tiếp diễn để mô tả ngữ cảnh nền trong văn kể chuyện."
+      "Ghi nhớ: Thì Quá khứ tiếp diễn chuyên dùng để miêu tả thời tiết, cảnh vật làm nền (background) cho một chuỗi sự kiện khác trong văn kể chuyện."
     ]
   },
-  {
+    {
     "id": "eng-s74",
     "questionId": "eng-q74",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Cấu trúc với liên từ \"While\" diễn tả nhiều hành động kéo dài đang diễn ra song song đồng thời tại một thời điểm trong quá khứ (thầy giáo đang giảng bài, học sinh đang ghi chép, một cậu bé đang ngủ), yêu cầu chia cả 3 vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Mô tả các hành động đang xảy ra đồng thời tại một thời điểm quá khứ trong lớp học (giảng bài, ghi chép, ngủ).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Liên từ 'While' kết nối ba hành động giảng bài ('explain'), ghi chép ('take notes') và ngủ ('sleep'). Ba hành động này xảy ra song song đồng thời trong lớp học vào một thời điểm quá khứ. Do đó, cả ba vế đều phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (chia Quá khứ đơn cả 3 vế).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 là 'the teacher' (số ít), vế 2 là 'the students' (số nhiều), vế 3 là 'one boy' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'the teacher' (giáo viên) - số ít, đi với 'was'. Vế 2 chủ ngữ là 'the students' (các học sinh) - số nhiều, đi với 'were'. Vế 3 chủ ngữ là 'one boy' (một cậu bé) - số ít, đi với 'was'.",
+        "result": "Vế 1: 'was' / Vế 2: 'were' / Vế 3: 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Cấu trúc song song 3 vế dùng Quá khứ tiếp diễn: 'was explaining', 'were taking', 'was sleeping'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: 'explain' + -ing -> 'explaining' -> 'was explaining'. Vế 2: 'take' (bỏ e) + -ing -> 'taking' -> 'were taking'. Vế 3: 'sleep' + -ing -> 'sleeping' -> 'was sleeping'.",
+        "result": "Động từ chia đúng: 'was explaining / were taking / was sleeping'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án B (was explaining / were taking / was sleeping) thỏa mãn đồng thời cấu trúc 3 vế.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (was explaining / were taking / was sleeping) chia đúng trợ động từ và thì tiếp diễn cho cả 3 vế. Các phương án C và D bị chia sai thì quá khứ đơn ở một số vế.",
         "result": "Đáp án đúng là B"
       }
     ],
-    "finalAnswer": "B",
+    "finalAnswer": "B. was explaining / were taking / was sleeping",
     "commonMistakes": [
-      "Chia các vế ở quá khứ đơn nối tiếp nhau."
+      "Học sinh chọn A hoặc D do nhầm lẫn đây là các hành động ngắn xảy ra liên tiếp trong quá khứ, hoặc viết sai chính tả 'takeing' thay vì 'taking'."
     ],
     "reviewSuggestions": [
-      "Thực hành viết các câu phức chứa nhiều mệnh đề chia ở các thì quá khứ tiếp diễn song song."
+      "Ghi nhớ quy tắc bỏ chữ 'e' câm trước khi thêm '-ing': take -> taking."
     ]
   },
-  {
+    {
     "id": "eng-s75",
     "questionId": "eng-q75",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Trạng ngữ chỉ thời gian xác định cụ thể trong quá khứ \"At this time last Sunday\" (Vào lúc này Chủ nhật tuần trước) chỉ ra hành động đang diễn ra tại thời điểm đó, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Câu có thời điểm cụ thể trong quá khứ 'At this time last Sunday'.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cụm từ 'At this time last Sunday' (vào thời điểm này Chủ nhật trước) là một mốc thời gian cụ thể và xác định trong quá khứ. Do đó, hành động xem bóng đá phải được chia ở thì Quá khứ tiếp diễn. Loại phương án B (watched - Quá khứ đơn) và D (are watching - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ là 'we' (ngôi thứ nhất số nhiều).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'we' (chúng tôi) - ngôi thứ nhất số nhiều. Trong thì Quá khứ tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Chia Quá khứ tiếp diễn cho số nhiều là 'were watching'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc: S + was/were + V-ing. Động từ 'watch' thêm đuôi '-ing' thành 'watching'. Kết hợp lại ta được cụm 'were watching'.",
+        "result": "Động từ chia đúng: 'were watching'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (were watching) đúng ngữ pháp.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (were watching) chia đúng trợ động từ số nhiều 'were'. Phương án C (was watching) dùng sai trợ động từ số ít 'was'.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. were watching",
     "commonMistakes": [
-      "Chia số ít was watching hoặc chia quá khứ đơn."
+      "Học sinh dễ chọn nhầm B (watched) vì bỏ qua cụm từ 'At this time' mà chỉ nhìn thấy 'last Sunday', hoặc nhầm lẫn chia trợ động từ 'was'."
     ],
     "reviewSuggestions": [
-      "Xác định rõ chủ ngữ số nhiều we để dùng were."
+      "Luôn phân biệt rõ: 1. last Sunday -> Quá khứ đơn; 2. At this time last Sunday -> Quá khứ tiếp diễn."
     ]
   },
-  {
+    {
     "id": "eng-s76",
     "questionId": "eng-q76",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Liên từ \"While\" (Trong khi) đứng đầu mệnh đề chỉ hành động tưới vườn đang diễn ra trong quá khứ thì hành động trời bắt đầu mưa (\"started\") xen vào, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Liên từ 'While' diễn tả hành động đang diễn ra (tưới vườn) thì hành động khác xen vào (mưa - quá khứ đơn).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động trời bắt đầu mưa ('started' - Quá khứ đơn) đã xen ngang vào hành động bố đang tưới vườn. Mệnh đề sau 'While' diễn tả hành động đang diễn ra kéo dài nên phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (watered - Quá khứ đơn) và C (is watering - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ sau while là 'my father' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'my father' (bố tôi) - danh từ số ít chỉ một người (ngôi 'He'). Trợ động từ tương ứng ở quá khứ tiếp diễn là 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hành động đang diễn ra chia Quá khứ tiếp diễn: 'was watering'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc: S + was/were + V-ing. Động từ 'water' (tưới nước) thêm đuôi '-ing' thành 'watering'. Ta được cụm động từ 'was watering'.",
+        "result": "Động từ chia đúng: 'was watering'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (was watering) chia đúng to be số ít.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (was watering) dùng đúng trợ động từ 'was' cho chủ ngữ số ít. Phương án D (were watering) sai vì dùng trợ động từ số nhiều 'were'.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. was watering",
     "commonMistakes": [
-      "Chia quá khứ đơn watered sau while."
+      "Học sinh chọn B (watered) do thói quen dịch từ hoặc nhầm lẫn cấu trúc song song quá khứ đơn, hoặc chọn D do nhầm lẫn số ít/số nhiều."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ cấu trúc xen vào: While + S + was/were + V-ing, S + V2/ed."
+      "Ghi nhớ: Trong cấu trúc xen ngang, mệnh đề chỉ hành động kéo dài đang diễn ra sau 'While' dùng Quá khứ tiếp diễn, hành động ngắn xen vào dùng Quá khứ đơn."
     ]
   },
-  {
+    {
     "id": "eng-s77",
     "questionId": "eng-q77",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động đang diễn ra trong quá khứ (đang tắm) thì hành động khác bất chợt xen vào (điện thoại reo - \"rang\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Hành động đang tắm (kéo dài) thì hành động chuông điện thoại reo xen vào (quá khứ đơn rang).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động điện thoại reo ('rang' - chia ở Quá khứ đơn) cắt ngang hành động cô ấy đang tắm. Do đó, hành động đang tắm phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (had - Quá khứ đơn) và C (is having - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ là 'She' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'She' (cô ấy) - số ít. Trợ động từ tương ứng ở quá khứ tiếp diễn là 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hành động kéo dài chia Quá khứ tiếp diễn: 'was having' (bỏ e thêm ing).",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ chính là 'have'. Tận cùng là chữ 'e' câm, ta bỏ 'e' trước khi thêm '-ing' thành 'having'. Kết hợp thành 'was having'.",
+        "result": "Động từ chia đúng: 'was having'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (was having) đúng cấu trúc và chính tả.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (was having) chia đúng trợ động từ số ít 'was' và đúng quy tắc chính tả. Phương án D (were having) sai trợ động từ.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. was having",
     "commonMistakes": [
-      "Dùng had ở quá khứ đơn cho hành động kéo dài."
+      "Học sinh chọn B (had) vì nhầm lẫn cả hai hành động xảy ra nối tiếp nhau, hoặc viết sai chính tả 'haveing'."
     ],
     "reviewSuggestions": [
-      "Học cách nhận biết hành động kéo dài đang diễn ra bị ngắt quãng bởi hành động ngắn."
+      "Ghi nhớ công thức xen ngang: S + was/were + V-ing + when + S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s78",
     "questionId": "eng-q78",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Câu hỏi nghi vấn Wh-question chứa mốc thời gian cụ thể trong quá khứ \"at 9:00 PM yesterday\" (vào lúc 9 giờ tối hôm qua) chỉ ra hành động đang diễn ra tại thời điểm đó, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Thời điểm cụ thể trong quá khứ 'at 9:00 PM yesterday'.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Mốc thời gian cụ thể 'at 9:00 PM yesterday' (9 giờ tối qua) yêu cầu động từ trong câu hỏi phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (did / do - Quá khứ đơn) và D (are / doing - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ câu hỏi là 'they' (số nhiều).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ của câu hỏi là đại từ 'they' (họ) - ngôi thứ ba số nhiều. Trong thì Quá khứ tiếp diễn, chủ ngữ này đi kèm với trợ động từ 'were' đảo lên trước chủ ngữ.",
+        "result": "Chủ ngữ số nhiều -> trợ động từ đảo lên là 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Cấu trúc nghi vấn quá khứ tiếp diễn với trợ động từ 'were' đứng trước chủ ngữ 'they'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc nghi vấn: Wh-word + was/were + S + V-ing? Động từ 'do' thêm '-ing' thành 'doing'. Ta được cụm 'were they doing'.",
+        "result": "Động từ chia đúng: 'were / doing'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (were / doing) đúng công thức.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (were / doing) dùng đúng trợ động từ số nhiều 'were'. Phương án C (was / doing) dùng sai trợ động từ 'was' của số ít.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. were / doing",
     "commonMistakes": [
-      "Dùng trợ động từ did của quá khứ đơn hoặc was cho chủ ngữ số nhiều."
+      "Học sinh chọn B (did / do) vì thói quen chia quá khứ đơn khi thấy 'yesterday' mà không để ý mốc giờ cụ thể 'at 9:00 PM'."
     ],
     "reviewSuggestions": [
-      "Nhớ công thức nghi vấn: Wh- + was/were + S + V-ing?."
+      "Ghi nhớ công thức nghi vấn: Was/Were + S + V-ing?."
     ]
   },
-  {
+    {
     "id": "eng-s79",
     "questionId": "eng-q79",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Liên từ \"While\" (Trong khi) kết nối hành động đi bộ dọc bãi biển đang diễn ra kéo dài thì hành động tìm thấy vỏ sò (\"found\") bất chợt xen vào, yêu cầu phối hợp thì Quá khứ tiếp diễn (Past Continuous) và Quá khứ đơn (Simple Past).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Hành động đi dạo dọc bãi biển (đang diễn ra) thì hành động nhặt được vỏ sò xen vào (nhất thời).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động đi bộ dọc bãi biển ('walk') là hành động đang diễn ra kéo dài trong quá khứ (sau 'While' chia Quá khứ tiếp diễn). Hành động tìm thấy vỏ sò ('find') xảy ra bất chợt, cắt ngang hành động đang đi bộ (chia Quá khứ đơn). Loại phương án B (walked / was finding) and D (walked / found - quá khứ đơn cả hai vế).",
+        "result": "Quá khứ tiếp diễn + Quá khứ đơn"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 là 'we', vế 2 là 'we'.",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ của cả hai vế đều là 'we' (chúng tôi) - số nhiều. Trong cấu trúc tiếp diễn, 'we' đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hành động đi dạo chia tiếp diễn 'were walking'. Hành động tìm thấy là động từ nhận thức/nhất thời chia quá khứ đơn 'found'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1 (Quá khứ tiếp diễn): 'walk' + -ing -> 'walking' -> 'were walking'. Vế 2 (Quá khứ đơn): động từ bất quy tắc 'find' chuyển thành 'found'.",
+        "result": "Động từ chia đúng: 'were walking / found'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (were walking / found) phối hợp đúng các thì.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (were walking / found) kết hợp đúng thì Quá khứ tiếp diễn và Quá khứ đơn. Phương án C (were walking / were finding) sai vì động từ 'find' chỉ hành động ngắn nhất thời, không chia tiếp diễn trong ngữ cảnh này.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. were walking / found",
     "commonMistakes": [
-      "Chia cả hai vế ở quá khứ đơn hoặc vế tìm thấy ở tiếp diễn."
+      "Học sinh chọn C vì thấy liên từ 'While' nên chia tiếp diễn cho cả hai vế, quên mất động từ 'find' (tìm thấy) chỉ khoảnh khắc nhất thời."
     ],
     "reviewSuggestions": [
-      "Lưu ý động từ find/see thường chỉ hành động ngắn xen vào, ít khi chia tiếp diễn."
+      "Lưu ý: Các động từ chỉ nhận thức, giác quan hoặc hành động ngắn nhất thời như find, see, hear, notice thường chia ở quá khứ đơn làm hành động xen vào."
     ]
   },
-  {
+    {
     "id": "eng-s80",
     "questionId": "eng-q80",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Cấu trúc với liên từ \"while\" chỉ hành động đi bộ dưới phố đang diễn ra kéo dài thì hành động nhìn thấy bạn (\"saw\") bất chợt xen vào, yêu cầu phối hợp thì Quá khứ đơn (Simple Past) ở vế chính và Quá khứ tiếp diễn (Past Continuous) ở vế phụ.",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Hành động đi bộ dưới phố (kéo dài) thì hành động nhìn thấy bạn xen vào (bất chợt).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động đi bộ dưới phố ('walk') đang diễn ra kéo dài trong quá khứ (sau 'while' chia Quá khứ tiếp diễn). Hành động nhìn thấy người bạn ('see') xảy ra bất chợt, cắt ngang quá trình đi bộ (chia Quá khứ đơn). Loại phương án B (was seeing / walked) và C (saw / walked).",
+        "result": "Quá khứ đơn + Quá khứ tiếp diễn"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ cả hai vế là 'I'.",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ của cả hai vế đều là 'I' - ngôi thứ nhất số ít. Trong vế tiếp diễn, chủ ngữ 'I' đi kèm trợ động từ 'was'.",
+        "result": "Chủ ngữ ngôi thứ nhất số ít -> to be là 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hành động ngắn xen vào chia quá khứ đơn 'saw'. Hành động kéo dài sau while chia quá khứ tiếp diễn 'was walking'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1 (Quá khứ đơn): Động từ bất quy tắc 'see' chia thành 'saw'. Vế 2 (Quá khứ tiếp diễn): Động từ 'walk' thêm '-ing' thành 'walking' -> 'was walking'.",
+        "result": "Động từ chia đúng: 'saw / was walking'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (saw / was walking) chia đúng dạng.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (saw / was walking) chia đúng thì cho hai vế. Phương án D (was seeing / was walking) sai vì động từ chỉ giác quan 'see' không chia ở tiếp diễn trong trường hợp này.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. saw / was walking",
     "commonMistakes": [
-      "Chia 'was seeing' (see là động từ chỉ giác quan không chia tiếp diễn trong ngữ cảnh này)."
+      "Học sinh chọn D vì chia tiếp diễn cho cả động từ 'see', quên mất 'see' là động từ trạng thái chỉ giác quan (Stative Verb) không chia tiếp diễn."
     ],
     "reviewSuggestions": [
-      "Tránh chia tiếp diễn cho động từ chỉ giác quan như see, hear."
+      "Ghi nhớ: Các động từ chỉ giác quan như see, hear, smell, taste không chia ở thì tiếp diễn khi diễn đạt nhận thức tự nhiên."
     ]
   },
-  {
+    {
     "id": "eng-s81",
     "questionId": "eng-q81",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Liên từ \"While\" (Trong khi) kết nối hai hành động đang xảy ra song song đồng thời trong quá khứ (mẹ đang chuẩn bị bữa tối và em gái đang dọn nhà), yêu cầu chia cả hai vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Hai hành động nấu ăn và dọn nhà diễn ra song song, đồng thời trong quá khứ nhờ liên từ 'While'.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động chuẩn bị bữa tối ('prepare dinner') và dọn dẹp nhà cửa ('clean the house') là hai hành động kéo dài, diễn ra song song độc lập tại cùng một thời điểm trong quá khứ. Do đó, cả hai vế đều phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (prepared / cleaned) và D (prepared / was cleaning).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 'my mother' (số ít), vế 2 'my sister' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'my mother' (mẹ tôi) - số ít, đi với 'was'. Vế 2 chủ ngữ là 'my sister' (chị/em gái tôi) - số ít, cũng đi với 'was'.",
+        "result": "Cả hai chủ ngữ đều đi với trợ động từ 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Cả hai hành động đều chia Quá khứ tiếp diễn: 'was preparing' và 'was cleaning'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: 'prepare' (bỏ e câm) + -ing -> 'preparing' -> 'was preparing'. Vế 2: 'clean' + -ing -> 'cleaning' -> 'was cleaning'.",
+        "result": "Động từ chia đúng: 'was preparing / was cleaning'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (was preparing / was cleaning) đúng cấu trúc song song.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (was preparing / was cleaning) chia đúng thì quá khứ tiếp diễn song song cho cả hai vế. Phương án C (was preparing / cleaned) chia vế sau ở quá khứ đơn là sai ngữ cảnh.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. was preparing / was cleaning",
     "commonMistakes": [
-      "Chia quá khứ đơn cho một trong hai hoặc cả hai vế."
+      "Học sinh chọn C vì nhầm lẫn đây là cấu trúc xen ngang, hoặc chọn B vì chia quá khứ đơn cho tất cả hành động quá khứ."
     ],
     "reviewSuggestions": [
-      "Khi hai hành động kéo dài diễn ra song song độc lập, chia quá khứ tiếp diễn cho cả hai."
+      "Khi hai hành động kéo dài xảy ra song song đồng thời trong quá khứ, ta dùng thì Quá khứ tiếp diễn cho cả hai mệnh đề."
     ]
   },
-  {
+    {
     "id": "eng-s82",
     "questionId": "eng-q82",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Cụm trạng từ \"Yesterday afternoon\" kết hợp với liên từ \"while\" diễn tả hai hành động song song, đồng thời đang diễn ra tại một thời điểm trong quá khứ (tôi làm bài tập và em gái nghe nhạc), yêu cầu chia cả hai vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Hai hành động làm bài tập và nghe nhạc diễn ra song song trong quá khứ.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động làm bài tập ('do homework') và nghe nhạc ('listen to music') diễn ra song song đồng thời vào chiều hôm qua và không ảnh hưởng hay ngắt quãng nhau. Do đó, cả hai mệnh đề đều phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (did / listened) và C (was doing / listened).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 'I', vế 2 'my sister' (số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'I' - đi với trợ động từ 'was'. Vế 2 chủ ngữ là 'my sister' (em gái tôi) - số ít, đi với trợ động từ 'was'.",
+        "result": "Cả hai chủ ngữ đều đi với trợ động từ 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Hai hành động song song chia tiếp diễn: 'was doing' và 'was listening'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: 'do' + -ing -> 'doing' -> 'was doing'. Vế 2: 'listen' + -ing -> 'listening' -> 'was listening'.",
+        "result": "Động từ chia đúng: 'was doing / was listening'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (was doing / was listening) chia đúng.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (was doing / was listening) chia đúng thì tiếp diễn song song cho cả hai vế. Phương án D (did / was listening) sai vì vế 1 chia quá khứ đơn.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. was doing / was listening",
     "commonMistakes": [
-      "Dùng quá khứ đơn cho hành động làm bài tập."
+      "Học sinh chọn D vì thói quen dùng quá khứ đơn 'did' cho vế 1, không nhận ra tính chất song song đồng thời của hai hành động."
     ],
     "reviewSuggestions": [
-      "Xác định tính kéo dài song song của hai hành động trong quá khứ."
+      "Nhận biết từ khóa: S1 + was/were + V-ing + while + S2 + was/were + V-ing."
     ]
   },
-  {
+    {
     "id": "eng-s83",
     "questionId": "eng-q83",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Mô tả thời tiết làm nền cho câu chuyện trong quá khứ (gió đang thổi mạnh, mưa đang đập vào cửa kính) lúc hành động thức dậy xen ngang (\"when we woke up\"), yêu cầu chia động từ ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Diễn tả ngữ cảnh nền của thời tiết (gió thổi, mưa đập vào cửa) khi hành động thức dậy xen vào ('when we woke up').",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động gió thổi ('blow') và mưa đập vào cửa ('beat') mô tả trạng thái thời tiết đang diễn ra liên tục để làm nền cho sự việc ngắn xen ngang là chúng tôi thức dậy ('woke up' - quá khứ đơn). Theo quy tắc kể chuyện, các hành động nền này phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (blew / beat - quá khứ đơn cả hai vế).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 'The wind' (số ít), vế 2 'the rain' (không đếm được, tương đương số ít).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'The wind' (Gió) - danh từ không đếm được (số ít), đi với trợ động từ 'was'. Vế 2 chủ ngữ là 'the rain' (Mưa) - danh từ không đếm được (số ít), đi với trợ động từ 'was'.",
+        "result": "Cả hai chủ ngữ đều đi với 'was'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Các hành động mô tả ngữ cảnh chia Quá khứ tiếp diễn: 'was blowing' và 'was beating'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: 'blow' + -ing -> 'blowing' -> 'was blowing'. Vế 2: 'beat' + -ing -> 'beating' -> 'was beating'.",
+        "result": "Động từ chia đúng: 'was blowing / was beating'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (was blowing / was beating) chia đúng ngữ cảnh nền.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (was blowing / was beating) chia đúng to be số ít và thì tiếp diễn cho cả hai vế chỉ thời tiết làm nền. Các phương án C và D chia một vế ở quá khứ đơn là sai ngữ cảnh.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. was blowing / was beating",
     "commonMistakes": [
-      "Dùng quá khứ đơn cho các hành động nền của thời tiết."
+      "Học sinh dễ chọn B (blew / beat) do phản xạ dịch nghĩa 'gió thổi mưa rơi' sang quá khứ đơn, quên mất đây là cảnh nền thời tiết khi hành động khác diễn ra."
     ],
     "reviewSuggestions": [
-      "Nhớ rằng thời tiết đang diễn ra làm nền cho sự việc khác thường chia ở tiếp diễn."
+      "Ghi nhớ: Thì Quá khứ tiếp diễn thường dùng để miêu tả thời tiết làm nền (background) trong văn kể chuyện."
     ]
   },
-  {
+    {
     "id": "eng-s84",
     "questionId": "eng-q84",
-    "recognition": "Nhận diện: Câu hỏi thuộc phần chia thì động từ. Dấu hiệu trong câu là thì Quá khứ tiếp diễn.",
+    "recognition": "Liên từ \"While\" (Trong khi) đứng đầu câu chỉ ra nhiều hành động kéo dài đang xảy ra song song đồng thời tại một thời điểm trong quá khứ (hướng dẫn viên giảng giải, du khách chụp ảnh, người khác ghi chép), yêu cầu chia cả 3 vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Tìm dấu hiệu thời gian / ngữ cảnh",
-        "explanation": "Diễn tả nhiều hành động cùng đang xảy ra song song tại một thời điểm trong quá khứ (hướng dẫn viên giảng bài, du khách chụp ảnh và ghi chép).",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Liên từ 'While' đứng đầu câu diễn tả các hoạt động đang xảy ra song song trong buổi tham quan. Hành động giảng bài ('explain'), chụp ảnh ('take photos') và ghi chép ('make notes') diễn ra đồng thời. Do đó, cả ba vế đều phải chia ở thì Quá khứ tiếp diễn. Loại phương án B (chia Quá khứ đơn cả 3 vế).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Xác định chủ ngữ",
-        "explanation": "Chủ ngữ vế 1 'the guide' (số ít), vế 2 'some tourists' (số nhiều), vế 3 'others' (số nhiều).",
-        "result": "Xác định ngôi của chủ ngữ"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Vế 1 chủ ngữ là 'the guide' (hướng dẫn viên) - số ít, đi với 'was'. Vế 2 chủ ngữ là 'some tourists' (một số du khách) - số nhiều, đi với 'were'. Vế 3 chủ ngữ là 'others' (những người khác) - danh từ số nhiều, đi với 'were'.",
+        "result": "Vế 1: 'was' / Vế 2: 'were' / Vế 3: 'were'"
       },
       {
         "order": 3,
-        "title": "Áp dụng công thức chia động từ",
-        "explanation": "Chia Quá khứ tiếp diễn cho cả 3 vế: 'was explaining', 'were taking', 'were making'.",
-        "result": "Tìm được động từ chia đúng"
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Vế 1: 'explain' + -ing -> 'explaining' -> 'was explaining'. Vế 2: 'take' (bỏ e câm) + -ing -> 'taking' -> 'were taking'. Vế 3: 'make' (bỏ e câm) + -ing -> 'making' -> 'were making'.",
+        "result": "Động từ chia đúng: 'was explaining / were taking / were making'"
       },
       {
         "order": 4,
-        "title": "Đối chiếu các phương án",
-        "explanation": "Phương án A (was explaining / were taking / were making) chia đúng tất cả các chủ ngữ.",
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (was explaining / were taking / were making) chia đúng trợ động từ số ít/nhiều và thì tiếp diễn cho cả 3 vế. Các phương án C và D chia một số vế ở quá khứ đơn là sai ngữ cảnh.",
         "result": "Đáp án đúng là A"
       }
     ],
-    "finalAnswer": "A",
+    "finalAnswer": "A. was explaining / were taking / were making",
     "commonMistakes": [
-      "Chia quá khứ đơn cho vế chụp ảnh hoặc ghi chép."
+      "Học sinh hay chọn B vì nghĩ đây là chuỗi hành động quá khứ liên tiếp, hoặc nhầm lẫn sự hòa hợp chủ-vị của 'some tourists' và 'others'."
     ],
     "reviewSuggestions": [
-      "Thực hành cấu trúc song song nhiều vế diễn tả các hoạt động cùng diễn ra."
+      "Ghi nhớ: Từ 'others' trong câu này đóng vai trò là đại từ số nhiều (những người khác) nên đi kèm trợ động từ số nhiều 'were'."
     ]
   },
   {
@@ -4616,524 +4616,765 @@ export const grammarSolutions: Solution[] = [
       "Chú ý các từ trạng thái như busy, free chỉ thời điểm hành động đang diễn ra."
     ]
   },
-  {
+    {
     "id": "eng-s162",
     "questionId": "eng-q162",
-    "recognition": "Diễn tả hành động đang xảy ra trong quá khứ thì bị một hành động khác xen vào.",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động đang thuyết trình diễn ra trong quá khứ thì bị một hành động ngắn khác xen vào (micro bị hỏng - \"stopped\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích mối quan hệ giữa hai hành động",
-        "explanation": "Hành động đang diễn thuyết trình đang xảy ra thì hành động cái mic bị hỏng xen vào (chia ở Quá khứ đơn: 'stopped').",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động cái mic bị hỏng ('stopped' - chia ở Quá khứ đơn) đã xen ngang vào hành động thuyết trình đang diễn ra lúc đó trong quá khứ. Theo quy tắc ngữ pháp, hành động đang diễn ra dùng Quá khứ tiếp diễn. Loại phương án A (make - Hiện tại đơn), B (made - Quá khứ đơn) và D (am making - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'I' đi với cấu trúc 'was + V-ing'. Động từ 'make' bỏ 'e' thêm -ing thành 'making'.",
-        "result": "was making"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ ngôi thứ nhất số ít 'I'. Trong cấu trúc quá khứ tiếp diễn, chủ ngữ 'I' đi với trợ động từ 'was'.",
+        "result": "Chủ ngữ ngôi thứ nhất số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ chính là 'make'. Tận cùng là chữ 'e' câm, ta bỏ 'e' trước khi thêm '-ing' thành 'making'. Kết hợp thành 'was making'.",
+        "result": "Động từ chia đúng: 'was making'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was making) chia đúng công thức và trợ động từ 'was'. Phương án B (made) chia ở Quá khứ đơn không diễn đạt được tính tiếp diễn kéo dài của hành động.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was making",
     "commonMistakes": [
-      "Chia ở quá khứ đơn 'made' hoặc nhầm dùng to be hiện tại."
+      "Học sinh dễ chọn B (made) vì nghĩ đây là chuỗi hành động quá khứ liên tiếp, hoặc quên không bỏ 'e' khi thêm -ing."
     ],
     "reviewSuggestions": [
-      "Luyện cấu trúc: S + was/were + V-ing + when + S + V2/ed."
+      "Ghi nhớ công thức xen ngang: S + was/were + V-ing + when + S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s163",
     "questionId": "eng-q163",
-    "recognition": "Nhận biết qua mốc thời gian cụ thể trong quá khứ 'at 8 p.m. last night'.",
+    "recognition": "Trạng ngữ chỉ thời gian xác định cụ thể trong quá khứ \"at 8 p.m. last night\" (vào lúc 8 giờ tối hôm qua) chỉ ra hành động đang diễn ra tại thời điểm đó, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Xác định thời điểm cụ thể",
-        "explanation": "Thời điểm '8 giờ tối qua' là mốc thời gian cụ thể đã qua, đòi hỏi chia thì Quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Câu có mốc thời gian cụ thể trong quá khứ là 'at 8 p.m. last night' (8 giờ tối qua). Mốc giờ cụ thể yêu cầu chia ở thì Quá khứ tiếp diễn. Loại phương án A (watches - Hiện tại đơn) và B (watched - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'She' số ít đi với cấu trúc 'was + V-ing'. Động từ 'watch' thêm -ing thành 'watching'.",
-        "result": "was watching"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'She' (cô ấy) - ngôi thứ ba số ít. Trong cấu trúc quá khứ tiếp diễn, chủ ngữ này đi kèm trợ động từ 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc khẳng định: S + was/were + V-ing. Động từ 'watch' thêm '-ing' thành 'watching'. Kết hợp lại ta được cụm 'was watching'.",
+        "result": "Động từ chia đúng: 'was watching'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was watching) chia đúng trợ động từ số ít 'was'. Phương án D (is watching) sai vì chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was watching",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'watched' do không chú ý giờ cụ thể 'at 8 p.m.'."
+      "Học sinh chọn B (watched) vì chỉ chú ý đến từ 'last night' mà bỏ qua mốc giờ cụ thể 'at 8 p.m.'.",
+      "Học sinh hay nhầm lẫn cách chia to be số ít."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ: Quá khứ đơn dùng cho mốc thời gian chung chung (last night), còn Quá khứ tiếp diễn dùng cho giờ giấc cụ thể (at 8 p.m. last night)."
+      "Nhớ phân biệt: 1. last night -> Quá khứ đơn; 2. at + giờ + last night -> Quá khứ tiếp diễn."
     ]
   },
-  {
+    {
     "id": "eng-s164",
     "questionId": "eng-q164",
-    "recognition": "Nhận biết qua thời điểm cụ thể trong quá khứ 'at 5 o’clock yesterday afternoon'.",
+    "recognition": "Trạng ngữ chỉ thời gian xác định cụ thể trong quá khứ \"at 5 o’clock yesterday afternoon\" (vào lúc 5 giờ chiều hôm qua) chỉ ra hành động đang diễn ra tại thời điểm đó, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Xác định thời điểm cụ thể",
-        "explanation": "Mốc '5 giờ chiều ngày hôm qua' yêu cầu chia động từ ở quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Mốc thời gian cụ thể 'at 5 o’clock yesterday afternoon' (5 giờ chiều qua) yêu cầu chia động từ ở thì Quá khứ tiếp diễn. Loại phương án A (play - Hiện tại đơn) và B (played - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'They' (họ) đi với cấu trúc số nhiều 'were + V-ing'. Động từ 'play' thêm -ing thành 'playing'.",
-        "result": "were playing"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'They' (họ) - số nhiều. Trong thì Quá khứ tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc khẳng định: S + was/were + V-ing. Động từ 'play' thêm '-ing' thành 'playing'. Kết hợp lại ta được 'were playing'.",
+        "result": "Động từ chia đúng: 'were playing'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were playing) chia đúng trợ động từ 'were' cho chủ ngữ 'They'. Phương án D (are playing) chia Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were playing",
     "commonMistakes": [
-      "Dùng nhầm trợ động từ số ít 'was playing' cho chủ ngữ 'They'."
+      "Học sinh dùng nhầm trợ động từ số ít 'was playing' cho chủ ngữ 'They', hoặc chia quá khứ đơn 'played' do không chú ý giờ cụ thể."
     ],
     "reviewSuggestions": [
-      "Đảm bảo sự hòa hợp giữa trợ động từ was/were và chủ ngữ số ít/số nhiều."
+      "Luôn chú ý sự hòa hợp giữa trợ động từ was/were và chủ ngữ số ít/số nhiều."
     ]
   },
-  {
+    {
     "id": "eng-s165",
     "questionId": "eng-q165",
-    "recognition": "Diễn tả hành động đang xảy ra (ăn tối) thì hành động khác xen vào (điện thoại reo).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động đang ăn tối diễn ra trong quá khứ thì bị một hành động ngắn khác xen vào (điện thoại reo - \"rang\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Việc ăn tối đang diễn ra kéo dài thì bị cắt ngang bởi tiếng chuông điện thoại (quá khứ đơn 'rang').",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động điện thoại reo ('rang' - Quá khứ đơn) xen ngang vào hành động đang ăn tối của chúng tôi trong quá khứ. Do đó, hành động ăn tối phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (have - Hiện tại đơn) và B (had - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'We' (chúng tôi) đi với cấu trúc 'were + V-ing'. Động từ 'have' bỏ 'e' thêm -ing thành 'having'.",
-        "result": "were having"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'We' (chúng tôi) - số nhiều. Trong cấu trúc quá khứ tiếp diễn, 'we' đi kèm với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ chính là 'have'. Ta bỏ chữ 'e' câm rồi thêm '-ing' thành 'having'. Kết hợp thành 'were having'.",
+        "result": "Động từ chia đúng: 'were having'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were having) chia đúng trợ động từ số nhiều và hình thức V-ing. Phương án D (are having) sai vì chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were having",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'had' hoặc chia hiện tại."
+      "Học sinh chọn B (had) vì nhầm lẫn đây là chuỗi hành động quá khứ đơn liên tiếp, hoặc viết sai chính tả 'haveing'."
     ],
     "reviewSuggestions": [
-      "Học cách xác định hành động kéo dài (quá khứ tiếp diễn) và hành động ngắn xen vào (quá khứ đơn)."
+      "Ghi nhớ công thức xen ngang trong quá khứ: S + was/were + V-ing + when + S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s166",
     "questionId": "eng-q166",
-    "recognition": "Nhận biết thời điểm xác định cụ thể trong quá khứ 'at this time yesterday'.",
+    "recognition": "Trạng ngữ chỉ thời gian xác định cụ thể trong quá khứ \"at this time yesterday\" (vào lúc này ngày hôm qua) chỉ ra hành động đang diễn ra tại thời điểm đó, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Xác định thời điểm cụ thể",
-        "explanation": "Cụm 'at this time yesterday' (vào thời điểm này ngày hôm qua) yêu cầu chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Cụm từ 'at this time yesterday' (vào thời điểm này ngày hôm qua) là mốc thời gian xác định cụ thể trong quá khứ. Do đó, ta chia động từ ở thì Quá khứ tiếp diễn. Loại phương án A (does - Hiện tại đơn) và B (did - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'He' (ngôi số ít) đi với cấu trúc 'was + V-ing'. Động từ 'do' thêm -ing thành 'doing'.",
-        "result": "was doing"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'He' (anh ấy) - ngôi thứ ba số ít. Trong thì Quá khứ tiếp diễn, chủ ngữ này đi kèm trợ động từ 'was'.",
+        "result": "Chủ ngữ ngôi thứ ba số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc khẳng định: S + was/were + V-ing. Động từ 'do' thêm '-ing' thành 'doing'. Kết hợp thành 'was doing'.",
+        "result": "Động từ chia đúng: 'was doing'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was doing) chia đúng trợ động từ 'was' cho ngôi 'He'. Phương án D (is doing) sai vì ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was doing",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'did' do không chú ý cụm từ chỉ thời điểm cụ thể 'at this time'."
+      "Học sinh chọn B (did) vì thói quen chỉ nhìn thấy 'yesterday' đã chia quá khứ đơn, bỏ qua cụm từ 'at this time'."
     ],
     "reviewSuggestions": [
-      "Phân biệt rõ: 'yesterday' (quá khứ đơn) và 'at this time yesterday' (quá khứ tiếp diễn)."
+      "Ghi nhớ: yesterday -> Quá khứ đơn; at this time yesterday -> Quá khứ tiếp diễn."
     ]
   },
-  {
+    {
     "id": "eng-s167",
     "questionId": "eng-q167",
-    "recognition": "Hành động đang diễn ra (nói chuyện) thì hành động khác xen vào (giáo viên bước vào).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động học sinh đang nói chuyện diễn ra trong quá khứ thì hành động giáo viên bước vào (\"came in\") xen ngang, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Hành động học sinh nói chuyện đang diễn ra trong lớp thì bị cắt ngang bởi hành động giáo viên vào phòng (quá khứ đơn 'came in').",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động giáo viên vào lớp ('came in' - chia ở Quá khứ đơn) đã cắt ngang hành động nói chuyện đang diễn ra của học sinh. Do đó, hành động nói chuyện phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (talk - Hiện tại đơn) và B (talked - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'The students' (số nhiều) đi với 'were + V-ing'. Động từ 'talk' thêm -ing thành 'talking'.",
-        "result": "were talking"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The students' (các học sinh) - danh từ số nhiều (nhận biết qua chữ 's'). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'talk' thêm đuôi '-ing' thành 'talking'. Kết hợp thành 'were talking'.",
+        "result": "Động từ chia đúng: 'were talking'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were talking) chia đúng trợ động từ số nhiều. Phương án D (are talking) sai vì chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were talking",
     "commonMistakes": [
-      "Dùng trợ động từ số ít 'was talking' hoặc chia quá khứ đơn."
+      "Học sinh chọn B (talked) do nhầm hành động liên tiếp, hoặc chia trợ động từ số ít 'was talking' do không để ý chữ 's' số nhiều ở chủ ngữ 'students'."
     ],
     "reviewSuggestions": [
-      "Chú ý danh từ chủ ngữ có đuôi 's' để chia đúng trợ động từ số nhiều."
+      "Luôn quan sát kỹ đuôi danh từ để xác định danh từ số ít hay số nhiều trước khi chia động từ to be."
     ]
   },
-  {
+    {
     "id": "eng-s168",
     "questionId": "eng-q168",
-    "recognition": "Diễn tả hành động đang xảy ra (nấu ăn) thì hành động khác xen vào (về nhà).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động đang nấu ăn trong quá khứ thì hành động tôi về nhà (\"got home\") xen ngang, yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Mẹ đang nấu ăn thì tôi về nhà (xen vào chia quá khứ đơn 'got home'). Vế đang nấu ăn chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động tôi về nhà ('got home' - chia ở Quá khứ đơn) xen ngang vào hành động mẹ đang nấu ăn. Do đó, hành động nấu ăn phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (cooks - Hiện tại đơn) và B (cooked - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số ít",
-        "explanation": "Chủ ngữ 'My mother' (số ít) đi với trợ động từ 'was' và động từ thêm -ing 'cooking'.",
-        "result": "was cooking"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'My mother' (mẹ tôi) - danh từ số ít chỉ một đối tượng (ngôi 'She'). Trợ động từ tương ứng ở quá khứ tiếp diễn là 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'cook' thêm đuôi '-ing' thành 'cooking'. Kết hợp lại ta được 'was cooking'.",
+        "result": "Động từ chia đúng: 'was cooking'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was cooking) chia đúng trợ động từ số ít 'was' và đúng thì tiếp diễn. Phương án D (is cooking) sai vì chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was cooking",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'cooked' hoặc hiện tại tiếp diễn."
+      "Học sinh chọn B (cooked) vì nhầm lẫn cả hai hành động xảy ra nối tiếp nhau, hoặc dùng trợ động từ số nhiều 'were'."
     ],
     "reviewSuggestions": [
-      "Thực hành viết các câu ghép miêu tả các hành động xen ngang nhau trong quá khứ."
+      "Ghi nhớ cấu trúc xen ngang: S + was/were + V-ing + when + S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s169",
     "questionId": "eng-q169",
-    "recognition": "Diễn tả hành động đang xảy ra (mưa) thì hành động khác xen vào (rời trường).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả bối cảnh thời tiết đang mưa to trong quá khứ lúc hành động rời trường (\"left\") xảy ra xen ngang, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Trời đang mưa to thì chúng tôi rời trường (quá khứ đơn 'left'). Hành động trời mưa chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động chúng tôi rời trường ('left' - chia ở Quá khứ đơn) xen ngang vào bối cảnh thời tiết đang mưa to lúc đó. Do đó, hành động trời mưa phải chia ở thì Quá khứ tiếp diễn để làm nền. Loại phương án A (rains - Hiện tại đơn) và B (rained - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'It' đi với cấu trúc 'was + V-ing'. Động từ 'rain' thêm -ing thành 'raining'.",
-        "result": "was raining"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ chỉ thời tiết 'It' (trời) - ngôi thứ ba số ít. Trong cấu trúc quá khứ tiếp diễn, 'it' đi với trợ động từ 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'rain' thêm đuôi '-ing' thành 'raining'. Kết hợp lại ta được 'was raining'.",
+        "result": "Động từ chia đúng: 'was raining'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was raining) chia đúng trợ động từ số ít 'was'. Phương án D (is raining) sai vì ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was raining",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'rained'."
+      "Học sinh chọn B (rained) vì thói quen dùng Quá khứ đơn nói về thời tiết chung chung, bỏ qua sắc thái thời tiết đang diễn ra làm nền cho sự việc rời trường."
     ],
     "reviewSuggestions": [
-      "Lưu ý các động từ chỉ thời tiết thường được chia tiếp diễn để mô tả khung cảnh."
+      "Nhớ rằng các hiện tượng thời tiết đang xảy ra làm bối cảnh nền cho sự việc khác thường chia ở tiếp diễn."
     ]
   },
-  {
+    {
     "id": "eng-s170",
     "questionId": "eng-q170",
-    "recognition": "Hành động đang xảy ra (chụp ảnh) thì hành động khác xen vào (hết pin).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động James đang chụp ảnh trong quá khứ thì bị một hành động ngắn khác xen vào (điện thoại hết pin - \"ran out\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "James đang chụp ảnh ở Nhật thì điện thoại bị hết pin (chia quá khứ đơn 'ran out'). Việc chụp ảnh chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động điện thoại hết pin ('ran out' - chia ở Quá khứ đơn) xen ngang vào hành động chụp ảnh đang diễn ra của James trong quá khứ. Do đó, hành động chụp ảnh phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (takes - Hiện tại đơn) và B (took - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'James' (số ít) đi với cấu trúc 'was + V-ing'. Động từ 'take' bỏ 'e' thêm -ing thành 'taking'.",
-        "result": "was taking"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'James' - danh từ số ít chỉ một người (ngôi 'He'). Trợ động từ tương ứng ở quá khứ tiếp diễn là 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ chính là 'take'. Tận cùng là chữ 'e' câm, ta bỏ 'e' trước khi thêm '-ing' thành 'taking'. Kết hợp thành 'was taking'.",
+        "result": "Động từ chia đúng: 'was taking'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was taking) chia đúng trợ động từ số ít 'was' và đúng chính tả đuôi -ing. Phương án D (is taking) chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was taking",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'took' hoặc quên bỏ 'e' trước khi thêm -ing."
+      "Học sinh viết sai chính tả 'takeing' (quên bỏ chữ e), hoặc chọn B (took) vì nhầm đây là chuỗi hành động quá khứ đơn liên tiếp."
     ],
     "reviewSuggestions": [
-      "Học cách biến đổi động từ 'take -> taking'."
+      "Nhớ kỹ quy tắc bỏ chữ 'e' câm ở cuối động từ trước khi thêm '-ing': take -> taking, make -> making."
     ]
   },
-  {
+    {
     "id": "eng-s171",
     "questionId": "eng-q171",
-    "recognition": "Hành động đang xảy ra (hướng dẫn nấu ăn) thì hành động khác xen vào (tôi đến).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động các đầu bếp đang hướng dẫn học sinh nấu ăn trong quá khứ thì hành động tôi đến (\"arrived\") xen ngang, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Các đầu bếp đang hướng dẫn học sinh nấu ăn thì tôi đến (xen vào chia quá khứ đơn 'arrived'). Việc hướng dẫn chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động tôi đến ('arrived' - chia ở Quá khứ đơn) cắt ngang hành động các đầu bếp đang giảng dạy/hướng dẫn. Hành động hướng dẫn kéo dài này phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (show - Hiện tại đơn) và B (showed - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'The cooks' (số nhiều) đi với 'were + V-ing'. Động từ 'show' thêm -ing thành 'showing'.",
-        "result": "were showing"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The cooks' (các đầu bếp) - danh từ số nhiều (nhận biết qua chữ 's'). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'show' thêm đuôi '-ing' thành 'showing'. Kết hợp thành 'were showing'.",
+        "result": "Động từ chia đúng: 'were showing'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were showing) chia đúng trợ động từ số nhiều 'were'. Phương án D (are showing) sai vì ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were showing",
     "commonMistakes": [
-      "Dùng trợ động từ số ít 'was showing' cho chủ ngữ số nhiều 'The cooks'."
+      "Học sinh dễ chọn nhầm B (showed) do nhầm cấu trúc xen ngang hoặc chia trợ động từ số ít 'was showing' vì không nhìn kỹ đuôi số nhiều của chủ ngữ 'cooks'."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ sự hòa hợp chủ-vị của trợ động từ quá khứ tiếp diễn."
+      "Ghi nhớ sự hòa hợp chủ-vị của trợ động từ: Danh từ số nhiều -> were; Danh từ số ít -> was."
     ]
   },
-  {
+    {
     "id": "eng-s172",
     "questionId": "eng-q172",
-    "recognition": "Hành động đang xảy ra (dọn sân trường) thì hành động khác xen vào (trời bắt đầu mưa).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động học sinh đang dọn dẹp sân trường trong quá khứ thì hành động trời bắt đầu mưa (\"started\") xen ngang, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Học sinh đang dọn dẹp thì trời bắt đầu mưa (quá khứ đơn 'started'). Việc dọn dẹp chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động trời bắt đầu mưa ('started' - chia ở Quá khứ đơn) xen ngang vào hành động học sinh đang dọn dẹp. Hành động dọn dẹp kéo dài này phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (clean - Hiện tại đơn) và B (cleaned - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'The students' (số nhiều) đi với 'were + V-ing'. Động từ 'clean' thêm -ing thành 'cleaning'.",
-        "result": "were cleaning"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The students' (các học sinh) - danh từ số nhiều (nhận biết qua chữ 's'). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'clean' thêm đuôi '-ing' thành 'cleaning'. Kết hợp thành 'were cleaning'.",
+        "result": "Động từ chia đúng: 'were cleaning'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were cleaning) chia đúng trợ động từ số nhiều 'were'. Phương án D (are cleaning) sai vì ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were cleaning",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'cleaned' hoặc chia trợ động từ 'was'."
+      "Học sinh chọn B (cleaned) do thói quen dịch từ hoặc dùng trợ động từ số ít 'was cleaning'."
     ],
     "reviewSuggestions": [
-      "Ôn tập cách chia động từ theo danh từ số nhiều làm chủ ngữ."
+      "Luôn xác định rõ chủ ngữ số ít hay số nhiều trước khi chia động từ to be trong thì tiếp diễn."
     ]
   },
-  {
+    {
     "id": "eng-s173",
     "questionId": "eng-q173",
-    "recognition": "Hành động đang xảy ra (đợi xe buýt) thì hành động khác xen vào (nhìn thấy bạn cũ).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động đang đợi xe buýt trong quá khứ thì bị một hành động ngắn khác xen vào (Anna nhìn thấy bạn - \"saw\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Chúng tôi đang đợi xe buýt thì Anna nhìn thấy bạn cũ (xen vào chia quá khứ đơn 'saw'). Việc đợi xe chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động Anna nhìn thấy bạn cũ ('saw' - chia ở Quá khứ đơn) xen ngang vào hành động chúng tôi đang đợi xe buýt trong quá khứ. Do đó, hành động đợi xe buýt phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (wait - Hiện tại đơn) và B (waited - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'We' đi với trợ động từ 'were' và động từ 'waiting'.",
-        "result": "were waiting"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'We' (chúng tôi) - số nhiều. Trong cấu trúc quá khứ tiếp diễn, 'we' đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'wait' thêm đuôi '-ing' thành 'waiting'. Kết hợp thành 'were waiting'.",
+        "result": "Động từ chia đúng: 'were waiting'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were waiting) chia đúng trợ động từ số nhiều 'were'. Phương án D (are waiting) chia Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were waiting",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'waited' hoặc chia hiện tại tiếp diễn."
+      "Học sinh chọn B (waited) vì nhầm lẫn cả hai hành động xảy ra nối tiếp nhau, hoặc quên chia to be."
     ],
     "reviewSuggestions": [
-      "Nhận diện liên từ 'when' thường kết nối hành động xen ngang."
+      "Ghi nhớ công thức xen ngang: S + was/were + V-ing + when + S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s174",
     "questionId": "eng-q174",
-    "recognition": "Hành động đang xảy ra (trồng cây) thì hành động khác xen vào (chúng tôi đi ngang qua).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động các công nhân đang trồng cây trong quá khứ thì hành động chúng tôi đi ngang qua (\"passed by\") xen ngang, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Công nhân đang trồng cây thì chúng tôi đi ngang qua (xen vào chia quá khứ đơn 'passed by'). Việc trồng cây chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động chúng tôi đi ngang qua ('passed by' - chia ở Quá khứ đơn) xen ngang vào hành động các công nhân đang trồng cây. Hành động trồng cây kéo dài này phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (plant - Hiện tại đơn) và B (planted - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'The city workers' (số nhiều) đi với 'were + V-ing'. Động từ 'plant' thêm -ing thành 'planting'.",
-        "result": "were planting"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The city workers' (các công nhân thành phố) - danh từ số nhiều (nhận biết qua chữ 's' ở workers). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'plant' thêm đuôi '-ing' thành 'planting'. Kết hợp thành 'were planting'.",
+        "result": "Động từ chia đúng: 'were planting'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were planting) chia đúng trợ động từ số nhiều 'were'. Phương án D (are planting) sai vì ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were planting",
     "commonMistakes": [
-      "Dùng trợ động từ số ít 'was planting' cho danh từ số nhiều 'workers'."
+      "Học sinh dùng trợ động từ số ít 'was planting' cho danh từ số nhiều 'workers', hoặc chia quá khứ đơn 'planted'."
     ],
     "reviewSuggestions": [
-      "Phân biệt danh từ chính trong cụm chủ ngữ dài để chia động từ."
+      "Đảm bảo phân biệt danh từ chính 'workers' (số nhiều) trong cụm chủ ngữ dài để chia đúng động từ."
     ]
   },
-  {
+    {
     "id": "eng-s175",
     "questionId": "eng-q175",
-    "recognition": "Hành động đang xảy ra (đọc bài) thì hành động khác xen vào (em trai gọi).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động tôi đang đọc văn bản tiếng Anh trong quá khứ thì bị một hành động ngắn khác xen vào (em trai gọi điện - \"called\"), yêu cầu chia hành động đang diễn ra ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Tôi đang đọc bài thì em trai gọi điện (xen vào chia quá khứ đơn 'called'). Việc đọc bài chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động em trai gọi điện ('called' - chia ở Quá khứ đơn) xen ngang vào hành động tôi đang đọc bài trong quá khứ. Do đó, hành động đọc bài phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (read - chia quá khứ đơn hoặc hiện tại nguyên mẫu), B (reads - Hiện tại đơn) và D (am reading - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ",
-        "explanation": "Chủ ngữ 'I' đi với cấu trúc 'was + V-ing'. Động từ 'read' thêm -ing thành 'reading'.",
-        "result": "was reading"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là đại từ 'I' - ngôi thứ nhất số ít. Trong cấu trúc quá khứ tiếp diễn, 'I' đi với trợ động từ 'was'.",
+        "result": "Chủ ngữ ngôi thứ nhất số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'read' thêm đuôi '-ing' thành 'reading'. Kết hợp thành 'was reading'.",
+        "result": "Động từ chia đúng: 'was reading'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was reading) chia đúng trợ động từ 'was' cho ngôi 'I'. Phương án A (read) sai vì ở quá khứ đơn không thể hiện được tính đang diễn ra.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was reading",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'read' (phát âm là /red/) hoặc hiện tại tiếp diễn."
+      "Học sinh chọn A (read - phát âm /red/ ở quá khứ) vì thói quen dùng quá khứ đơn cho các hành động trong câu kể, bỏ qua tính chất xen ngang của câu."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ cấu trúc chia với ngôi 'I' trong quá khứ tiếp diễn dùng trợ động từ 'was'."
+      "Ghi nhớ cấu trúc: S + was/were + V-ing + when + S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s176",
     "questionId": "eng-q176",
-    "recognition": "Hành động đang xảy ra (đi du lịch) thì hành động khác xen vào (thời tiết thay đổi).",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động các du khách đang đi du lịch trong quá khứ thì hành động thời tiết thay đổi đột ngột (\"changed\") xen ngang, yêu cầu chia ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh",
-        "explanation": "Du khách đang đi du lịch vòng quanh Phú Quốc thì thời tiết thay đổi đột ngột (xen vào chia quá khứ đơn 'changed'). Việc đi du lịch chia quá khứ tiếp diễn.",
-        "result": "Thì Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động thời tiết thay đổi đột ngột ('changed' - chia ở Quá khứ đơn) xen ngang vào hành động các du khách đang đi du lịch. Hành động đi du lịch kéo dài này phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (travel - Hiện tại đơn) và B (travelled - Quá khứ đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'The tourists' (số nhiều) đi với cấu trúc 'were + V-ing'. Động từ 'travel' gấp đôi phụ âm 'l' trước khi thêm -ing thành 'travelling'.",
-        "result": "were travelling"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The tourists' (các du khách) - danh từ số nhiều (nhận biết qua chữ 's'). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ chính là 'travel'. Đây là động từ có 2 âm tiết, theo quy tắc tiếng Anh Anh-Anh, ta gấp đôi phụ âm cuối 'l' trước khi thêm '-ing' thành 'travelling'. Kết hợp thành 'were travelling'.",
+        "result": "Động từ chia đúng: 'were travelling'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were travelling) chia đúng trợ động từ số nhiều 'were' và viết đúng chính tả. Phương án D (are travelling) chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were travelling",
     "commonMistakes": [
-      "Không gấp đôi phụ âm 'l' (traveling - mặc dù tiếng Anh-Mỹ chấp nhận nhưng đề thi chuẩn thường ưu tiên Anh-Anh với 2 chữ l) hoặc chia trợ động từ 'was'."
+      "Học sinh viết sai chính tả động từ dạng V-ing thành 'traveling' (trong một số đề thi chuẩn Anh-Anh yêu cầu gấp đôi chữ l), hoặc chia trợ động từ số ít 'was'."
     ],
     "reviewSuggestions": [
-      "Lưu ý quy tắc gấp đôi phụ âm cuối của động từ có 2 âm tiết nhấn trọng âm khác nhau."
+      "Ghi nhớ quy tắc gấp đôi phụ âm cuối đối với động từ 'travel' -> 'travelling'."
     ]
   },
-  {
+    {
     "id": "eng-s177",
     "questionId": "eng-q177",
-    "recognition": "Nhận biết hành động đang xảy ra kéo dài sau liên từ 'While'.",
+    "recognition": "Liên từ \"While\" (Trong khi) đứng đầu câu diễn tả hành động đang đọc sách diễn ra trong quá khứ thì hành động bố về nhà (\"came home\") xen ngang, yêu cầu chia mệnh đề sau \"While\" ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Xác định vai trò của liên từ While",
-        "explanation": "Mệnh đề sau 'While' (trong khi) thường diễn tả hành động đang xảy ra kéo dài trong quá khứ, làm nền cho hành động khác xen vào.",
-        "result": "Mệnh đề sau While chia Quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động bố về nhà ('came home' - chia ở Quá khứ đơn) đã cắt ngang hành động cô ấy đang đọc sách. Mệnh đề đi sau 'While' diễn tả hành động đang diễn ra kéo dài nên phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (reads - Hiện tại đơn) và D (is reading - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số ít",
-        "explanation": "Chủ ngữ 'she' số ít đi với cấu trúc 'was + V-ing'. Động từ 'read' thêm -ing thành 'reading'.",
-        "result": "was reading"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ sau 'While' là đại từ 'she' (cô ấy) - ngôi thứ ba số ít. Trong cấu trúc tiếp diễn, chủ ngữ số ít đi với trợ động từ 'was'.",
+        "result": "Chủ ngữ số ít -> to be là 'was'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'read' thêm đuôi '-ing' thành 'reading'. Kết hợp thành 'was reading'.",
+        "result": "Động từ chia đúng: 'was reading'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (was reading) chia đúng trợ động từ số ít 'was'. Phương án B (read) chia ở Quá khứ đơn không diễn tả được tính tiếp diễn kéo dài của hành động.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. was reading",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'read' do không chú ý liên từ 'While'."
+      "Học sinh chọn B (read) do thói quen dịch từ hoặc nhầm lẫn cấu trúc song song quá khứ đơn, quên mất sau 'While' thường ưu tiên thì tiếp diễn."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ quy tắc: While + S + was/were + V-ing."
+      "Ghi nhớ công thức: While + S + was/were + V-ing, S + V2/ed."
     ]
   },
-  {
+    {
     "id": "eng-s178",
     "questionId": "eng-q178",
-    "recognition": "Nhận biết mệnh đề sau liên từ 'While' diễn tả hành động đang xảy ra.",
+    "recognition": "Liên từ \"While\" (Trong khi) diễn tả hành động học sinh đang đọc đoạn văn trong quá khứ thì hành động giáo viên viết từ mới lên bảng xen vào (hoặc xảy ra song song), yêu cầu chia mệnh đề sau \"While\" ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Xác định thì và chủ ngữ",
-        "explanation": "Liên từ 'While' đứng đầu câu chỉ hành động đang xảy ra kéo dài. Chủ ngữ 'the students' (số nhiều) yêu cầu trợ động từ số nhiều.",
-        "result": "Quá khứ tiếp diễn, chủ ngữ số nhiều"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Liên từ 'While' diễn tả một hành động đang xảy ra kéo dài trong quá khứ (đang đọc đoạn văn). Do đó, mệnh đề đi sau 'While' phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (read - Quá khứ đơn) và D (reads - Hiện tại đơn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ",
-        "explanation": "Động từ 'read' thêm -ing đi kèm trợ động từ số nhiều là 'were reading'.",
-        "result": "were reading"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'the students' (các học sinh) - danh từ số nhiều (nhận biết qua chữ 's'). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'read' thêm đuôi '-ing' thành 'reading'. Kết hợp thành 'were reading'.",
+        "result": "Động từ chia đúng: 'were reading'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (were reading) chia đúng trợ động từ số nhiều 'were'. Phương án C (are reading) sai vì chia ở Hiện tại tiếp diễn.",
+        "result": "Đáp án đúng là B"
       }
     ],
     "finalAnswer": "B. were reading",
     "commonMistakes": [
-      "Chọn 'read' quá khứ đơn hoặc nhầm chia trợ động từ số ít 'was'."
+      "Học sinh chọn A (read) do không nhận diện được vai trò của 'While' yêu cầu thì tiếp diễn, hoặc nhầm chia trợ động từ số ít 'was reading'."
     ],
     "reviewSuggestions": [
-      "Ôn tập cách chia động từ sau While với danh từ số nhiều."
+      "Ghi nhớ quy tắc: Mệnh đề sau While chia Quá khứ tiếp diễn để diễn tả hành động làm nền."
     ]
   },
-  {
+    {
     "id": "eng-s179",
     "questionId": "eng-q179",
-    "recognition": "Cấu trúc phủ định ở thì Quá khứ tiếp diễn.",
+    "recognition": "Cấu trúc với liên từ \"when\" diễn tả hành động đang không chú ý kéo dài trong quá khứ lúc hành động giáo viên giải thích quy tắc (\"explained\") xảy ra xen ngang, yêu cầu chia thể phủ định của thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Xác định ngữ cảnh thời gian",
-        "explanation": "Câu diễn tả hành động đang không xảy ra (không chú ý) khi giáo viên giảng giải (quá khứ đơn 'explained'). Ngữ cảnh đòi hỏi thể phủ định quá khứ tiếp diễn.",
-        "result": "Thể phủ định quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động giáo viên giải thích quy tắc ('explained' - chia ở Quá khứ đơn) xen ngang vào trạng thái đang không chú ý của các bạn cùng lớp lúc đó. Do đó, hành động chú ý phải chia ở thì Quá khứ tiếp diễn dạng phủ định. Loại phương án C (don't pay - Hiện tại đơn) và D (aren't paying - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn dạng phủ định"
       },
       {
         "order": 2,
-        "title": "Áp dụng cấu trúc phủ định",
-        "explanation": "Công thức: S + wasn't/weren't + V-ing. Chủ ngữ 'My classmates' (số nhiều) đi với 'weren't paying'.",
-        "result": "weren't paying"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'My classmates' (các bạn cùng lớp của tôi) - danh từ số nhiều (nhận biết qua chữ 's'). Trong cấu trúc phủ định quá khứ tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were not' (viết tắt là 'weren't').",
+        "result": "Chủ ngữ số nhiều -> to be phủ định là 'weren't'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Công thức phủ định: S + wasn't/weren't + V-ing. Cụm động từ 'pay attention' chuyển thành 'weren't paying'.",
+        "result": "Động từ chia đúng: 'weren't paying'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án A (weren't paying) chia đúng trợ động từ phủ định số nhiều. Phương án B (didn't paying) sai nghiêm trọng vì sau trợ động từ 'did/didn't' luôn luôn phải là động từ nguyên mẫu, không được đi kèm với V-ing.",
+        "result": "Đáp án đúng là A"
       }
     ],
     "finalAnswer": "A. weren’t paying",
     "commonMistakes": [
-      "Chọn 'didn't paying' (sai cấu trúc ngữ pháp vì sau didn't phải là động từ nguyên mẫu)."
+      "Học sinh chọn nhầm B (didn't paying) vì nhớ mang máng quá khứ đơn phủ định là didn't mà không biết cấu trúc ngữ pháp này bị sai công thức hoàn toàn."
     ],
     "reviewSuggestions": [
-      "Ghi nhớ: không được dùng V-ing ngay sau trợ động từ did/didn't."
+      "Tuyệt đối ghi nhớ: Trợ động từ did/didn't chỉ đi với động từ nguyên mẫu (V-infinitive), không đi với V-ing."
     ]
   },
-  {
+    {
     "id": "eng-s180",
     "questionId": "eng-q180",
-    "recognition": "Cấu trúc câu hỏi nghi vấn (Yes/No Question) ở thì Quá khứ tiếp diễn.",
+    "recognition": "Câu hỏi nghi vấn Yes/No Question ở thì Quá khứ tiếp diễn diễn tả hành động đang ăn tối thì bị hành động ngắn khác xen vào (tôi gọi điện - \"called\"), yêu cầu đảo trợ động từ lên trước chủ ngữ.",
     "detailedSteps": [
       {
         "order": 1,
-        "title": "Phân tích ngữ cảnh thời gian",
-        "explanation": "Câu hỏi hỏi về hành động đang diễn ra (ăn tối) khi hành động khác gọi điện đến cắt ngang ('when I called you last night').",
-        "result": "Câu hỏi quá khứ tiếp diễn"
+        "title": "Xác định thì của câu (Tense)",
+        "explanation": "Hành động tôi gọi điện ('called' - chia ở Quá khứ đơn) xen ngang vào hành động ăn tối của người nghe vào tối qua. Do đó, câu hỏi về việc đang ăn tối phải chia ở thì Quá khứ tiếp diễn. Loại phương án C (Do / have - Hiện tại đơn) và D (Are / having - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Áp dụng cấu trúc câu hỏi",
-        "explanation": "Công thức: Was/Were + S + V-ing? Chủ ngữ 'you' đi với trợ động từ 'Were'. Động từ 'have' bỏ 'e' thêm -ing thành 'having'.",
-        "result": "Were / having"
+        "title": "Xác định chủ ngữ và trợ động từ đảo ngữ",
+        "explanation": "Chủ ngữ là đại từ 'you' (bạn) - ngôi thứ hai. Trong câu hỏi quá khứ tiếp diễn, ta đảo trợ động từ 'were' lên đầu câu trước chủ ngữ.",
+        "result": "Chủ ngữ ngôi thứ hai -> to be đảo lên đầu là 'Were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Cấu trúc nghi vấn: Was/Were + S + V-ing? Động từ chính 'have' bỏ chữ 'e' câm rồi thêm '-ing' thành 'having'. Ta được cụm hoàn chỉnh: 'Were you having'.",
+        "result": "Động từ chia đúng: 'Were / having'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án B (Were / having) chia đúng trợ động từ và hình thức V-ing. Phương án A (Did / have) ở quá khứ đơn không nhấn mạnh được sắc thái đang diễn ra bị xen ngang tại một thời điểm cụ thể.",
+        "result": "Đáp án đúng là B"
       }
     ],
     "finalAnswer": "B. Were / having",
     "commonMistakes": [
-      "Chọn trợ động từ quá khứ đơn 'Did / have' vì nhầm lẫn hành động đã hoàn thành."
+      "Học sinh chọn A (Did / have) do thói quen dùng quá khứ đơn cho câu hỏi thời gian 'last night' mà không nhận diện được tính chất xen ngang của hai hành động."
     ],
     "reviewSuggestions": [
-      "Luyện viết và chia động từ dạng câu hỏi đối với các thì tiếp diễn."
+      "Luyện tập phân biệt câu hỏi: 1. Did you have dinner last night? (Hỏi xem đã ăn tối chưa - hành động trọn vẹn); 2. Were you having dinner when I called? (Hỏi xem có đang ăn tối lúc tôi gọi không - hành động đang diễn ra)."
     ]
   },
-  {
+    {
     "id": "eng-s181",
     "questionId": "eng-q181",
-    "recognition": "Diễn tả hai hành động song song đồng thời xảy ra trong quá khứ.",
+    "recognition": "Liên từ \"while\" (trong khi) kết nối hành động la hét của lũ trẻ xảy ra song song đồng thời với hành động nói chuyện của bố mẹ (\"were talking\") trong quá khứ, yêu cầu chia cả hai vế ở thì Quá khứ tiếp diễn (Past Continuous).",
     "detailedSteps": [
       {
         "order": 1,
         "title": "Phân tích mối quan hệ hai vế câu",
-        "explanation": "Hai vế được liên kết bằng liên từ 'while' (trong khi). Vế sau chia quá khứ tiếp diễn 'were talking', vế trước tả hành động hét lớn xảy ra song song cũng chia quá khứ tiếp diễn.",
-        "result": "Hai hành động song song chia Quá khứ tiếp diễn"
+        "explanation": "Vế sau chia thì Quá khứ tiếp diễn 'were talking' kết hợp với liên từ 'while' cho biết hai hành động la hét ('shout') và nói chuyện diễn ra song song cùng lúc trong quá khứ. Do đó, vế đầu cũng phải chia ở thì Quá khứ tiếp diễn. Loại phương án A (shout - Hiện tại đơn) và D (are shouting - Hiện tại tiếp diễn).",
+        "result": "Thì Quá khứ tiếp diễn (Past Continuous)"
       },
       {
         "order": 2,
-        "title": "Chia động từ theo chủ ngữ số nhiều",
-        "explanation": "Chủ ngữ 'The children' (trẻ em - số nhiều) đi với cấu trúc 'were + V-ing'. Động từ 'shout' thêm -ing thành 'shouting'.",
-        "result": "were shouting"
+        "title": "Xác định chủ ngữ và sự hòa hợp chủ-vị",
+        "explanation": "Chủ ngữ là 'The children' (lũ trẻ) - danh từ số nhiều (số ít là 'child'). Trong cấu trúc tiếp diễn, chủ ngữ số nhiều đi với trợ động từ 'were'.",
+        "result": "Chủ ngữ số nhiều -> to be là 'were'"
+      },
+      {
+        "order": 3,
+        "title": "Chia động từ chính (Verb conjugation)",
+        "explanation": "Động từ 'shout' thêm đuôi '-ing' thành 'shouting'. Kết hợp lại ta được 'were shouting'.",
+        "result": "Động từ chia đúng: 'were shouting'"
+      },
+      {
+        "order": 4,
+        "title": "Đối chiếu các phương án và kết luận",
+        "explanation": "Phương án C (were shouting) chia đúng trợ động từ số nhiều và thì tiếp diễn song song. Phương án B (shouted) chia ở Quá khứ đơn không thể hiện tính song song đồng thời của hành động kéo dài.",
+        "result": "Đáp án đúng là C"
       }
     ],
     "finalAnswer": "C. were shouting",
     "commonMistakes": [
-      "Chọn quá khứ đơn 'shouted' do thói quen dịch nghĩa."
+      "Học sinh chọn B (shouted) vì thói quen dùng quá khứ đơn cho hành động la hét, hoặc dùng trợ động từ số ít 'was shouting' do nhầm 'children' là số ít."
     ],
     "reviewSuggestions": [
-      "Nhớ quy tắc: Khi tả 2 hành động xảy ra song song đồng thời ở quá khứ, cả 2 vế đều chia Quá khứ tiếp diễn."
+      "Ghi nhớ các danh từ số nhiều đặc biệt: child -> children (trẻ em), person -> people (mọi người), foot -> feet (bàn chân)."
     ]
   }
 ];

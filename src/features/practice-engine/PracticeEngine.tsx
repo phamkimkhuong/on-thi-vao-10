@@ -52,6 +52,7 @@ export const PracticeEngine: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [existingAttempt, setExistingAttempt] = useState<UserAttempt | null>(null);
+  const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
   const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | null>(null);
@@ -182,11 +183,27 @@ export const PracticeEngine: React.FC = () => {
   const completedQuestionIds = useMemo(() => {
     const userId = user?.uid ?? 'guest';
     const attempts = storageService.getAttempts(userId);
-    return new Set(
-      attempts
-        .filter(a => a.questionTypeId === questionTypeId)
-        .map(a => a.questionId)
-    );
+    
+    // Tìm lần làm gần nhất cho từng câu hỏi
+    const latestAttemptsByQId: Record<string, UserAttempt> = {};
+    attempts.forEach(a => {
+      if (a.questionTypeId === questionTypeId) {
+        const existing = latestAttemptsByQId[a.questionId];
+        if (!existing || new Date(a.createdAt).getTime() > new Date(existing.createdAt).getTime()) {
+          latestAttemptsByQId[a.questionId] = a;
+        }
+      }
+    });
+
+    const completed = new Set<string>();
+    Object.entries(latestAttemptsByQId).forEach(([qId, attempt]) => {
+      // Chỉ tính là đã hoàn thành (tô màu xanh) nếu lần làm mới nhất ở trạng thái chờ chấm
+      if (attempt.gradingMode === 'manual') {
+        completed.add(qId);
+      }
+    });
+
+    return completed;
   }, [user, questionTypeId, currentIdx, isSubmitted]);
 
   const getSubTenseProgress = useCallback((qIds: string[]) => {
@@ -209,6 +226,7 @@ export const PracticeEngine: React.FC = () => {
     setQuestionStartAt(Date.now());
     setUploadProgress({});
     setUploadControls({});
+    setPastAttempts([]);
   }, []);
 
   useEffect(() => {
@@ -258,9 +276,21 @@ export const PracticeEngine: React.FC = () => {
 
       if (latestAttemptLocal) {
         if (isMounted) {
-          setExistingAttempt(latestAttemptLocal);
-          setIsSubmitted(true);
-          setIsCorrect(latestAttemptLocal.isCorrect);
+          if (latestAttemptLocal.gradingMode !== 'manual') {
+            // Lần làm gần nhất đã được chấm: tạm ẩn để làm lại (Clean Slate)
+            setExistingAttempt(null);
+            setIsSubmitted(false);
+            setIsCorrect(false);
+            // Lưu tối đa 2 lần làm gần nhất để so sánh sau khi nộp
+            setPastAttempts(attemptsForQLocal.slice(0, 2));
+          } else {
+            // Lần làm gần nhất đang chờ chấm: hiển thị giao diện đã nộp bài
+            setExistingAttempt(latestAttemptLocal);
+            setIsSubmitted(true);
+            setIsCorrect(latestAttemptLocal.isCorrect);
+            // Lưu tối đa 2 lần làm trước đó (bắt đầu từ lần thứ 2) để so sánh
+            setPastAttempts(attemptsForQLocal.slice(1, 3));
+          }
         }
       }
 
@@ -279,14 +309,23 @@ export const PracticeEngine: React.FC = () => {
 
           if (isMounted) {
             if (latestAttemptRemote) {
-              setExistingAttempt(latestAttemptRemote);
-              setIsSubmitted(true);
-              setIsCorrect(latestAttemptRemote.isCorrect);
+              if (latestAttemptRemote.gradingMode !== 'manual') {
+                setExistingAttempt(null);
+                setIsSubmitted(false);
+                setIsCorrect(false);
+                setPastAttempts(attemptsForQRemote.slice(0, 2));
+              } else {
+                setExistingAttempt(latestAttemptRemote);
+                setIsSubmitted(true);
+                setIsCorrect(latestAttemptRemote.isCorrect);
+                setPastAttempts(attemptsForQRemote.slice(1, 3));
+              }
             } else {
               setExistingAttempt(null);
               setIsSubmitted(false);
               setIsCorrect(false);
               setProofImages([]);
+              setPastAttempts([]);
             }
           }
         } catch (err) {
@@ -298,6 +337,7 @@ export const PracticeEngine: React.FC = () => {
           setIsSubmitted(false);
           setIsCorrect(false);
           setProofImages([]);
+          setPastAttempts([]);
         }
       }
     };
@@ -310,6 +350,13 @@ export const PracticeEngine: React.FC = () => {
   }, [currentIdx, questionTypeId, questions, user]);
 
   const handleRetry = () => {
+    if (existingAttempt) {
+      // Đưa existingAttempt hiện tại (vừa mới xem) vào danh sách pastAttempts
+      setPastAttempts(prev => {
+        const filtered = prev.filter(a => a.id !== existingAttempt.id);
+        return [existingAttempt, ...filtered].slice(0, 2);
+      });
+    }
     setExistingAttempt(null);
     setProofImages(prev => {
       revokeLocalProofImages(prev);
@@ -1169,6 +1216,104 @@ export const PracticeEngine: React.FC = () => {
                         </div>
                       ))
                     }
+                  </div>
+                </div>
+              )}
+
+              {/* Lịch sử so sánh các lần làm trước */}
+              {pastAttempts.length > 0 && (
+                <div className="space-y-3 p-5 bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-border/50 shadow-sm animate-fade-in">
+                  <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
+                    ⏳ So sánh với các lần làm trước đó (Tối đa 2 lần gần nhất):
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    {pastAttempts.map((past, idx) => {
+                      const dateStr = new Date(past.createdAt).toLocaleDateString('vi-VN', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      });
+                      
+                      const isPastCorrect = past.isCorrect;
+                      
+                      return (
+                        <div 
+                          key={past.id} 
+                          className={cn(
+                            "p-4 rounded-xl border transition-all duration-150 relative flex flex-col justify-between gap-3 bg-card",
+                            isPastCorrect 
+                              ? "border-emerald-500/20 hover:border-emerald-500/35" 
+                              : "border-rose-500/20 hover:border-rose-500/35"
+                          )}
+                        >
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-[10px] font-bold text-muted-foreground">
+                                Lần làm {pastAttempts.length - idx}: {dateStr}
+                              </span>
+                              <span className={cn(
+                                "text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1",
+                                isPastCorrect
+                                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                  : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+                              )}>
+                                {isPastCorrect ? (
+                                  <>
+                                    <CheckCircle size={10} /> Đúng / Đạt
+                                  </>
+                                ) : (
+                                  <>
+                                    <XCircle size={10} /> Sai / Cần sửa
+                                  </>
+                                )}
+                              </span>
+                            </div>
+
+                            <div className="text-xs font-semibold text-foreground">
+                              {isMath ? (
+                                <div className="space-y-2">
+                                  <span className="text-muted-foreground block text-[11px]">Bài giải tự luận:</span>
+                                  {past.proofImages && past.proofImages.length > 0 ? (
+                                    <div className="flex gap-1.5 overflow-x-auto py-1">
+                                      {past.proofImages.map((img) => (
+                                        <div key={img.id} className="relative rounded-lg overflow-hidden border border-border bg-black w-14 h-14 shrink-0 flex items-center justify-center">
+                                          <img 
+                                            src={img.downloadUrl || img.storagePath} 
+                                            alt="Minh chứng" 
+                                            className="w-full h-full object-cover cursor-pointer"
+                                            onClick={() => window.open(img.downloadUrl || img.storagePath, '_blank')}
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <span className="text-muted-foreground italic text-[11px]">Không có ảnh bài làm</span>
+                                  )}
+                                </div>
+                              ) : (
+                                <div>
+                                  <span className="text-muted-foreground text-[11px]">Đáp án đã chọn: </span>
+                                  <span className="font-extrabold text-primary">{past.userAnswer}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {past.teacherFeedback && (
+                            <div className={cn(
+                              "text-[10px] font-bold p-2 rounded-lg border",
+                              isPastCorrect 
+                                ? "bg-emerald-500/5 border-emerald-500/10 text-emerald-800 dark:text-emerald-300"
+                                : "bg-rose-500/5 border-rose-500/10 text-rose-800 dark:text-rose-300"
+                            )}>
+                              💬 Nhận xét: "{past.teacherFeedback}"
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
