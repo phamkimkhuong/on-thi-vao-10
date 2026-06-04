@@ -1632,6 +1632,486 @@ export const englishQuestions: Question[] = [
     difficulty: "hard",
     sourceType: "mock_exam",
     validatorType: "choice"
+  },
+  {
+    id: "eng-q102",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "It usually ______ at this time of the year.",
+    options: ["A. rain", "B. rains", "C. rained", "D. is raining"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q103",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My mother often ______ breakfast at 6 a.m.",
+    options: ["A. cooks", "B. cook", "C. cooked", "D. is cooking"],
+    correctAnswer: "A",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q104",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Students at our school ______ the classrooms clean.",
+    options: ["A. keeps", "B. kept", "C. keep", "D. are keeping"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q105",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "He usually ______ to school by bike.",
+    options: ["A. go", "B. goes", "C. went", "D. is going"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q106",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "They ______ English every Monday and Friday.",
+    options: ["A. study", "B. studies", "C. studied", "D. are studying"],
+    correctAnswer: "A",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q107",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My father ______ coffee every morning.",
+    options: ["A. drink", "B. drinks", "C. drank", "D. is drinking"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q108",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We often ______ part in school activities.",
+    options: ["A. takes", "B. took", "C. take", "D. are taking"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q109",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "She ______ her younger brother after school.",
+    options: ["A. look after", "B. looks after", "C. looked after", "D. is looking after"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q110",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "This workshop ______ teenagers how to cook healthy dishes.",
+    options: ["A. show", "B. shows", "C. showed", "D. is showing"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q111",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Our professional cooks usually ______ students useful feedback.",
+    options: ["A. give", "B. gives", "C. gave", "D. are giving"],
+    correctAnswer: "A",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q112",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "A green city ______ smart ideas to protect the environment.",
+    options: ["A. use", "B. uses", "C. used", "D. is using"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q113",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Public transport ______ people travel more easily in big cities.",
+    options: ["A. help", "B. helps", "C. helped", "D. is helping"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q114",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Phu Quoc ______ many beautiful beaches and scenic attractions.",
+    options: ["A. have", "B. has", "C. had", "D. is having"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q115",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Ly Son ______ a small island in Quang Ngai.",
+    options: ["A. be", "B. are", "C. is", "D. was"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q116",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Barcelona ______ many recycling bins around the city.",
+    options: ["A. have", "B. has", "C. had", "D. is having"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q117",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The number of students in this class ______ not very large.",
+    options: ["A. are", "B. is", "C. were", "D. be"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q118",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Many people in my village ______ unnecessary expenses to save money.",
+    options: ["A. cuts down on", "B. cut down on", "C. cutted down on", "D. are cut down on"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q119",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My teacher ______ us to read English texts every day.",
+    options: ["A. encourage", "B. encourages", "C. encouraged", "D. is encouraging"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q120",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "______ your sister usually help you with English homework?",
+    options: ["A. Do", "B. Does", "C. Is", "D. Did"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q121",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The Internet ______ an important role in modern education.",
+    options: ["A. play", "B. plays", "C. played", "D. is playing"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q122",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "James ______ back from Japan last week.",
+    options: ["A. come", "B. came", "C. comes", "D. is coming"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q123",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ a great time during our trip to Quy Nhon yesterday.",
+    options: ["A. have", "B. has", "C. had", "D. are having"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q124",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My sister ______ her homework last night.",
+    options: ["A. finishes", "B. finished", "C. is finishing", "D. finish"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q125",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "They ______ football after school yesterday afternoon.",
+    options: ["A. play", "B. plays", "C. played", "D. are playing"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q126",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The students ______ the classrooms clean last Friday.",
+    options: ["A. keep", "B. keeps", "C. kept", "D. are keeping"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q127",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "I ______ a new English book two days ago.",
+    options: ["A. buy", "B. buys", "C. bought", "D. am buying"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q128",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My father ______ me to school this morning.",
+    options: ["A. takes", "B. took", "C. take", "D. is taking"],
+    correctAnswer: "B",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q129",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "She ______ very happy after the exam.",
+    options: ["A. is", "B. are", "C. was", "D. were"],
+    correctAnswer: "C",
+    difficulty: "easy",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q130",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The city ______ a lot before the Olympic Games in 1992.",
+    options: ["A. improve", "B. improves", "C. improved", "D. is improving"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q131",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Barcelona ______ many green designs many years ago.",
+    options: ["A. starts", "B. started", "C. start", "D. is starting"],
+    correctAnswer: "B",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q132",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Portland ______ more parks and walking paths in the past.",
+    options: ["A. make", "B. makes", "C. made", "D. is making"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q133",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The workshop ______ teenagers how to cook healthy dishes last summer.",
+    options: ["A. teach", "B. teaches", "C. taught", "D. is teaching"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q134",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Our teacher ______ us useful feedback after the speaking activity.",
+    options: ["A. give", "B. gives", "C. gave", "D. is giving"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q135",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ meat and vegetables at a nearby supermarket yesterday.",
+    options: ["A. buy", "B. buys", "C. bought", "D. are buying"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q136",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The microphone ______ working during the presentation.",
+    options: ["A. stop", "B. stops", "C. stopped", "D. is stopping"],
+    correctAnswer: "C",
+    difficulty: "medium",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q137",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "The people in my village ______ to move downhill after years of delay.",
+    options: ["A. decide", "B. decides", "C. decided", "D. are deciding"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q138",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "Côn Đảo ______ as exciting as Phú Quốc, but it was peaceful.",
+    options: ["A. isn’t", "B. wasn’t", "C. weren’t", "D. doesn’t"],
+    correctAnswer: "B",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q139",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "We ______ any lodging in that village last night.",
+    options: ["A. don’t find", "B. doesn’t find", "C. didn’t find", "D. weren’t find"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q140",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "______ you visit Ly Son Island last summer?",
+    options: ["A. Do", "B. Does", "C. Did", "D. Were"],
+    correctAnswer: "C",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
+  },
+  {
+    id: "eng-q141",
+    subjectId: "english",
+    topicId: "eng-t2",
+    questionTypeId: "eng-qt6",
+    content: "My classmates ______ late for the meeting yesterday morning.",
+    options: ["A. is", "B. are", "C. was", "D. were"],
+    correctAnswer: "D",
+    difficulty: "hard",
+    sourceType: "manual",
+    validatorType: "choice"
   }
 ];
 
@@ -5255,6 +5735,944 @@ export const englishSolutions: Solution[] = [
     ],
     reviewSuggestions: [
       "Học cách tìm câu chủ đề (topic sentence) thường nằm ở đầu hoặc cuối bài để xác định main idea."
+    ]
+  },
+  {
+    id: "eng-s102",
+    questionId: "eng-q102",
+    recognition: "Có trạng từ tần suất 'usually' chỉ thói quen, hành động lặp đi lặp lại ở hiện tại.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì của câu",
+        explanation: "Từ khóa 'usually' (thường xuyên) là dấu hiệu nhận biết tiêu biểu của thì Hiện tại đơn.",
+        result: "Thì Hiện tại đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ theo chủ ngữ",
+        explanation: "Chủ ngữ là đại từ 'It' (ngôi thứ ba số ít), động từ 'rain' cần thêm đuôi -s.",
+        result: "It + rains"
+      }
+    ],
+    finalAnswer: "B. rains",
+    commonMistakes: [
+      "Nhầm lẫn chia động từ nguyên mẫu (rain) cho chủ ngữ số ít."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ các trạng từ chỉ tần suất hiện tại đơn và quy tắc thêm -s/-es."
+    ]
+  },
+  {
+    id: "eng-s103",
+    questionId: "eng-q103",
+    recognition: "Có trạng từ tần suất 'often' chỉ thói quen ở hiện tại.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chủ ngữ",
+        explanation: "Dấu hiệu 'often' chỉ thì Hiện tại đơn. Chủ ngữ 'My mother' là danh từ số ít.",
+        result: "Hiện tại đơn, chủ ngữ số ít"
+      },
+      {
+        order: 2,
+        title: "Chia động từ",
+        explanation: "Động từ 'cook' thêm đuôi -s đi kèm chủ ngữ số ít 'My mother'.",
+        result: "My mother + cooks"
+      }
+    ],
+    finalAnswer: "A. cooks",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'cook' do quên chia động từ ngôi thứ ba số ít."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cách chia động từ với danh từ số ít chỉ người."
+    ]
+  },
+  {
+    id: "eng-s104",
+    questionId: "eng-q104",
+    recognition: "Diễn tả thực tế hiển nhiên hoặc thói quen của học sinh tại trường học.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ",
+        explanation: "Chủ ngữ 'Students at our school' tập trung vào danh từ chính 'Students' (số nhiều).",
+        result: "Chủ ngữ số nhiều"
+      },
+      {
+        order: 2,
+        title: "Chia động từ ở hiện tại đơn",
+        explanation: "Với chủ ngữ số nhiều, động từ ở thì hiện tại đơn giữ nguyên dạng nguyên mẫu.",
+        result: "Students + keep"
+      }
+    ],
+    finalAnswer: "C. keep",
+    commonMistakes: [
+      "Nhầm lẫn 'our school' (số ít) là chủ ngữ chính và chia động từ số ít 'keeps'."
+    ],
+    reviewSuggestions: [
+      "Luyện tập xác định danh từ chính đứng trước giới từ trong cụm chủ ngữ dài."
+    ]
+  },
+  {
+    id: "eng-s105",
+    questionId: "eng-q105",
+    recognition: "Có từ tín hiệu 'usually' chỉ thói quen đi học.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ đi với chủ ngữ số ít",
+        explanation: "Chủ ngữ 'He' (ngôi thứ ba số ít) đi với động từ thêm -es cho các từ kết thúc bằng 'o'.",
+        result: "He + goes"
+      }
+    ],
+    finalAnswer: "B. goes",
+    commonMistakes: [
+      "Nhầm lẫn viết dạng nguyên thể 'go' hoặc chia quá khứ 'went' khi có 'usually'."
+    ],
+    reviewSuggestions: [
+      "Ôn quy tắc thêm -es sau các động từ tận cùng bằng o, x, s, z, ch, sh."
+    ]
+  },
+  {
+    id: "eng-s106",
+    questionId: "eng-q106",
+    recognition: "Dấu hiệu 'every Monday and Friday' chỉ lịch trình lặp lại vào các thứ hai và thứ sáu.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và động từ",
+        explanation: "Chủ ngữ 'They' (số nhiều) đi kèm động từ nguyên mẫu 'study' ở thì Hiện tại đơn.",
+        result: "They + study"
+      }
+    ],
+    finalAnswer: "A. study",
+    commonMistakes: [
+      "Nhầm lẫn chia 'studies' (dành cho chủ ngữ số ít)."
+    ],
+    reviewSuggestions: [
+      "Nhớ quy tắc động từ nguyên mẫu đi với các đại từ nhân xưng số nhiều (They, We, You)."
+    ]
+  },
+  {
+    id: "eng-s107",
+    questionId: "eng-q107",
+    recognition: "Dấu hiệu 'every morning' (mỗi sáng) chỉ thói quen ở hiện tại đơn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ theo chủ ngữ số ít",
+        explanation: "Chủ ngữ 'My father' (số ít) đi với động từ thêm -s là 'drinks'.",
+        result: "My father + drinks"
+      }
+    ],
+    finalAnswer: "B. drinks",
+    commonMistakes: [
+      "Chọn dạng nguyên thể 'drink' hoặc chia thì tiếp diễn khi nói về thói quen cố định."
+    ],
+    reviewSuggestions: [
+      "Phân biệt rõ cách dùng thì Hiện tại đơn (thói quen) và Hiện tại tiếp diễn."
+    ]
+  },
+  {
+    id: "eng-s108",
+    questionId: "eng-q108",
+    recognition: "Có trạng từ tần suất 'often' chỉ hành động thường xuyên.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ đi kèm cụm 'take part in'",
+        explanation: "Chủ ngữ 'We' (số nhiều) đi với động từ nguyên mẫu 'take' trong cụm 'take part in' (tham gia).",
+        result: "We + take"
+      }
+    ],
+    finalAnswer: "C. take",
+    commonMistakes: [
+      "Dùng động từ số ít 'takes' hoặc chia quá khứ 'took' do không chú ý trạng từ 'often'."
+    ],
+    reviewSuggestions: [
+      "Học các cụm từ cố định (collocations) phổ biến như take part in, join in."
+    ]
+  },
+  {
+    id: "eng-s109",
+    questionId: "eng-q109",
+    recognition: "Diễn tả hành động thói quen lặp lại sau giờ học hàng ngày.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia cụm động từ 'look after'",
+        explanation: "Chủ ngữ 'She' (số ít) đi kèm động từ thêm -s: 'looks after' (chăm sóc).",
+        result: "She + looks after"
+      }
+    ],
+    finalAnswer: "B. looks after",
+    commonMistakes: [
+      "Quên thêm -s vào động từ chính 'look' trong cụm động từ ghép."
+    ],
+    reviewSuggestions: [
+      "Luyện chia động từ cho các cụm phrasal verbs thông dụng."
+    ]
+  },
+  {
+    id: "eng-s110",
+    questionId: "eng-q110",
+    recognition: "Diễn tả tính chất, chức năng khách quan của buổi hội thảo (sự thật hiển nhiên).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ ở hiện tại đơn",
+        explanation: "Chủ ngữ 'This workshop' (Buổi hội thảo này - danh từ số ít) đi với động từ thêm -s là 'shows'.",
+        result: "This workshop + shows"
+      }
+    ],
+    finalAnswer: "B. shows",
+    commonMistakes: [
+      "Nhầm lẫn chia động từ nguyên mẫu 'show' hoặc quá khứ 'showed' khi mô tả công dụng cố định."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cách dùng thì Hiện tại đơn cho sự thật khách quan và chức năng của sự vật."
+    ]
+  },
+  {
+    id: "eng-s111",
+    questionId: "eng-q111",
+    recognition: "Có trạng từ 'usually' chỉ lịch trình, thói quen.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ chính",
+        explanation: "Chủ ngữ 'Our professional cooks' có danh từ chính là 'cooks' (đầu bếp - số nhiều).",
+        result: "Chủ ngữ số nhiều"
+      },
+      {
+        order: 2,
+        title: "Chia động từ",
+        explanation: "Đi với chủ ngữ số nhiều ở thì hiện tại đơn, động từ 'give' giữ nguyên mẫu.",
+        result: "cooks + give"
+      }
+    ],
+    finalAnswer: "A. give",
+    commonMistakes: [
+      "Bị nhầm từ 'cooks' là động từ chia số ít của 'cook' thay vì danh từ chỉ người số nhiều."
+    ],
+    reviewSuggestions: [
+      "Phân biệt danh từ 'cook' (đầu bếp) và động từ 'cook' (nấu ăn)."
+    ]
+  },
+  {
+    id: "eng-s112",
+    questionId: "eng-q112",
+    recognition: "Diễn tả một đặc điểm, đặc tính phổ quát của một thành phố xanh ở hiện tại.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ và động từ",
+        explanation: "Chủ ngữ 'A green city' (số ít) đi kèm động từ chia số ít thêm -s: 'uses'.",
+        result: "A green city + uses"
+      }
+    ],
+    finalAnswer: "B. uses",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'use' hoặc nhầm sang tiếp diễn."
+    ],
+    reviewSuggestions: [
+      "Xác định mạo từ 'A/An' biểu thị một danh từ số ít làm chủ ngữ."
+    ]
+  },
+  {
+    id: "eng-s113",
+    questionId: "eng-q113",
+    recognition: "Diễn tả lợi ích thực tế khách quan của phương tiện giao thông công cộng.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ không đếm được",
+        explanation: "Chủ ngữ 'Public transport' (phương tiện công cộng) là danh từ không đếm được, tương đương ngôi thứ ba số ít.",
+        result: "Chủ ngữ ngôi thứ ba số ít"
+      },
+      {
+        order: 2,
+        title: "Chia động từ",
+        explanation: "Động từ 'help' thêm -s tạo thành 'helps'.",
+        result: "helps"
+      }
+    ],
+    finalAnswer: "B. helps",
+    commonMistakes: [
+      "Nghĩ rằng phương tiện công cộng bao gồm nhiều xe nên chia động từ nguyên mẫu 'help'."
+    ],
+    reviewSuggestions: [
+      "Học danh sách các danh từ không đếm được phổ biến luôn chia động từ số ít."
+    ]
+  },
+  {
+    id: "eng-s114",
+    questionId: "eng-q114",
+    recognition: "Diễn tả thực tế địa lý tồn tại ở hiện tại của đảo Phú Quốc.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ có/sở hữu",
+        explanation: "Chủ ngữ 'Phu Quoc' là danh từ riêng số ít, đi với dạng động từ 'has' (có).",
+        result: "Phu Quoc + has"
+      }
+    ],
+    finalAnswer: "B. has",
+    commonMistakes: [
+      "Dùng 'have' cho danh từ số ít hoặc dùng 'is having' (đang có) vốn không dùng cho trạng thái sở hữu cố định."
+    ],
+    reviewSuggestions: [
+      "Ôn quy tắc chia động từ bất quy tắc 'have/has' ở hiện tại đơn."
+    ]
+  },
+  {
+    id: "eng-s115",
+    questionId: "eng-q115",
+    recognition: "Diễn tả sự thật địa lý về đảo Lý Sơn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ to be",
+        explanation: "Chủ ngữ 'Ly Son' là danh từ số ít, dạng to be tương ứng ở hiện tại đơn là 'is'.",
+        result: "Ly Son + is"
+      }
+    ],
+    finalAnswer: "C. is",
+    commonMistakes: [
+      "Chọn dạng nguyên thể 'be' hoặc chia quá khứ 'was' dù đảo vẫn đang tồn tại ở hiện tại."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ cách chia động từ to be (am, is, are) theo các nhóm chủ ngữ."
+    ]
+  },
+  {
+    id: "eng-s116",
+    questionId: "eng-q116",
+    recognition: "Diễn tả đặc điểm thực tế hiển nhiên ở hiện tại của thành phố Barcelona.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ có/sở hữu",
+        explanation: "Chủ ngữ 'Barcelona' là danh từ riêng số ít, đi với 'has' biểu thị tính chất sở hữu.",
+        result: "Barcelona + has"
+      }
+    ],
+    finalAnswer: "B. has",
+    commonMistakes: [
+      "Chọn 'have' do nhầm lẫn danh từ riêng chỉ địa điểm là số nhiều."
+    ],
+    reviewSuggestions: [
+      "Khắc sâu quy tắc danh từ riêng chỉ tên địa danh luôn chia động từ số ít."
+    ]
+  },
+  {
+    id: "eng-s117",
+    questionId: "eng-q117",
+    recognition: "Sự hòa hợp chủ ngữ bắt đầu bằng cấu trúc 'The number of'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định quy tắc 'The number of'",
+        explanation: "Khác với 'A number of' (chia số nhiều), cấu trúc 'The number of + danh từ số nhiều' chỉ số lượng cụ thể và luôn đi với động từ số ít.",
+        result: "The number of + N số nhiều -> Động từ số ít"
+      },
+      {
+        order: 2,
+        title: "Chia động từ to be",
+        explanation: "Động từ to be số ít phù hợp ở hiện tại đơn là 'is'.",
+        result: "is"
+      }
+    ],
+    finalAnswer: "B. is",
+    commonMistakes: [
+      "Nhìn thấy 'students' số nhiều và vội vàng chọn 'are'."
+    ],
+    reviewSuggestions: [
+      "Học thuộc lòng sự khác biệt giữa 'The number of' (động từ số ít) và 'A number of' (động từ số nhiều)."
+    ]
+  },
+  {
+    id: "eng-s118",
+    questionId: "eng-q118",
+    recognition: "Diễn tả thói quen tiết kiệm tiền của người dân trong làng.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ chính",
+        explanation: "Chủ ngữ 'Many people in my village' tập trung vào danh từ chính đứng trước giới từ: 'Many people' (số nhiều).",
+        result: "Chủ ngữ số nhiều"
+      },
+      {
+        order: 2,
+        title: "Chia cụm động từ 'cut down on'",
+        explanation: "Chủ ngữ số nhiều đi với động từ nguyên mẫu: 'cut down on' (cắt giảm).",
+        result: "Many people + cut down on"
+      }
+    ],
+    finalAnswer: "B. cut down on",
+    commonMistakes: [
+      "Chọn 'cuts down on' do nhầm chủ ngữ là 'my village' số ít."
+    ],
+    reviewSuggestions: [
+      "Chú ý danh từ đứng trước cụm giới từ 'in...' để chia động từ chính xác."
+    ]
+  },
+  {
+    id: "eng-s119",
+    questionId: "eng-q119",
+    recognition: "Có trạng từ chỉ tần suất 'every day' (mỗi ngày) ở hiện tại đơn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ theo chủ ngữ số ít",
+        explanation: "Chủ ngữ 'My teacher' (số ít) đi với động từ thêm -s: 'encourages' (khuyến khích).",
+        result: "My teacher + encourages"
+      }
+    ],
+    finalAnswer: "B. encourages",
+    commonMistakes: [
+      "Dùng động từ nguyên mẫu 'encourage' hoặc chia thì quá khứ 'encouraged'."
+    ],
+    reviewSuggestions: [
+      "Luyện tập chia động từ ngôi thứ ba số ít ở hiện tại đơn."
+    ]
+  },
+  {
+    id: "eng-s120",
+    questionId: "eng-q120",
+    recognition: "Câu hỏi nghi vấn Có/Không (Yes/No Question) ở hiện tại đơn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định chủ ngữ ngôi thứ ba số ít",
+        explanation: "Chủ ngữ câu hỏi là 'your sister' (chị/em gái bạn - danh từ số ít).",
+        result: "Chủ ngữ số ít"
+      },
+      {
+        order: 2,
+        title: "Chọn trợ động từ phù hợp",
+        explanation: "Trợ động từ dùng cho chủ ngữ số ít ở dạng nghi vấn hiện tại đơn là 'Does'.",
+        result: "Does your sister..."
+      }
+    ],
+    finalAnswer: "B. Does",
+    commonMistakes: [
+      "Chọn trợ động từ 'Do' hoặc dùng 'Is' (vì nhầm lẫn cấu trúc câu hỏi có động từ thường 'help')."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ cấu trúc câu hỏi nghi vấn hiện tại đơn: Do/Does + S + V(nguyên mẫu)?"
+    ]
+  },
+  {
+    id: "eng-s121",
+    questionId: "eng-q121",
+    recognition: "Diễn tả vai trò quan trọng của Internet trong cuộc sống hiện đại (sự thật khách quan).",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Chia động từ đi kèm cụm 'play a role'",
+        explanation: "Chủ ngữ 'The Internet' là số ít, đi với động từ thêm -s là 'plays' trong cụm 'play an important role' (đóng vai trò quan trọng).",
+        result: "The Internet + plays"
+      }
+    ],
+    finalAnswer: "B. plays",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'play' hoặc chia quá khứ 'played' do không chú ý ngữ cảnh hiện đại."
+    ],
+    reviewSuggestions: [
+      "Học thuộc cụm từ hay 'play an important role in something'."
+    ]
+  },
+  {
+    id: "eng-s122",
+    questionId: "eng-q122",
+    recognition: "Nhận biết qua trạng ngữ thời gian trong quá khứ 'last week'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian",
+        explanation: "Cụm từ 'last week' (tuần trước) chỉ hành động đã xảy ra và chấm dứt trong quá khứ.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ bất quy tắc",
+        explanation: "Động từ 'come' là động từ bất quy tắc, dạng quá khứ cột 2 (V2) của nó là 'came'.",
+        result: "came"
+      }
+    ],
+    finalAnswer: "B. came",
+    commonMistakes: [
+      "Chọn động từ nguyên mẫu 'come' hoặc chia hiện tại đơn 'comes'."
+    ],
+    reviewSuggestions: [
+      "Học thuộc bảng động từ bất quy tắc thông dụng."
+    ]
+  },
+  {
+    id: "eng-s123",
+    questionId: "eng-q123",
+    recognition: "Nhận biết qua trạng từ chỉ thời gian trong quá khứ 'yesterday'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian",
+        explanation: "Từ 'yesterday' (ngày hôm qua) là dấu hiệu rõ ràng của thì Quá khứ đơn.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ bất quy tắc",
+        explanation: "Động từ 'have' có dạng quá khứ đơn (V2) bất quy tắc là 'had'.",
+        result: "had"
+      }
+    ],
+    finalAnswer: "C. had",
+    commonMistakes: [
+      "Nhầm sang thì Hiện tại tiếp diễn hoặc giữ nguyên mẫu."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ cụm từ: have a great time (có một khoảng thời gian tuyệt vời)."
+    ]
+  },
+  {
+    id: "eng-s124",
+    questionId: "eng-q124",
+    recognition: "Nhận biết qua cụm từ chỉ thời gian quá khứ 'last night'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì của câu",
+        explanation: "Trạng ngữ 'last night' (tối qua) cho biết hành động xảy ra trong quá khứ.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ có quy tắc",
+        explanation: "Động từ 'finish' là động từ có quy tắc, chỉ cần thêm đuôi -ed thành 'finished'.",
+        result: "finished"
+      }
+    ],
+    finalAnswer: "B. finished",
+    commonMistakes: [
+      "Nhầm lẫn chia hiện tại đơn 'finishes' hoặc dùng dạng nguyên mẫu."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cách thêm đuôi -ed đối với động từ có quy tắc."
+    ]
+  },
+  {
+    id: "eng-s125",
+    questionId: "eng-q125",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian quá khứ 'yesterday afternoon'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Cụm 'yesterday afternoon' (chiều hôm qua) chỉ hành động đã xảy ra ở quá khứ đơn. Động từ 'play' có quy tắc, chia là 'played'.",
+        result: "played"
+      }
+    ],
+    finalAnswer: "C. played",
+    commonMistakes: [
+      "Chọn đáp án chỉ thì Hiện tại tiếp diễn do nhầm lẫn ngữ cảnh."
+    ],
+    reviewSuggestions: [
+      "Luyện tập nhận diện các cụm từ đi với 'yesterday' (yesterday morning, yesterday afternoon...)."
+    ]
+  },
+  {
+    id: "eng-s126",
+    questionId: "eng-q126",
+    recognition: "Nhận biết qua cụm từ chỉ thời gian quá khứ 'last Friday'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Dấu hiệu 'last Friday' (thứ Sáu tuần trước) yêu cầu chia động từ ở quá khứ đơn. Động từ 'keep' bất quy tắc có dạng quá khứ là 'kept'.",
+        result: "kept"
+      }
+    ],
+    finalAnswer: "C. kept",
+    commonMistakes: [
+      "Giữ nguyên mẫu hoặc nhầm chia thêm -s như ở hiện tại."
+    ],
+    reviewSuggestions: [
+      "Học thuộc dạng quá khứ của động từ bất quy tắc 'keep' là 'kept'."
+    ]
+  },
+  {
+    id: "eng-s127",
+    questionId: "eng-q127",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian quá khứ 'two days ago'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì của câu",
+        explanation: "Từ 'ago' (trước đây) là dấu hiệu điển hình của thì Quá khứ đơn.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ bất quy tắc",
+        explanation: "Động từ 'buy' bất quy tắc có quá khứ cột 2 (V2) là 'bought'.",
+        result: "bought"
+      }
+    ],
+    finalAnswer: "C. bought",
+    commonMistakes: [
+      "Nhầm lẫn chia động từ nguyên mẫu 'buy' hoặc dạng tiếp diễn."
+    ],
+    reviewSuggestions: [
+      "Luyện tập phát âm và viết đúng động từ 'buy -> bought'."
+    ]
+  },
+  {
+    id: "eng-s128",
+    questionId: "eng-q128",
+    recognition: "Nhận biết qua ngữ cảnh thời gian đã qua trong buổi sáng 'this morning'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh thời gian",
+        explanation: "Cụm 'this morning' (sáng nay) khi nói vào thời điểm muộn hơn trong ngày biểu thị hành động đã kết thúc.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ bất quy tắc",
+        explanation: "Động từ 'take' bất quy tắc có dạng quá khứ là 'took'.",
+        result: "took"
+      }
+    ],
+    finalAnswer: "B. took",
+    commonMistakes: [
+      "Nhầm chia ở hiện tại đơn 'takes' do nghĩ sáng nay vẫn là hiện tại."
+    ],
+    reviewSuggestions: [
+      "Lưu ý ngữ cảnh khi sử dụng 'this morning' thường được chia ở quá khứ đơn."
+    ]
+  },
+  {
+    id: "eng-s129",
+    questionId: "eng-q129",
+    recognition: "Nhận biết qua ngữ cảnh hành động đã hoàn thành sau kì thi 'after the exam'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chủ ngữ",
+        explanation: "Ngữ cảnh miêu tả trạng thái sau kì thi đã kết thúc. Chủ ngữ 'She' là ngôi thứ ba số ít.",
+        result: "Quá khứ đơn, chủ ngữ số ít"
+      },
+      {
+        order: 2,
+        title: "Chia động từ to be",
+        explanation: "Động từ to be ở quá khứ đơn đi với chủ ngữ số ít (I/He/She/It) là 'was'.",
+        result: "was"
+      }
+    ],
+    finalAnswer: "C. was",
+    commonMistakes: [
+      "Dùng 'were' cho chủ ngữ số ít hoặc chọn 'is' ở hiện tại."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ cách chia động từ to be trong quá khứ: was (số ít), were (số nhiều)."
+    ]
+  },
+  {
+    id: "eng-s130",
+    questionId: "eng-q130",
+    recognition: "Nhận biết mốc thời gian lịch sử trong quá khứ 'in 1992'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu mốc thời gian",
+        explanation: "Năm '1992' là một mốc thời gian xác định đã qua trong lịch sử, biểu thị hành động xảy ra và kết thúc trong quá khứ.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ có quy tắc",
+        explanation: "Động từ 'improve' tận cùng bằng 'e', ta chỉ cần thêm đuôi -d thành 'improved'.",
+        result: "improved"
+      }
+    ],
+    finalAnswer: "C. improved",
+    commonMistakes: [
+      "Chọn thì hiện tại đơn hoặc tiếp diễn không phù hợp với mốc thời gian lịch sử."
+    ],
+    reviewSuggestions: [
+      "Ôn tập cách chia động từ có quy tắc tận cùng bằng chữ cái 'e'."
+    ]
+  },
+  {
+    id: "eng-s131",
+    questionId: "eng-q131",
+    recognition: "Nhận biết qua trạng ngữ thời gian quá khứ 'many years ago'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Cụm 'many years ago' (nhiều năm trước) chỉ hành động đã xảy ra trong quá khứ. Động từ 'start' có quy tắc, thêm -ed thành 'started'.",
+        result: "started"
+      }
+    ],
+    finalAnswer: "B. started",
+    commonMistakes: [
+      "Chọn hiện tại đơn chia số ít 'starts' hoặc động từ nguyên mẫu."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ trạng từ 'ago' luôn đi với thì Quá khứ đơn."
+    ]
+  },
+  {
+    id: "eng-s132",
+    questionId: "eng-q132",
+    recognition: "Nhận biết qua trạng ngữ thời gian trong quá khứ 'in the past'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian",
+        explanation: "Cụm từ 'in the past' (trong quá khứ) là dấu hiệu của thì Quá khứ đơn.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ bất quy tắc",
+        explanation: "Động từ 'make' bất quy tắc có dạng quá khứ (V2) là 'made'.",
+        result: "made"
+      }
+    ],
+    finalAnswer: "C. made",
+    commonMistakes: [
+      "Chia ở hiện tại đơn 'makes' hoặc nhầm sang tiếp diễn."
+    ],
+    reviewSuggestions: [
+      "Học kỹ dạng động từ bất quy tắc của 'make' -> 'made'."
+    ]
+  },
+  {
+    id: "eng-s133",
+    questionId: "eng-q133",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian quá khứ 'last summer'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Trạng ngữ 'last summer' (mùa hè năm ngoái) chỉ thời gian trong quá khứ. Động từ 'teach' bất quy tắc có dạng quá khứ là 'taught'.",
+        result: "taught"
+      }
+    ],
+    finalAnswer: "C. taught",
+    commonMistakes: [
+      "Nhầm lẫn chia động từ nguyên mẫu 'teach' hoặc chia hiện tại 'teaches'."
+    ],
+    reviewSuggestions: [
+      "Chú ý dạng viết và cách đọc của động từ bất quy tắc 'teach -> taught'."
+    ]
+  },
+  {
+    id: "eng-s134",
+    questionId: "eng-q134",
+    recognition: "Nhận biết qua mốc thời gian hành động đã kết thúc 'after the speaking activity'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh hành động",
+        explanation: "Giáo viên nhận xét sau khi hoạt động nói đã kết thúc hoàn toàn, biểu thị một sự việc trong quá khứ.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ bất quy tắc",
+        explanation: "Động từ 'give' có dạng quá khứ bất quy tắc là 'gave'.",
+        result: "gave"
+      }
+    ],
+    finalAnswer: "C. gave",
+    commonMistakes: [
+      "Nhầm lẫn chia ở hiện tại 'gives' do quen dùng."
+    ],
+    reviewSuggestions: [
+      "Phân tích kĩ ngữ cảnh hoạt động đã kết thúc hay chưa trước khi chia động từ."
+    ]
+  },
+  {
+    id: "eng-s135",
+    questionId: "eng-q135",
+    recognition: "Nhận biết qua trạng ngữ chỉ thời gian trong quá khứ 'yesterday'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chia động từ",
+        explanation: "Trạng ngữ 'yesterday' (ngày hôm qua) chỉ hành động trong quá khứ. Động từ 'buy' bất quy tắc chia cột 2 (V2) là 'bought'.",
+        result: "bought"
+      }
+    ],
+    finalAnswer: "C. bought",
+    commonMistakes: [
+      "Chọn dạng nguyên mẫu 'buy' hoặc chia 'buys'."
+    ],
+    reviewSuggestions: [
+      "Ôn tập động từ bất quy tắc 'buy -> bought'."
+    ]
+  },
+  {
+    id: "eng-s136",
+    questionId: "eng-q136",
+    recognition: "Nhận biết qua ngữ cảnh diễn tả sự việc đã xảy ra 'during the presentation'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh thời gian",
+        explanation: "Hành động cái mic ngừng hoạt động diễn ra trong suốt buổi thuyết trình đã kết thúc.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ có quy tắc và nhân đôi phụ âm",
+        explanation: "Động từ 'stop' là động từ 1 âm tiết kết thúc bằng 1 phụ âm trước đó là 1 nguyên âm. Khi thêm -ed cần gấp đôi phụ âm cuối 'p' thành 'stopped'.",
+        result: "stopped"
+      }
+    ],
+    finalAnswer: "C. stopped",
+    commonMistakes: [
+      "Thêm -ed nhưng không gấp đôi phụ âm cuối 'p' thành 'stoped'."
+    ],
+    reviewSuggestions: [
+      "Ôn tập quy tắc gấp đôi phụ âm cuối khi thêm đuôi -ed."
+    ]
+  },
+  {
+    id: "eng-s137",
+    questionId: "eng-q137",
+    recognition: "Nhận biết qua cụm từ diễn tả sự việc trong quá khứ 'after years of delay'.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định ngữ cảnh hành động",
+        explanation: "Việc người dân quyết định di dời sau nhiều năm trì hoãn là một sự kiện đã xảy ra và được kể lại.",
+        result: "Thì Quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Chia động từ có quy tắc",
+        explanation: "Động từ 'decide' kết thúc bằng 'e', chỉ cần thêm đuôi -d thành 'decided'.",
+        result: "decided"
+      }
+    ],
+    finalAnswer: "C. decided",
+    commonMistakes: [
+      "Chọn phương án hiện tại đơn do nhầm lẫn ngữ cảnh của sự việc."
+    ],
+    reviewSuggestions: [
+      "Đọc hiểu toàn bộ câu để nắm vững ý nghĩa tường thuật của ngữ cảnh."
+    ]
+  },
+  {
+    id: "eng-s138",
+    questionId: "eng-q138",
+    recognition: "Sự hòa hợp giữa động từ to be ở quá khứ và chủ ngữ số ít.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định thì và chủ ngữ",
+        explanation: "Vế sau có động từ 'was' chỉ quá khứ đơn. Chủ ngữ 'Côn Đảo' ở vế trước là danh từ số ít.",
+        result: "Quá khứ đơn, chủ ngữ số ít"
+      },
+      {
+        order: 2,
+        title: "Chia động từ to be thể phủ định",
+        explanation: "To be phủ định đi với chủ ngữ số ít ở quá khứ đơn là 'was not' (viết tắt là 'wasn't').",
+        result: "wasn't"
+      }
+    ],
+    finalAnswer: "B. wasn't",
+    commonMistakes: [
+      "Chọn 'weren't' do nhầm lẫn sự hòa hợp chủ-vị hoặc chọn 'isn't' ở hiện tại."
+    ],
+    reviewSuggestions: [
+      "Ôn tập dạng phủ định của động từ to be ở quá khứ đơn: wasn't / weren't."
+    ]
+  },
+  {
+    id: "eng-s139",
+    questionId: "eng-q139",
+    recognition: "Cấu trúc phủ định của động từ thường ở thì Quá khứ đơn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian và thể phủ định",
+        explanation: "Dấu hiệu 'last night' chỉ quá khứ đơn. Câu mang ý phủ định vì có 'any lodging' (không tìm thấy bất kì nơi lưu trú nào).",
+        result: "Thể phủ định quá khứ đơn"
+      },
+      {
+        order: 2,
+        title: "Áp dụng cấu trúc phủ định",
+        explanation: "Công thức: S + didn't + V(nguyên mẫu). Động từ 'find' giữ nguyên mẫu sau trợ động từ 'didn't'.",
+        result: "didn't find"
+      }
+    ],
+    finalAnswer: "C. didn't find",
+    commonMistakes: [
+      "Chọn 'didn't + V2' (didn't found) hoặc nhầm dùng to be 'weren't find'."
+    ],
+    reviewSuggestions: [
+      "Ghi nhớ quy tắc: Sau trợ động từ 'did/didn't', động từ chính luôn ở dạng nguyên mẫu."
+    ]
+  },
+  {
+    id: "eng-s140",
+    questionId: "eng-q140",
+    recognition: "Cấu trúc câu hỏi nghi vấn (Yes/No Question) ở thì Quá khứ đơn.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu thời gian và loại câu",
+        explanation: "Dấu hiệu 'last summer' chỉ quá khứ đơn. Động từ trong câu là động từ thường 'visit' ở dạng nguyên mẫu, nên đây là câu hỏi với động từ thường.",
+        result: "Câu hỏi quá khứ đơn với động từ thường"
+      },
+      {
+        order: 2,
+        title: "Chọn trợ động từ phù hợp đặt đầu câu",
+        explanation: "Công thức câu hỏi quá khứ đơn: Did + S + V(nguyên mẫu)? Do đó ta cần mượn trợ động từ 'Did'.",
+        result: "Did"
+      }
+    ],
+    finalAnswer: "C. Did",
+    commonMistakes: [
+      "Chọn trợ động từ 'Do/Does' của hiện tại hoặc chọn 'Were' (to be)."
+    ],
+    reviewSuggestions: [
+      "Học kĩ cấu trúc câu hỏi nghi vấn thì quá khứ đơn với động từ thường và động từ to be."
+    ]
+  },
+  {
+    id: "eng-s141",
+    questionId: "eng-q141",
+    recognition: "Sự hòa hợp giữa động từ to be ở quá khứ đơn và chủ ngữ số nhiều.",
+    detailedSteps: [
+      {
+        order: 1,
+        title: "Xác định dấu hiệu và chủ ngữ",
+        explanation: "Dấu hiệu 'yesterday morning' chỉ quá khứ đơn. Chủ ngữ 'My classmates' (các bạn cùng lớp của tôi) là danh từ số nhiều.",
+        result: "Quá khứ đơn, chủ ngữ số nhiều"
+      },
+      {
+        order: 2,
+        title: "Chia động từ to be",
+        explanation: "Động từ to be ở quá khứ đơn đi với chủ ngữ số nhiều (We/You/They/Danh từ số nhiều) là 'were'.",
+        result: "were"
+      }
+    ],
+    finalAnswer: "D. were",
+    commonMistakes: [
+      "Chọn 'was' do không chú ý chữ 's' số nhiều ở chủ ngữ 'classmates' hoặc chia hiện tại 'are'."
+    ],
+    reviewSuggestions: [
+      "Lưu ý phân tích kĩ danh từ số ít hay số nhiều ở chủ ngữ trước khi chia động từ to be."
     ]
   }
 ];
