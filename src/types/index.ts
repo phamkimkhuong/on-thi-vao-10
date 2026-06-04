@@ -149,6 +149,7 @@ export interface UserAttempt {
   timeSpent: number; // đơn vị: giây
   createdAt: string; // ISO String
   teacherFeedback?: string;
+  selectedSubTense?: string;
 }
 
 export interface UserMistake {

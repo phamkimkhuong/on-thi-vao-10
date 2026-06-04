@@ -396,7 +396,8 @@ export const PracticeEngine: React.FC = () => {
       gradingMode: 'manual',
       isCorrect: correct,
       timeSpent: Math.round((getNow() - questionStartAt) / 1000),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      ...(selectedSubTense ? { selectedSubTense } : {})
     };
 
     // Lưu vào LocalStorage

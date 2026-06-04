@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
-import { mathQuestionTypes, mathQuestions } from '../../data/mathData';
-import { englishQuestionTypes, englishQuestions } from '../../data/englishData';
+import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
+import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -15,9 +15,6 @@ import {
   CheckCircle,
   XCircle,
   BookOpen,
-  Maximize2,
-  RotateCw,
-  MessageSquare,
   Award,
   Star,
   Activity,
@@ -26,6 +23,59 @@ import {
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
+
+export interface PendingGroup {
+  id: string;
+  student: SimulatedStudent;
+  questionTypeId: string;
+  selectedSubTense?: string;
+  attempts: UserAttempt[];
+}
+
+const getSubTenseName = (subId: string): string => {
+  switch (subId) {
+    case 'present_simple': return 'Thì Hiện tại đơn';
+    case 'past_simple': return 'Thì Quá khứ đơn';
+    case 'present_continuous': return 'Thì Hiện tại tiếp diễn';
+    case 'past_continuous': return 'Thì Quá khứ tiếp diễn';
+    case 'all': return 'Tổng ôn thông minh';
+    default: return '';
+  }
+};
+
+const detectSubTense = (attempt: UserAttempt): string => {
+  if (attempt.selectedSubTense) return attempt.selectedSubTense;
+  if (attempt.questionTypeId !== 'eng-qt6') return '';
+  const num = parseInt(attempt.questionId.replace('eng-q', ''), 10);
+  if (isNaN(num)) return '';
+  if ((num >= 5 && num <= 24) || (num >= 102 && num <= 121)) {
+    return 'present_simple';
+  } else if ((num >= 25 && num <= 44) || (num >= 122 && num <= 141)) {
+    return 'past_simple';
+  } else if ((num >= 45 && num <= 64) || (num >= 142 && num <= 161)) {
+    return 'present_continuous';
+  } else if ((num >= 65 && num <= 84) || (num >= 162 && num <= 181)) {
+    return 'past_continuous';
+  }
+  return '';
+};
+
+const getQuestionSubTenseName = (questionId: string): string => {
+  if (!questionId.startsWith('eng-q')) return '';
+  const num = parseInt(questionId.replace('eng-q', ''), 10);
+  if (isNaN(num)) return '';
+  
+  if ((num >= 5 && num <= 24) || (num >= 102 && num <= 121)) {
+    return 'Thì Hiện tại đơn';
+  } else if ((num >= 25 && num <= 44) || (num >= 122 && num <= 141)) {
+    return 'Thì Quá khứ đơn';
+  } else if ((num >= 45 && num <= 64) || (num >= 142 && num <= 161)) {
+    return 'Thì Hiện tại tiếp diễn';
+  } else if ((num >= 65 && num <= 84) || (num >= 162 && num <= 181)) {
+    return 'Thì Quá khứ tiếp diễn';
+  }
+  return '';
+};
 
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
@@ -42,12 +92,38 @@ export const TeacherDashboard: React.FC = () => {
   const [selectedStudent, setSelectedStudent] = useState<SimulatedStudent | null>(null);
   const [studentProgress, setStudentProgress] = useState<UserProgress | null>(null);
 
-  // Trạng thái xem ảnh bài làm tự luận Toán để chấm
-  const [reviewingItem, setReviewingItem] = useState<{ student: SimulatedStudent; attempt: UserAttempt } | null>(null);
-  const [imageRotation, setImageRotation] = useState(0);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [feedbackText, setFeedbackText] = useState('');
+  // Trạng thái xem bài làm để chấm
+  const [reviewingItem, setReviewingItem] = useState<PendingGroup | null>(null);
+  const [grades, setGrades] = useState<Record<string, { isCorrect: boolean; feedback: string }>>({});
+
   const [gradingSuccessMsg, setGradingSuccessMsg] = useState<string | null>(null);
+
+  const pendingGroups = useMemo(() => {
+    const groupsMap = new Map<string, PendingGroup>();
+
+    pendingAttempts.forEach(({ student, attempt }) => {
+      const subTense = attempt.selectedSubTense || (attempt.questionTypeId === 'eng-qt6' ? detectSubTense(attempt) : '');
+      const key = `${student.id}-${attempt.questionTypeId}-${subTense}`;
+
+      if (!groupsMap.has(key)) {
+        groupsMap.set(key, {
+          id: key,
+          student,
+          questionTypeId: attempt.questionTypeId,
+          selectedSubTense: subTense || undefined,
+          attempts: []
+        });
+      }
+
+      groupsMap.get(key)!.attempts.push(attempt);
+    });
+
+    groupsMap.forEach(group => {
+      group.attempts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    });
+
+    return [...groupsMap.values()];
+  }, [pendingAttempts]);
 
   const loadData = useCallback(async (teacherUserId = user?.uid) => {
     setIsLoading(true);
@@ -181,26 +257,45 @@ export const TeacherDashboard: React.FC = () => {
     setIsLoading(false);
   };
 
-  // Bắt đầu chấm một bài làm tự luận
-  const handleStartReview = (item: { student: SimulatedStudent; attempt: UserAttempt }) => {
-    setReviewingItem(item);
-    setImageRotation(0);
-    setIsZoomed(false);
-    setFeedbackText('');
+  // Bắt đầu chấm bài làm theo nhóm (group)
+  const handleStartReview = (group: PendingGroup) => {
+    setReviewingItem(group);
+
+    
+    // Khởi tạo trạng thái chấm điểm cho từng bài làm trong nhóm
+    const initialGrades: Record<string, { isCorrect: boolean; feedback: string }> = {};
+    group.attempts.forEach(attempt => {
+      initialGrades[attempt.id] = {
+        isCorrect: attempt.isCorrect,
+        feedback: ''
+      };
+    });
+    setGrades(initialGrades);
     setGradingSuccessMsg(null);
   };
 
-  // Submit chấm điểm từ giáo viên
-  const handleGradeSubmit = async (isCorrect: boolean) => {
+  // Submit chấm điểm hàng loạt từ giáo viên
+  const handleGradeSubmit = async () => {
     if (!reviewingItem) return;
 
-    const { student, attempt } = reviewingItem;
     setIsLoading(true);
+    const { student, attempts } = reviewingItem;
 
     try {
-      await progressService.gradeRealAttempt(student.id, attempt, isCorrect, feedbackText.trim());
+      // Chấm điểm cho từng attempt trong group song song
+      await Promise.all(
+        attempts.map(attempt => {
+          const grade = grades[attempt.id] || { isCorrect: attempt.isCorrect, feedback: '' };
+          return progressService.gradeRealAttempt(
+            student.id,
+            attempt,
+            grade.isCorrect,
+            grade.feedback.trim()
+          );
+        })
+      );
 
-      setGradingSuccessMsg(isCorrect ? "Đã duyệt bài làm ĐẠT yêu cầu!" : "Đã gửi đánh giá CẦN SỬA LẠI tới học sinh.");
+      setGradingSuccessMsg(`Đã phê duyệt thành công ${attempts.length} bài làm của học sinh!`);
 
       // Tải lại dữ liệu mới nhất
       await loadData();
@@ -216,7 +311,7 @@ export const TeacherDashboard: React.FC = () => {
         });
       }
     } catch (e) {
-      console.error("Lỗi khi chấm điểm:", e);
+      console.error("Lỗi khi chấm điểm các bài làm:", e);
     } finally {
       setIsLoading(false);
     }
@@ -225,13 +320,6 @@ export const TeacherDashboard: React.FC = () => {
       setReviewingItem(null);
     }, 1500);
   };
-
-  const isMathAttempt = reviewingItem?.attempt.questionTypeId.startsWith('math') ?? false;
-  const qList = isMathAttempt ? mathQuestions : englishQuestions;
-  const currentQuestion = reviewingItem
-    ? qList.find(q => q.id === reviewingItem.attempt.questionId)
-    : null;
-
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
 
@@ -282,9 +370,9 @@ export const TeacherDashboard: React.FC = () => {
         >
           <UserCheck size={15} />
           Hàng đợi Phê duyệt
-          {pendingAttempts.length > 0 && (
+          {pendingGroups.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-rose-500 text-white font-black text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center animate-bounce">
-              {pendingAttempts.length}
+              {pendingGroups.length}
             </span>
           )}
         </button>
@@ -462,15 +550,15 @@ export const TeacherDashboard: React.FC = () => {
 
         </div>
       ) : (
-        /* Hàng đợi chấm bài tự luận Toán */
+        /* Hàng đợi chấm bài */
         <div className="space-y-6">
           {!reviewingItem ? (
             <div className="space-y-4">
               <h3 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1">
-                <BookOpen size={14} /> Bài làm Toán & Tiếng Anh chờ duyệt ({pendingAttempts.length})
+                <BookOpen size={14} /> Bài làm Toán & Tiếng Anh chờ duyệt ({pendingGroups.length})
               </h3>
 
-              {pendingAttempts.length === 0 ? (
+              {pendingGroups.length === 0 ? (
                 <div className="p-8 border border-dashed border-border rounded-2xl text-center space-y-3 bg-slate-50/10 dark:bg-slate-900/5">
                   <CheckCircle size={40} className="mx-auto text-emerald-500 animate-bounce" />
                   <p className="text-xs font-bold text-foreground">Tuyệt vời! Đã hoàn thành chấm toàn bộ bài tự luận & trắc nghiệm.</p>
@@ -478,53 +566,64 @@ export const TeacherDashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {pendingAttempts.map((item, index) => {
-                    const qType = mathQuestionTypes.find(t => t.id === item.attempt.questionTypeId) || englishQuestionTypes.find(t => t.id === item.attempt.questionTypeId);
+                  {pendingGroups.map((group) => {
+                    const qType = mathQuestionTypes.find(t => t.id === group.questionTypeId) || englishQuestionTypes.find(t => t.id === group.questionTypeId);
+                    
+                    const subTenseName = group.selectedSubTense === 'all' 
+                      ? 'Tổng ôn thông minh' 
+                      : (group.selectedSubTense ? getSubTenseName(group.selectedSubTense) : '');
 
                     return (
-                      <Card key={index} className="border-border/50 bg-card hover:border-emerald-500/30 transition-colors">
+                      <Card key={group.id} className="border-border/50 bg-card hover:border-emerald-500/30 transition-colors">
                         <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
                           <div className="space-y-2">
                             <div className="flex items-center justify-between gap-2 border-b border-border/20 pb-2">
                               <div className="flex items-center gap-2">
                                 <img
-                                  src={item.student.avatar}
-                                  alt={item.student.name}
+                                  src={group.student.avatar}
+                                  alt={group.student.name}
                                   className="w-6 h-6 rounded-full bg-slate-100 border border-emerald-500/20"
                                 />
-                                <span className="font-extrabold text-[11px] text-foreground">{item.student.name}</span>
+                                <span className="font-extrabold text-[11px] text-foreground">{group.student.name}</span>
                               </div>
                               <span className="text-[9px] font-bold text-muted-foreground">
-                                {new Date(item.attempt.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                                {group.attempts.length > 0 && new Date(group.attempts[group.attempts.length - 1].createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             </div>
 
-                            {item.attempt.questionTypeId.startsWith('math') ? (
+                            {group.questionTypeId.startsWith('math') ? (
                               <>
                                 <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-500 inline-block">
                                   📐 {qType?.name}
                                 </span>
-                                <p className="text-xs font-semibold text-foreground line-clamp-2 mt-1">
-                                  Bài làm đã tải lên {item.attempt.proofImages?.length || 0} ảnh lời giải để chờ chấm.
+                                <p className="text-xs font-semibold text-foreground mt-1">
+                                  Bài làm tự luận Toán chờ duyệt ({group.attempts.length} câu).
                                 </p>
                               </>
                             ) : (
                               <>
-                                <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-violet-100 dark:bg-violet-950 text-violet-500 inline-block">
-                                  🗣️ {qType?.name}
-                                </span>
-                                <p className="text-xs font-semibold text-foreground line-clamp-2 mt-1">
-                                  Đã chọn đáp án: <span className="font-black text-violet-600 dark:text-violet-400">{item.attempt.userAnswer}</span>
+                                <div className="flex flex-wrap gap-1.5 items-center">
+                                  <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-violet-100 dark:bg-violet-950 text-violet-500">
+                                    🗣️ {qType?.name}
+                                  </span>
+                                  {subTenseName && (
+                                    <span className="text-[9px] font-extrabold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                                      {subTenseName}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-xs font-semibold text-foreground mt-1.5">
+                                  Bài làm trắc nghiệm Tiếng Anh chờ duyệt ({group.attempts.length} câu).
                                 </p>
                               </>
                             )}
                           </div>
 
                           <Button
-                            onClick={() => handleStartReview(item)}
+                            onClick={() => handleStartReview(group)}
                             className="w-full font-bold text-[11px] py-1 px-3 border border-border bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
                           >
-                            Mở Workspace Chấm bài
+                            Mở Workspace Chấm {group.attempts.length} câu
                           </Button>
                         </CardContent>
                       </Card>
@@ -534,193 +633,302 @@ export const TeacherDashboard: React.FC = () => {
               )}
             </div>
           ) : (
-            /* Workspace chấm ảnh bài làm thông minh */
+            /* Workspace chấm nhóm bài làm thông minh */
             <div className="space-y-6">
 
               {/* Back Button */}
               <button
                 onClick={() => setReviewingItem(null)}
-                className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start"
               >
-                ← Quay lại hàng đợi bài làm
+                ← Quay lại hàng đợi
               </button>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={reviewingItem.student.avatar}
+                    alt={reviewingItem.student.name}
+                    className="w-10 h-10 rounded-full border border-emerald-500/20 bg-slate-100"
+                  />
+                  <div>
+                    <h3 className="text-sm font-black text-foreground">
+                      Duyệt bài làm của {reviewingItem.student.name}
+                    </h3>
+                    <p className="text-[10px] text-muted-foreground font-semibold">
+                      Chuyên đề: {mathQuestionTypes.find(t => t.id === reviewingItem.questionTypeId)?.name || englishQuestionTypes.find(t => t.id === reviewingItem.questionTypeId)?.name}
+                      {reviewingItem.selectedSubTense && ` (${reviewingItem.selectedSubTense === 'all' ? 'Tổng ôn thông minh' : getSubTenseName(reviewingItem.selectedSubTense)})`}
+                    </p>
+                  </div>
+                </div>
 
-                {/* Cột trái: Ảnh bài làm của học sinh */}
-                <div className="space-y-4">
-                  <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider">
-                    🖼️ Ảnh bài làm của {reviewingItem.student.name}
-                  </h4>
+                <div className="space-y-6">
+                  {reviewingItem.attempts.map((attempt, index) => {
+                    const qList = attempt.questionTypeId.startsWith('math') ? mathQuestions : englishQuestions;
+                    const question = qList.find(q => q.id === attempt.questionId);
+                    const grade = grades[attempt.id] || { isCorrect: attempt.isCorrect, feedback: '' };
 
-                  <Card className="overflow-hidden border-border/50 bg-black relative flex items-center justify-center p-2 min-h-[400px]">
-                    {reviewingItem.attempt.proofImages && reviewingItem.attempt.proofImages.length > 0 ? (
-                      <div className="relative w-full flex items-center justify-center overflow-hidden">
-                        <img
-                          src={reviewingItem.attempt.proofImages[0].downloadUrl}
-                          alt="Student Proof"
-                          className={cn(
-                            "max-h-[420px] max-w-full rounded-lg transition-all object-contain",
-                            isZoomed ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
+                    const isMathAttempt = attempt.questionTypeId.startsWith('math');
+                    const sList = isMathAttempt ? mathSolutions : englishSolutions;
+                    const solutionDetail = sList.find(s => s.questionId === attempt.questionId);
+
+                    return (
+                      <Card key={attempt.id} className="border-border/50 bg-card overflow-hidden shadow-sm">
+                        <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30 p-4 flex flex-row items-center justify-between gap-2 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-black text-foreground">Câu hỏi {index + 1}</span>
+                            {attempt.questionTypeId === 'eng-qt6' && (
+                              <span className="text-[9px] font-extrabold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                                {getQuestionSubTenseName(attempt.questionId)}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[9px] text-muted-foreground font-semibold">
+                            {new Date(attempt.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </CardHeader>
+                        
+                        <CardContent className="p-5 space-y-4">
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                            
+                            {/* Phần hiển thị Đề bài & Lời giải học sinh */}
+                            <div className="space-y-3">
+                              <div>
+                                <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đề bài:</span>
+                                <div className="text-xs font-semibold text-foreground p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-border/30">
+                                  {question ? (
+                                    <LatexRenderer text={question.content} />
+                                  ) : (
+                                    "Không tìm thấy câu hỏi"
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Nếu là toán, hiển thị ảnh chụp bài giải */}
+                              {isMathAttempt && (
+                                <div>
+                                  <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Ảnh bài làm:</span>
+                                  <div className="bg-black/90 p-2 rounded-xl flex items-center justify-center min-h-[200px] border border-border relative">
+                                    {attempt.proofImages && attempt.proofImages.length > 0 ? (
+                                      <img
+                                        src={attempt.proofImages[0].downloadUrl}
+                                        alt="Math Proof"
+                                        className="max-h-[300px] object-contain rounded-lg"
+                                      />
+                                    ) : (
+                                      <span className="text-xs text-muted-foreground">Không có ảnh chụp</span>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Nếu là tiếng anh, hiển thị lựa chọn phương án */}
+                              {!isMathAttempt && question?.options && (
+                                <div>
+                                  <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Lựa chọn phương án:</span>
+                                  <div className="grid grid-cols-1 gap-2">
+                                    {question.options.map((opt, oIdx) => {
+                                      const optLetter = opt.trim().charAt(0);
+                                      const studentLetter = attempt.userAnswer?.trim().charAt(0);
+                                      const correctLetter = question.correctAnswer?.trim().charAt(0);
+                                      
+                                      const isStudentChoice = optLetter === studentLetter;
+                                      const isCorrectChoice = optLetter === correctLetter;
+
+                                      return (
+                                        <div
+                                          key={oIdx}
+                                          className={cn(
+                                            "p-2.5 rounded-lg text-xs font-semibold border",
+                                            isStudentChoice
+                                              ? "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
+                                              : "bg-card border-border text-foreground",
+                                            isCorrectChoice && "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                                          )}
+                                        >
+                                          {opt}
+                                          {isStudentChoice && <span className="text-[10px] font-bold ml-1.5">(Học sinh chọn)</span>}
+                                          {isCorrectChoice && <span className="text-[10px] font-bold ml-1.5">(Đáp án đúng)</span>}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Phần hiển thị chấm điểm & Nhận xét của giáo viên */}
+                            <div className="space-y-4">
+                              <div>
+                                <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đáp số đúng chuẩn:</span>
+                                <div className="text-xs font-black text-emerald-500">
+                                  {question?.correctAnswer || "(Không có)"}
+                                </div>
+                              </div>
+
+                              {!isMathAttempt && (
+                                <div>
+                                  <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đáp án học sinh chọn:</span>
+                                  <div className="text-xs font-black text-rose-500">
+                                    {attempt.userAnswer || "(Không có)"}
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="space-y-2 border-t border-border/20 pt-3">
+                                <span className="text-[9px] font-bold text-muted-foreground block uppercase">Chấm kết quả câu này:</span>
+                                <div className="flex gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => setGrades(prev => ({
+                                      ...prev,
+                                      [attempt.id]: { ...prev[attempt.id], isCorrect: false }
+                                    }))}
+                                    className={cn(
+                                      "flex-1 font-bold py-2 text-xs rounded-lg border transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+                                      !grade.isCorrect
+                                        ? "bg-rose-500/15 border-rose-500/40 text-rose-600 animate-fade-in"
+                                        : "bg-background border-border text-muted-foreground hover:bg-secondary/40"
+                                    )}
+                                  >
+                                    <XCircle size={14} /> Sai
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setGrades(prev => ({
+                                      ...prev,
+                                      [attempt.id]: { ...prev[attempt.id], isCorrect: true }
+                                    }))}
+                                    className={cn(
+                                      "flex-1 font-bold py-2 text-xs rounded-lg border transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+                                      grade.isCorrect
+                                        ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 animate-fade-in"
+                                        : "bg-background border-border text-muted-foreground hover:bg-secondary/40"
+                                    )}
+                                  >
+                                    <CheckCircle size={14} /> Đúng
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className="space-y-1.5">
+                                <span className="text-[9px] font-bold text-muted-foreground block uppercase">Nhận xét câu này (nếu có):</span>
+                                <input
+                                  type="text"
+                                  value={grade.feedback}
+                                  onChange={(e) => setGrades(prev => ({
+                                    ...prev,
+                                    [attempt.id]: { ...prev[attempt.id], feedback: e.target.value }
+                                  }))}
+                                  placeholder="Nhận xét riêng cho câu này..."
+                                  className="w-full bg-slate-50 dark:bg-slate-900 border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 text-foreground font-semibold"
+                                />
+                              </div>
+                            </div>
+
+                          </div>
+
+                          {/* Hướng dẫn giải chi tiết cho giáo viên đối chiếu */}
+                          {solutionDetail && (
+                            <div className="border-t border-border/40 pt-4 mt-4 space-y-4">
+                              <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">
+                                💡 Hướng dẫn giải chi tiết (Học sinh nhìn thấy):
+                              </span>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Tư duy nhận dạng & Đáp số */}
+                                <div className="space-y-3">
+                                  <div className={cn(
+                                    "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
+                                    isMathAttempt 
+                                      ? "bg-indigo-50/50 dark:bg-indigo-950/10 border-indigo-100 dark:border-indigo-900/30" 
+                                      : "bg-violet-50/50 dark:bg-violet-950/10 border-violet-100 dark:border-violet-900/30"
+                                  )}>
+                                    <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
+                                    <LatexRenderer text={solutionDetail.recognition} />
+                                  </div>
+
+                                  <div className="p-3.5 bg-slate-50 dark:bg-slate-900/40 border border-border/30 rounded-xl text-xs space-y-2">
+                                    <div className="font-extrabold text-foreground">
+                                      Đáp số đúng: <span className="text-emerald-500 font-black"><LatexRenderer text={question?.correctAnswer || solutionDetail.finalAnswer} /></span>
+                                    </div>
+                                    {solutionDetail.commonMistakes && solutionDetail.commonMistakes.length > 0 && (
+                                      <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
+                                        <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
+                                        {solutionDetail.commonMistakes.map((m: string, i: number) => (
+                                          <p key={i}>• {m}</p>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Các bước giải chi tiết */}
+                                <div className="space-y-4 pl-1">
+                                  {solutionDetail.detailedSteps.map((step: any, idx: number) => (
+                                    <div key={idx} className="space-y-1">
+                                      <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
+                                        <span className={cn(
+                                          "w-5 h-5 rounded-full text-white flex items-center justify-center text-[10px] shrink-0 font-bold",
+                                          isMathAttempt ? "bg-indigo-600" : "bg-violet-600"
+                                        )}>
+                                          {step.order}
+                                        </span>
+                                        {step.title}
+                                      </h5>
+                                      <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed">
+                                        <LatexRenderer text={step.explanation} />
+                                        {step.formula && (
+                                          <div className="my-2 p-2 bg-secondary/50 rounded-lg text-foreground border border-border/5 overflow-x-auto">
+                                            <LatexRenderer text={step.formula} block={true} />
+                                          </div>
+                                        )}
+                                        {step.result && (
+                                          <p className={cn(
+                                            "font-bold mt-1",
+                                            isMathAttempt ? "text-indigo-600 dark:text-indigo-400" : "text-violet-600 dark:text-violet-400"
+                                          )}>
+                                            👉 Kết quả bước: <LatexRenderer text={step.result} />
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
                           )}
-                          style={{ transform: `rotate(${imageRotation}deg)` }}
-                          onClick={() => setIsZoomed(!isZoomed)}
-                        />
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
 
-                        {/* Các nút xoay & zoom ảnh */}
-                        <div className="absolute bottom-4 right-4 flex gap-2">
-                          <button
-                            onClick={() => setImageRotation((prev) => (prev + 90) % 360)}
-                            className="bg-slate-900/80 hover:bg-slate-900 p-2 rounded-xl text-white shadow transition-colors cursor-pointer"
-                            title="Xoay ảnh 90 độ"
-                          >
-                            <RotateCw size={14} />
-                          </button>
-                          <button
-                            onClick={() => setIsZoomed(!isZoomed)}
-                            className="bg-slate-900/80 hover:bg-slate-900 p-2 rounded-xl text-white shadow transition-colors cursor-pointer"
-                            title="Phóng to / Thu nhỏ"
-                          >
-                            <Maximize2 size={14} />
-                          </button>
-                        </div>
+                {/* Nút gửi phê duyệt cho cả nhóm */}
+                <Card className="border-emerald-500/20 bg-card shadow-sm">
+                  <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-left">
+                      <h4 className="font-extrabold text-xs text-foreground">Xác nhận phê duyệt nhóm câu hỏi này</h4>
+                      <p className="text-[10px] text-muted-foreground font-semibold mt-0.5">
+                        Hệ thống sẽ lưu lại điểm số của cả {reviewingItem.attempts.length} câu hỏi và mở lại cho học sinh làm lại các câu bị sai.
+                      </p>
+                    </div>
+
+                    {gradingSuccessMsg ? (
+                      <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-xl text-xs font-bold animate-fade-in flex items-center gap-2">
+                        <CheckCircle size={16} className="text-emerald-500 animate-bounce" />
+                        {gradingSuccessMsg}
                       </div>
                     ) : (
-                      <div className="text-center p-8 text-slate-400">
-                        Không tìm thấy ảnh bài làm được upload.
-                      </div>
+                      <Button
+                        onClick={() => handleGradeSubmit()}
+                        className="font-bold text-xs py-2 px-6 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer h-10 w-full sm:w-auto"
+                      >
+                        🚀 Phê duyệt {reviewingItem.attempts.length} bài làm
+                      </Button>
                     )}
-                  </Card>
-
-                  <p className="text-[10px] text-muted-foreground text-center font-semibold italic">
-                    💡 Mẹo: Nhấp vào ảnh để phóng to/thu nhỏ. Sử dụng nút xoay nếu ảnh chụp bị ngược.
-                  </p>
-                </div>
-
-                {/* Cột phải: Đáp án & Thao tác chấm điểm */}
-                <div className="space-y-6">
-
-                  {/* Đáp án đối chiếu */}
-                  <Card className="border-border/50 bg-card">
-                    <CardHeader className="p-5 border-b border-border/20">
-                      <CardTitle className="text-foreground text-xs font-black">
-                        🔬 {isMathAttempt ? "Đề bài & Đáp án đối chiếu" : "Chi tiết câu hỏi & Đáp án đối chiếu"}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-5 space-y-4">
-                      <div>
-                        <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đề bài:</span>
-                        <div className="text-xs font-semibold text-foreground p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-border/30">
-                          {currentQuestion ? (
-                            <LatexRenderer text={currentQuestion.content} />
-                          ) : (
-                            "Không tìm thấy câu hỏi"
-                          )}
-                        </div>
-                      </div>
-
-                      {!isMathAttempt && currentQuestion?.options && (
-                        <div>
-                          <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Lựa chọn phương án:</span>
-                          <div className="grid grid-cols-1 gap-2">
-                            {currentQuestion.options.map((opt, i) => {
-                              const optLetter = opt.trim().charAt(0);
-                              const studentLetter = reviewingItem.attempt.userAnswer?.trim().charAt(0);
-                              const correctLetter = currentQuestion.correctAnswer?.trim().charAt(0);
-                              
-                              const isStudentChoice = optLetter === studentLetter;
-                              const isCorrectChoice = optLetter === correctLetter;
-
-                              return (
-                                <div
-                                  key={i}
-                                  className={cn(
-                                    "p-2.5 rounded-lg text-xs font-semibold border",
-                                    isStudentChoice
-                                      ? "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
-                                      : "bg-card border-border text-foreground",
-                                    isCorrectChoice && "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                                  )}
-                                >
-                                  {opt}
-                                  {isStudentChoice && <span className="text-[10px] font-bold ml-1.5">(Học sinh chọn)</span>}
-                                  {isCorrectChoice && <span className="text-[10px] font-bold ml-1.5">(Đáp án đúng)</span>}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                      {!isMathAttempt && (
-                        <div>
-                          <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đáp án học sinh chọn:</span>
-                          <div className="text-sm font-black text-rose-500">
-                            {reviewingItem.attempt.userAnswer || "(Không có đáp án)"}
-                          </div>
-                        </div>
-                      )}
-
-                      <div>
-                        <span className="text-[9px] font-bold text-muted-foreground block mb-1 uppercase">Đáp số đúng:</span>
-                        <div className="text-sm font-black text-emerald-500">
-                          {currentQuestion?.correctAnswer || "(Không có đáp án)"}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Form chấm bài của Giáo viên */}
-                  <Card className="border-emerald-500/20 bg-card shadow-sm shadow-emerald-500/5">
-                    <CardHeader className="p-5 border-b border-border/20">
-                      <CardTitle className="text-foreground text-xs font-black flex items-center gap-1.5">
-                        <MessageSquare size={15} className="text-emerald-500" />
-                        Nhận xét & Phê duyệt kết quả
-                      </CardTitle>
-                    </CardHeader>
-
-                    <CardContent className="p-5 space-y-4">
-                      {gradingSuccessMsg ? (
-                        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-center rounded-xl text-xs font-bold animate-fade-in flex items-center justify-center gap-2">
-                          <CheckCircle size={20} className="text-emerald-500 animate-bounce" />
-                          {gradingSuccessMsg}
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-muted-foreground uppercase block">Nhận xét chi tiết (Feedback cho học sinh):</label>
-                            <textarea
-                              value={feedbackText}
-                              onChange={(e) => setFeedbackText(e.target.value)}
-                              placeholder="Ví dụ: Trình bày bài giải rõ ràng, tính toán cẩn thận. Tuy nhiên chú ý ghi đầy đủ điều kiện xác định ở mỗi bước biến đổi..."
-                              className="w-full min-h-[90px] bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-foreground font-semibold placeholder:text-muted-foreground/40 placeholder:font-normal"
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-3 pt-2">
-                            <button
-                              onClick={() => handleGradeSubmit(false)}
-                              className="w-full font-bold py-3 text-xs bg-rose-500/10 hover:bg-rose-500/25 border border-rose-500/20 hover:border-rose-500/40 text-rose-600 dark:text-rose-400 rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                              <XCircle size={15} />
-                              Cần sửa lại (Chấm Sai)
-                            </button>
-
-                            <button
-                              onClick={() => handleGradeSubmit(true)}
-                              className="w-full font-bold py-3 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                              <CheckCircle size={15} />
-                              Đạt yêu cầu (Chấm Đúng)
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                </div>
-
+                  </CardContent>
+                </Card>
               </div>
 
             </div>
