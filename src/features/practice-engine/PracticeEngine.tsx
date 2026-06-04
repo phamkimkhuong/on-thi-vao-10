@@ -55,7 +55,7 @@ export const PracticeEngine: React.FC = () => {
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
-  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | null>(null);
+  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | null>(null);
   const [customQuestions, setCustomQuestions] = useState<Question[] | null>(null);
   const [selectedTensesForCombo, setSelectedTensesForCombo] = useState<string[]>([
     'present_simple',
@@ -66,6 +66,25 @@ export const PracticeEngine: React.FC = () => {
     'future_simple'
   ]);
   const [isConfiguringAll, setIsConfiguringAll] = useState(false);
+
+  // States cho tính năng Luyện thi trắc nghiệm (Exam Mode)
+  const [isConfiguringExam, setIsConfiguringExam] = useState(false);
+  const [examTenses, setExamTenses] = useState<string[]>([
+    'present_simple',
+    'past_simple',
+    'present_continuous',
+    'past_continuous',
+    'present_perfect',
+    'future_simple'
+  ]);
+  const [examQuestionCount, setExamQuestionCount] = useState<number>(20);
+  const [examTimeLimit, setExamTimeLimit] = useState<number>(15); // số phút, 0 = không giới hạn
+  const [isExamMode, setIsExamMode] = useState(false);
+  const [isExamSubmitted, setIsExamSubmitted] = useState(false);
+  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
+  const [examAnswers, setExamAnswers] = useState<Record<string, string>>({}); // { questionId: selectedOption }
+  const [examTimeLeft, setExamTimeLeft] = useState<number>(0); // giây còn lại
+  const [examTotalTimeSpent, setExamTotalTimeSpent] = useState<number>(0);
 
   // Quản lý trạng thái upload tiến trình & điều khiển
   const [uploadProgress, setUploadProgress] = useState<Record<string, ProofImageUploadProgress>>({});
@@ -140,6 +159,10 @@ export const PracticeEngine: React.FC = () => {
   const qList = isMath ? mathQuestions : englishQuestions;
 
   const questions: Question[] = useMemo(() => {
+    if (isExamMode) {
+      return examQuestions;
+    }
+
     if (questionTypeId === 'eng-qt6' && selectedSubTense === 'all' && customQuestions) {
       return customQuestions;
     }
@@ -182,7 +205,7 @@ export const PracticeEngine: React.FC = () => {
       }
     }
     return filtered;
-  }, [questionTypeId, qList, selectedSubTense, customQuestions]);
+  }, [questionTypeId, qList, selectedSubTense, customQuestions, isExamMode, examQuestions]);
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -193,6 +216,14 @@ export const PracticeEngine: React.FC = () => {
     : null;
 
   const completedQuestionIds = useMemo(() => {
+    if (isExamMode) {
+      if (!isExamSubmitted) {
+        return new Set(Object.keys(examAnswers));
+      } else {
+        return new Set(examQuestions.map(q => q.id));
+      }
+    }
+
     const userId = user?.uid ?? 'guest';
     const attempts = storageService.getAttempts(userId);
     
@@ -216,7 +247,7 @@ export const PracticeEngine: React.FC = () => {
     });
 
     return completed;
-  }, [user, questionTypeId, currentIdx, isSubmitted]);
+  }, [user, questionTypeId, currentIdx, isSubmitted, isExamMode, isExamSubmitted, examAnswers, examQuestions]);
 
   const getSubTenseProgress = useCallback((qIds: string[]) => {
     const done = qIds.filter(id => completedQuestionIds.has(id)).length;
@@ -255,16 +286,29 @@ export const PracticeEngine: React.FC = () => {
     setSelectedSubTense(null);
     setCustomQuestions(null);
     setIsConfiguringAll(false);
+    setIsConfiguringExam(false);
+    setIsExamMode(false);
+    setIsExamSubmitted(false);
+    setExamQuestions([]);
+    setExamAnswers({});
   }, [routeSubject, questionTypeId, resetQuestionState]);
 
   // Reset index và state khi chuyển đổi dạng thì động từ cơ bản
   useEffect(() => {
     setCurrentIdx(0);
     resetQuestionState();
+    if (selectedSubTense !== 'exam') {
+      setIsConfiguringExam(false);
+      setIsExamMode(false);
+      setIsExamSubmitted(false);
+      setExamQuestions([]);
+      setExamAnswers({});
+    }
   }, [selectedSubTense, resetQuestionState]);
 
   // Tự động kiểm tra và tải bài làm cũ của học sinh đối với câu hỏi này để tránh bắt làm lại từ đầu
   useEffect(() => {
+    if (isExamMode) return;
     if (questions.length === 0) return;
     const currentQ = questions[currentIdx];
     if (!currentQ) return;
@@ -361,6 +405,163 @@ export const PracticeEngine: React.FC = () => {
     };
   }, [currentIdx, questionTypeId, questions, user]);
 
+  // Hiệu ứng đếm ngược thời gian thi
+  useEffect(() => {
+    if (!isExamMode || isExamSubmitted) return;
+
+    const timer = setInterval(() => {
+      if (examTimeLimit > 0) {
+        setExamTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            // Hết giờ: Tự động nộp bài
+            handleExamSubmit(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }
+      setExamTotalTimeSpent(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isExamMode, isExamSubmitted, examTimeLimit]);
+
+  const startExamPractice = () => {
+    if (examTenses.length === 0) {
+      alert('Vui lòng chọn ít nhất 1 thì để luyện thi!');
+      return;
+    }
+
+    let pool: Question[] = [];
+    examTenses.forEach(tense => {
+      let filtered: Question[] = [];
+      if (tense === 'present_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 5 && num <= 24) || (num >= 102 && num <= 121));
+        });
+      } else if (tense === 'past_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 25 && num <= 44) || (num >= 122 && num <= 141));
+        });
+      } else if (tense === 'present_continuous') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 45 && num <= 64) || (num >= 142 && num <= 161));
+        });
+      } else if (tense === 'past_continuous') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 65 && num <= 84) || (num >= 162 && num <= 181));
+        });
+      } else if (tense === 'present_perfect') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && (num >= 182 && num <= 201);
+        });
+      } else if (tense === 'future_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && (num >= 202 && num <= 221);
+        });
+      }
+      pool = [...pool, ...filtered];
+    });
+
+    if (pool.length === 0) {
+      alert('Không tìm thấy câu hỏi tương ứng!');
+      return;
+    }
+
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const finalQuestions = shuffled.slice(0, examQuestionCount);
+    setExamQuestions(finalQuestions);
+    setExamAnswers({});
+    setExamTimeLeft(examTimeLimit * 60);
+    setExamTotalTimeSpent(0);
+    setIsExamMode(true);
+    setIsExamSubmitted(false);
+    setIsConfiguringExam(false);
+    setSelectedSubTense('exam');
+    setCurrentIdx(0);
+    resetQuestionState();
+  };
+
+  const handleExamSubmit = async (isTimeOut = false) => {
+    if (isExamSubmitted) return;
+
+    if (isTimeOut) {
+      alert('Hết giờ làm bài thi! Hệ thống đang tự động nộp bài làm của bạn.');
+    } else {
+      const confirmSubmit = window.confirm('Bạn có chắc chắn muốn nộp bài thi trắc nghiệm này không?');
+      if (!confirmSubmit) return;
+    }
+
+    setIsExamSubmitted(true);
+
+    const attemptsToSave: UserAttempt[] = [];
+    const averageTimeSpent = Math.max(1, Math.round(examTotalTimeSpent / examQuestions.length));
+
+    for (const q of examQuestions) {
+      const selectedAns = examAnswers[q.id] || '';
+      const finalAns = selectedAns ? formatAnswerForDisplay(q, selectedAns) : 'Chưa trả lời';
+      const correct = validateAnswer(q, selectedAns);
+      const attemptId = `attempt-${getNow()}-${q.id}`;
+
+      const attemptData: UserAttempt = {
+        id: attemptId,
+        userId: user ? user.uid : 'guest',
+        questionId: q.id,
+        questionTypeId: q.questionTypeId,
+        userAnswer: finalAns,
+        gradingMode: 'manual',
+        isCorrect: correct,
+        timeSpent: averageTimeSpent,
+        createdAt: new Date().toISOString(),
+        selectedSubTense: 'exam'
+      };
+
+      attemptsToSave.push(attemptData);
+      storageService.saveAttempt(user?.uid ?? 'guest', attemptData);
+
+      if (!correct && user) {
+        const localMistakes = storageService.getMistakes(user.uid);
+        const activeMistake = localMistakes.find(m => m.questionId === q.id);
+        if (activeMistake) {
+          progressService.saveMistake(user.uid, activeMistake);
+        }
+      }
+    }
+
+    if (user) {
+      try {
+        progressService.saveUserProfile(user);
+        await Promise.all(
+          attemptsToSave.map(attempt => progressService.saveAttempt(user.uid, attempt))
+        );
+      } catch (err) {
+        console.error("Lỗi khi đồng bộ kết quả thi trắc nghiệm lên Firestore:", err);
+      }
+    }
+
+    const score = examQuestions.filter(q => validateAnswer(q, examAnswers[q.id] || '')).length;
+    const pct = (score / examQuestions.length) * 100;
+    if (pct >= 80) {
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.7 }
+      });
+    }
+  };
+
   const handleRetry = () => {
     if (existingAttempt) {
       // Đưa existingAttempt hiện tại (vừa mới xem) vào danh sách pastAttempts
@@ -386,6 +587,11 @@ export const PracticeEngine: React.FC = () => {
   };
 
   const handleOptionSelect = (optLetter: string) => {
+    if (isExamMode) {
+      if (isExamSubmitted) return;
+      setExamAnswers(prev => ({ ...prev, [questions[currentIdx].id]: optLetter }));
+      return;
+    }
     if (isSubmitted) return;
     setSelectedOption(optLetter);
   };
@@ -478,6 +684,22 @@ export const PracticeEngine: React.FC = () => {
   };
 
   const handleNext = () => {
+    if (isExamMode) {
+      if (currentIdx < questions.length - 1) {
+        revokeLocalProofImages(proofImages);
+        setCurrentIdx(currentIdx + 1);
+        resetQuestionState();
+      } else if (!isExamSubmitted) {
+        alert('Bạn đang ở câu hỏi cuối cùng. Hãy kiểm tra lại bài làm và nhấn nút "Nộp bài thi" để kết thúc.');
+      } else {
+        setIsExamMode(false);
+        setIsExamSubmitted(false);
+        setExamQuestions([]);
+        setExamAnswers({});
+        setSelectedSubTense(null);
+      }
+      return;
+    }
     if (currentIdx < questions.length - 1) {
       revokeLocalProofImages(proofImages);
       setCurrentIdx(currentIdx + 1);
@@ -644,6 +866,150 @@ export const PracticeEngine: React.FC = () => {
     setIsConfiguringAll(false);
   };
 
+  // Màn hình cấu hình Luyện thi trắc nghiệm (Exam Configuration View)
+  if (questionTypeId === 'eng-qt6' && isConfiguringExam) {
+    const tensesMeta = [
+      { id: 'present_simple', name: '⏱️ Thì Hiện tại đơn' },
+      { id: 'past_simple', name: '🗓️ Thì Quá khứ đơn' },
+      { id: 'present_continuous', name: '⚡ Thì Hiện tại tiếp diễn' },
+      { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn' },
+      { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành' },
+      { id: 'future_simple', name: '🔮 Thì Tương lai đơn' },
+    ];
+
+    const toggleTense = (id: string) => {
+      setExamTenses(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(t => t !== id);
+        } else {
+          return [...prev, id];
+        }
+      });
+    };
+
+    return (
+      <div className="space-y-6 max-w-2xl mx-auto pb-12 animate-fade-in">
+        <button
+          onClick={() => {
+            setIsConfiguringExam(false);
+            setSelectedSubTense(null);
+          }}
+          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start"
+        >
+          ← Quay lại
+        </button>
+
+        <Card className="border-indigo-500/10 shadow-md">
+          <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30">
+            <CardTitle className="text-foreground text-sm font-black flex items-center gap-2">
+              🏆 Thiết lập cấu hình Đề thi trắc nghiệm
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 space-y-6">
+            {/* 1. Chọn các thì */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
+                1. Chọn các dạng thì thi cử:
+              </h3>
+              <div className="grid grid-cols-2 gap-3">
+                {tensesMeta.map((tense) => {
+                  const isChecked = examTenses.includes(tense.id);
+                  return (
+                    <div
+                      key={tense.id}
+                      onClick={() => toggleTense(tense.id)}
+                      className={cn(
+                        "flex items-center gap-2.5 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer select-none text-xs font-bold",
+                        isChecked
+                          ? "bg-indigo-500/5 border-indigo-500/30 text-indigo-900 dark:text-indigo-200"
+                          : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground"
+                      )}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => {}}
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                      />
+                      <span>{tense.name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Chọn số câu hỏi */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
+                2. Chọn số lượng câu hỏi:
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {[10, 15, 20, 30, 40].map((count) => (
+                  <button
+                    key={count}
+                    onClick={() => setExamQuestionCount(count)}
+                    className={cn(
+                      "px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer",
+                      examQuestionCount === count
+                        ? "bg-indigo-600 border-indigo-600 text-white shadow-sm"
+                        : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground"
+                    )}
+                  >
+                    {count} câu
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Chọn thời gian làm bài */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
+                3. Chọn thời gian làm bài:
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: '5 phút', val: 5 },
+                  { label: '10 phút', val: 10 },
+                  { label: '15 phút', val: 15 },
+                  { label: '20 phút', val: 20 },
+                  { label: '30 phút', val: 30 },
+                  { label: 'Không giới hạn', val: 0 }
+                ].map((item) => (
+                  <button
+                    key={item.val}
+                    onClick={() => setExamTimeLimit(item.val)}
+                    className={cn(
+                      "px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer",
+                      examTimeLimit === item.val
+                        ? "bg-indigo-600 border-indigo-600 text-white shadow-sm"
+                        : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground"
+                    )}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {examTenses.length === 0 && (
+              <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-semibold">
+                ⚠️ Bạn cần chọn ít nhất 1 dạng thì để bắt đầu thi.
+              </div>
+            )}
+
+            <Button
+              onClick={startExamPractice}
+              disabled={examTenses.length === 0}
+              className="w-full font-bold py-3 text-xs bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer h-11"
+            >
+              🚀 Bắt đầu làm bài thi
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   // Màn hình cấu hình Tổng ôn thông minh (chọn ít nhất 2 dạng thì, tối đa 40 câu)
   if (questionTypeId === 'eng-qt6' && isConfiguringAll) {
     const tensesMeta = [
@@ -751,12 +1117,26 @@ export const PracticeEngine: React.FC = () => {
   }
 
   // Màn hình chọn dạng thì con cho "Thì động từ cơ bản" (eng-qt6) dưới dạng Card
-  if (questionTypeId === 'eng-qt6' && selectedSubTense === null) {
+  if (questionTypeId === 'eng-qt6' && selectedSubTense === null && !isConfiguringExam) {
     const subTenseCards = [
       {
         id: 'all',
         name: '📑 Tổng ôn',
         description: 'Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.',
+        qIds: [
+          ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+        ]
+      },
+      {
+        id: 'exam',
+        name: '🏆 Luyện thi trắc nghiệm',
+        description: 'Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.',
         qIds: [
           ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
           ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
@@ -829,6 +1209,8 @@ export const PracticeEngine: React.FC = () => {
                 onClick={() => {
                   if (card.id === 'all') {
                     setIsConfiguringAll(true);
+                  } else if (card.id === 'exam') {
+                    setIsConfiguringExam(true);
                   } else {
                     setSelectedSubTense(card.id as any);
                   }
@@ -865,6 +1247,317 @@ export const PracticeEngine: React.FC = () => {
             );
           })}
         </div>
+      </div>
+    );
+  }
+
+  if (isExamMode) {
+    const score = examQuestions.filter(q => validateAnswer(q, examAnswers[q.id] || '')).length;
+    const correctAnswersCount = score;
+    const incorrectAnswersCount = examQuestions.length - score;
+    const percentage = Math.round((score / examQuestions.length) * 100);
+
+    const formatTime = (seconds: number) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    return (
+      <div className="space-y-6 max-w-3xl mx-auto pb-12 animate-fade-in">
+        {/* Header: Timer / Results summary */}
+        {!isExamSubmitted ? (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
+            <button
+              onClick={() => {
+                const confirmQuit = window.confirm('Bạn có chắc chắn muốn thoát chế độ luyện thi và hủy bỏ bài làm này?');
+                if (confirmQuit) {
+                  setIsExamMode(false);
+                  setIsConfiguringExam(false);
+                  setSelectedSubTense(null);
+                }
+              }}
+              className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all"
+            >
+              ← Thoát luyện thi
+            </button>
+
+            {/* Timer banner */}
+            <div className={cn(
+              "px-4 py-2 rounded-xl border flex items-center gap-2 text-xs font-extrabold shadow-sm select-none",
+              examTimeLimit === 0
+                ? "bg-slate-50 dark:bg-slate-900 border-border text-muted-foreground"
+                : examTimeLeft < 60
+                  ? "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400 animate-pulse"
+                  : examTimeLeft < 120
+                    ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 animate-pulse"
+                    : "bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400"
+            )}>
+              <span className="relative flex h-2 w-2">
+                <span className={cn(
+                  "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+                  examTimeLeft < 60 ? "bg-rose-400" : "bg-indigo-400"
+                )}></span>
+                <span className={cn(
+                  "relative inline-flex rounded-full h-2 w-2",
+                  examTimeLeft < 60 ? "bg-rose-500" : "bg-indigo-500"
+                )}></span>
+              </span>
+              <span>
+                {examTimeLimit === 0
+                  ? '⏱️ Thời gian: Không giới hạn'
+                  : `⏱️ Thời gian còn lại: ${formatTime(examTimeLeft)}`
+                }
+              </span>
+            </div>
+
+            <Button
+              onClick={() => handleExamSubmit(false)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl cursor-pointer"
+            >
+              Nộp bài thi
+            </Button>
+          </div>
+        ) : (
+          /* Results Dashboard after submission */
+          <Card className="border-indigo-500/10 shadow-lg bg-card overflow-hidden">
+            <div className="bg-gradient-to-r from-indigo-600 to-violet-700 p-6 text-white text-center space-y-4">
+              <h2 className="text-lg font-black tracking-tight flex items-center justify-center gap-2">
+                🏆 Kết quả bài thi trắc nghiệm
+              </h2>
+              <div className="flex justify-center items-center gap-6">
+                <div className="w-20 h-20 rounded-full border-4 border-white/20 flex flex-col items-center justify-center bg-white/10">
+                  <span className="text-xl font-black">{percentage}%</span>
+                  <span className="text-[9px] font-bold opacity-80">Điểm</span>
+                </div>
+                <div className="text-left space-y-1">
+                  <p className="text-xs font-bold">Số câu đúng: <span className="text-emerald-300 font-black">{correctAnswersCount} / {examQuestions.length}</span></p>
+                  <p className="text-xs font-bold">Số câu sai: <span className="text-rose-300 font-black">{incorrectAnswersCount} / {examQuestions.length}</span></p>
+                  <p className="text-xs font-bold">Thời gian làm bài: <span className="text-amber-300 font-black">{formatTime(examTotalTimeSpent)}</span></p>
+                </div>
+              </div>
+              <div className="flex justify-center gap-3 pt-2">
+                <Button
+                  onClick={startExamPractice}
+                  className="bg-white hover:bg-slate-100 text-indigo-700 font-black text-xs px-4 py-2 rounded-xl cursor-pointer"
+                >
+                  🔄 Thi đề khác
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsExamMode(false);
+                    setIsExamSubmitted(false);
+                    setExamQuestions([]);
+                    setExamAnswers({});
+                    setSelectedSubTense(null);
+                  }}
+                  variant="outline"
+                  className="border-white/40 hover:bg-white/10 text-white font-black text-xs px-4 py-2 rounded-xl cursor-pointer"
+                >
+                  🚪 Thoát luyện thi
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Question Selector Bubbles */}
+        <div className="flex flex-wrap items-center gap-2 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
+          <span className="text-xs font-bold text-muted-foreground mr-1">Câu hỏi thi:</span>
+          {examQuestions.map((q, idx) => {
+            const isActive = idx === currentIdx;
+            const hasAnswer = examAnswers[q.id] !== undefined;
+            const isCorrect = isExamSubmitted && examAnswers[q.id] === q.correctAnswer;
+
+            return (
+              <button
+                key={q.id}
+                onClick={() => {
+                  setCurrentIdx(idx);
+                }}
+                className={cn(
+                  "w-8 h-8 rounded-xl flex items-center justify-center text-xs font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
+                  isActive
+                    ? "bg-primary border-primary text-white shadow-sm shadow-primary/20 scale-105"
+                    : isExamSubmitted
+                      ? isCorrect
+                        ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
+                        : "bg-rose-500/10 dark:bg-rose-500/20 border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20"
+                      : hasAnswer
+                        ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20"
+                        : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"
+                )}
+                title={`Câu ${idx + 1}`}
+              >
+                {idx + 1}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Main Question Card */}
+        <Card className="border-indigo-500/10 shadow-md">
+          <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30">
+            <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2">
+              <BookOpen size={16} className="text-primary" />
+              Câu hỏi {currentIdx + 1} / {examQuestions.length}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 space-y-6">
+            {/* Content */}
+            <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
+              <LatexRenderer text={questions[currentIdx].content} />
+            </div>
+
+            {/* Answer Options list */}
+            <div className="grid grid-cols-1 gap-3">
+              {questions[currentIdx].options?.map((opt: string, i: number) => {
+                const optLetter = opt.charAt(0);
+                const isSelected = examAnswers[questions[currentIdx].id] === optLetter;
+                const isCorrectAnswer = questions[currentIdx].correctAnswer === optLetter;
+
+                // Color styles based on active exam vs submitted review states
+                const buttonStyle = isExamSubmitted
+                  ? isCorrectAnswer
+                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                    : isSelected
+                      ? "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-400 shadow-sm"
+                      : "bg-card border-border opacity-70 text-foreground"
+                  : isSelected
+                    ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 shadow-sm"
+                    : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground";
+
+                return (
+                  <button
+                    key={i}
+                    disabled={isExamSubmitted}
+                    onClick={() => handleOptionSelect(optLetter)}
+                    className={cn(
+                      "w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 cursor-pointer",
+                      !isExamSubmitted && "active:scale-[0.99] cursor-pointer",
+                      buttonStyle
+                    )}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Review Status Banner after submission */}
+            {isExamSubmitted && (
+              <div className={cn(
+                "p-4 rounded-xl border flex items-center gap-3",
+                examAnswers[questions[currentIdx].id] === questions[currentIdx].correctAnswer
+                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400"
+                  : "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400"
+              )}>
+                {examAnswers[questions[currentIdx].id] === questions[currentIdx].correctAnswer ? (
+                  <>
+                    <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                    <div>
+                      <h4 className="font-extrabold text-sm">Chính xác!</h4>
+                      <p className="text-xs font-semibold opacity-90">Bạn đã trả lời đúng câu hỏi này.</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <XCircle size={24} className="text-rose-500 shrink-0" />
+                    <div>
+                      <h4 className="font-extrabold text-sm">Chưa chính xác!</h4>
+                      <p className="text-xs font-semibold opacity-90">
+                        {examAnswers[questions[currentIdx].id]
+                          ? `Bạn đã chọn đáp án ${examAnswers[questions[currentIdx].id]}. Đáp án đúng là ${questions[currentIdx].correctAnswer}.`
+                          : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là ${questions[currentIdx].correctAnswer}.`
+                        }
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Solution view after submission */}
+            {isExamSubmitted && solutionDetail && (
+              <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
+                <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
+
+                <div className={cn(
+                  "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
+                  getSubjectTheme(routeSubject).bg,
+                  getSubjectTheme(routeSubject).border
+                )}>
+                  <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
+                  <LatexRenderer text={solutionDetail.recognition} />
+                </div>
+
+                <div className="space-y-5 pl-1.5">
+                  {solutionDetail.detailedSteps.map((step: any, idx: number) => (
+                    <div key={idx} className="space-y-1">
+                      <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] shrink-0 font-bold">
+                          {step.order}
+                        </span>
+                        {step.title}
+                      </h5>
+                      <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed">
+                        <LatexRenderer text={step.explanation} />
+                        {step.formula && (
+                          <div className="my-2 p-2 bg-secondary/50 rounded-lg text-foreground border border-border/5 overflow-x-auto">
+                            <LatexRenderer text={step.formula} block={true} />
+                          </div>
+                        )}
+                        {step.result && (
+                          <p className="text-primary font-bold mt-1">
+                            👉 Kết quả bước: <LatexRenderer text={step.result} />
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2">
+                  <div className="font-extrabold text-foreground">
+                    Đáp số đúng: <span className="text-emerald-500 font-black"><LatexRenderer text={questions[currentIdx].correctAnswer} /></span>
+                  </div>
+                  {solutionDetail.commonMistakes.length > 0 && (
+                    <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
+                      <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
+                      {solutionDetail.commonMistakes.map((m: string, i: number) => (
+                        <p key={i}>• {m}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Navigation controls */}
+            <div className="flex gap-3 w-full pt-4">
+              <Button
+                type="button"
+                disabled={currentIdx === 0}
+                onClick={() => {
+                  setCurrentIdx(currentIdx - 1);
+                }}
+                variant="outline"
+                className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-10 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <ArrowLeft size={14} /> Câu trước
+              </Button>
+              <Button
+                type="button"
+                onClick={handleNext}
+                variant="outline"
+                className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-10 cursor-pointer"
+              >
+                {currentIdx === examQuestions.length - 1 && isExamSubmitted ? "Thoát xem" : "Câu tiếp"} <ArrowRight size={14} />
+              </Button>
+            </div>
+
+          </CardContent>
+        </Card>
       </div>
     );
   }

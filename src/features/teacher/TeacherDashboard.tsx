@@ -40,6 +40,7 @@ const getSubTenseName = (subId: string): string => {
     case 'past_continuous': return 'Thì Quá khứ tiếp diễn';
     case 'present_perfect': return 'Thì Hiện tại hoàn thành';
     case 'future_simple': return 'Thì Tương lai đơn';
+    case 'exam': return 'Luyện thi trắc nghiệm';
     case 'all': return 'Tổng ôn thông minh';
     default: return '';
   }
