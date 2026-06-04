@@ -26,15 +26,11 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => {
-  // Lấy cấu hình dark mode ban đầu
-  const initialDarkMode = typeof window !== 'undefined'
-    ? localStorage.getItem('otv10_dark_mode') === 'true'
-    : false;
+  // Lấy cấu hình dark mode ban đầu (luôn mặc định là sáng)
+  const initialDarkMode = false;
 
-  // Cập nhật class dark lên html ban đầu
-  if (initialDarkMode && typeof document !== 'undefined') {
-    document.documentElement.classList.add('dark');
-  } else if (typeof document !== 'undefined') {
+  // Luôn đảm bảo không có class dark trên html
+  if (typeof document !== 'undefined') {
     document.documentElement.classList.remove('dark');
   }
 
@@ -47,26 +43,17 @@ export const useAppStore = create<AppState>((set) => {
     authLoading: true,
     progressVersion: 0,
 
-    toggleDarkMode: () => set((state) => {
-      const newDark = !state.darkMode;
-      localStorage.setItem('otv10_dark_mode', String(newDark));
-      if (newDark) {
-        document.documentElement.classList.add('dark');
-      } else {
+    toggleDarkMode: () => {
+      if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('dark');
       }
-      return { darkMode: newDark };
-    }),
+    },
 
-    setDarkMode: (dark) => set(() => {
-      localStorage.setItem('otv10_dark_mode', String(dark));
-      if (dark) {
-        document.documentElement.classList.add('dark');
-      } else {
+    setDarkMode: (_dark) => {
+      if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('dark');
       }
-      return { darkMode: dark };
-    }),
+    },
 
     setSubject: (subject) => set({ selectedSubject: subject }),
     refreshProgress: () => set((state) => ({ progressVersion: state.progressVersion + 1 })),

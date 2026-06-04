@@ -7,8 +7,6 @@ import {
   Bookmark,
   GraduationCap,
   Award,
-  Moon,
-  Sun,
   Menu,
   X,
   ChevronRight,
@@ -26,8 +24,6 @@ export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const {
-    darkMode,
-    toggleDarkMode,
     selectedSubject,
     setSubject,
     user,
@@ -149,13 +145,6 @@ export const AppLayout: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
-          >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
@@ -401,17 +390,10 @@ export const AppLayout: React.FC = () => {
 
         {/* Dark Mode Toggle & Footer */}
         <div className={cn(
-          "p-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-semibold",
-          isSidebarCollapsed && "justify-center p-2"
+          "p-4 border-t border-border/50 flex items-center justify-center text-xs text-muted-foreground font-semibold",
+          isSidebarCollapsed && "p-2"
         )}>
-          {!isSidebarCollapsed && <span>Version MVP V2</span>}
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-            title="Đổi giao diện Sáng/Tối"
-          >
-            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
+          {!isSidebarCollapsed ? <span>Version MVP V2</span> : <span>V2</span>}
         </div>
       </aside>
 
