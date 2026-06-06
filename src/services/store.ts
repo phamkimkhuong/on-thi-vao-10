@@ -49,7 +49,7 @@ export const useAppStore = create<AppState>((set) => {
       }
     },
 
-    setDarkMode: (_dark) => {
+    setDarkMode: () => {
       if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('dark');
       }

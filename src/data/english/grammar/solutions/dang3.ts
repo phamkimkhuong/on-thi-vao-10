@@ -25,7 +25,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Nhiều học sinh tại trường THPT Nguyễn Du thích thú với việc tham gia câu lạc bộ tiếng Anh."
   },
   {
     "id": "eng-s263",
@@ -51,7 +52,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Cô ấy dạy tiếng Anh cho trẻ em rất giỏi."
   },
   {
     "id": "eng-s264",
@@ -77,7 +79,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Anh trai tôi rất kém trong việc ghi nhớ từ vựng tiếng Anh mới."
   },
   {
     "id": "eng-s265",
@@ -103,7 +106,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Nhiều người sợ đi bộ một mình trong bóng tối."
   },
   {
     "id": "eng-s266",
@@ -129,7 +133,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Cha mẹ luôn tự hào về những thành tựu của con cái họ."
   },
   {
     "id": "eng-s267",
@@ -155,7 +160,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Quy Nhơn nổi tiếng với những bãi biển đẹp và hải sản tươi ngon."
   },
   {
     "id": "eng-s268",
@@ -181,7 +187,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Phong cách học tập của tôi khá khác biệt so với của bạn."
   },
   {
     "id": "eng-s269",
@@ -207,7 +214,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Học sinh đang rất hào hứng về kỳ nghỉ hè sắp tới."
   },
   {
     "id": "eng-s270",
@@ -233,7 +241,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Cô ấy lo lắng về kết quả của kỳ thi tuyển sinh."
   },
   {
     "id": "eng-s271",
@@ -259,7 +268,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Tính từ + Giới từ thông dụng: interested in (thích), good/bad at (giỏi/kém), proud/afraid of (tự hào/sợ), famous for (nổi tiếng), different from (khác với)."
-    ]
+    ],
+    "translation": "Giáo viên rất hài lòng với bài thuyết trình của chúng tôi về bảo vệ môi trường."
   },
   {
     "id": "eng-s272",
@@ -285,7 +295,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Sự phát triển của trẻ em phụ thuộc vào việc chúng đọc sách nhiều như thế nào."
   },
   {
     "id": "eng-s273",
@@ -311,7 +322,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Chiếc xe đạp đẹp này thuộc về bạn hay anh trai bạn?"
   },
   {
     "id": "eng-s274",
@@ -337,7 +349,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Bạn nên lắng nghe lời khuyên của cha mẹ."
   },
   {
     "id": "eng-s275",
@@ -363,7 +376,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Chúng tôi đang đợi xe buýt trường học ở trước cổng."
   },
   {
     "id": "eng-s276",
@@ -389,7 +403,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Vui lòng nhìn lên bảng và chú ý vào bài học."
   },
   {
     "id": "eng-s277",
@@ -415,7 +430,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Những công dân tốt luôn quan tâm đến việc bảo vệ môi trường."
   },
   {
     "id": "eng-s278",
@@ -441,7 +457,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Tôi hoàn toàn đồng ý với ý kiến của bạn về vấn đề này."
   },
   {
     "id": "eng-s279",
@@ -467,7 +484,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Anh ấy đã xin lỗi giáo viên vì đi học muộn."
   },
   {
     "id": "eng-s280",
@@ -493,7 +511,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Nếu bạn tin vào chính mình, bạn có thể đạt được các mục tiêu của mình."
   },
   {
     "id": "eng-s281",
@@ -519,7 +538,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các cụm Động từ + Giới từ thông dụng: depend on (phụ thuộc), belong to (thuộc về), listen to (nghe), wait for (đợi), look at (nhìn), care/agree/believe/apologize... + giới từ tương ứng."
-    ]
+    ],
+    "translation": "Họ đang tìm kiếm những chiếc chìa khóa bị mất ở trong vườn."
   },
   {
     "id": "eng-s282",
@@ -545,7 +565,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Chúng tôi cần tìm ai đó để chăm sóc chú chó của mình khi đi nghỉ."
   },
   {
     "id": "eng-s283",
@@ -571,7 +592,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Cô ấy đang tìm kiếm chìa khóa của mình, nhưng cô ấy vẫn chưa tìm thấy chúng."
   },
   {
     "id": "eng-s284",
@@ -597,7 +619,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Nếu bạn không biết nghĩa của từ này, hãy tra cứu nó trong từ điển."
   },
   {
     "id": "eng-s285",
@@ -623,7 +646,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Chúng tôi đang rất mong đợi được ghé thăm thành phố Quy Nhơn vào mùa hè này."
   },
   {
     "id": "eng-s286",
@@ -649,7 +673,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Vui lòng tắt tivi. Không có ai đang xem cả."
   },
   {
     "id": "eng-s287",
@@ -675,7 +700,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Trời đang tối dần, vì vậy vui lòng bật đèn lên."
   },
   {
     "id": "eng-s288",
@@ -701,7 +727,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Anh ấy quyết định bỏ thuốc lá vì những vấn đề về sức khỏe."
   },
   {
     "id": "eng-s289",
@@ -727,7 +754,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Nhiều học sinh tham gia dọn dẹp các bãi biển địa phương vào cuối tuần."
   },
   {
     "id": "eng-s290",
@@ -753,7 +781,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Bạn nên thử chiếc áo phông này trước khi mua nó."
   },
   {
     "id": "eng-s291",
@@ -779,7 +808,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học phrasal verbs theo nhóm từ gốc: look (after: chăm sóc, for: tìm, up: tra cứu, forward to: mong đợi); turn (on: bật, off: tắt); give up (từ bỏ); take part in (tham gia); try on (thử đồ); cut down on (cắt giảm)."
-    ]
+    ],
+    "translation": "Chúng ta nên giảm thiểu rác thải nhựa để bảo vệ hành tinh của chúng ta."
   },
   {
     "id": "eng-s292",
@@ -805,7 +835,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Tiết học đầu tiên của chúng tôi ở trường luôn bắt đầu vào lúc 7 giờ."
   },
   {
     "id": "eng-s293",
@@ -831,7 +862,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Những ngôi sao tỏa sáng rực rỡ trên bầu trời vào ban đêm."
   },
   {
     "id": "eng-s294",
@@ -857,7 +889,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Chúng tôi có tiết học tiếng Anh vào sáng thứ Hai."
   },
   {
     "id": "eng-s295",
@@ -883,7 +916,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Tôi thường nhận được nhiều món quà đẹp vào ngày sinh nhật của mình."
   },
   {
     "id": "eng-s296",
@@ -909,7 +943,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Kỳ thi tuyển sinh vào lớp 10 tiếp theo sẽ diễn ra vào năm 2026."
   },
   {
     "id": "eng-s297",
@@ -935,7 +970,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Bà tôi thích uống trà nóng vào buổi sáng."
   },
   {
     "id": "eng-s298",
@@ -961,7 +997,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Học sinh không được phép chơi bóng đá ở trong lớp học."
   },
   {
     "id": "eng-s299",
@@ -987,7 +1024,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Cậu ấy đã để lại cuốn sổ ghi chép trên bàn sau khi hoàn thành bài tập về nhà."
   },
   {
     "id": "eng-s300",
@@ -1013,7 +1051,8 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Nhiều học sinh địa phương tụ tập tại trường để chơi thể thao vào buổi chiều."
   },
   {
     "id": "eng-s301",
@@ -1039,6 +1078,7 @@ export const dang3Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ tháp giới từ: [Thời gian]: AT + giờ/đêm, ON + thứ/ngày cụ thể, IN + tháng/năm/mùa/buổi. [Nơi chốn]: AT + địa điểm cụ thể/ở trường, ON + bề mặt, IN + thành phố/quốc gia/không gian kín."
-    ]
+    ],
+    "translation": "Chúng tôi đã dành kỳ nghỉ hè của mình ở Quy Nhơn, một thành phố biển xinh đẹp."
   }
 ];

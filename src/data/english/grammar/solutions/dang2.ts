@@ -25,7 +25,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Họ đã quyết định chuyển sang một ngôi làng khác sau nhiều năm trì hoãn."
   },
   {
     "id": "eng-s223",
@@ -51,7 +52,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Cô ấy muốn cải thiện tiếng Anh tốt hơn trước kỳ thi."
   },
   {
     "id": "eng-s224",
@@ -77,7 +79,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Anh trai tôi thích đọc sách về khoa học."
   },
   {
     "id": "eng-s225",
@@ -103,7 +106,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ nhóm động từ khuyết thiếu kinh điển: can, could, should, must, will, would, may, might... + V0 (nguyên mẫu không to)."
-    ]
+    ],
+    "translation": "Chúng ta nên trồng nhiều cây hơn xung quanh trường học."
   },
   {
     "id": "eng-s226",
@@ -129,7 +133,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: ask / tell / encourage / allow / invite / advise + somebody + to V."
-    ]
+    ],
+    "translation": "Giáo viên yêu cầu chúng tôi đọc đoạn văn một cách cẩn thận."
   },
   {
     "id": "eng-s227",
@@ -155,7 +160,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Họ đã hoàn thành việc dọn dẹp lớp học trước khi chuông reo."
   },
   {
     "id": "eng-s228",
@@ -181,7 +187,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ nhóm động từ khuyết thiếu kinh điển: can, could, should, must, will, would, may, might... + V0 (nguyên mẫu không to)."
-    ]
+    ],
+    "translation": "Học sinh phải tuân thủ nội quy của nhà trường."
   },
   {
     "id": "eng-s229",
@@ -207,7 +214,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Tôi hy vọng sẽ đỗ kỳ thi tuyển sinh năm nay."
   },
   {
     "id": "eng-s230",
@@ -233,7 +241,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Cô ấy tránh dành quá nhiều thời gian trên mạng xã hội."
   },
   {
     "id": "eng-s231",
@@ -259,7 +268,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ nhóm động từ khuyết thiếu kinh điển: can, could, should, must, will, would, may, might... + V0 (nguyên mẫu không to)."
-    ]
+    ],
+    "translation": "Bạn có thể giúp tôi làm bài tập này không?"
   },
   {
     "id": "eng-s232",
@@ -285,7 +295,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: how/what/where/when + to V (cách làm gì, làm cái gì, làm ở đâu...)."
-    ]
+    ],
+    "translation": "Hội thảo nấu ăn này hướng dẫn thanh thiếu niên cách chuẩn bị các món ăn lành mạnh."
   },
   {
     "id": "eng-s233",
@@ -311,7 +322,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: help + somebody + V0 / to V (giúp ai làm gì)."
-    ]
+    ],
+    "translation": "Khóa học giúp học sinh cảm thấy tự tin hơn khi nói tiếng Anh."
   },
   {
     "id": "eng-s234",
@@ -337,7 +349,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Giáo viên gợi ý việc học từ mới mỗi ngày."
   },
   {
     "id": "eng-s235",
@@ -363,7 +376,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Chúng ta cần giảm thiểu rác thải nhựa để bảo vệ môi trường."
   },
   {
     "id": "eng-s236",
@@ -389,7 +403,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Nhiều học sinh luyện tập nói tiếng Anh với bạn bè sau giờ học."
   },
   {
     "id": "eng-s237",
@@ -415,7 +430,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Anna muốn đi du lịch Nhật Bản trong kỳ nghỉ hè."
   },
   {
     "id": "eng-s238",
@@ -441,7 +457,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: ask / tell / encourage / allow / invite / advise + somebody + to V."
-    ]
+    ],
+    "translation": "Người hướng dẫn dặn khách du lịch phải cẩn thận trên đường mòn trên núi."
   },
   {
     "id": "eng-s239",
@@ -467,7 +484,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ nhóm động từ khuyết thiếu kinh điển: can, could, should, must, will, would, may, might... + V0 (nguyên mẫu không to)."
-    ]
+    ],
+    "translation": "Chúng ta có thể sử dụng xe buýt và tàu hỏa để giảm thiểu ô nhiễm không khí."
   },
   {
     "id": "eng-s240",
@@ -493,7 +511,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Các học sinh tiếp tục dọn dẹp sân trường cho đến khi nó sạch sẽ."
   },
   {
     "id": "eng-s241",
@@ -519,7 +538,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Bố mẹ tôi đã đồng ý cho tôi tham gia câu lạc bộ tiếng Anh."
   },
   {
     "id": "eng-s242",
@@ -545,7 +565,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: V1-ing and V2-ing, V0 and V0, to V1 and V2 (lược bỏ 'to' thứ hai)."
-    ]
+    ],
+    "translation": "Việc lựa chọn và mua thực phẩm tươi sống là điều quan trọng trong nấu ăn."
   },
   {
     "id": "eng-s243",
@@ -571,7 +592,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: ask / tell / encourage / allow / invite / advise + somebody + to V."
-    ]
+    ],
+    "translation": "Giáo viên đã khuyến khích chúng tôi tham gia vào hoạt động nói."
   },
   {
     "id": "eng-s244",
@@ -597,7 +619,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc chung: Preposition + V-ing. Chú ý các cụm cố định: be interested in + V-ing, look forward to + V-ing."
-    ]
+    ],
+    "translation": "Anh ấy đã từ bỏ việc chơi trò chơi máy tính muộn vào ban đêm."
   },
   {
     "id": "eng-s245",
@@ -623,7 +646,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc câu hỏi: Do/Does/Did + S + V0 (nguyên mẫu không to)?"
-    ]
+    ],
+    "translation": "Bạn có đi thăm đảo Lý Sơn vào mùa hè năm ngoái không?"
   },
   {
     "id": "eng-s246",
@@ -649,7 +673,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Cô ấy không muốn ăn hải sản vì cô ấy bị dị ứng với nó."
   },
   {
     "id": "eng-s247",
@@ -675,7 +700,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc chung: Preposition + V-ing. Chú ý các cụm cố định: be interested in + V-ing, look forward to + V-ing."
-    ]
+    ],
+    "translation": "Chúng tôi thích tìm hiểu về các thành phố xanh."
   },
   {
     "id": "eng-s248",
@@ -701,7 +727,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc chung: Preposition + V-ing. Chú ý các cụm cố định: be interested in + V-ing, look forward to + V-ing."
-    ]
+    ],
+    "translation": "Các học sinh đang rất mong đợi được tham quan thư viện trường mới."
   },
   {
     "id": "eng-s249",
@@ -727,7 +754,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc sai khiến/cho phép chủ động: make / let + somebody + V0 (nguyên mẫu không to)."
-    ]
+    ],
+    "translation": "Giáo viên bắt chúng tôi viết lại câu đó một lần nữa."
   },
   {
     "id": "eng-s250",
@@ -753,7 +781,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: stop + V-ing = dừng hẳn việc đang làm; stop + to V = dừng lại để làm việc khác."
-    ]
+    ],
+    "translation": "Cô ấy đã dừng làm việc bởi vì cô ấy rất mệt."
   },
   {
     "id": "eng-s251",
@@ -779,7 +808,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: stop + V-ing = dừng hẳn việc đang làm; stop + to V = dừng lại để làm việc khác."
-    ]
+    ],
+    "translation": "Chúng tôi đã dừng lại để chụp vài bức ảnh trên đường tới bãi biển."
   },
   {
     "id": "eng-s252",
@@ -805,7 +835,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Chính quyền địa phương lên kế hoạch phát triển Quy Nhơn thành một thành phố du lịch xanh hàng đầu Việt Nam."
   },
   {
     "id": "eng-s253",
@@ -831,7 +862,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với to V chỉ ý chí, quyết định: want, decide, hope, need, plan, agree, would like, volunteer... + to V."
-    ]
+    ],
+    "translation": "Nhiều bạn trẻ ở Bình Định tình nguyện thu gom rác trên các bãi biển vào dịp cuối tuần."
   },
   {
     "id": "eng-s254",
@@ -857,7 +889,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ đi với V-ing quen thuộc: enjoy, avoid, finish, practice, suggest, keep, mind... + V-ing."
-    ]
+    ],
+    "translation": "Người hướng dẫn viên gợi ý đi thăm tháp đôi cổ kính (Tháp Đôi) vào buổi chiều."
   },
   {
     "id": "eng-s255",
@@ -883,7 +916,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: spend + time/money + V-ing (dành thời gian/tiền bạc làm gì)."
-    ]
+    ],
+    "translation": "Các nghệ nhân địa phương tại xưởng rượu Bàu Đá dành nhiều ngày để chưng cất rượu gạo truyền thống."
   },
   {
     "id": "eng-s256",
@@ -909,7 +943,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: ask / tell / encourage / allow / invite / advise + somebody + to V."
-    ]
+    ],
+    "translation": "Giáo viên luôn khuyến khích học sinh tham gia các hoạt động xanh để bảo vệ môi trường."
   },
   {
     "id": "eng-s257",
@@ -935,7 +970,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc chung: Preposition + V-ing. Chú ý các cụm cố định: be interested in + V-ing, look forward to + V-ing."
-    ]
+    ],
+    "translation": "Chúng tôi rất mong chờ được tham gia lễ hội võ thuật truyền thống Bình Định vào tháng tới."
   },
   {
     "id": "eng-s258",
@@ -961,7 +997,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: ask / tell / encourage / allow / invite / advise + somebody + to V."
-    ]
+    ],
+    "translation": "Trường học không cho phép học sinh sử dụng túi nilon hoặc chai dùng một lần trong lớp học."
   },
   {
     "id": "eng-s259",
@@ -987,7 +1024,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc sai khiến/cho phép chủ động: make / let + somebody + V0 (nguyên mẫu không to)."
-    ]
+    ],
+    "translation": "Đừng để trẻ em chơi gần vùng nước sâu của con sông địa phương."
   },
   {
     "id": "eng-s260",
@@ -1013,7 +1051,8 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: V1-ing and V2-ing, V0 and V0, to V1 and V2 (lược bỏ 'to' thứ hai)."
-    ]
+    ],
+    "translation": "Học tiếng Anh và tìm kiếm thông tin trên Internet giúp thanh thiếu niên mở rộng kiến thức của mình."
   },
   {
     "id": "eng-s261",
@@ -1039,6 +1078,7 @@ export const dang2Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: V1-ing and V2-ing, V0 and V0, to V1 and V2 (lược bỏ 'to' thứ hai)."
-    ]
+    ],
+    "translation": "Cô ấy quyết định ở nhà và chuẩn bị cho kỳ thi tuyển sinh sắp tới."
   }
 ];

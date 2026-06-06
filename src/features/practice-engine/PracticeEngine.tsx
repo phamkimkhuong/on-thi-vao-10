@@ -42,6 +42,7 @@ export const PracticeEngine: React.FC = () => {
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
   const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
   const tensesReviewBestScore = useMemo(() => {
+    void progressVersion;
     const userId = user?.uid ?? 'guest';
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
@@ -75,6 +76,7 @@ export const PracticeEngine: React.FC = () => {
   }, [user, progressVersion]);
 
   const tensesReviewAttemptsCount = useMemo(() => {
+    void progressVersion;
     const userId = user?.uid ?? 'guest';
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
@@ -93,6 +95,23 @@ export const PracticeEngine: React.FC = () => {
     return uniqueSessionIds.size;
   }, [user, progressVersion]);
 
+  const globalProgressPercent = useMemo(() => {
+    void progressVersion;
+    const userId = user?.uid ?? 'guest';
+    const attempts = storageService.getAttempts(userId);
+    const correctQIds = new Set<string>();
+    attempts.forEach(a => {
+      if (a.isCorrect && a.questionTypeId === 'eng-qt6') {
+        correctQIds.add(a.questionId);
+      }
+    });
+    const engQt6Questions = englishQuestions.filter(q => q.questionTypeId === 'eng-qt6');
+    const totalQCount = engQt6Questions.length;
+    if (totalQCount === 0) return 0;
+    const percent = Math.round((correctQIds.size / totalQCount) * 100);
+    return Math.max(1, percent);
+  }, [user, progressVersion]);
+
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
   const [proofImages, setProofImages] = useState<LocalProofImage[]>([]);
@@ -105,8 +124,8 @@ export const PracticeEngine: React.FC = () => {
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
-  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | 'prep_phrasal' | 'comparison' | null>(null);
-  const [grammarSection, setGrammarSection] = useState<'dang1' | 'dang2' | 'dang3' | 'dang4' | null>(null);
+  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | 'prep_phrasal' | 'comparison' | 'word_position' | null>(null);
+  const [grammarSection, setGrammarSection] = useState<'dang1' | 'dang2' | 'dang3' | 'dang4' | 'dang5' | null>(null);
   const [customQuestions, setCustomQuestions] = useState<Question[] | null>(null);
   const [selectedTensesForCombo, setSelectedTensesForCombo] = useState<string[]>([
     'present_simple',
@@ -283,6 +302,11 @@ export const PracticeEngine: React.FC = () => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
           return num >= 302 && num <= 331;
         });
+      } else if (selectedSubTense === 'word_position') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 332 && num <= 361;
+        });
       } else if (selectedSubTense === 'tenses_review') {
         filtered = filtered.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
@@ -332,8 +356,9 @@ export const PracticeEngine: React.FC = () => {
       }
     });
 
+    void progressVersion;
     return completed;
-  }, [user, questionTypeId, currentIdx, isSubmitted, isExamMode, isExamSubmitted, examAnswers, examQuestions]);
+  }, [user, questionTypeId, progressVersion, isExamMode, isExamSubmitted, examAnswers, examQuestions]);
 
   const getSubTenseProgress = useCallback((qIds: string[]) => {
     const done = qIds.filter(id => completedQuestionIds.has(id)).length;
@@ -490,130 +515,9 @@ export const PracticeEngine: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [currentIdx, questionTypeId, questions, user]);
+  }, [currentIdx, questionTypeId, questions, user, isExamMode]);
 
-  // Hiệu ứng đếm ngược thời gian thi
-  useEffect(() => {
-    if (!isExamMode || isExamSubmitted) return;
-
-    const timer = setInterval(() => {
-      if (examTimeLimit > 0) {
-        setExamTimeLeft(prev => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            // Hết giờ: Tự động nộp bài
-            handleExamSubmit(true);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }
-      setExamTotalTimeSpent(prev => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isExamMode, isExamSubmitted, examTimeLimit]);
-
-  const startExamPractice = () => {
-    if (examTenses.length === 0) {
-      alert('Vui lòng chọn ít nhất 1 thì để luyện thi!');
-      return;
-    }
-
-    let pool: Question[] = [];
-    examTenses.forEach(tense => {
-      let filtered: Question[] = [];
-      if (tense === 'present_simple') {
-        filtered = qList.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && ((num >= 5 && num <= 24) || (num >= 102 && num <= 121));
-        });
-      } else if (tense === 'past_simple') {
-        filtered = qList.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && ((num >= 25 && num <= 44) || (num >= 122 && num <= 141));
-        });
-      } else if (tense === 'present_continuous') {
-        filtered = qList.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && ((num >= 45 && num <= 64) || (num >= 142 && num <= 161));
-        });
-      } else if (tense === 'past_continuous') {
-        filtered = qList.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && ((num >= 65 && num <= 84) || (num >= 162 && num <= 181));
-        });
-      } else if (tense === 'present_perfect') {
-        filtered = qList.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && (num >= 182 && num <= 201);
-        });
-      } else if (tense === 'future_simple') {
-        filtered = qList.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return q.questionTypeId === 'eng-qt6' && (num >= 202 && num <= 221);
-        });
-      }
-      pool = [...pool, ...filtered];
-    });
-
-    if (pool.length === 0) {
-      alert('Không tìm thấy câu hỏi tương ứng!');
-      return;
-    }
-
-    const shuffled = [...pool];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    const finalQuestions = shuffled.slice(0, examQuestionCount);
-    setExamQuestions(finalQuestions);
-    setExamAnswers({});
-    setExamTimeLeft(examTimeLimit * 60);
-    setExamTotalTimeSpent(0);
-    setIsExamMode(true);
-    setIsExamSubmitted(false);
-    setIsConfiguringExam(false);
-    setSelectedSubTense('exam');
-    setCurrentIdx(0);
-    resetQuestionState();
-  };
-
-  const startTensesReview = () => {
-    const pool = qList.filter(q => {
-      if (q.questionTypeId !== 'eng-qt6') return false;
-      const num = parseInt(q.id.replace('eng-q', ''), 10);
-      return num >= 5 && num <= 221;
-    });
-
-    if (pool.length === 0) {
-      alert('Không tìm thấy câu hỏi tương ứng!');
-      return;
-    }
-
-    const shuffled = [...pool];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    const finalQuestions = shuffled.slice(0, 20);
-    setExamQuestions(finalQuestions);
-    setExamAnswers({});
-    setExamTimeLimit(15);
-    setExamTimeLeft(15 * 60);
-    setExamTotalTimeSpent(0);
-    setIsExamMode(true);
-    setIsExamSubmitted(false);
-    setIsConfiguringExam(false);
-    setSelectedSubTense('tenses_review');
-    setCurrentIdx(0);
-    resetQuestionState();
-  };
-
-  const handleExamSubmit = async (isTimeOut = false) => {
+  const handleExamSubmit = useCallback(async (isTimeOut = false) => {
     if (isExamSubmitted) return;
 
     if (isTimeOut) {
@@ -685,7 +589,163 @@ export const PracticeEngine: React.FC = () => {
         origin: { y: 0.7 }
       });
     }
+  }, [
+    isExamSubmitted,
+    examTotalTimeSpent,
+    examQuestions,
+    examAnswers,
+    selectedSubTense,
+    user,
+    refreshProgress
+  ]);
+
+  // Hiệu ứng đếm ngược thời gian thi
+  useEffect(() => {
+    if (!isExamMode || isExamSubmitted) return;
+
+    const timer = setInterval(() => {
+      if (examTimeLimit > 0) {
+        setExamTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            // Hết giờ: Tự động nộp bài
+            handleExamSubmit(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }
+      setExamTotalTimeSpent(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isExamMode, isExamSubmitted, examTimeLimit, handleExamSubmit]);
+
+  const startExamPractice = () => {
+    if (examTenses.length === 0) {
+      alert('Vui lòng chọn ít nhất 1 dạng bài để luyện thi!');
+      return;
+    }
+
+    let pool: Question[] = [];
+    examTenses.forEach(tense => {
+      let filtered: Question[] = [];
+      if (tense === 'present_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 5 && num <= 24) || (num >= 102 && num <= 121));
+        });
+      } else if (tense === 'past_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 25 && num <= 44) || (num >= 122 && num <= 141));
+        });
+      } else if (tense === 'present_continuous') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 45 && num <= 64) || (num >= 142 && num <= 161));
+        });
+      } else if (tense === 'past_continuous') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && ((num >= 65 && num <= 84) || (num >= 162 && num <= 181));
+        });
+      } else if (tense === 'present_perfect') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && (num >= 182 && num <= 201);
+        });
+      } else if (tense === 'future_simple') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && (num >= 202 && num <= 221);
+        });
+      } else if (tense === 'module1') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 5 && num <= 221;
+        });
+      } else if (tense === 'module2') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 222 && num <= 261;
+        });
+      } else if (tense === 'module3') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 262 && num <= 301;
+        });
+      } else if (tense === 'module4') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 302 && num <= 331;
+        });
+      } else if (tense === 'module5') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 332 && num <= 361;
+        });
+      }
+      pool = [...pool, ...filtered];
+    });
+
+    if (pool.length === 0) {
+      alert('Không tìm thấy câu hỏi tương ứng!');
+      return;
+    }
+
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const finalQuestions = shuffled.slice(0, examQuestionCount);
+    setExamQuestions(finalQuestions);
+    setExamAnswers({});
+    setExamTimeLeft(examTimeLimit * 60);
+    setExamTotalTimeSpent(0);
+    setIsExamMode(true);
+    setIsExamSubmitted(false);
+    setIsConfiguringExam(false);
+    setSelectedSubTense('exam');
+    setCurrentIdx(0);
+    resetQuestionState();
   };
+
+  const startTensesReview = () => {
+    const pool = qList.filter(q => {
+      if (q.questionTypeId !== 'eng-qt6') return false;
+      const num = parseInt(q.id.replace('eng-q', ''), 10);
+      return num >= 5 && num <= 221;
+    });
+
+    if (pool.length === 0) {
+      alert('Không tìm thấy câu hỏi tương ứng!');
+      return;
+    }
+
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const finalQuestions = shuffled.slice(0, 20);
+    setExamQuestions(finalQuestions);
+    setExamAnswers({});
+    setExamTimeLimit(15);
+    setExamTimeLeft(15 * 60);
+    setExamTotalTimeSpent(0);
+    setIsExamMode(true);
+    setIsExamSubmitted(false);
+    setIsConfiguringExam(false);
+    setSelectedSubTense('tenses_review');
+    setCurrentIdx(0);
+    resetQuestionState();
+  };
+
+
 
   const handleRetry = () => {
     if (existingAttempt) {
@@ -938,7 +998,12 @@ export const PracticeEngine: React.FC = () => {
   }
 
   const startCustomReview = () => {
-    if (selectedTensesForCombo.length < 2) return;
+    const isGlobal = grammarSection === null;
+    if (isGlobal) {
+      if (selectedTensesForCombo.length < 1) return;
+    } else {
+      if (selectedTensesForCombo.length < 2) return;
+    }
 
     let pool: Question[] = [];
     selectedTensesForCombo.forEach(tense => {
@@ -973,6 +1038,31 @@ export const PracticeEngine: React.FC = () => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
           return q.questionTypeId === 'eng-qt6' && (num >= 202 && num <= 221);
         });
+      } else if (tense === 'module1') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 5 && num <= 221;
+        });
+      } else if (tense === 'module2') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 222 && num <= 261;
+        });
+      } else if (tense === 'module3') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 262 && num <= 301;
+        });
+      } else if (tense === 'module4') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 302 && num <= 331;
+        });
+      } else if (tense === 'module5') {
+        filtered = qList.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return q.questionTypeId === 'eng-qt6' && num >= 332 && num <= 361;
+        });
       }
       pool = [...pool, ...filtered];
     });
@@ -994,14 +1084,23 @@ export const PracticeEngine: React.FC = () => {
 
   // Màn hình cấu hình Luyện thi trắc nghiệm (Exam Configuration View)
   if (questionTypeId === 'eng-qt6' && isConfiguringExam) {
-    const tensesMeta = [
-      { id: 'present_simple', name: '⏱️ Thì Hiện tại đơn' },
-      { id: 'past_simple', name: '🗓️ Thì Quá khứ đơn' },
-      { id: 'present_continuous', name: '⚡ Thì Hiện tại tiếp diễn' },
-      { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn' },
-      { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành' },
-      { id: 'future_simple', name: '🔮 Thì Tương lai đơn' },
-    ];
+    const isGlobal = grammarSection === null;
+    const tensesMeta = isGlobal
+      ? [
+          { id: 'module1', name: '📦 Dạng 1: Thì động từ cơ bản' },
+          { id: 'module2', name: '📦 Dạng 2: Cấu trúc động từ (to V, V-ing, V0)' },
+          { id: 'module3', name: '📦 Dạng 3: Giới từ & Phrasal Verbs cơ bản' },
+          { id: 'module4', name: '📦 Dạng 4: Cấu trúc So sánh (Comparisons)' },
+          { id: 'module5', name: '📦 Dạng 5: Vị trí từ loại (Word Positions)' }
+        ]
+      : [
+          { id: 'present_simple', name: '⏱️ Thì Hiện tại đơn' },
+          { id: 'past_simple', name: '🗓️ Thì Quá khứ đơn' },
+          { id: 'present_continuous', name: '⚡ Thì Hiện tại tiếp diễn' },
+          { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn' },
+          { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành' },
+          { id: 'future_simple', name: '🔮 Thì Tương lai đơn' },
+        ];
 
     const toggleTense = (id: string) => {
       setExamTenses(prev => {
@@ -1032,12 +1131,12 @@ export const PracticeEngine: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
-            {/* 1. Chọn các thì */}
+            {/* 1. Chọn các dạng bài */}
             <div className="space-y-2">
               <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
-                1. Chọn các dạng thì thi cử:
+                {isGlobal ? "1. Chọn các dạng bài ôn thi:" : "1. Chọn các dạng thì thi cử:"}
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className={cn("grid gap-3", isGlobal ? "grid-cols-1" : "grid-cols-2")}>
                 {tensesMeta.map((tense) => {
                   const isChecked = examTenses.includes(tense.id);
                   return (
@@ -1119,7 +1218,7 @@ export const PracticeEngine: React.FC = () => {
 
             {examTenses.length === 0 && (
               <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-semibold">
-                ⚠️ Bạn cần chọn ít nhất 1 dạng thì để bắt đầu thi.
+                ⚠️ Bạn cần chọn ít nhất 1 {isGlobal ? 'dạng bài' : 'dạng thì'} để bắt đầu thi.
               </div>
             )}
 
@@ -1138,14 +1237,23 @@ export const PracticeEngine: React.FC = () => {
 
   // Màn hình cấu hình Tổng ôn thông minh (chọn ít nhất 2 dạng thì, tối đa 40 câu)
   if (questionTypeId === 'eng-qt6' && isConfiguringAll) {
-    const tensesMeta = [
-      { id: 'present_simple', name: '⏱️ Thì Hiện tại đơn (Present Simple)', desc: 'Tập trung chia động từ thường/to be với: usually, often, every day...' },
-      { id: 'past_simple', name: '🗓️ Thì Quá khứ đơn (Past Simple)', desc: 'Tập trung các dấu hiệu thời gian trong quá khứ: yesterday, ago, last summer...' },
-      { id: 'present_continuous', name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)', desc: 'Tập trung hành động đang xảy ra: now, at the moment, Look!...' },
-      { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)', desc: 'Diễn tả hành động đang xảy ra tại thời điểm quá khứ với liên từ: while...' },
-      { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành (Present Perfect)', desc: 'Tập trung chia has/have + V3/ed với: since, for, just, already, yet, ever, never...' },
-      { id: 'future_simple', name: '🔮 Thì Tương lai đơn & câu điều kiện loại 1 (Future Simple)', desc: 'Tập trung chia will + V nguyên mẫu, won\'t và cấu trúc câu điều kiện loại 1...' },
-    ];
+    const isGlobal = grammarSection === null;
+    const tensesMeta = isGlobal
+      ? [
+          { id: 'module1', name: '📦 Dạng 1: Thì động từ cơ bản', desc: 'Luyện tập toàn bộ câu hỏi liên quan đến 6 thì tiếng Anh cơ bản.' },
+          { id: 'module2', name: '📦 Dạng 2: Cấu trúc động từ (to V, V-ing, V0)', desc: 'Luyện các cấu trúc động từ nguyên mẫu và danh động từ.' },
+          { id: 'module3', name: '📦 Dạng 3: Giới từ & Phrasal Verbs cơ bản', desc: 'Luyện giới từ cố định, phrasal verbs, giới từ thời gian/nơi chốn.' },
+          { id: 'module4', name: '📦 Dạng 4: Cấu trúc So sánh (Comparisons)', desc: 'Luyện các cấu trúc so sánh hơn, so sánh nhất, so sánh bằng/không bằng.' },
+          { id: 'module5', name: '📦 Dạng 5: Vị trí từ loại (Word Positions)', desc: 'Luyện vị trí của danh từ, động từ, tính từ, trạng từ.' }
+        ]
+      : [
+          { id: 'present_simple', name: '⏱️ Thì Hiện tại đơn (Present Simple)', desc: 'Tập trung chia động từ thường/to be với: usually, often, every day...' },
+          { id: 'past_simple', name: '🗓️ Thì Quá khứ đơn (Past Simple)', desc: 'Tập trung các dấu hiệu thời gian trong quá khứ: yesterday, ago, last summer...' },
+          { id: 'present_continuous', name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)', desc: 'Tập trung hành động đang xảy ra: now, at the moment, Look!...' },
+          { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)', desc: 'Diễn tả hành động đang xảy ra tại thời điểm quá khứ với liên từ: while...' },
+          { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành (Present Perfect)', desc: 'Tập trung chia has/have + V3/ed với: since, for, just, already, yet, ever, never...' },
+          { id: 'future_simple', name: '🔮 Thì Tương lai đơn & câu điều kiện loại 1 (Future Simple)', desc: 'Tập trung chia will + V nguyên mẫu, won\'t và cấu trúc câu điều kiện loại 1...' },
+        ];
 
     const toggleTense = (id: string) => {
       setSelectedTensesForCombo(prev => {
@@ -1157,7 +1265,7 @@ export const PracticeEngine: React.FC = () => {
       });
     };
 
-    const hasEnoughTenses = selectedTensesForCombo.length >= 2;
+    const hasEnoughTenses = isGlobal ? selectedTensesForCombo.length >= 1 : selectedTensesForCombo.length >= 2;
 
     return (
       <div className="space-y-6 max-w-2xl mx-auto pb-12 animate-fade-in">
@@ -1177,10 +1285,10 @@ export const PracticeEngine: React.FC = () => {
           <CardContent className="p-6 space-y-6">
             <div className="space-y-1.5">
               <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
-                1. Chọn các dạng thì muốn luyện tập (Ít nhất 2 dạng):
+                {isGlobal ? "1. Chọn các dạng bài muốn luyện tập (Ít nhất 1 dạng):" : "1. Chọn các dạng thì muốn luyện tập (Ít nhất 2 dạng):"}
               </h3>
               <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
-                Hệ thống sẽ tổng hợp câu hỏi từ các dạng thì đã chọn để rèn luyện phản xạ hỗn hợp.
+                {isGlobal ? "Hệ thống sẽ tổng hợp câu hỏi từ các dạng bài đã chọn để tạo đề ôn tập tổng hợp." : "Hệ thống sẽ tổng hợp câu hỏi từ các dạng thì đã chọn để rèn luyện phản xạ hỗn hợp."}
               </p>
             </div>
 
@@ -1225,7 +1333,7 @@ export const PracticeEngine: React.FC = () => {
 
             {!hasEnoughTenses && (
               <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center gap-1.5 animate-pulse">
-                ⚠️ Bạn cần chọn ít nhất 2 dạng thì để bắt đầu tổng ôn.
+                ⚠️ Bạn cần chọn ít nhất {isGlobal ? '1 dạng bài' : '2 dạng thì'} để bắt đầu tổng ôn.
               </div>
             )}
 
@@ -1259,7 +1367,7 @@ export const PracticeEngine: React.FC = () => {
             <p className="text-xs text-muted-foreground font-semibold">Chọn chương trình học phù hợp để bắt đầu ôn tập.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
             {/* Dạng 1: Thì động từ cơ bản */}
             <Card
               className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md"
@@ -1382,6 +1490,131 @@ export const PracticeEngine: React.FC = () => {
 
                 <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
                   <span>Bắt đầu học ngay →</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
+              onClick={() => {
+                setSelectedSubTense('word_position');
+                setGrammarSection('dang5');
+              }}
+            >
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400">
+                      Module 5
+                    </span>
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                      🔓 Sẵn sàng
+                    </span>
+                  </div>
+
+                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
+                    Dạng 5: Vị trí từ loại (Word Positions)
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Học các vị trí đứng của Danh từ, Động từ, Tính từ, Trạng từ trong câu. Đây là bước đệm trực tiếp để giải quyết phần thi Word Form và Đọc hiểu.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
+                  <span>Bắt đầu học ngay →</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Hai card lớn Tổng ôn thông minh & Luyện thi trắc nghiệm cho cả 5 Dạng */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-border/50">
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
+              onClick={() => {
+                setSelectedTensesForCombo(['module1', 'module2', 'module3', 'module4', 'module5']);
+                setIsConfiguringAll(true);
+              }}
+            >
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 px-2.5 py-1 rounded-full text-[9px] font-bold w-fit">
+                      <span className="text-[10px]">🗣️</span> Anh
+                    </div>
+                  </div>
+
+                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                    📝 Tổng ôn thông minh
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border/20 pt-4 mt-auto">
+                  <div className="flex items-center gap-2 flex-1 max-w-[65%]">
+                    <div className="h-1 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-indigo-600 dark:bg-indigo-400 rounded-full transition-all duration-300" 
+                        style={{ width: `${globalProgressPercent}%` }} 
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold text-muted-foreground shrink-0">{globalProgressPercent}%</span>
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="font-bold text-[11px] py-1 px-3.5 border border-border/50 hover:bg-accent hover:text-accent-foreground cursor-pointer h-8 rounded-xl shrink-0"
+                  >
+                    Luyện tập →
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
+              onClick={() => {
+                setExamTenses(['module1', 'module2', 'module3', 'module4', 'module5']);
+                setIsConfiguringExam(true);
+              }}
+            >
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 px-2.5 py-1 rounded-full text-[9px] font-bold w-fit">
+                      <span className="text-[10px]">🗣️</span> Anh
+                    </div>
+                  </div>
+
+                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                    🏆 Luyện thi trắc nghiệm
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border/20 pt-4 mt-auto">
+                  <div className="flex items-center gap-2 flex-1 max-w-[65%]">
+                    <div className="h-1 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-indigo-600 dark:bg-indigo-400 rounded-full transition-all duration-300" 
+                        style={{ width: `${globalProgressPercent}%` }} 
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold text-muted-foreground shrink-0">{globalProgressPercent}%</span>
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="font-bold text-[11px] py-1 px-3.5 border border-border/50 hover:bg-accent hover:text-accent-foreground cursor-pointer h-8 rounded-xl shrink-0"
+                  >
+                    Luyện tập →
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -1825,6 +2058,13 @@ export const PracticeEngine: React.FC = () => {
                   <LatexRenderer text={solutionDetail.recognition} />
                 </div>
 
+                {solutionDetail.translation && (
+                  <div className="text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/10 border-border/30">
+                    <span className="font-extrabold text-foreground block mb-1">🇬🇧 Dịch nghĩa câu hỏi:</span>
+                    <p className="italic">"{solutionDetail.translation}"</p>
+                  </div>
+                )}
+
                 <div className="space-y-5 pl-1.5">
                   {solutionDetail.detailedSteps.map((step: any, idx: number) => (
                     <div key={idx} className="space-y-1">
@@ -1922,7 +2162,7 @@ export const PracticeEngine: React.FC = () => {
         <button
           onClick={() => {
             if (questionTypeId === 'eng-qt6') {
-              if (selectedSubTense === 'verb_combo' || selectedSubTense === 'prep_phrasal' || selectedSubTense === 'comparison') {
+              if (selectedSubTense === 'verb_combo' || selectedSubTense === 'prep_phrasal' || selectedSubTense === 'comparison' || selectedSubTense === 'word_position') {
                 setGrammarSection(null);
               }
               setSelectedSubTense(null);
@@ -2399,6 +2639,13 @@ export const PracticeEngine: React.FC = () => {
                     <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
                     <LatexRenderer text={solutionDetail.recognition} />
                   </div>
+
+                  {solutionDetail.translation && (
+                    <div className="text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/10 border-border/30">
+                      <span className="font-extrabold text-foreground block mb-1">🇬🇧 Dịch nghĩa câu hỏi:</span>
+                      <p className="italic">"{solutionDetail.translation}"</p>
+                    </div>
+                  )}
 
                   <div className="space-y-5 pl-1.5">
                     {solutionDetail.detailedSteps.map((step: any, idx: number) => (

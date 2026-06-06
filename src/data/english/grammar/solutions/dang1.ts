@@ -37,7 +37,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc thêm -es cho động từ tận cùng bằng: o, ch, s, x, sh, z (mẹo nhớ: O chanh sút xe sh zỏm)."
-    ]
+    ],
+    "translation": "Cậu ấy thường thức dậy sớm vào buổi sáng."
   },
   {
     "id": "eng-s6",
@@ -75,7 +76,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ kỹ bảng chia động từ HAVE ở Hiện tại đơn: I/You/We/They đi với HAVE; He/She/It đi với HAS."
-    ]
+    ],
+    "translation": "Bây giờ cô ấy đang đọc một cuốn sách ở trong phòng khách."
   },
   {
     "id": "eng-s7",
@@ -113,7 +115,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Mọi hiện tượng tự nhiên, quy luật vật lý, toán học hay sự thật hiển nhiên đều bắt buộc chia Hiện tại đơn."
-    ]
+    ],
+    "translation": "Họ đã đi du lịch thành phố Đà Nẵng vào mùa hè năm ngoái."
   },
   {
     "id": "eng-s8",
@@ -151,7 +154,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Danh từ không đếm được (nước, tiền, sữa, thông tin, thời tiết...) luôn đi với động từ chia số ít."
-    ]
+    ],
+    "translation": "Tôi đã xem bộ phim này ba lần rồi."
   },
   {
     "id": "eng-s9",
@@ -189,7 +193,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Chú ý vị trí trạng từ chỉ tần suất: đứng trước động từ thường (rarely drinks, always drinks) nhưng đứng sau động từ to be."
-    ]
+    ],
+    "translation": "Nhìn kìa! Chiếc xe buýt đang đi tới kìa."
   },
   {
     "id": "eng-s10",
@@ -227,7 +232,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc câu hỏi thì Hiện tại đơn: Do/Does + S + V-infinitive."
-    ]
+    ],
+    "translation": "Chúng tôi đang ăn tối thì điện thoại reo."
   },
   {
     "id": "eng-s11",
@@ -265,7 +271,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn tìm danh từ chính đứng đầu cụm chủ ngữ (ở đây là 'students' chứ không phải 'school') để chia động từ cho chính xác."
-    ]
+    ],
+    "translation": "Vào thời điểm này ngày hôm qua cậu ấy đang làm bài tập về nhà."
   },
   {
     "id": "eng-s12",
@@ -303,7 +310,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Lịch trình cố định của phương tiện giao thông (tàu xe, máy bay), lịch chiếu phim, lịch học... luôn chia ở Hiện tại đơn."
-    ]
+    ],
+    "translation": "Tôi hy vọng rằng nhiều người hơn sẽ sử dụng phương tiện giao thông công cộng trong tương lai."
   },
   {
     "id": "eng-s13",
@@ -341,7 +349,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc phối hợp thì: Khi mệnh đề chính ở tương lai (will/can/shall + V0), mệnh đề phụ chỉ thời gian (when, as soon as, after, before, until) phải chia ở Hiện tại đơn."
-    ]
+    ],
+    "translation": "Nếu ngày mai trời mưa, chúng tôi sẽ hủy trận đấu bóng đá."
   },
   {
     "id": "eng-s14",
@@ -379,7 +388,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ kỹ cấu trúc câu điều kiện loại 1: If + S + V(s/es) (Hiện tại đơn), S + will/can/must + V-infinitive (Tương lai)."
-    ]
+    ],
+    "translation": "Bố tôi lái xe đi làm mỗi ngày."
   },
   {
     "id": "eng-s15",
@@ -417,7 +427,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý phát âm của động từ READ: Dạng nguyên mẫu đọc là /riːd/, dạng quá khứ viết giống nhưng đọc là /red/ (giống màu đỏ)."
-    ]
+    ],
+    "translation": "Nghe kìa! Ai đó đang gõ cửa."
   },
   {
     "id": "eng-s16",
@@ -455,7 +466,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Chủ ngữ số nhiều (We/They/danh từ số nhiều) đi với động từ nguyên mẫu V0; chủ ngữ số ít (He/She/It/danh từ số ít) đi với V-s/es."
-    ]
+    ],
+    "translation": "Gần đây họ đã xây một ngôi nhà mới."
   },
   {
     "id": "eng-s17",
@@ -493,7 +505,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý: Tính số ít/số nhiều dựa vào danh từ chính theo sau tính từ sở hữu (teacher là số ít), chứ không phụ thuộc vào từ sở hữu (our)."
-    ]
+    ],
+    "translation": "Cô ấy đã dạy học tại ngôi trường này kể từ năm 2020."
   },
   {
     "id": "eng-s18",
@@ -531,7 +544,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Tuyệt đối không dùng to be (is/am/are/isn't) làm trợ động từ đứng trước động từ thường nguyên mẫu."
-    ]
+    ],
+    "translation": "Trong khi mẹ tôi đang nấu ăn thì bố tôi đang làm vườn."
   },
   {
     "id": "eng-s19",
@@ -569,7 +583,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý các trạng từ chỉ thói quen thông lệ như Normally, Usually, Generally luôn đi kèm với Hiện tại đơn."
-    ]
+    ],
+    "translation": "Tôi đã làm mất chìa khóa rồi. Tôi không thể mở cửa bây giờ."
   },
   {
     "id": "eng-s20",
@@ -607,7 +622,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn chia động từ ở tất cả các mệnh đề của câu ghép, tránh việc chỉ chia vế đầu mà bỏ quên vế sau."
-    ]
+    ],
+    "translation": "Nếu cô ấy thức dậy sớm, cô ấy sẽ bắt kịp chuyến xe buýt."
   },
   {
     "id": "eng-s21",
@@ -645,7 +661,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học cách xác định sự hòa hợp chủ-vị trong mệnh đề quan hệ khi đại từ quan hệ thay thế cho cả một ý của câu trước."
-    ]
+    ],
+    "translation": "Họ sẽ đi học bằng xe buýt vào ngày mai."
   },
   {
     "id": "eng-s22",
@@ -683,7 +700,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Thực hành cấu trúc câu hỏi thông tin ở Hiện tại đơn: Wh- + do/does + S + V0?."
-    ]
+    ],
+    "translation": "Chúng tôi đã sống ở thành phố Quy Nhơn được mười năm."
   },
   {
     "id": "eng-s23",
@@ -721,7 +739,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Thời gian biểu cố định (lịch bay, giờ tàu chạy, giờ học, lịch chiếu phim) luôn chia ở Hiện tại đơn ngay cả khi nói về tương lai."
-    ]
+    ],
+    "translation": "Cô ấy vẫn chưa làm xong bài tập về nhà. Bạn có thể đợi không?"
   },
   {
     "id": "eng-s24",
@@ -759,7 +778,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc điều kiện loại 1: Mệnh đề điều kiện (If) không bao giờ chứa 'will', bắt buộc chia Hiện tại đơn."
-    ]
+    ],
+    "translation": "Vào lúc 8 giờ tối hôm qua, họ đang xem phim tại rạp chiếu phim."
   },
   {
     "id": "eng-s25",
@@ -797,7 +817,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc bảng động từ bất quy tắc thông dụng."
-    ]
+    ],
+    "translation": "Hôm qua, ông ấy đã mua một chiếc xe đạp mới cho con trai mình."
   },
   {
     "id": "eng-s26",
@@ -835,7 +856,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập phát âm và cách viết của các động từ bất quy tắc thường gặp."
-    ]
+    ],
+    "translation": "Mặt trời mọc ở đằng Đông."
   },
   {
     "id": "eng-s27",
@@ -873,7 +895,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các động từ bất quy tắc kết thúc bằng d chuyển sang t (send->sent, build->built)."
-    ]
+    ],
+    "translation": "Hiện tại anh trai tôi đang chơi cờ vua với bạn anh ấy."
   },
   {
     "id": "eng-s28",
@@ -911,7 +934,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học cách phân biệt trợ động từ did và động từ chính did."
-    ]
+    ],
+    "translation": "Họ đã đến thăm tỉnh Bình Định rất nhiều lần."
   },
   {
     "id": "eng-s29",
@@ -949,7 +973,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Did + S + V0 trong câu hỏi quá khứ."
-    ]
+    ],
+    "translation": "Nếu cậu ấy học tập chăm chỉ, cậu ấy sẽ đỗ kỳ thi tuyển sinh."
   },
   {
     "id": "eng-s30",
@@ -987,7 +1012,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc công thức câu phủ định quá khứ đơn: S + didn't + V0."
-    ]
+    ],
+    "translation": "Tôi hứa tôi sẽ giúp bạn làm dự án khoa học tối nay."
   },
   {
     "id": "eng-s31",
@@ -1025,7 +1051,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xem lại cách chia động từ to be ở quá khứ: was (số ít) và were (số nhiều)."
-    ]
+    ],
+    "translation": "Trong khi giáo viên đang giảng bài thì học sinh đang ghi chép."
   },
   {
     "id": "eng-s32",
@@ -1063,7 +1090,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý ngữ cảnh thói quen trong quá khứ (không dùng hiện tại đơn)."
-    ]
+    ],
+    "translation": "Chúng tôi đã ăn tối xong rồi."
   },
   {
     "id": "eng-s33",
@@ -1101,7 +1129,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cách dùng quá khứ đơn diễn tả các hành động xảy ra nối tiếp nhau."
-    ]
+    ],
+    "translation": "She học tiếng Anh từ khi cô ấy bảy tuổi."
   },
   {
     "id": "eng-s34",
@@ -1139,7 +1168,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc quy tắc gấp đôi phụ âm cuối đối với động từ một âm tiết trước khi thêm ed."
-    ]
+    ],
+    "translation": "Tối qua, tôi đi ngủ sớm vì tôi mệt."
   },
   {
     "id": "eng-s35",
@@ -1177,7 +1207,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Chú ý nhận biết trạng ngữ chỉ thời gian quá khứ để chia đúng."
-    ]
+    ],
+    "translation": "Lũ trẻ đang chơi đùa ở ngoài sân bây giờ."
   },
   {
     "id": "eng-s36",
@@ -1215,7 +1246,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện nhớ bảng động từ bất quy tắc thông dụng hàng ngày."
-    ]
+    ],
+    "translation": "Nước sôi ở 100 độ C."
   },
   {
     "id": "eng-s37",
@@ -1253,7 +1285,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ ago luôn đi với thì quá khứ đơn."
-    ]
+    ],
+    "translation": "Họ sẽ xây dựng cây cầu này vào tháng tới."
   },
   {
     "id": "eng-s38",
@@ -1291,7 +1324,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xem lại cấu trúc phủ định quá khứ đơn: S + did + not + V0."
-    ]
+    ],
+    "translation": "Nếu bạn tập thể dục thường xuyên, sức khỏe của bạn sẽ được cải thiện."
   },
   {
     "id": "eng-s39",
@@ -1329,7 +1363,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Đảm bảo tính song hành của các động từ khi được nối bởi liên từ 'and'."
-    ]
+    ],
+    "translation": "Cậu ấy đã sống ở Luân Đôn ba năm."
   },
   {
     "id": "eng-s40",
@@ -1367,7 +1402,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Quy tắc: Sau did/didn't động từ chính luôn ở dạng nguyên mẫu."
-    ]
+    ],
+    "translation": "Học sinh đang làm bài kiểm tra trong lớp lúc này."
   },
   {
     "id": "eng-s41",
@@ -1405,7 +1441,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc các động từ có 3 cột giống nhau (hit-hit-hit, cut-cut-cut) và đuôi -ld chuyển thành -lt."
-    ]
+    ],
+    "translation": "Khi tôi đến ga xe lửa, tàu đã rời đi rồi."
   },
   {
     "id": "eng-s42",
@@ -1443,7 +1480,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xem lại sự phối hợp nguyên nhân - kết quả trong chuỗi hành động quá khứ."
-    ]
+    ],
+    "translation": "Chúng tôi sẽ đi dã ngoại nếu thời tiết tốt vào chủ nhật tuần này."
   },
   {
     "id": "eng-s43",
@@ -1481,7 +1519,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ liên từ 'As soon as' diễn tả hành động xảy ra nối tiếp nhau dùng quá khứ đơn cho cả hai vế."
-    ]
+    ],
+    "translation": "Họ đã hoàn thành dự án trước thời hạn tuần trước."
   },
   {
     "id": "eng-s44",
@@ -1519,7 +1558,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Chuỗi hành động liên tiếp trong quá khứ luôn chia quá khứ đơn cho tất cả động từ."
-    ]
+    ],
+    "translation": "Bà tôi luôn đi bộ vào buổi sáng."
   },
   {
     "id": "eng-s45",
@@ -1557,7 +1597,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các dấu hiệu bắt đầu bằng từ cảm thán: Look!, Listen!, Keep silent!."
-    ]
+    ],
+    "translation": "Hiện tại cô ấy đang học nhóm với bạn bè trong thư viện."
   },
   {
     "id": "eng-s46",
@@ -1595,7 +1636,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc bảng chia động từ to be theo chủ ngữ."
-    ]
+    ],
+    "translation": "Họ đang sơn lại căn phòng màu xanh lá cây lúc này."
   },
   {
     "id": "eng-s47",
@@ -1633,7 +1675,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các danh từ số nhiều đặc biệt: child -> children, person -> people."
-    ]
+    ],
+    "translation": "Anh ấy đang nói chuyện điện thoại với mẹ của mình ngay bây giờ."
   },
   {
     "id": "eng-s48",
@@ -1671,7 +1714,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện viết cấu trúc tiếp diễn đầy đủ gồm cả to be và V-ing."
-    ]
+    ],
+    "translation": "Hãy nhìn những đám mây đen kìa! Trời sắp mưa rồi."
   },
   {
     "id": "eng-s49",
@@ -1709,7 +1753,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xem lại quy tắc gấp đôi phụ âm cuối của động từ có một nguyên âm đứng giữa hai phụ âm."
-    ]
+    ],
+    "translation": "Chúng tôi đang chuẩn bị cho ngày hội thể thao của trường ngay bây giờ."
   },
   {
     "id": "eng-s50",
@@ -1747,7 +1792,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học cách nhận biết các trạng ngữ chỉ tình huống tạm thời: these days, this week."
-    ]
+    ],
+    "translation": "Bạn có đang làm bài tập về nhà lúc này không?"
   },
   {
     "id": "eng-s51",
@@ -1785,7 +1831,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học cách dùng Hiện tại tiếp diễn để diễn tả lịch trình cá nhân trong tương lai gần."
-    ]
+    ],
+    "translation": "Lũ trẻ không chơi game bây giờ; chúng đang đọc sách."
   },
   {
     "id": "eng-s52",
@@ -1823,7 +1870,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc câu hỏi thì Hiện tại tiếp diễn: Am/Is/Are + S + V-ing?."
-    ]
+    ],
+    "translation": "Listen! Cô ấy đang hát một bài hát tiếng Anh thật hay."
   },
   {
     "id": "eng-s53",
@@ -1861,7 +1909,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học cách dùng đặc biệt của always trong thì Hiện tại tiếp diễn để phàn nàn."
-    ]
+    ],
+    "translation": "Mẹ tôi đang nấu bữa trưa trong bếp lúc này."
   },
   {
     "id": "eng-s54",
@@ -1899,7 +1948,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Tìm hiểu về Động từ trạng thái (Stative Verbs) không dùng ở các thì tiếp diễn."
-    ]
+    ],
+    "translation": "Họ đang xem một bộ phim tài liệu về biến đổi khí hậu bây giờ."
   },
   {
     "id": "eng-s55",
@@ -1937,7 +1987,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ rằng các câu mệnh lệnh yêu cầu người khác giữ yên lặng luôn đi với thì tiếp diễn."
-    ]
+    ],
+    "translation": "Tại sao bạn lại khóc? Có chuyện gì xảy ra thế?"
   },
   {
     "id": "eng-s56",
@@ -1975,7 +2026,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc bỏ e tận cùng trước khi thêm ing."
-    ]
+    ],
+    "translation": "Anh ấy đang không làm việc hôm nay; anh ấy đang xin nghỉ phép."
   },
   {
     "id": "eng-s57",
@@ -2013,7 +2065,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xác định rõ danh từ số nhiều có tận cùng bằng s để dùng to be phù hợp."
-    ]
+    ],
+    "translation": "Dự án bảo vệ môi trường đang tiến triển rất tốt lúc này."
   },
   {
     "id": "eng-s58",
@@ -2051,7 +2104,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Các đại từ bất định như someone, everyone, nobody luôn đi với động từ số ít."
-    ]
+    ],
+    "translation": "Cô ấy đang viết một bức thư gửi cho người bạn qua thư của mình bây giờ."
   },
   {
     "id": "eng-s59",
@@ -2089,7 +2143,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn lại quy tắc nhân đôi phụ âm cuối trước khi thêm ing."
-    ]
+    ],
+    "translation": "Học sinh đang lắng nghe bài giảng một cách chăm chú lúc này."
   },
   {
     "id": "eng-s60",
@@ -2127,7 +2182,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt thói quen lâu dài (Hiện tại đơn) và thói quen tạm thời/xu hướng dạo gần đây (Hiện tại tiếp diễn)."
-    ]
+    ],
+    "translation": "Look! Trời đang tuyết rơi ngoài trời kìa."
   },
   {
     "id": "eng-s61",
@@ -2165,7 +2221,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc: 'The number of + N' + V số ít; 'A number of + N' + V số nhiều."
-    ]
+    ],
+    "translation": "Chúng tôi đang dọn dẹp lớp học cho ngày mai."
   },
   {
     "id": "eng-s62",
@@ -2203,7 +2260,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Quan sát kỹ ngữ cảnh để xem hành động đang diễn ra hay là thói quen lâu dài."
-    ]
+    ],
+    "translation": "Bố tôi đang sửa chiếc xe đạp của ông ấy ở ngoài vườn bây giờ."
   },
   {
     "id": "eng-s63",
@@ -2241,7 +2299,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: S + am/is/are + always + V-ing dùng để phàn nàn về một thói quen xấu."
-    ]
+    ],
+    "translation": "Con mèo đang ngủ ngon lành trên ghế sofa lúc này."
   },
   {
     "id": "eng-s64",
@@ -2279,7 +2338,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học kỹ nhóm Stative Verbs (like, love, think, believe, understand) không dùng ở thì tiếp diễn khi chỉ trạng thái."
-    ]
+    ],
+    "translation": "Họ đang lên kế hoạch cho chuyến đi dã ngoại vào cuối tuần này."
   },
   {
     "id": "eng-s65",
@@ -2317,7 +2377,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ sự khác biệt: 1. Yesterday -> Quá khứ đơn; 2. At + giờ + yesterday -> Quá khứ tiếp diễn."
-    ]
+    ],
+    "translation": "Tôi đang thuyết trình thì micro bị hỏng."
   },
   {
     "id": "eng-s66",
@@ -2355,7 +2416,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ công thức: While + S + was/were + V-ing, S + V2/ed (diễn tả hành động đang xảy ra thì hành động khác xen vào)."
-    ]
+    ],
+    "translation": "Cô ấy đang xem tivi vào lúc 8 giờ tối hôm qua."
   },
   {
     "id": "eng-s67",
@@ -2393,7 +2455,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc bỏ chữ 'e' câm trước khi thêm '-ing': prepare -> preparing, make -> making, write -> writing."
-    ]
+    ],
+    "translation": "Họ đang chơi bóng đá vào lúc 5 giờ chiều ngày hôm qua."
   },
   {
     "id": "eng-s68",
@@ -2431,7 +2494,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Thuộc lòng công thức câu hỏi thì Quá khứ tiếp diễn: Wh-word + was/were + S + V-ing?."
-    ]
+    ],
+    "translation": "Chúng tôi đang ăn tối thì điện thoại reo lên."
   },
   {
     "id": "eng-s69",
@@ -2469,7 +2533,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cách dùng của 'While': diễn tả hai hành động xảy ra song song đồng thời trong quá khứ -> cả hai vế đều chia Quá khứ tiếp diễn (was/were + V-ing)."
-    ]
+    ],
+    "translation": "Cậu ấy đang làm bài tập về nhà vào thời điểm này ngày hôm qua."
   },
   {
     "id": "eng-s70",
@@ -2507,7 +2572,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Dùng thì Quá khứ tiếp diễn để mô tả trang phục, trạng thái thời tiết, hoặc các hành động làm nền tại một thời điểm cụ thể trong quá khứ."
-    ]
+    ],
+    "translation": "Các học sinh đang nói chuyện trong lớp khi giáo viên bước vào."
   },
   {
     "id": "eng-s71",
@@ -2545,7 +2611,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý: Động từ 'think' khi mang nghĩa 'tin rằng, nghĩ rằng' (quan điểm) là động từ trạng thái không chia tiếp diễn; nhưng khi mang nghĩa 'suy nghĩ, cân nhắc' (hành động trí óc) thì vẫn chia tiếp diễn bình thường."
-    ]
+    ],
+    "translation": "Mẹ tôi đang chuẩn bị bữa tối khi tôi về đến nhà."
   },
   {
     "id": "eng-s72",
@@ -2583,7 +2650,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc: Mệnh đề đi sau 'While' thường chia ở các thì tiếp diễn để nhấn mạnh tính liên tục của hành động làm nền."
-    ]
+    ],
+    "translation": "Trời đang mưa to khi chúng tôi rời khỏi trường."
   },
   {
     "id": "eng-s73",
@@ -2621,7 +2689,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Thì Quá khứ tiếp diễn chuyên dùng để miêu tả thời tiết, cảnh vật làm nền (background) cho một chuỗi sự kiện khác trong văn kể chuyện."
-    ]
+    ],
+    "translation": "James đang chụp ảnh ở Nhật Bản thì điện thoại hết pin."
   },
   {
     "id": "eng-s74",
@@ -2659,7 +2728,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc bỏ chữ 'e' câm trước khi thêm '-ing': take -> taking."
-    ]
+    ],
+    "translation": "Các đầu bếp đang hướng dẫn thanh thiếu niên cách chuẩn bị món ăn khi tôi đến."
   },
   {
     "id": "eng-s75",
@@ -2697,7 +2767,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn phân biệt rõ: 1. last Sunday -> Quá khứ đơn; 2. At this time last Sunday -> Quá khứ tiếp diễn."
-    ]
+    ],
+    "translation": "Các học sinh đang quét dọn sân trường khi trời bắt đầu mưa."
   },
   {
     "id": "eng-s76",
@@ -2735,7 +2806,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Trong cấu trúc xen ngang, mệnh đề chỉ hành động kéo dài đang diễn ra sau 'While' dùng Quá khứ tiếp diễn, hành động ngắn xen vào dùng Quá khứ đơn."
-    ]
+    ],
+    "translation": "Chúng tôi đang đợi xe buýt thì Anna nhìn thấy người bạn cũ của mình."
   },
   {
     "id": "eng-s77",
@@ -2773,7 +2845,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức xen ngang: S + was/were + V-ing + when + S + V2/ed."
-    ]
+    ],
+    "translation": "Các công nhân đô thị đang trồng thêm cây dọc con phố khi chúng tôi đi ngang qua."
   },
   {
     "id": "eng-s78",
@@ -2811,7 +2884,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức nghi vấn: Was/Were + S + V-ing?."
-    ]
+    ],
+    "translation": "Tôi đang viết một bài viết tiếng Anh thì em trai tôi gọi điện cho tôi."
   },
   {
     "id": "eng-s79",
@@ -2849,7 +2923,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý: Các động từ chỉ nhận thức, giác quan hoặc hành động ngắn nhất thời như find, see, hear, notice thường chia ở quá khứ đơn làm hành động xen vào."
-    ]
+    ],
+    "translation": "Các du khách đang đi tham quan xung quanh đảo Phú Quốc thì thời tiết thay đổi đột ngột."
   },
   {
     "id": "eng-s80",
@@ -2887,7 +2962,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Các động từ chỉ giác quan như see, hear, smell, taste không chia ở thì tiếp diễn khi diễn đạt nhận thức tự nhiên."
-    ]
+    ],
+    "translation": "Trong khi cô ấy đang đọc sách thì bố cô ấy về nhà."
   },
   {
     "id": "eng-s81",
@@ -2925,7 +3001,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Khi hai hành động kéo dài xảy ra song song đồng thời trong quá khứ, ta dùng thì Quá khứ tiếp diễn cho cả hai mệnh đề."
-    ]
+    ],
+    "translation": "Trong khi học sinh đang đọc đoạn văn, giáo viên đã viết từ mới lên bảng."
   },
   {
     "id": "eng-s82",
@@ -2963,7 +3040,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhận biết từ khóa: S1 + was/were + V-ing + while + S2 + was/were + V-ing."
-    ]
+    ],
+    "translation": "Các bạn cùng lớp của tôi đang chú ý lắng nghe khi giáo viên giải thích quy tắc."
   },
   {
     "id": "eng-s83",
@@ -3001,7 +3079,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Thì Quá khứ tiếp diễn thường dùng để miêu tả thời tiết làm nền (background) trong văn kể chuyện."
-    ]
+    ],
+    "translation": "Có phải bạn đang ăn tối khi tôi gọi điện cho bạn tối qua không?"
   },
   {
     "id": "eng-s84",
@@ -3039,7 +3118,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Từ 'others' trong câu này đóng vai trò là đại từ số nhiều (những người khác) nên đi kèm trợ động từ số nhiều 'were'."
-    ]
+    ],
+    "translation": "Lũ trẻ đang cười nói vui vẻ trong khi bố mẹ chúng đang trò chuyện."
   },
   {
     "id": "eng-s85",
@@ -3065,7 +3145,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc gia đình từ của invent: invent -> inventor (người phát minh) -> invention (sự phát minh) -> inventive (sáng tạo)."
-    ]
+    ],
+    "translation": "Cô ấy đã quyết định ở nhà và chuẩn bị cho kỳ thi sắp tới."
   },
   {
     "id": "eng-s86",
@@ -3091,7 +3172,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: spend + time/money + V-ing, waste + time/money + V-ing."
-    ]
+    ],
+    "translation": "Bố tôi muốn mua một chiếc xe đạp mới vào tuần tới."
   },
   {
     "id": "eng-s87",
@@ -3117,7 +3199,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ gia đình từ của nature: nature -> natural -> naturally -> naturalist (nhà tự nhiên học)."
-    ]
+    ],
+    "translation": "Họ thích dọn dẹp sân trường vào mỗi cuối tuần."
   },
   {
     "id": "eng-s88",
@@ -3144,7 +3227,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập nhận diện tiền tố trái nghĩa: pleasant -> unpleasant, happy -> unhappy, polite -> impolite."
-    ]
+    ],
+    "translation": "Giáo viên yêu cầu học sinh làm bài tập cẩn thận."
   },
   {
     "id": "eng-s89",
@@ -3170,7 +3254,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: profession -> professional -> professionally."
-    ]
+    ],
+    "translation": "Chúng tôi tránh sử dụng túi nilon để bảo vệ môi trường."
   },
   {
     "id": "eng-s98",
@@ -3190,7 +3275,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt: tính từ -ing chỉ bản chất/tính chất của vật/sự việc; tính từ -ed chỉ cảm xúc/cảm nhận của con người."
-    ]
+    ],
+    "translation": "Chúng tôi đã ghé thăm ngôi làng cổ nơi sản xuất ra các sản phẩm truyền thống."
   },
   {
     "id": "eng-s99",
@@ -3210,7 +3296,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ phân biệt: since + mốc thời gian (ví dụ: since 2010), for + khoảng thời gian (ví dụ: for 10 years)."
-    ]
+    ],
+    "translation": "Cô ấy là học sinh có bài thuyết trình hay nhất lớp."
   },
   {
     "id": "eng-s102",
@@ -3236,7 +3323,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các trạng từ chỉ tần suất hiện tại đơn và quy tắc thêm -s/-es."
-    ]
+    ],
+    "translation": "Bố tôi thường uống một tách trà nóng vào buổi sáng."
   },
   {
     "id": "eng-s103",
@@ -3262,7 +3350,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập cách chia động từ với danh từ số ít chỉ người."
-    ]
+    ],
+    "translation": "Mẹ tôi chuẩn bị bữa sáng cho cả gia đình mỗi ngày."
   },
   {
     "id": "eng-s104",
@@ -3288,7 +3377,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập xác định danh từ chính đứng trước giới từ trong cụm chủ ngữ dài."
-    ]
+    ],
+    "translation": "Họ không đi học bằng xe buýt; họ tự đi bộ."
   },
   {
     "id": "eng-s105",
@@ -3308,7 +3398,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn quy tắc thêm -es sau các động từ tận cùng bằng o, x, s, z, ch, sh."
-    ]
+    ],
+    "translation": "Bạn có thường xuyên chơi thể thao sau giờ học không?"
   },
   {
     "id": "eng-s106",
@@ -3328,7 +3419,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ quy tắc động từ nguyên mẫu đi với các đại từ nhân xưng số nhiều (They, We, You)."
-    ]
+    ],
+    "translation": "Trường học bắt đầu vào lúc 7 giờ sáng và kết thúc vào lúc 11 giờ 30."
   },
   {
     "id": "eng-s107",
@@ -3348,7 +3440,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt rõ cách dùng thì Hiện tại đơn (thói quen) và Hiện tại tiếp diễn."
-    ]
+    ],
+    "translation": "Cô ấy không thích uống sữa; cô ấy thích nước trái cây hơn."
   },
   {
     "id": "eng-s108",
@@ -3368,7 +3461,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học các cụm từ cố định (collocations) phổ biến như take part in, join in."
-    ]
+    ],
+    "translation": "Bố tôi làm việc trong một văn phòng lớn ở trung tâm thành phố Quy Nhơn."
   },
   {
     "id": "eng-s109",
@@ -3388,7 +3482,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện chia động từ cho các cụm phrasal verbs thông dụng."
-    ]
+    ],
+    "translation": "Nước đóng băng ở 0 độ C."
   },
   {
     "id": "eng-s110",
@@ -3408,7 +3503,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập cách dùng thì Hiện tại đơn cho sự thật khách quan và chức năng của sự vật."
-    ]
+    ],
+    "translation": "Các học sinh luôn mặc đồng phục khi đến trường."
   },
   {
     "id": "eng-s111",
@@ -3434,7 +3530,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt danh từ 'cook' (đầu bếp) và động từ 'cook' (nấu ăn)."
-    ]
+    ],
+    "translation": "Bạn có biết câu trả lời cho câu hỏi khó này không?"
   },
   {
     "id": "eng-s112",
@@ -3454,7 +3551,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xác định mạo từ 'A/An' biểu thị một danh từ số ít làm chủ ngữ."
-    ]
+    ],
+    "translation": "Trái Đất quay xung quanh Mặt Trời."
   },
   {
     "id": "eng-s113",
@@ -3480,7 +3578,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học danh sách các danh từ không đếm được phổ biến luôn chia động từ số ít."
-    ]
+    ],
+    "translation": "Anh ấy không nói tiếng Anh trôi chảy, nhưng anh ấy đang cố gắng học tập."
   },
   {
     "id": "eng-s114",
@@ -3500,7 +3599,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn quy tắc chia động từ bất quy tắc 'have/has' ở hiện tại đơn."
-    ]
+    ],
+    "translation": "Thư viện trường mở cửa vào lúc 8 giờ sáng hàng ngày."
   },
   {
     "id": "eng-s115",
@@ -3520,7 +3620,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cách chia động từ to be (am, is, are) theo các nhóm chủ ngữ."
-    ]
+    ],
+    "translation": "Chúng tôi thường ghé thăm ông bà của mình vào những ngày cuối tuần."
   },
   {
     "id": "eng-s116",
@@ -3540,7 +3641,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Khắc sâu quy tắc danh từ riêng chỉ tên địa danh luôn chia động từ số ít."
-    ]
+    ],
+    "translation": "Cô ấy có rất nhiều sách hay về lịch sử Việt Nam."
   },
   {
     "id": "eng-s117",
@@ -3566,7 +3668,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc lòng sự khác biệt giữa 'The number of' (động từ số ít) và 'A number of' (động từ số nhiều)."
-    ]
+    ],
+    "translation": "Tại sao bạn không thích học ngữ pháp tiếng Anh?"
   },
   {
     "id": "eng-s118",
@@ -3592,7 +3695,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Chú ý danh từ đứng trước cụm giới từ 'in...' để chia động từ chính xác."
-    ]
+    ],
+    "translation": "Bình Định nổi tiếng với Lễ hội Võ thuật truyền thống."
   },
   {
     "id": "eng-s119",
@@ -3612,7 +3716,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập chia động từ ngôi thứ ba số ít ở hiện tại đơn."
-    ]
+    ],
+    "translation": "Học sinh trung thực không bao giờ gian lận trong các kỳ thi."
   },
   {
     "id": "eng-s120",
@@ -3638,7 +3743,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc câu hỏi nghi vấn hiện tại đơn: Do/Does + S + V(nguyên mẫu)?"
-    ]
+    ],
+    "translation": "Bố tôi thích đọc báo vào mỗi buổi sáng."
   },
   {
     "id": "eng-s121",
@@ -3658,7 +3764,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc cụm từ hay 'play an important role in something'."
-    ]
+    ],
+    "translation": "Bạn có cần bất kỳ sự trợ giúp nào với bài tập về nhà của mình không?"
   },
   {
     "id": "eng-s122",
@@ -3684,7 +3791,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc bảng động từ bất quy tắc thông dụng."
-    ]
+    ],
+    "translation": "Họ đã đi du lịch đảo Lý Sơn vào mùa hè năm ngoái."
   },
   {
     "id": "eng-s123",
@@ -3710,7 +3818,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cụm từ: have a great time (có một khoảng thời gian tuyệt vời)."
-    ]
+    ],
+    "translation": "Hôm qua, cô ấy đã mua một cuốn từ điển tiếng Anh mới ở hiệu sách."
   },
   {
     "id": "eng-s124",
@@ -3736,7 +3845,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập cách thêm đuôi -ed đối với động từ có quy tắc."
-    ]
+    ],
+    "translation": "Chúng tôi đã không xem trận bóng đá trên tivi tối qua."
   },
   {
     "id": "eng-s125",
@@ -3756,7 +3866,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập nhận diện các cụm từ đi với 'yesterday' (yesterday morning, yesterday afternoon...)."
-    ]
+    ],
+    "translation": "Bạn đã làm gì vào cuối tuần vừa rồi?"
   },
   {
     "id": "eng-s126",
@@ -3776,7 +3887,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc dạng quá khứ của động từ bất quy tắc 'keep' là 'kept'."
-    ]
+    ],
+    "translation": "Giáo viên đã giải thích quy tắc ngữ pháp cho chúng tôi rất kỹ vào hôm qua."
   },
   {
     "id": "eng-s127",
@@ -3802,7 +3914,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập phát âm và viết đúng động từ 'buy -> bought'."
-    ]
+    ],
+    "translation": "Anh ấy đã không đến trường vào thứ Hai vì anh ấy bị ốm."
   },
   {
     "id": "eng-s128",
@@ -3828,7 +3941,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý ngữ cảnh khi sử dụng 'this morning' thường được chia ở quá khứ đơn."
-    ]
+    ],
+    "translation": "Họ đã hoàn thành bài thi trắc nghiệm trước khi hết giờ làm bài."
   },
   {
     "id": "eng-s129",
@@ -3854,7 +3968,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cách chia động từ to be trong quá khứ: was (số ít), were (số nhiều)."
-    ]
+    ],
+    "translation": "Khi tôi còn nhỏ, tôi thường chơi thả diều trên cánh đồng."
   },
   {
     "id": "eng-s130",
@@ -3880,7 +3995,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập cách chia động từ có quy tắc tận cùng bằng chữ cái 'e'."
-    ]
+    ],
+    "translation": "Bố tôi đã sửa chiếc xe đạp cũ của tôi vào chiều chủ nhật tuần trước."
   },
   {
     "id": "eng-s131",
@@ -3900,7 +4016,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ trạng từ 'ago' luôn đi với thì Quá khứ đơn."
-    ]
+    ],
+    "translation": "Gia đình tôi đã chuyển đến thành phố Quy Nhơn cách đây 5 năm."
   },
   {
     "id": "eng-s132",
@@ -3926,7 +4043,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học kỹ dạng động từ bất quy tắc của 'make' -> 'made'."
-    ]
+    ],
+    "translation": "Tại sao bạn lại không tham gia hoạt động bảo vệ môi trường tuần trước?"
   },
   {
     "id": "eng-s133",
@@ -3946,7 +4064,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Chú ý dạng viết và cách đọc của động từ bất quy tắc 'teach -> taught'."
-    ]
+    ],
+    "translation": "Chúng tôi đã nghe thấy một tiếng động lớn từ ngoài vườn tối qua."
   },
   {
     "id": "eng-s134",
@@ -3972,7 +4091,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân tích kĩ ngữ cảnh hoạt động đã kết thúc hay chưa trước khi chia động từ."
-    ]
+    ],
+    "translation": "Cô ấy đã đạt điểm tối đa trong kỳ thi học kỳ vừa rồi."
   },
   {
     "id": "eng-s135",
@@ -3992,7 +4112,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập động từ bất quy tắc 'buy -> bought'."
-    ]
+    ],
+    "translation": "Lần cuối cùng bạn đi du lịch đến Đà Lạt là khi nào?"
   },
   {
     "id": "eng-s136",
@@ -4018,7 +4139,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập quy tắc gấp đôi phụ âm cuối khi thêm đuôi -ed."
-    ]
+    ],
+    "translation": "Họ đã trồng rất nhiều cây xanh dọc con phố vào tháng trước."
   },
   {
     "id": "eng-s137",
@@ -4044,7 +4166,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Đọc hiểu toàn bộ câu để nắm vững ý nghĩa tường thuật của ngữ cảnh."
-    ]
+    ],
+    "translation": "Học sinh đã không chuẩn bị tốt cho buổi thuyết trình hôm qua."
   },
   {
     "id": "eng-s138",
@@ -4070,7 +4193,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập dạng phủ định của động từ to be ở quá khứ đơn: wasn't / weren't."
-    ]
+    ],
+    "translation": "Ai đã giúp bạn hoàn thành bài tập toán khó này?"
   },
   {
     "id": "eng-s139",
@@ -4096,7 +4220,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc: Sau trợ động từ 'did/didn't', động từ chính luôn ở dạng nguyên mẫu."
-    ]
+    ],
+    "translation": "Cơn mưa lớn đã kết thúc vào đêm qua."
   },
   {
     "id": "eng-s140",
@@ -4122,7 +4247,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học kĩ cấu trúc câu hỏi nghi vấn thì quá khứ đơn với động từ thường và động từ to be."
-    ]
+    ],
+    "translation": "Chúng tôi đã dành cả kỳ nghỉ hè để tự học tiếng Anh tại nhà."
   },
   {
     "id": "eng-s141",
@@ -4148,7 +4274,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý phân tích kĩ danh từ số ít hay số nhiều ở chủ ngữ trước khi chia động từ to be."
-    ]
+    ],
+    "translation": "Bạn có tìm thấy chiếc chìa khóa bị mất của mình vào sáng nay không?"
   },
   {
     "id": "eng-s142",
@@ -4174,7 +4301,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ dấu hiệu nhận biết thì Hiện tại tiếp diễn là các từ cảm thán như Look!, Listen!, Be quiet!."
-    ]
+    ],
+    "translation": "Hiện tại họ đang chuẩn bị cho hội thảo nấu ăn sắp tới."
   },
   {
     "id": "eng-s143",
@@ -4200,7 +4328,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: các đại từ bất định như someone, anyone, everyone luôn đi với động từ số ít."
-    ]
+    ],
+    "translation": "Cô ấy đang viết một bức thư cho người bạn nước ngoài của mình lúc này."
   },
   {
     "id": "eng-s144",
@@ -4226,7 +4355,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ôn tập cấu trúc thì Hiện tại tiếp diễn: S + am/is/are + V-ing."
-    ]
+    ],
+    "translation": "Bố tôi đang không xem tivi bây giờ; ông ấy đang đọc sách."
   },
   {
     "id": "eng-s145",
@@ -4252,7 +4382,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý quy tắc bỏ chữ cái 'e' ở cuối động từ trước khi thêm đuôi -ing."
-    ]
+    ],
+    "translation": "Có phải bạn đang lắng nghe hướng dẫn của giáo viên lúc này không?"
   },
   {
     "id": "eng-s146",
@@ -4278,7 +4409,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Rèn luyện thói quen phân tích ngữ cảnh các câu mệnh lệnh trong giao tiếp."
-    ]
+    ],
+    "translation": "Look! Những học sinh kia đang nhặt rác trên bãi biển Quy Nhơn."
   },
   {
     "id": "eng-s147",
@@ -4298,7 +4430,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Khắc sâu sự hòa hợp trợ động từ: I + am, He/She/It + is, You/We/They + are."
-    ]
+    ],
+    "translation": "Hiện tại tôi đang không học ngữ pháp; tôi đang làm bài tập tiếng Anh."
   },
   {
     "id": "eng-s148",
@@ -4318,7 +4451,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các trạng từ đặc trưng chỉ thời điểm hiện tại tiếp diễn."
-    ]
+    ],
+    "translation": "Hãy nghe kìa! Con chim đang hót một bài hát thật hay trên cây."
   },
   {
     "id": "eng-s149",
@@ -4338,7 +4472,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt rõ trạng từ tần suất hiện tại đơn và trạng từ thời điểm hiện tại tiếp diễn."
-    ]
+    ],
+    "translation": "Tại sao anh ấy lại đang chạy nhanh như thế trên phố bây giờ?"
   },
   {
     "id": "eng-s150",
@@ -4358,7 +4493,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học cách nhận diện và chia động từ cho danh từ số ít chỉ người."
-    ]
+    ],
+    "translation": "Mẹ tôi đang chuẩn bị một số món ăn truyền thống trong bếp lúc này."
   },
   {
     "id": "eng-s151",
@@ -4378,7 +4514,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Đảm bảo sự hòa hợp giữa danh từ chủ ngữ số nhiều và trợ động từ 'are'."
-    ]
+    ],
+    "translation": "Các học sinh đang thực hành nói tiếng Anh trong lớp học ngay bây giờ."
   },
   {
     "id": "eng-s152",
@@ -4398,7 +4535,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý phân biệt danh từ số nhiều có đuôi 's' để chia trợ động từ thích hợp."
-    ]
+    ],
+    "translation": "Thời tiết đang trở nên ấm hơn ở khu vực này."
   },
   {
     "id": "eng-s153",
@@ -4418,7 +4556,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập nhận diện trạng từ chỉ thời điểm hành động đang xảy ra."
-    ]
+    ],
+    "translation": "Họ đang không chơi bóng đá ngoài sân bây giờ vì trời đang mưa."
   },
   {
     "id": "eng-s154",
@@ -4444,7 +4583,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: thì Hiện tại tiếp diễn dùng để tả hành động tạm thời diễn ra xung quanh hiện tại với các trạng từ như this week, this month, these days."
-    ]
+    ],
+    "translation": "Bạn đang học bài cho kỳ thi tuyển sinh sắp tới phải không?"
   },
   {
     "id": "eng-s155",
@@ -4464,7 +4604,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Xác định danh từ số ít chỉ địa danh để chia đúng trợ động từ 'is'."
-    ]
+    ],
+    "translation": "Mọi người đang đợi xe buýt trong phòng chờ ngay bây giờ."
   },
   {
     "id": "eng-s156",
@@ -4484,7 +4625,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện viết đúng dạng V-ing đối với các động từ có quy tắc tận cùng bằng nguyên âm câm 'e'."
-    ]
+    ],
+    "translation": "Bác sĩ đang khám bệnh cho một bệnh nhân tại bệnh viện lúc này."
   },
   {
     "id": "eng-s157",
@@ -4510,7 +4652,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Đọc kỹ toàn bộ câu ghép/câu nối để tìm manh mối ngữ nghĩa hỗ trợ."
-    ]
+    ],
+    "translation": "Dự án môi trường đang tiến triển rất nhanh chóng."
   },
   {
     "id": "eng-s158",
@@ -4536,7 +4679,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc câu hỏi nghi vấn của thì Hiện tại tiếp diễn."
-    ]
+    ],
+    "translation": "Tôi đang đọc một cuốn sách thú vị về lịch sử Quy Nhơn bây giờ."
   },
   {
     "id": "eng-s159",
@@ -4562,7 +4706,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt cách dùng hiện tại đơn (sự thật chung) và hiện tại tiếp diễn (sự việc tạm thời đang xảy ra)."
-    ]
+    ],
+    "translation": "Look! Xe buýt trường học đang đi tới kìa."
   },
   {
     "id": "eng-s160",
@@ -4588,7 +4733,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý: thì Hiện tại tiếp diễn còn dùng để nói về xu hướng/sự thay đổi ở hiện tại với các từ như These days, Today."
-    ]
+    ],
+    "translation": "Họ đang thảo luận về cách giảm thiểu rác thải nhựa lúc này."
   },
   {
     "id": "eng-s161",
@@ -4614,7 +4760,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Chú ý các từ trạng thái như busy, free chỉ thời điểm hành động đang diễn ra."
-    ]
+    ],
+    "translation": "Anh ấy đang không làm việc hôm nay; anh ấy đang tận hưởng ngày nghỉ."
   },
   {
     "id": "eng-s162",
@@ -4652,7 +4799,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức xen ngang: S + was/were + V-ing + when + S + V2/ed."
-    ]
+    ],
+    "translation": "Tôi đang thuyết trình thì micro ngừng hoạt động."
   },
   {
     "id": "eng-s163",
@@ -4691,7 +4839,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ phân biệt: 1. last night -> Quá khứ đơn; 2. at + giờ + last night -> Quá khứ tiếp diễn."
-    ]
+    ],
+    "translation": "Cô ấy đang xem tivi vào lúc 8 giờ tối hôm qua."
   },
   {
     "id": "eng-s164",
@@ -4729,7 +4878,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn chú ý sự hòa hợp giữa trợ động từ was/were và chủ ngữ số ít/số nhiều."
-    ]
+    ],
+    "translation": "Họ đang chơi bóng đá vào lúc 5 giờ chiều ngày hôm qua."
   },
   {
     "id": "eng-s165",
@@ -4767,7 +4917,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức xen ngang trong quá khứ: S + was/were + V-ing + when + S + V2/ed."
-    ]
+    ],
+    "translation": "Chúng tôi đang ăn tối thì điện thoại reo lên."
   },
   {
     "id": "eng-s166",
@@ -4805,7 +4956,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: yesterday -> Quá khứ đơn; at this time yesterday -> Quá khứ tiếp diễn."
-    ]
+    ],
+    "translation": "Cậu ấy đang làm bài tập về nhà vào thời điểm này ngày hôm qua."
   },
   {
     "id": "eng-s167",
@@ -4843,7 +4995,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn quan sát kỹ đuôi danh từ để xác định danh từ số ít hay số nhiều trước khi chia động từ to be."
-    ]
+    ],
+    "translation": "Các học sinh đang ở trong lớp học khi giáo viên bước vào."
   },
   {
     "id": "eng-s168",
@@ -4881,7 +5034,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc xen ngang: S + was/were + V-ing + when + S + V2/ed."
-    ]
+    ],
+    "translation": "Mẹ tôi đang chuẩn bị bữa tối khi tôi về đến nhà."
   },
   {
     "id": "eng-s169",
@@ -4919,7 +5073,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ rằng các hiện tượng thời tiết đang xảy ra làm bối cảnh nền cho sự việc khác thường chia ở tiếp diễn."
-    ]
+    ],
+    "translation": "Trời đang mưa to khi chúng tôi rời khỏi trường."
   },
   {
     "id": "eng-s170",
@@ -4957,7 +5112,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ kỹ quy tắc bỏ chữ 'e' câm ở cuối động từ trước khi thêm '-ing': take -> taking, make -> making."
-    ]
+    ],
+    "translation": "James đang chụp ảnh ở Nhật Bản thì điện thoại hết pin."
   },
   {
     "id": "eng-s171",
@@ -4995,7 +5151,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ sự hòa hợp chủ-vị của trợ động từ: Danh từ số nhiều -> were; Danh từ số ít -> was."
-    ]
+    ],
+    "translation": "Các đầu bếp đang hướng dẫn thanh thiếu niên cách chuẩn bị món ăn lành mạnh khi tôi đến."
   },
   {
     "id": "eng-s172",
@@ -5033,7 +5190,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn xác định rõ chủ ngữ số ít hay số nhiều trước khi chia động từ to be trong thì tiếp diễn."
-    ]
+    ],
+    "translation": "Các học sinh đang quét dọn sân trường khi trời bắt đầu mưa."
   },
   {
     "id": "eng-s173",
@@ -5071,7 +5229,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức xen ngang: S + was/were + V-ing + when + S + V2/ed."
-    ]
+    ],
+    "translation": "Chúng tôi đang đợi xe buýt thì Anna nhìn thấy người bạn cũ của mình."
   },
   {
     "id": "eng-s174",
@@ -5109,7 +5268,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Đảm bảo phân biệt danh từ chính 'workers' (số nhiều) trong cụm chủ ngữ dài để chia đúng động từ."
-    ]
+    ],
+    "translation": "Các công nhân đô thị đang trồng thêm cây dọc con phố khi chúng tôi đi ngang qua."
   },
   {
     "id": "eng-s175",
@@ -5147,7 +5307,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: S + was/were + V-ing + when + S + V2/ed."
-    ]
+    ],
+    "translation": "Tôi đang đọc một văn bản tiếng Anh thì em trai tôi gọi điện cho tôi."
   },
   {
     "id": "eng-s176",
@@ -5185,7 +5346,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc gấp đôi phụ âm cuối đối với động từ 'travel' -> 'travelling'."
-    ]
+    ],
+    "translation": "Các du khách đang đi tham quan xung quanh đảo Phú Quốc thì thời tiết thay đổi đột ngột."
   },
   {
     "id": "eng-s177",
@@ -5223,7 +5385,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức: While + S + was/were + V-ing, S + V2/ed."
-    ]
+    ],
+    "translation": "Trong khi cô ấy đang đọc sách thì bố cô ấy về nhà."
   },
   {
     "id": "eng-s178",
@@ -5261,7 +5424,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ quy tắc: Mệnh đề sau While chia Quá khứ tiếp diễn để diễn tả hành động làm nền."
-    ]
+    ],
+    "translation": "Trong khi học sinh đang đọc đoạn văn, giáo viên đã viết từ mới lên bảng."
   },
   {
     "id": "eng-s179",
@@ -5299,7 +5463,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Tuyệt đối ghi nhớ: Trợ động từ did/didn't chỉ đi với động từ nguyên mẫu (V-infinitive), không đi với V-ing."
-    ]
+    ],
+    "translation": "Các bạn cùng lớp của tôi đang chú ý lắng nghe khi giáo viên giải thích quy tắc."
   },
   {
     "id": "eng-s180",
@@ -5337,7 +5502,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập phân biệt câu hỏi: 1. Did you have dinner last night? (Hỏi xem đã ăn tối chưa - hành động trọn vẹn); 2. Were you having dinner when I called? (Hỏi xem có đang ăn tối lúc tôi gọi không - hành động đang diễn ra)."
-    ]
+    ],
+    "translation": "Có phải bạn đang ăn tối khi tôi gọi điện cho bạn tối qua không?"
   },
   {
     "id": "eng-s181",
@@ -5375,7 +5541,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các danh từ số nhiều đặc biệt: child -> children (trẻ em), person -> people (mọi người), foot -> feet (bàn chân)."
-    ]
+    ],
+    "translation": "Lũ trẻ đang cười nói vui vẻ trong khi bố mẹ chúng đang trò chuyện."
   },
   {
     "id": "eng-s182",
@@ -5413,7 +5580,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức: S + have/has + V3/ed + since + S + V2/ed (quá khứ đơn)."
-    ]
+    ],
+    "translation": "Chúng tôi đã biết nhau từ khi học tiểu học."
   },
   {
     "id": "eng-s183",
@@ -5451,7 +5619,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ sự khác biệt: since + mốc thời gian (since 2020), for + khoảng thời gian (for 5 years)."
-    ]
+    ],
+    "translation": "Cô ấy đã sống ở thành phố Quy Nhơn được năm năm rồi."
   },
   {
     "id": "eng-s184",
@@ -5489,7 +5658,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: 'yet' dùng ở cuối câu phủ định và câu hỏi của thì Hiện tại hoàn thành."
-    ]
+    ],
+    "translation": "Tôi vẫn chưa làm xong bài tập về nhà. Bạn có thể đợi vài phút không?"
   },
   {
     "id": "eng-s185",
@@ -5527,7 +5697,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: recently / lately (gần đây) -> Hiện tại hoàn thành."
-    ]
+    ],
+    "translation": "Gần đây họ đã xây một ngôi nhà mới."
   },
   {
     "id": "eng-s186",
@@ -5565,7 +5736,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cụm từ hỏi kinh nghiệm: Have you ever been to + địa điểm? (Bạn đã từng đến ... chưa?)."
-    ]
+    ],
+    "translation": "Bạn đã bao giờ đến thành phố Đà Lạt chưa?"
   },
   {
     "id": "eng-s187",
@@ -5603,7 +5775,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ vị trí: just đứng giữa has/have và V3/ed (S + has/have + just + V3/ed)."
-    ]
+    ],
+    "translation": "Bố tôi vừa mới đi làm về."
   },
   {
     "id": "eng-s188",
@@ -5641,7 +5814,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Diễn tả kinh nghiệm, số lần làm việc gì đó -> Hiện tại hoàn thành."
-    ]
+    ],
+    "translation": "Chúng tôi đã xem bộ phim này ba lần rồi."
   },
   {
     "id": "eng-s189",
@@ -5673,7 +5847,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Mẹo nhớ: 'Since' + mốc thời gian (như năm, tháng, ngày, thứ, một sự kiện cụ thể)."
-    ]
+    ],
+    "translation": "Cô ấy học tiếng Anh từ năm 2018."
   },
   {
     "id": "eng-s190",
@@ -5705,7 +5880,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Mẹo nhớ: 'For' + khoảng thời gian (for 2 days, for 5 months, for a long time)."
-    ]
+    ],
+    "translation": "Anh ấy đã làm giáo viên được mười năm rồi."
   },
   {
     "id": "eng-s191",
@@ -5737,7 +5913,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: S + has/have + never + V3/ed dùng để diễn tả trải nghiệm chưa từng làm việc gì tính đến nay."
-    ]
+    ],
+    "translation": "Tôi chưa từng ăn món Phở truyền thống Việt Nam trước đây. Đây là lần đầu tiên của tôi."
   },
   {
     "id": "eng-s192",
@@ -5775,7 +5952,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Dùng Hiện tại hoàn thành khi hành động trong quá khứ dẫn đến kết quả thấy rõ ở hiện tại."
-    ]
+    ],
+    "translation": "Anh ấy đã đánh mất chìa khóa của mình rồi. Bây giờ anh ấy không thể vào phòng được."
   },
   {
     "id": "eng-s193",
@@ -5807,7 +5985,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luyện tập: Nhận diện mốc thời gian quá khứ đơn (last summer, ago) vs mốc thời gian hiện tại hoàn thành (since then, recently)."
-    ]
+    ],
+    "translation": "Họ đã ghé thăm Đà Nẵng vào mùa hè năm ngoái, nhưng họ chưa từng trở lại đó kể từ đó."
   },
   {
     "id": "eng-s194",
@@ -5839,7 +6018,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Hành động xảy ra tại một thời điểm đã chấm dứt (last week) -> Quá khứ đơn; hành động kéo dài đến hiện tại (for...) -> Hiện tại hoàn thành."
-    ]
+    ],
+    "translation": "Anh ấy đã mua chiếc xe hơi đó vào tuần trước. Anh ấy mới chỉ sở hữu nó vài ngày thôi."
   },
   {
     "id": "eng-s195",
@@ -5871,7 +6051,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Cứ có yesterday, ago, last... thì bắt buộc chia Quá khứ đơn, không được chia Hiện tại hoàn thành."
-    ]
+    ],
+    "translation": "Tôi vẫn chưa gặp giáo viên của mình, nhưng tôi đã gọi điện cho cô ấy ngày hôm qua."
   },
   {
     "id": "eng-s196",
@@ -5909,7 +6090,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc câu hỏi: How long + have/has + S + V3/ed? (Ai đó đã làm gì được bao lâu rồi?)."
-    ]
+    ],
+    "translation": "Bạn đã đọc cuốn sách này được bao lâu rồi?"
   },
   {
     "id": "eng-s197",
@@ -5947,7 +6129,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ dạng V3 của động từ bất quy tắc thông dụng: write -> wrote -> written."
-    ]
+    ],
+    "translation": "Cô ấy đã viết một bức thư gửi cho người bạn qua thư của mình rồi."
   },
   {
     "id": "eng-s198",
@@ -5985,7 +6168,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Thuộc lòng cấu trúc: S + have/has + V3/ed + since + S + V2/ed."
-    ]
+    ],
+    "translation": "Họ đã sở hữu ngôi nhà đó kể từ khi họ chuyển đến Bình Định."
   },
   {
     "id": "eng-s199",
@@ -6023,7 +6207,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Dùng Hiện tại hoàn thành cho các hành động xảy ra trong khoảng thời gian chưa qua hẳn (this week, this month, this year)."
-    ]
+    ],
+    "translation": "Tôi đã ghé thăm bãi biển Quy Nhơn hai lần trong tuần này."
   },
   {
     "id": "eng-s200",
@@ -6055,7 +6240,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ vị trí: already đứng giữa has/have và V3/ed trong câu khẳng định; yet đứng cuối câu phủ định hoặc câu nghi vấn."
-    ]
+    ],
+    "translation": "Cô ấy vừa mới ăn xong bữa tối và hiện tại đang xem tivi."
   },
   {
     "id": "eng-s201",
@@ -6093,7 +6279,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Hành động trong quá khứ có kết quả trực tiếp ở hiện tại -> ưu tiên Hiện tại hoàn thành."
-    ]
+    ],
+    "translation": "Trận đấu đã bắt đầu rồi. Chúng ta bị muộn rồi."
   },
   {
     "id": "eng-s202",
@@ -6125,7 +6312,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Dự đoán tương lai bắt đầu bằng I think / I hope / I believe... + will + V nguyên mẫu."
-    ]
+    ],
+    "translation": "Tôi nghĩ nhiều người hơn sẽ sử dụng phương tiện giao thông công cộng trong tương lai."
   },
   {
     "id": "eng-s203",
@@ -6157,7 +6345,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức điều kiện loại 1: If + S + V(hiện tại đơn), S + will/can + V(nguyên mẫu)."
-    ]
+    ],
+    "translation": "Nếu bạn học tập chăm chỉ, bạn sẽ đỗ kỳ thi tuyển sinh."
   },
   {
     "id": "eng-s204",
@@ -6189,7 +6378,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Trong câu điều kiện loại 1, mệnh đề chính dùng will + V để chỉ kết quả xảy ra trong tương lai."
-    ]
+    ],
+    "translation": "Nếu ngày mai trời mưa, chúng tôi sẽ hủy chuyến dã ngoại."
   },
   {
     "id": "eng-s205",
@@ -6221,7 +6411,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt từ khóa: next week (tương lai đơn) vs last week (quá khứ đơn)."
-    ]
+    ],
+    "translation": "Họ sẽ đi du lịch đến Đà Lạt vào tuần tới."
   },
   {
     "id": "eng-s206",
@@ -6253,7 +6444,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: S + hope + (that) + S + will + V(nguyên mẫu)."
-    ]
+    ],
+    "translation": "Tôi hy vọng rằng sức khỏe của tôi sẽ sớm được cải thiện."
   },
   {
     "id": "eng-s207",
@@ -6291,7 +6483,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Tuyệt đối ghi nhớ: Mệnh đề If của câu điều kiện loại 1 KHÔNG bao giờ dùng 'will/won't', chỉ dùng Hiện tại đơn."
-    ]
+    ],
+    "translation": "Sức khỏe của bạn sẽ cải thiện nếu bạn tập thể dục thường xuyên."
   },
   {
     "id": "eng-s208",
@@ -6329,7 +6522,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Lưu ý: Mệnh đề If câu điều kiện loại 1 vẫn tuân thủ đầy đủ quy tắc chia động từ của thì Hiện tại đơn (S số ít -> V-s/es)."
-    ]
+    ],
+    "translation": "Nếu cô ấy thức dậy sớm, cô ấy sẽ bắt kịp chuyến xe buýt."
   },
   {
     "id": "eng-s209",
@@ -6361,7 +6555,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn dịch nghĩa sơ bộ câu điều kiện để quyết định mệnh đề chính dùng khẳng định (will) hay phủ định (won't)."
-    ]
+    ],
+    "translation": "Nếu cậu ấy không làm việc chăm chỉ, cậu ấy sẽ thất bại trong dự án."
   },
   {
     "id": "eng-s210",
@@ -6393,7 +6588,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các từ khóa tương lai: tomorrow, next year, in the future, soon."
-    ]
+    ],
+    "translation": "Chúng tôi sẽ dọn dẹp nhà cửa vào sáng mai."
   },
   {
     "id": "eng-s211",
@@ -6425,7 +6621,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Mẹo nhận biết: Thấy 'I promise' -> mệnh đề sau dùng 'will + V nguyên mẫu'."
-    ]
+    ],
+    "translation": "Tôi hứa tôi sẽ giúp bạn làm bài tập về nhà tối nay."
   },
   {
     "id": "eng-s212",
@@ -6457,7 +6654,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Dùng 'will' khi dự đoán có các từ: probably, maybe, perhaps, possibly."
-    ]
+    ],
+    "translation": "Cô ấy có thể sẽ đến đó đúng giờ."
   },
   {
     "id": "eng-s213",
@@ -6489,7 +6687,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức câu hỏi tương lai: Will + S + V(nguyên mẫu)?"
-    ]
+    ],
+    "translation": "Bạn sẽ tham gia câu lạc bộ tiếng Anh vào ngày mai chứ?"
   },
   {
     "id": "eng-s214",
@@ -6521,7 +6720,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Dự đoán thời tiết ở một thời điểm tương lai cụ thể -> chia Tương lai đơn."
-    ]
+    ],
+    "translation": "Tôi nghĩ trời sẽ mưa vào chiều mai, vì vậy hãy mang theo ô."
   },
   {
     "id": "eng-s215",
@@ -6553,7 +6753,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Mệnh đề If dùng hiện tại đơn phủ định: If + S + don't/doesn't + V(nguyên mẫu)."
-    ]
+    ],
+    "translation": "Nếu bạn rời đi bây giờ, bạn sẽ bị trễ chuyến tàu."
   },
   {
     "id": "eng-s216",
@@ -6585,7 +6786,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt rõ: go (Hiện tại đơn) - went (Quá khứ đơn) - will go (Tương lai đơn)."
-    ]
+    ],
+    "translation": "Họ sẽ đi học bằng xe buýt vào ngày mai."
   },
   {
     "id": "eng-s217",
@@ -6617,7 +6819,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Công thức câu điều kiện loại 1 dùng will + V ở mệnh đề chính để chỉ kết quả."
-    ]
+    ],
+    "translation": "Nếu họ mua chiếc xe mới, họ sẽ tốn rất nhiều tiền."
   },
   {
     "id": "eng-s218",
@@ -6649,7 +6852,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc diễn tả hy vọng: S + hope + S + will + V."
-    ]
+    ],
+    "translation": "Tôi hy vọng họ sẽ sớm trồng thêm cây xanh ở khu vực này."
   },
   {
     "id": "eng-s219",
@@ -6681,7 +6885,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Mẹo nhận biết: Mốc thời gian 'this weekend' chỉ sự việc tương lai có thể xảy ra -> chọn điều kiện loại 1."
-    ]
+    ],
+    "translation": "Nếu cuối tuần này trời nắng, chúng tôi sẽ đi biển."
   },
   {
     "id": "eng-s220",
@@ -6713,7 +6918,8 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc phối hợp thì tương lai: S + will + V + as soon as / when / after + S + V(hiện tại đơn)."
-    ]
+    ],
+    "translation": "Tôi sẽ trả lại tiền cho bạn ngay khi tôi được nhận lương."
   },
   {
     "id": "eng-s221",
@@ -6745,6 +6951,7 @@ export const dang1Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: if + hiện tại đơn, will + V nguyên mẫu (will be)."
-    ]
+    ],
+    "translation": "Họ sẽ bị trễ nếu giao thông đông đúc."
   }
 ];

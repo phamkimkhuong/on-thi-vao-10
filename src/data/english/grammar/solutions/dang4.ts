@@ -25,7 +25,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức so sánh hơn tính từ ngắn: S + be + adj-er + than..."
-    ]
+    ],
+    "translation": "Anh trai tôi cao hơn tôi, vì vậy anh ấy có thể chạm tới ngăn tủ trên cùng một cách dễ dàng."
   },
   {
     "id": "eng-s303",
@@ -51,7 +52,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ công thức so sánh hơn tính từ dài: S + be + more + adj + than..."
-    ]
+    ],
+    "translation": "Chiếc áo khoác da này đắt hơn chiếc áo khoác cotton."
   },
   {
     "id": "eng-s304",
@@ -77,7 +79,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "So sánh nhất bắt buộc phải có mạo từ 'the' đứng trước: the + adj-est / the most + adj."
-    ]
+    ],
+    "translation": "Đỉnh Everest là ngọn núi cao nhất trên thế giới."
   },
   {
     "id": "eng-s305",
@@ -103,7 +106,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Cụm từ chỉ trải nghiệm như 'S + have/has ever + V3/ed' đi kèm phía sau là dấu hiệu kinh điển của câu so sánh nhất."
-    ]
+    ],
+    "translation": "Đây là bông hoa đẹp nhất tôi từng thấy trong khu vườn này."
   },
   {
     "id": "eng-s306",
@@ -129,7 +133,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ kỹ: Giữa 'as... as' luôn luôn là tính từ hoặc trạng từ nguyên mẫu (giữ nguyên gốc)."
-    ]
+    ],
+    "translation": "Chiếc vali này nặng bằng chiếc vali kia, vì vậy bạn có thể xách chiếc nào cũng được."
   },
   {
     "id": "eng-s307",
@@ -155,7 +160,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc cấu trúc phủ định: S1 + be + not as/so + adj + as + S2 (bằng nghĩa với: S2 + be + so sánh hơn + S1)."
-    ]
+    ],
+    "translation": "Quê hương tôi không đông đúc bằng Thành phố Hồ Chí Minh."
   },
   {
     "id": "eng-s308",
@@ -181,7 +187,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc lòng bảng tính từ bất quy tắc: good -> better -> the best."
-    ]
+    ],
+    "translation": "Tôi hy vọng tiếng Anh của bạn sẽ trở nên tốt hơn sau khóa học ngữ pháp này."
   },
   {
     "id": "eng-s309",
@@ -207,7 +214,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Phân biệt rõ: so sánh hơn là 'better', so sánh nhất là 'the best'."
-    ]
+    ],
+    "translation": "Cô ấy là học sinh giỏi nhất trong lớp chúng tôi; cô ấy luôn đạt điểm số cao nhất."
   },
   {
     "id": "eng-s310",
@@ -233,7 +241,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cặp biến đổi bất quy tắc của từ chỉ sự tồi tệ: bad -> worse -> the worst."
-    ]
+    ],
+    "translation": "Thời tiết hôm nay thậm chí còn tệ hơn thời tiết hôm qua."
   },
   {
     "id": "eng-s311",
@@ -259,7 +268,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc: S + be + the worst + N + S + have ever + V3."
-    ]
+    ],
+    "translation": "Đó là bộ phim tệ nhất tôi từng xem; nó rất là nhàm chán!"
   },
   {
     "id": "eng-s312",
@@ -285,7 +295,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Các tính từ từ 3 âm tiết trở lên luôn là tính từ dài và sử dụng 'more' trong so sánh hơn."
-    ]
+    ],
+    "translation": "Sau khi luyện tập nói trước công chúng, cô ấy cảm thấy tự tin hơn trước."
   },
   {
     "id": "eng-s313",
@@ -311,7 +322,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc cực kỳ hay gặp trong đề thi: one of the + so sánh nhất + danh từ số nhiều (ở đây là destinations)."
-    ]
+    ],
+    "translation": "Quy Nhơn là một trong những điểm đến du lịch phổ biến nhất ở miền Trung Việt Nam."
   },
   {
     "id": "eng-s314",
@@ -337,7 +349,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Quy tắc vàng: Tuyệt đối không dùng 'more' đi với tính từ ngắn (ví dụ: more cheap, more tall là sai)."
-    ]
+    ],
+    "translation": "Đi du lịch bằng xe buýt thì rẻ hơn đi du lịch bằng máy bay."
   },
   {
     "id": "eng-s315",
@@ -363,7 +376,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn lưu ý sự xuất hiện của mạo từ 'the' trong các câu chọn lựa so sánh nhất."
-    ]
+    ],
+    "translation": "Đối với nhiều học sinh, các dạng từ tiếng Anh là phần khó nhất của kỳ thi."
   },
   {
     "id": "eng-s316",
@@ -389,7 +403,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: Cho dù câu mang nghĩa so sánh hơn, nhưng nếu sử dụng cấu trúc 'as... as' thì từ nằm ở giữa vẫn phải giữ nguyên mẫu."
-    ]
+    ],
+    "translation": "Không ai trong lớp chúng tôi có thể chạy nhanh bằng Nam."
   },
   {
     "id": "eng-s317",
@@ -415,7 +430,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ hai dạng so sánh của far: far -> farther/further -> the farthest/furthest."
-    ]
+    ],
+    "translation": "Bảo tàng nằm xa nhà tôi hơn tôi tưởng."
   },
   {
     "id": "eng-s318",
@@ -441,7 +457,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc biến đổi: little + danh từ không đếm được -> less + danh từ không đếm được + than."
-    ]
+    ],
+    "translation": "Chúng tôi có ít thời gian hơn chúng tôi nghĩ, vì vậy chúng tôi phải khẩn trương lên."
   },
   {
     "id": "eng-s319",
@@ -467,7 +484,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ: the least + adj dài = ít ... nhất (trái nghĩa hoàn toàn với the most + adj dài)."
-    ]
+    ],
+    "translation": "Đây là chiếc áo sơ mi rẻ nhất trong cửa hàng; nó chỉ có giá 5 đô la."
   },
   {
     "id": "eng-s320",
@@ -493,7 +511,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn tìm kiếm từ 'than' trong câu để xác định chính xác đây là so sánh hơn."
-    ]
+    ],
+    "translation": "Tôi thấy đọc sách thú vị hơn xem tivi."
   },
   {
     "id": "eng-s321",
@@ -519,7 +538,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Các tính từ 2 âm tiết kết thúc bằng -y (happy, busy, easy, dirty, friendly...) đều đổi y -> i rồi thêm -er/-est."
-    ]
+    ],
+    "translation": "Thứ Hai thường là ngày bận rộn nhất trong tuần của bố mẹ tôi."
   },
   {
     "id": "eng-s322",
@@ -545,7 +565,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ các tính từ ngắn cần gấp đôi phụ âm cuối: hot -> hotter, big -> bigger, wet -> wetter, sad -> sadder, thin -> thinner."
-    ]
+    ],
+    "translation": "Mùa hè ở Quy Nhơn nóng hơn nhiều so với ở Đà Lạt."
   },
   {
     "id": "eng-s323",
@@ -571,7 +592,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Đối với tính từ ngắn kết thúc bằng 'e' (như large, wide, nice, close...), chỉ cần thêm '-r' để tạo so sánh hơn."
-    ]
+    ],
+    "translation": "Ngôi nhà mới của anh ấy rộng hơn nhiều so với ngôi nhà cũ."
   },
   {
     "id": "eng-s324",
@@ -597,7 +619,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Luôn ghi nhớ quy tắc đổi y -> i + er cho tính từ 2 âm tiết kết thúc bằng y khi làm các bài thi ngữ pháp chính thống."
-    ]
+    ],
+    "translation": "Người dân ở ngôi làng này thân thiện hơn người dân ở thành phố."
   },
   {
     "id": "eng-s325",
@@ -623,7 +646,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ kỹ: easy -> easier -> the easiest."
-    ]
+    ],
+    "translation": "Kỳ thi học kỳ này dễ hơn kỳ thi học kỳ trước."
   },
   {
     "id": "eng-s326",
@@ -649,7 +673,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Cụm từ hoàn chỉnh: Mr. Brown is one of the best teachers... (Thầy Brown là một trong những giáo viên tốt nhất...)."
-    ]
+    ],
+    "translation": "Thầy Brown là một trong những giáo viên dạy giỏi nhất ở trường chúng tôi."
   },
   {
     "id": "eng-s327",
@@ -675,7 +700,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Quy tắc cốt lõi: Động từ TO BE đi với TÍNH TỪ (as + adj + as). Động từ THƯỜNG đi với TRẠNG TỪ (as + adv + as)."
-    ]
+    ],
+    "translation": "Cô ấy chơi đàn piano giỏi bằng giáo viên của cô ấy."
   },
   {
     "id": "eng-s328",
@@ -701,7 +727,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Hầu hết các trạng từ kết thúc bằng đuôi '-ly' (trừ fast, early, late, hard...) đều được coi là trạng từ dài và sử dụng 'more' trong so sánh hơn."
-    ]
+    ],
+    "translation": "Bạn nên lái xe cẩn thận hơn khi trời mưa so với khi trời nắng."
   },
   {
     "id": "eng-s329",
@@ -727,7 +754,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Học thuộc cụm diễn tiến sức khỏe: get better (tốt lên) >< get worse (tệ đi)."
-    ]
+    ],
+    "translation": "Cơn đau đầu của tôi đang trở nên tồi tệ hơn; tôi cần đi khám bác sĩ."
   },
   {
     "id": "eng-s330",
@@ -753,7 +781,8 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Nhớ kỹ: Tính từ dài (3 âm tiết trở lên) bắt buộc phải dùng 'more' đứng trước trong câu so sánh hơn."
-    ]
+    ],
+    "translation": "Chiếc ghế sofa mới này thoải mái hơn nhiều so với chiếc ghế gỗ cũ."
   },
   {
     "id": "eng-s331",
@@ -779,6 +808,7 @@ export const dang4Solutions: Solution[] = [
     ],
     "reviewSuggestions": [
       "Ghi nhớ cấu trúc hoàn chỉnh: one of the most + adj dài + danh từ số nhiều."
-    ]
+    ],
+    "translation": "Đây là một trong những bệnh viện hiện đại nhất ở tỉnh Bình Định."
   }
 ];

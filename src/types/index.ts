@@ -130,6 +130,7 @@ export interface Solution {
   id: string;
   questionId: string;
   recognition: string;
+  translation?: string; // Dịch nghĩa của câu hỏi tiếng Anh
   detailedSteps: SolutionStep[];
   finalAnswer: string;
   commonMistakes: string[];
