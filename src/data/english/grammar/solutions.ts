@@ -6718,24 +6718,24 @@ export const grammarSolutions: Solution[] = [
   {
     "id": "eng-s221",
     "questionId": "eng-q221",
-    "recognition": "Nhận dạng cấu trúc câu điều kiện loại 1 với mệnh đề If chia ở hiện tại đơn \"if the traffic is heavy\", yêu cầu chia mệnh đề chính ở thì Tương lai đơn (will + V).",
+    "recognition": "Cấu trúc câu điều kiện loại 1 với mệnh đề If chia ở Hiện tại đơn 'if the traffic is heavy', mệnh đề chính cần chia ở thì Tương lai đơn (will + V).",
     "detailedSteps": [
       {
         "order": 1,
         "title": "Xác định loại câu điều kiện",
-        "explanation": "Mệnh đề If dùng động từ 'is' chia ở Hiện tại đơn chỉ điều kiện có thật có thể xảy ra. Đây là câu điều kiện loại 1. Mệnh đề chính phải chia ở thì Tương lai đơn (will + V nguyên mẫu). Loại phương án A (are - Hiện tại đơn), B (were - Quá khứ đơn) và D (would be - Dùng trong điều kiện loại 2).",
-        "result": "Mệnh đề chính chia thì Tương lai đơn"
+        "explanation": "Mệnh đề If có động từ 'is' chia ở Hiện tại đơn chỉ một giả định có thể xảy ra. Do đó đây là câu điều kiện loại 1, mệnh đề chính chia ở thì Tương lai đơn (will + V nguyên mẫu). Loại phương án B (were - Quá khứ đơn) và D (would be - Điều kiện loại 2).",
+        "result": "Mệnh đề chính dùng 'will + V'"
       },
       {
         "order": 2,
         "title": "Chia động từ chính (Verb conjugation)",
-        "explanation": "Công thức: will + V nguyên mẫu. Với động từ 'be', ta chia là 'will be'.",
+        "explanation": "Động từ 'be' nguyên mẫu đi sau 'will' -> 'will be'.",
         "result": "Động từ chia đúng: 'will be'"
       },
       {
         "order": 3,
         "title": "Đối chiếu các phương án và kết luận",
-        "explanation": "Phương án C (will be) chia đúng trợ động từ 'will' và động từ 'be' nguyên mẫu.",
+        "explanation": "Phương án C (will be) chia đúng thì tương lai đơn theo cấu trúc điều kiện loại 1.",
         "result": "Đáp án đúng là C"
       }
     ],
@@ -6746,6 +6746,1045 @@ export const grammarSolutions: Solution[] = [
     "reviewSuggestions": [
       "Ghi nhớ: if + hiện tại đơn, will + V nguyên mẫu (will be)."
     ]
+  },
+  {
+    "id": "eng-s222",
+    "questionId": "eng-q222",
+    "recognition": "Động từ 'decide' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'decided' (quá khứ của decide). Theo quy tắc, cấu trúc động từ là: decide + to V.",
+        "result": "decide + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'move' đi sau 'decide' phải là 'to move'.",
+        "result": "Đáp án đúng là C. to move"
+      }
+    ],
+    "finalAnswer": "C. to move",
+    "commonMistakes": [
+      "Học sinh chọn A (move) hoặc B (moving) do không nắm vững quy tắc decide + to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: decide + to V (quyết định làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s223",
+    "questionId": "eng-q223",
+    "recognition": "Động từ 'want' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'wants' (ngôi thứ ba số ít của want). Theo quy tắc, cấu trúc động từ là: want + to V.",
+        "result": "want + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'improve' đi sau 'want' phải là 'to improve'.",
+        "result": "Đáp án đúng là C. to improve"
+      }
+    ],
+    "finalAnswer": "C. to improve",
+    "commonMistakes": [
+      "Học sinh chọn B (improving) do nhầm lẫn sang quy tắc động từ đuôi -ing."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: want + to V (muốn làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s224",
+    "questionId": "eng-q224",
+    "recognition": "Động từ 'enjoy' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'enjoys' (ngôi thứ ba số ít của enjoy). Theo quy tắc, cấu trúc động từ là: enjoy + V-ing.",
+        "result": "enjoy + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'read' đi sau 'enjoy' phải là 'reading'.",
+        "result": "Đáp án đúng là B. reading"
+      }
+    ],
+    "finalAnswer": "B. reading",
+    "commonMistakes": [
+      "Học sinh chọn C (to read) do thói quen dịch sang tiếng Việt là 'thích ĐỂ đọc' dẫn đến dùng to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: enjoy + V-ing (yêu thích làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s225",
+    "questionId": "eng-q225",
+    "recognition": "Động từ khuyết thiếu 'should' đứng trước chỗ trống yêu cầu động từ theo sau giữ nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ khuyết thiếu 'should' (nên) đi trước chỗ trống. Theo quy tắc, sau động từ khuyết thiếu là động từ nguyên mẫu không 'to' (V0).",
+        "result": "should + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'plant' đi sau 'should' phải là 'plant'.",
+        "result": "Đáp án đúng là A. plant"
+      }
+    ],
+    "finalAnswer": "A. plant",
+    "commonMistakes": [
+      "Học sinh chọn C (to plant) hoặc B (planting) do không nhớ quy tắc của động từ khuyết thiếu."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: can/should/must/will/may + V nguyên mẫu (V0)."
+    ]
+  },
+  {
+    "id": "eng-s226",
+    "questionId": "eng-q226",
+    "recognition": "Cấu trúc 'ask sb' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Cụm đứng trước chỗ trống là 'asked us' (dạng quá khứ của ask + tân ngữ us). Theo quy tắc, cấu trúc động từ là: ask somebody + to V.",
+        "result": "ask sb + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'read' phải là 'to read'.",
+        "result": "Đáp án đúng là C. to read"
+      }
+    ],
+    "finalAnswer": "C. to read",
+    "commonMistakes": [
+      "Học sinh chọn A (read) vì nhầm với các động từ chỉ giác quan hoặc cấu trúc make/let."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: ask somebody + to V (yêu cầu ai làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s227",
+    "questionId": "eng-q227",
+    "recognition": "Động từ 'finish' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'finished' (quá khứ của finish). Theo quy tắc, cấu trúc động từ là: finish + V-ing.",
+        "result": "finish + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'clean' đi sau 'finish' phải là 'cleaning'.",
+        "result": "Đáp án đúng là B. cleaning"
+      }
+    ],
+    "finalAnswer": "B. cleaning",
+    "commonMistakes": [
+      "Học sinh chọn C (to clean) vì không nhớ rõ bảng động từ đi kèm V-ing."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: finish + V-ing (hoàn thành làm việc gì)."
+    ]
+  },
+  {
+    "id": "eng-s228",
+    "questionId": "eng-q228",
+    "recognition": "Động từ khuyết thiếu 'must' đứng trước chỗ trống yêu cầu động từ theo sau giữ nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ khuyết thiếu 'must' (phải) đi trước chỗ trống. Theo quy tắc, sau động từ khuyết thiếu là động từ nguyên mẫu không 'to' (V0).",
+        "result": "must + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'follow' đi sau 'must' phải là 'follow'.",
+        "result": "Đáp án đúng là A. follow"
+      }
+    ],
+    "finalAnswer": "A. follow",
+    "commonMistakes": [
+      "Học sinh chọn D (to follow) hoặc C (following) vì nhầm quy tắc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: must + V0 (phải làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s229",
+    "questionId": "eng-q229",
+    "recognition": "Động từ 'hope' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'hope' (hy vọng). Theo quy tắc, cấu trúc động từ là: hope + to V.",
+        "result": "hope + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'pass' đi sau 'hope' phải là 'to pass'.",
+        "result": "Đáp án đúng là C. to pass"
+      }
+    ],
+    "finalAnswer": "C. to pass",
+    "commonMistakes": [
+      "Học sinh chọn B (passing) vì nhầm lẫn các động từ chỉ mong muốn, hy vọng."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: hope + to V (hy vọng làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s230",
+    "questionId": "eng-q230",
+    "recognition": "Động từ 'avoid' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'avoids' (ngôi thứ ba số ít của avoid). Theo quy tắc, cấu trúc động từ là: avoid + V-ing.",
+        "result": "avoid + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'spend' đi sau 'avoid' phải là 'spending'.",
+        "result": "Đáp án đúng là B. spending"
+      }
+    ],
+    "finalAnswer": "B. spending",
+    "commonMistakes": [
+      "Học sinh chọn C (to spend) vì không nhớ tránh né đi với V-ing."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: avoid + V-ing (tránh làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s231",
+    "questionId": "eng-q231",
+    "recognition": "Động từ khuyết thiếu 'can' ở dạng câu hỏi 'Can you' yêu cầu động từ theo sau giữ nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ khuyết thiếu",
+        "explanation": "Động từ khuyết thiếu 'can' được sử dụng ở đầu câu hỏi yêu cầu động từ chính theo sau ở dạng nguyên mẫu không 'to' (V0).",
+        "result": "can + S + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'help' đi sau 'can' phải là 'help'.",
+        "result": "Đáp án đúng là A. help"
+      }
+    ],
+    "finalAnswer": "A. help",
+    "commonMistakes": [
+      "Học sinh chọn C (helping) hoặc D (to help) vì nhầm cấu trúc câu hỏi đề nghị."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: can/could + V0 (yêu cầu lịch sự)."
+    ]
+  },
+  {
+    "id": "eng-s232",
+    "questionId": "eng-q232",
+    "recognition": "Cấu trúc nghi vấn 'how' trong mệnh đề chỉ mục đích yêu cầu động từ theo sau chia dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện từ nghi vấn how",
+        "explanation": "Câu có cụm từ nghi vấn 'how' (như thế nào) đứng trước chỗ trống. Theo quy tắc cấu trúc từ nghi vấn + to V: show sb how + to V.",
+        "result": "how + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'make' đi sau 'how' phải là 'to make'.",
+        "result": "Đáp án đúng là C. to make"
+      }
+    ],
+    "finalAnswer": "C. to make",
+    "commonMistakes": [
+      "Học sinh chọn B (making) do nhầm lẫn sang động từ đứng trước show."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: how/what/where/when + to V (cách làm gì, cái gì cần làm...)."
+    ]
+  },
+  {
+    "id": "eng-s233",
+    "questionId": "eng-q233",
+    "recognition": "Động từ 'help' đi với tân ngữ yêu cầu động từ theo sau chia ở dạng V0 hoặc to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ help",
+        "explanation": "Động từ đứng trước là 'helps' (trợ giúp). Theo quy tắc: help + O + V0 hoặc help + O + to V.",
+        "result": "help + O + V0/to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Trong các phương án lựa chọn, chỉ có phương án A (become - V0) là hợp lý nhất.",
+        "result": "Đáp án đúng là A. become"
+      }
+    ],
+    "finalAnswer": "A. become",
+    "commonMistakes": [
+      "Học sinh chọn C (to becoming) do nhầm lẫn to đi kèm V-ing."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: help somebody (to) do something."
+    ]
+  },
+  {
+    "id": "eng-s234",
+    "questionId": "eng-q234",
+    "recognition": "Động từ 'suggest' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'suggests' (ngôi thứ ba số ít của suggest). Theo quy tắc, cấu trúc động từ là: suggest + V-ing.",
+        "result": "suggest + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'learn' đi sau 'suggest' phải là 'learning'.",
+        "result": "Đáp án đúng là B. learning"
+      }
+    ],
+    "finalAnswer": "B. learning",
+    "commonMistakes": [
+      "Học sinh chọn C (to learn) do dịch nghĩa gợi ý làm gì đó thành to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: suggest + V-ing (gợi ý làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s235",
+    "questionId": "eng-q235",
+    "recognition": "Động từ 'need' đứng trước chỗ trống chỉ người yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện chủ ngữ và động từ",
+        "explanation": "Chủ ngữ chỉ người 'We' đi với động từ 'need'. Theo quy tắc chủ động: need + to V.",
+        "result": "need + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'cut' đi sau 'need' phải là 'to cut'.",
+        "result": "Đáp án đúng là C. to cut"
+      }
+    ],
+    "finalAnswer": "C. to cut",
+    "commonMistakes": [
+      "Học sinh chọn B (cutting) vì nhầm cấu trúc bị động của vật (need + V-ing = need to be V3/ed)."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: S (chỉ người) + need + to V (cần làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s236",
+    "questionId": "eng-q236",
+    "recognition": "Động từ 'practice' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'practice' (luyện tập). Theo quy tắc, cấu trúc động từ là: practice + V-ing.",
+        "result": "practice + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'speak' đi sau 'practice' phải là 'speaking'.",
+        "result": "Đáp án đúng là B. speaking"
+      }
+    ],
+    "finalAnswer": "B. speaking",
+    "commonMistakes": [
+      "Học sinh chọn C (to speak) vì nhầm lẫn quy tắc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: practice + V-ing (luyện tập làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s237",
+    "questionId": "eng-q237",
+    "recognition": "Cấu trúc 'would like' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc đi trước",
+        "explanation": "Cụm đứng trước chỗ trống là 'would like' (muốn, thích). Theo quy tắc, cấu trúc động từ là: would like + to V.",
+        "result": "would like + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'visit' đi sau 'would like' phải là 'to visit'.",
+        "result": "Đáp án đúng là C. to visit"
+      }
+    ],
+    "finalAnswer": "C. to visit",
+    "commonMistakes": [
+      "Học sinh chọn B (visiting) vì nhầm với động từ like đơn lẻ (like + V-ing)."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: like + V-ing (thích nói chung) nhưng would like + to V (muốn cụ thể)."
+    ]
+  },
+  {
+    "id": "eng-s238",
+    "questionId": "eng-q238",
+    "recognition": "Cấu trúc 'tell sb' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc động từ",
+        "explanation": "Động từ 'told' (quá khứ của tell) kết hợp với tân ngữ 'the tourists'. Theo quy tắc: tell sb + to V.",
+        "result": "tell sb + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'be' đi sau 'told the tourists' phải là 'to be'.",
+        "result": "Đáp án đúng là C. to be"
+      }
+    ],
+    "finalAnswer": "C. to be",
+    "commonMistakes": [
+      "Học sinh chọn A (be) hoặc B (being) do nhầm lẫn quy tắc câu gián tiếp mệnh lệnh."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: tell somebody + to V (bảo ai đó làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s239",
+    "questionId": "eng-q239",
+    "recognition": "Động từ khuyết thiếu 'can' đứng trước chỗ trống yêu cầu động từ theo sau giữ nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ khuyết thiếu",
+        "explanation": "Động từ khuyết thiếu 'can' (có thể) đi trước chỗ trống. Quy tắc: can + V0.",
+        "result": "can + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'use' đi sau 'can' phải là 'use'.",
+        "result": "Đáp án đúng là A. use"
+      }
+    ],
+    "finalAnswer": "A. use",
+    "commonMistakes": [
+      "Học sinh chọn B (using) hoặc C (to use) do thói quen dịch nghĩa."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: can/could/may/might + V nguyên mẫu (V0)."
+    ]
+  },
+  {
+    "id": "eng-s240",
+    "questionId": "eng-q240",
+    "recognition": "Động từ 'keep' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'kept' (quá khứ của keep). Theo quy tắc, cấu trúc động từ là: keep + V-ing.",
+        "result": "keep + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'clean' đi sau 'keep' phải là 'cleaning'.",
+        "result": "Đáp án đúng là B. cleaning"
+      }
+    ],
+    "finalAnswer": "B. cleaning",
+    "commonMistakes": [
+      "Học sinh chọn C (to clean) do nhầm lẫn quy tắc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: keep + V-ing (tiếp tục làm gì đó liên tục)."
+    ]
+  },
+  {
+    "id": "eng-s241",
+    "questionId": "eng-q241",
+    "recognition": "Động từ 'agree' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'agreed' (quá khứ của agree). Theo quy tắc, cấu trúc động từ là: agree + to V.",
+        "result": "agree + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'let' đi sau 'agree' phải là 'to let'.",
+        "result": "Đáp án đúng là C. to let"
+      }
+    ],
+    "finalAnswer": "C. to let",
+    "commonMistakes": [
+      "Học sinh chọn B (letting) vì nhầm lẫn quy tắc chia động từ."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: agree + to V (đồng ý làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s242",
+    "questionId": "eng-q242",
+    "recognition": "Cấu trúc song song liên kết bởi liên từ 'and' yêu cầu các thành phần ngữ pháp cùng dạng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc song song",
+        "explanation": "Trong câu có cụm 'Choosing and ______'. Từ 'choosing' là danh động từ (V-ing) đóng vai trò chủ ngữ. Liên từ 'and' yêu cầu từ nối tiếp theo cũng ở dạng V-ing để tạo cấu trúc song song.",
+        "result": "V-ing and V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'buy' là 'buying'.",
+        "result": "Đáp án đúng là B. buying"
+      }
+    ],
+    "finalAnswer": "B. buying",
+    "commonMistakes": [
+      "Học sinh chọn A (buy) hoặc C (to buy) do không nhận dạng được tính song song của hai chủ ngữ."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: Khi hai hành động đứng cạnh nhau làm chủ ngữ liên kết bằng 'and', chúng phải cùng dạng (V-ing and V-ing)."
+    ]
+  },
+  {
+    "id": "eng-s243",
+    "questionId": "eng-q243",
+    "recognition": "Cấu trúc 'encourage sb' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc động từ",
+        "explanation": "Động từ 'encouraged' (quá khứ của encourage) kết hợp với tân ngữ 'us'. Theo quy tắc, cấu trúc động từ là: encourage somebody + to V.",
+        "result": "encourage sb + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'take' đi sau 'encouraged us' phải là 'to take'.",
+        "result": "Đáp án đúng là C. to take"
+      }
+    ],
+    "finalAnswer": "C. to take",
+    "commonMistakes": [
+      "Học sinh chọn B (taking) vì nhầm lẫn quy tắc chia."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: encourage somebody + to V (khuyến khích ai làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s244",
+    "questionId": "eng-q244",
+    "recognition": "Cụm động từ 'give up' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cụm động từ/giới từ",
+        "explanation": "Cụm động từ đứng trước chỗ trống là 'gave up' (quá khứ của give up - từ bỏ). Do 'up' là giới từ, động từ đi sau giới từ bắt buộc phải chia V-ing.",
+        "result": "give up + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'play' là 'playing'.",
+        "result": "Đáp án đúng là B. playing"
+      }
+    ],
+    "finalAnswer": "B. playing",
+    "commonMistakes": [
+      "Học sinh chọn C (to play) do thói quen từ bỏ 'để làm gì'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: give up + V-ing (từ bỏ làm việc gì đó)."
+    ]
+  },
+  {
+    "id": "eng-s245",
+    "questionId": "eng-q245",
+    "recognition": "Trợ động từ 'Did' dùng trong câu hỏi thì quá khứ đơn yêu cầu động từ chính ở dạng nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện trợ động từ",
+        "explanation": "Câu hỏi bắt đầu bằng trợ động từ 'Did' chỉ thì Quá khứ đơn. Theo quy tắc, khi đã có trợ động từ Did, động từ chính trong câu phải về nguyên mẫu không to (V0).",
+        "result": "Did + S + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng nguyên mẫu của động từ 'visit' là 'visit'.",
+        "result": "Đáp án đúng là A. visit"
+      }
+    ],
+    "finalAnswer": "A. visit",
+    "commonMistakes": [
+      "Học sinh chọn B (visited) vì nhìn thấy 'last summer' nên chia quá khứ trực tiếp cho động từ chính mặc dù đã có Did."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc câu hỏi: Did + S + V nguyên mẫu (V0)?"
+    ]
+  },
+  {
+    "id": "eng-s246",
+    "questionId": "eng-q246",
+    "recognition": "Động từ 'want' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'want' (ở thể phủ định 'doesn't want'). Quy tắc động từ theo sau 'want' vẫn chia dạng to + V.",
+        "result": "want + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'eat' đi sau 'want' phải là 'to eat'.",
+        "result": "Đáp án đúng là C. to eat"
+      }
+    ],
+    "finalAnswer": "C. to eat",
+    "commonMistakes": [
+      "Học sinh chọn B (eating) do nhầm lẫn quy tắc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: want + to V (muốn làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s247",
+    "questionId": "eng-q247",
+    "recognition": "Động từ đi sau giới từ bắt buộc phải chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện giới từ đứng trước",
+        "explanation": "Trước chỗ trống là giới từ 'in' thuộc tính từ 'interested in' (thích thú, quan tâm). Theo quy tắc, sau mọi giới từ (ngoại trừ but, except...) ta dùng động từ chia V-ing.",
+        "result": "preposition + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'learn' là 'learning'.",
+        "result": "Đáp án đúng là B. learning"
+      }
+    ],
+    "finalAnswer": "B. learning",
+    "commonMistakes": [
+      "Học sinh chọn C (to learn) vì thấy 'interested' rồi chọn to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: be interested in + V-ing/Noun (thích cái gì/làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s248",
+    "questionId": "eng-q248",
+    "recognition": "Cụm từ 'look forward to' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc đặc biệt",
+        "explanation": "Cụm từ đứng trước chỗ trống là 'looking forward to'. Từ 'to' ở đây đóng vai trò là một giới từ thực sự, không phải là một phần của động từ nguyên mẫu. Vì vậy động từ đi sau bắt buộc phải chia V-ing.",
+        "result": "look forward to + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'use' là 'using'.",
+        "result": "Đáp án đúng là B. using"
+      }
+    ],
+    "finalAnswer": "B. using",
+    "commonMistakes": [
+      "Học sinh chọn A (use) hoặc C (to use) do hiểu sai từ 'to' trong cấu trúc này."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: look forward to + V-ing (trông chờ, mong đợi làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s249",
+    "questionId": "eng-q249",
+    "recognition": "Cấu trúc 'make sb' đứng trước chỗ trống yêu cầu động từ theo sau giữ nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ và tân ngữ",
+        "explanation": "Động từ đứng trước là 'made' (quá khứ của make) kết hợp với tân ngữ chỉ người 'us'. Theo quy tắc cấu trúc sai khiến chủ động: make + somebody + V nguyên mẫu không to (V0).",
+        "result": "make sb + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng nguyên mẫu của động từ 'write' là 'write'.",
+        "result": "Đáp án đúng là A. write"
+      }
+    ],
+    "finalAnswer": "A. write",
+    "commonMistakes": [
+      "Học sinh chọn C (to write) vì thói quen dùng to V sau các động từ chỉ sự yêu cầu."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: make + somebody + V nguyên mẫu không to (V0) (buộc ai làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s250",
+    "questionId": "eng-q250",
+    "recognition": "Động từ 'stop' đi với V-ing diễn tả hành động dừng hẳn việc đang làm.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định ngữ cảnh hành động",
+        "explanation": "Câu nói 'She stopped ______ because she was very tired'. Vì cô ấy rất mệt nên cô ấy dừng hẳn việc đang chạy lại. Theo quy tắc: stop + V-ing = dừng hẳn hành động đang làm.",
+        "result": "stop + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'run' là 'running' (gấp đôi phụ âm cuối).",
+        "result": "Đáp án đúng là B. running"
+      }
+    ],
+    "finalAnswer": "B. running",
+    "commonMistakes": [
+      "Học sinh chọn C (to run) do không phân biệt được nghĩa của stop + to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ phân biệt: stop + V-ing (dừng hẳn việc đang làm) và stop + to V (dừng lại để làm việc khác)."
+    ]
+  },
+  {
+    "id": "eng-s251",
+    "questionId": "eng-q251",
+    "recognition": "Động từ 'stop' đi với to + V diễn tả việc dừng hành động này để làm hành động khác.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Xác định ngữ cảnh hành động",
+        "explanation": "Câu nói 'We stopped ______ some photos on the way to the beach'. Chúng tôi dừng lại trên đường đi ra bãi biển nhằm mục đích để chụp ảnh. Cấu trúc chỉ mục đích dừng lại để làm gì là: stop + to V.",
+        "result": "stop + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'take' phải là 'to take'.",
+        "result": "Đáp án đúng là C. to take"
+      }
+    ],
+    "finalAnswer": "C. to take",
+    "commonMistakes": [
+      "Học sinh chọn B (taking) do thói quen máy móc hễ gặp 'stop' là chọn V-ing mà không dịch nghĩa ngữ cảnh."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ: stop + to V (dừng lại để làm gì), stop + V-ing (dừng hẳn việc đang làm)."
+    ]
+  },
+  {
+    "id": "eng-s252",
+    "questionId": "eng-q252",
+    "recognition": "Động từ 'plan' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'plans' (kế hoạch). Theo quy tắc, cấu trúc động từ là: plan + to V.",
+        "result": "plan + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'develop' đi sau 'plan' phải là 'to develop'.",
+        "result": "Đáp án đúng là A. to develop"
+      }
+    ],
+    "finalAnswer": "A. to develop",
+    "commonMistakes": [
+      "Học sinh chọn B (developing) do nhầm lẫn quy tắc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: plan + to V (lên kế hoạch làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s253",
+    "questionId": "eng-q253",
+    "recognition": "Động từ 'volunteer' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'volunteer' (tình nguyện). Theo quy tắc, cấu trúc động từ là: volunteer + to V.",
+        "result": "volunteer + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'collect' đi sau 'volunteer' phải là 'to collect'.",
+        "result": "Đáp án đúng là B. to collect"
+      }
+    ],
+    "finalAnswer": "B. to collect",
+    "commonMistakes": [
+      "Học sinh chọn C (collecting) vì nhầm lẫn sang quy tắc động từ đuôi -ing."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: volunteer + to V (tình nguyện làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s254",
+    "questionId": "eng-q254",
+    "recognition": "Động từ 'suggest' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ đi trước",
+        "explanation": "Động từ đứng trước chỗ trống là 'suggested' (quá khứ của suggest). Theo quy tắc, cấu trúc động từ là: suggest + V-ing.",
+        "result": "suggest + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'visit' đi sau 'suggest' phải là 'visiting'.",
+        "result": "Đáp án đúng là C. visiting"
+      }
+    ],
+    "finalAnswer": "C. visiting",
+    "commonMistakes": [
+      "Học sinh chọn B (to visit) do nhầm lẫn quy tắc chia động từ."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: suggest + V-ing (đề xuất làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s255",
+    "questionId": "eng-q255",
+    "recognition": "Cấu trúc 'spend time' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc động từ",
+        "explanation": "Câu có cụm 'spend days' (dành ra nhiều ngày). Theo quy tắc, cấu trúc là: spend + time + V-ing.",
+        "result": "spend + time + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'make' là 'making' (bỏ e thêm -ing).",
+        "result": "Đáp án đúng là B. making"
+      }
+    ],
+    "finalAnswer": "B. making",
+    "commonMistakes": [
+      "Học sinh chọn C (to make) vì thói quen dùng to V để chỉ mục đích."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: spend + time/money + V-ing (dành thời gian/tiền bạc làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s256",
+    "questionId": "eng-q256",
+    "recognition": "Cấu trúc 'encourage sb' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc động từ",
+        "explanation": "Động từ đứng trước là 'encourage' đi kèm tân ngữ 'students'. Quy tắc cấu trúc là: encourage somebody + to V.",
+        "result": "encourage sb + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'take' đi sau 'students' phải là 'to take'.",
+        "result": "Đáp án đúng là C. to take"
+      }
+    ],
+    "finalAnswer": "C. to take",
+    "commonMistakes": [
+      "Học sinh chọn B (taking) vì nhầm lẫn quy tắc."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cụm: encourage somebody + to V (khuyến khích ai làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s257",
+    "questionId": "eng-q257",
+    "recognition": "Cấu trúc 'look forward to' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng V-ing.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc đặc biệt",
+        "explanation": "Câu có cụm 'look forward to' (trông đợi). Từ 'to' ở đây là giới từ nên động từ theo sau bắt buộc phải chia V-ing.",
+        "result": "look forward to + V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'watch' là 'watching'.",
+        "result": "Đáp án đúng là B. watching"
+      }
+    ],
+    "finalAnswer": "B. watching",
+    "commonMistakes": [
+      "Học sinh chọn C (to watch) do thấy chữ 'to' nên nhầm tưởng là to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: look forward to + V-ing (trông mong, mong đợi làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s258",
+    "questionId": "eng-q258",
+    "recognition": "Cấu trúc 'allow sb' đứng trước chỗ trống yêu cầu động từ theo sau chia ở dạng to + V nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc động từ",
+        "explanation": "Câu sử dụng phủ định của động từ allow kết hợp tân ngữ 'students'. Theo quy tắc: allow somebody + to V.",
+        "result": "allow sb + to V"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng đúng của động từ 'bring' đi sau 'students' phải là 'to bring'.",
+        "result": "Đáp án đúng là B. to bring"
+      }
+    ],
+    "finalAnswer": "B. to bring",
+    "commonMistakes": [
+      "Học sinh chọn A (bring) vì nhầm với cấu trúc let/make sb + V0."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: allow somebody + to V (cho phép ai làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s259",
+    "questionId": "eng-q259",
+    "recognition": "Cấu trúc 'let sb' đứng trước chỗ trống yêu cầu động từ theo sau giữ nguyên mẫu không to (V0).",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện động từ và tân ngữ",
+        "explanation": "Câu dùng cấu trúc 'Don't let' kết hợp tân ngữ 'children'. Quy tắc cấu trúc là: let + somebody + V nguyên mẫu không to (V0).",
+        "result": "let sb + V0"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng nguyên mẫu của động từ 'play' là 'play'.",
+        "result": "Đáp án đúng là A. play"
+      }
+    ],
+    "finalAnswer": "A. play",
+    "commonMistakes": [
+      "Học sinh chọn C (to play) vì nhầm lẫn sang cấu trúc allow sb to V."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: let somebody + V nguyên mẫu không to (V0) (để ai làm gì)."
+    ]
+  },
+  {
+    "id": "eng-s260",
+    "questionId": "eng-q260",
+    "recognition": "Cấu trúc song song liên kết bởi liên từ 'and' yêu cầu các thành phần ngữ pháp cùng dạng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc song song",
+        "explanation": "Trong câu có cụm 'Learning English and ______'. Động từ 'learning' ở dạng V-ing đứng đầu làm chủ ngữ. Liên từ 'and' kết nối yêu cầu động từ sau đó cũng phải chia V-ing.",
+        "result": "V-ing and V-ing"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng V-ing của động từ 'search' là 'searching'.",
+        "result": "Đáp án đúng là B. searching"
+      }
+    ],
+    "finalAnswer": "B. searching",
+    "commonMistakes": [
+      "Học sinh chọn A (search) hoặc C (to search) do không đảm bảo tính song hành của liên từ 'and'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc song hành: V1-ing and V2-ing."
+    ]
+  },
+  {
+    "id": "eng-s261",
+    "questionId": "eng-q261",
+    "recognition": "Cấu trúc song song sau từ chỉ mục đích 'to V' yêu cầu các động từ được liên kết cùng dạng nguyên mẫu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận diện cấu trúc song song",
+        "explanation": "Câu có cụm 'decided to stay at home and ______'. Sau 'decided' là 'to stay' (to V). Liên từ 'and' kết nối với động từ tiếp theo, theo quy tắc song hành sẽ lược bỏ 'to' thứ hai, chỉ cần động từ nguyên mẫu không to (V0).",
+        "result": "to V1 and V2"
+      },
+      {
+        "order": 2,
+        "title": "Chọn phương án đúng",
+        "explanation": "Dạng nguyên mẫu của động từ 'prepare' là 'prepare'.",
+        "result": "Đáp án đúng là A. prepare"
+      }
+    ],
+    "finalAnswer": "A. prepare",
+    "commonMistakes": [
+      "Học sinh chọn C (to prepare) mặc dù về ngữ pháp không sai nhưng không tự nhiên bằng việc lược bỏ 'to'."
+    ],
+    "reviewSuggestions": [
+      "Ghi nhớ cấu trúc: to V1 and V2 (lược bỏ 'to' đứng trước V2 để câu ngắn gọn)."
+    ]
   }
-];
-
+];

@@ -37,11 +37,61 @@ const getNow = () => Date.now();
 export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, setSubject, user, progressVersion } = useAppStore();
+  const { selectedSubject, setSubject, user, progressVersion, refreshProgress } = useAppStore();
   void progressVersion;
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
   const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
+  const tensesReviewBestScore = useMemo(() => {
+    const userId = user?.uid ?? 'guest';
+    const attempts = storageService.getAttempts(userId);
+    const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
+    
+    const sessions: Record<string, { correct: number; total: number }> = {};
+    reviewAttempts.forEach(a => {
+      let sessionId = '';
+      if (a.id.startsWith('attempt-tenses_review-')) {
+        const parts = a.id.split('-');
+        sessionId = parts.slice(2, -1).join('-');
+      }
+      if (!sessionId) {
+        sessionId = a.createdAt.substring(0, 19);
+      }
+      if (!sessions[sessionId]) {
+        sessions[sessionId] = { correct: 0, total: 0 };
+      }
+      sessions[sessionId].total += 1;
+      if (a.isCorrect) {
+        sessions[sessionId].correct += 1;
+      }
+    });
 
+    let bestScore = 0;
+    Object.values(sessions).forEach(s => {
+      if (s.correct > bestScore) {
+        bestScore = s.correct;
+      }
+    });
+    return bestScore;
+  }, [user, progressVersion]);
+
+  const tensesReviewAttemptsCount = useMemo(() => {
+    const userId = user?.uid ?? 'guest';
+    const attempts = storageService.getAttempts(userId);
+    const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
+    const uniqueSessionIds = new Set<string>();
+    reviewAttempts.forEach(a => {
+      let sessionId = '';
+      if (a.id.startsWith('attempt-tenses_review-')) {
+        const parts = a.id.split('-');
+        sessionId = parts.slice(2, -1).join('-');
+      }
+      if (!sessionId) {
+        sessionId = a.createdAt.substring(0, 19);
+      }
+      uniqueSessionIds.add(sessionId);
+    });
+    return uniqueSessionIds.size;
+  }, [user, progressVersion]);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
@@ -55,7 +105,8 @@ export const PracticeEngine: React.FC = () => {
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
-  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | null>(null);
+  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | null>(null);
+  const [grammarSection, setGrammarSection] = useState<'dang1' | 'dang2' | null>(null);
   const [customQuestions, setCustomQuestions] = useState<Question[] | null>(null);
   const [selectedTensesForCombo, setSelectedTensesForCombo] = useState<string[]>([
     'present_simple',
@@ -202,6 +253,31 @@ export const PracticeEngine: React.FC = () => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
           return num >= 202 && num <= 221;
         });
+      } else if (selectedSubTense === 'to_v') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 222 && num <= 241;
+        });
+      } else if (selectedSubTense === 'v_ing') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 242 && num <= 261;
+        });
+      } else if (selectedSubTense === 'v0') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 262 && num <= 281;
+        });
+      } else if (selectedSubTense === 'verb_combo') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 222 && num <= 261;
+        });
+      } else if (selectedSubTense === 'tenses_review') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 5 && num <= 221;
+        });
       }
     }
     return filtered;
@@ -291,6 +367,7 @@ export const PracticeEngine: React.FC = () => {
     setIsExamSubmitted(false);
     setExamQuestions([]);
     setExamAnswers({});
+    setGrammarSection(null);
   }, [routeSubject, questionTypeId, resetQuestionState]);
 
   // Reset index và state khi chuyển đổi dạng thì động từ cơ bản
@@ -494,6 +571,38 @@ export const PracticeEngine: React.FC = () => {
     resetQuestionState();
   };
 
+  const startTensesReview = () => {
+    const pool = qList.filter(q => {
+      if (q.questionTypeId !== 'eng-qt6') return false;
+      const num = parseInt(q.id.replace('eng-q', ''), 10);
+      return num >= 5 && num <= 221;
+    });
+
+    if (pool.length === 0) {
+      alert('Không tìm thấy câu hỏi tương ứng!');
+      return;
+    }
+
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const finalQuestions = shuffled.slice(0, 20);
+    setExamQuestions(finalQuestions);
+    setExamAnswers({});
+    setExamTimeLimit(15);
+    setExamTimeLeft(15 * 60);
+    setExamTotalTimeSpent(0);
+    setIsExamMode(true);
+    setIsExamSubmitted(false);
+    setIsConfiguringExam(false);
+    setSelectedSubTense('tenses_review');
+    setCurrentIdx(0);
+    resetQuestionState();
+  };
+
   const handleExamSubmit = async (isTimeOut = false) => {
     if (isExamSubmitted) return;
 
@@ -508,12 +617,16 @@ export const PracticeEngine: React.FC = () => {
 
     const attemptsToSave: UserAttempt[] = [];
     const averageTimeSpent = Math.max(1, Math.round(examTotalTimeSpent / examQuestions.length));
+    const sessionId = getNow();
+    const sessionTimestamp = new Date().toISOString();
 
     for (const q of examQuestions) {
       const selectedAns = examAnswers[q.id] || '';
       const finalAns = selectedAns ? formatAnswerForDisplay(q, selectedAns) : 'Chưa trả lời';
       const correct = validateAnswer(q, selectedAns);
-      const attemptId = `attempt-${getNow()}-${q.id}`;
+      const attemptId = selectedSubTense === 'tenses_review'
+        ? `attempt-tenses_review-${sessionId}-${q.id}`
+        : `attempt-${getNow()}-${q.id}`;
 
       const attemptData: UserAttempt = {
         id: attemptId,
@@ -524,8 +637,8 @@ export const PracticeEngine: React.FC = () => {
         gradingMode: 'manual',
         isCorrect: correct,
         timeSpent: averageTimeSpent,
-        createdAt: new Date().toISOString(),
-        selectedSubTense: 'exam'
+        createdAt: sessionTimestamp,
+        selectedSubTense: selectedSubTense || 'exam'
       };
 
       attemptsToSave.push(attemptData);
@@ -551,9 +664,11 @@ export const PracticeEngine: React.FC = () => {
       }
     }
 
+    refreshProgress();
+
     const score = examQuestions.filter(q => validateAnswer(q, examAnswers[q.id] || '')).length;
     const pct = (score / examQuestions.length) * 100;
-    if (pct >= 80) {
+    if (pct >= 80 || (selectedSubTense === 'tenses_review' && pct >= 75)) {
       confetti({
         particleCount: 120,
         spread: 80,
@@ -680,6 +795,7 @@ export const PracticeEngine: React.FC = () => {
         }
       }
     }
+    refreshProgress();
     setExistingAttempt(attemptData);
   };
 
@@ -1118,137 +1234,255 @@ export const PracticeEngine: React.FC = () => {
 
   // Màn hình chọn dạng thì con cho "Thì động từ cơ bản" (eng-qt6) dưới dạng Card
   if (questionTypeId === 'eng-qt6' && selectedSubTense === null && !isConfiguringExam) {
-    const subTenseCards = [
-      {
-        id: 'all',
-        name: '📑 Tổng ôn',
-        description: 'Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.',
-        qIds: [
-          ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
-        ]
-      },
-      {
-        id: 'exam',
-        name: '🏆 Luyện thi trắc nghiệm',
-        description: 'Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.',
-        qIds: [
-          ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
-        ]
-      },
-      {
-        id: 'present_simple',
-        name: '⏱️ Thì Hiện tại đơn (Present Simple)',
-        description: 'Tập trung luyện các câu chia thì Hiện tại đơn với các dấu hiệu nhận biết quen thuộc: usually, often, always, every day...',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 5}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`)]
-      },
-      {
-        id: 'past_simple',
-        name: '🗓️ Thì Quá khứ đơn (Past Simple)',
-        description: 'Tập trung luyện các câu chia thì Quá khứ đơn với các dấu hiệu thời gian quá khứ: yesterday, last summer, ago...',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 25}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`)]
-      },
-      {
-        id: 'present_continuous',
-        name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)',
-        description: 'Tập trung luyện các câu chia thì Hiện tại tiếp diễn với các dấu hiệu thời điểm hoặc cảm thán: now, at the moment, Look!...',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`)]
-      },
-      {
-        id: 'past_continuous',
-        name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
-        description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)]
-      },
-      {
-        id: 'present_perfect',
-        name: '✨ Thì Hiện tại hoàn thành (Present Perfect)',
-        description: 'Tập trung chia động từ ở thì Hiện tại hoàn thành (has/have + V3/ed) và phân biệt với Quá khứ đơn.',
-        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`)
-      },
-      {
-        id: 'future_simple',
-        name: '🔮 Thì Tương lai đơn (Future Simple / Will)',
-        description: 'Tập trung chia động từ ở thì Tương lai đơn (will + V) và cấu trúc câu điều kiện loại 1.',
-        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
-      }
-    ];
+    if (grammarSection === null) {
+      return (
+        <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+          <button
+            onClick={() => navigate('/practice')}
+            className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start"
+          >
+            ← Quay lại danh sách dạng bài
+          </button>
 
-    return (
-      <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
-        <button
-          onClick={() => navigate('/practice')}
-          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start"
-        >
-          ← Quay lại danh sách dạng bài
-        </button>
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-black text-foreground tracking-tight">Trắc nghiệm Ngữ pháp & Từ vựng</h2>
+            <p className="text-xs text-muted-foreground font-semibold">Chọn chương trình học phù hợp để bắt đầu ôn tập.</p>
+          </div>
 
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-black text-foreground tracking-tight">Chọn dạng thì cần rèn luyện</h2>
-          <p className="text-xs text-muted-foreground font-semibold">Tập trung rèn luyện chuyên sâu từng thì sẽ giúp tăng điểm số nhanh hơn.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            {/* Dạng 1: Thì động từ cơ bản */}
+            <Card
+              className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md"
+              onClick={() => setGrammarSection('dang1')}
+            >
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
+                      Module 1
+                    </span>
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+                      🔓 Luôn mở
+                    </span>
+                  </div>
+
+                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
+                    Dạng 1: Thì động từ cơ bản
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Nắm chắc 6 thì ngữ pháp trọng tâm trong đề thi vào 10 (Hiện tại đơn, Quá khứ đơn, Tiếp diễn, Hoàn thành, Tương lai đơn) và luyện thi trắc nghiệm.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
+                  <span>Khám phá 6 bài học →</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
+              onClick={() => {
+                setSelectedSubTense('verb_combo');
+                setGrammarSection('dang2');
+              }}
+            >
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
+                      Module 2
+                    </span>
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                      🔓 Sẵn sàng
+                    </span>
+                  </div>
+
+                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
+                    Dạng 2: Cấu trúc động từ (to V, V-ing, V0)
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Học các mẫu verb patterns đi với to V, V-ing, V0, cấu trúc song song. Đây là phần chuyển tiếp cực kỳ quan trọng hỗ trợ cho dạng Word Form và viết lại câu.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
+                  <span>Bắt đầu học ngay →</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
+      );
+    }
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {subTenseCards.map((card) => {
-            const percent = getSubTenseProgress(card.qIds);
-            return (
-              <Card
-                key={card.id}
-                className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card flex flex-col justify-between"
-                onClick={() => {
-                  if (card.id === 'all') {
-                    setIsConfiguringAll(true);
-                  } else if (card.id === 'exam') {
-                    setIsConfiguringExam(true);
-                  } else {
-                    setSelectedSubTense(card.id as any);
-                  }
-                }}
+    if (grammarSection === 'dang1') {
+      const subTenseCards = [
+        {
+          id: 'present_simple',
+          name: '⏱️ Thì Hiện tại đơn (Present Simple)',
+          description: 'Tập trung luyện các câu chia thì Hiện tại đơn với các dấu hiệu nhận biết quen thuộc: usually, often, always, every day...',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 5}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`)]
+        },
+        {
+          id: 'past_simple',
+          name: '🗓️ Thì Quá khứ đơn (Past Simple)',
+          description: 'Tập trung luyện các câu chia thì Quá khứ đơn với các dấu hiệu thời gian quá khứ: yesterday, last summer, ago...',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 25}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`)]
+        },
+        {
+          id: 'present_continuous',
+          name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)',
+          description: 'Tập trung luyện các câu chia thì Hiện tại tiếp diễn với các dấu hiệu thời điểm hoặc cảm thán: now, at the moment, Look!...',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`)]
+        },
+        {
+          id: 'past_continuous',
+          name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
+          description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)]
+        },
+        {
+          id: 'present_perfect',
+          name: '✨ Thì Hiện tại hoàn thành (Present Perfect)',
+          description: 'Tập trung chia động từ ở thì Hiện tại hoàn thành (has/have + V3/ed) và phân biệt với Quá khứ đơn.',
+          qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`)
+        },
+        {
+          id: 'future_simple',
+          name: '🔮 Thì Tương lai đơn (Future Simple / Will)',
+          description: 'Tập trung chia động từ ở thì Tương lai đơn (will + V) và cấu trúc câu điều kiện loại 1.',
+          qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+        },
+        {
+          id: 'all',
+          name: '📑 Tổng ôn thông minh',
+          description: 'Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.',
+          qIds: [
+            ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+          ]
+        },
+        {
+          id: 'exam',
+          name: '🏆 Luyện thi trắc nghiệm',
+          description: 'Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.',
+          qIds: [
+            ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+          ]
+        }
+      ];
+
+      return (
+        <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+          <button
+            onClick={() => setGrammarSection(null)}
+            className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
+          >
+            ← Quay lại chọn Module
+          </button>
+
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-black text-foreground tracking-tight">Dạng 1: Thì động từ cơ bản</h2>
+            <p className="text-xs text-muted-foreground font-semibold">Luyện tập sâu từng thì hoặc làm bài thi thử để kiểm tra trình độ.</p>
+          </div>
+
+          {/* Hero Milestone Card: Bài kiểm tra tổng hợp 6 thì */}
+          <Card className="border-indigo-500/20 bg-gradient-to-br from-slate-50 to-indigo-50/20 dark:from-slate-900/50 dark:to-indigo-950/10 shadow-sm overflow-hidden">
+            <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500 text-white flex items-center gap-1">
+                    📝 ĐÁNH GIÁ NĂNG LỰC
+                  </span>
+                  <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+                    🔓 Tự do ôn tập
+                  </span>
+                </div>
+                <h3 className="font-extrabold text-sm md:text-base text-foreground">
+                  Bài kiểm tra tổng hợp 6 thì
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+                  Bài thi tổng hợp gồm **20 câu hỏi trắc nghiệm** trộn ngẫu nhiên từ cả 6 thì (thời gian làm bài: 15 phút, không hiện đáp án ngay). Khuyên dùng để tự đánh giá mức độ phản xạ phối hợp giữa các thì.
+                </p>
+                {tensesReviewAttemptsCount > 0 && (
+                  <div className="flex gap-4 text-[10px] font-extrabold text-muted-foreground pt-1.5">
+                    <span>Đã làm: <span className="text-foreground">{tensesReviewAttemptsCount} lần</span></span>
+                    <span>Điểm cao nhất: <span className={cn(tensesReviewBestScore >= 15 ? "text-emerald-600" : "text-rose-600")}>{tensesReviewBestScore}/20 câu đúng ({Math.round(tensesReviewBestScore / 20 * 100)}%)</span></span>
+                  </div>
+                )}
+              </div>
+              <Button
+                onClick={startTensesReview}
+                className="font-bold text-xs py-2 px-5 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer h-10 shrink-0 shadow-sm"
               >
-                <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
-                        🗣️ Anh
-                      </span>
-                    </div>
+                {tensesReviewAttemptsCount > 0 ? '🔄 Kiểm tra lại' : '✍️ Làm bài ngay'}
+              </Button>
+            </CardContent>
+          </Card>
 
-                    <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
-                      {card.name}
-                    </h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{card.description}</p>
-                  </div>
-
-                  <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
-                    <div className="flex items-center gap-1.5 flex-1 max-w-[60%]">
-                      <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
-                        <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {subTenseCards.map((card) => {
+              const percent = getSubTenseProgress(card.qIds);
+              return (
+                <Card
+                  key={card.id}
+                  className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card flex flex-col justify-between"
+                  onClick={() => {
+                    if (card.id === 'all') {
+                      setIsConfiguringAll(true);
+                    } else if (card.id === 'exam') {
+                      setIsConfiguringExam(true);
+                    } else {
+                      setSelectedSubTense(card.id as any);
+                    }
+                  }}
+                >
+                  <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
+                          🗣️ Anh
+                        </span>
                       </div>
-                      <span className="text-[9px] text-primary shrink-0">{percent}%</span>
+
+                      <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
+                        {card.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{card.description}</p>
                     </div>
 
-                    <Button variant="outline" size="sm" className="font-bold text-[10px] py-1 px-3 shrink-0 border border-border/50 cursor-pointer h-7">
-                      Luyện tập →
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                    <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
+                      <div className="flex items-center gap-1.5 flex-1 max-w-[60%]">
+                        <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
+                          <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+                        </div>
+                        <span className="text-[9px] text-primary shrink-0">{percent}%</span>
+                      </div>
+
+                      <Button variant="outline" size="sm" className="font-bold text-[10px] py-1 px-3 shrink-0 border border-border/50 cursor-pointer h-7">
+                        Luyện tập →
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   if (isExamMode) {
@@ -1336,12 +1570,38 @@ export const PracticeEngine: React.FC = () => {
                   <p className="text-xs font-bold">Thời gian làm bài: <span className="text-amber-300 font-black">{formatTime(examTotalTimeSpent)}</span></p>
                 </div>
               </div>
+
+              {selectedSubTense === 'tenses_review' && (
+                <div className={cn(
+                  "p-4 rounded-xl border text-left text-xs font-semibold space-y-1 mt-3 leading-relaxed",
+                  percentage >= 75
+                    ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-100"
+                    : "bg-rose-500/20 border-rose-500/30 text-rose-100"
+                )}>
+                  {percentage >= 75 ? (
+                    <>
+                      <h4 className="text-sm font-black text-emerald-300 flex items-center gap-1.5">
+                        🎉 ĐÃ MỞ KHÓA DẠNG 2 CẤU TRÚC ĐỘNG TỪ!
+                      </h4>
+                      <p>Chúc mừng bạn đã hoàn thành bài kiểm tra điều kiện xuất sắc với {correctAnswersCount}/20 câu đúng ({percentage}%). Dạng 2: Cấu trúc động từ (to V, V-ing, V0) đã được mở khóa thành công!</p>
+                    </>
+                  ) : (
+                    <>
+                      <h4 className="text-sm font-black text-rose-300 flex items-center gap-1.5">
+                        🔒 CHƯA ĐỦ ĐIỀU KIỆN MỞ KHÓA DẠNG 2
+                      </h4>
+                      <p>Bạn đạt được {correctAnswersCount}/20 câu đúng ({percentage}%). Hãy làm lại bài kiểm tra hoặc ôn tập kỹ lại các thì cơ bản để đạt tối thiểu 75% (15/20 câu đúng) nhé!</p>
+                    </>
+                  )}
+                </div>
+              )}
+
               <div className="flex justify-center gap-3 pt-2">
                 <Button
-                  onClick={startExamPractice}
+                  onClick={selectedSubTense === 'tenses_review' ? startTensesReview : startExamPractice}
                   className="bg-white hover:bg-slate-100 text-indigo-700 font-black text-xs px-4 py-2 rounded-xl cursor-pointer"
                 >
-                  🔄 Thi đề khác
+                  {selectedSubTense === 'tenses_review' ? '🔄 Thi lại bài test' : '🔄 Thi đề khác'}
                 </Button>
                 <Button
                   onClick={() => {
@@ -1588,6 +1848,9 @@ export const PracticeEngine: React.FC = () => {
         <button
           onClick={() => {
             if (questionTypeId === 'eng-qt6') {
+              if (selectedSubTense === 'verb_combo') {
+                setGrammarSection(null);
+              }
               setSelectedSubTense(null);
               setCustomQuestions(null);
               setIsConfiguringAll(false);
