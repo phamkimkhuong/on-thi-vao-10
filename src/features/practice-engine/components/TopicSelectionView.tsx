@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
 import { QuestionType } from '../../../types';
+import { mathTopics } from '../../../data/mathData';
+import { englishTopics } from '../../../data/englishData';
 
 interface TopicSelectionViewProps {
   routeSubject: 'math' | 'english';
@@ -39,6 +42,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   startTensesReview,
   getSubTenseProgress,
 }) => {
+  const navigate = useNavigate();
   const isMath = routeSubject === 'math';
 
   if (!isMath && grammarSection === 'dang1') {
@@ -210,10 +214,11 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   }
 
   // Màn hình chọn dạng bài chính
+  const topics = isMath ? mathTopics : englishTopics;
   const qTypes = isMath ? mathQuestionTypes : englishQuestionTypes;
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+    <div className="space-y-8 max-w-4xl mx-auto pb-12 animate-fade-in">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-foreground tracking-tight">
           {isMath ? '📐 Luyện tập Toán tuyển sinh 10' : '🗣️ Luyện tập Tiếng Anh vào 10'}
@@ -225,51 +230,70 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
         </p>
       </div>
 
-      <div className={cn("grid gap-4", isMath ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3")}>
-        {qTypes.map((qType) => {
-          return (
-            <Card
-              key={qType.id}
-              className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
-              onClick={() => {
-                if (qType.id === 'eng-qt6') {
-                  setGrammarSection('dang1');
-                } else {
-                  setSelectedSubTense(null);
-                  setGrammarSection(null);
-                  window.location.hash = `#/practice/${qType.id}`;
-                }
-              }}
-            >
-              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
-                      {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Bài học'}
-                    </span>
-                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
-                      🔓 Sẵn sàng
-                    </span>
-                  </div>
+      {topics.map((topic) => {
+        const topicQTypes = qTypes.filter(qt => qt.topicId === topic.id);
+        if (topicQTypes.length === 0) return null;
 
-                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
-                    {qType.name}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                    {qType.description}
-                  </p>
-                </div>
+        return (
+          <div key={topic.id} className="space-y-4">
+            <div className="flex items-center gap-2.5 border-b border-border/20 pb-2">
+              <div className="h-4 w-1 bg-primary rounded-full" />
+              <h3 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
+                {topic.name}
+              </h3>
+              <span className="text-[9px] bg-slate-100 dark:bg-slate-800 text-muted-foreground font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                {topicQTypes.length} dạng bài
+              </span>
+            </div>
 
-                <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
-                  <span>
-                    {qType.id === 'eng-qt6' ? 'Khám phá 6 bài học →' : 'Bắt đầu học ngay →'}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+            <div className={cn("grid gap-4", isMath ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3")}>
+              {topicQTypes.map((qType) => {
+                return (
+                  <Card
+                    key={qType.id}
+                    className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
+                    onClick={() => {
+                      if (qType.id === 'eng-qt6') {
+                        setGrammarSection('dang1');
+                      } else {
+                        setSelectedSubTense(null);
+                        setGrammarSection(null);
+                        navigate(`/practice/${qType.id}`);
+                      }
+                    }}
+                  >
+                    <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
+                            {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Bài học'}
+                          </span>
+                          <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+                            🔓 Sẵn sàng
+                          </span>
+                        </div>
+
+                        <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
+                          {qType.name}
+                        </h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+                          {qType.description}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
+                        <span>
+                          {qType.id === 'eng-qt6' ? 'Khám phá 6 bài học →' : 'Bắt đầu học ngay →'}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
 
       {!isMath && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-border/50">

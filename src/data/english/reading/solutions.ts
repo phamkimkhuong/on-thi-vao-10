@@ -42,58 +42,6 @@ export const readingSolutions: Solution[] = [
     ]
   },
   {
-    "id": "eng-s92",
-    "questionId": "eng-q92",
-    "recognition": "Xác nhận thông tin địa điểm của trường THPT Nguyen Du.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Tìm thông tin trong bài đọc",
-        "explanation": "Bài đọc viết: \"My school, THPT Nguyen Du, was established in Hoai Nhon, Binh Dinh.\"",
-        "result": "Địa điểm: Hoai Nhon"
-      },
-      {
-        "order": 2,
-        "title": "Đối chiếu với phát biểu",
-        "explanation": "Phát biểu ghi trường nằm ở Quy Nhon city. Đây là thông tin sai lệch so với bài đọc.",
-        "result": "False"
-      }
-    ],
-    "finalAnswer": "B. False",
-    "commonMistakes": [
-      "Không đọc kỹ tên huyện/thành phố, nhầm lẫn Binh Dinh thì phải đi với Quy Nhơn."
-    ],
-    "reviewSuggestions": [
-      "Luyện tập so khớp từ khóa địa điểm cụ thể."
-    ]
-  },
-  {
-    "id": "eng-s93",
-    "questionId": "eng-q93",
-    "recognition": "Xác nhận số lượng học sinh lớp 10 mới trúng tuyển năm 2024-2025.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Tìm thông tin trong bài đọc",
-        "explanation": "Bài đọc viết: \"In the school year 2024-2025, the school admitted 437 tenth-graders.\"",
-        "result": "Số lượng: 437"
-      },
-      {
-        "order": 2,
-        "title": "Đối chiếu phát biểu",
-        "explanation": "Phát biểu ghi: \"admitted 437 new tenth-grade students\". Ý này hoàn toàn trùng khớp.",
-        "result": "True"
-      }
-    ],
-    "finalAnswer": "A. True",
-    "commonMistakes": [
-      "Nhầm số 437 với tổng số 1,200 học sinh của trường."
-    ],
-    "reviewSuggestions": [
-      "Đọc kỹ và đối chiếu số lượng với danh từ đi kèm."
-    ]
-  },
-  {
     "id": "eng-s101",
     "questionId": "eng-q101",
     "recognition": "Câu hỏi yêu cầu tìm ý chính (main topic) của bài đọc.",

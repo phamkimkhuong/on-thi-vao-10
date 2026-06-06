@@ -210,29 +210,6 @@ export const englishQuestionTypes: QuestionType[] = [
     exampleQuestionId: 'eng-q90'
   },
   {
-    id: 'eng-qt9',
-    topicId: 'eng-t3',
-    name: 'Đọc hiểu True/False',
-    slug: 'doc-hieu-true-false',
-    description: 'Đọc một đoạn văn ngắn và xác định các phát biểu cho trước là Đúng (True) hay Sai (False) dựa trên thông tin thực tế trong bài đọc.',
-    recognitionSigns: [
-      'Đề bài cho một đoạn văn và các câu phát biểu ngắn.',
-      'Lựa chọn trả lời dạng trắc nghiệm A. True hoặc B. False.'
-    ],
-    solvingSteps: [
-      'Đọc kỹ câu phát biểu và xác định các từ khóa chính (danh từ riêng, số lượng, thời gian, hành động).',
-      'Dò tìm từ khóa hoặc các từ đồng nghĩa trong đoạn văn bài đọc.',
-      'Đối chiếu kỹ lưỡng thông tin trong bài đọc với câu phát biểu. Nếu thông tin khớp hoàn toàn chọn True, ngược lại chọn False.'
-    ],
-    commonMistakes: [
-      'Suy luận cảm tính ngoài đời thực thay vì bám sát thông tin trong bài đọc.',
-      'Bị bẫy bởi các từ mang tính phủ định ngầm hoặc hạn chế (như only, rarely, never).'
-    ],
-    difficulty: 'easy',
-    examFrequency: 'high',
-    exampleQuestionId: 'eng-q92'
-  },
-  {
     id: 'eng-qt10',
     topicId: 'eng-t4',
     name: 'Viết lại câu cùng nghĩa (Although/Because)',

@@ -36,36 +36,6 @@ export const readingQuestions: Question[] = [
     "validatorType": "choice"
   },
   {
-    "id": "eng-q92",
-    "subjectId": "english",
-    "topicId": "eng-t3",
-    "questionTypeId": "eng-qt9",
-    "content": "Read the passage and choose whether the statement is True or False:\n\n*Passage:* My school, THPT Nguyen Du, was established in Hoai Nhon, Binh Dinh. It has about 1,200 students. In the school year 2024-2025, the school admitted 437 tenth-graders.\n\n*Statement:* THPT Nguyen Du is located in Quy Nhon city.",
-    "options": [
-      "A. True",
-      "B. False"
-    ],
-    "correctAnswer": "B",
-    "difficulty": "easy",
-    "sourceType": "mock_exam",
-    "validatorType": "choice"
-  },
-  {
-    "id": "eng-q93",
-    "subjectId": "english",
-    "topicId": "eng-t3",
-    "questionTypeId": "eng-qt9",
-    "content": "Read the passage and choose whether the statement is True or False:\n\n*Passage:* My school, THPT Nguyen Du, was established in Hoai Nhon, Binh Dinh. It has about 1,200 students. In the school year 2024-2025, the school admitted 437 tenth-graders.\n\n*Statement:* The school admitted 437 new tenth-grade students in the school year 2024-2025.",
-    "options": [
-      "A. True",
-      "B. False"
-    ],
-    "correctAnswer": "A",
-    "difficulty": "easy",
-    "sourceType": "mock_exam",
-    "validatorType": "choice"
-  },
-  {
     "id": "eng-q101",
     "subjectId": "english",
     "topicId": "eng-t3",
