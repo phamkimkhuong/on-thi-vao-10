@@ -19,7 +19,8 @@ import {
   Star,
   Activity,
   UserCheck,
-  Loader
+  Loader,
+  RefreshCw
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
@@ -81,7 +82,7 @@ const getQuestionSubTenseName = (questionId: string): string => {
   if (!questionId.startsWith('eng-q')) return '';
   const num = parseInt(questionId.replace('eng-q', ''), 10);
   if (isNaN(num)) return '';
-  
+
   if ((num >= 5 && num <= 24) || (num >= 102 && num <= 121)) {
     return 'Thì Hiện tại đơn';
   } else if ((num >= 25 && num <= 44) || (num >= 122 && num <= 141)) {
@@ -119,32 +120,18 @@ export const TeacherDashboard: React.FC = () => {
 
   const [reviewingItem, setReviewingItem] = useState<PendingGroup | null>(null);
   const [grades, setGrades] = useState<Record<string, { isCorrect: boolean; feedback: string }>>({});
-  const [reviewingStudentAttempts, setReviewingStudentAttempts] = useState<UserAttempt[]>([]);
-
   const [gradingSuccessMsg, setGradingSuccessMsg] = useState<string | null>(null);
 
   const reviewingStudentStats = useMemo(() => {
     if (!reviewingItem) return { correct: 0, incorrect: 0 };
-    
-    // Lọc các attempt của học sinh này cho questionTypeId đang duyệt
-    const filtered = reviewingStudentAttempts.filter(
-      a => a.questionTypeId === reviewingItem.questionTypeId
-    );
-    
-    // Nhóm theo questionId và tìm lần làm mới nhất
-    const latestAttemptsByQId: Record<string, UserAttempt> = {};
-    filtered.forEach(a => {
-      const existing = latestAttemptsByQId[a.questionId];
-      if (!existing || new Date(a.createdAt).getTime() > new Date(existing.createdAt).getTime()) {
-        latestAttemptsByQId[a.questionId] = a;
-      }
-    });
 
     let correct = 0;
     let incorrect = 0;
 
-    Object.values(latestAttemptsByQId).forEach(attempt => {
-      if (attempt.isCorrect) {
+    reviewingItem.attempts.forEach(attempt => {
+      const grade = grades[attempt.id];
+      const isCorrect = grade ? grade.isCorrect : attempt.isCorrect;
+      if (isCorrect) {
         correct++;
       } else {
         incorrect++;
@@ -152,27 +139,7 @@ export const TeacherDashboard: React.FC = () => {
     });
 
     return { correct, incorrect };
-  }, [reviewingItem, reviewingStudentAttempts]);
-
-  useEffect(() => {
-    if (!reviewingItem) {
-      setReviewingStudentAttempts([]);
-      return;
-    }
-    
-    let active = true;
-    progressService.getAttempts(reviewingItem.student.id).then((attempts) => {
-      if (active) {
-        setReviewingStudentAttempts(attempts);
-      }
-    }).catch(err => {
-      console.error("Error loading attempts for student in review:", err);
-    });
-    
-    return () => {
-      active = false;
-    };
-  }, [reviewingItem]);
+  }, [reviewingItem, grades]);
 
   const pendingGroups = useMemo(() => {
     const groupsMap = new Map<string, PendingGroup>();
@@ -337,7 +304,7 @@ export const TeacherDashboard: React.FC = () => {
   const handleStartReview = (group: PendingGroup) => {
     setReviewingItem(group);
 
-    
+
     // Khởi tạo trạng thái chấm điểm cho từng bài làm trong nhóm
     const initialGrades: Record<string, { isCorrect: boolean; feedback: string }> = {};
     group.attempts.forEach(attempt => {
@@ -630,9 +597,21 @@ export const TeacherDashboard: React.FC = () => {
         <div className="space-y-6">
           {!reviewingItem ? (
             <div className="space-y-4">
-              <h3 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1">
-                <BookOpen size={14} /> Bài làm Toán & Tiếng Anh chờ duyệt ({pendingGroups.length})
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1">
+                  <BookOpen size={14} /> Bài làm Toán & Tiếng Anh chờ duyệt ({pendingGroups.length})
+                </h3>
+                <Button
+                  onClick={() => loadData()}
+                  disabled={isLoading}
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-[10px] font-extrabold gap-1.5 rounded-lg border-border bg-card hover:bg-secondary flex items-center cursor-pointer transition-all"
+                >
+                  <RefreshCw size={12} className={cn("shrink-0", isLoading && "animate-spin")} />
+                  Làm mới
+                </Button>
+              </div>
 
               {pendingGroups.length === 0 ? (
                 <div className="p-8 border border-dashed border-border rounded-2xl text-center space-y-3 bg-slate-50/10 dark:bg-slate-900/5">
@@ -644,9 +623,9 @@ export const TeacherDashboard: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {pendingGroups.map((group) => {
                     const qType = mathQuestionTypes.find(t => t.id === group.questionTypeId) || englishQuestionTypes.find(t => t.id === group.questionTypeId);
-                    
-                    const subTenseName = group.selectedSubTense === 'all' 
-                      ? 'Tổng ôn thông minh' 
+
+                    const subTenseName = group.selectedSubTense === 'all'
+                      ? 'Tổng ôn thông minh'
                       : (group.selectedSubTense ? getSubTenseName(group.selectedSubTense) : '');
 
                     return (
@@ -735,7 +714,7 @@ export const TeacherDashboard: React.FC = () => {
                       Chuyên đề: {mathQuestionTypes.find(t => t.id === reviewingItem.questionTypeId)?.name || englishQuestionTypes.find(t => t.id === reviewingItem.questionTypeId)?.name}
                       {reviewingItem.selectedSubTense && ` (${reviewingItem.selectedSubTense === 'all' ? 'Tổng ôn thông minh' : getSubTenseName(reviewingItem.selectedSubTense)})`}
                     </p>
-                    
+
                     {/* Thống kê số câu đúng/sai của học sinh */}
                     <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-bold mt-1.5 text-muted-foreground bg-slate-50 dark:bg-slate-900/40 px-2.5 py-1.5 rounded-lg border border-border/30 w-fit">
                       <span className="flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400">
@@ -774,10 +753,10 @@ export const TeacherDashboard: React.FC = () => {
                             {new Date(attempt.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </CardHeader>
-                        
+
                         <CardContent className="p-5 space-y-4">
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                            
+
                             {/* Phần hiển thị Đề bài & Lời giải học sinh */}
                             <div className="space-y-3">
                               <div>
@@ -818,7 +797,7 @@ export const TeacherDashboard: React.FC = () => {
                                       const optLetter = opt.trim().charAt(0);
                                       const studentLetter = attempt.userAnswer?.trim().charAt(0);
                                       const correctLetter = question.correctAnswer?.trim().charAt(0);
-                                      
+
                                       const isStudentChoice = optLetter === studentLetter;
                                       const isCorrectChoice = optLetter === correctLetter;
 
@@ -921,14 +900,14 @@ export const TeacherDashboard: React.FC = () => {
                               <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">
                                 💡 Hướng dẫn giải chi tiết (Học sinh nhìn thấy):
                               </span>
-                              
+
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* Tư duy nhận dạng & Đáp số */}
                                 <div className="space-y-3">
                                   <div className={cn(
                                     "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
-                                    isMathAttempt 
-                                      ? "bg-indigo-50/50 dark:bg-indigo-950/10 border-indigo-100 dark:border-indigo-900/30" 
+                                    isMathAttempt
+                                      ? "bg-indigo-50/50 dark:bg-indigo-950/10 border-indigo-100 dark:border-indigo-900/30"
                                       : "bg-violet-50/50 dark:bg-violet-950/10 border-violet-100 dark:border-violet-900/30"
                                   )}>
                                     <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>

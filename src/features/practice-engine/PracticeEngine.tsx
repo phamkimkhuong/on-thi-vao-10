@@ -1934,7 +1934,7 @@ export const PracticeEngine: React.FC = () => {
           {examQuestions.map((q, idx) => {
             const isActive = idx === currentIdx;
             const hasAnswer = examAnswers[q.id] !== undefined;
-            const isCorrect = isExamSubmitted && examAnswers[q.id] === q.correctAnswer;
+            const isCorrect = isExamSubmitted && validateAnswer(q, examAnswers[q.id] || '');
 
             return (
               <button
@@ -1976,55 +1976,93 @@ export const PracticeEngine: React.FC = () => {
               <LatexRenderer text={questions[currentIdx].content} />
             </div>
 
-            {/* Answer Options list */}
+            {/* Answer Options list or text input for fill-in-the-blank */}
             <div className="grid grid-cols-1 gap-3">
-              {questions[currentIdx].options?.map((opt: string, i: number) => {
-                const optLetter = opt.charAt(0);
-                const isSelected = examAnswers[questions[currentIdx].id] === optLetter;
-                const isCorrectAnswer = questions[currentIdx].correctAnswer === optLetter;
+              {questions[currentIdx].options && questions[currentIdx].options.length > 0 ? (
+                questions[currentIdx].options.map((opt: string, i: number) => {
+                  const optLetter = opt.charAt(0);
+                  const isSelected = examAnswers[questions[currentIdx].id] === optLetter;
+                  const isCorrectAnswer = questions[currentIdx].correctAnswer === optLetter;
 
-                // Color styles based on active exam vs submitted review states
-                const buttonStyle = isExamSubmitted
-                  ? isCorrectAnswer
-                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                  // Color styles based on active exam vs submitted review states
+                  const buttonStyle = isExamSubmitted
+                    ? isCorrectAnswer
+                      ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-sm"
+                      : isSelected
+                        ? "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-400 shadow-sm"
+                        : "bg-card border-border opacity-70 text-foreground"
                     : isSelected
-                      ? "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-400 shadow-sm"
-                      : "bg-card border-border opacity-70 text-foreground"
-                  : isSelected
-                    ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 shadow-sm"
-                    : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground";
+                      ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 shadow-sm"
+                      : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground";
 
-                return (
-                  <button
-                    key={i}
+                  return (
+                    <button
+                      key={i}
+                      disabled={isExamSubmitted}
+                      onClick={() => handleOptionSelect(optLetter)}
+                      className={cn(
+                        "w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 cursor-pointer",
+                        !isExamSubmitted && "active:scale-[0.99] cursor-pointer",
+                        buttonStyle
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })
+              ) : (
+                // Điền từ tự do trong Exam Mode
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-muted-foreground">
+                    {isExamSubmitted ? "Đáp án của bạn:" : "Nhập đáp án của bạn:"}
+                  </label>
+                  <input
+                    type="text"
                     disabled={isExamSubmitted}
-                    onClick={() => handleOptionSelect(optLetter)}
+                    value={examAnswers[questions[currentIdx].id] || ''}
+                    onChange={(e) => {
+                      const typedVal = e.target.value;
+                      setExamAnswers(prev => ({ ...prev, [questions[currentIdx].id]: typedVal }));
+                    }}
+                    placeholder={isExamSubmitted ? "Không có câu trả lời" : "Nhập từ cần điền (ví dụ: inventions)..."}
                     className={cn(
-                      "w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 cursor-pointer",
-                      !isExamSubmitted && "active:scale-[0.99] cursor-pointer",
-                      buttonStyle
+                      "w-full p-4 rounded-xl text-xs font-semibold border focus:outline-none transition-all duration-150 bg-card text-foreground",
+                      isExamSubmitted
+                        ? validateAnswer(questions[currentIdx], examAnswers[questions[currentIdx].id] || '')
+                          ? "border-emerald-500 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400"
+                          : "border-rose-500 bg-rose-500/5 text-rose-700 dark:text-rose-400"
+                        : "border-border focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     )}
-                  >
-                    {opt}
-                  </button>
-                );
-              })}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !isExamSubmitted) {
+                        handleNext();
+                      }
+                    }}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Review Status Banner after submission */}
             {isExamSubmitted && (
               <div className={cn(
                 "p-4 rounded-xl border flex items-center gap-3",
-                examAnswers[questions[currentIdx].id] === questions[currentIdx].correctAnswer
+                validateAnswer(questions[currentIdx], examAnswers[questions[currentIdx].id] || '')
                   ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400"
                   : "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400"
               )}>
-                {examAnswers[questions[currentIdx].id] === questions[currentIdx].correctAnswer ? (
+                {validateAnswer(questions[currentIdx], examAnswers[questions[currentIdx].id] || '') ? (
                   <>
                     <CheckCircle size={24} className="text-emerald-500 shrink-0" />
                     <div>
                       <h4 className="font-extrabold text-sm">Chính xác!</h4>
-                      <p className="text-xs font-semibold opacity-90">Bạn đã trả lời đúng câu hỏi này.</p>
+                      <p className="text-xs font-semibold opacity-90">
+                        {questions[currentIdx].options && questions[currentIdx].options.length > 0 ? (
+                          `Bạn đã chọn đáp án đúng.`
+                        ) : (
+                          `Bạn đã nhập đúng đáp án: "${examAnswers[questions[currentIdx].id]}".`
+                        )}
+                      </p>
                     </div>
                   </>
                 ) : (
@@ -2033,10 +2071,15 @@ export const PracticeEngine: React.FC = () => {
                     <div>
                       <h4 className="font-extrabold text-sm">Chưa chính xác!</h4>
                       <p className="text-xs font-semibold opacity-90">
-                        {examAnswers[questions[currentIdx].id]
-                          ? `Bạn đã chọn đáp án ${examAnswers[questions[currentIdx].id]}. Đáp án đúng là ${questions[currentIdx].correctAnswer}.`
-                          : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là ${questions[currentIdx].correctAnswer}.`
-                        }
+                        {questions[currentIdx].options && questions[currentIdx].options.length > 0 ? (
+                          examAnswers[questions[currentIdx].id]
+                            ? `Bạn đã chọn đáp án ${examAnswers[questions[currentIdx].id]}. Đáp án đúng là ${questions[currentIdx].correctAnswer}.`
+                            : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là ${questions[currentIdx].correctAnswer}.`
+                        ) : (
+                          examAnswers[questions[currentIdx].id]
+                            ? `Bạn đã nhập: "${examAnswers[questions[currentIdx].id]}". Đáp án đúng là "${questions[currentIdx].correctAnswer}".`
+                            : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là "${questions[currentIdx].correctAnswer}".`
+                        )}
                       </p>
                     </div>
                   </>
@@ -2237,24 +2280,43 @@ export const PracticeEngine: React.FC = () => {
                   </p>
                 </div>
               ) : (
-                // Trắc nghiệm cho môn Anh
+                // Trắc nghiệm hoặc tự điền từ (fill-in-the-blank) cho môn Anh
                 <div className="grid grid-cols-1 gap-3">
-                  {currentQuestion.options?.map((opt: string, i: number) => {
-                    const optLetter = opt.charAt(0); // A, B, C, D
-                    const isSelected = selectedOption === optLetter;
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => handleOptionSelect(optLetter)}
-                        className={`w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
-                          ? 'bg-primary/10 border-primary text-primary shadow-sm shadow-primary/5'
-                          : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
-                          }`}
-                      >
-                        {opt}
-                      </button>
-                    );
-                  })}
+                  {currentQuestion.options && currentQuestion.options.length > 0 ? (
+                    currentQuestion.options.map((opt: string, i: number) => {
+                      const optLetter = opt.charAt(0); // A, B, C, D
+                      const isSelected = selectedOption === optLetter;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => handleOptionSelect(optLetter)}
+                          className={`w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
+                            ? 'bg-primary/10 border-primary text-primary shadow-sm shadow-primary/5'
+                            : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
+                            }`}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    // Điền từ tự do (Word Form / etc.)
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-muted-foreground">Đáp án của bạn:</label>
+                      <input
+                        type="text"
+                        value={selectedOption || ''}
+                        onChange={(e) => setSelectedOption(e.target.value)}
+                        placeholder="Nhập từ cần điền (ví dụ: inventions)..."
+                        className="w-full p-4 rounded-xl text-xs font-semibold border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-150"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && selectedOption && !isSubmitting) {
+                            handleSubmit();
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -2472,6 +2534,9 @@ export const PracticeEngine: React.FC = () => {
                     <div>
                       <h4 className="font-extrabold text-sm">Chính xác! Cực kỳ xuất sắc.</h4>
                       <p className="text-xs font-semibold opacity-90">Bạn đã tăng điểm số Mastery cho dạng bài này.</p>
+                      <p className="text-xs font-bold opacity-90 mt-1">
+                        Đáp án bạn đã {currentQuestion.options && currentQuestion.options.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption}</span>
+                      </p>
                       {existingAttempt?.teacherFeedback && (
                         <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
                           💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
@@ -2486,6 +2551,9 @@ export const PracticeEngine: React.FC = () => {
                       <h4 className="font-extrabold text-sm">Chưa đúng rồi! Nhưng không sao.</h4>
                       <p className="text-xs font-semibold opacity-90">
                         Câu hỏi đã được lưu vào **Sổ lỗi sai**. Hãy xem kỹ lời giải chi tiết dưới đây để khắc phục nhé!
+                      </p>
+                      <p className="text-xs font-bold opacity-90 mt-1">
+                        Đáp án bạn đã {currentQuestion.options && currentQuestion.options.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption || '(Trống)'}</span>
                       </p>
                       {existingAttempt?.teacherFeedback && (
                         <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">

@@ -192,24 +192,48 @@ export const englishQuestionTypes: QuestionType[] = [
     topicId: 'eng-t2',
     name: 'Chia dạng từ (Word Form)',
     slug: 'chia-dang-tu-word-form',
-    description: 'Dạng bài chia dạng đúng của từ trong ngoặc (danh từ, động từ, tính từ, trạng từ) để hoàn thành câu, xuất hiện phổ biến trong đề thi tuyển sinh vào 10 Bình Định.',
+    description: 'Dạng bài chia dạng đúng của từ trong ngoặc để hoàn thành câu, chiếm điểm số trực tiếp trong Part 6 của đề thi tuyển sinh lớp 10 Bình Định. Dạng bài này kiểm tra khả năng vận dụng ngữ pháp kết hợp biến đổi từ loại (Danh - Động - Tính - Trạng) từ một gốc từ cho trước (như inventions, studying, natural, unpleasant). Đây là bước tiếp nối trực tiếp ngay sau khi học sinh đã nắm vững Vị trí từ loại (Dạng 5) để thực hiện biến đổi từ chính xác theo cấu trúc câu thay vì đoán nghĩa.',
     recognitionSigns: [
-      'Câu có từ gợi ý trong ngoặc đơn ở cuối câu (ví dụ: (INVENT), (STUDY)...)',
-      'Yêu cầu điền từ thích hợp vào chỗ trống.'
+      'Cuối câu hỏi có một từ gốc viết hoa đặt trong ngoặc đơn như (INVENT), (STUDY), (NATURE), (PLEASE)...',
+      'Trong câu có một chỗ trống cần điền một từ loại đã được biến đổi chính xác để hoàn thành cấu trúc ngữ pháp và ý nghĩa của câu.'
     ],
     solvingSteps: [
-      'Xác định loại từ cần điền (danh từ, động từ, tính từ, hay trạng từ) dựa vào vị trí của chỗ trống và các từ xung quanh.',
-      'Xét ngữ cảnh và ý nghĩa của câu để xác định từ đó mang nghĩa khẳng định hay phủ định, số ít hay số nhiều.',
-      'Biến đổi từ gốc trong ngoặc theo đúng dạng và viết lại chính xác.'
+      'Bước 1: Xác định vị trí chỗ trống và phân tích cấu trúc ngữ pháp xung quanh (ví dụ: đứng sau tính từ cần danh từ, đứng trước danh từ cần tính từ, đứng sau động từ thường cần trạng từ...).',
+      'Bước 2: Quyết định loại từ cần điền: Danh từ (Noun), Động từ (Verb), Tính từ (Adjective) hay Trạng từ (Adverb).',
+      'Bước 3: Biến đổi từ gốc trong ngoặc sang đúng từ loại đã chọn bằng cách áp dụng các hậu tố phổ biến (-tion, -ment, -ful, -ly...) hoặc các tiền tố phù hợp.',
+      'Bước 4: Kiểm tra lại các yếu tố phụ trợ: Danh từ cần ở dạng số ít hay số nhiều (như sau "one of the" phải là danh từ số nhiều), từ cần mang nghĩa khẳng định hay phủ định (ví dụ pleasant vs unpleasant dựa trên ngữ cảnh).'
     ],
     commonMistakes: [
-      'Xác định sai loại từ cần điền (ví dụ cần tính từ nhưng điền trạng từ).',
-      'Quên không chia số nhiều của danh từ (ví dụ viết "invention" thay vì "inventions").',
-      'Không đổi sang nghĩa phủ định khi câu yêu cầu (ví dụ viết "pleasant" thay vì "unpleasant").'
+      'Xác định sai loại từ cần điền (nhầm lẫn giữa tính từ và trạng từ, hoặc điền động từ vào vị trí danh từ).',
+      'Quên chia danh từ số nhiều: Ghi danh từ số ít (ví dụ "invention") khi đứng sau các cụm từ yêu cầu số nhiều như "one of the...", "many", "some" (đáp án đúng phải là "inventions").',
+      'Bỏ qua phân tích nghĩa phủ định của câu: Điền từ mang nghĩa khẳng định trong ngữ cảnh tiêu cực (ví dụ: ghi "pleasant" khi ngữ cảnh câu chỉ sự khó chịu "không tìm được khách sạn", đúng ra phải là "unpleasant").',
+      'Sai chính tả khi thêm hậu tố (quên gấp đôi phụ âm, biến đổi sai đuôi "y" thành "i" trước khi thêm hậu tố, viết sai đuôi tiền tố phủ định).'
     ],
     difficulty: 'medium',
     examFrequency: 'high',
-    exampleQuestionId: 'eng-q85'
+    exampleQuestionId: 'eng-q85',
+    subTypes: [
+      {
+        name: 'Dạng 1: Biến đổi Động từ thành Danh từ (Verb -> Noun)',
+        example: 'The telephone is one of the most useful inventions of the 20th century. (INVENT)',
+        note: 'Đứng sau cụm "one of the most useful" (so sánh nhất + tính từ) bắt buộc phải là một danh từ số nhiều. Ta chuyển động từ "invent" thành danh từ "invention" rồi thêm "s" thành "inventions". Các cặp động - danh từ phổ biến: invent -> invention, decide -> decision, communicate -> communication, educate -> education, inform -> information, perform -> performance, attract -> attraction, protect -> protection.'
+      },
+      {
+        name: 'Dạng 2: Biến đổi Danh từ thành Tính từ (Noun -> Adjective)',
+        example: 'They are trying to protect the natural beauty of the area. (NATURE)',
+        note: 'Đứng trước danh từ "beauty" để bổ nghĩa cho nó cần một tính từ. Ta biến đổi danh từ "nature" thành tính từ "natural". Các cặp danh - tính từ hay gặp: nature -> natural, beauty -> beautiful, danger -> dangerous, environment -> environmental, use -> useful/useless, success -> successful, care -> careful/careless, peace -> peaceful.'
+      },
+      {
+        name: 'Dạng 3: Biến đổi Tính từ thành Trạng từ (Adjective -> Adverb)',
+        example: 'She speaks English very fluently. (FLUENT)',
+        note: 'Đứng sau để bổ nghĩa cho động từ hành động "speaks" cần một trạng từ chỉ cách thức. Ta thêm đuôi "-ly" vào sau tính từ "fluent" để thành trạng từ "fluently". Các trạng từ phổ biến: carefully, quickly, clearly, fluently, successfully, naturally.'
+      },
+      {
+        name: 'Dạng 4: Tạo từ mang nghĩa phủ định (Negative Prefixes)',
+        example: 'It was an unpleasant experience because we couldn\'t find a hotel. (PLEASE)',
+        note: 'Ngữ cảnh chỉ việc "không thể tìm thấy khách sạn" mang nghĩa tiêu cực. Ta cần chuyển "please" thành tính từ "pleasant" rồi thêm tiền tố phủ định "un-" thành "unpleasant". Các tiền tố phủ định thường gặp: un- (unhappy, unhealthy), im- (impossible, impatient), in- (incorrect, inactive), dis- (dishonest, disappear), il- (illegal), ir- (irregular).'
+      }
+    ]
   },
   {
     id: 'eng-qt8',

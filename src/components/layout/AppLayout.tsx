@@ -95,8 +95,8 @@ export const AppLayout: React.FC = () => {
 
     fetchRealPendingCount();
 
-    // Tự động tải lại mỗi 15 giây để báo bài mới cho Giáo viên
-    const interval = setInterval(fetchRealPendingCount, 15000);
+    // Tự động tải lại mỗi 180 giây để báo bài mới cho Giáo viên (tiết kiệm Firestore read)
+    const interval = setInterval(fetchRealPendingCount, 180000);
     return () => clearInterval(interval);
   }, [user, isTeacher]);
 
@@ -229,7 +229,7 @@ export const AppLayout: React.FC = () => {
         <nav className="flex-1 px-3 py-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path || 
+            const isActive = location.pathname === item.path ||
               (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
 
             return (
@@ -280,8 +280,8 @@ export const AppLayout: React.FC = () => {
                 {realPendingCount > 0 && (
                   <span className={cn(
                     "bg-rose-500 text-white font-black text-[9px] rounded-full flex items-center justify-center animate-bounce shrink-0",
-                    isSidebarCollapsed 
-                      ? "absolute top-1 right-1.5 w-3.5 h-3.5 text-[8px]" 
+                    isSidebarCollapsed
+                      ? "absolute top-1 right-1.5 w-3.5 h-3.5 text-[8px]"
                       : "ml-auto w-4.5 h-4.5"
                   )}>
                     {realPendingCount}
@@ -325,7 +325,7 @@ export const AppLayout: React.FC = () => {
         <div className={cn("p-4 border-t border-border/50 bg-slate-50/20 dark:bg-slate-900/5", isSidebarCollapsed && "p-2.5")}>
           {user ? (
             <div className={cn("flex items-center gap-2.5", isSidebarCollapsed && "flex-col gap-1 justify-center")}>
-              <div 
+              <div
                 className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0 cursor-pointer"
                 title={`${user.displayName || 'Học sinh'} (${user.email})`}
                 onClick={() => {
