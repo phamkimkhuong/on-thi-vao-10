@@ -1,55 +1,6 @@
 import { QuestionType } from '@/types';
 
 export const englishQuestionTypes: QuestionType[] = [
-  // Topic 1
-  {
-    id: 'eng-qt1',
-    topicId: 'eng-t1',
-    name: 'Phát âm đuôi -s/-es',
-    slug: 'phat-am-duoi-s-es',
-    description: 'Quy tắc phát âm đuôi danh từ số nhiều hoặc động từ chia ngôi thứ ba số ít, xuất hiện phổ biến trong phần ngữ âm trắc nghiệm.',
-    recognitionSigns: [
-      'Câu hỏi chọn từ có phần gạch chân phát âm khác các từ còn lại',
-      'Cả 4 từ đều tận cùng bằng đuôi -s hoặc -es'
-    ],
-    solvingSteps: [
-      'Xác định âm tận cùng của từ gốc trước khi thêm -s/-es:',
-      '- Nhóm 1: Phát âm là /ɪz/ khi từ gốc tận cùng bằng các âm rít: /s/, /z/, /ʃ/, /ʒ/, /tʃ/, /dʒ/ (mẹo nhớ: s, x, z, ch, sh, ge/ce)',
-      '- Nhóm 2: Phát âm là /s/ khi từ gốc tận cùng bằng các âm vô thanh: /p/, /t/, /k/, /f/, /θ/ (mẹo nhớ: Thảo Phải Kính Phật Tổ)',
-      '- Nhóm 3: Phát âm là /z/ cho các trường hợp còn lại (âm hữu thanh và nguyên âm)',
-      'Phân loại 4 từ trong đề bài vào 3 nhóm trên để tìm ra từ khác biệt'
-    ],
-    commonMistakes: [
-      'Nhầm lẫn giữa âm tận cùng trong chữ viết và âm thực tế trong phát âm (ví dụ: từ "laugh" kết thúc bằng "gh" nhưng phát âm là /f/, do đó phát âm đuôi là /s/ chứ không phải /z/)',
-      'Quên mất quy tắc phát âm đuôi -es sau các đuôi đặc biệt như "ce", "se", "ge"'
-    ],
-    difficulty: 'easy',
-    examFrequency: 'high'
-  },
-  {
-    id: 'eng-qt2',
-    topicId: 'eng-t1',
-    name: 'Phát âm đuôi -ed',
-    slug: 'phat-am-duoi-ed',
-    description: 'Quy tắc phát âm đuôi động từ quá khứ hoặc phân từ hai, là câu hỏi kinh điển luôn có trong đề thi tuyển sinh.',
-    recognitionSigns: [
-      'Câu hỏi chọn từ gạch chân phát âm khác',
-      'Cả 4 từ đều tận cùng bằng đuôi -ed'
-    ],
-    solvingSteps: [
-      'Xác định âm tận cùng của động từ gốc trước khi thêm -ed:',
-      '- Nhóm 1: Phát âm là /ɪd/ khi từ gốc tận cùng bằng âm /t/ hoặc /d/ (mẹo nhớ: Tiền Đô)',
-      '- Nhóm 2: Phát âm là /t/ khi từ gốc tận cùng bằng các âm vô thanh: /p/, /k/, /f/, /s/, /ʃ/, /tʃ/ (mẹo nhớ: Sáng Sớm Chạy Phố Không Phanh)',
-      '- Nhóm 3: Phát âm là /d/ cho các trường hợp còn lại (âm hữu thanh)',
-      'Phân loại 4 từ và chọn đáp án khác biệt nhất'
-    ],
-    commonMistakes: [
-      'Bị lừa bởi một số tính từ tận cùng bằng -ed phát âm ngoại lệ là /ɪd/ như: decided, naked, wicked, beloved, sacred, hatred',
-      'Nhầm lẫn âm vô thanh và hữu thanh dẫn đến phân loại sai'
-    ],
-    difficulty: 'easy',
-    examFrequency: 'high'
-  },
   // Topic 2
   {
     id: 'eng-qt3',
