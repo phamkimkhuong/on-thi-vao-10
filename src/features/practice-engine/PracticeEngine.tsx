@@ -105,8 +105,8 @@ export const PracticeEngine: React.FC = () => {
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
-  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | null>(null);
-  const [grammarSection, setGrammarSection] = useState<'dang1' | 'dang2' | null>(null);
+  const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | 'prep_phrasal' | null>(null);
+  const [grammarSection, setGrammarSection] = useState<'dang1' | 'dang2' | 'dang3' | null>(null);
   const [customQuestions, setCustomQuestions] = useState<Question[] | null>(null);
   const [selectedTensesForCombo, setSelectedTensesForCombo] = useState<string[]>([
     'present_simple',
@@ -272,6 +272,11 @@ export const PracticeEngine: React.FC = () => {
         filtered = filtered.filter(q => {
           const num = parseInt(q.id.replace('eng-q', ''), 10);
           return num >= 222 && num <= 261;
+        });
+      } else if (selectedSubTense === 'prep_phrasal') {
+        filtered = filtered.filter(q => {
+          const num = parseInt(q.id.replace('eng-q', ''), 10);
+          return num >= 262 && num <= 301;
         });
       } else if (selectedSubTense === 'tenses_review') {
         filtered = filtered.filter(q => {
@@ -1249,7 +1254,7 @@ export const PracticeEngine: React.FC = () => {
             <p className="text-xs text-muted-foreground font-semibold">Chọn chương trình học phù hợp để bắt đầu ôn tập.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
             {/* Dạng 1: Thì động từ cơ bản */}
             <Card
               className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md"
@@ -1303,6 +1308,38 @@ export const PracticeEngine: React.FC = () => {
                   </h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Học các mẫu verb patterns đi với to V, V-ing, V0, cấu trúc song song. Đây là phần chuyển tiếp cực kỳ quan trọng hỗ trợ cho dạng Word Form và viết lại câu.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
+                  <span>Bắt đầu học ngay →</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card
+              className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
+              onClick={() => {
+                setSelectedSubTense('prep_phrasal');
+                setGrammarSection('dang3');
+              }}
+            >
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-pink-100 dark:bg-pink-900/40 text-pink-600 dark:text-pink-400">
+                      Module 3
+                    </span>
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                      🔓 Sẵn sàng
+                    </span>
+                  </div>
+
+                  <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
+                    Dạng 3: Giới từ & Phrasal Verbs cơ bản
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Học giới từ đi sau tính từ, động từ, cụm động từ (phrasal verbs) hay gặp và giới từ thời gian/nơi chốn (in, on, at) để lấy trọn điểm trắc nghiệm.
                   </p>
                 </div>
 
@@ -1848,7 +1885,7 @@ export const PracticeEngine: React.FC = () => {
         <button
           onClick={() => {
             if (questionTypeId === 'eng-qt6') {
-              if (selectedSubTense === 'verb_combo') {
+              if (selectedSubTense === 'verb_combo' || selectedSubTense === 'prep_phrasal') {
                 setGrammarSection(null);
               }
               setSelectedSubTense(null);

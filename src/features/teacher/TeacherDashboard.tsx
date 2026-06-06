@@ -46,6 +46,7 @@ const getSubTenseName = (subId: string): string => {
     case 'v_ing': return 'Cấu trúc V-ing';
     case 'v0': return 'Động từ nguyên mẫu V0';
     case 'verb_combo': return 'Tổng hợp Cấu trúc động từ';
+    case 'prep_phrasal': return 'Giới từ & Phrasal Verbs';
     case 'tenses_review': return 'Kiểm tra tổng hợp 6 thì';
     default: return '';
   }
@@ -68,14 +69,10 @@ const detectSubTense = (attempt: UserAttempt): string => {
     return 'present_perfect';
   } else if (num >= 202 && num <= 221) {
     return 'future_simple';
-  } else if (num >= 222 && num <= 241) {
-    return 'to_v';
-  } else if (num >= 242 && num <= 261) {
-    return 'v_ing';
-  } else if (num >= 262 && num <= 281) {
-    return 'v0';
-  } else if (num >= 282 && num <= 291) {
+  } else if (num >= 222 && num <= 261) {
     return 'verb_combo';
+  } else if (num >= 262 && num <= 301) {
+    return 'prep_phrasal';
   }
   return '';
 };
@@ -97,14 +94,10 @@ const getQuestionSubTenseName = (questionId: string): string => {
     return 'Thì Hiện tại hoàn thành';
   } else if (num >= 202 && num <= 221) {
     return 'Thì Tương lai đơn';
-  } else if (num >= 222 && num <= 241) {
-    return 'Cấu trúc to V';
-  } else if (num >= 242 && num <= 261) {
-    return 'Cấu trúc V-ing';
-  } else if (num >= 262 && num <= 281) {
-    return 'Động từ nguyên mẫu V0';
-  } else if (num >= 282 && num <= 291) {
+  } else if (num >= 222 && num <= 261) {
     return 'Tổng hợp Cấu trúc động từ';
+  } else if (num >= 262 && num <= 301) {
+    return 'Giới từ & Phrasal Verbs';
   }
   return '';
 };
