@@ -9,7 +9,7 @@ import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../
 import { Button } from '../../components/ui/button';
 
 import { Question, Solution, StructuredAnswer, UserAttempt } from '../../types';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId } from '../../utils/subject';
@@ -24,6 +24,7 @@ import { ExamConfigView } from './components/ExamConfigView';
 import { ExamPracticeView } from './components/ExamPracticeView';
 import { QuestionCard } from './components/QuestionCard';
 import { ResultCard } from './components/ResultCard';
+import { AiTutorPanel } from '../../components/common/AiTutorPanel';
 
 const getNow = () => Date.now();
 
@@ -131,6 +132,7 @@ export const PracticeEngine: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [existingAttempt, setExistingAttempt] = useState<UserAttempt | null>(null);
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
+  const [isTutorOpen, setIsTutorOpen] = useState(false);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
   const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | 'prep_phrasal' | 'comparison' | 'word_position' | null>(null);
@@ -1089,23 +1091,36 @@ export const PracticeEngine: React.FC = () => {
     <div className="space-y-6 max-w-3xl mx-auto pb-12">
       {/* Header trạng thái luyện tập */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
-        <button
-          onClick={() => {
-            if (questionTypeId === 'eng-qt6') {
-              if (selectedSubTense === 'verb_combo' || selectedSubTense === 'prep_phrasal' || selectedSubTense === 'comparison' || selectedSubTense === 'word_position') {
-                setSelectedSubTense(null);
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              if (questionTypeId === 'eng-qt6') {
+                if (selectedSubTense === 'verb_combo' || selectedSubTense === 'prep_phrasal' || selectedSubTense === 'comparison' || selectedSubTense === 'word_position') {
+                  setSelectedSubTense(null);
+                } else {
+                  setGrammarSection('dang1');
+                  setSelectedSubTense(null);
+                }
               } else {
-                setGrammarSection('dang1');
-                setSelectedSubTense(null);
+                navigate('/practice');
               }
-            } else {
-              navigate('/practice');
-            }
-          }}
-          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all"
-        >
-          ← Quay lại
-        </button>
+            }}
+            className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all font-semibold"
+          >
+            ← Quay lại
+          </button>
+          
+          {!isExamMode && currentQuestion && (
+            <button
+              onClick={() => setIsTutorOpen(true)}
+              type="button"
+              className="text-xs font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm border border-emerald-500/25"
+            >
+              <Sparkles size={13} className="text-emerald-500 fill-emerald-500 animate-pulse" />
+              Hỏi Gia sư AI
+            </button>
+          )}
+        </div>
 
         {/* Bong bóng tròn hiển thị số câu */}
         <div className="flex flex-wrap items-center gap-1.5 flex-1 justify-end max-w-full overflow-x-auto py-1">
@@ -1184,6 +1199,16 @@ export const PracticeEngine: React.FC = () => {
           resetQuestionState={resetQuestionState}
           handleRetry={handleRetry}
           handleNext={handleNext}
+        />
+      )}
+
+      {currentQuestion && (
+        <AiTutorPanel
+          isOpen={isTutorOpen}
+          onClose={() => setIsTutorOpen(false)}
+          question={currentQuestion}
+          solution={solutionDetail || undefined}
+          studentAnswer={selectedOption || ''}
         />
       )}
     </div>

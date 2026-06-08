@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
+import { aiService } from '../../services/aiService';
 import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
 import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { SimulatedStudent, UserAttempt, UserProgress } from '../../types';
+import { SimulatedStudent, UserAttempt, UserProgress, Question, Solution } from '../../types';
 import {
   Users,
   GraduationCap,
@@ -20,7 +21,8 @@ import {
   Activity,
   UserCheck,
   Loader,
-  RefreshCw
+  RefreshCw,
+  Timer
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
@@ -103,6 +105,24 @@ const getQuestionSubTenseName = (questionId: string): string => {
   return '';
 };
 
+const fetchImageAsBase64 = async (url: string): Promise<{ data: string; mimeType: string }> => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      const base64Data = result.split(',')[1];
+      resolve({
+        data: base64Data,
+        mimeType: blob.type
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
+
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
@@ -117,10 +137,48 @@ export const TeacherDashboard: React.FC = () => {
   // Trạng thái chọn học sinh xem tiến độ
   const [selectedStudent, setSelectedStudent] = useState<SimulatedStudent | null>(null);
   const [studentProgress, setStudentProgress] = useState<UserProgress | null>(null);
+  const [selectedStudentAttempts, setSelectedStudentAttempts] = useState<UserAttempt[]>([]);
 
   const [reviewingItem, setReviewingItem] = useState<PendingGroup | null>(null);
   const [grades, setGrades] = useState<Record<string, { isCorrect: boolean; feedback: string }>>({});
   const [gradingSuccessMsg, setGradingSuccessMsg] = useState<string | null>(null);
+
+  const [aiGradingLoading, setAiGradingLoading] = useState<Record<string, boolean>>({});
+
+  const handleAiGrade = async (attempt: UserAttempt, question: Question, solution: Solution | undefined) => {
+
+    setAiGradingLoading(prev => ({ ...prev, [attempt.id]: true }));
+
+    try {
+      let imageObj = undefined;
+      if (attempt.proofImages && attempt.proofImages.length > 0) {
+        const url = attempt.proofImages[0].downloadUrl;
+        if (url) {
+          imageObj = await fetchImageAsBase64(url);
+        }
+      }
+
+      const result = await aiService.gradeProofAttempt(
+        question,
+        solution,
+        attempt.userAnswer || '',
+        imageObj
+      );
+
+      setGrades(prev => ({
+        ...prev,
+        [attempt.id]: {
+          isCorrect: result.isCorrect,
+          feedback: result.feedback
+        }
+      }));
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message || 'Không thể tự động chấm bằng AI.');
+    } finally {
+      setAiGradingLoading(prev => ({ ...prev, [attempt.id]: false }));
+    }
+  };
 
   const reviewingStudentStats = useMemo(() => {
     if (!reviewingItem) return { correct: 0, incorrect: 0 };
@@ -140,6 +198,55 @@ export const TeacherDashboard: React.FC = () => {
 
     return { correct, incorrect };
   }, [reviewingItem, grades]);
+
+  const selectedStudentStats = useMemo(() => {
+    if (!selectedStudent || !selectedStudentAttempts.length) {
+      return {
+        totalStudyMinutes: 0,
+        activeDaysInLast7: 0,
+        totalAttempts: 0,
+        accuracyRate: 0,
+        activityGrid: [] as Array<{ dateStr: string; label: string; count: number; active: boolean }>
+      };
+    }
+
+    const totalStudySeconds = selectedStudentAttempts.reduce((acc, a) => acc + (a.timeSpent || 0), 0);
+    const totalStudyMinutes = Math.round((totalStudySeconds / 60) * 10) / 10;
+    const totalAttempts = selectedStudentAttempts.length;
+    const correctAttempts = selectedStudentAttempts.filter(a => a.isCorrect).length;
+    const accuracyRate = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
+
+    // Tính 7 ngày qua
+    const grid = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().substring(0, 10);
+
+      const dayAttempts = selectedStudentAttempts.filter(a => a.createdAt.substring(0, 10) === dateStr);
+      const count = dayAttempts.length;
+
+      const weekdayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+      const label = `${weekdayNames[d.getDay()]} (${d.getDate()}/${d.getMonth() + 1})`;
+
+      grid.push({
+        dateStr,
+        label,
+        count,
+        active: count > 0
+      });
+    }
+
+    const activeDaysInLast7 = grid.filter(g => g.active).length;
+
+    return {
+      totalStudyMinutes,
+      activeDaysInLast7,
+      totalAttempts,
+      accuracyRate,
+      activityGrid: grid
+    };
+  }, [selectedStudent, selectedStudentAttempts]);
 
   const pendingGroups = useMemo(() => {
     const groupsMap = new Map<string, PendingGroup>();
@@ -172,6 +279,7 @@ export const TeacherDashboard: React.FC = () => {
     setIsLoading(true);
     setSelectedStudent(null);
     setStudentProgress(null);
+    setSelectedStudentAttempts([]);
 
     try {
       const list = await progressService.getRealStudents(teacherUserId ? [teacherUserId] : []);
@@ -290,14 +398,23 @@ export const TeacherDashboard: React.FC = () => {
   const handleSelectStudent = async (student: SimulatedStudent) => {
     setSelectedStudent(student);
     setIsLoading(true);
-    const prog = await progressService.getUserProgressFromFirestore(student.id);
-    setStudentProgress(prog || {
-      userId: student.id,
-      masteryLevels: {},
-      completedLessons: [],
-      lastUpdatedAt: new Date().toISOString()
-    });
-    setIsLoading(false);
+    try {
+      const [prog, atts] = await Promise.all([
+        progressService.getUserProgressFromFirestore(student.id),
+        progressService.getAttempts(student.id)
+      ]);
+      setStudentProgress(prog || {
+        userId: student.id,
+        masteryLevels: {},
+        completedLessons: [],
+        lastUpdatedAt: new Date().toISOString()
+      });
+      setSelectedStudentAttempts(atts || []);
+    } catch (err) {
+      console.error("Lỗi khi lấy thông tin chi tiết học sinh:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Bắt đầu chấm bài làm theo nhóm (group)
@@ -379,15 +496,18 @@ export const TeacherDashboard: React.FC = () => {
             </p>
           </div>
 
-          <div className="shrink-0 bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/20 flex items-center gap-2 text-xs font-extrabold shadow-sm text-white select-none">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>Hệ thống: Trực tuyến</span>
+          <div className="flex gap-2 items-center">
+            <div className="shrink-0 bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/20 flex items-center gap-2 text-xs font-extrabold shadow-sm text-white select-none">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span>Hệ thống: Trực tuyến</span>
+            </div>
+
+
           </div>
         </div>
         {/* Decor */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />
       </div>
-
       {/* Tabs Menu */}
       <div className="flex border-b border-border/30 gap-2">
         <button
@@ -496,23 +616,79 @@ export const TeacherDashboard: React.FC = () => {
 
                   <CardContent className="p-5 space-y-6">
                     {/* Thống kê nhanh */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-3 rounded-xl flex items-center gap-3">
-                        <Award className="text-emerald-500" size={24} />
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-3 rounded-xl flex items-center gap-2.5">
+                        <Award className="text-emerald-500 shrink-0" size={20} />
                         <div>
-                          <p className="text-[9px] font-bold text-muted-foreground uppercase leading-none mb-1">Số dạng đã master</p>
-                          <h4 className="text-sm font-black text-foreground">{studentProgress.completedLessons.length} / {mathQuestionTypes.length + englishQuestionTypes.length}</h4>
+                          <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Số dạng master</p>
+                          <h4 className="text-xs font-black text-foreground">{studentProgress.completedLessons.length} / {mathQuestionTypes.length + englishQuestionTypes.length}</h4>
                         </div>
                       </div>
 
-                      <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-3 rounded-xl flex items-center gap-3">
-                        <Activity className="text-indigo-500" size={24} />
+                      <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-3 rounded-xl flex items-center gap-2.5">
+                        <Activity className="text-indigo-500 shrink-0" size={20} />
                         <div>
-                          <p className="text-[9px] font-bold text-muted-foreground uppercase leading-none mb-1">Tỷ lệ hoàn thành</p>
-                          <h4 className="text-sm font-black text-foreground">
+                          <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tỷ lệ hoàn thành</p>
+                          <h4 className="text-xs font-black text-foreground">
                             {Math.round((studentProgress.completedLessons.length / (mathQuestionTypes.length + englishQuestionTypes.length)) * 100)}%
                           </h4>
                         </div>
+                      </div>
+
+                      <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-3 rounded-xl flex items-center gap-2.5">
+                        <Timer className="text-amber-500 shrink-0" size={20} />
+                        <div>
+                          <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tổng giờ tự học</p>
+                          <h4 className="text-xs font-black text-foreground">
+                            {selectedStudentStats.totalStudyMinutes} phút
+                          </h4>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-3 rounded-xl flex items-center gap-2.5">
+                        <CheckCircle className="text-teal-500 shrink-0" size={20} />
+                        <div>
+                          <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tỷ lệ chính xác</p>
+                          <h4 className="text-xs font-black text-foreground">
+                            {selectedStudentStats.accuracyRate}%
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Biểu đồ 7 ngày qua */}
+                    <div className="bg-slate-50 dark:bg-slate-900 border border-border/30 p-4 rounded-xl space-y-3">
+                      <div className="flex items-center justify-between border-b border-border/20 pb-2">
+                        <h5 className="text-[10px] font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
+                          <Activity size={14} className="text-emerald-500 animate-pulse" />
+                          Tần suất học tập 7 ngày qua ({selectedStudentStats.activeDaysInLast7}/7 ngày hoạt động)
+                        </h5>
+                        <span className="text-[9px] font-extrabold text-muted-foreground">
+                          Tổng cộng {selectedStudentStats.totalAttempts} câu đã làm
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-2">
+                        {selectedStudentStats.activityGrid.map((day, dIdx) => (
+                          <div
+                            key={dIdx}
+                            className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-card border border-border/40"
+                          >
+                            <span className="text-[8px] font-bold text-muted-foreground">{day.label.split(' ')[0]}</span>
+                            <div
+                              className={cn(
+                                "w-6 h-6 rounded-md flex items-center justify-center text-[9px] font-black transition-all",
+                                day.active
+                                  ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/20"
+                                  : "bg-slate-100 dark:bg-slate-800 text-muted-foreground/40 border border-dashed border-border/50"
+                              )}
+                              title={day.active ? `Đã làm ${day.count} câu vào ngày ${day.dateStr}` : 'Không có hoạt động'}
+                            >
+                              {day.count > 0 ? day.count : '-'}
+                            </div>
+                            <span className="text-[7px] font-semibold text-muted-foreground/60">{day.label.split(' ')[1]?.replace(/[()]/g, '')}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
@@ -842,7 +1018,26 @@ export const TeacherDashboard: React.FC = () => {
                               )}
 
                               <div className="space-y-2 border-t border-border/20 pt-3">
-                                <span className="text-[9px] font-bold text-muted-foreground block uppercase">Chấm kết quả câu này:</span>
+                                <div className="flex justify-between items-center">
+                                  <span className="text-[9px] font-bold text-muted-foreground uppercase">Chấm kết quả câu này:</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleAiGrade(attempt, question!, solutionDetail)}
+                                    disabled={aiGradingLoading[attempt.id]}
+                                    className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-md transition-all"
+                                  >
+                                    {aiGradingLoading[attempt.id] ? (
+                                      <>
+                                        <Loader size={10} className="animate-spin text-emerald-600" />
+                                        Đang chấm AI...
+                                      </>
+                                    ) : (
+                                      <>
+                                        🤖 Trợ lý AI Chấm
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
                                 <div className="flex gap-2">
                                   <button
                                     type="button"

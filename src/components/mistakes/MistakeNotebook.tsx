@@ -16,7 +16,8 @@ import {
   XCircle,
   Calendar,
   AlertTriangle,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer } from '../../types';
@@ -25,6 +26,7 @@ import { getSubjectTheme } from '../../utils/theme';
 import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../utils/answerValidator';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
+import { AiTutorPanel } from '../common/AiTutorPanel';
 
 interface EnrichedMistake extends UserMistake {
   question: Question;
@@ -50,6 +52,7 @@ export const MistakeNotebook: React.FC = () => {
   const [reSolution, setReSolution] = useState<Solution | null>(null);
   const [isReSubmitting, setIsReSubmitting] = useState(false);
   const [reSubmitError, setReSubmitError] = useState<string | null>(null);
+  const [isTutorOpen, setIsTutorOpen] = useState(false);
 
   const loadMistakes = useCallback(() => {
     const currentUserId = user!.uid;
@@ -370,17 +373,27 @@ export const MistakeNotebook: React.FC = () => {
       ) : (
         // GIẢI LẠI CÂU SAI (REVIEW MODE)
         <Card className="border-indigo-500/10 shadow-md">
-          <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30 flex flex-row items-center justify-between py-4">
+          <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30 flex flex-row items-center justify-between py-4 flex-wrap gap-2">
             <div className="flex flex-col">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Luyện lại câu sai</span>
               <CardTitle className="text-foreground text-sm font-bold mt-1">Dạng bài: {activeMistake.typeName}</CardTitle>
             </div>
-            <button
-              onClick={closeReview}
-              className="text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer"
-            >
-              Đóng lại [X]
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsTutorOpen(true)}
+                type="button"
+                className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg border border-emerald-500/20 transition-all flex items-center gap-1 cursor-pointer"
+              >
+                <Sparkles size={11} className="text-emerald-500 fill-emerald-500 animate-pulse" />
+                Hỏi Gia sư AI
+              </button>
+              <button
+                onClick={closeReview}
+                className="text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                Đóng lại [X]
+              </button>
+            </div>
           </CardHeader>
 
           <CardContent className="p-6 space-y-6">
@@ -533,6 +546,15 @@ export const MistakeNotebook: React.FC = () => {
         </Card>
       )}
 
+      {activeMistake && (
+        <AiTutorPanel
+          isOpen={isTutorOpen}
+          onClose={() => setIsTutorOpen(false)}
+          question={activeMistake.question}
+          solution={reSolution || undefined}
+          studentAnswer={selectedOption || reAnswer || ''}
+        />
+      )}
     </div>
   );
 };

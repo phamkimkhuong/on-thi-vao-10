@@ -3,6 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported, Analytics, setUserId, setUserProperties, logEvent as firebaseLogEvent } from 'firebase/analytics';
+import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC--Q8dDklMtRVrTkgczovpDPma28jq8xI",
@@ -15,13 +16,16 @@ const firebaseConfig = {
 };
 
 // Khởi tạo Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 // Khởi tạo Auth
 export const auth = getAuth(app);
 
 // Khởi tạo Firebase Storage để lưu ảnh bài làm tự luận
 export const firebaseStorage = getStorage(app);
+
+// Khởi tạo Functions để gọi Backend AI Proxy
+export const functions = getFunctions(app);
 
 // Khởi tạo Firestore với Offline Persistence (bộ nhớ đệm đa tab cục bộ)
 export const db = initializeFirestore(app, {
