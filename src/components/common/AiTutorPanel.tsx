@@ -4,6 +4,8 @@ import { aiService } from '../../services/aiService';
 import { LatexRenderer } from './LatexRenderer';
 import { Send, X, Bot, User, Sparkles, Loader, Trash2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db, auth } from '../../services/firebase';
 
 interface Message {
   role: 'user' | 'model';
@@ -28,18 +30,47 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Khởi động tin nhắn chào mừng
+  // Khởi động tin nhắn chào mừng hoặc tải lịch sử chat từ Firestore
   useEffect(() => {
     if (isOpen) {
-      setMessages([
-        {
-          role: 'model',
-          text: `Xin chào! Thầy là Gia sư AI ôn thi vào 10. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
-        }
-      ]);
+      if (auth.currentUser?.uid) {
+        setIsLoadingHistory(true);
+        const userId = auth.currentUser.uid;
+        const chatRef = doc(db, 'users', userId, 'chats', question.id);
+        
+        getDoc(chatRef).then((docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data && Array.isArray(data.messages)) {
+              setMessages(data.messages);
+              return;
+            }
+          }
+          // Default welcome message if no history exists
+          setMessages([
+            {
+              role: 'model',
+              text: `Xin chào! Thầy là Gia sư AI ôn thi vào 10. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
+            }
+          ]);
+        }).catch((err) => {
+          console.error("Lỗi khi tải lịch sử chat từ Firestore:", err);
+        }).finally(() => {
+          setIsLoadingHistory(false);
+        });
+      } else {
+        // Fallback default message
+        setMessages([
+          {
+            role: 'model',
+            text: `Xin chào! Thầy là Gia sư AI ôn thi vào 10. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
+          }
+        ]);
+      }
     }
   }, [isOpen, question.id]);
 
@@ -50,11 +81,25 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
 
   if (!isOpen) return null;
 
+  const saveChatHistory = async (updatedMessages: Message[]) => {
+    if (!auth.currentUser?.uid) return;
+    const userId = auth.currentUser.uid;
+    const chatRef = doc(db, 'users', userId, 'chats', question.id);
+    try {
+      await setDoc(chatRef, {
+        userId,
+        questionId: question.id,
+        messages: updatedMessages,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error("Lỗi khi lưu lịch sử chat vào Firestore:", err);
+    }
+  };
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-
-
 
     const userText = input.trim();
     setInput('');
@@ -73,16 +118,20 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
         userText
       );
 
-      setMessages(prev => [...prev, { role: 'model', text: tutorReply }]);
+      const finalMessages = [...updatedMessages, { role: 'model', text: tutorReply } as Message];
+      setMessages(finalMessages);
+      saveChatHistory(finalMessages);
     } catch (err: any) {
       console.error(err);
-      setMessages(prev => [
-        ...prev,
+      const errorMessages = [
+        ...updatedMessages,
         {
           role: 'model',
           text: `⚠️ Lỗi: ${err.message || 'Không thể kết nối với Gia sư AI.'}`
-        }
-      ]);
+        } as Message
+      ];
+      setMessages(errorMessages);
+      saveChatHistory(errorMessages);
     } finally {
       setIsLoading(false);
     }
@@ -90,13 +139,29 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
 
 
 
-  const handleClearHistory = () => {
-    setMessages([
+  const handleClearHistory = async () => {
+    const defaultWelcome: Message[] = [
       {
         role: 'model',
         text: `Đã làm sạch lịch sử trò chuyện. Thầy sẵn sàng hỗ trợ em giải đáp thắc mắc về câu hỏi này rồi!`
       }
-    ]);
+    ];
+    setMessages(defaultWelcome);
+
+    if (auth.currentUser?.uid) {
+      const userId = auth.currentUser.uid;
+      const chatRef = doc(db, 'users', userId, 'chats', question.id);
+      try {
+        await setDoc(chatRef, {
+          userId,
+          questionId: question.id,
+          messages: defaultWelcome,
+          updatedAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.error("Lỗi khi xóa lịch sử chat trong Firestore:", err);
+      }
+    }
   };
 
   return (
@@ -142,40 +207,47 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((m, idx) => {
-          const isBot = m.role === 'model';
-          return (
-            <div
-              key={idx}
-              className={cn(
-                "flex items-start gap-2.5 max-w-[85%] animate-fade-in",
-                isBot ? "self-start" : "ml-auto flex-row-reverse"
-              )}
-            >
+        {isLoadingHistory ? (
+          <div className="flex flex-col items-center justify-center h-48 text-muted-foreground gap-2 text-xs font-semibold animate-pulse">
+            <Loader size={18} className="animate-spin text-emerald-600" />
+            Đang tải lịch sử trò chuyện...
+          </div>
+        ) : (
+          messages.map((m, idx) => {
+            const isBot = m.role === 'model';
+            return (
               <div
+                key={idx}
                 className={cn(
-                  "w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm",
-                  isBot
-                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                    : "bg-primary text-primary-foreground"
+                  "flex items-start gap-2.5 max-w-[85%] animate-fade-in",
+                  isBot ? "self-start" : "ml-auto flex-row-reverse"
                 )}
               >
-                {isBot ? <Bot size={14} /> : <User size={14} />}
-              </div>
+                <div
+                  className={cn(
+                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm",
+                    isBot
+                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                      : "bg-primary text-primary-foreground"
+                  )}
+                >
+                  {isBot ? <Bot size={14} /> : <User size={14} />}
+                </div>
 
-              <div
-                className={cn(
-                  "p-3 rounded-2xl text-xs font-semibold leading-relaxed shadow-sm overflow-x-auto",
-                  isBot
-                    ? "bg-secondary text-foreground rounded-tl-none border border-border/40"
-                    : "bg-primary text-primary-foreground rounded-tr-none"
-                )}
-              >
-                <LatexRenderer text={m.text} />
+                <div
+                  className={cn(
+                    "p-3 rounded-2xl text-xs font-semibold leading-relaxed shadow-sm overflow-x-auto",
+                    isBot
+                      ? "bg-secondary text-foreground rounded-tl-none border border-border/40"
+                      : "bg-primary text-primary-foreground"
+                  )}
+                >
+                  <LatexRenderer text={m.text} />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
 
         {isLoading && (
           <div className="flex items-start gap-2.5 max-w-[85%] self-start animate-pulse">
