@@ -198,13 +198,13 @@ Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả 
   const suggestions = subject === 'math' ? mathSuggestions : englishSuggestions;
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full overflow-hidden p-4 lg:p-6 gap-6 bg-slate-50/50 dark:bg-slate-950/20">
+    <div className="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-100px)] lg:overflow-hidden p-0 gap-3 bg-slate-50/50 dark:bg-slate-950/20">
       
       {/* 1. Cột trái: Khung Chat */}
-      <div className="flex-1 flex flex-col bg-card border border-border/80 rounded-3xl shadow-xl overflow-hidden min-h-[500px] lg:min-h-0">
+      <div className="flex-1 flex flex-col bg-card border border-border/80 rounded-2xl shadow-xl overflow-hidden min-h-[500px] lg:min-h-0">
         
         {/* Chat Header */}
-        <div className="p-4 border-b border-border bg-slate-50/50 dark:bg-slate-900/20 flex flex-wrap items-center justify-between gap-4">
+        <div className="p-3 border-b border-border bg-slate-50/50 dark:bg-slate-900/20 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/10">
               <Bot size={20} />
@@ -258,7 +258,7 @@ Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả 
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-50/20 dark:bg-slate-900/5">
+        <div className="flex-grow overflow-y-auto p-3 space-y-3 bg-slate-50/20 dark:bg-slate-900/5">
           {messages.map((m, idx) => {
             const isBot = m.role === 'model';
             return (
@@ -305,7 +305,7 @@ Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả 
 
         {/* Gợi ý câu hỏi nhanh (nếu không loading) */}
         {!isLoading && (
-          <div className="p-3 bg-slate-50/40 dark:bg-slate-900/5 border-t border-border flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin">
+          <div className="p-2 bg-slate-50/40 dark:bg-slate-900/5 border-t border-border flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin">
             {suggestions.map((s, idx) => (
               <button
                 key={idx}
@@ -338,7 +338,7 @@ Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả 
         )}
 
         {/* Chat Input Form */}
-        <form onSubmit={(e) => handleSend(e)} className="p-4 border-t border-border bg-slate-50/50 dark:bg-slate-900/20 flex gap-2">
+        <form onSubmit={(e) => handleSend(e)} className="p-3 border-t border-border bg-slate-50/50 dark:bg-slate-900/20 flex gap-2">
           <input
             type="text"
             value={input}
@@ -364,10 +364,10 @@ Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả 
       </div>
 
       {/* 2. Cột phải: Hồ sơ năng lực (Real-time Profile) */}
-      <div className="w-full lg:w-80 shrink-0 flex flex-col gap-6">
+      <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3 lg:h-full lg:overflow-y-auto pr-1">
         
         {/* Profile Card */}
-        <div className="bg-card border border-border/80 rounded-3xl p-5 shadow-xl flex flex-col relative overflow-hidden">
+        <div className="bg-card border border-border/80 rounded-2xl p-4 shadow-xl flex flex-col relative overflow-hidden shrink-0">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-500/5 to-transparent rounded-bl-full pointer-events-none" />
           
           <div className="flex items-center gap-3">
@@ -406,7 +406,7 @@ Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả 
         </div>
 
         {/* Real-time Diagnostics Card */}
-        <div className="flex-1 bg-card border border-border/80 rounded-3xl p-5 shadow-xl flex flex-col overflow-hidden min-h-[300px]">
+        <div className="flex-1 bg-card border border-border/80 rounded-2xl p-4 shadow-xl flex flex-col overflow-hidden min-h-[300px] shrink-0">
           <div className="flex items-center gap-2 pb-4 border-b border-border">
             <Brain className="text-amber-500" size={18} />
             <div className="text-left">

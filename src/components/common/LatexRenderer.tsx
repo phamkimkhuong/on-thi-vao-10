@@ -58,13 +58,13 @@ const shouldRenderAsLatex = (text: string, block: boolean): boolean => {
  * Kiểm tra xem chuỗi có chứa delimiters LaTeX hay không: \\( ... \\) hoặc \\[ ... \\]
  */
 const hasLatexDelimiters = (text: string): boolean => {
-  return text.includes('\\(') || text.includes('\\[');
+  return text.includes('\\(') || text.includes('\\[') || text.includes('$');
 };
 
 /**
- * Regex phân tách chuỗi theo delimiters LaTeX: \\( ... \\) hoặc \\[ ... \\]
+ * Regex phân tách chuỗi theo delimiters LaTeX: $...$, $$...$$, \\( ... \\) hoặc \\[ ... \\]
  */
-const DELIMITER_REGEX = /(\\\(.*?\\\)|\\\[.*?\\\])/gs;
+const DELIMITER_REGEX = /(\$\$.*?\$\$|\$.*?\$|\\\(.*?\\\)|\\\[.*?\\\])/gs;
 
 /**
  * Render phần text thuần (không phải LaTeX) với hỗ trợ xuống dòng.
@@ -113,6 +113,18 @@ const renderMixedContent = (container: HTMLElement, text: string, defaultDisplay
       div.className = 'my-2 overflow-x-auto overflow-y-hidden py-1';
       renderKatex(formula, div, true);
       container.appendChild(div);
+    } else if (part.startsWith('$$') && part.endsWith('$$')) {
+      const formula = part.slice(2, -2);
+      const div = document.createElement('div');
+      div.className = 'my-2 overflow-x-auto overflow-y-hidden py-1';
+      renderKatex(formula, div, true);
+      container.appendChild(div);
+    } else if (part.startsWith('$') && part.endsWith('$')) {
+      const formula = part.slice(1, -1);
+      const span = document.createElement('span');
+      span.className = 'inline-block px-0.5';
+      renderKatex(formula, span, false);
+      container.appendChild(span);
     } else if (part) {
       // Text thuần — nếu text chứa LaTeX commands hoặc biểu thức toán học, render nốt bằng KaTeX
       if (shouldRenderAsLatex(part, defaultDisplayMode)) {

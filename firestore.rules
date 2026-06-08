@@ -100,6 +100,11 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+    match /student_profiles/{userId} {
+      allow read: if isOwner(userId) || isTeacher();
+      allow write: if false;
+    }
+
     match /users/{userId} {
       allow get: if isOwner(userId) || isTeacher();
       allow list: if isTeacher();
@@ -138,6 +143,11 @@ service cloud.firestore {
         allow read, write: if isOwner(userId);
         allow read: if isTeacher();
         allow delete: if isOwner(userId);
+      }
+
+      match /general_chats/{chatId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
       }
     }
   }

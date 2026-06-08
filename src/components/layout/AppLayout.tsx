@@ -173,7 +173,7 @@ export const AppLayout: React.FC = () => {
       {/* 🧭 Sidebar (Desktop & Mobile Panel) */}
       <aside className={`
         fixed md:sticky top-0 left-0 bottom-0 z-50 md:z-30
-        bg-card border-r border-border flex flex-col h-screen
+        bg-card border-r border-border flex flex-col h-screen overflow-y-auto
         transition-all duration-300 md:translate-x-0
         ${isSidebarCollapsed ? 'w-64 md:w-20' : 'w-64 md:w-64'}
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -465,7 +465,10 @@ export const AppLayout: React.FC = () => {
         </header>
 
         {/* ⚡ Content Wrapper */}
-        <div className="flex-1 p-4 md:p-8 animate-fade-in">
+        <div className={cn(
+          "flex-1 animate-fade-in",
+          location.pathname.startsWith('/ai-tutor') ? "p-2 md:p-3" : "p-4 md:p-8"
+        )}>
           <Outlet />
         </div>
       </main>
