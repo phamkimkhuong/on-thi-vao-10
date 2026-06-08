@@ -28,13 +28,10 @@ export const AppLayout: React.FC = () => {
     setSubject,
     user,
     logout,
-    progressVersion
+    progressVersion,
+    isPremium
   } = useAppStore();
   void progressVersion;
-
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
@@ -103,6 +100,10 @@ export const AppLayout: React.FC = () => {
     const interval = setInterval(fetchRealPendingCount, 180000);
     return () => clearInterval(interval);
   }, [user, isTeacher]);
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
 
   const menuItems = [
     { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
@@ -325,6 +326,19 @@ export const AppLayout: React.FC = () => {
           </div>
         )}
 
+        {/* Nâng cấp Premium Banner */}
+        {!isPremium && !isSidebarCollapsed && (
+          <div className="mx-4 my-3 p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-center animate-pulse shrink-0">
+            <span className="text-[10px] font-black text-amber-600 dark:text-amber-400 block mb-1.5">⚡ AI &amp; CHẶNG 3 BỊ GIỚI HẠN</span>
+            <button
+              onClick={() => { setIsSidebarOpen(false); navigate('/premium'); }}
+              className="w-full py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-[11px] rounded-lg shadow-md transition-all cursor-pointer"
+            >
+              Nâng cấp Premium
+            </button>
+          </div>
+        )}
+
         {/* Account Sidebar Section */}
         <div className={cn("p-4 border-t border-border/50 bg-slate-50/20 dark:bg-slate-900/5", isSidebarCollapsed && "p-2.5")}>
           <div className={cn("flex items-center gap-2.5", isSidebarCollapsed && "flex-col gap-1 justify-center")}>
@@ -343,9 +357,14 @@ export const AppLayout: React.FC = () => {
               </span>
             </div>
             {!isSidebarCollapsed ? (
-              <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-xs font-extrabold truncate text-foreground leading-none">{user.displayName || 'Học sinh'}</span>
-                <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1">{user.email}</span>
+              <div className="flex flex-col min-w-0 flex-1 text-left">
+                <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1">
+                  {user.displayName || 'Học sinh'}
+                  {isPremium && (
+                    <span className="px-1 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded font-black tracking-widest shrink-0 leading-none">PRO</span>
+                  )}
+                </span>
+                <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-1.5">{user.email}</span>
                 <button
                   onClick={() => { logout(); setIsSidebarOpen(false); navigate('/auth'); }}
                   className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer"
@@ -409,14 +428,28 @@ export const AppLayout: React.FC = () => {
             </div>
 
             {/* Account Status */}
+            {!isPremium && (
+              <button
+                onClick={() => navigate('/premium')}
+                className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-xs rounded-xl shadow-sm hover:shadow transition-all cursor-pointer flex items-center gap-1 shrink-0 scale-95"
+              >
+                👑 Lên Premium
+              </button>
+            )}
+
             <div className="flex items-center gap-2.5 pl-2 border-l border-border/50">
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
                 <span className="text-xs font-black text-primary">
                   {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
                 </span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-extrabold leading-none">{user.displayName || 'Học sinh'}</span>
+              <div className="flex flex-col text-left">
+                <span className="text-xs font-extrabold leading-none flex items-center gap-1">
+                  {user.displayName || 'Học sinh'}
+                  {isPremium && (
+                    <span className="px-1 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded font-black tracking-widest shrink-0 leading-none">PRO</span>
+                  )}
+                </span>
                 <button
                   onClick={() => { logout(); navigate('/auth'); }}
                   className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"

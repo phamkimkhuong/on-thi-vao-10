@@ -23,6 +23,7 @@ interface TopicSelectionViewProps {
   tensesReviewBestScore: number;
   startTensesReview: () => void;
   getSubTenseProgress: (qIds: string[]) => number;
+  isPremium: boolean;
 }
 
 export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
@@ -41,6 +42,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   tensesReviewBestScore,
   startTensesReview,
   getSubTenseProgress,
+  isPremium,
 }) => {
   const navigate = useNavigate();
   const isMath = routeSubject === 'math';
@@ -253,6 +255,13 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     key={qType.id}
                     className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
                     onClick={() => {
+                      if (topic.tier === 3 && !isPremium) {
+                        if (window.confirm("Chặng 3 (Mục tiêu điểm 9-10) là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa không?")) {
+                          navigate('/premium');
+                        }
+                        return;
+                      }
+
                       if (qType.id === 'eng-qt6') {
                         setGrammarSection('dang1');
                       } else {
@@ -268,9 +277,15 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                           <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
                             {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Bài học'}
                           </span>
-                          <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
-                            🔓 Sẵn sàng
-                          </span>
+                          {topic.tier === 3 && !isPremium ? (
+                            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
+                              👑 Khóa Premium
+                            </span>
+                          ) : (
+                            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+                              🔓 Sẵn sàng
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">

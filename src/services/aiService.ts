@@ -24,7 +24,7 @@ export const aiService = {
       console.error("Lỗi khi gọi callGeminiProxy:", err);
       // Xử lý thông điệp thân thiện với người dùng
       const message = err.message || 'Không nhận được câu trả lời từ AI.';
-      throw new Error(message);
+      throw new Error(message, { cause: err });
     }
   },
 

@@ -10,8 +10,10 @@ import MistakeNotebook from './components/mistakes/MistakeNotebook';
 import ExamEngine from './features/exam-engine/ExamEngine';
 import TeacherDashboard from './features/teacher/TeacherDashboard';
 import { AuthPage } from './features/auth/AuthPage';
+import { PremiumPricing } from './features/premium/PremiumPricing';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth, setAnalyticsUser } from './services/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { auth, setAnalyticsUser, db } from './services/firebase';
 import { progressService } from './services/progressService';
 import { Loader } from 'lucide-react';
 
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
       { path: 'mistakes', element: <MistakeNotebook /> },
       { path: 'exam', element: <ExamEngine /> },
       { path: 'teacher', element: <TeacherDashboard /> },
+      { path: 'premium', element: <PremiumPricing /> },
     ]
   },
   {
@@ -42,25 +45,64 @@ const router = createBrowserRouter([
 ]);
 
 export const App: React.FC = () => {
-  const { authLoading, setUser, setAuthLoading, refreshProgress } = useAppStore();
+  const { authLoading, setUser, setAuthLoading, refreshProgress, setPremium } = useAppStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    let unsubscribeUserDoc: (() => void) | null = null;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
         // Định danh người dùng trên Firebase Analytics
         setAnalyticsUser(user.uid);
+
+        // Lắng nghe real-time profile người dùng để cập nhật trạng thái Premium
+        unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            const premiumStatus = data.isPremium === true || data.role === 'premium';
+            
+            // Nếu người dùng vừa được nâng cấp lên Premium thành công, chúc mừng bằng hiệu ứng confetti!
+            const prevPremium = useAppStore.getState().isPremium;
+            if (premiumStatus && !prevPremium) {
+              import('canvas-confetti').then((confetti) => {
+                confetti.default({
+                  particleCount: 150,
+                  spread: 80,
+                  origin: { y: 0.6 }
+                });
+              });
+            }
+            
+            setPremium(premiumStatus);
+          } else {
+            setPremium(false);
+          }
+        }, (err) => {
+          console.error("Lỗi khi lắng nghe user profile:", err);
+        });
+
         // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập.
         await progressService.mergeGuestDataWithFirestore(user.uid);
         refreshProgress();
       } else {
         setAnalyticsUser(null);
+        setPremium(false);
+        if (unsubscribeUserDoc) {
+          unsubscribeUserDoc();
+          unsubscribeUserDoc = null;
+        }
       }
       setAuthLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [setUser, setAuthLoading, refreshProgress]);
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeUserDoc) {
+        unsubscribeUserDoc();
+      }
+    };
+  }, [setUser, setAuthLoading, refreshProgress, setPremium]);
 
   if (authLoading) {
     return (

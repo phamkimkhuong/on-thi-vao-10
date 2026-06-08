@@ -1,9 +1,16 @@
-import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import PayOS from "@payos/node";
 
 initializeApp();
 const db = getFirestore();
+
+const payOS = new PayOS(
+  process.env.PAYOS_CLIENT_ID || "",
+  process.env.PAYOS_API_KEY || "",
+  process.env.PAYOS_CHECKSUM_KEY || ""
+);
 
 // Hạn mức số lượng câu hỏi tối đa của mỗi tài khoản (100 câu hỏi/ngày)
 const DAILY_REQUEST_LIMIT = 100;
@@ -279,7 +286,20 @@ export const callGeminiProxy = onCall({
     console.error("Lỗi khi tải hồ sơ học sinh:", err);
   }
 
-  // 1.1 Kiểm tra hạn mức sử dụng ngày hôm nay cho tất cả tài khoản
+  // 1.05 Kiểm tra xem người dùng có phải là Premium hay không
+  let isPremium = false;
+  try {
+    const userDoc = await db.collection("users").doc(uid).get();
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      isPremium = userData.isPremium === true || userData.role === "premium";
+    }
+  } catch (err) {
+    console.error("Lỗi khi tải thông tin user để check Premium:", err);
+  }
+
+  // 1.1 Kiểm tra hạn mức sử dụng ngày hôm nay
+  const dailyLimit = isPremium ? DAILY_REQUEST_LIMIT : 5;
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -291,11 +311,18 @@ export const callGeminiProxy = onCall({
 
     const todayRequests = logsSnap.size;
 
-    if (todayRequests >= DAILY_REQUEST_LIMIT) {
-      throw new HttpsError(
-        "resource-exhausted",
-        `Tài khoản của bạn đã dùng hết hạn mức AI hàng ngày (${DAILY_REQUEST_LIMIT} câu hỏi). Vui lòng quay lại vào ngày mai nhé!`
-      );
+    if (todayRequests >= dailyLimit) {
+      if (!isPremium) {
+        throw new HttpsError(
+          "resource-exhausted",
+          "Hôm nay bạn đã dùng hết hạn mức 5 câu hỏi miễn phí. Hãy nâng cấp tài khoản Premium để không giới hạn ôn luyện cùng AI!"
+        );
+      } else {
+        throw new HttpsError(
+          "resource-exhausted",
+          `Tài khoản của bạn đã dùng hết hạn mức AI hàng ngày (${dailyLimit} câu hỏi). Vui lòng quay lại vào ngày mai nhé!`
+        );
+      }
     }
   } catch (err) {
     if (err instanceof HttpsError) throw err;
@@ -601,4 +628,119 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
       totalTokens: successUsage.totalTokenCount || 0
     } : null
   };
+});
+
+export const createPaymentLink = onCall({
+  cors: true
+}, async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Yêu cầu đăng nhập để mua gói Premium.");
+  }
+
+  const uid = request.auth.uid;
+  const email = request.auth.token?.email || "";
+
+  // Gói Premium giá 99.000 VNĐ
+  const amount = 99000;
+  const description = "Rut gon, Vi-et, hinh hoc 10"; 
+  
+  // PayOS orderCode must be a positive integer (53-bit integer limit)
+  const orderCode = Number(String(Date.now()).slice(-7) + String(Math.floor(Math.random() * 900 + 100)));
+
+  const { returnUrl, cancelUrl } = request.data;
+  if (!returnUrl || !cancelUrl) {
+    throw new HttpsError("invalid-argument", "Thiếu tham số returnUrl hoặc cancelUrl.");
+  }
+
+  const paymentData = {
+    orderCode,
+    amount,
+    description: description.slice(0, 25),
+    cancelUrl,
+    returnUrl,
+    items: [
+      {
+        name: "Premium Account",
+        quantity: 1,
+        price: amount
+      }
+    ]
+  };
+
+  try {
+    const response = await payOS.createPaymentLink(paymentData);
+
+    await db.collection("transactions").doc(String(orderCode)).set({
+      orderCode,
+      userId: uid,
+      email,
+      amount,
+      status: "pending",
+      paymentLinkId: response.paymentLinkId,
+      checkoutUrl: response.checkoutUrl,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    return {
+      checkoutUrl: response.checkoutUrl,
+      orderCode
+    };
+  } catch (error) {
+    console.error("Lỗi tạo link thanh toán PayOS:", error);
+    throw new HttpsError("internal", `Không thể tạo liên kết thanh toán: ${error.message}`);
+  }
+});
+
+export const payosWebhook = onRequest({
+  cors: true
+}, async (req, res) => {
+  try {
+    const body = req.body;
+    
+    // Xác thực chữ ký dữ liệu từ PayOS gửi sang
+    const verifiedData = payOS.verifyPaymentWebhookData(body);
+
+    const { orderCode, status } = verifiedData;
+    
+    if (status === "PAID") {
+      const txRef = db.collection("transactions").doc(String(orderCode));
+      const txDoc = await txRef.get();
+
+      if (txDoc.exists) {
+        const txData = txDoc.data();
+        if (txData.status !== "completed") {
+          const batch = db.batch();
+
+          batch.update(txRef, {
+            status: "completed",
+            updatedAt: new Date()
+          });
+
+          const userRef = db.collection("users").doc(txData.userId);
+          batch.set(userRef, {
+            isPremium: true,
+            role: "premium",
+            premiumUpdatedAt: new Date()
+          }, { merge: true });
+
+          await batch.commit();
+          console.log(`[Webhook] Nâng cấp Premium thành công cho user: ${txData.userId}, orderCode: ${orderCode}`);
+        }
+      } else {
+        console.warn(`[Webhook] Không tìm thấy bản ghi giao dịch cho orderCode: ${orderCode}`);
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Webhook processed successfully"
+    });
+  } catch (error) {
+    console.error("Lỗi xử lý webhook PayOS:", error);
+    return res.status(400).json({
+      success: false,
+      message: `Invalid signature or error: ${error.message}`
+    });
+  }
 });

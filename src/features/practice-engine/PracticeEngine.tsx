@@ -31,7 +31,7 @@ const getNow = () => Date.now();
 export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, setSubject, user, progressVersion, refreshProgress } = useAppStore();
+  const { selectedSubject, setSubject, user, progressVersion, refreshProgress, isPremium } = useAppStore();
   void progressVersion;
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
 
@@ -606,6 +606,7 @@ export const PracticeEngine: React.FC = () => {
     examAnswers,
     selectedSubTense,
     user,
+    selectedSubject,
     refreshProgress
   ]);
 
@@ -1065,6 +1066,7 @@ export const PracticeEngine: React.FC = () => {
         tensesReviewBestScore={tensesReviewBestScore}
         startTensesReview={startTensesReview}
         getSubTenseProgress={getSubTenseProgress}
+        isPremium={isPremium}
       />
     );
   }

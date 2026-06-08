@@ -9,6 +9,7 @@ interface AppState {
   // Auth state
   user: User | null;
   authLoading: boolean;
+  isPremium: boolean;
 
   // Reactivity trigger for LocalStorage progress changes
   progressVersion: number;
@@ -21,6 +22,7 @@ interface AppState {
 
   // Auth actions
   setUser: (user: User | null) => void;
+  setPremium: (isPremium: boolean) => void;
   setAuthLoading: (loading: boolean) => void;
   logout: () => Promise<void>;
 }
@@ -42,6 +44,7 @@ export const useAppStore = create<AppState>((set) => {
     user: null,
     authLoading: true,
     progressVersion: 0,
+    isPremium: false,
 
     toggleDarkMode: () => {
       if (typeof document !== 'undefined') {
@@ -59,6 +62,7 @@ export const useAppStore = create<AppState>((set) => {
     refreshProgress: () => set((state) => ({ progressVersion: state.progressVersion + 1 })),
 
     setUser: (user) => set({ user }),
+    setPremium: (isPremium) => set({ isPremium }),
     setAuthLoading: (loading) => set({ authLoading: loading }),
     logout: async () => {
       const { signOut } = await import('firebase/auth');

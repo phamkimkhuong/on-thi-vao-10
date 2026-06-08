@@ -11,7 +11,7 @@ import { getDifficultyTheme, getStarsFromScore, getTierTheme } from '../../utils
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject, user, progressVersion } = useAppStore();
+  const { selectedSubject, user, progressVersion, isPremium } = useAppStore();
   void progressVersion;
   const progress = storageService.getProgress(user!.uid).masteryLevels;
 
@@ -20,6 +20,15 @@ export const Roadmap: React.FC = () => {
   const getMasteryStars = (questionTypeId: string) => getStarsFromScore(progress[questionTypeId] ?? 0);
 
   const handleSelectType = (id: string) => {
+    const qType = questionTypes.find(t => t.id === id);
+    const topic = topics.find(t => t.id === qType?.topicId);
+    
+    if (topic?.tier === 3 && !isPremium) {
+      if (window.confirm("Chặng 3 (Mục tiêu điểm 9-10) là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?")) {
+        navigate('/premium');
+      }
+      return;
+    }
     navigate(`/question-types/${id}`);
   };
 
@@ -89,8 +98,11 @@ export const Roadmap: React.FC = () => {
                 'p-5 rounded-2xl border transition-all duration-300',
                 getTierTheme(tier.id).badgeStyle
               )}>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
                   <h3 className="text-base font-black tracking-tight">{tier.title}</h3>
+                  {tier.id === 3 && !isPremium && (
+                    <span className="px-2 py-0.5 text-[8px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest uppercase shadow-sm animate-pulse">👑 Khóa Premium</span>
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground font-semibold mt-1.5 leading-relaxed">
                   {tier.description}

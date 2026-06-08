@@ -94,6 +94,12 @@ service cloud.firestore {
       allow list, create, update, delete: if false;
     }
 
+    match /transactions/{transactionId} {
+      allow get: if signedIn() && resource.data.userId == request.auth.uid;
+      allow list: if false;
+      allow create, update, delete: if false;
+    }
+
     match /users/{userId} {
       allow get: if isOwner(userId) || isTeacher();
       allow list: if isTeacher();
