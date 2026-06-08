@@ -6,6 +6,29 @@ import admin from "firebase-admin";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Hàm loại bỏ dấu tiếng Việt (đưa về ký tự không dấu)
+function removeAccents(str) {
+  if (!str) return "";
+  return str.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "d");
+}
+
+// Hàm trích xuất danh sách các từ khóa có nghĩa (hỗ trợ có dấu và không dấu)
+function extractKeywords(text) {
+  if (!text) return [];
+  const cleanWithAccents = text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'\[\]]/g, " ");
+  const cleanNoAccents = removeAccents(cleanWithAccents);
+  
+  const wordsWithAccents = cleanWithAccents.split(/\s+/).filter(w => w.length >= 2);
+  const wordsNoAccents = cleanNoAccents.split(/\s+/).filter(w => w.length >= 2);
+  
+  const combined = [...wordsWithAccents, ...wordsNoAccents];
+  // Loại bỏ các từ trùng lặp và giới hạn tối đa 40 từ
+  return [...new Set(combined)].slice(0, 40);
+}
+
 // 1. Đọc file env của functions để lấy API Key
 function loadApiKey() {
   const envPath = path.join(__dirname, ".env");
@@ -126,6 +149,10 @@ async function run() {
           return;
         }
 
+        // Trích xuất các từ khóa phục vụ cho Hybrid Search (kết hợp title của chunk và tên dạng bài lớn)
+        const cleanTextForKeywords = `${chunkTitle} ${qType.name}`;
+        const keywords = extractKeywords(cleanTextForKeywords);
+
         await collectionRef.doc(chunkId).set({
           subjectId: qType.subjectId,
           parentId: qType.id,
@@ -133,10 +160,11 @@ async function run() {
           chunkType: chunkType,
           title: chunkTitle,
           content: chunkContent,
+          keywords: keywords,
           embedding: admin.firestore.FieldValue.vector(embedding),
           updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
-        console.log(`  - Thành công: Đã ghi chunk [${chunkType}] với ID: ${chunkId}`);
+        console.log(`  - Thành công: Đã ghi chunk [${chunkType}] với ID: ${chunkId} (${keywords.length} keywords)`);
       } catch (err) {
         console.error(`  - Lỗi khi ghi chunk [${chunkType}] ${chunkId}:`, err.message);
       }

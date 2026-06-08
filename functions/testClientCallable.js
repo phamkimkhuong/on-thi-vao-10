@@ -28,6 +28,10 @@ async function run() {
     projectId: "on-thi-vao-10-7d87c"
   });
 
+  const db = admin.firestore();
+  await db.collection("student_profiles").doc("test-diagnostic-user").delete();
+  console.log("Đã xóa sạch hồ sơ học sinh cũ test-diagnostic-user.");
+
   const customToken = await admin.auth().createCustomToken("test-diagnostic-user", {
     email: "diagnostic@test.com"
   });
@@ -142,6 +146,96 @@ async function run() {
     console.log("==================================================\n");
   } catch (err) {
     console.error("Lỗi khi gọi Test Case 3:", err);
+  }
+
+  // Test Case 4: Kiểm tra Trí nhớ Dài hạn (student_profiles)
+  console.log("Đang gọi Test Case 4 (Học sinh mắc lỗi sai, mong đợi hệ thống ghi nhận vào Firestore)...");
+  const paramsMemoryTrigger = {
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: "Thưa thầy, em tính ra biệt thức delta bằng 5 rồi. Thế là phương trình vô nghiệm đúng không thầy?" }]
+      }
+    ],
+    systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
+    useRag: false,
+    subjectId: "math"
+  };
+
+  try {
+    const resultMemoryTrigger = await callGeminiProxy(paramsMemoryTrigger);
+    console.log("\n==================================================");
+    console.log("TEST CASE 4.1: MẮC LỖI SAI (Ghi nhận điểm yếu)");
+    console.log("AI phản hồi:", resultMemoryTrigger.data.text);
+    console.log("==================================================\n");
+
+    // Đợi 2 giây để chắc chắn Firestore đã được ghi nhận
+    console.log("Đang chờ 2 giây để Firestore lưu trữ...");
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Đọc hồ sơ học sinh trên Firestore
+    const docSnap = await db.collection("student_profiles").doc("test-diagnostic-user").get();
+    console.log("==================================================");
+    console.log("KẾT QUẢ HỒ SƠ HỌC SINH LƯU TRÊN FIRESTORE:");
+    console.log(JSON.stringify(docSnap.data(), null, 2));
+    console.log("==================================================\n");
+
+    // Gọi lần thứ 2 với một câu hỏi bình thường để xem AI có tải điểm yếu của học sinh từ Firestore vào ngữ cảnh học hay không
+    console.log("Đang gọi Test Case 4.2 (Nhắc nhở từ Trí nhớ dài hạn)...");
+    const paramsMemoryRecall = {
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: "Thưa thầy, em tính ra biệt thức delta bằng 5 rồi. Thế là phương trình vô nghiệm đúng không thầy?" }]
+        },
+        {
+          role: "model",
+          parts: [{ text: resultMemoryTrigger.data.text }]
+        },
+        {
+          role: "user",
+          parts: [{ text: "Em hiểu rồi ạ, thầy cho em xin một bài tập tự luyện nhỏ về phần này với ạ." }]
+        }
+      ],
+      systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
+      useRag: false,
+      subjectId: "math"
+    };
+
+    const resultMemoryRecall = await callGeminiProxy(paramsMemoryRecall);
+    console.log("\n==================================================");
+    console.log("TEST CASE 4.2: NHẮC NHỞ TỪ TRÍ NHỚ DÀI HẠN (RECALL)");
+    console.log("AI phản hồi (Mong đợi AI tự động chú ý hoặc nhắc nhở điểm yếu về dấu delta):");
+    console.log(resultMemoryRecall.data.text);
+    console.log("==================================================\n");
+
+  } catch (err) {
+    console.error("Lỗi khi gọi Test Case 4:", err);
+  }
+
+  // Test Case 5: Kiểm tra Hybrid Search (Tìm kiếm Lai kết hợp Vector + Keywords không dấu)
+  console.log("Đang gọi Test Case 5 (Kiểm tra Hybrid Search với từ khóa không dấu 'although because')...");
+  const paramsHybridSearch = {
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: "thay huong dan em cach viet lai cau although because voi a" }]
+      }
+    ],
+    systemInstruction: "Bạn là một Gia sư AI môn Tiếng Anh ôn thi lớp 10.",
+    useRag: true,
+    subjectId: "english"
+  };
+
+  try {
+    const resultHybridSearch = await callGeminiProxy(paramsHybridSearch);
+    console.log("\n==================================================");
+    console.log("TEST CASE 5: HYBRID SEARCH VERIFICATION (Accents-less Keyword Match)");
+    console.log("AI phản hồi (Mong đợi tìm đúng tài liệu Although/Because và giảng giải cách chuyển đổi):");
+    console.log(resultHybridSearch.data.text);
+    console.log("==================================================\n");
+  } catch (err) {
+    console.error("Lỗi khi gọi Test Case 5:", err);
   }
 }
 

@@ -32,6 +32,29 @@ async function getEmbedding(text, apiKey) {
   return data?.embedding?.values;
 }
 
+// Hàm loại bỏ dấu tiếng Việt (đưa về ký tự không dấu)
+function removeAccents(str) {
+  if (!str) return "";
+  return str.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "d");
+}
+
+// Hàm trích xuất danh sách các từ khóa có nghĩa (hỗ trợ có dấu và không dấu)
+function extractKeywords(text) {
+  if (!text) return [];
+  const cleanWithAccents = text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'\[\]]/g, " ");
+  const cleanNoAccents = removeAccents(cleanWithAccents);
+  
+  const wordsWithAccents = cleanWithAccents.split(/\s+/).filter(w => w.length >= 2);
+  const wordsNoAccents = cleanNoAccents.split(/\s+/).filter(w => w.length >= 2);
+  
+  const combined = [...wordsWithAccents, ...wordsNoAccents];
+  // Loại bỏ trùng lặp và giới hạn tối đa 30 từ (do Firestore array-contains-any chỉ hỗ trợ tối đa 30 phần tử)
+  return [...new Set(combined)].slice(0, 30);
+}
+
 // Hàm tóm tắt hội thoại cũ thành 1 câu duy nhất bằng LLM
 async function summarizeHistory(historyToCompress, apiKey) {
   let textToCompress = historyToCompress.map(h => {
@@ -125,6 +148,88 @@ Câu truy vấn tìm kiếm tri thức được viết lại (hoặc "NONE"):`;
   }
 }
 
+// Hàm phân tích hội thoại hiện tại và cập nhật hồ sơ học sinh (student_profiles)
+async function updateStudentProfile(uid, userMessage, assistantMessage, currentProfile, apiKey) {
+  const oldStrengths = currentProfile?.strengths || [];
+  const oldWeaknesses = currentProfile?.weaknesses || [];
+  const oldSummary = currentProfile?.learningSummary || "";
+
+  const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10.
+Nhiệm vụ của bạn là: Đọc lượt hội thoại cuối cùng dưới đây giữa Học sinh và Gia sư AI, đối chiếu với Hồ sơ cũ của học sinh, và trích xuất thêm các điểm mạnh mới, điểm yếu/lỗi sai mới, cũng như cập nhật lại câu tóm tắt tiến trình học tập của học sinh.
+
+Hội thoại cuối cùng:
+- Học sinh: "${userMessage}"
+- Gia sư AI: "${assistantMessage}"
+
+Hồ sơ cũ của học sinh:
+- Điểm mạnh cũ: ${oldStrengths.length > 0 ? JSON.stringify(oldStrengths) : "(Không có)"}
+- Điểm yếu/Lỗi sai cũ: ${oldWeaknesses.length > 0 ? JSON.stringify(oldWeaknesses) : "(Không có)"}
+- Tóm tắt cũ: "${oldSummary || "(Không có)"}"
+
+Yêu cầu trích xuất:
+1. Điểm mạnh mới (newStrengths): Chỉ ghi nhận khi học sinh tự giải đúng bài tập, hiểu bài nhanh, áp dụng đúng công thức, hoặc biết liên kết các kiến thức khó.
+2. Điểm yếu mới (newWeaknesses): Ghi nhận khi học sinh tính toán sai số học, quên điều kiện áp dụng, áp dụng sai công thức, nhầm lẫn khái niệm, hoặc thể hiện sự lúng túng ở một phần kiến thức cụ thể.
+3. Tóm tắt mới (learningSummary): Viết lại 1 câu duy nhất (dưới 30 từ) tóm tắt toàn bộ tiến trình năng lực hiện tại của học sinh sau lượt hội thoại này.
+4. Chỉ ghi nhận các điểm mạnh/yếu THỰC SỰ NỔI BẬT và MỚI (không trùng lặp ngữ nghĩa với Hồ sơ cũ). Mỗi ý chỉ viết từ 3-7 từ ngắn gọn (ví dụ: "Quên đk delta >= 0", "Nhầm dấu công thức Vi-ét").
+5. Trả về kết quả dưới dạng cấu trúc JSON sạch, không bọc trong markdown (không dùng \`\`\`json ... \`\`\`), có dạng:
+{
+  "newStrengths": ["...", "..."],
+  "newWeaknesses": ["...", "..."],
+  "learningSummary": "..."
+}
+
+Kết quả JSON:`;
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }]
+      })
+    });
+    if (!response.ok) {
+      console.warn("LLM updateStudentProfile trả về lỗi HTTP:", response.status);
+      return;
+    }
+    const data = await response.json();
+    let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+    
+    // Clean JSON wrappers if any
+    if (rawText.startsWith("```")) {
+      rawText = rawText.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+    }
+    
+    const parsed = JSON.parse(rawText);
+    const { newStrengths = [], newWeaknesses = [], learningSummary = "" } = parsed;
+
+    // Merge strengths and weaknesses (remove duplicates and empty values)
+    const mergeAndUnique = (oldArr, newArr) => {
+      const combined = [...oldArr, ...newArr.map(s => s.trim())].filter(Boolean);
+      return [...new Set(combined)];
+    };
+
+    const updatedStrengths = mergeAndUnique(oldStrengths, newStrengths);
+    const updatedWeaknesses = mergeAndUnique(oldWeaknesses, newWeaknesses);
+    const finalSummary = learningSummary || oldSummary;
+
+    // Cập nhật lên Firestore
+    await db.collection("student_profiles").doc(uid).set({
+      strengths: updatedStrengths,
+      weaknesses: updatedWeaknesses,
+      learningSummary: finalSummary,
+      lastUpdated: new Date()
+    }, { merge: true });
+    
+    console.log(`[Memory] Updated student profile for uid: ${uid}. Added strengths: ${JSON.stringify(newStrengths)}, weaknesses: ${JSON.stringify(newWeaknesses)}`);
+  } catch (err) {
+    console.error("Lỗi khi cập nhật hồ sơ học sinh:", err);
+  }
+}
+
 export const callGeminiProxy = onCall({
   cors: true
 }, async (request) => {
@@ -145,6 +250,33 @@ export const callGeminiProxy = onCall({
   const { prompt, contents, systemInstruction, useRag, subjectId, image } = request.data;
   if (!prompt && !contents) {
     throw new HttpsError("invalid-argument", "Thiếu tham số prompt hoặc contents.");
+  }
+
+  // 1.15 Tải hồ sơ năng lực học sinh (Long-term Memory)
+  let studentProfile = null;
+  let profileInstruction = "";
+  try {
+    const profileDoc = await db.collection("student_profiles").doc(uid).get();
+    if (profileDoc.exists) {
+      studentProfile = profileDoc.data();
+      const strengths = studentProfile.strengths || [];
+      const weaknesses = studentProfile.weaknesses || [];
+      const summary = studentProfile.learningSummary || "";
+      
+      profileInstruction = `\n\nHỒ SƠ NĂNG LỰC HỌC SINH HIỆN TẠI:`;
+      if (strengths.length > 0) {
+        profileInstruction += `\n- Điểm mạnh: ${strengths.join(", ")}`;
+      }
+      if (weaknesses.length > 0) {
+        profileInstruction += `\n- Điểm yếu / Lỗi sai thường gặp: ${weaknesses.join(", ")}`;
+      }
+      if (summary) {
+        profileInstruction += `\n- Tóm tắt tiến trình học tập: ${summary}`;
+      }
+      profileInstruction += `\nLưu ý: Hãy khéo léo nhắc nhở học sinh sửa các lỗi sai thường gặp và tận dụng điểm mạnh của mình nếu chủ đề hội thoại liên quan. Tuyệt đối KHÔNG liệt kê trực tiếp toàn bộ hồ sơ này cho học sinh xem, chỉ dùng làm ngữ cảnh sư phạm ngầm để giảng dạy.`;
+    }
+  } catch (err) {
+    console.error("Lỗi khi tải hồ sơ học sinh:", err);
   }
 
   // 1.1 Kiểm tra hạn mức sử dụng ngày hôm nay cho tất cả tài khoản
@@ -209,37 +341,88 @@ export const callGeminiProxy = onCall({
         } else {
           console.log(`[RAG] Generating embedding for: "${rewrittenQuery.substring(0, 50)}..."`);
           const queryEmbedding = await getEmbedding(rewrittenQuery, apiKey);
-        if (queryEmbedding) {
-          console.log(`[RAG] Querying Firestore vector search for subject: ${subjectId}`);
-          const query = db.collection("knowledge_base")
-            .where("subjectId", "==", subjectId)
-            .findNearest({
-              vectorField: "embedding",
-              queryVector: queryEmbedding,
-              distanceMeasure: "COSINE",
-              limit: 2,
-              distanceThreshold: 0.3
-            });
-          const snapshot = await query.get();
-          const documents = [];
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            documents.push({
-              title: data.title,
-              parentTitle: data.parentTitle,
-              content: data.content
-            });
-          });
+          if (queryEmbedding) {
+            console.log(`[RAG] Running Hybrid Search for query: "${rewrittenQuery}"`);
+            
+            // 1. Tạo Promise 1: Semantic Vector Search
+            const vectorQuery = db.collection("knowledge_base")
+              .where("subjectId", "==", subjectId)
+              .findNearest({
+                vectorField: "embedding",
+                queryVector: queryEmbedding,
+                distanceMeasure: "COSINE",
+                limit: 2,
+                distanceThreshold: 0.3
+              });
 
-          if (documents.length > 0) {
-            console.log(`[RAG] Found ${documents.length} matching document(s).`);
-            ragContext = "\n\nTÀI LIỆU THAM KHẢO LIÊN QUAN:\n" + documents.map(d => `---
+            // 2. Tạo Promise 2: Keyword Search (array-contains-any)
+            const queryKeywords = extractKeywords(rewrittenQuery);
+            let keywordQueryPromise = Promise.resolve({ docs: [] });
+            
+            if (queryKeywords.length > 0) {
+              console.log(`[RAG] Keyword Search query tokens: ${JSON.stringify(queryKeywords)}`);
+              keywordQueryPromise = db.collection("knowledge_base")
+                .where("subjectId", "==", subjectId)
+                .where("keywords", "array-contains-any", queryKeywords)
+                .limit(2)
+                .get()
+                .catch(err => {
+                  console.error("Lỗi khi truy vấn keyword search (sẽ bỏ qua):", err);
+                  return { docs: [] };
+                });
+            }
+
+            // Chạy song song cả hai truy vấn
+            const [vectorSnap, keywordSnap] = await Promise.all([
+              vectorQuery.get(),
+              keywordQueryPromise
+            ]);
+
+            const mergedDocsMap = new Map();
+
+            // Đọc kết quả từ Vector Search trước (độ ưu tiên cao hơn)
+            vectorSnap.forEach(doc => {
+              const data = doc.data();
+              const uniqueId = doc.id;
+              mergedDocsMap.set(uniqueId, {
+                id: uniqueId,
+                title: data.title,
+                parentTitle: data.parentTitle,
+                content: data.content,
+                source: "vector"
+              });
+            });
+
+            // Đọc kết quả từ Keyword Search
+            keywordSnap.forEach(doc => {
+              const data = doc.data();
+              const uniqueId = doc.id;
+              // Nếu đã có trong map, đánh dấu là match cả hai, nếu chưa thì thêm mới
+              if (mergedDocsMap.has(uniqueId)) {
+                mergedDocsMap.get(uniqueId).source += "+keyword";
+              } else {
+                mergedDocsMap.set(uniqueId, {
+                  id: uniqueId,
+                  title: data.title,
+                  parentTitle: data.parentTitle,
+                  content: data.content,
+                  source: "keyword"
+                });
+              }
+            });
+
+            // Lấy danh sách kết quả đã loại trùng và giới hạn tối đa 3 tài liệu
+            const mergedDocuments = Array.from(mergedDocsMap.values()).slice(0, 3);
+            console.log(`[RAG] Hybrid search merged ${mergedDocuments.length} unique document(s). Sources: ${mergedDocuments.map(d => `${d.id}(${d.source})`).join(", ")}`);
+
+            if (mergedDocuments.length > 0) {
+              ragContext = "\n\nTÀI LIỆU THAM KHẢO LIÊN QUAN:\n" + mergedDocuments.map(d => `---
 [Chủ đề: ${d.parentTitle ? `${d.parentTitle} -> ${d.title}` : d.title}]
 Nội dung: ${d.content}`).join("\n") + "\n---";
-          } else {
-            console.log("[RAG] No matching documents found.");
+            } else {
+              console.log("[RAG] No matching documents found through Hybrid search.");
+            }
           }
-        }
       }
       }
     } catch (err) {
@@ -302,8 +485,11 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
     }
   }
 
-  // Kết hợp System Instruction gốc với tài liệu RAG và Tóm tắt lịch sử
+  // Kết hợp System Instruction gốc với hồ sơ học sinh, tài liệu RAG và Tóm tắt lịch sử
   let finalSystemInstruction = systemInstruction || "";
+  if (profileInstruction) {
+    finalSystemInstruction += profileInstruction;
+  }
   if (historySummary) {
     finalSystemInstruction += `\n\nTÓM TẮT TIẾN TRÌNH HỘI THOẠI TRƯỚC ĐÓ:\n- ${historySummary}\n`;
   }
@@ -370,6 +556,12 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
       // Lấy dữ liệu token tiêu thụ của model chạy thành công
       successUsage = data.usageMetadata;
       console.log(`Gọi thành công model: ${model}`);
+
+      // Pha cập nhật (Update Memory): Phân tích cuộc hội thoại hiện tại để cập nhật hồ sơ học sinh
+      if (uid && responseText && queryText) {
+        await updateStudentProfile(uid, queryText, responseText, studentProfile, apiKey);
+      }
+
       break; // Gọi thành công, thoát khỏi vòng lặp thử model
     } catch (err) {
       console.error(`Lỗi kết nối khi gọi model ${model}:`, err);
