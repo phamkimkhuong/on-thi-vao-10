@@ -894,7 +894,6 @@ export const PracticeEngine: React.FC = () => {
       const goBack = window.confirm('Chúc mừng bạn đã hoàn thành tất cả câu hỏi ôn tập của dạng bài này! Bạn có muốn quay lại danh sách không?');
       if (goBack) {
         if (questionTypeId === 'eng-qt6') {
-          setGrammarSection('dang1');
           setSelectedSubTense(null);
         } else {
           navigate('/practice');
@@ -1101,12 +1100,7 @@ export const PracticeEngine: React.FC = () => {
           <button
             onClick={() => {
               if (questionTypeId === 'eng-qt6') {
-                if (selectedSubTense === 'verb_combo' || selectedSubTense === 'prep_phrasal' || selectedSubTense === 'comparison' || selectedSubTense === 'word_position') {
-                  setSelectedSubTense(null);
-                } else {
-                  setGrammarSection('dang1');
-                  setSelectedSubTense(null);
-                }
+                setSelectedSubTense(null);
               } else {
                 navigate('/practice');
               }

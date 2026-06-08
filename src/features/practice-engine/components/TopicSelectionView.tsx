@@ -47,73 +47,137 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const navigate = useNavigate();
   const isMath = routeSubject === 'math';
 
-  if (!isMath && grammarSection === 'dang1') {
-    const subTenseCards = [
-      {
-        id: 'present_simple',
-        name: '⏱️ Thì Hiện tại đơn (Present Simple)',
-        description: 'Tập trung luyện các câu chia thì Hiện tại đơn với các dấu hiệu nhận biết quen thuộc: usually, often, always, every day...',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 5}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`)]
-      },
-      {
-        id: 'past_simple',
-        name: '🗓️ Thì Quá khứ đơn (Past Simple)',
-        description: 'Tập trung luyện các câu chia thì Quá khứ đơn với các dấu hiệu thời gian quá khứ: yesterday, last summer, ago...',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 25}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`)]
-      },
-      {
-        id: 'present_continuous',
-        name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)',
-        description: 'Tập trung luyện các câu chia thì Hiện tại tiếp diễn với các dấu hiệu thời điểm hoặc cảm thán: now, at the moment, Look!...',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`)]
-      },
-      {
-        id: 'past_continuous',
-        name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
-        description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
-        qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)]
-      },
-      {
-        id: 'present_perfect',
-        name: '✨ Thì Hiện tại hoàn thành (Present Perfect)',
-        description: 'Tập trung chia động từ ở thì Hiện tại hoàn thành (has/have + V3/ed) và phân biệt với Quá khứ đơn.',
-        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`)
-      },
-      {
-        id: 'future_simple',
-        name: '🔮 Thì Tương lai đơn (Future Simple / Will)',
-        description: 'Tập trung chia động từ ở thì Tương lai đơn (will + V) và cấu trúc câu điều kiện loại 1.',
-        qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
-      },
-      {
-        id: 'all',
-        name: '📑 Tổng ôn thông minh',
-        description: 'Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.',
-        qIds: [
-          ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
-        ]
-      },
-      {
-        id: 'exam',
-        name: '🏆 Luyện thi trắc nghiệm',
-        description: 'Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.',
-        qIds: [
-          ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
-          ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
-        ]
-      }
-    ];
+  if (!isMath && grammarSection !== null) {
+    let subTenseCards: Array<{ id: string; name: string; description: string; qIds: string[] }> = [];
+    let sectionTitle = '';
+    let sectionDesc = '';
+
+    if (grammarSection === 'dang1') {
+      sectionTitle = 'Dạng 1: Thì động từ cơ bản';
+      sectionDesc = 'Luyện tập sâu từng thì hoặc làm bài thi thử để kiểm tra trình độ.';
+      subTenseCards = [
+        {
+          id: 'present_simple',
+          name: '⏱️ Thì Hiện tại đơn (Present Simple)',
+          description: 'Tập trung luyện các câu chia thì Hiện tại đơn với các dấu hiệu nhận biết quen thuộc: usually, often, always, every day...',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 5}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`)]
+        },
+        {
+          id: 'past_simple',
+          name: '🗓️ Thì Quá khứ đơn (Past Simple)',
+          description: 'Tập trung luyện các câu chia thì Quá khứ đơn với các dấu hiệu thời gian quá khứ: yesterday, last summer, ago...',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 25}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`)]
+        },
+        {
+          id: 'present_continuous',
+          name: '⚡ Thì Hiện tại tiếp diễn (Present Continuous)',
+          description: 'Tập trung luyện các câu chia thì Hiện tại tiếp diễn với các dấu hiệu thời điểm hoặc cảm thán: now, at the moment, Look!...',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 45}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`)]
+        },
+        {
+          id: 'past_continuous',
+          name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)',
+          description: 'Tập trung luyện các câu chia thì Quá khứ tiếp diễn diễn tả hành động đang xảy ra tại một thời điểm quá khứ với liên từ while.',
+          qIds: [...Array.from({ length: 20 }, (_, i) => `eng-q${i + 65}`), ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`)]
+        },
+        {
+          id: 'present_perfect',
+          name: '✨ Thì Hiện tại hoàn thành (Present Perfect)',
+          description: 'Tập trung chia động từ ở thì Hiện tại hoàn thành (has/have + V3/ed) và phân biệt với Quá khứ đơn.',
+          qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`)
+        },
+        {
+          id: 'future_simple',
+          name: '🔮 Thì Tương lai đơn (Future Simple / Will)',
+          description: 'Tập trung chia động từ ở thì Tương lai đơn (will + V) và cấu trúc câu điều kiện loại 1.',
+          qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+        },
+        {
+          id: 'all',
+          name: '📑 Tổng ôn thông minh',
+          description: 'Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.',
+          qIds: [
+            ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+          ]
+        },
+        {
+          id: 'exam',
+          name: '🏆 Luyện thi trắc nghiệm',
+          description: 'Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.',
+          qIds: [
+            ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+            ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+          ]
+        }
+      ];
+    } else if (grammarSection === 'dang2') {
+      sectionTitle = 'Dạng 2: Cấu trúc động từ (to V, V-ing, V0)';
+      sectionDesc = 'Luyện tập các cấu trúc động từ nguyên mẫu và danh động từ.';
+      subTenseCards = [
+        {
+          id: 'to_v',
+          name: '👉 Cấu trúc động từ dạng "to V"',
+          description: 'Luyện chia động từ dạng to V sau các từ chỉ mong muốn, quyết định: decide, want, hope, agree, would like...',
+          qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 222}`)
+        },
+        {
+          id: 'v_ing',
+          name: '👉 Cấu trúc động từ dạng "V-ing"',
+          description: 'Luyện chia động từ dạng V-ing sau các từ chỉ sở thích, trì hoãn: enjoy, avoid, practice, finish, spend time...',
+          qIds: Array.from({ length: 20 }, (_, i) => `eng-q${i + 242}`)
+        },
+        {
+          id: 'verb_combo',
+          name: '📑 Tổng hợp Cấu trúc động từ',
+          description: 'Luyện tập tổng hợp các cấu trúc động từ (to V, V-ing, V0) để củng cố phản xạ phân biệt.',
+          qIds: Array.from({ length: 40 }, (_, i) => `eng-q${i + 222}`)
+        }
+      ];
+    } else if (grammarSection === 'dang3') {
+      sectionTitle = 'Dạng 3: Giới từ & Phrasal verbs cơ bản';
+      sectionDesc = 'Luyện giới từ cố định, phrasal verbs, giới từ thời gian/nơi chốn thông dụng.';
+      subTenseCards = [
+        {
+          id: 'prep_phrasal',
+          name: '🔌 Giới từ & Phrasal Verbs',
+          description: 'Luyện giới từ đi kèm tính từ, động từ cố định (interested in, good at, turn off, look after, cut down on...).',
+          qIds: Array.from({ length: 40 }, (_, i) => `eng-q${i + 262}`)
+        }
+      ];
+    } else if (grammarSection === 'dang4') {
+      sectionTitle = 'Dạng 4: Cấu trúc So sánh (Comparisons)';
+      sectionDesc = 'Luyện các cấu trúc so sánh hơn, so sánh nhất, so sánh bằng/không bằng của tính từ và trạng từ.';
+      subTenseCards = [
+        {
+          id: 'comparison',
+          name: '⚖️ Cấu trúc So sánh (Comparisons)',
+          description: 'Rèn luyện các cấu trúc so sánh bằng, so sánh hơn, so sánh nhất của tính từ/trạng từ ngắn và dài.',
+          qIds: Array.from({ length: 30 }, (_, i) => `eng-q${i + 302}`)
+        }
+      ];
+    } else if (grammarSection === 'dang5') {
+      sectionTitle = 'Dạng 5: Vị trí từ loại (Word Positions)';
+      sectionDesc = 'Luyện xác định vị trí của danh từ, động từ, tính từ, trạng từ trong cấu trúc câu.';
+      subTenseCards = [
+        {
+          id: 'word_position',
+          name: '📐 Vị trí từ loại (Word Positions)',
+          description: 'Rèn luyện kỹ năng xác định từ loại phù hợp để điền vào câu dựa trên ngữ cảnh và từ đứng trước/sau.',
+          qIds: Array.from({ length: 30 }, (_, i) => `eng-q${i + 332}`)
+        }
+      ];
+    }
 
     return (
       <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
@@ -127,44 +191,105 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           ← Quay lại chọn Module
         </button>
 
+        {/* Tab Selector */}
+        <div className="bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl flex flex-wrap gap-1 text-xs font-bold shadow-inner">
+          <button
+            onClick={() => setGrammarSection('dang1')}
+            className={cn(
+              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
+              grammarSection === 'dang1'
+                ? "bg-card text-foreground shadow-sm font-black"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            ⏱️ Dạng 1: Thì động từ
+          </button>
+          <button
+            onClick={() => setGrammarSection('dang2')}
+            className={cn(
+              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
+              grammarSection === 'dang2'
+                ? "bg-card text-foreground shadow-sm font-black"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            📦 Dạng 2: Cấu trúc động từ
+          </button>
+          <button
+            onClick={() => setGrammarSection('dang3')}
+            className={cn(
+              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
+              grammarSection === 'dang3'
+                ? "bg-card text-foreground shadow-sm font-black"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            🔌 Dạng 3: Giới từ & Phrasal
+          </button>
+          <button
+            onClick={() => setGrammarSection('dang4')}
+            className={cn(
+              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
+              grammarSection === 'dang4'
+                ? "bg-card text-foreground shadow-sm font-black"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            ⚖️ Dạng 4: So sánh
+          </button>
+          <button
+            onClick={() => setGrammarSection('dang5')}
+            className={cn(
+              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
+              grammarSection === 'dang5'
+                ? "bg-card text-foreground shadow-sm font-black"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            📐 Dạng 5: Vị trí từ loại
+          </button>
+        </div>
+
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-black text-foreground tracking-tight">Dạng 1: Thì động từ cơ bản</h2>
-          <p className="text-xs text-muted-foreground font-semibold">Luyện tập sâu từng thì hoặc làm bài thi thử để kiểm tra trình độ.</p>
+          <h2 className="text-2xl font-black text-foreground tracking-tight">{sectionTitle}</h2>
+          <p className="text-xs text-muted-foreground font-semibold">{sectionDesc}</p>
         </div>
 
         {/* Hero Milestone Card: Bài kiểm tra tổng hợp 6 thì */}
-        <Card className="border-indigo-500/20 bg-gradient-to-br from-slate-50 to-indigo-50/20 dark:from-slate-900/50 dark:to-indigo-950/10 shadow-sm overflow-hidden">
-          <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2 flex-1">
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500 text-white flex items-center gap-1">
-                  📝 ĐÁNH GIÁ NĂNG LỰC
-                </span>
-                <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
-                  🔓 Tự do ôn tập
-                </span>
-              </div>
-              <h3 className="font-extrabold text-sm md:text-base text-foreground">
-                Bài kiểm tra tổng hợp 6 thì
-              </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
-                Bài thi tổng hợp gồm **20 câu hỏi trắc nghiệm** trộn ngẫu nhiên từ cả 6 thì (thời gian làm bài: 15 phút, không hiện đáp án ngay). Khuyên dùng để tự đánh giá mức độ phản xạ phối hợp giữa các thì.
-              </p>
-              {tensesReviewAttemptsCount > 0 && (
-                <div className="flex gap-4 text-[10px] font-extrabold text-muted-foreground pt-1.5">
-                  <span>Đã làm: <span className="text-foreground">{tensesReviewAttemptsCount} lần</span></span>
-                  <span>Điểm cao nhất: <span className={cn(tensesReviewBestScore >= 15 ? "text-emerald-600" : "text-rose-600")}>{tensesReviewBestScore}/20 câu đúng ({Math.round(tensesReviewBestScore / 20 * 100)}%)</span></span>
+        {grammarSection === 'dang1' && (
+          <Card className="border-indigo-500/20 bg-gradient-to-br from-slate-50 to-indigo-50/20 dark:from-slate-900/50 dark:to-indigo-950/10 shadow-sm overflow-hidden">
+            <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500 text-white flex items-center gap-1">
+                    📝 ĐÁNH GIÁ NĂNG LỰC
+                  </span>
+                  <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+                    🔓 Tự do ôn tập
+                  </span>
                 </div>
-              )}
-            </div>
-            <Button
-              onClick={startTensesReview}
-              className="font-bold text-xs py-2 px-5 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer h-10 shrink-0 shadow-sm"
-            >
-              {tensesReviewAttemptsCount > 0 ? '🔄 Kiểm tra lại' : '✍️ Làm bài ngay'}
-            </Button>
-          </CardContent>
-        </Card>
+                <h3 className="font-extrabold text-sm md:text-base text-foreground">
+                  Bài kiểm tra tổng hợp 6 thì
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+                  Bài thi tổng hợp gồm **20 câu hỏi trắc nghiệm** trộn ngẫu nhiên từ cả 6 thì (thời gian làm bài: 15 phút, không hiện đáp án ngay). Khuyên dùng để tự đánh giá mức độ phản xạ phối hợp giữa các thì.
+                </p>
+                {tensesReviewAttemptsCount > 0 && (
+                  <div className="flex gap-4 text-[10px] font-extrabold text-muted-foreground pt-1.5">
+                    <span>Đã làm: <span className="text-foreground">{tensesReviewAttemptsCount} lần</span></span>
+                    <span>Điểm cao nhất: <span className={cn(tensesReviewBestScore >= 15 ? "text-emerald-600" : "text-rose-600")}>{tensesReviewBestScore}/20 câu đúng ({Math.round(tensesReviewBestScore / 20 * 100)}%)</span></span>
+                  </div>
+                )}
+              </div>
+              <Button
+                onClick={startTensesReview}
+                className="font-bold text-xs py-2 px-5 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer h-10 shrink-0 shadow-sm"
+              >
+                {tensesReviewAttemptsCount > 0 ? '🔄 Kiểm tra lại' : '✍️ Làm bài ngay'}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {subTenseCards.map((card) => {
