@@ -19,6 +19,9 @@ export const aiService = {
         'callGeminiProxy'
       );
       const result = await callGeminiProxy(params);
+      console.log("[callGemini] Raw result:", result);
+      console.log("[callGemini] result.data:", result.data);
+      console.log("[callGemini] result.data.text:", result.data?.text);
       return result.data.text;
     } catch (err: any) {
       console.error("Lỗi khi gọi callGeminiProxy:", err);

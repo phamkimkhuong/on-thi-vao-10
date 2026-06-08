@@ -11,7 +11,8 @@ import {
   X,
   ChevronRight,
   TrendingUp,
-  Users
+  Users,
+  Sparkles
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
@@ -109,6 +110,7 @@ export const AppLayout: React.FC = () => {
     { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
     { path: '/roadmap', label: 'Lộ trình học', icon: Map },
     { path: '/practice', label: 'Luyện tập', icon: BookOpen },
+    { path: '/ai-tutor', label: 'Gia sư AI', icon: Sparkles },
     { path: '/mistakes', label: 'Sổ lỗi sai', icon: Bookmark },
     { path: '/exam', label: 'Thi thử vào 10', icon: Award }
   ];
@@ -129,6 +131,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/roadmap')) return 'Lộ trình học';
     if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
     if (path.startsWith('/practice')) return 'Luyện tập';
+    if (path.startsWith('/ai-tutor')) return 'Gia sư AI Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return 'Thi thử vào 10';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';

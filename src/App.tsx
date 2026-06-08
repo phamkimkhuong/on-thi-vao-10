@@ -11,6 +11,7 @@ import ExamEngine from './features/exam-engine/ExamEngine';
 import TeacherDashboard from './features/teacher/TeacherDashboard';
 import { AuthPage } from './features/auth/AuthPage';
 import { PremiumPricing } from './features/premium/PremiumPricing';
+import { GeneralAiTutor } from './features/ai-tutor/GeneralAiTutor';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, setAnalyticsUser, db } from './services/firebase';
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       { path: 'exam', element: <ExamEngine /> },
       { path: 'teacher', element: <TeacherDashboard /> },
       { path: 'premium', element: <PremiumPricing /> },
+      { path: 'ai-tutor', element: <GeneralAiTutor /> },
     ]
   },
   {
