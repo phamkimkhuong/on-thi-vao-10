@@ -48,23 +48,84 @@ async function run() {
     contents: [
       {
         role: "model",
-        parts: [{ text: "Xin chào! Thầy là Gia sư AI ôn thi vào 10..." }]
+        parts: [{ text: "Chào em! Hôm nay chúng ta sẽ ôn luyện về chuyên đề Biện luận nghiệm phương trình bậc hai & Hệ thức Vi-ét nhé." }]
       },
       {
         role: "user",
-        parts: [{ text: "xin chào" }]
+        parts: [{ text: "Dạ thầy, em đang làm bài tính x1^2 + x2^2." }]
+      },
+      {
+        role: "model",
+        parts: [{ text: "Với bài này, em cần tính biệt thức delta trước để kiểm tra điều kiện phương trình có nghiệm, sau đó áp dụng hệ thức Vi-ét để biểu diễn x1 + x2 và x1 * x2." }]
+      },
+      {
+        role: "user",
+        parts: [{ text: "Thế còn biệt thức delta tính thế nào hả thầy?" }]
       }
     ],
-    systemInstruction: "Bạn là một gia sư toán.",
+    systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
     useRag: true,
     subjectId: "math"
   };
 
   try {
     const result = await callGeminiProxy(params);
-    console.log("Kết quả nhận được từ Cloud Function:", JSON.stringify(result, null, 2));
+    console.log("\n==================================================");
+    console.log("TEST CASE 1: CONVERSATIONAL QUERY REWRITING");
+    console.log("Kết quả từ Cloud Function:", JSON.stringify(result, null, 2));
+    console.log("==================================================\n");
   } catch (err) {
-    console.error("Lỗi khi gọi Cloud Function:", err);
+    console.error("Lỗi khi gọi Test Case 1:", err);
+  }
+
+  // Test Case 2: Kiểm tra Stage 1 Fast Filter (Xã giao ngắn)
+  console.log("Đang gọi Test Case 2 (Xã giao ngắn, mong đợi khớp Fast Filter)...");
+  const paramsSocialShort = {
+    contents: [
+      ...params.contents.slice(0, -1),
+      {
+        role: "user",
+        parts: [{ text: "dạ vâng ạ" }]
+      }
+    ],
+    systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
+    useRag: true,
+    subjectId: "math"
+  };
+
+  try {
+    const resultSocialShort = await callGeminiProxy(paramsSocialShort);
+    console.log("\n==================================================");
+    console.log("TEST CASE 2: CONDITIONAL RAG - FAST FILTER (STAGE 1)");
+    console.log("Kết quả từ Cloud Function:", JSON.stringify(resultSocialShort, null, 2));
+    console.log("==================================================\n");
+  } catch (err) {
+    console.error("Lỗi khi gọi Test Case 2:", err);
+  }
+
+  // Test Case 3: Kiểm tra Stage 2 Semantic Filter (Xã giao dài)
+  console.log("Đang gọi Test Case 3 (Xã giao dài, mong đợi khớp Semantic Filter)...");
+  const paramsSocialLong = {
+    contents: [
+      ...params.contents.slice(0, -1),
+      {
+        role: "user",
+        parts: [{ text: "Dạ em cảm ơn thầy nhiều ạ, em đã nắm rõ các bước giải rồi!" }]
+      }
+    ],
+    systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
+    useRag: true,
+    subjectId: "math"
+  };
+
+  try {
+    const resultSocialLong = await callGeminiProxy(paramsSocialLong);
+    console.log("\n==================================================");
+    console.log("TEST CASE 3: CONDITIONAL RAG - SEMANTIC FILTER (STAGE 2)");
+    console.log("Kết quả từ Cloud Function:", JSON.stringify(resultSocialLong, null, 2));
+    console.log("==================================================\n");
+  } catch (err) {
+    console.error("Lỗi khi gọi Test Case 3:", err);
   }
 }
 

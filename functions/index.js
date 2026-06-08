@@ -32,6 +32,56 @@ async function getEmbedding(text, apiKey) {
   return data?.embedding?.values;
 }
 
+// Hàm viết lại câu truy vấn của học sinh dựa trên lịch sử hội thoại bằng LLM
+async function rewriteQuery(chatHistory, currentMessage, apiKey) {
+  let historyText = "";
+  if (chatHistory && chatHistory.length > 0) {
+    historyText = chatHistory.map(h => {
+      const roleName = h.role === "user" ? "Học sinh" : "Gia sư";
+      const text = h.parts?.map(p => p.text).join(" ") || "";
+      return `${roleName}: ${text}`;
+    }).join("\n");
+  }
+
+  const prompt = `Bạn là một trợ lý AI phân tích ngữ cảnh hội thoại ôn thi lớp 10 môn Toán & Tiếng Anh.
+Nhiệm vụ của bạn là: Đọc lịch sử trò chuyện và tin nhắn mới nhất của học sinh dưới đây, sau đó VIẾT LẠI tin nhắn mới nhất thành một câu truy vấn tìm kiếm tri thức (search query) độc lập, rõ ràng và đầy đủ ngữ cảnh để tra cứu tài liệu lý thuyết.
+
+Yêu cầu:
+- Câu truy vấn mới phải chứa đầy đủ từ khóa chuyên môn (ví dụ: tên thì ngữ pháp, tên định lý, dạng toán, công thức).
+- Nếu tin nhắn mới nhất là câu chào hỏi, xã giao (ví dụ: "chào thầy", "em hiểu rồi", "cảm ơn ạ") hoặc KHÔNG chứa bất kỳ thắc mắc kiến thức nào cần tra cứu, hãy trả về chính xác từ khóa "NONE".
+- Chỉ trả về duy nhất câu truy vấn được viết lại (hoặc "NONE"), tuyệt đối không giải thích, không thêm ký tự markdown hay từ ngữ thừa thãi.
+
+Lịch sử trò chuyện:
+${historyText || "(Không có lịch sử)"}
+
+Tin nhắn mới nhất của học sinh: "${currentMessage}"
+
+Câu truy vấn tìm kiếm tri thức được viết lại (hoặc "NONE"):`;
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }]
+      })
+    });
+    if (!response.ok) {
+      console.warn("LLM rewriteQuery trả về lỗi HTTP:", response.status);
+      return currentMessage;
+    }
+    const data = await response.json();
+    const rewritten = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    return rewritten || currentMessage;
+  } catch (err) {
+    console.error("Lỗi khi viết lại query với LLM:", err);
+    return currentMessage; // Fallback về câu gốc
+  }
+}
+
 export const callGeminiProxy = onCall({
   cors: true
 }, async (request) => {
@@ -81,7 +131,7 @@ export const callGeminiProxy = onCall({
   let ragContext = "";
   let queryText = "";
 
-  // Lấy câu hỏi hiện tại để tạo vector embedding
+  // Lấy câu hỏi hiện tại để phân tích
   if (contents && contents.length > 0) {
     for (let i = contents.length - 1; i >= 0; i--) {
       if (contents[i].role === "user") {
@@ -97,36 +147,56 @@ export const callGeminiProxy = onCall({
 
   if (useRag && subjectId && queryText) {
     try {
-      console.log(`[RAG] Generating embedding for: "${queryText.substring(0, 50)}..."`);
-      const queryEmbedding = await getEmbedding(queryText, apiKey);
-      if (queryEmbedding) {
-        console.log(`[RAG] Querying Firestore vector search for subject: ${subjectId}`);
-        const query = db.collection("knowledge_base")
-          .where("subjectId", "==", subjectId)
-          .findNearest({
-            vectorField: "embedding",
-            queryVector: queryEmbedding,
-            distanceMeasure: "COSINE",
-            limit: 3
-          });
-        const snapshot = await query.get();
-        const documents = [];
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          documents.push({
-            title: data.title,
-            content: data.content
-          });
-        });
+      console.log(`[RAG] Analyzing query: "${queryText.substring(0, 50)}..."`);
+      
+      const cleanedText = queryText.trim().toLowerCase();
+      // Stage 1 Fast Filter: Phát hiện nhanh câu chào hỏi/xã giao cực ngắn bằng Regex
+      const socialRegex = /^(chào|helo|hello|hi|chào thầy|chào cô|xin chào|dạ|vâng|ok|oke|cảm ơn|cám ơn|thanks|thank you|em cảm ơn|dạ em cảm ơn|dạ vâng|vâng ạ|em hiểu rồi|dạ em hiểu rồi|dạ rõ rồi|ok ạ|dạ ok|dạ vâng ạ|ạ)[.!?;]*$/i;
 
-        if (documents.length > 0) {
-          console.log(`[RAG] Found ${documents.length} matching document(s).`);
-          ragContext = "\n\nTÀI LIỆU THAM KHẢO LIÊN QUAN:\n" + documents.map(d => `---
-[Chủ đề: ${d.title}]
-Nội dung: ${d.content}`).join("\n") + "\n---";
+      if (cleanedText.length < 15 && socialRegex.test(cleanedText)) {
+        console.log(`[RAG] Fast-filter triggered: Query classified as conversational/social ("${cleanedText}"). Skipping RAG.`);
+      } else {
+        // Stage 2 Semantic Filter: Viết lại câu truy vấn bằng LLM và check NONE
+        const chatHistory = contents ? contents.slice(0, -1) : [];
+        const rewrittenQuery = await rewriteQuery(chatHistory, queryText, apiKey);
+        console.log(`[RAG] LLM rewritten query: "${rewrittenQuery}"`);
+
+        if (rewrittenQuery.toUpperCase() === "NONE") {
+          console.log(`[RAG] Query classified as conversational/social by LLM. Skipping RAG.`);
         } else {
-          console.log("[RAG] No matching documents found.");
+          console.log(`[RAG] Generating embedding for: "${rewrittenQuery.substring(0, 50)}..."`);
+          const queryEmbedding = await getEmbedding(rewrittenQuery, apiKey);
+        if (queryEmbedding) {
+          console.log(`[RAG] Querying Firestore vector search for subject: ${subjectId}`);
+          const query = db.collection("knowledge_base")
+            .where("subjectId", "==", subjectId)
+            .findNearest({
+              vectorField: "embedding",
+              queryVector: queryEmbedding,
+              distanceMeasure: "COSINE",
+              limit: 3
+            });
+          const snapshot = await query.get();
+          const documents = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            documents.push({
+              title: data.title,
+              parentTitle: data.parentTitle,
+              content: data.content
+            });
+          });
+
+          if (documents.length > 0) {
+            console.log(`[RAG] Found ${documents.length} matching document(s).`);
+            ragContext = "\n\nTÀI LIỆU THAM KHẢO LIÊN QUAN:\n" + documents.map(d => `---
+[Chủ đề: ${d.parentTitle ? `${d.parentTitle} -> ${d.title}` : d.title}]
+Nội dung: ${d.content}`).join("\n") + "\n---";
+          } else {
+            console.log("[RAG] No matching documents found.");
+          }
         }
+      }
       }
     } catch (err) {
       console.error("Lỗi khi thực hiện RAG (sẽ tiếp tục chạy không RAG):", err);

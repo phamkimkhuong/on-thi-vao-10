@@ -113,46 +113,92 @@ async function run() {
     const subjectName = qType.subjectId === "math" ? "Toán" : "Tiếng Anh";
     console.log(`\nĐang xử lý dạng bài: "${qType.name}" (${subjectName})...`);
 
-    // Xây dựng nội dung tài liệu Markdown có cấu trúc chất lượng cao
-    const markdownContent = `DẠNG BÀI: ${qType.name} (Môn: ${subjectName})
+    // 5.1 Xóa tài liệu lớn cũ (nếu có) để dọn dẹp database
+    const oldDocId = `${qType.subjectId}_${qType.id}`;
+    await collectionRef.doc(oldDocId).delete().catch(() => {});
+
+    // Helper tạo và lưu từng chunk nhỏ
+    const saveChunk = async (chunkId, chunkType, chunkTitle, chunkContent) => {
+      try {
+        const embedding = await getEmbedding(chunkContent, apiKey);
+        if (!embedding || embedding.length === 0) {
+          console.error(`  - Thất bại: Không nhận được vector embedding cho chunk [${chunkType}].`);
+          return;
+        }
+
+        await collectionRef.doc(chunkId).set({
+          subjectId: qType.subjectId,
+          parentId: qType.id,
+          parentTitle: qType.name,
+          chunkType: chunkType,
+          title: chunkTitle,
+          content: chunkContent,
+          embedding: admin.firestore.FieldValue.vector(embedding),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log(`  - Thành công: Đã ghi chunk [${chunkType}] với ID: ${chunkId}`);
+      } catch (err) {
+        console.error(`  - Lỗi khi ghi chunk [${chunkType}] ${chunkId}:`, err.message);
+      }
+    };
+
+    // 5.2 Sinh chunk Overview (Khái quát & Nhận diện)
+    const overviewContent = `DẠNG BÀI: ${qType.name} (Môn: ${subjectName})
 Mô tả chuyên đề: ${qType.description}
 
 Dấu hiệu nhận biết dạng bài này:
-${qType.recognitionSigns ? qType.recognitionSigns.map(s => `- ${s}`).join("\n") : "- Không có"}
+${qType.recognitionSigns && qType.recognitionSigns.length > 0 ? qType.recognitionSigns.map(s => `- ${s}`).join("\n") : "- Không có"}`;
+    
+    await saveChunk(
+      `${qType.subjectId}_${qType.id}_overview`,
+      "overview",
+      `[Tổng quan] ${qType.name}`,
+      overviewContent
+    );
 
+    // 5.3 Sinh chunk Method (Các bước giải chi tiết)
+    if (qType.solvingSteps && qType.solvingSteps.length > 0) {
+      const methodContent = `PHƯƠNG PHÁP GIẢI DẠNG BÀI: ${qType.name} (Môn: ${subjectName})
 Các bước giải chi tiết:
-${qType.solvingSteps ? qType.solvingSteps.map((s, idx) => `${idx + 1}. ${s}`).join("\n") : "- Không có"}
+${qType.solvingSteps.map((s, idx) => `${idx + 1}. ${s}`).join("\n")}`;
 
-Các lỗi học sinh thường mắc phải:
-${qType.commonMistakes ? qType.commonMistakes.map(s => `- ${s}`).join("\n") : "- Không có"}
+      await saveChunk(
+        `${qType.subjectId}_${qType.id}_method`,
+        "method",
+        `[Phương pháp giải] ${qType.name}`,
+        methodContent
+      );
+    }
 
-${qType.subTypes && qType.subTypes.length > 0 ? `Các dạng bài tập nhỏ và ví dụ mẫu:
-` + qType.subTypes.map(sub => `---
-* ${sub.name}
-  - Ví dụ: ${sub.example}
-  - Hướng dẫn/Lưu ý: ${sub.note}`).join("\n") : ""}`;
+    // 5.4 Sinh chunk Mistakes (Các lỗi thường gặp)
+    if (qType.commonMistakes && qType.commonMistakes.length > 0) {
+      const mistakesContent = `CẢNH BÁO LỖI THƯỜNG GẶP của dạng bài: ${qType.name} (Môn: ${subjectName})
+Các lỗi học sinh dễ mắc sai lầm:
+${qType.commonMistakes.map(s => `- ${s}`).join("\n")}`;
 
-    try {
-      // Gọi API để lấy vector
-      const embedding = await getEmbedding(markdownContent, apiKey);
-      if (!embedding || embedding.length === 0) {
-        console.error(`- Thất bại: Không nhận được vector embedding.`);
-        continue;
+      await saveChunk(
+        `${qType.subjectId}_${qType.id}_mistakes`,
+        "mistakes",
+        `[Cảnh báo lỗi sai] ${qType.name}`,
+        mistakesContent
+      );
+    }
+
+    // 5.5 Sinh chunk Examples (Từng phân dạng con & Ví dụ mẫu)
+    if (qType.subTypes && qType.subTypes.length > 0) {
+      for (let idx = 0; idx < qType.subTypes.length; idx++) {
+        const sub = qType.subTypes[idx];
+        const exampleContent = `PHÂN DẠNG BÀI TẬP: ${sub.name} (Thuộc dạng bài lớn: ${qType.name})
+Ví dụ mẫu: ${sub.example}
+Hướng dẫn/Lưu ý đặc biệt: ${sub.note || "Không có"}`;
+
+        await saveChunk(
+          `${qType.subjectId}_${qType.id}_sub_${idx}`,
+          "example",
+          `[Ví dụ & Phân dạng] ${qType.name} -> ${sub.name}`,
+          exampleContent
+        );
       }
-      console.log(`- Tạo vector embedding thành công (độ dài: ${embedding.length} chiều).`);
-
-      // Ghi nhận vào Firestore
-      const docId = `${qType.subjectId}_${qType.id}`;
-      await collectionRef.doc(docId).set({
-        subjectId: qType.subjectId,
-        title: qType.name,
-        content: markdownContent,
-        embedding: admin.firestore.FieldValue.vector(embedding),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
-      console.log(`- Đã ghi thành công vào Firestore với ID: ${docId}`);
-    } catch (err) {
-      console.error(`- Lỗi khi xử lý dạng bài "${qType.name}":`, err.message);
     }
   }
 
