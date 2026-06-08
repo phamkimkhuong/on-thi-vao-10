@@ -3,26 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
+import { logCustomEvent } from '../../services/firebase';
 import { mathQuestions, mathQuestionTypes } from '../../data/mathData';
 import { englishQuestions, englishQuestionTypes } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
-import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
 import { Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
 import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
-import { 
-  Award, 
-  Timer, 
-  CheckCircle, 
-  AlertTriangle, 
-  ArrowRight, 
-  Play, 
-  CheckSquare, 
+import {
+  Award,
+  Timer,
+  CheckCircle,
+  AlertTriangle,
+  ArrowRight,
+  Play,
+  CheckSquare,
   TrendingUp,
   Zap
 } from 'lucide-react';
@@ -31,6 +32,22 @@ import confetti from 'canvas-confetti';
 export const ExamEngine: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, user } = useAppStore();
+
+  useEffect(() => {
+    const start = Date.now();
+    return () => {
+      const durationSeconds = Math.round((Date.now() - start) / 1000);
+      const durationMinutes = Math.round((durationSeconds / 60) * 100) / 100;
+      if (durationSeconds > 2) {
+        logCustomEvent('study_session_end', {
+          subject: selectedSubject === 'math' ? 'Toán' : 'Anh',
+          duration_minutes: durationMinutes,
+          duration_seconds: durationSeconds,
+          mode: 'exam'
+        });
+      }
+    };
+  }, [selectedSubject]);
 
   const [examState, setExamState] = useState<'intro' | 'testing' | 'result'>('intro');
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -60,7 +77,7 @@ export const ExamEngine: React.FC = () => {
       return {};
     });
   };
-  
+
   // Đếm ngược thời gian (giây)
   const [timeLeft, setTimeLeft] = useState(0);
   const [timeSpent, setTimeSpent] = useState(0);
@@ -80,7 +97,7 @@ export const ExamEngine: React.FC = () => {
     let correctCount = 0;
     const totalCount = examQuestions.length;
     const attemptResults: ExamResult['attempts'] = {};
-    const currentUserId = user?.uid ?? 'guest';
+    const currentUserId = user!.uid;
     const completedAt = new Date().toISOString();
     const examId = `exam-${selectedSubject}-${Date.now()}`;
     const examAttempts: UserAttempt[] = [];
@@ -133,6 +150,14 @@ export const ExamEngine: React.FC = () => {
 
       examAttempts.push(attemptData);
       storageService.saveAttempt(currentUserId, attemptData);
+
+      logCustomEvent('request_teacher_grading', {
+        subjectId: selectedSubject,
+        examId,
+        questionTypeId: q.questionTypeId,
+        questionId: q.id,
+        hasProofImages: localProofImages.length > 0
+      });
     }
 
     const score = Math.round((correctCount / totalCount) * 10 * 10) / 10; // Thang điểm 10 làm tròn 1 chữ số
@@ -230,7 +255,7 @@ export const ExamEngine: React.FC = () => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
+
     const displayMins = mins < 10 ? `0${mins}` : mins;
     const displaySecs = secs < 10 ? `0${secs}` : secs;
 
@@ -245,7 +270,7 @@ export const ExamEngine: React.FC = () => {
 
     const isMath = selectedSubject === 'math';
     const typeList = isMath ? mathQuestionTypes : englishQuestionTypes;
-    
+
     // Group kết quả theo QuestionType
     const analysis: Record<string, { name: string, total: number, correct: number }> = {};
 
@@ -274,15 +299,6 @@ export const ExamEngine: React.FC = () => {
       percent: Math.round((data.correct / data.total) * 100)
     }));
   };
-
-  if (selectedSubject === 'math' && !user) {
-    return (
-      <MathLoginRequired
-        title="Đăng nhập để làm đề Toán"
-        description="Đề Toán có phần tự luận và ảnh bài làm cần lưu theo tài khoản. Hãy đăng nhập trước khi bắt đầu làm bài Toán."
-      />
-    );
-  }
 
   // RENDER GIAO DIỆN GIỚI THIỆU ĐỀ THI
   if (examState === 'intro') {
@@ -321,7 +337,7 @@ export const ExamEngine: React.FC = () => {
               <p>• Dữ liệu bài thi sẽ được phân tích sâu để tìm điểm yếu của bạn.</p>
             </div>
 
-            <Button 
+            <Button
               onClick={handleStartExam}
               className="w-full font-bold py-3.5 text-xs active:scale-[0.98] shadow-md shadow-primary/20 flex items-center justify-center gap-1.5"
             >
@@ -337,7 +353,7 @@ export const ExamEngine: React.FC = () => {
   if (examState === 'testing') {
     return (
       <div className="max-w-4xl mx-auto space-y-6 pb-20">
-        
+
         {/* Header phòng thi nổi (Sticky) */}
         <div className="sticky top-0 bg-background/80 backdrop-blur-md py-4 border-b border-border/50 flex items-center justify-between z-30 px-2">
           <div className="flex flex-col">
@@ -398,11 +414,10 @@ export const ExamEngine: React.FC = () => {
                         <button
                           key={i}
                           onClick={() => handleOptionSelect(q.id, optLetter)}
-                          className={`w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${
-                            isSelected 
-                              ? 'bg-primary/10 border-primary text-primary shadow-sm' 
+                          className={`w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
+                              ? 'bg-primary/10 border-primary text-primary shadow-sm'
                               : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
-                          }`}
+                            }`}
                         >
                           {opt}
                         </button>
@@ -432,7 +447,7 @@ export const ExamEngine: React.FC = () => {
         )}
 
         {/* Nộp bài thi */}
-        <Button 
+        <Button
           onClick={handleSubmitExam}
           disabled={isSubmittingExam}
           className="w-full font-bold py-4 text-xs bg-red-500 hover:bg-red-600 active:scale-[0.98] shadow-md shadow-red-500/10 flex items-center justify-center gap-1.5"
@@ -449,7 +464,7 @@ export const ExamEngine: React.FC = () => {
 
     return (
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
-        
+
         {/* Kết quả chung */}
         <Card className="border-indigo-500/10 shadow-md overflow-hidden relative">
           <CardHeader className="bg-gradient-to-r from-primary to-indigo-600 text-primary-foreground p-6 md:p-8 text-center">
@@ -460,7 +475,7 @@ export const ExamEngine: React.FC = () => {
             </p>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
-            
+
             {/* Lời khuyên cá nhân hóa */}
             <div className="p-4 bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 rounded-xl space-y-1.5 text-xs font-semibold text-muted-foreground">
               <span className="font-extrabold text-foreground flex items-center gap-1"><Zap size={14} className="text-amber-500" /> Nhận xét năng lực:</span>
@@ -480,9 +495,8 @@ export const ExamEngine: React.FC = () => {
                 {analysis.map((item) => {
                   const isWeak = item.percent < 60;
                   return (
-                    <div key={item.typeId} className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card ${
-                      isWeak ? 'border-red-500/20 shadow-sm shadow-red-500/5' : 'border-border'
-                    }`}>
+                    <div key={item.typeId} className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card ${isWeak ? 'border-red-500/20 shadow-sm shadow-red-500/5' : 'border-border'
+                      }`}>
                       <div className="space-y-1 flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h5 className="font-extrabold text-xs text-foreground truncate">{item.name}</h5>

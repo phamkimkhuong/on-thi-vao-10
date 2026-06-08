@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/ca
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
-import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
 import {
   Bookmark,
@@ -52,7 +52,7 @@ export const MistakeNotebook: React.FC = () => {
   const [reSubmitError, setReSubmitError] = useState<string | null>(null);
 
   const loadMistakes = useCallback(() => {
-    const currentUserId = user?.uid ?? 'guest';
+    const currentUserId = user!.uid;
     const list = storageService.getMistakes(currentUserId);
     const isMath = selectedSubject === 'math';
 
@@ -116,7 +116,7 @@ export const MistakeNotebook: React.FC = () => {
         : selectedOption || '';
     const finalAns = formatAnswerForDisplay(activeMistake.question, answerInput);
     const correct = validateAnswer(activeMistake.question, answerInput);
-    const currentUserId = user?.uid ?? 'guest';
+    const currentUserId = user!.uid;
     const submittedAt = new Date().toISOString();
     const attemptId = `attempt-review-${activeMistake.questionId}-${Date.now()}`;
     let uploadedProofImages: UserAttempt['proofImages'] = [];
@@ -206,15 +206,6 @@ export const MistakeNotebook: React.FC = () => {
       </span>
     );
   };
-
-  if (selectedSubject === 'math' && !user) {
-    return (
-      <MathLoginRequired
-        title="Đăng nhập để xem và luyện lại lỗi sai Toán"
-        description="Sổ lỗi sai Toán cần gắn với tài khoản để lưu ảnh bài làm, lịch sử khắc phục và tiến độ mastery chính xác."
-      />
-    );
-  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-12">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '../../services/firebase';
+import { auth, logCustomEvent } from '../../services/firebase';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -17,7 +17,7 @@ import { GraduationCap, Mail, Lock, User, ArrowRight, AlertCircle, Loader } from
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, refreshProgress, setSubject } = useAppStore();
+  const { user, refreshProgress } = useAppStore();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -67,6 +67,9 @@ export const AuthPage: React.FC = () => {
 
         // Khởi tạo và merge dữ liệu Guest với tài khoản mới.
         await progressService.mergeGuestDataWithFirestore(loggedUser.uid);
+
+        // Ghi nhận log sự kiện đăng ký thành công
+        logCustomEvent('sign_up', { method: 'email' });
       }
 
       refreshProgress();
@@ -243,17 +246,6 @@ export const AuthPage: React.FC = () => {
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                 </svg>
                 <span>Tiếp tục với Google</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSubject('english');
-                  navigate('/dashboard');
-                }}
-                className="w-full text-center py-2 bg-secondary/50 hover:bg-secondary border border-border/30 rounded-xl text-xs font-bold text-foreground transition-all duration-150 active:scale-[0.98] cursor-pointer"
-              >
-                Tiếp tục học Tiếng Anh ở chế độ Khách
               </button>
 
               <button

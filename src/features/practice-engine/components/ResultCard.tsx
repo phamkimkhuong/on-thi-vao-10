@@ -6,6 +6,7 @@ import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofIma
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
 import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { logCustomEvent } from '../../../services/firebase';
 
 interface ResultCardProps {
   currentQuestion: Question;
@@ -42,6 +43,16 @@ export const ResultCard: React.FC<ResultCardProps> = ({
   handleRetry,
   handleNext,
 }) => {
+  React.useEffect(() => {
+    if (existingAttempt?.teacherFeedback) {
+      logCustomEvent('view_teacher_feedback', {
+        questionId: currentQuestion.id,
+        attemptId: existingAttempt.id,
+        feedback: existingAttempt.teacherFeedback
+      });
+    }
+  }, [existingAttempt, currentQuestion.id]);
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className={cn(

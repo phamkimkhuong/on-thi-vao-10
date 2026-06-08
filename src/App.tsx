@@ -11,7 +11,7 @@ import ExamEngine from './features/exam-engine/ExamEngine';
 import TeacherDashboard from './features/teacher/TeacherDashboard';
 import { AuthPage } from './features/auth/AuthPage';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './services/firebase';
+import { auth, setAnalyticsUser } from './services/firebase';
 import { progressService } from './services/progressService';
 import { Loader } from 'lucide-react';
 
@@ -48,9 +48,13 @@ export const App: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
+        // Định danh người dùng trên Firebase Analytics
+        setAnalyticsUser(user.uid);
         // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập.
         await progressService.mergeGuestDataWithFirestore(user.uid);
         refreshProgress();
+      } else {
+        setAnalyticsUser(null);
       }
       setAuthLoading(false);
     });

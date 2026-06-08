@@ -13,7 +13,7 @@ export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, user, progressVersion } = useAppStore();
   void progressVersion;
-  const progress = storageService.getProgress(user?.uid ?? 'guest').masteryLevels;
+  const progress = storageService.getProgress(user!.uid).masteryLevels;
 
   const topics = selectedSubject === 'math' ? mathTopics : englishTopics;
   const questionTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;

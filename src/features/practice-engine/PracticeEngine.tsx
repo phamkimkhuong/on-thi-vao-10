@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
+import { logCustomEvent } from '../../services/firebase';
 import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
 import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Button } from '../../components/ui/button';
-import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+
 import { Question, Solution, StructuredAnswer, UserAttempt } from '../../types';
 import { AlertTriangle } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -33,9 +34,25 @@ export const PracticeEngine: React.FC = () => {
   void progressVersion;
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
 
+  useEffect(() => {
+    const start = Date.now();
+    return () => {
+      const durationSeconds = Math.round((Date.now() - start) / 1000);
+      const durationMinutes = Math.round((durationSeconds / 60) * 100) / 100;
+      if (durationSeconds > 2) {
+        logCustomEvent('study_session_end', {
+          subject: routeSubject === 'math' ? 'Toán' : 'Anh',
+          duration_minutes: durationMinutes,
+          duration_seconds: durationSeconds,
+          mode: 'practice'
+        });
+      }
+    };
+  }, [routeSubject]);
+
   const tensesReviewBestScore = useMemo(() => {
     void progressVersion;
-    const userId = user?.uid ?? 'guest';
+    const userId = user!.uid;
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
     
@@ -69,7 +86,7 @@ export const PracticeEngine: React.FC = () => {
 
   const tensesReviewAttemptsCount = useMemo(() => {
     void progressVersion;
-    const userId = user?.uid ?? 'guest';
+    const userId = user!.uid;
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
     const uniqueSessionIds = new Set<string>();
@@ -89,7 +106,7 @@ export const PracticeEngine: React.FC = () => {
 
   const globalProgressPercent = useMemo(() => {
     void progressVersion;
-    const userId = user?.uid ?? 'guest';
+    const userId = user!.uid;
     const attempts = storageService.getAttempts(userId);
     const correctQIds = new Set<string>();
     attempts.forEach(a => {
@@ -326,7 +343,7 @@ export const PracticeEngine: React.FC = () => {
       }
     }
 
-    const userId = user?.uid ?? 'guest';
+    const userId = user!.uid;
     const attempts = storageService.getAttempts(userId);
     
     // Tìm lần làm gần nhất cho từng câu hỏi
@@ -424,7 +441,7 @@ export const PracticeEngine: React.FC = () => {
     loadedQuestionIdRef.current = currentQ.id;
 
     const checkAttempt = async () => {
-      const userAttemptsLocal = storageService.getAttempts(user?.uid ?? 'guest');
+      const userAttemptsLocal = storageService.getAttempts(user!.uid);
       const attemptsForQLocal = userAttemptsLocal
         .filter(a => a.questionId === currentQ.id)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -527,7 +544,7 @@ export const PracticeEngine: React.FC = () => {
 
       const attemptData: UserAttempt = {
         id: attemptId,
-        userId: user ? user.uid : 'guest',
+        userId: user!.uid,
         questionId: q.id,
         questionTypeId: q.questionTypeId,
         userAnswer: finalAns,
@@ -539,7 +556,15 @@ export const PracticeEngine: React.FC = () => {
       };
 
       attemptsToSave.push(attemptData);
-      storageService.saveAttempt(user?.uid ?? 'guest', attemptData);
+      storageService.saveAttempt(user!.uid, attemptData);
+
+      logCustomEvent('request_teacher_grading', {
+        subjectId: selectedSubject,
+        examId: sessionId.toString(),
+        questionTypeId: q.questionTypeId,
+        questionId: q.id,
+        isExam: true
+      });
 
       if (!correct && user) {
         const localMistakes = storageService.getMistakes(user.uid);
@@ -816,7 +841,7 @@ export const PracticeEngine: React.FC = () => {
 
     const attemptData: UserAttempt = {
       id: attemptId,
-      userId: user ? user.uid : 'guest',
+      userId: user!.uid,
       questionId: currentQ.id,
       questionTypeId: currentQ.questionTypeId,
       userAnswer: finalAnswer,
@@ -829,7 +854,14 @@ export const PracticeEngine: React.FC = () => {
       ...(selectedSubTense ? { selectedSubTense } : {})
     };
 
-    storageService.saveAttempt(user?.uid ?? 'guest', attemptData);
+    storageService.saveAttempt(user!.uid, attemptData);
+
+    logCustomEvent('request_teacher_grading', {
+      subjectId: routeSubject,
+      questionTypeId: currentQ.questionTypeId,
+      questionId: currentQ.id,
+      hasProofImages: uploadedProofImages.length > 0
+    });
 
     if (user) {
       progressService.saveUserProfile(user);
@@ -955,9 +987,6 @@ export const PracticeEngine: React.FC = () => {
   };
 
   // Render switches
-  if (isMath && !user) {
-    return <MathLoginRequired />;
-  }
 
   if (questionTypeId === 'eng-qt6' && isConfiguringExam) {
     return (

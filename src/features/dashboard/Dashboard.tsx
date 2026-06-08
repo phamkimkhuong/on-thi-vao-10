@@ -24,7 +24,7 @@ export const Dashboard: React.FC = () => {
   const { setSubject, user, progressVersion } = useAppStore();
   void progressVersion;
 
-  const currentUserId = user?.uid ?? 'guest';
+  const currentUserId = user!.uid;
   const progress = storageService.getProgress(currentUserId);
   const mistakes = storageService.getMistakes(currentUserId).filter(m => m.reviewStatus !== 'fixed');
   const exams = storageService.getExamResults(currentUserId);

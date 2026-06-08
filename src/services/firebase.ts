@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAnalytics, isSupported, Analytics, setUserId, setUserProperties, logEvent as firebaseLogEvent } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC--Q8dDklMtRVrTkgczovpDPma28jq8xI",
@@ -28,3 +29,30 @@ export const db = initializeFirestore(app, {
     tabManager: persistentMultipleTabManager()
   })
 });
+
+// Khởi tạo Analytics an toàn cho môi trường Web
+// analytics chỉ được import khi đang ở môi trường Web/Browser
+export let analytics: Analytics | null = null;
+isSupported().then((supported) => {
+  if (supported) {
+    analytics = getAnalytics(app);
+  }
+});
+
+// Helper định danh học sinh
+export const setAnalyticsUser = (userId: string | null) => {
+  if (analytics) {
+    setUserId(analytics, userId);
+    if (userId) {
+      setUserProperties(analytics, { role: 'student' });
+    }
+  }
+};
+
+// Helper ghi nhận sự kiện chuyển đổi tùy chỉnh
+export const logCustomEvent = (eventName: string, params?: Record<string, any>) => {
+  if (analytics) {
+    firebaseLogEvent(analytics, eventName, params);
+  }
+};
+
