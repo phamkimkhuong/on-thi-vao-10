@@ -27,3 +27,5 @@ dist-ssr
 .env
 .env.*
 functions/.env
+service-account.json
+functions/service-account.json

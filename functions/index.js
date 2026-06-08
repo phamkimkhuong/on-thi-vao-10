@@ -8,6 +8,30 @@ const db = getFirestore();
 // Hạn mức số lượng câu hỏi tối đa của mỗi tài khoản (100 câu hỏi/ngày)
 const DAILY_REQUEST_LIMIT = 100;
 
+// Hàm tạo Vector Embedding sử dụng Gemini Embedding API
+async function getEmbedding(text, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${apiKey}`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "models/gemini-embedding-001",
+      content: {
+        parts: [{ text }]
+      },
+      outputDimensionality: 1536
+    })
+  });
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Failed to generate embedding: ${errText}`);
+  }
+  const data = await response.json();
+  return data?.embedding?.values;
+}
+
 export const callGeminiProxy = onCall({
   cors: true
 }, async (request) => {
@@ -25,12 +49,12 @@ export const callGeminiProxy = onCall({
     throw new HttpsError("failed-precondition", "API Key chưa được cấu hình ở phía máy chủ.");
   }
 
-  const { prompt, image } = request.data;
-  if (!prompt) {
-    throw new HttpsError("invalid-argument", "Thiếu tham số prompt.");
+  const { prompt, contents, systemInstruction, useRag, subjectId, image } = request.data;
+  if (!prompt && !contents) {
+    throw new HttpsError("invalid-argument", "Thiếu tham số prompt hoặc contents.");
   }
 
-  // 1.1 Kiểm tra hạn mức sử dụng ngày hôm nay cho tất cả tài khoản (cả học sinh và giáo viên)
+  // 1.1 Kiểm tra hạn mức sử dụng ngày hôm nay cho tất cả tài khoản
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -53,7 +77,103 @@ export const callGeminiProxy = onCall({
     console.error("Lỗi truy vấn logs sử dụng:", err);
   }
 
-  // 2. Định nghĩa danh sách các model dự phòng (Fallback List) để tối đa hóa hạn mức miễn phí
+  // 1.2 Thực hiện RAG (Retrieval-Augmented Generation) nếu được yêu cầu
+  let ragContext = "";
+  let queryText = "";
+
+  // Lấy câu hỏi hiện tại để tạo vector embedding
+  if (contents && contents.length > 0) {
+    for (let i = contents.length - 1; i >= 0; i--) {
+      if (contents[i].role === "user") {
+        const textParts = contents[i].parts?.filter(p => p.text).map(p => p.text) || [];
+        queryText = textParts.join(" ");
+        break;
+      }
+    }
+  }
+  if (!queryText && prompt) {
+    queryText = prompt;
+  }
+
+  if (useRag && subjectId && queryText) {
+    try {
+      console.log(`[RAG] Generating embedding for: "${queryText.substring(0, 50)}..."`);
+      const queryEmbedding = await getEmbedding(queryText, apiKey);
+      if (queryEmbedding) {
+        console.log(`[RAG] Querying Firestore vector search for subject: ${subjectId}`);
+        const query = db.collection("knowledge_base")
+          .where("subjectId", "==", subjectId)
+          .findNearest({
+            vectorField: "embedding",
+            queryVector: queryEmbedding,
+            distanceMeasure: "COSINE",
+            limit: 3
+          });
+        const snapshot = await query.get();
+        const documents = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          documents.push({
+            title: data.title,
+            content: data.content
+          });
+        });
+
+        if (documents.length > 0) {
+          console.log(`[RAG] Found ${documents.length} matching document(s).`);
+          ragContext = "\n\nTÀI LIỆU THAM KHẢO LIÊN QUAN:\n" + documents.map(d => `---
+[Chủ đề: ${d.title}]
+Nội dung: ${d.content}`).join("\n") + "\n---";
+        } else {
+          console.log("[RAG] No matching documents found.");
+        }
+      }
+    } catch (err) {
+      console.error("Lỗi khi thực hiện RAG (sẽ tiếp tục chạy không RAG):", err);
+    }
+  }
+
+  // 1.3 Thiết lập cấu trúc contents & systemInstruction gửi đi
+  let finalContents = contents;
+  if (!finalContents && prompt) {
+    const parts = [{ text: prompt }];
+    if (image && image.data && image.mimeType) {
+      parts.push({
+        inlineData: {
+          mimeType: image.mimeType,
+          data: image.data
+        }
+      });
+    }
+    finalContents = [{ role: "user", parts }];
+  } else if (image && image.data && image.mimeType) {
+    // Clone contents để tránh mutate data của client gửi lên
+    finalContents = JSON.parse(JSON.stringify(contents));
+    let lastUserMsg = null;
+    for (let i = finalContents.length - 1; i >= 0; i--) {
+      if (finalContents[i].role === "user") {
+        lastUserMsg = finalContents[i];
+        break;
+      }
+    }
+    if (lastUserMsg) {
+      if (!lastUserMsg.parts) lastUserMsg.parts = [];
+      lastUserMsg.parts.push({
+        inlineData: {
+          mimeType: image.mimeType,
+          data: image.data
+        }
+      });
+    }
+  }
+
+  // Kết hợp System Instruction gốc với tài liệu RAG
+  let finalSystemInstruction = systemInstruction || "";
+  if (ragContext) {
+    finalSystemInstruction += ragContext;
+  }
+
+  // 2. Định nghĩa danh sách các model dự phòng
   const MODELS = [
     "gemini-3.1-flash-lite", // Ưu tiên 1 (500 câu/ngày)
     "gemini-2.5-flash-lite", // Ưu tiên 2 (20 câu/ngày)
@@ -62,33 +182,30 @@ export const callGeminiProxy = onCall({
     "gemini-3-flash"         // Ưu tiên 5 (20 câu/ngày)
   ];
 
-  const parts = [{ text: prompt }];
-
-  if (image && image.data && image.mimeType) {
-    parts.push({
-      inlineData: {
-        mimeType: image.mimeType,
-        data: image.data
-      }
-    });
-  }
-
-  const contents = [{ parts }];
   let responseText = "";
   let lastError = null;
   let successUsage = null;
 
-  // Chạy vòng lặp thử từng model, nếu model trước bị quá hạn mức (429) sẽ tự động chuyển sang model tiếp theo
+  // Chạy vòng lặp thử từng model
   for (const model of MODELS) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     
+    const reqPayload = {
+      contents: finalContents
+    };
+    if (finalSystemInstruction) {
+      reqPayload.systemInstruction = {
+        parts: [{ text: finalSystemInstruction }]
+      };
+    }
+
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ contents })
+        body: JSON.stringify(reqPayload)
       });
 
       // Nếu gặp lỗi quá tần suất gọi (429), ghi log và tiếp tục thử model tiếp theo
@@ -119,7 +236,6 @@ export const callGeminiProxy = onCall({
     } catch (err) {
       console.error(`Lỗi kết nối khi gọi model ${model}:`, err);
       lastError = err;
-      // Tiếp tục vòng lặp sang model tiếp theo
     }
   }
 
