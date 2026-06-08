@@ -32,6 +32,49 @@ async function getEmbedding(text, apiKey) {
   return data?.embedding?.values;
 }
 
+// Hàm tóm tắt hội thoại cũ thành 1 câu duy nhất bằng LLM
+async function summarizeHistory(historyToCompress, apiKey) {
+  let textToCompress = historyToCompress.map(h => {
+    const roleName = h.role === "user" ? "Học sinh" : "Gia sư";
+    const text = h.parts?.map(p => p.text).join(" ") || "";
+    return `${roleName}: ${text}`;
+  }).join("\n");
+
+  const prompt = `Bạn là một trợ lý AI hỗ trợ tóm tắt hội thoại học tập.
+Hãy đọc lịch sử hội thoại ôn thi lớp 10 dưới đây và tóm tắt ngắn gọn trạng thái hiện tại của cuộc hội thoại trong đúng 1 CÂU DUY NHẤT.
+
+Yêu cầu tóm tắt:
+- Chỉ rõ học sinh đã nắm được kiến thức gì và hiện tại đang gặp khó khăn hay thắc mắc ở phần kiến thức cụ thể nào.
+- Trả về duy nhất 1 câu tóm tắt bằng tiếng Việt, ngắn gọn (dưới 30 từ), không có lời dẫn hay giải thích gì thêm.
+
+Hội thoại cần tóm tắt:
+${textToCompress}
+
+Câu tóm tắt duy nhất:`;
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }]
+      })
+    });
+    if (!response.ok) {
+      console.warn("LLM summarizeHistory trả về lỗi HTTP:", response.status);
+      return "";
+    }
+    const data = await response.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+  } catch (err) {
+    console.error("Lỗi khi tóm tắt lịch sử chat:", err);
+    return "";
+  }
+}
+
 // Hàm viết lại câu truy vấn của học sinh dựa trên lịch sử hội thoại bằng LLM
 async function rewriteQuery(chatHistory, currentMessage, apiKey) {
   let historyText = "";
@@ -174,7 +217,8 @@ export const callGeminiProxy = onCall({
               vectorField: "embedding",
               queryVector: queryEmbedding,
               distanceMeasure: "COSINE",
-              limit: 3
+              limit: 2,
+              distanceThreshold: 0.3
             });
           const snapshot = await query.get();
           const documents = [];
@@ -203,8 +247,29 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
     }
   }
 
-  // 1.3 Thiết lập cấu trúc contents & systemInstruction gửi đi
+  // 1.25 Thực hiện nén lịch sử chat nếu quá dài (Sliding Window + LLM Summarization)
+  let historySummary = "";
   let finalContents = contents;
+  
+  if (contents && contents.length > 5) {
+    try {
+      // Trích xuất phần hội thoại cũ cần tóm tắt (trừ 4 tin nhắn gần nhất và tin nhắn mới nhất)
+      const historyToCompress = contents.slice(0, -5);
+      console.log(`[Compression] Summarizing ${historyToCompress.length} legacy chat messages...`);
+      historySummary = await summarizeHistory(historyToCompress, apiKey);
+      if (historySummary) {
+        console.log(`[Compression] Legacy chat summary: "${historySummary}"`);
+      }
+      
+      // Giữ lại 4 tin nhắn gần nhất + 1 tin nhắn cuối vừa gửi
+      finalContents = contents.slice(-5);
+    } catch (err) {
+      console.error("Lỗi khi thực hiện nén lịch sử chat (sẽ fallback giữ nguyên):", err);
+      finalContents = contents;
+    }
+  }
+
+  // 1.3 Thiết lập cấu trúc contents & systemInstruction gửi đi
   if (!finalContents && prompt) {
     const parts = [{ text: prompt }];
     if (image && image.data && image.mimeType) {
@@ -217,8 +282,8 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
     }
     finalContents = [{ role: "user", parts }];
   } else if (image && image.data && image.mimeType) {
-    // Clone contents để tránh mutate data của client gửi lên
-    finalContents = JSON.parse(JSON.stringify(contents));
+    // Clone finalContents để tránh mutate data của client gửi lên
+    finalContents = JSON.parse(JSON.stringify(finalContents));
     let lastUserMsg = null;
     for (let i = finalContents.length - 1; i >= 0; i--) {
       if (finalContents[i].role === "user") {
@@ -237,8 +302,11 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
     }
   }
 
-  // Kết hợp System Instruction gốc với tài liệu RAG
+  // Kết hợp System Instruction gốc với tài liệu RAG và Tóm tắt lịch sử
   let finalSystemInstruction = systemInstruction || "";
+  if (historySummary) {
+    finalSystemInstruction += `\n\nTÓM TẮT TIẾN TRÌNH HỘI THOẠI TRƯỚC ĐÓ:\n- ${historySummary}\n`;
+  }
   if (ragContext) {
     finalSystemInstruction += ragContext;
   }
@@ -333,5 +401,12 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
     console.error("Lỗi ghi nhật ký sử dụng token:", err);
   }
 
-  return { text: responseText };
+  return { 
+    text: responseText,
+    usage: successUsage ? {
+      promptTokens: successUsage.promptTokenCount || 0,
+      candidatesTokens: successUsage.candidatesTokenCount || 0,
+      totalTokens: successUsage.totalTokenCount || 0
+    } : null
+  };
 });

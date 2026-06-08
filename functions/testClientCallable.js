@@ -61,6 +61,22 @@ async function run() {
       {
         role: "user",
         parts: [{ text: "Thế còn biệt thức delta tính thế nào hả thầy?" }]
+      },
+      {
+        role: "model",
+        parts: [{ text: "Biệt thức delta tính theo công thức: Delta = b^2 - 4ac. Nếu Delta >= 0 thì phương trình có nghiệm. Sau đó em áp dụng Vi-ét." }]
+      },
+      {
+        role: "user",
+        parts: [{ text: "Em tính ra Delta rồi, giờ biến đổi x1^2 + x2^2 thế nào tiếp theo ạ?" }]
+      },
+      {
+        role: "model",
+        parts: [{ text: "Em dùng hằng đẳng thức đáng nhớ: x1^2 + x2^2 = (x1 + x2)^2 - 2x1x2. Từ đó thay S = x1 + x2 và P = x1x2 vào." }]
+      },
+      {
+        role: "user",
+        parts: [{ text: "Nếu đề bài bắt tính thêm trị tuyệt đối của x1 - x2 thì biến đổi sao hả thầy?" }]
       }
     ],
     systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
