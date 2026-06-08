@@ -412,7 +412,11 @@ export const PracticeEngine: React.FC = () => {
     setIsExamSubmitted(false);
     setExamQuestions([]);
     setExamAnswers({});
-    setGrammarSection(null);
+    if (questionTypeId === 'eng-qt6') {
+      setGrammarSection('dang1');
+    } else {
+      setGrammarSection(null);
+    }
   }, [routeSubject, questionTypeId, resetQuestionState]);
 
   // Reset index và state khi chuyển đổi dạng thì động từ cơ bản

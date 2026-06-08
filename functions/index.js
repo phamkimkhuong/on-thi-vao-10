@@ -299,7 +299,7 @@ export const callGeminiProxy = onCall({
   }
 
   // 1.1 Kiểm tra hạn mức sử dụng ngày hôm nay
-  const dailyLimit = isPremium ? DAILY_REQUEST_LIMIT : 5;
+  const dailyLimit = isPremium ? DAILY_REQUEST_LIMIT : 20;
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -315,7 +315,7 @@ export const callGeminiProxy = onCall({
       if (!isPremium) {
         throw new HttpsError(
           "resource-exhausted",
-          "Hôm nay bạn đã dùng hết hạn mức 5 câu hỏi miễn phí. Hãy nâng cấp tài khoản Premium để không giới hạn ôn luyện cùng AI!"
+          "Hôm nay bạn đã dùng hết hạn mức 20 câu hỏi miễn phí. Hãy nâng cấp tài khoản Premium để không giới hạn ôn luyện cùng AI!"
         );
       } else {
         throw new HttpsError(

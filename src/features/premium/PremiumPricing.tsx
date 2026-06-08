@@ -55,7 +55,7 @@ export const PremiumPricing: React.FC = () => {
 
   const freeBenefits = [
     'Học tập chặng 1 & 2 (Mục tiêu điểm 5 và điểm 7-8)',
-    'Hỏi đáp Gia sư AI giới hạn 5 câu hỏi/ngày',
+    'Hỏi đáp Gia sư AI giới hạn 20 câu hỏi/ngày',
     'Tự động ghi nhận sổ lỗi sai dạng bài',
     'Thi thử vào 10 cơ bản'
   ];

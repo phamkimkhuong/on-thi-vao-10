@@ -453,6 +453,9 @@ export const AppLayout: React.FC = () => {
                     <span className="px-1 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded font-black tracking-widest shrink-0 leading-none">PRO</span>
                   )}
                 </span>
+                {!isPremium && (
+                  <span className="text-[9px] text-amber-600 dark:text-amber-400 font-bold mt-1">Free (20 câu/ngày)</span>
+                )}
                 <button
                   onClick={() => { logout(); navigate('/auth'); }}
                   className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-1.5 self-start cursor-pointer"

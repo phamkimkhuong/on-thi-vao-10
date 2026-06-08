@@ -118,7 +118,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
     return (
       <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
         <button
-          onClick={() => setGrammarSection(null)}
+          onClick={() => {
+            setGrammarSection(null);
+            navigate('/practice');
+          }}
           className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
         >
           ← Quay lại chọn Module
@@ -264,6 +267,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
 
                       if (qType.id === 'eng-qt6') {
                         setGrammarSection('dang1');
+                        navigate(`/practice/eng-qt6`);
                       } else {
                         setSelectedSubTense(null);
                         setGrammarSection(null);
