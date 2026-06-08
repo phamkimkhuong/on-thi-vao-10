@@ -254,7 +254,7 @@ export const callGeminiProxy = onCall({
     throw new HttpsError("failed-precondition", "API Key chưa được cấu hình ở phía máy chủ.");
   }
 
-  const { prompt, contents, systemInstruction, useRag, subjectId, image } = request.data;
+  const { prompt, contents, systemInstruction, useRag, subjectId, image, responseMimeType, responseSchema, temperature } = request.data;
   if (!prompt && !contents) {
     throw new HttpsError("invalid-argument", "Thiếu tham số prompt hoặc contents.");
   }
@@ -438,8 +438,8 @@ export const callGeminiProxy = onCall({
               }
             });
 
-            // Lấy danh sách kết quả đã loại trùng và giới hạn tối đa 3 tài liệu
-            const mergedDocuments = Array.from(mergedDocsMap.values()).slice(0, 3);
+            // Lấy danh sách kết quả đã loại trùng và giới hạn tối đa 2 tài liệu (Tối ưu hóa token)
+            const mergedDocuments = Array.from(mergedDocsMap.values()).slice(0, 2);
             console.log(`[RAG] Hybrid search merged ${mergedDocuments.length} unique document(s). Sources: ${mergedDocuments.map(d => `${d.id}(${d.source})`).join(", ")}`);
 
             if (mergedDocuments.length > 0) {
@@ -549,6 +549,18 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
         parts: [{ text: finalSystemInstruction }]
       };
     }
+    if (responseMimeType || responseSchema || typeof temperature === "number") {
+      reqPayload.generationConfig = {};
+      if (responseMimeType) {
+        reqPayload.generationConfig.responseMimeType = responseMimeType;
+      }
+      if (responseSchema) {
+        reqPayload.generationConfig.responseSchema = responseSchema;
+      }
+      if (typeof temperature === "number") {
+        reqPayload.generationConfig.temperature = temperature;
+      }
+    }
 
     try {
       const response = await fetch(url, {
@@ -584,9 +596,17 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
       successUsage = data.usageMetadata;
       console.log(`Gọi thành công model: ${model}`);
 
-      // Pha cập nhật (Update Memory): Phân tích cuộc hội thoại hiện tại để cập nhật hồ sơ học sinh
+      // Pha cập nhật (Update Memory): Phân tích cuộc hội thoại hiện tại để cập nhật hồ sơ học sinh (Chạy bất đồng bộ, bỏ qua tin nhắn xã giao ngắn để tối ưu hóa tokens & latency)
       if (uid && responseText && queryText) {
-        await updateStudentProfile(uid, queryText, responseText, studentProfile, apiKey);
+        const cleanedQuery = queryText.trim().toLowerCase();
+        const socialRegex = /^(chào|helo|hello|hi|chào thầy|chào cô|xin chào|dạ|vâng|ok|oke|cảm ơn|cám ơn|thanks|thank you|em cảm ơn|dạ em cảm ơn|dạ vâng|vâng ạ|em hiểu rồi|dạ em hiểu rồi|dạ rõ rồi|ok ạ|dạ ok|dạ vâng ạ|ạ)[.!?;]*$/i;
+        const isSocialQuery = cleanedQuery.length < 15 && socialRegex.test(cleanedQuery);
+        
+        if (!isSocialQuery) {
+          updateStudentProfile(uid, queryText, responseText, studentProfile, apiKey).catch(err => {
+            console.error("Lỗi cập nhật hồ sơ học sinh (async):", err);
+          });
+        }
       }
 
       break; // Gọi thành công, thoát khỏi vòng lặp thử model
