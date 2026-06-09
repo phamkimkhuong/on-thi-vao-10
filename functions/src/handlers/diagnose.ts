@@ -1,5 +1,5 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
-import { updateStudentProfileFromSession } from "../services/profile.js";
+import { updateStudentProfileFromSession, consolidateProfile } from "../services/profile.js";
 
 export const diagnoseSession = onCall({
   cors: true,
@@ -21,10 +21,14 @@ export const diagnoseSession = onCall({
 
   try {
     const cleanSubjectId = subjectId || "math";
-    // Chạy bất đồng bộ chẩn đoán dưới nền
-    updateStudentProfileFromSession(uid, cleanSubjectId, chatHistory, apiKey).catch((err) => {
-      console.error(`Lỗi khi chạy chẩn đoán session môn ${cleanSubjectId}:`, err);
-    });
+    // Chạy bất đồng bộ chẩn đoán và dọn dẹp dưới nền
+    updateStudentProfileFromSession(uid, cleanSubjectId, chatHistory, apiKey)
+      .then(() => {
+        return consolidateProfile(uid, cleanSubjectId, apiKey);
+      })
+      .catch((err) => {
+        console.error(`Lỗi khi chạy chẩn đoán session/consolidate môn ${cleanSubjectId}:`, err);
+      });
 
     return { success: true };
   } catch (error: any) {

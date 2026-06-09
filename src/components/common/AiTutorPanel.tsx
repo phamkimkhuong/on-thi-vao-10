@@ -6,6 +6,9 @@ import { Send, X, Bot, User, Sparkles, Loader, Trash2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../../services/firebase';
+import { getPersonalizedGreeting, StudentProfile } from '../../utils/greetingHelper';
+import { mathTopics } from '../../data/mathData';
+import { englishTopics } from '../../data/englishData';
 
 interface Message {
   role: 'user' | 'model';
@@ -31,6 +34,8 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const [profile, setProfile] = useState<StudentProfile | null>(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
   const messagesRef = useRef<Message[]>([]);
   const hasNewMessages = useRef(false);
@@ -41,6 +46,30 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
   }, [messages]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Tải hồ sơ học sinh khi mở bảng chat bài tập
+  useEffect(() => {
+    if (isOpen && auth.currentUser?.uid) {
+      setIsLoadingProfile(true);
+      const profileRef = doc(db, 'student_profiles', auth.currentUser.uid);
+      getDoc(profileRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            setProfile(docSnap.data() as StudentProfile);
+          } else {
+            setProfile(null);
+          }
+        })
+        .catch((err) => {
+          console.error("Lỗi khi tải hồ sơ học sinh:", err);
+        })
+        .finally(() => {
+          setIsLoadingProfile(false);
+        });
+    } else if (!isOpen) {
+      setProfile(null);
+    }
+  }, [isOpen]);
 
   // Khởi động tin nhắn chào mừng hoặc tải lịch sử chat từ Firestore
   useEffect(() => {
@@ -81,6 +110,39 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
       }
     }
   }, [isOpen, question.id]);
+
+  // Cập nhật tin nhắn chào mừng cá nhân hóa khi profile tải xong và tin nhắn hiện tại vẫn đang là tin nhắn chào mặc định
+  useEffect(() => {
+    if (isLoadingProfile || !isOpen) return;
+    
+    if (messages.length === 1 && messages[0].role === 'model') {
+      const currentText = messages[0].text;
+      
+      const isDefaultOrGenericWelcome = 
+        currentText.startsWith('Xin chào! Thầy là Gia sư AI') ||
+        currentText.startsWith('Chào ') ||
+        currentText.startsWith('Hello ');
+        
+      if (isDefaultOrGenericWelcome) {
+        const cleanSubjectId = question.subjectId || 'math';
+        const topicsList = cleanSubjectId === 'math' ? mathTopics : englishTopics;
+        const topic = topicsList.find(t => t.id === question.topicId);
+        const topicName = topic ? topic.name : '';
+        
+        const displayName = auth.currentUser?.displayName;
+        const personalizedText = getPersonalizedGreeting(
+          displayName,
+          profile,
+          cleanSubjectId,
+          topicName
+        );
+        
+        if (currentText !== personalizedText) {
+          setMessages([{ role: 'model', text: personalizedText }]);
+        }
+      }
+    }
+  }, [profile, isLoadingProfile, isOpen, question, messages.length]);
 
   // Bộ lắng nghe đóng phiên (Click X, chuyển câu hỏi, hoặc rời trang) để chạy chẩn đoán 1 lần duy nhất
   useEffect(() => {

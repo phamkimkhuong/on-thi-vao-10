@@ -10,6 +10,7 @@ import {
   AlertTriangle, CheckCircle, Award
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { getPersonalizedGreeting } from '../../utils/greetingHelper';
 
 interface Message {
   role: 'user' | 'model';
@@ -160,6 +161,28 @@ export const GeneralAiTutor: React.FC = () => {
     });
   }, [user?.uid, subject]);
 
+  // 3. Cập nhật tin nhắn chào mừng cá nhân hóa khi profile tải xong và tin nhắn hiện tại vẫn đang là tin nhắn chào mặc định
+  useEffect(() => {
+    if (isLoadingProfile || !user?.uid) return;
+    
+    if (messages.length === 1 && messages[0].role === 'model') {
+      const currentText = messages[0].text;
+      
+      const isDefaultOrGenericWelcome = 
+        currentText.startsWith('Chào em! Thầy là Gia sư AI') ||
+        currentText.startsWith('Hello! Thầy là Gia sư AI') ||
+        currentText.startsWith('Chào ') ||
+        currentText.startsWith('Hello ');
+        
+      if (isDefaultOrGenericWelcome) {
+        const personalizedText = getPersonalizedGreeting(user?.displayName, profile, subject);
+        if (currentText !== personalizedText) {
+          setMessages([{ role: 'model', text: personalizedText }]);
+        }
+      }
+    }
+  }, [profile, isLoadingProfile, subject, user?.displayName, messages.length]);
+
   // Tự động cuộn xuống tin nhắn mới nhất
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -248,7 +271,8 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
         useRag: true,
         subjectId: subject,
         temperature: 0.7,
-        skipDiagnosis: true
+        skipDiagnosis: true,
+        chatId: 'general'
       });
 
       const finalMessages = [...updatedMessages, { role: 'model', text: reply } as Message];

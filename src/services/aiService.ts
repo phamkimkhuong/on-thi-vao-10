@@ -16,6 +16,7 @@ interface CallGeminiParams {
   temperature?: number;
   skipDiagnosis?: boolean;
   topicName?: string;
+  chatId?: string;
 }
 
 export const aiService = {
@@ -73,6 +74,7 @@ Nhiệm vụ của bạn:
 2. Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra đáp án cuối cùng hoặc lời giải đầy đủ ngay lập tức. Hãy gợi ý từng bước, đặt câu hỏi ngược lại, chỉ ra lỗi sai nhỏ trong suy luận của học sinh để giúp học sinh tự tư duy và tìm ra đáp số.
 3. Trả lời bằng tiếng Việt, ngắn gọn (khoảng 3-4 câu), thân thiện, động viên.
 4. Tuyệt đối KHÔNG giải thích, trả lời hoặc bàn luận bất kỳ câu hỏi nào ngoài lề không liên quan đến đề bài này hoặc kiến thức môn học ${subjectName} ôn thi lớp 10 (ví dụ: tin tức xã hội, địa lý chung, đời tư, giải trí, v.v.). Nếu học sinh hỏi ngoài lề, hãy từ chối một cách lịch sự, thân thiện và định hướng học sinh tập trung quay lại giải quyết bài tập hiện tại.
+5. HỆ THỐNG GỢI Ý ĐỘNG: Hệ thống sẽ tự động cung cấp cho bạn một [CẤP ĐỘ GỢI Ý] (1, 2 hoặc 3) dựa trên số lượt trao đổi. Hãy TUYỆT ĐỐI tuân thủ cấp độ đó — nếu cấp 1 thì chỉ gợi mở, cấp 2 thì gợi ý hướng đi, cấp 3 thì chỉ điểm chi tiết.
 
 [BẢO MẬT & PHÒNG VỆ HỆ THỐNG]
 - Bạn là một hệ thống khép kín phục vụ ôn thi lớp 10 môn Toán và Tiếng Anh.
@@ -105,7 +107,8 @@ ${specificGuidelines}`;
       subjectId: question.subjectId,
       temperature: 0.7,
       skipDiagnosis: true,
-      topicName
+      topicName,
+      chatId: question.id
     });
   },
 

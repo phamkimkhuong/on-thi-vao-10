@@ -64,7 +64,7 @@ async function run() {
   const db = admin.firestore();
 
   if (shouldClear) {
-    console.log("🧹 Đang tiến hành xóa sạch dữ liệu nhật ký sử dụng trong collection 'ai_usage_logs'...");
+    console.log("Quyết định xóa sạch dữ liệu nhật ký sử dụng trong collection 'ai_usage_logs'...");
     
     // Lấy số lượng tài liệu trước khi xóa
     const countSnapshot = await db.collection("ai_usage_logs").get();
@@ -83,10 +83,10 @@ async function run() {
 
   console.log("Đang kết nối tới Firestore và truy vấn dữ liệu ai_usage_logs...\n");
 
-  // Lấy 50 log sử dụng gần nhất
+  // Lấy 100 log sử dụng gần nhất
   const snapshot = await db.collection("ai_usage_logs")
     .orderBy("timestamp", "desc")
-    .limit(50)
+    .limit(100)
     .get();
 
   if (snapshot.empty) {
@@ -95,24 +95,48 @@ async function run() {
     return;
   }
 
+  const typeMapNames = {
+    "tutor": "Gia sư AI (Tutor)",
+    "rewrite": "Viết lại câu hỏi (Rewrite)",
+    "summary": "Tóm tắt lịch sử (Summary)",
+    "diagnose": "Chẩn đoán phiên (Diagnose)",
+    "consolidate": "Tinh gọn bộ nhớ (Consolidate)",
+    "proof_grading": "Chấm bài tự luận (Grading)"
+  };
+
   const logs = [];
   let totalPrompt = 0;
   let totalCandidates = 0;
   let totalAll = 0;
 
+  const breakdown = {};
+  Object.keys(typeMapNames).forEach(k => {
+    breakdown[k] = { count: 0, promptTokens: 0, candidatesTokens: 0, totalTokens: 0 };
+  });
+
   snapshot.forEach(doc => {
     const data = doc.data();
+    const rawType = data.type || "tutor";
+    const type = typeMapNames[rawType] ? rawType : "tutor";
+
     logs.push({
       id: doc.id,
       email: data.email || "N/A",
       promptTokens: data.promptTokens || 0,
       candidatesTokens: data.candidatesTokens || 0,
       totalTokens: data.totalTokens || 0,
+      type: typeMapNames[type],
       time: data.timestamp ? data.timestamp.toDate().toLocaleString("vi-VN") : "N/A"
     });
+
     totalPrompt += data.promptTokens || 0;
     totalCandidates += data.candidatesTokens || 0;
     totalAll += data.totalTokens || 0;
+
+    breakdown[type].count++;
+    breakdown[type].promptTokens += data.promptTokens || 0;
+    breakdown[type].candidatesTokens += data.candidatesTokens || 0;
+    breakdown[type].totalTokens += data.totalTokens || 0;
   });
 
   const count = logs.length;
@@ -135,9 +159,28 @@ async function run() {
   const avgCostUSD = costUSD / count;
   const avgCostVND = costVND / count;
 
-  console.log(`=== BÁO CÁO THỐNG KÊ TOKEN (${count} LƯỢT GỌI GẦN NHẤT) ===\n`);
+  console.log(`=== BÁO CÁO THỐNG KÊ TOKEN VÀ CHI PHÍ (${count} LƯỢT GỌI GẦN NHẤT) ===\n`);
   
-  console.log(`📊 PHÂN TÍCH TRUNG BÌNH MỖI REQUEST:`);
+  console.log("📊 CHI TIẾT THEO PHÂN LOẠI TÁC VỤ (BREAKDOWN):");
+  const breakdownTable = [];
+  Object.entries(breakdown).forEach(([key, stats]) => {
+    if (stats.count > 0) {
+      const typeCostUSD = (stats.promptTokens * rateInput) + (stats.candidatesTokens * rateOutput);
+      const typeCostVND = typeCostUSD * usdToVnd;
+      breakdownTable.push({
+        "Loại tác vụ": typeMapNames[key],
+        "Số lượt gọi": stats.count,
+        "Input Tokens": stats.promptTokens.toLocaleString(),
+        "Output Tokens": stats.candidatesTokens.toLocaleString(),
+        "Tổng Tokens": stats.totalTokens.toLocaleString(),
+        "Chi phí VND": `~ ${Math.round(typeCostVND).toLocaleString()} VNĐ`
+      });
+    }
+  });
+  console.table(breakdownTable);
+  console.log();
+
+  console.log(`📊 PHÂN TÍCH TRUNG BÌNH MỖI REQUEST (CHUNG):`);
   console.log(`- Prompt Tokens trung bình (Input):     ${avgPrompt.toLocaleString()} tokens`);
   console.log(`- Candidates Tokens trung bình (Output):  ${avgCandidates.toLocaleString()} tokens`);
   console.log(`- Tổng số Tokens trung bình:             ${avgTotal.toLocaleString()} tokens`);
@@ -146,15 +189,17 @@ async function run() {
 
   console.log(`🔥 LƯỢT GỌI TIÊU THỤ LỚN NHẤT:`);
   console.log(`- ID: ${maxLog.id} (${maxLog.time})`);
+  console.log(`- Tác vụ: ${maxLog.type}`);
   console.log(`- Chi tiết: Input ${maxLog.promptTokens.toLocaleString()} | Output ${maxLog.candidatesTokens.toLocaleString()} | Tổng ${maxLog.totalTokens.toLocaleString()}`);
   console.log();
 
   console.log(`❄️ LƯỢT GỌI TIÊU THỤ THẤP NHẤT:`);
   console.log(`- ID: ${minLog.id} (${minLog.time})`);
+  console.log(`- Tác vụ: ${minLog.type}`);
   console.log(`- Chi tiết: Input ${minLog.promptTokens.toLocaleString()} | Output ${minLog.candidatesTokens.toLocaleString()} | Tổng ${minLog.totalTokens.toLocaleString()}`);
   console.log();
 
-  console.log(`💰 TỔNG LƯỢNG TOKEN & CHI PHÍ THƯƠNG MẠI TIÊU THỤ (Của ${count} lượt gọi):`);
+  console.log(`💰 TỔNG LƯỢNG TOKEN & CHI PHÍ THƯƠNG MẠI TIÊU THỤ (Toàn bộ ${count} lượt gọi):`);
   console.log(`- Tổng Prompt Tokens:                    ${totalPrompt.toLocaleString()} tokens`);
   console.log(`- Tổng Candidates Tokens:                ${totalCandidates.toLocaleString()} tokens`);
   console.log(`- Tổng cộng:                             ${totalAll.toLocaleString()} tokens`);
@@ -166,6 +211,7 @@ async function run() {
   console.table(logs.slice(0, 10).map(l => ({
     "Thời gian": l.time.split(" ")[1] + " " + l.time.split(" ")[0],
     "Tài khoản": l.email,
+    "Tác vụ": l.type,
     "Input Tokens": l.promptTokens,
     "Output Tokens": l.candidatesTokens,
     "Tổng Tokens": l.totalTokens,

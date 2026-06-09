@@ -110,7 +110,7 @@ export async function rewriteQuery(
   chatHistory: ChatContent[],
   currentMessage: string,
   apiKey: string
-): Promise<string> {
+): Promise<{ rewrittenQuery: string; usageMetadata?: any }> {
   let historyText = "";
   if (chatHistory && chatHistory.length > 0) {
     historyText = chatHistory
@@ -151,14 +151,17 @@ Câu truy vấn tìm kiếm tri thức được viết lại (hoặc "NONE"):`;
 
     if (!response.ok) {
       console.warn("LLM rewriteQuery trả về lỗi HTTP:", response.status);
-      return currentMessage;
+      return { rewrittenQuery: currentMessage };
     }
 
     const data = (await response.json()) as any;
     const rewritten = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-    return rewritten || currentMessage;
+    return {
+      rewrittenQuery: rewritten || currentMessage,
+      usageMetadata: data.usageMetadata
+    };
   } catch (err) {
     console.error("Lỗi khi viết lại query với LLM:", err);
-    return currentMessage;
+    return { rewrittenQuery: currentMessage };
   }
 }

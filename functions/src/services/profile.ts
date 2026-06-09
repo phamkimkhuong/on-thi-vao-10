@@ -183,6 +183,21 @@ Kết quả JSON:`;
     }
 
     const data = (await response.json()) as any;
+    const usage = data?.usageMetadata;
+    if (usage) {
+      db.collection("ai_usage_logs").add({
+        userId: uid,
+        email: "system-diagnosis",
+        promptTokens: usage.promptTokenCount || 0,
+        candidatesTokens: usage.candidatesTokenCount || 0,
+        totalTokens: usage.totalTokenCount || 0,
+        timestamp: new Date(),
+        type: "diagnose",
+      }).catch((err) => {
+        console.error("Lỗi khi ghi log diagnose:", err);
+      });
+    }
+
     let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
     if (rawText.startsWith("```")) {
@@ -224,5 +239,168 @@ Kết quả JSON:`;
     );
   } catch (err) {
     console.error("Lỗi khi cập nhật hồ sơ học sinh từ phiên hội thoại:", err);
+  }
+}
+
+export async function consolidateProfile(
+  uid: string,
+  subjectId: string,
+  apiKey: string
+): Promise<void> {
+  try {
+    // 1. Tải hồ sơ học sinh hiện tại
+    const profileDoc = await db.collection("student_profiles").doc(uid).get();
+    if (!profileDoc.exists) {
+      console.log(`[Consolidation] Không tìm thấy hồ sơ học sinh cho uid: ${uid}. Bỏ qua dọn dẹp.`);
+      return;
+    }
+
+    const currentProfile = profileDoc.data();
+    const subProfile = currentProfile?.[subjectId] || {};
+    const strengths: string[] = subProfile.strengths || [];
+    const weaknesses: string[] = subProfile.weaknesses || [];
+    const learningSummary: string = subProfile.learningSummary || "";
+
+    if (strengths.length === 0 && weaknesses.length === 0) {
+      console.log(`[Consolidation] Hồ sơ trống cho uid: ${uid}. Bỏ qua.`);
+      return;
+    }
+
+    // 2. Tải các attempts của học sinh từ Firestore subcollection
+    const attemptsSnap = await db.collection("users").doc(uid).collection("attempts").get();
+    
+    // Gom nhóm attempts theo questionTypeId
+    const attemptsMap: Record<string, any[]> = {};
+    attemptsSnap.forEach(docSnap => {
+      const attempt = docSnap.data();
+      if (attempt.questionTypeId) {
+        if (!attemptsMap[attempt.questionTypeId]) {
+          attemptsMap[attempt.questionTypeId] = [];
+        }
+        attemptsMap[attempt.questionTypeId].push(attempt);
+      }
+    });
+
+    // 3. Tìm các dạng bài đã làm đúng 3 câu liên tiếp gần nhất
+    const masteredQuestionTypeIds: string[] = [];
+    
+    for (const [qtId, list] of Object.entries(attemptsMap)) {
+      const sorted = [...list].sort((a, b) => {
+        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+      });
+      const recent = sorted.slice(0, 3);
+      if (recent.length === 3 && recent.every(a => a.isCorrect === true)) {
+        masteredQuestionTypeIds.push(qtId);
+      }
+    }
+
+    // 4. Tra cứu tên các dạng bài từ collection knowledge_base
+    const qTypesSnap = await db.collection("knowledge_base")
+      .where("subjectId", "==", subjectId)
+      .where("chunkType", "==", "overview")
+      .get();
+
+    const qTypeMap: Record<string, string> = {};
+    qTypesSnap.forEach(docSnap => {
+      const data = docSnap.data();
+      if (data.parentId && data.parentTitle) {
+        qTypeMap[data.parentId] = data.parentTitle;
+      }
+    });
+
+    const masteredTopics = masteredQuestionTypeIds
+      .map(id => qTypeMap[id])
+      .filter(Boolean);
+
+    console.log(`[Consolidation] uid: ${uid}, mastered topics: ${JSON.stringify(masteredTopics)}`);
+
+    // 5. Gọi Gemini để tối ưu hóa, làm sạch và loại bỏ điểm yếu
+    const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}.
+Nhiệm vụ của bạn là: Hãy tinh gọn hồ sơ học sinh và thực hiện dọn dẹp các điểm yếu đã khắc phục.
+
+Thông tin hồ sơ hiện tại môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}:
+- Điểm mạnh hiện tại: ${JSON.stringify(strengths)}
+- Điểm yếu/Lỗi sai hiện tại: ${JSON.stringify(weaknesses)}
+- Tóm tắt học lực hiện tại: "${learningSummary}"
+
+Dữ liệu thực tế luyện tập:
+Học sinh đã giải đúng 100% (3/3 câu liên tiếp gần đây nhất) thuộc các dạng bài sau: ${masteredTopics.length > 0 ? JSON.stringify(masteredTopics) : "(Không có)"}
+
+Yêu cầu thực hiện:
+1. Nhóm/gộp các điểm mạnh hoặc điểm yếu trùng lặp ngữ nghĩa hoặc quá giống nhau (ví dụ: "Nhầm dấu Vi-ét" và "Sai dấu khi dùng Vi-ét" gộp thành "Nhầm dấu Vi-ét").
+2. Đối chiếu điểm yếu hiện tại với "Dữ liệu thực tế luyện tập": Nếu học sinh đã làm đúng 100% các câu gần đây của một dạng bài (ví dụ: "Hệ thức Vi-ét"), hãy loại bỏ các lỗi sai liên quan đến dạng bài đó khỏi danh sách điểm yếu, và chuyển nó thành một điểm mạnh mới (ví dụ: "Đã khắc phục lỗi dấu Vi-ét" hoặc "Nắm chắc hệ thức Vi-ét").
+3. Tinh gọn lại từ ngữ cho các điểm mạnh/yếu, mỗi ý chỉ từ 3-7 từ ngắn gọn và súc tích.
+4. Cập nhật lại câu tóm tắt tiến trình học tập của học sinh môn này (dưới 30 từ).
+5. Trả về kết quả dưới dạng cấu trúc JSON sạch, không bọc trong markdown (không dùng \`\`\`json ... \`\`\`), có dạng:
+{
+  "strengths": ["...", "..."],
+  "weaknesses": ["...", "..."],
+  "learningSummary": "..."
+}
+
+Kết quả JSON:`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("[Consolidation] LLM consolidation trả về lỗi HTTP:", response.status);
+      return;
+    }
+
+    const data = (await response.json()) as any;
+    const usage = data?.usageMetadata;
+    if (usage) {
+      db.collection("ai_usage_logs").add({
+        userId: uid,
+        email: "system-consolidation",
+        promptTokens: usage.promptTokenCount || 0,
+        candidatesTokens: usage.candidatesTokenCount || 0,
+        totalTokens: usage.totalTokenCount || 0,
+        timestamp: new Date(),
+        type: "consolidate",
+      }).catch((err) => {
+        console.error("Lỗi khi ghi log consolidate:", err);
+      });
+    }
+
+    let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+    if (rawText.startsWith("```")) {
+      rawText = rawText
+        .replace(/^```json\s*/i, "")
+        .replace(/```\s*$/, "")
+        .trim();
+    }
+
+    const parsed = JSON.parse(rawText);
+    const { strengths: newStrengths = [], weaknesses: newWeaknesses = [], learningSummary: newSummary = "" } = parsed;
+
+    // Cập nhật lại Firestore
+    await db.collection("student_profiles").doc(uid).set(
+      {
+        [subjectId]: {
+          strengths: newStrengths,
+          weaknesses: newWeaknesses,
+          learningSummary: newSummary || learningSummary,
+          lastUpdated: new Date(),
+        },
+        lastUpdated: new Date(),
+      },
+      { merge: true }
+    );
+
+    console.log(`[Consolidation] Success for uid: ${uid}. strengths: ${newStrengths.length}, weaknesses: ${newWeaknesses.length}`);
+
+  } catch (err) {
+    console.error("[Consolidation] Lỗi khi làm sạch bộ nhớ học sinh:", err);
   }
 }

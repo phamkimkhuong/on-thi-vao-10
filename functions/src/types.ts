@@ -26,6 +26,7 @@ export interface GeminiProxyRequest {
   temperature?: number;
   skipDiagnosis?: boolean;
   topicName?: string;
+  chatId?: string;
 }
 
 export interface Transaction {
