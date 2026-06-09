@@ -237,6 +237,58 @@ async function run() {
   } catch (err) {
     console.error("Lỗi khi gọi Test Case 5:", err);
   }
+
+  // Test Case 6: Kiểm tra Kích hoạt ghi log Rewrite Query
+  console.log("Đang gọi Test Case 6 (Mong đợi kích hoạt Rewrite Query và ghi log)...");
+  const paramsRewrite = {
+    contents: [
+      ...params.contents,
+      {
+        role: "model",
+        parts: [{ text: "Để tính $|x_1 - x_2|$, em bình phương lên được $(x_1-x_2)^2$." }]
+      },
+      {
+        role: "user",
+        parts: [{ text: "tại sao lại làm thế hả thầy?" }]
+      }
+    ],
+    systemInstruction: "Bạn là một Gia sư AI môn Toán ôn thi lớp 10.",
+    useRag: true,
+    subjectId: "math"
+  };
+
+  try {
+    const resultRewrite = await callGeminiProxy(paramsRewrite);
+    console.log("\n==================================================");
+    console.log("TEST CASE 6: REWRITE QUERY LOGGING VERIFICATION");
+    console.log("AI phản hồi:", resultRewrite.data.text.substring(0, 150) + "...");
+    console.log("==================================================\n");
+  } catch (err) {
+    console.error("Lỗi khi gọi Test Case 6:", err);
+  }
+
+  // Test Case 7: Kiểm tra diagnoseSession (Diagnose & Consolidate)
+  console.log("Đang gọi Test Case 7 (Tổng kết phiên, mong đợi ghi log diagnose & consolidate)...");
+  const diagnoseSession = httpsCallable(clientFunctions, "diagnoseSession");
+  try {
+    const resultDiagnose = await diagnoseSession({
+      chatHistory: [
+        { role: "user", text: "Thưa thầy, em tính ra biệt thức delta bằng 5 rồi. Thế là phương trình vô nghiệm đúng không thầy?" },
+        { role: "model", text: "Chào em! Biệt thức Delta = 5 là số dương. Khi Delta > 0, phương trình bậc hai có hai nghiệm phân biệt chứ không phải vô nghiệm đâu em nhé." }
+      ],
+      subjectId: "math"
+    });
+    console.log("\n==================================================");
+    console.log("TEST CASE 7: DIAGNOSE SESSION VERIFICATION");
+    console.log("diagnoseSession kết quả:", JSON.stringify(resultDiagnose.data, null, 2));
+    console.log("==================================================\n");
+
+    // Đợi 2 giây để chắc chắn các tác vụ bất đồng bộ ghi log xong
+    console.log("Đang chờ 2 giây để Firestore lưu trữ các log chạy ngầm...");
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  } catch (err) {
+    console.error("Lỗi khi gọi Test Case 7:", err);
+  }
 }
 
 run().catch(console.error);

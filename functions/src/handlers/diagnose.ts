@@ -21,14 +21,9 @@ export const diagnoseSession = onCall({
 
   try {
     const cleanSubjectId = subjectId || "math";
-    // Chạy bất đồng bộ chẩn đoán và dọn dẹp dưới nền
-    updateStudentProfileFromSession(uid, cleanSubjectId, chatHistory, apiKey)
-      .then(() => {
-        return consolidateProfile(uid, cleanSubjectId, apiKey);
-      })
-      .catch((err) => {
-        console.error(`Lỗi khi chạy chẩn đoán session/consolidate môn ${cleanSubjectId}:`, err);
-      });
+    // Await để đảm bảo tác vụ được hoàn thành đầy đủ trên GCP trước khi đóng function container
+    await updateStudentProfileFromSession(uid, cleanSubjectId, chatHistory, apiKey);
+    await consolidateProfile(uid, cleanSubjectId, apiKey);
 
     return { success: true };
   } catch (error: any) {
