@@ -32,6 +32,14 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
+  const messagesRef = useRef<Message[]>([]);
+  const hasNewMessages = useRef(false);
+
+  // Đồng bộ tin nhắn mới nhất sang Ref
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Khởi động tin nhắn chào mừng hoặc tải lịch sử chat từ Firestore
@@ -74,6 +82,25 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
     }
   }, [isOpen, question.id]);
 
+  // Bộ lắng nghe đóng phiên (Click X, chuyển câu hỏi, hoặc rời trang) để chạy chẩn đoán 1 lần duy nhất
+  useEffect(() => {
+    if (isOpen) {
+      hasNewMessages.current = false;
+    }
+
+    return () => {
+      if (hasNewMessages.current && messagesRef.current.length > 1) {
+        const chatHistoryForDiagnosis = messagesRef.current.map(m => ({
+          role: m.role,
+          text: m.text
+        }));
+        
+        aiService.diagnoseSession(chatHistoryForDiagnosis, question.subjectId);
+        hasNewMessages.current = false; // Tránh chạy lặp lại
+      }
+    };
+  }, [isOpen, question.id, question.subjectId]);
+
   // Tự động cuộn xuống tin nhắn mới nhất
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -108,6 +135,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
     const updatedMessages = [...messages, { role: 'user', text: userText } as Message];
     setMessages(updatedMessages);
     setIsLoading(true);
+    hasNewMessages.current = true;
 
     try {
       const tutorReply = await aiService.askTutor(

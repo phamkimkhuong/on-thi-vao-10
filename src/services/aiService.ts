@@ -1,6 +1,8 @@
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import { Question, Solution } from '../types';
+import { mathTopics } from '../data/mathData';
+import { englishTopics } from '../data/englishData';
 
 interface CallGeminiParams {
   prompt?: string;
@@ -12,6 +14,8 @@ interface CallGeminiParams {
   responseMimeType?: string;
   responseSchema?: any;
   temperature?: number;
+  skipDiagnosis?: boolean;
+  topicName?: string;
 }
 
 export const aiService = {
@@ -89,12 +93,19 @@ ${specificGuidelines}`;
       parts: [{ text: message }]
     });
 
+    const cleanSubjectId = question.subjectId || 'math';
+    const topicsList = cleanSubjectId === 'math' ? mathTopics : englishTopics;
+    const topic = topicsList.find(t => t.id === question.topicId);
+    const topicName = topic ? topic.name : '';
+
     return this.callGemini({
       contents,
       systemInstruction,
       useRag: true,
       subjectId: question.subjectId,
-      temperature: 0.7
+      temperature: 0.7,
+      skipDiagnosis: true,
+      topicName
     });
   },
 
@@ -162,6 +173,19 @@ Nhiệm vụ của bạn:
           feedback: textResponse.substring(0, 200) || 'Đã chấm bài làm.'
         };
       }
+    }
+  },
+
+  async diagnoseSession(chatHistory: Array<{ role: 'user' | 'model'; text: string }>, subjectId: string): Promise<void> {
+    try {
+      const diagnoseSessionFn = httpsCallable<{ chatHistory: typeof chatHistory; subjectId: string }, { success: boolean }>(
+        functions,
+        'diagnoseSession'
+      );
+      await diagnoseSessionFn({ chatHistory, subjectId });
+      console.log(`[diagnoseSession] Session diagnosis triggered successfully for ${subjectId}`);
+    } catch (err) {
+      console.error("[diagnoseSession] Error triggering session diagnosis:", err);
     }
   }
 };

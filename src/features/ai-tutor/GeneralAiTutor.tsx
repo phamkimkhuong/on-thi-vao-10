@@ -16,7 +16,17 @@ interface Message {
   text: string;
 }
 
+interface SubjectProfile {
+  strengths?: string[];
+  weaknesses?: string[];
+  learningSummary?: string;
+  lastUpdated?: any;
+}
+
 interface StudentProfile {
+  math?: SubjectProfile;
+  english?: SubjectProfile;
+  // Legacy fields for backward compatibility
   strengths?: string[];
   weaknesses?: string[];
   learningSummary?: string;
@@ -50,6 +60,57 @@ export const GeneralAiTutor: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const messagesRef = useRef<Message[]>([]);
+  const hasNewMessages = useRef(false);
+  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const runDiagnosisRef = useRef<(() => void) | null>(null);
+
+  // Đồng bộ tin nhắn mới nhất sang Ref
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  const resetInactivityTimer = () => {
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+    inactivityTimerRef.current = setTimeout(() => {
+      console.log(`[GeneralAiTutor] Inactivity timeout reached (3m). Triggering diagnosis for subject: ${subject}`);
+      if (runDiagnosisRef.current) {
+        runDiagnosisRef.current();
+      }
+    }, 3 * 60 * 1000); // 3 minutes timeout
+  };
+
+  // Bộ lắng nghe đóng phiên (chuyển môn, unmount, hoặc timeout) để chạy chẩn đoán 1 lần duy nhất
+  useEffect(() => {
+    hasNewMessages.current = false;
+    resetInactivityTimer();
+
+    const currentSubject = subject;
+
+    const runDiagnosis = () => {
+      if (hasNewMessages.current && messagesRef.current.length > 1) {
+        const chatHistoryForDiagnosis = messagesRef.current.map(m => ({
+          role: m.role,
+          text: m.text
+        }));
+        console.log(`[GeneralAiTutor] Running session diagnosis for subject: ${currentSubject}`);
+        aiService.diagnoseSession(chatHistoryForDiagnosis, currentSubject);
+        hasNewMessages.current = false;
+      }
+    };
+
+    runDiagnosisRef.current = runDiagnosis;
+
+    return () => {
+      runDiagnosis();
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    };
+  }, [subject]);
 
   // 1. Lắng nghe hồ sơ học sinh (student_profiles) theo thời gian thực
   useEffect(() => {
@@ -127,6 +188,10 @@ export const GeneralAiTutor: React.FC = () => {
       try {
         await deleteDoc(chatRef);
         setMessages([]);
+        hasNewMessages.current = false;
+        if (inactivityTimerRef.current) {
+          clearTimeout(inactivityTimerRef.current);
+        }
       } catch (err) {
         console.error("Lỗi khi xóa lịch sử chat:", err);
       }
@@ -145,6 +210,9 @@ export const GeneralAiTutor: React.FC = () => {
     const updatedMessages = [...messages, { role: 'user', text: textToSend } as Message];
     setMessages(updatedMessages);
     setIsLoading(true);
+
+    hasNewMessages.current = true;
+    resetInactivityTimer();
 
     const systemInstruction = subject === 'math'
       ? `Bạn là một Gia sư AI môn Toán tận tâm hỗ trợ học sinh Việt Nam ôn thi vào lớp 10.
@@ -179,7 +247,8 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
         systemInstruction,
         useRag: true,
         subjectId: subject,
-        temperature: 0.7
+        temperature: 0.7,
+        skipDiagnosis: true
       });
 
       const finalMessages = [...updatedMessages, { role: 'model', text: reply } as Message];
@@ -221,6 +290,24 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
   ];
 
   const suggestions = subject === 'math' ? mathSuggestions : englishSuggestions;
+
+  const cleanSubject = subject || 'math';
+  const subProfile = cleanSubject === 'math' ? profile?.math : profile?.english;
+  
+  let strengths: string[] = subProfile?.strengths || [];
+  let weaknesses: string[] = subProfile?.weaknesses || [];
+  let learningSummary = subProfile?.learningSummary || "";
+  let lastUpdated = subProfile?.lastUpdated;
+
+  // Di trú từ cấu trúc cũ nếu chọn Toán và chưa có cấu trúc môn học mới
+  if (cleanSubject === "math" && profile && !profile.math) {
+    if (profile.strengths) strengths = profile.strengths;
+    if (profile.weaknesses) weaknesses = profile.weaknesses;
+    if (profile.learningSummary) learningSummary = profile.learningSummary;
+    if (profile.lastUpdated) lastUpdated = profile.lastUpdated;
+  }
+
+  const hasProfileData = strengths.length > 0 || weaknesses.length > 0 || !!learningSummary;
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-100px)] lg:overflow-hidden p-0 gap-3 bg-slate-50/50 dark:bg-slate-950/20">
@@ -422,22 +509,22 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
                   <Loader size={16} className="animate-spin text-amber-500" />
                   Đang tải dữ liệu hồ sơ...
                 </div>
-              ) : profile ? (
+              ) : (profile && hasProfileData) ? (
                 <>
                   {/* 1. Tóm tắt học lực */}
-                  {profile.learningSummary && (
+                  {learningSummary && (
                     <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/40">
                       <span className="text-[8px] font-black text-amber-600 dark:text-amber-400 block mb-1">TIẾN TRÌNH HIỆN TẠI</span>
-                      <p className="text-[10px] font-bold leading-relaxed text-foreground">{profile.learningSummary}</p>
+                      <p className="text-[10px] font-bold leading-relaxed text-foreground">{learningSummary}</p>
                     </div>
                   )}
 
                   {/* 2. Điểm mạnh */}
                   <div>
-                    <span className="text-[8px] font-black text-emerald-600 block mb-2">ĐIỂM MẠNH ({profile.strengths?.length || 0})</span>
-                    {profile.strengths && profile.strengths.length > 0 ? (
+                    <span className="text-[8px] font-black text-emerald-600 block mb-2">ĐIỂM MẠNH ({strengths.length || 0})</span>
+                    {strengths.length > 0 ? (
                       <ul className="space-y-1.5">
-                        {profile.strengths.map((s, idx) => (
+                        {strengths.map((s, idx) => (
                           <li key={idx} className="flex items-start gap-1.5 text-[10px] font-bold text-muted-foreground leading-tight">
                             <CheckCircle className="text-emerald-500 shrink-0 mt-0.5" size={12} />
                             <span>{s}</span>
@@ -451,10 +538,10 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
 
                   {/* 3. Điểm yếu */}
                   <div>
-                    <span className="text-[8px] font-black text-orange-600 block mb-2">ĐIỂM YẾU / LỖI SAI ({profile.weaknesses?.length || 0})</span>
-                    {profile.weaknesses && profile.weaknesses.length > 0 ? (
+                    <span className="text-[8px] font-black text-orange-600 block mb-2">ĐIỂM YẾU / LỖI SAI ({weaknesses.length || 0})</span>
+                    {weaknesses.length > 0 ? (
                       <ul className="space-y-1.5">
-                        {profile.weaknesses.map((w, idx) => (
+                        {weaknesses.map((w, idx) => (
                           <li key={idx} className="flex items-start gap-1.5 text-[10px] font-bold text-muted-foreground leading-tight">
                             <AlertTriangle className="text-orange-500 shrink-0 mt-0.5" size={12} />
                             <span>{w}</span>
@@ -470,15 +557,15 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
                 <div className="flex flex-col items-center justify-center h-40 text-center gap-3">
                   <Brain className="text-slate-300 dark:text-slate-700" size={32} />
                   <p className="text-[10px] font-bold text-muted-foreground leading-relaxed px-2">
-                    Chưa có dữ liệu chẩn đoán. Thầy sẽ phân tích và tự động ghi nhận các điểm mạnh, lỗi sai thường gặp khi em gửi câu hỏi ôn luyện!
+                    Chưa có dữ liệu chẩn đoán cho môn học này. Thầy sẽ phân tích và tự động ghi nhận các điểm mạnh, lỗi sai thường gặp khi em gửi câu hỏi ôn luyện!
                   </p>
                 </div>
               )}
             </div>
 
-            {profile?.lastUpdated && (
+            {lastUpdated && (
               <div className="pt-3 border-t border-border text-[8px] text-muted-foreground font-semibold text-right">
-                Cập nhật mới nhất: {new Date(profile.lastUpdated.seconds * 1000).toLocaleString("vi-VN")}
+                Cập nhật mới nhất: {new Date(lastUpdated.seconds ? lastUpdated.seconds * 1000 : new Date(lastUpdated).getTime()).toLocaleString("vi-VN")}
               </div>
             )}
           </div>

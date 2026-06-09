@@ -24,6 +24,8 @@ export interface GeminiProxyRequest {
   responseMimeType?: string;
   responseSchema?: any;
   temperature?: number;
+  skipDiagnosis?: boolean;
+  topicName?: string;
 }
 
 export interface Transaction {

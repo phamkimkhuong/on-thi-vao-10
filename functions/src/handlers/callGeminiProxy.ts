@@ -6,9 +6,55 @@ import {
   extractKeywords,
   summarizeHistory,
   rewriteQuery,
+  removeAccents,
   FALLBACK_MODELS,
 } from "../services/gemini.js";
 import { updateStudentProfile } from "../services/profile.js";
+
+function isRelevantToTopic(item: string, topicName: string): boolean {
+  if (!topicName) return true; // Nếu không có tên chuyên đề, giữ lại tất cả
+  
+  const cleanStr = (s: string) => {
+    return removeAccents(s.toLowerCase())
+      .replace(/[^\w\s]/g, " ")
+      .split(/\s+/)
+      .filter(w => w.length > 2);
+  };
+
+  const topicWords = cleanStr(topicName);
+  const itemWords = cleanStr(item);
+
+  // 1. Kiểm tra từ trùng nhau trực tiếp
+  const hasDirectOverlap = itemWords.some(w => topicWords.includes(w));
+  if (hasDirectOverlap) return true;
+
+  // 2. Tra cứu chéo từ đồng nghĩa/liên quan
+  const topicNormalized = removeAccents(topicName.toLowerCase());
+  const relatedMap: { [key: string]: string[] } = {
+    "vi et": ["vi et", "viét", "delta", "nghiem", "he thuc", "bac hai"],
+    "can thuc": ["can", "rut gon", "bieu thuc", "mau thuc", "hang dang thuc"],
+    "dai so": ["can", "rut gon", "bieu thuc"],
+    "he phuong trinh": ["he", "thuc te", "chuyen dong", "nang suat", "cong viec"],
+    "toan thuc te": ["he", "thuc te", "chuyen dong", "nang suat", "cong viec", "phan tram"],
+    "ham so": ["ham", "parabol", "duong thang", "cat", "giao diem", "toa do", "tiep xuc"],
+    "do thi": ["ham", "parabol", "duong thang", "cat", "giao diem", "toa do", "tiep xuc"],
+    "duong tron": ["tron", "tiep tuyen", "noi tiep", "goc", "cung", "day", "tam giac"],
+    "hinh hoc": ["tron", "tiep tuyen", "noi tiep", "goc", "cung", "day", "tam giac"],
+    "tu vung": ["tu vung", "vocabulary", "word", "nghia"],
+    "ngu phap": ["ngu phap", "grammar", "thi", "tense", "verb", "dong tu", "tu loai"],
+    "viet": ["viet", "bien doi", "rewrite", "dong", "indirect", "gian tiep", "conditional", "dieu kien", "wish", "although", "despite"]
+  };
+
+  for (const [key, relatedWords] of Object.entries(relatedMap)) {
+    if (topicNormalized.includes(key)) {
+      const itemNormalized = removeAccents(item.toLowerCase());
+      const hasRelated = relatedWords.some(word => itemNormalized.includes(word));
+      if (hasRelated) return true;
+    }
+  }
+
+  return false;
+}
 
 export const callGeminiProxy = onCall({
   cors: true,
@@ -38,6 +84,8 @@ export const callGeminiProxy = onCall({
     responseMimeType,
     responseSchema,
     temperature,
+    skipDiagnosis,
+    topicName,
   } = data;
 
   if (!prompt && !contents) {
@@ -51,21 +99,46 @@ export const callGeminiProxy = onCall({
     const profileDoc = await db.collection("student_profiles").doc(uid).get();
     if (profileDoc.exists) {
       studentProfile = profileDoc.data();
-      const strengths: string[] = studentProfile.strengths || [];
-      const weaknesses: string[] = studentProfile.weaknesses || [];
-      const summary: string = studentProfile.learningSummary || "";
+      const cleanSubjectId = subjectId || "math";
+      const subProfile = studentProfile[cleanSubjectId] || {};
+      
+      let strengths: string[] = subProfile.strengths || [];
+      let weaknesses: string[] = subProfile.weaknesses || [];
+      let summary: string = subProfile.learningSummary || "";
 
-      profileInstruction = `\n\nHỒ SƠ NĂNG LỰC HỌC SINH HIỆN TẠI:`;
-      if (strengths.length > 0) {
-        profileInstruction += `\n- Điểm mạnh: ${strengths.join(", ")}`;
+      // Di trú nếu chưa có cấu trúc môn học mới
+      if (!studentProfile[cleanSubjectId] && cleanSubjectId === "math") {
+        if (studentProfile.strengths) strengths = studentProfile.strengths;
+        if (studentProfile.weaknesses) weaknesses = studentProfile.weaknesses;
+        if (studentProfile.learningSummary) summary = studentProfile.learningSummary;
       }
-      if (weaknesses.length > 0) {
-        profileInstruction += `\n- Điểm yếu / Lỗi sai thường gặp: ${weaknesses.join(", ")}`;
+
+      // Lọc điểm mạnh/yếu theo độ liên quan ngữ nghĩa (Semantic/Keyword Relevance) của chuyên đề (Topic)
+      if (topicName) {
+        const originalStrengthsCount = strengths.length;
+        const originalWeaknessesCount = weaknesses.length;
+
+        strengths = strengths.filter(s => isRelevantToTopic(s, topicName));
+        weaknesses = weaknesses.filter(w => isRelevantToTopic(w, topicName));
+
+        console.log(`[Relevance Filter] Topic: "${topicName}". Strengths: ${originalStrengthsCount} -> ${strengths.length}, Weaknesses: ${originalWeaknessesCount} -> ${weaknesses.length}`);
       }
-      if (summary) {
-        profileInstruction += `\n- Tóm tắt tiến trình học tập: ${summary}`;
+
+      const subjectName = cleanSubjectId === "math" ? "Toán" : "Tiếng Anh";
+
+      if (strengths.length > 0 || weaknesses.length > 0 || summary) {
+        profileInstruction = `\n\nHỒ SƠ NĂNG LỰC HỌC SINH MÔN ${subjectName.toUpperCase()} HIỆN TẠI:`;
+        if (strengths.length > 0) {
+          profileInstruction += `\n- Điểm mạnh: ${strengths.join(", ")}`;
+        }
+        if (weaknesses.length > 0) {
+          profileInstruction += `\n- Điểm yếu / Lỗi sai thường gặp: ${weaknesses.join(", ")}`;
+        }
+        if (summary) {
+          profileInstruction += `\n- Tóm tắt tiến trình học tập: ${summary}`;
+        }
+        profileInstruction += `\nLưu ý: Hãy khéo léo nhắc nhở học sinh sửa các lỗi sai thường gặp và tận dụng điểm mạnh của mình nếu chủ đề hội thoại liên quan. Tuyệt đối KHÔNG liệt kê trực tiếp toàn bộ hồ sơ này cho học sinh xem, chỉ dùng làm ngữ cảnh sư phạm ngầm để giảng dạy.`;
       }
-      profileInstruction += `\nLưu ý: Hãy khéo léo nhắc nhở học sinh sửa các lỗi sai thường gặp và tận dụng điểm mạnh của mình nếu chủ đề hội thoại liên quan. Tuyệt đối KHÔNG liệt kê trực tiếp toàn bộ hồ sơ này cho học sinh xem, chỉ dùng làm ngữ cảnh sư phạm ngầm để giảng dạy.`;
     }
   } catch (err) {
     console.error("Lỗi khi tải hồ sơ học sinh:", err);
@@ -373,13 +446,13 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
       console.log(`Gọi thành công model: ${model}`);
 
       // Pha cập nhật (Update Memory): Phân tích cuộc hội thoại hiện tại để cập nhật hồ sơ học sinh (Chạy bất đồng bộ, bỏ qua tin nhắn xã giao ngắn để tối ưu hóa tokens & latency)
-      if (uid && responseText && queryText) {
+      if (!skipDiagnosis && uid && responseText && queryText) {
         const cleanedQuery = queryText.trim().toLowerCase();
         const socialRegex = /^(chào|helo|hello|hi|chào thầy|chào cô|xin chào|dạ|vâng|ok|oke|cảm ơn|cám ơn|thanks|thank you|em cảm ơn|dạ em cảm ơn|dạ vâng|vâng ạ|em hiểu rồi|dạ em hiểu rồi|dạ rõ rồi|ok ạ|dạ ok|dạ vâng ạ|ạ)[.!?;]*$/i;
         const isSocialQuery = cleanedQuery.length < 15 && socialRegex.test(cleanedQuery);
 
         if (!isSocialQuery) {
-          updateStudentProfile(uid, queryText, responseText, studentProfile, apiKey).catch((err) => {
+          updateStudentProfile(uid, subjectId || "math", queryText, responseText, studentProfile, apiKey).catch((err) => {
             console.error("Lỗi cập nhật hồ sơ học sinh (async):", err);
           });
         }
