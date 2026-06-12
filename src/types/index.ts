@@ -137,6 +137,21 @@ export interface Solution {
   reviewSuggestions: string[]; // Khuyên học sinh ôn lại thẻ kiến thức nào
 }
 
+export interface StepEvaluation {
+  stepOrder: number;
+  title: string;
+  status: 'correct' | 'incorrect' | 'missing';
+  studentContent?: string;
+  feedback: string;
+}
+
+export interface AiEvaluation {
+  isCorrect: boolean;
+  score: number;
+  summaryFeedback: string;
+  stepsEvaluation: StepEvaluation[];
+}
+
 export interface UserAttempt {
   id: string;
   userId: string;
@@ -151,6 +166,7 @@ export interface UserAttempt {
   createdAt: string; // ISO String
   teacherFeedback?: string;
   selectedSubTense?: string;
+  aiEvaluation?: AiEvaluation;
 }
 
 export interface UserMistake {

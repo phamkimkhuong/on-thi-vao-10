@@ -175,7 +175,7 @@ export const TeacherDashboard: React.FC = () => {
         ...prev,
         [attempt.id]: {
           isCorrect: result.isCorrect,
-          feedback: result.feedback
+          feedback: result.summaryFeedback
         }
       }));
     } catch (error: any) {

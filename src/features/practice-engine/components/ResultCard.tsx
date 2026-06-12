@@ -142,6 +142,93 @@ export const ResultCard: React.FC<ResultCardProps> = ({
         )}
       </div>
 
+      {/* Báo cáo chấm điểm tự luận từ AI */}
+      {isMath && existingAttempt?.aiEvaluation && (
+        <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in text-left">
+          <div className="flex items-center justify-between border-b border-border/40 pb-3 flex-wrap gap-2">
+            <h4 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
+              🤖 Báo cáo chấm tự luận từ AI:
+            </h4>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-muted-foreground">Điểm số:</span>
+              <span className={cn(
+                "px-2.5 py-1 rounded-full text-xs font-black shadow-sm border",
+                existingAttempt.aiEvaluation.score >= 8
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                  : existingAttempt.aiEvaluation.score >= 5
+                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                    : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+              )}>
+                {existingAttempt.aiEvaluation.score} / 10 điểm
+              </span>
+            </div>
+          </div>
+
+          {/* Nhận xét tổng quan */}
+          <div className="p-3 bg-secondary/30 rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground leading-relaxed">
+            <span className="font-extrabold text-foreground block mb-1">💬 Nhận xét tổng quan:</span>
+            {existingAttempt.aiEvaluation.summaryFeedback}
+          </div>
+
+          {/* Đánh giá chi tiết từng bước */}
+          <div className="space-y-3 pt-2">
+            <span className="text-[10px] font-black uppercase text-muted-foreground tracking-wider block mb-2">
+              📋 Chi tiết đánh giá từng bước:
+            </span>
+            <div className="space-y-3">
+              {existingAttempt.aiEvaluation.stepsEvaluation.map((step) => {
+                const isCorrect = step.status === 'correct';
+                const isMissing = step.status === 'missing';
+                
+                return (
+                  <div 
+                    key={step.stepOrder} 
+                    className={cn(
+                      "p-3 rounded-xl border transition-all duration-150 relative flex flex-col gap-2 bg-card",
+                      isCorrect 
+                        ? "border-emerald-500/20 hover:border-emerald-500/35" 
+                        : isMissing
+                          ? "border-amber-500/20 hover:border-amber-500/35"
+                          : "border-rose-500/20 hover:border-rose-500/35"
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-3 flex-wrap">
+                      <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-foreground flex items-center justify-center text-[10px] shrink-0 font-bold">
+                          {step.stepOrder}
+                        </span>
+                        {step.title}
+                      </h5>
+                      <span className={cn(
+                        "text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0",
+                        isCorrect
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                          : isMissing
+                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                            : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+                      )}>
+                        {isCorrect ? '✓ Đạt' : isMissing ? '⚠️ Thiếu' : '✗ Lỗi'}
+                      </span>
+                    </div>
+
+                    {step.studentContent && (
+                      <div className="text-[11px] bg-slate-100/50 dark:bg-slate-900/30 p-2 rounded-lg text-muted-foreground font-semibold leading-relaxed border border-border/5 mt-1">
+                        <span className="text-[9px] font-black text-muted-foreground uppercase block mb-1">Nội dung bạn viết:</span>
+                        <LatexRenderer text={step.studentContent} />
+                      </div>
+                    )}
+
+                    <div className="text-xs text-muted-foreground font-semibold leading-relaxed pl-6.5 mt-0.5">
+                      {step.feedback}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Ảnh bài làm đã nộp */}
       {isMath && (proofImages.length > 0 || (existingAttempt?.proofImages && existingAttempt.proofImages.length > 0)) && (
         <div className="space-y-3 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in">

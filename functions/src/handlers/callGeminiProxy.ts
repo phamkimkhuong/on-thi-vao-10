@@ -845,6 +845,13 @@ Chú ý:
               .replace(/```\s*$/, "")
               .trim();
           }
+          // Chuẩn hóa các dấu backslash đơn (chưa được escape) trước các lệnh LaTeX như \times, \frac để tránh bị JSON.parse chuyển đổi thành phím Tab, phím Form Feed...
+          cleanJson = cleanJson.replace(/(?<!\\)\\([a-zA-Z]+)/g, (match, p1) => {
+            if (p1 === 'n') {
+              return match;
+            }
+            return '\\\\' + p1;
+          });
           const parsed = JSON.parse(cleanJson);
           responseText = parsed.tutorResponse || responseText;
           

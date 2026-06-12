@@ -1,6 +1,6 @@
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
-import { Question, Solution } from '../types';
+import { Question, Solution, AiEvaluation } from '../types';
 import { mathTopics } from '../data/mathData';
 import { englishTopics } from '../data/englishData';
 
@@ -71,7 +71,7 @@ ${solution ? 'Lời giải chi tiết chuẩn:\n- Nhận dạng: ' + solution.re
 Học sinh đã trả lời: ${studentAnswer || 'Chưa trả lời'}
 
 Nhiệm vụ của bạn:
-1. Đóng vai Gia sư hỗ trợ giải đáp thắc mắc của học sinh về câu hỏi này.
+1. Đọc và giải đáp thắc mắc của học sinh về câu hỏi này.
 2. Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra đáp án cuối cùng hoặc lời giải đầy đủ ngay lập tức. Hãy gợi ý từng bước, đặt câu hỏi ngược lại, chỉ ra lỗi sai nhỏ trong suy luận của học sinh để giúp học sinh tự tư duy và tìm ra đáp số.
 3. Trả lời bằng tiếng Việt, ngắn gọn (khoảng 3-4 câu), thân thiện, động viên.
 4. Tuyệt đối KHÔNG giải thích, trả lời hoặc bàn luận bất kỳ câu hỏi nào ngoài lề không liên quan đến đề bài này hoặc kiến thức môn học ${subjectName} ôn thi lớp 10 (ví dụ: tin tức xã hội, địa lý chung, đời tư, giải trí, v.v.). Nếu học sinh hỏi ngoài lề, hãy từ chối một cách lịch sự, thân thiện và định hướng học sinh tập trung quay lại giải quyết bài tập hiện tại.
@@ -119,31 +119,39 @@ ${specificGuidelines}`;
     solution: Solution | undefined,
     studentAnswer: string,
     image?: { data: string; mimeType: string }
-  ): Promise<{ isCorrect: boolean; feedback: string }> {
+  ): Promise<AiEvaluation> {
     const isMath = question.subjectId === 'math';
     
     const criteria = isMath
-      ? 'Kiểm tra xem lời giải và đáp số của học sinh có đúng logic toán học, các bước biến đổi chính xác và đạt yêu cầu không.'
-      : 'Kiểm tra xem lời giải/câu trả lời của học sinh có chính xác ngữ pháp, từ vựng, cấu trúc câu và đạt yêu cầu của đề bài không.';
+      ? `Nhiệm vụ chấm môn Toán tự luận:
+1. Đọc và phân tích kỹ chữ viết tay hoặc văn bản trong bài làm của học sinh (đặc biệt đọc hiểu công thức toán học từ ảnh).
+2. So sánh từng bước giải của học sinh với các bước giải mẫu dưới đây:
+${solution ? solution.detailedSteps.map(s => `- Bước ${s.order} (${s.title}): ${s.explanation}`).join('\n') : '- Đề bài không có bước giải mẫu cụ thể. Hãy tự phân tích các bước hợp lý.'}
+3. Chỉ ra bước nào học sinh làm đúng (status: 'correct'), bước nào giải sai/tính nhầm số học/nhầm dấu (status: 'incorrect'), và bước nào làm thiếu/quên viết vào bài (status: 'missing'), đặc biệt chú ý đến:
+   - Phần đặt Điều kiện xác định (ĐKXĐ) ở đầu bài (nếu cần thiết phải có).
+   - Phần đối chiếu nghiệm với ĐKXĐ và kết luận nghiệm ở cuối bài.
+4. Đánh giá tính đúng đắn chung 'isCorrect' (chỉ true khi toàn bộ logic giải và kết quả cuối cùng đều đúng) và tính toán điểm số 'score' trên thang điểm 10 (mỗi bước giải đúng tương ứng một phần điểm).`
+      : `Nhiệm vụ chấm môn Tiếng Anh:
+1. Đọc và phân tích kỹ câu trả lời của học sinh.
+2. Đánh giá xem câu trả lời có chính xác về ngữ pháp, cấu trúc câu và từ vựng theo yêu cầu đề bài không.
+3. Tạo 1 bước đánh giá duy nhất với stepOrder: 1, title: "Ngữ pháp & Từ vựng", đánh giá status ('correct' hoặc 'incorrect') kèm nhận xét lỗi sai nếu có.`;
 
-    const prompt = `Bạn là một giáo viên chấm thi tuyển sinh vào lớp 10 chuyên nghiệp tại Việt Nam.
-Hãy chấm bài làm của học sinh cho câu hỏi sau:
-Đề bài: ${question.content}
+    const prompt = `Bạn là một giáo viên chấm thi tuyển sinh vào lớp 10 chuyên nghiệp tại Việt Nam, cực kỳ nghiêm khắc và chi tiết.
+Hãy chấm bài làm tự luận của học sinh cho câu hỏi sau đây:
+
+[ĐỀ BÀI]
+${question.content}
 Đáp án đúng chuẩn: ${question.correctAnswer}
-${solution ? 'Lời giải chi tiết chuẩn:\n- Nhận dạng: ' + solution.recognition + '\n- Các bước:\n' + solution.detailedSteps.map(s => `+ Bước ${s.order} (${s.title}): ${s.explanation}`).join('\n') : ''}
 
-Bài làm của học sinh:
-- Đáp án/Văn bản nộp: ${studentAnswer || 'Không ghi đáp án bằng chữ'}
-${image ? '- Có ảnh đính kèm bài làm viết tay của học sinh bên dưới.' : ''}
+[BÀI LÀM CỦA HỌC SINH]
+- Văn bản nộp: ${studentAnswer || '(Không ghi đáp án bằng chữ)'}
+${image ? '- Ảnh chụp bài làm đính kèm bên dưới.' : ''}
 
-Nhiệm vụ của bạn:
-1. Đọc và phân tích kỹ bài làm của học sinh (đọc hiểu chữ viết tay trong ảnh nếu có).
-2. ${criteria}
-3. Trả về kết quả dưới định dạng JSON chính xác như sau (TUYỆT ĐỐI không bao quanh bởi ký tự markdown như \`\`\`json hoặc bất kỳ ký tự nào ngoài JSON):
-{
-  "isCorrect": true hoặc false,
-  "feedback": "Lời nhận xét chi tiết, chỉ ra lỗi sai cụ thể trong bài làm hoặc khen ngợi nếu học sinh giải xuất sắc. Viết bằng tiếng Việt thân thiện, súc tích (2-3 câu)."
-}`;
+[YÊU CẦU CHẤM ĐIỂM]
+${criteria}
+
+[YÊU CẦU ĐẦU RA]
+Bạn phải trả về kết quả dưới định dạng JSON chính xác theo Schema đã cho. Nhận xét bằng tiếng Việt, thân thiện nhưng khách quan và súc tích.`;
 
     const textResponse = await this.callGemini({
       prompt,
@@ -152,30 +160,63 @@ Nhiệm vụ của bạn:
       responseSchema: {
         type: 'OBJECT',
         properties: {
-          isCorrect: {
-            type: 'BOOLEAN'
-          },
-          feedback: {
-            type: 'STRING'
+          isCorrect: { type: 'BOOLEAN' },
+          score: { type: 'NUMBER', description: 'Điểm số của học sinh trên thang 10 (ví dụ: 8.5)' },
+          summaryFeedback: { type: 'STRING', description: 'Lời nhận xét tổng quan ngắn gọn (2-3 câu)' },
+          stepsEvaluation: {
+            type: 'ARRAY',
+            items: {
+              type: 'OBJECT',
+              properties: {
+                stepOrder: { type: 'INTEGER' },
+                title: { type: 'STRING' },
+                status: { 
+                  type: 'STRING', 
+                  enum: ['correct', 'incorrect', 'missing'] 
+                },
+                studentContent: { type: 'STRING', description: 'Nội dung học sinh viết tương ứng với bước này (nếu có)' },
+                feedback: { type: 'STRING', description: 'Nhận xét chi tiết cho bước này, chỉ rõ lỗi sai hoặc lý do thiếu' }
+              },
+              required: ['stepOrder', 'title', 'status', 'feedback']
+            }
           }
         },
-        required: ['isCorrect', 'feedback']
+        required: ['isCorrect', 'score', 'summaryFeedback', 'stepsEvaluation']
       },
       temperature: 0.1
     });
     
+    const cleanJson = (str: string) => {
+      return str.replace(/(?<!\\)\\([a-zA-Z]+)/g, (match, p1) => {
+        if (p1 === 'n') {
+          return match;
+        }
+        return '\\\\' + p1;
+      });
+    };
+
     try {
-      return JSON.parse(textResponse.trim());
+      const cleanedText = cleanJson(textResponse.trim());
+      return JSON.parse(cleanedText);
     } catch (err) {
       console.error("Lỗi parse JSON kết quả chấm của Gemini:", textResponse, err);
       // Fallback clean-up in case of unexpected format issues
       try {
-        const cleaned = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+        const cleaned = cleanJson(textResponse.replace(/```json/g, '').replace(/```/g, '').trim());
         return JSON.parse(cleaned);
       } catch {
         return {
           isCorrect: textResponse.toLowerCase().includes('"iscorrect": true') || textResponse.toLowerCase().includes('"iscorrect":true'),
-          feedback: textResponse.substring(0, 200) || 'Đã chấm bài làm.'
+          score: textResponse.toLowerCase().includes('"iscorrect": true') ? 10 : 5,
+          summaryFeedback: textResponse.substring(0, 200) || 'Đã chấm bài làm.',
+          stepsEvaluation: [
+            {
+              stepOrder: 1,
+              title: "Đánh giá bài làm",
+              status: textResponse.toLowerCase().includes('"iscorrect": true') ? 'correct' : 'incorrect',
+              feedback: 'Đã hoàn thành phân tích bài làm.'
+            }
+          ]
         };
       }
     }

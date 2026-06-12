@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
+import { aiService } from '../../services/aiService';
 import { mathQuestions, mathQuestionTypes, mathSolutions } from '../../data/mathData';
 import { englishQuestions, englishQuestionTypes, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
@@ -20,13 +21,29 @@ import {
   Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer } from '../../types';
+import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer, AiEvaluation } from '../../types';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme } from '../../utils/theme';
 import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../utils/answerValidator';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
 import { AiTutorPanel } from '../common/AiTutorPanel';
+
+const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: string }> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64Data = result.split(',')[1];
+      resolve({
+        data: base64Data,
+        mimeType: file.type
+      });
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
 
 interface EnrichedMistake extends UserMistake {
   question: Question;
@@ -53,6 +70,7 @@ export const MistakeNotebook: React.FC = () => {
   const [isReSubmitting, setIsReSubmitting] = useState(false);
   const [reSubmitError, setReSubmitError] = useState<string | null>(null);
   const [isTutorOpen, setIsTutorOpen] = useState(false);
+  const [latestAttempt, setLatestAttempt] = useState<UserAttempt | null>(null);
 
   const loadMistakes = useCallback(() => {
     const currentUserId = user!.uid;
@@ -98,6 +116,7 @@ export const MistakeNotebook: React.FC = () => {
     setReSubmitted(false);
     setIsReSubmitting(false);
     setReSubmitError(null);
+    setLatestAttempt(null);
 
     // Tìm giải pháp
     const isMath = selectedSubject === 'math';
@@ -118,7 +137,6 @@ export const MistakeNotebook: React.FC = () => {
         ? reAnswer
         : selectedOption || '';
     const finalAns = formatAnswerForDisplay(activeMistake.question, answerInput);
-    const correct = validateAnswer(activeMistake.question, answerInput);
     const currentUserId = user!.uid;
     const submittedAt = new Date().toISOString();
     const attemptId = `attempt-review-${activeMistake.questionId}-${Date.now()}`;
@@ -139,6 +157,29 @@ export const MistakeNotebook: React.FC = () => {
       return;
     }
 
+    let aiEvaluation: AiEvaluation | undefined = undefined;
+    let correct = validateAnswer(activeMistake.question, answerInput);
+    let gradingMode: 'auto' | 'manual' = activeMistake.question.answerSchema?.autoCheckMode === 'manual' ? 'manual' : 'auto';
+
+    if (selectedSubject === 'math' && reProofImages.length > 0) {
+      try {
+        const base64Image = await convertFileToBase64(reProofImages[0].file);
+        const evaluation = await aiService.gradeProofAttempt(
+          activeMistake.question,
+          reSolution || undefined,
+          finalAns,
+          base64Image
+        );
+        aiEvaluation = evaluation;
+        correct = evaluation.isCorrect;
+        gradingMode = 'auto';
+      } catch (err) {
+        console.error("Lỗi khi gọi AI chấm bài trong sổ lỗi:", err);
+        gradingMode = 'manual';
+        correct = true;
+      }
+    }
+
     const attemptData: UserAttempt = {
       id: attemptId,
       userId: currentUserId,
@@ -147,13 +188,16 @@ export const MistakeNotebook: React.FC = () => {
       userAnswer: finalAns,
       ...(activeMistake.question.answerSchema ? { finalAnswer: reStructuredAnswer } : {}),
       ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
-      gradingMode: activeMistake.question.answerSchema?.autoCheckMode === 'manual' ? 'manual' : 'auto',
+      gradingMode,
       isCorrect: correct,
       timeSpent: 30, // Mock time
-      createdAt: submittedAt
+      createdAt: submittedAt,
+      ...(aiEvaluation ? { aiEvaluation } : {}),
+      ...(aiEvaluation ? { teacherFeedback: aiEvaluation.summaryFeedback } : {})
     };
 
     setReCorrect(correct);
+    setLatestAttempt(attemptData);
     setReSubmitted(true);
     setIsReSubmitting(false);
 
@@ -183,6 +227,7 @@ export const MistakeNotebook: React.FC = () => {
     revokeLocalProofImages(reProofImages);
     setReProofImages([]);
     setActiveMistake(null);
+    setLatestAttempt(null);
     loadMistakes(); // Load lại danh sách
   };
 
@@ -495,6 +540,93 @@ export const MistakeNotebook: React.FC = () => {
                     </>
                   )}
                 </div>
+
+                {/* Báo cáo chấm điểm tự luận từ AI */}
+                {selectedSubject === 'math' && latestAttempt?.aiEvaluation && (
+                  <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm text-left">
+                    <div className="flex items-center justify-between border-b border-border/40 pb-3 flex-wrap gap-2">
+                      <h4 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
+                        🤖 Báo cáo chấm tự luận từ AI:
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-muted-foreground">Điểm số:</span>
+                        <span className={cn(
+                          "px-2.5 py-1 rounded-full text-xs font-black shadow-sm border",
+                          latestAttempt.aiEvaluation.score >= 8
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                            : latestAttempt.aiEvaluation.score >= 5
+                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                              : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                        )}>
+                          {latestAttempt.aiEvaluation.score} / 10 điểm
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Nhận xét tổng quan */}
+                    <div className="p-3 bg-secondary/30 rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground leading-relaxed">
+                      <span className="font-extrabold text-foreground block mb-1">💬 Nhận xét tổng quan:</span>
+                      {latestAttempt.aiEvaluation.summaryFeedback}
+                    </div>
+
+                    {/* Đánh giá chi tiết từng bước */}
+                    <div className="space-y-3 pt-2">
+                      <span className="text-[10px] font-black uppercase text-muted-foreground tracking-wider block mb-2">
+                        📋 Chi tiết đánh giá từng bước:
+                      </span>
+                      <div className="space-y-3">
+                        {latestAttempt.aiEvaluation.stepsEvaluation.map((step) => {
+                          const isCorrect = step.status === 'correct';
+                          const isMissing = step.status === 'missing';
+                          
+                          return (
+                            <div 
+                              key={step.stepOrder} 
+                              className={cn(
+                                "p-3 rounded-xl border transition-all duration-150 relative flex flex-col gap-2 bg-card",
+                                isCorrect 
+                                  ? "border-emerald-500/20 hover:border-emerald-500/35" 
+                                  : isMissing
+                                    ? "border-amber-500/20 hover:border-amber-500/35"
+                                    : "border-rose-500/20 hover:border-rose-500/35"
+                              )}
+                            >
+                              <div className="flex items-start justify-between gap-3 flex-wrap">
+                                <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
+                                  <span className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-foreground flex items-center justify-center text-[10px] shrink-0 font-bold">
+                                    {step.stepOrder}
+                                  </span>
+                                  {step.title}
+                                </h5>
+                                <span className={cn(
+                                  "text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0",
+                                  isCorrect
+                                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                    : isMissing
+                                      ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                                      : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+                                )}>
+                                  {isCorrect ? '✓ Đạt' : isMissing ? '⚠️ Thiếu' : '✗ Lỗi'}
+                                </span>
+                              </div>
+
+                              {step.studentContent && (
+                                <div className="text-[11px] bg-slate-100/50 dark:bg-slate-900/30 p-2 rounded-lg text-muted-foreground font-semibold leading-relaxed border border-border/5 mt-1">
+                                  <span className="text-[9px] font-black text-muted-foreground uppercase block mb-1">Nội dung bạn viết:</span>
+                                  <LatexRenderer text={step.studentContent} />
+                                </div>
+                              )}
+
+                              <div className="text-xs text-muted-foreground font-semibold leading-relaxed pl-6.5 mt-0.5">
+                                {step.feedback}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Lời giải mẫu của câu sai */}
                 {reSolution && (
