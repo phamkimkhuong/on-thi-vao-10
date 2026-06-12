@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { aiService } from '../../services/aiService';
@@ -72,7 +72,7 @@ export const GeneralAiTutor: React.FC = () => {
     messagesRef.current = messages;
   }, [messages]);
 
-  const resetInactivityTimer = () => {
+  const resetInactivityTimer = useCallback(() => {
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
     }
@@ -82,7 +82,7 @@ export const GeneralAiTutor: React.FC = () => {
         runDiagnosisRef.current();
       }
     }, 3 * 60 * 1000); // 3 minutes timeout
-  };
+  }, [subject]);
 
   // Bộ lắng nghe đóng phiên (chuyển môn, unmount, hoặc timeout) để chạy chẩn đoán 1 lần duy nhất
   useEffect(() => {
@@ -111,7 +111,7 @@ export const GeneralAiTutor: React.FC = () => {
         clearTimeout(inactivityTimerRef.current);
       }
     };
-  }, [subject]);
+  }, [subject, resetInactivityTimer]);
 
   // 1. Lắng nghe hồ sơ học sinh (student_profiles) theo thời gian thực
   useEffect(() => {
@@ -141,7 +141,7 @@ export const GeneralAiTutor: React.FC = () => {
 
     const chatRef = doc(db, 'users', user.uid, 'general_chats', subject);
 
-    onSnapshot(chatRef, (docSnap) => {
+    const unsubscribe = onSnapshot(chatRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         if (data && Array.isArray(data.messages)) {
@@ -159,6 +159,8 @@ export const GeneralAiTutor: React.FC = () => {
     }, (err) => {
       console.error("Lỗi khi tải lịch sử chat:", err);
     });
+
+    return () => unsubscribe();
   }, [user?.uid, subject]);
 
   // 3. Cập nhật tin nhắn chào mừng cá nhân hóa khi profile tải xong và tin nhắn hiện tại vẫn đang là tin nhắn chào mặc định
@@ -181,7 +183,7 @@ export const GeneralAiTutor: React.FC = () => {
         }
       }
     }
-  }, [profile, isLoadingProfile, subject, user?.displayName, messages.length]);
+  }, [profile, isLoadingProfile, subject, user?.displayName, user?.uid, messages]);
 
   // Tự động cuộn xuống tin nhắn mới nhất
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
@@ -24,6 +24,7 @@ interface TopicSelectionViewProps {
   startTensesReview: () => void;
   getSubTenseProgress: (qIds: string[]) => number;
   isPremium: boolean;
+  questionTypeId?: string;
 }
 
 export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
@@ -43,9 +44,215 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   startTensesReview,
   getSubTenseProgress,
   isPremium,
+  questionTypeId,
 }) => {
   const navigate = useNavigate();
   const isMath = routeSubject === 'math';
+
+  const dang1QIds = useMemo(() => [
+    ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
+    ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 102}`),
+    ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 122}`),
+    ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 142}`),
+    ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 162}`),
+    ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 182}`),
+    ...Array.from({ length: 20 }, (_, i) => `eng-q${i + 202}`)
+  ], []);
+
+  const dang2QIds = useMemo(() => Array.from({ length: 40 }, (_, i) => `eng-q${i + 222}`), []);
+  const dang3QIds = useMemo(() => Array.from({ length: 40 }, (_, i) => `eng-q${i + 262}`), []);
+  const dang4QIds = useMemo(() => Array.from({ length: 30 }, (_, i) => `eng-q${i + 302}`), []);
+  const dang5QIds = useMemo(() => Array.from({ length: 30 }, (_, i) => `eng-q${i + 332}`), []);
+
+  if (!isMath && questionTypeId === 'eng-qt6' && grammarSection === null) {
+    const dangCards = [
+      {
+        id: 'dang1',
+        name: '⏱️ Dạng 1: Thì động từ cơ bản',
+        description: 'Luyện tập 6 thì động từ chủ chốt (Hiện tại đơn, Quá khứ đơn, Tiếp diễn, Hoàn thành, Tương lai đơn, Quá khứ tiếp diễn) và các quy tắc phối hợp thì.',
+        qIds: dang1QIds,
+      },
+      {
+        id: 'dang2',
+        name: '📦 Dạng 2: Cấu trúc động từ',
+        description: 'Luyện tập cấu trúc động từ nguyên mẫu và danh động từ (to V, V-ing, V0) để củng cố phản xạ phân biệt.',
+        qIds: dang2QIds,
+      },
+      {
+        id: 'dang3',
+        name: '🔌 Dạng 3: Giới từ & Phrasal verbs',
+        description: 'Luyện giới từ cố định đi kèm tính từ, động từ và các cụm động từ cơ bản thông dụng.',
+        qIds: dang3QIds,
+      },
+      {
+        id: 'dang4',
+        name: '⚖️ Dạng 4: Cấu trúc So sánh',
+        description: 'Rèn luyện các cấu trúc so sánh bằng, so sánh hơn, so sánh nhất của tính từ và trạng từ.',
+        qIds: dang4QIds,
+      },
+      {
+        id: 'dang5',
+        name: '📐 Dạng 5: Vị trí của các loại từ',
+        description: 'Rèn luyện kỹ năng xác định từ loại phù hợp (Danh - Động - Tính - Trạng) để điền vào câu dựa trên ngữ cảnh.',
+        qIds: dang5QIds,
+      },
+    ];
+
+    return (
+      <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+        <button
+          onClick={() => {
+            navigate('/practice');
+          }}
+          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
+        >
+          ← Quay lại chọn chuyên đề
+        </button>
+
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-black text-foreground tracking-tight">Trắc nghiệm Ngữ pháp & Từ vựng</h2>
+          <p className="text-xs text-muted-foreground font-semibold">
+            Chọn một trong 5 dạng chuyên đề dưới đây để bắt đầu ôn tập ngữ pháp và từ vựng Tiếng Anh vào 10.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {dangCards.map((card) => {
+            const percent = getSubTenseProgress(card.qIds);
+            return (
+              <Card
+                key={card.id}
+                className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card flex flex-col justify-between"
+                onClick={() => {
+                  setGrammarSection(card.id as any);
+                }}
+              >
+                <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
+                        🗣️ Anh
+                      </span>
+                    </div>
+
+                    <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
+                      {card.name}
+                    </h4>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{card.description}</p>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
+                    <div className="flex items-center gap-1.5 flex-1 max-w-[60%]">
+                      <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
+                        <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+                      </div>
+                      <span className="text-[9px] text-primary shrink-0">{percent}%</span>
+                    </div>
+
+                    <Button variant="outline" size="sm" className="font-bold text-[10px] py-1 px-3 shrink-0 border border-border/50 cursor-pointer h-7">
+                      Luyện tập →
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-border/50">
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
+            onClick={() => {
+              setSelectedTensesForCombo(['module1', 'module2', 'module3', 'module4', 'module5']);
+              setIsConfiguringAll(true);
+            }}
+          >
+            <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 px-2.5 py-1 rounded-full text-[9px] font-bold w-fit">
+                    <span className="text-[10px]">🗣️</span> Anh
+                  </div>
+                </div>
+
+                <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                  📝 Tổng ôn thông minh
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Tự chọn tổ hợp các dạng bài mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between border-t border-border/20 pt-4 mt-auto">
+                <div className="flex items-center gap-2 flex-1 max-w-[65%]">
+                  <div className="h-1 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-600 dark:bg-indigo-400 rounded-full transition-all duration-300"
+                      style={{ width: `${globalProgressPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-bold text-muted-foreground shrink-0">{globalProgressPercent}%</span>
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="font-bold text-[11px] py-1 px-3.5 border border-border/50 hover:bg-accent hover:text-accent-foreground cursor-pointer h-8 rounded-xl shrink-0"
+                >
+                  Luyện tập →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
+            onClick={() => {
+              setExamTenses(['module1', 'module2', 'module3', 'module4', 'module5']);
+              setIsConfiguringExam(true);
+            }}
+          >
+            <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 px-2.5 py-1 rounded-full text-[9px] font-bold w-fit">
+                    <span className="text-[10px]">🗣️</span> Anh
+                  </div>
+                </div>
+
+                <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                  🏆 Luyện thi trắc nghiệm
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Luyện thi tính giờ với số lượng câu và dạng bài tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between border-t border-border/20 pt-4 mt-auto">
+                <div className="flex items-center gap-2 flex-1 max-w-[65%]">
+                  <div className="h-1 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-600 dark:bg-indigo-400 rounded-full transition-all duration-300"
+                      style={{ width: `${globalProgressPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-bold text-muted-foreground shrink-0">{globalProgressPercent}%</span>
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="font-bold text-[11px] py-1 px-3.5 border border-border/50 hover:bg-accent hover:text-accent-foreground cursor-pointer h-8 rounded-xl shrink-0"
+                >
+                  Luyện tập →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   if (!isMath && grammarSection !== null) {
     let subTenseCards: Array<{ id: string; name: string; description: string; qIds: string[] }> = [];
@@ -184,71 +391,11 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
         <button
           onClick={() => {
             setGrammarSection(null);
-            navigate('/practice');
           }}
           className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
         >
-          ← Quay lại chọn Module
+          ← Quay lại danh sách Dạng bài
         </button>
-
-        {/* Tab Selector */}
-        <div className="bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl flex flex-wrap gap-1 text-xs font-bold shadow-inner">
-          <button
-            onClick={() => setGrammarSection('dang1')}
-            className={cn(
-              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
-              grammarSection === 'dang1'
-                ? "bg-card text-foreground shadow-sm font-black"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            ⏱️ Dạng 1: Thì động từ
-          </button>
-          <button
-            onClick={() => setGrammarSection('dang2')}
-            className={cn(
-              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
-              grammarSection === 'dang2'
-                ? "bg-card text-foreground shadow-sm font-black"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            📦 Dạng 2: Cấu trúc động từ
-          </button>
-          <button
-            onClick={() => setGrammarSection('dang3')}
-            className={cn(
-              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
-              grammarSection === 'dang3'
-                ? "bg-card text-foreground shadow-sm font-black"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            🔌 Dạng 3: Giới từ & Phrasal
-          </button>
-          <button
-            onClick={() => setGrammarSection('dang4')}
-            className={cn(
-              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
-              grammarSection === 'dang4'
-                ? "bg-card text-foreground shadow-sm font-black"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            ⚖️ Dạng 4: So sánh
-          </button>
-          <button
-            onClick={() => setGrammarSection('dang5')}
-            className={cn(
-              "px-4 py-2.5 rounded-xl transition-all cursor-pointer flex-1 text-center min-w-[120px]",
-              grammarSection === 'dang5'
-                ? "bg-card text-foreground shadow-sm font-black"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            📐 Dạng 5: Vị trí từ loại
-          </button>
-        </div>
 
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-black text-foreground tracking-tight">{sectionTitle}</h2>
@@ -391,7 +538,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                       }
 
                       if (qType.id === 'eng-qt6') {
-                        setGrammarSection('dang1');
+                        setGrammarSection(null);
                         navigate(`/practice/eng-qt6`);
                       } else {
                         setSelectedSubTense(null);

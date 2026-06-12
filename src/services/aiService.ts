@@ -170,7 +170,7 @@ Nhiệm vụ của bạn:
       try {
         const cleaned = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
         return JSON.parse(cleaned);
-      } catch (innerErr) {
+      } catch {
         return {
           isCorrect: textResponse.toLowerCase().includes('"iscorrect": true') || textResponse.toLowerCase().includes('"iscorrect":true'),
           feedback: textResponse.substring(0, 200) || 'Đã chấm bài làm.'

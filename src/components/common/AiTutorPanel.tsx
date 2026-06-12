@@ -142,7 +142,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
         }
       }
     }
-  }, [profile, isLoadingProfile, isOpen, question, messages.length]);
+  }, [profile, isLoadingProfile, isOpen, question, messages]);
 
   // Bộ lắng nghe đóng phiên (Click X, chuyển câu hỏi, hoặc rời trang) để chạy chẩn đoán 1 lần duy nhất
   useEffect(() => {
