@@ -4,6 +4,8 @@ import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { aiService } from '../../services/aiService';
+import { functions } from '../../services/firebase';
+import { httpsCallable } from 'firebase/functions';
 import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
 import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
@@ -127,8 +129,12 @@ export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<'students' | 'grading'>('students');
+  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium'>('students');
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
+  const [premiumEmail, setPremiumEmail] = useState('');
+  const [premiumSubmitting, setPremiumSubmitting] = useState(false);
+  const [premiumSuccessMsg, setPremiumSuccessMsg] = useState<string | null>(null);
+  const [premiumErrorMsg, setPremiumErrorMsg] = useState<string | null>(null);
   const [pendingAttempts, setPendingAttempts] = useState<Array<{ student: SimulatedStudent; attempt: UserAttempt }>>([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -480,6 +486,36 @@ export const TeacherDashboard: React.FC = () => {
       setReviewingItem(null);
     }, 1500);
   };
+
+  const handleGrantPremium = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!premiumEmail.trim()) return;
+
+    setPremiumSubmitting(true);
+    setPremiumSuccessMsg(null);
+    setPremiumErrorMsg(null);
+
+    try {
+      const grantPremium = httpsCallable<{ studentEmail: string }, { success: boolean; message: string; studentName: string }>(
+        functions,
+        'grantPremiumByEmail'
+      );
+      const res = await grantPremium({ studentEmail: premiumEmail });
+      
+      if (res.data.success) {
+        setPremiumSuccessMsg(res.data.message);
+        setPremiumEmail('');
+        // Tải lại danh sách học sinh để hiển thị badge/status mới
+        await loadData();
+      }
+    } catch (err: any) {
+      console.error(err);
+      setPremiumErrorMsg(err.message || 'Có lỗi xảy ra khi cấp quyền Premium.');
+    } finally {
+      setPremiumSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
 
@@ -539,6 +575,18 @@ export const TeacherDashboard: React.FC = () => {
             </span>
           )}
         </button>
+        <button
+          onClick={() => { setActiveTab('premium'); setReviewingItem(null); }}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'premium'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Award size={15} />
+          Cấp Quyền Premium
+        </button>
       </div>
 
       {/* Content Tabs */}
@@ -580,10 +628,15 @@ export const TeacherDashboard: React.FC = () => {
                         <h4 className="font-extrabold text-xs text-foreground truncate">{student.name}</h4>
                         <p className="text-[10px] text-muted-foreground font-semibold truncate">{student.email}</p>
 
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-1.5 mt-1">
                           <span className="text-[9px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded">
                             Đã đạt: {completedCount} dạng bài
                           </span>
+                          {student.isPremium && (
+                            <span className="text-[9px] bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 font-black px-1.5 py-0.5 rounded border border-amber-500/20 animate-pulse flex items-center gap-0.5">
+                              ⭐ Premium
+                            </span>
+                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -768,7 +821,7 @@ export const TeacherDashboard: React.FC = () => {
           </div>
 
         </div>
-      ) : (
+      ) : activeTab === 'grading' ? (
         /* Hàng đợi chấm bài */
         <div className="space-y-6">
           {!reviewingItem ? (
@@ -1194,6 +1247,71 @@ export const TeacherDashboard: React.FC = () => {
 
             </div>
           )}
+        </div>
+      ) : (
+        /* Cấp Quyền Premium */
+        <div className="max-w-xl mx-auto space-y-6">
+          <Card className="border-border/50 bg-card shadow-sm">
+            <CardHeader className="p-6 border-b border-border/20">
+              <CardTitle className="text-foreground text-sm font-black flex items-center gap-2">
+                <Award size={18} className="text-amber-500 animate-pulse" />
+                Cấp Tài Khoản Premium Cho Học Sinh
+              </CardTitle>
+              <CardDescription className="text-[10px] font-semibold text-muted-foreground">
+                Nhập email học sinh đã đăng ký tài khoản để kích hoạt gói nâng cấp Premium.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <form onSubmit={handleGrantPremium} className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="student-email" className="text-[10px] font-black uppercase text-muted-foreground tracking-wider">
+                    Email Học Sinh
+                  </label>
+                  <input
+                    id="student-email"
+                    type="email"
+                    required
+                    placeholder="example@student.com"
+                    value={premiumEmail}
+                    onChange={(e) => setPremiumEmail(e.target.value)}
+                    className="w-full text-xs font-semibold bg-slate-50 dark:bg-slate-900 border border-border/60 focus:border-emerald-500 rounded-xl px-4 py-3 outline-none transition-all"
+                    disabled={premiumSubmitting}
+                  />
+                </div>
+
+                {premiumErrorMsg && (
+                  <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold animate-fade-in flex items-center gap-2">
+                    <XCircle size={16} className="shrink-0" />
+                    <span>{premiumErrorMsg}</span>
+                  </div>
+                )}
+
+                {premiumSuccessMsg && (
+                  <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-xl text-xs font-bold animate-fade-in flex items-center gap-2">
+                    <CheckCircle size={16} className="shrink-0 text-emerald-500 animate-bounce" />
+                    <span>{premiumSuccessMsg}</span>
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={premiumSubmitting || !premiumEmail}
+                  className="w-full font-bold text-xs py-3 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer h-11 flex items-center justify-center gap-2 transition-all shadow-sm active:scale-98"
+                >
+                  {premiumSubmitting ? (
+                    <>
+                      <Loader size={16} className="animate-spin" />
+                      Đang xử lý nâng cấp...
+                    </>
+                  ) : (
+                    <>
+                      🚀 Kích hoạt Premium
+                    </>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       )}
 

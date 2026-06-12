@@ -205,4 +205,5 @@ export interface SimulatedStudent {
   name: string;
   avatar: string;
   email: string;
+  isPremium?: boolean;
 }

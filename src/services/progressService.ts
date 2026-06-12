@@ -567,6 +567,7 @@ export const progressService = {
             name: data.name || 'Học sinh mới',
             avatar: data.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${docRef.id}`,
             email: data.email || '',
+            isPremium: data.isPremium === true || data.role === 'premium',
             completedCount
           } as any);
         }

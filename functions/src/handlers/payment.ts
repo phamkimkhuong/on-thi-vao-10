@@ -137,3 +137,75 @@ export const payosWebhook = onRequest({
     });
   }
 });
+
+export const grantPremiumByEmail = onCall({
+  cors: true,
+}, async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Yêu cầu đăng nhập để thực hiện tác vụ này.");
+  }
+
+  const callerUid = request.auth.uid;
+
+  // Kiểm tra quyền giáo viên
+  const isBootstrap = callerUid === "hzSKwkaroTR1LKcXp09E5wL7F6f1";
+  let isAuthorizedTeacher = isBootstrap;
+
+  if (!isAuthorizedTeacher) {
+    const teacherDoc = await db.collection("teachers").doc(callerUid).get();
+    if (
+      teacherDoc.exists &&
+      teacherDoc.data()?.active === true &&
+      teacherDoc.data()?.role === "teacher"
+    ) {
+      isAuthorizedTeacher = true;
+    }
+  }
+
+  if (!isAuthorizedTeacher) {
+    throw new HttpsError("permission-denied", "Chỉ giáo viên mới có quyền thực hiện tác vụ này.");
+  }
+
+  const { studentEmail } = request.data;
+  if (!studentEmail || typeof studentEmail !== "string") {
+    throw new HttpsError("invalid-argument", "Thiếu hoặc sai định dạng email học sinh.");
+  }
+
+  const targetEmail = studentEmail.trim().toLowerCase();
+
+  // Tìm học sinh theo email
+  const usersRef = db.collection("users");
+  const querySnapshot = await usersRef.where("email", "==", targetEmail).get();
+
+  if (querySnapshot.empty) {
+    throw new HttpsError(
+      "not-found",
+      `Không tìm thấy tài khoản học sinh với email: ${studentEmail}. Học sinh cần đăng nhập vào hệ thống ít nhất một lần để tạo tài khoản trước.`
+    );
+  }
+
+  const userDoc = querySnapshot.docs[0];
+  const userRef = userDoc.ref;
+  const userData = userDoc.data();
+
+  if (userData.isPremium === true || userData.role === "premium") {
+    return {
+      success: true,
+      message: `Học sinh với email ${studentEmail} đã là tài khoản Premium từ trước.`,
+      studentName: userData.name || "Học sinh",
+    };
+  }
+
+  await userRef.set({
+    isPremium: true,
+    role: "premium",
+    premiumUpdatedAt: new Date(),
+    grantedByTeacher: callerUid,
+  }, { merge: true });
+
+  return {
+    success: true,
+    message: `Đã cấp quyền Premium thành công cho học sinh ${userData.name || ""} (${targetEmail})!`,
+    studentName: userData.name || "Học sinh",
+  };
+});
