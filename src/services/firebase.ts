@@ -20,9 +20,6 @@ export const app = initializeApp(firebaseConfig);
 
 // Khởi tạo Auth
 export const auth = getAuth(app);
-import { signInWithCustomToken } from 'firebase/auth';
-(window as any).auth = auth;
-(window as any).signInWithCustomToken = signInWithCustomToken;
 
 // Khởi tạo Firebase Storage để lưu ảnh bài làm tự luận
 export const firebaseStorage = getStorage(app);

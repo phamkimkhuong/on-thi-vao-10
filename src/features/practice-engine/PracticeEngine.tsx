@@ -13,8 +13,7 @@ import { AlertTriangle, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId } from '../../utils/subject';
-import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
-import { proofImageService, ProofImageUploadProgress, UploadControl } from '../../services/proofImageService';
+
 import confetti from 'canvas-confetti';
 
 // Import subcomponents
@@ -25,6 +24,8 @@ import { ExamPracticeView } from './components/ExamPracticeView';
 import { QuestionCard } from './components/QuestionCard';
 import { ResultCard } from './components/ResultCard';
 import { AiTutorPanel } from '../../components/common/AiTutorPanel';
+import { useEnglishQuestionFilter } from './hooks/useEnglishQuestionFilter';
+import { useProofUpload } from './hooks/useProofUpload';
 
 const getNow = () => Date.now();
 
@@ -124,7 +125,18 @@ export const PracticeEngine: React.FC = () => {
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
-  const [proofImages, setProofImages] = useState<LocalProofImage[]>([]);
+  
+  const {
+    proofImages,
+    setProofImages,
+    totalUploadStats,
+    handlePauseUpload,
+    handleResumeUpload,
+    handleCancelUpload,
+    executeUpload,
+    clearUpload
+  } = useProofUpload();
+
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -167,166 +179,24 @@ export const PracticeEngine: React.FC = () => {
   const [examTimeLeft, setExamTimeLeft] = useState<number>(0); // giây còn lại
   const [examTotalTimeSpent, setExamTotalTimeSpent] = useState<number>(0);
 
-  // Quản lý trạng thái upload tiến trình & điều khiển
-  const [uploadProgress, setUploadProgress] = useState<Record<string, ProofImageUploadProgress>>({});
-  const [uploadControls, setUploadControls] = useState<Record<string, UploadControl>>({});
-
-  const proofImagesRef = useRef(proofImages);
   const loadedQuestionIdRef = useRef<string | null>(null);
-  useEffect(() => {
-    proofImagesRef.current = proofImages;
-  }, [proofImages]);
-
-  // Thu hồi các Object URL khi component unmount để tránh rò rỉ bộ nhớ
-  useEffect(() => {
-    return () => {
-      revokeLocalProofImages(proofImagesRef.current);
-    };
-  }, []);
 
   // Quản lý mức độ gợi ý (0: không gợi ý, 1: hiện gợi ý bước 1, 2: hiện gợi ý bước 2,...)
   const [hintLevel, setHintLevel] = useState(0);
   const [questionStartAt, setQuestionStartAt] = useState(() => Date.now());
 
-  const totalUploadStats = useMemo(() => {
-    const values = Object.values(uploadProgress);
-    if (values.length === 0) return null;
-
-    let totalBytes = 0;
-    let bytesTransferred = 0;
-    let runningCount = 0;
-    let pausedCount = 0;
-    let errorCount = 0;
-    let canceledCount = 0;
-
-    values.forEach(v => {
-      totalBytes += v.totalBytes;
-      bytesTransferred += v.bytesTransferred;
-      if (v.state === 'running') runningCount++;
-      else if (v.state === 'paused') pausedCount++;
-      else if (v.state === 'error') errorCount++;
-      else if (v.state === 'canceled') canceledCount++;
-    });
-
-    const percent = totalBytes > 0 ? Math.round((bytesTransferred / totalBytes) * 100) : 0;
-
-    return {
-      percent,
-      bytesTransferred,
-      totalBytes,
-      runningCount,
-      pausedCount,
-      errorCount,
-      canceledCount,
-      isPaused: pausedCount > 0 && runningCount === 0,
-      isAllCompleted: bytesTransferred === totalBytes && totalBytes > 0
-    };
-  }, [uploadProgress]);
-
-  const handlePauseUpload = () => {
-    Object.values(uploadControls).forEach(ctrl => ctrl.pause());
-  };
-
-  const handleResumeUpload = () => {
-    Object.values(uploadControls).forEach(ctrl => ctrl.resume());
-  };
-
-  const handleCancelUpload = () => {
-    Object.values(uploadControls).forEach(ctrl => ctrl.cancel());
-  };
-
   // Derived States - Tính toán trực tiếp trong lúc render
   const isMath = routeSubject === 'math';
   const qList = isMath ? mathQuestions : englishQuestions;
 
-  const questions: Question[] = useMemo(() => {
-    if (isExamMode) {
-      return examQuestions;
-    }
-
-    if (questionTypeId === 'eng-qt6' && selectedSubTense === 'all' && customQuestions) {
-      return customQuestions;
-    }
-
-    let filtered = questionTypeId
-      ? qList.filter(q => q.questionTypeId === questionTypeId)
-      : qList;
-
-    if (questionTypeId === 'eng-qt6' && selectedSubTense && selectedSubTense !== 'all') {
-      if (selectedSubTense === 'present_simple') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return (num >= 5 && num <= 24) || (num >= 102 && num <= 121);
-        });
-      } else if (selectedSubTense === 'past_simple') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return (num >= 25 && num <= 44) || (num >= 122 && num <= 141);
-        });
-      } else if (selectedSubTense === 'present_continuous') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return (num >= 45 && num <= 64) || (num >= 142 && num <= 161);
-        });
-      } else if (selectedSubTense === 'past_continuous') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return (num >= 65 && num <= 84) || (num >= 162 && num <= 181);
-        });
-      } else if (selectedSubTense === 'present_perfect') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 182 && num <= 201;
-        });
-      } else if (selectedSubTense === 'future_simple') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 202 && num <= 221;
-        });
-      } else if (selectedSubTense === 'to_v') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 222 && num <= 241;
-        });
-      } else if (selectedSubTense === 'v_ing') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 242 && num <= 261;
-        });
-      } else if (selectedSubTense === 'v0') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 262 && num <= 281;
-        });
-      } else if (selectedSubTense === 'verb_combo') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 222 && num <= 261;
-        });
-      } else if (selectedSubTense === 'prep_phrasal') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 262 && num <= 301;
-        });
-      } else if (selectedSubTense === 'comparison') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 302 && num <= 331;
-        });
-      } else if (selectedSubTense === 'word_position') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 332 && num <= 361;
-        });
-      } else if (selectedSubTense === 'tenses_review') {
-        filtered = filtered.filter(q => {
-          const num = parseInt(q.id.replace('eng-q', ''), 10);
-          return num >= 5 && num <= 221;
-        });
-      }
-    }
-    return filtered;
-  }, [questionTypeId, qList, selectedSubTense, customQuestions, isExamMode, examQuestions]);
+  const questions = useEnglishQuestionFilter(
+    questionTypeId,
+    qList,
+    selectedSubTense,
+    customQuestions,
+    isExamMode,
+    examQuestions
+  );
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -378,20 +248,15 @@ export const PracticeEngine: React.FC = () => {
   const resetQuestionState = useCallback(() => {
     loadedQuestionIdRef.current = null;
     setStructuredAnswer({});
-    setProofImages(prev => {
-      revokeLocalProofImages(prev);
-      return [];
-    });
+    clearUpload();
     setSelectedOption(null);
     setIsSubmitted(false);
     setIsSubmitting(false);
     setSubmitError(null);
     setHintLevel(0);
     setQuestionStartAt(Date.now());
-    setUploadProgress({});
-    setUploadControls({});
     setPastAttempts([]);
-  }, []);
+  }, [clearUpload]);
 
   useEffect(() => {
     const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);
@@ -494,7 +359,7 @@ export const PracticeEngine: React.FC = () => {
               setExistingAttempt(null);
               setIsSubmitted(false);
               setIsCorrect(false);
-              setProofImages([]);
+              clearUpload();
               setPastAttempts([]);
             }
           }
@@ -506,7 +371,7 @@ export const PracticeEngine: React.FC = () => {
           setExistingAttempt(null);
           setIsSubmitted(false);
           setIsCorrect(false);
-          setProofImages([]);
+          clearUpload();
           setPastAttempts([]);
         }
       }
@@ -517,7 +382,7 @@ export const PracticeEngine: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [currentIdx, questionTypeId, questions, user, isExamMode]);
+  }, [currentIdx, questionTypeId, questions, user, isExamMode, clearUpload]);
 
   const handleExamSubmit = useCallback(async (isTimeOut = false) => {
     if (isExamSubmitted) return;
@@ -763,10 +628,7 @@ export const PracticeEngine: React.FC = () => {
       });
     }
     setExistingAttempt(null);
-    setProofImages(prev => {
-      revokeLocalProofImages(prev);
-      return [];
-    });
+    clearUpload();
     setIsSubmitted(false);
     setIsCorrect(false);
     setStructuredAnswer({});
@@ -774,8 +636,6 @@ export const PracticeEngine: React.FC = () => {
     setSubmitError(null);
     setHintLevel(0);
     setQuestionStartAt(Date.now());
-    setUploadProgress({});
-    setUploadControls({});
   };
 
   const handleOptionSelect = (optLetter: string) => {
@@ -809,19 +669,7 @@ export const PracticeEngine: React.FC = () => {
 
     try {
       if (user && proofImages.length > 0) {
-        uploadedProofImages = await proofImageService.uploadProofImages(
-          user.uid,
-          attemptId,
-          proofImages.map(image => ({ id: image.id, file: image.file })),
-          {
-            onProgress: (prog) => {
-              setUploadProgress(prog);
-            },
-            onTasksCreated: (ctrls) => {
-              setUploadControls(ctrls);
-            }
-          }
-        );
+        uploadedProofImages = await executeUpload(user.uid, attemptId);
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Không thể upload ảnh bài làm. Vui lòng thử lại.';
@@ -882,7 +730,7 @@ export const PracticeEngine: React.FC = () => {
   };
 
   const handleNext = () => {
-    revokeLocalProofImages(proofImages);
+    clearUpload();
     if (currentIdx < questions.length - 1) {
       setCurrentIdx(currentIdx + 1);
       resetQuestionState();
@@ -1129,7 +977,7 @@ export const PracticeEngine: React.FC = () => {
               <button
                 key={q.id}
                 onClick={() => {
-                  revokeLocalProofImages(proofImages);
+                  clearUpload();
                   setCurrentIdx(idx);
                   resetQuestionState();
                 }}
