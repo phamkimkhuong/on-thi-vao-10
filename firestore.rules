@@ -148,6 +148,11 @@ service cloud.firestore {
       match /general_chats/{chatId} {
         allow read, write: if isOwner(userId);
         allow read: if isTeacher();
+
+        match /sessions/{sessionId} {
+          allow read, write: if isOwner(userId);
+          allow read: if isTeacher();
+        }
       }
     }
   }

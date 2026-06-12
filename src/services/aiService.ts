@@ -44,7 +44,8 @@ export const aiService = {
     solution: Solution | undefined,
     studentAnswer: string,
     history: Array<{ role: 'user' | 'model'; text: string }>,
-    message: string
+    message: string,
+    image?: { data: string; mimeType: string }
   ): Promise<string> {
     const isMath = question.subjectId === 'math';
     const subjectName = isMath ? 'môn Toán' : 'môn Tiếng Anh';
@@ -108,7 +109,8 @@ ${specificGuidelines}`;
       temperature: 0.7,
       skipDiagnosis: true,
       topicName,
-      chatId: question.id
+      chatId: question.id,
+      image
     });
   },
 

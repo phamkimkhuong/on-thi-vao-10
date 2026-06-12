@@ -33,5 +33,21 @@ service firebase.storage {
         && request.resource.size < 5 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
     }
+
+    match /users/{userId}/chats/{questionId}/{fileName} {
+      allow read: if isOwner(userId) || isTeacher();
+
+      allow write: if isOwner(userId)
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    match /users/{userId}/general_chats/{subjectId}/{fileName} {
+      allow read: if isOwner(userId) || isTeacher();
+
+      allow write: if isOwner(userId)
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
   }
 }
