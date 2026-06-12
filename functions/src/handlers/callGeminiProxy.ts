@@ -357,8 +357,8 @@ export const callGeminiProxy = onCall({
                 vectorField: "embedding",
                 queryVector: queryEmbedding,
                 distanceMeasure: "COSINE",
-                limit: 2,
-                distanceThreshold: 0.3,
+                limit: 4,
+                distanceThreshold: 0.4,
               });
 
             // 2. Tạo Promise 2: Keyword Search (array-contains-any)
@@ -370,7 +370,7 @@ export const callGeminiProxy = onCall({
               keywordQueryPromise = db.collection("knowledge_base")
                 .where("subjectId", "==", subjectId)
                 .where("keywords", "array-contains-any", queryKeywords)
-                .limit(2)
+                .limit(4)
                 .get()
                 .catch((err) => {
                   console.error("Lỗi khi truy vấn keyword search (sẽ bỏ qua):", err);
@@ -395,7 +395,10 @@ export const callGeminiProxy = onCall({
                 title: data.title,
                 parentTitle: data.parentTitle,
                 content: data.content,
+                chunkType: data.chunkType || "overview",
+                difficulty: data.difficulty || "medium",
                 source: "vector",
+                score: 1.0, // Điểm cơ sở cho vector search
               });
             });
 
@@ -405,21 +408,70 @@ export const callGeminiProxy = onCall({
               const uniqueId = doc.id;
               // Nếu đã có trong map, đánh dấu là match cả hai, nếu chưa thì thêm mới
               if (mergedDocsMap.has(uniqueId)) {
-                mergedDocsMap.get(uniqueId).source += "+keyword";
+                const docObj = mergedDocsMap.get(uniqueId);
+                docObj.source += "+keyword";
+                docObj.score += 0.5; // Điểm bonus nếu khớp cả hai
               } else {
                 mergedDocsMap.set(uniqueId, {
                   id: uniqueId,
                   title: data.title,
                   parentTitle: data.parentTitle,
                   content: data.content,
+                  chunkType: data.chunkType || "overview",
+                  difficulty: data.difficulty || "medium",
                   source: "keyword",
+                  score: 0.7, // Điểm cơ sở cho keyword search
                 });
               }
             });
 
-            // Lấy danh sách kết quả đã loại trùng và giới hạn tối đa 2 tài liệu (Tối ưu hóa token)
-            const mergedDocuments = Array.from(mergedDocsMap.values()).slice(0, 2);
-            console.log(`[RAG] Hybrid search merged ${mergedDocuments.length} unique document(s). Sources: ${mergedDocuments.map(d => `${d.id}(${d.source})`).join(", ")}`);
+            const candidateDocs = Array.from(mergedDocsMap.values());
+
+            // Thực hiện Reranking / Scoring trong bộ nhớ
+            candidateDocs.forEach((doc) => {
+              // 1. Khớp chuyên đề (Topic matching)
+              if (topicName && doc.parentTitle) {
+                const cleanTopic = removeAccents(topicName.toLowerCase()).trim();
+                const cleanParentTitle = removeAccents(doc.parentTitle.toLowerCase()).trim();
+                if (cleanParentTitle.includes(cleanTopic) || cleanTopic.includes(cleanParentTitle)) {
+                  doc.score += 1.5; // Cộng điểm mạnh nếu trùng hoặc tương tự chuyên đề hiện tại
+                }
+              }
+
+              // 2. Khớp ý định của học sinh (Intent matching dựa trên query)
+              const cleanQuery = rewrittenQuery.toLowerCase();
+              
+              // Nếu hỏi về lỗi sai, cảnh báo -> Ưu tiên chunk 'mistakes'
+              if (doc.chunkType === "mistakes" && (cleanQuery.includes("sai") || cleanQuery.includes("lỗi") || cleanQuery.includes("nhầm") || cleanQuery.includes("sửa") || cleanQuery.includes("cảnh báo"))) {
+                doc.score += 1.0;
+              }
+              
+              // Nếu hỏi về phương pháp/các bước -> Ưu tiên chunk 'method'
+              if (doc.chunkType === "method" && (cleanQuery.includes("làm sao") || cleanQuery.includes("bước") || cleanQuery.includes("cách") || cleanQuery.includes("hướng dẫn") || cleanQuery.includes("phương pháp"))) {
+                doc.score += 1.0;
+              }
+
+              // Nếu hỏi về ví dụ/mẫu -> Ưu tiên chunk 'example'
+              if (doc.chunkType === "example" && (cleanQuery.includes("ví dụ") || cleanQuery.includes("mẫu") || cleanQuery.includes("đề bài") || cleanQuery.includes("phân dạng"))) {
+                doc.score += 1.0;
+              }
+
+              // 3. Khớp tần suất từ khóa của câu hỏi với tiêu đề chunk (Keyword frequency matching)
+              if (queryKeywords && queryKeywords.length > 0 && doc.title) {
+                const titleKeywords = extractKeywords(doc.title);
+                const matchingKeywordsCount = queryKeywords.filter(k => titleKeywords.includes(k)).length;
+                if (matchingKeywordsCount > 0) {
+                  doc.score += matchingKeywordsCount * 0.3; // Cộng thêm 0.3 điểm cho mỗi từ khóa trùng khớp trong tiêu đề
+                }
+              }
+            });
+
+            // Sắp xếp giảm dần theo score
+            candidateDocs.sort((a, b) => b.score - a.score);
+
+            // Lấy tối đa 2 tài liệu tối ưu nhất để tránh làm phình token context
+            const mergedDocuments = candidateDocs.slice(0, 2);
+            console.log(`[RAG] Reranked ${candidateDocs.length} candidates. Selected: ${mergedDocuments.map(d => `${d.id}(score:${d.score.toFixed(1)}, source:${d.source}, type:${d.chunkType})`).join(", ")}`);
 
             if (mergedDocuments.length > 0) {
               ragContext = "\n\nTÀI LIỆU THAM KHẢO LIÊN QUAN:\n" + mergedDocuments.map((d) => `---

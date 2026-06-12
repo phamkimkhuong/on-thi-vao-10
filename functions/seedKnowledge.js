@@ -158,13 +158,14 @@ async function run() {
           parentId: qType.id,
           parentTitle: qType.name,
           chunkType: chunkType,
+          difficulty: qType.difficulty || "medium",
           title: chunkTitle,
           content: chunkContent,
           keywords: keywords,
           embedding: admin.firestore.FieldValue.vector(embedding),
           updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
-        console.log(`  - Thành công: Đã ghi chunk [${chunkType}] với ID: ${chunkId} (${keywords.length} keywords)`);
+        console.log(`  - Thành công: Đã ghi chunk [${chunkType}] với ID: ${chunkId} (${keywords.length} keywords, difficulty: ${qType.difficulty || "medium"})`);
       } catch (err) {
         console.error(`  - Lỗi khi ghi chunk [${chunkType}] ${chunkId}:`, err.message);
       }
