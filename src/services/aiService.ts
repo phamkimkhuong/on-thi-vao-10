@@ -83,8 +83,8 @@ Nhiệm vụ của bạn:
 
 ${specificGuidelines}`;
 
-    // Chuyển đổi lịch sử chat sang định dạng contents chuẩn của Gemini
-    const contents = history.map(h => ({
+    // Chuyển đổi lịch sử chat sang định dạng contents chuẩn của Gemini (giới hạn 8 tin nhắn gần nhất)
+    const contents = history.slice(-8).map(h => ({
       role: h.role,
       parts: [{ text: h.text }]
     }));

@@ -437,50 +437,50 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
 
   // 1.25 Thực hiện nén lịch sử chat định kỳ (Batch Summarization + Firestore Caching)
   let historySummary = "";
-  let finalContents: ChatContent[] | undefined = contents;
+  let finalContents: ChatContent[] | undefined;
 
-  if (contents && contents.length >= 10) {
-    try {
-      // Định vị tài liệu chat tương ứng để đọc/ghi lịch sử tóm tắt
-      let chatDocRef;
-      if (chatId && chatId !== "general") {
-        chatDocRef = db.collection("users").doc(uid).collection("chats").doc(chatId);
-      } else {
-        chatDocRef = db.collection("users").doc(uid).collection("general_chats").doc(subjectId || "math");
-      }
+  try {
+    // Định vị tài liệu chat tương ứng để đọc/ghi lịch sử tóm tắt
+    let chatDocRef;
+    if (chatId && chatId !== "general") {
+      chatDocRef = db.collection("users").doc(uid).collection("chats").doc(chatId);
+    } else {
+      chatDocRef = db.collection("users").doc(uid).collection("general_chats").doc(subjectId || "math");
+    }
 
-      // Đọc tóm tắt đã lưu trong Firestore
-      const chatDoc = await chatDocRef.get();
-      let existingSummary = "";
-      if (chatDoc.exists) {
-        existingSummary = chatDoc.data()?.historySummary || "";
-      }
+    // Đọc tóm tắt đã lưu trong Firestore
+    const chatDoc = await chatDocRef.get();
+    const chatData = chatDoc.exists ? chatDoc.data() : null;
+    let existingSummary = chatData?.historySummary || "";
+    const fullHistory = chatData?.messages || [];
 
+    // Nếu số lượng tin nhắn trong Firestore (lịch sử đầy đủ) đạt chặng >= 10
+    if (fullHistory.length >= 10) {
       // Nếu số lượng tin nhắn đạt điểm chốt (checkpoint chia hết cho 5, ví dụ 10, 15, 20...)
-      if (contents.length % 5 === 0) {
+      if (fullHistory.length % 5 === 0) {
         // Ta cần tóm tắt toàn bộ phần lịch sử cũ trừ 5 tin nhắn gần nhất
-        const messagesToSummarize = contents.slice(0, -5);
+        const messagesToSummarize = fullHistory.slice(0, -5);
         let textToCompress = "";
         
         if (existingSummary) {
           // Gộp tóm tắt cũ với các tin nhắn mới phát sinh từ checkpoint cũ đến nay
-          const newMessagesText = messagesToSummarize.slice(5).map(m => {
+          const newMessagesText = messagesToSummarize.slice(5).map((m: any) => {
             const roleName = m.role === "user" ? "Học sinh" : "Gia sư";
-            const text = m.parts?.map(p => p.text).join(" ") || "";
+            const text = m.text || "";
             return `${roleName}: ${text}`;
           }).join("\n");
           
           textToCompress = `Tóm tắt hội thoại trước đó: ${existingSummary}\nCác lượt hội thoại mới:\n${newMessagesText}`;
         } else {
           // Nếu chưa có tóm tắt cũ, tóm tắt toàn bộ
-          textToCompress = messagesToSummarize.map(m => {
+          textToCompress = messagesToSummarize.map((m: any) => {
             const roleName = m.role === "user" ? "Học sinh" : "Gia sư";
-            const text = m.parts?.map(p => p.text).join(" ") || "";
+            const text = m.text || "";
             return `${roleName}: ${text}`;
           }).join("\n");
         }
 
-        console.log(`[Compression] Generating new batch summary at checkpoint length: ${contents.length}`);
+        console.log(`[Compression] Generating new batch summary at checkpoint length: ${fullHistory.length}`);
         
         // Gọi LLM tóm tắt phần text này
         const prompt = `Bạn là một trợ lý AI hỗ trợ tóm tắt hội thoại học tập.
@@ -532,19 +532,24 @@ Câu tóm tắt duy nhất:`;
           }
         }
       }
+    }
 
-      historySummary = existingSummary;
-      
-      // Tính toán sliceSize:
-      const sliceSize = (contents.length % 5) + 5;
-      finalContents = contents.slice(-sliceSize);
+    historySummary = existingSummary;
 
-      console.log(`[Compression] Sending cached history summary + ${finalContents.length} messages context.`);
-
-    } catch (err) {
-      console.error("Lỗi khi thực hiện Batch Summarization (sẽ gửi toàn bộ):", err);
+    // Để đảm bảo an toàn và tương thích ngược (Backward Compatibility):
+    // - Nếu Client mới gửi lên sliding window rút gọn (contents <= 9), ta dùng nguyên contents.
+    // - Nếu Client cũ gửi lên toàn bộ history dài (> 9), ta tự động cắt lát lấy 8 tin nhắn gần nhất.
+    if (contents && contents.length > 9) {
+      finalContents = contents.slice(-8);
+    } else {
       finalContents = contents;
     }
+
+    console.log(`[Compression] Sending cached history summary + ${finalContents?.length || 0} messages context.`);
+
+  } catch (err) {
+    console.error("Lỗi khi thực hiện Batch Summarization (sẽ gửi toàn bộ):", err);
+    finalContents = contents;
   }
 
   // 1.3 Thiết lập cấu trúc contents & systemInstruction gửi đi
@@ -797,9 +802,9 @@ Chú ý:
             if (hasNewData) {
               const cleanSubjectId = subjectId || "math";
               const subProfile = studentProfile?.[cleanSubjectId] || {};
-              let oldStrengths = subProfile.strengths || [];
-              let oldWeaknesses = subProfile.weaknesses || [];
-              let oldSummary = subProfile.learningSummary || "";
+              const oldStrengths = subProfile.strengths || [];
+              const oldWeaknesses = subProfile.weaknesses || [];
+              const oldSummary = subProfile.learningSummary || "";
               
               const mergeAndUnique = (oldArr: string[], newArr: any[]) => {
                 const combined = [...oldArr, ...newArr.map((s) => String(s).trim())].filter(Boolean);
