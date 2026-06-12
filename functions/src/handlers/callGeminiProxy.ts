@@ -330,6 +330,7 @@ export const callGeminiProxy = onCall({
               email: email,
               promptTokens: rewriteResult.usageMetadata.promptTokenCount || 0,
               candidatesTokens: rewriteResult.usageMetadata.candidatesTokenCount || 0,
+              cachedTokens: rewriteResult.usageMetadata.cachedContentTokenCount || 0,
               totalTokens: rewriteResult.usageMetadata.totalTokenCount || 0,
               timestamp: new Date(),
               type: "rewrite",
@@ -523,6 +524,7 @@ Câu tóm tắt duy nhất:`;
               email: email,
               promptTokens: summaryUsage.promptTokenCount || 0,
               candidatesTokens: summaryUsage.candidatesTokenCount || 0,
+              cachedTokens: summaryUsage.cachedContentTokenCount || 0,
               totalTokens: summaryUsage.totalTokenCount || 0,
               timestamp: new Date(),
               type: "summary",
@@ -856,6 +858,7 @@ Chú ý:
         email: email,
         promptTokens: successUsage.promptTokenCount || 0,
         candidatesTokens: successUsage.candidatesTokenCount || 0,
+        cachedTokens: successUsage.cachedContentTokenCount || 0,
         totalTokens: successUsage.totalTokenCount || 0,
         timestamp: new Date(),
         type: responseMimeType ? "proof_grading" : "tutor",
@@ -870,6 +873,7 @@ Chú ý:
     usage: successUsage ? {
       promptTokens: successUsage.promptTokenCount || 0,
       candidatesTokens: successUsage.candidatesTokenCount || 0,
+      cachedTokens: successUsage.cachedContentTokenCount || 0,
       totalTokens: successUsage.totalTokenCount || 0,
     } : null,
   };
