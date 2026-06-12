@@ -17,11 +17,6 @@ const shouldRenderAsLatex = (text: string, block: boolean): boolean => {
     return true;
   }
 
-  // Nhận diện bất kỳ lệnh LaTeX nào (bắt đầu bằng \ theo sau là chữ cái) hoặc các ký tự đặc trưng
-  if (/\\[a-zA-Z]+/.test(text) || /[_^{}]/.test(text)) {
-    return true;
-  }
-
   // Các ký tự tiếng Việt có dấu
   const hasVietnameseAccents = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ]/i.test(text);
 
@@ -31,6 +26,11 @@ const shouldRenderAsLatex = (text: string, block: boolean): boolean => {
 
   if (hasVietnameseAccents || hasVietnameseStopWords) {
     return false;
+  }
+
+  // Nhận diện bất kỳ lệnh LaTeX nào (bắt đầu bằng \ theo sau là chữ cái) hoặc các ký tự đặc trưng
+  if (/\\[a-zA-Z]+/.test(text) || /[_^{}]/.test(text)) {
+    return true;
   }
 
   // Kiểm tra xem chuỗi chỉ chứa các ký tự toán học hợp lệ
@@ -153,19 +153,21 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
     if (!containerRef.current || !text) return;
 
     try {
-      const hasDelims = hasLatexDelimiters(text);
+      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế
+      const normalizedText = text.replace(/\\n/g, '\n');
+      const hasDelims = hasLatexDelimiters(normalizedText);
 
       if (hasDelims) {
         // Chuỗi có delimiters \\( \\) hoặc \\[ \\] → phân tách và render từng phần
-        renderMixedContent(containerRef.current, text, block);
-      } else if (shouldRenderAsLatex(text, block)) {
+        renderMixedContent(containerRef.current, normalizedText, block);
+      } else if (shouldRenderAsLatex(normalizedText, block)) {
         // Chuỗi là raw LaTeX hoặc biểu thức toán học (không có delimiters) → render toàn bộ bằng KaTeX
         containerRef.current.innerHTML = '';
-        renderKatex(text, containerRef.current, block);
+        renderKatex(normalizedText, containerRef.current, block);
       } else {
         // Text thuần (tiếng Việt, chữ cái, số, dấu câu) → hiển thị nguyên văn
         containerRef.current.innerHTML = '';
-        appendTextWithLineBreaks(containerRef.current, text);
+        appendTextWithLineBreaks(containerRef.current, normalizedText);
       }
     } catch (error) {
       console.error('KaTeX rendering error:', error);
