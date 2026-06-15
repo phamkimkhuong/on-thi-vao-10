@@ -98,7 +98,6 @@ const renderKatex = (formula: string, element: HTMLElement, displayMode: boolean
  */
 const renderMixedContent = (container: HTMLElement, text: string, defaultDisplayMode: boolean) => {
   const parts = text.split(DELIMITER_REGEX);
-  container.innerHTML = '';
 
   parts.forEach((part) => {
     if (part.startsWith('\\(') && part.endsWith('\\)')) {
@@ -153,22 +152,42 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
     if (!containerRef.current || !text) return;
 
     try {
+      // Xóa trắng container trước khi render mới
+      containerRef.current.innerHTML = '';
+
       // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế
       const normalizedText = text.replace(/\\n/g, '\n');
-      const hasDelims = hasLatexDelimiters(normalizedText);
 
-      if (hasDelims) {
-        // Chuỗi có delimiters \\( \\) hoặc \\[ \\] → phân tách và render từng phần
-        renderMixedContent(containerRef.current, normalizedText, block);
-      } else if (shouldRenderAsLatex(normalizedText, block)) {
-        // Chuỗi là raw LaTeX hoặc biểu thức toán học (không có delimiters) → render toàn bộ bằng KaTeX
-        containerRef.current.innerHTML = '';
-        renderKatex(normalizedText, containerRef.current, block);
-      } else {
-        // Text thuần (tiếng Việt, chữ cái, số, dấu câu) → hiển thị nguyên văn
-        containerRef.current.innerHTML = '';
-        appendTextWithLineBreaks(containerRef.current, normalizedText);
-      }
+      // Tách riêng các khối hình ảnh SVG (nếu có) để render đồ họa vector trực tiếp
+      const SVG_REGEX = /(<svg[\s\S]*?<\/svg>)/g;
+      const segments = normalizedText.split(SVG_REGEX);
+
+      segments.forEach((segment) => {
+        if (!segment) return;
+
+        if (segment.trim().startsWith('<svg') && segment.trim().endsWith('</svg>')) {
+          const svgDiv = document.createElement('div');
+          // Giao diện thẻ SVG căn giữa, nền trắng ở theme sáng / nền đậm ở theme tối
+          svgDiv.className = 'flex justify-center my-3 p-3 bg-white dark:bg-slate-900 rounded-2xl border border-border/60 shadow-sm max-w-full overflow-x-auto';
+          svgDiv.innerHTML = segment;
+          containerRef.current?.appendChild(svgDiv);
+        } else {
+          // Xử lý đoạn văn bản / công thức Toán bình thường
+          const hasDelims = hasLatexDelimiters(segment);
+          if (hasDelims) {
+            renderMixedContent(containerRef.current!, segment, block);
+          } else if (shouldRenderAsLatex(segment, block)) {
+            const span = document.createElement('span');
+            span.className = 'inline-block px-0.5';
+            renderKatex(segment, span, block);
+            containerRef.current?.appendChild(span);
+          } else {
+            const span = document.createElement('span');
+            appendTextWithLineBreaks(span, segment);
+            containerRef.current?.appendChild(span);
+          }
+        }
+      });
     } catch (error) {
       console.error('KaTeX rendering error:', error);
       if (containerRef.current) {

@@ -54,7 +54,7 @@ export const aiService = {
       ? `Hướng dẫn chuyên biệt cho môn Toán:
 - Sử dụng các biểu thức toán học định dạng LaTeX để hiển thị công thức đẹp mắt và chính xác.
 - QUY TẮC LATEX BẮT BUỘC: Chỉ sử dụng thẻ LaTeX inline đơn là dấu đô la đơn kẹp hai đầu (ví dụ: $x^2 + 2x + 1 = 0$, $\\frac{a}{b}$). Tuyệt đối KHÔNG sử dụng định dạng khối dạng $$ ... $$ hay dấu gạch chéo kép \\ để tránh vỡ giao diện hiển thị.
-- Khi gợi ý suy luận, hãy tập trung vào các khái niệm toán học, định lý, công thức biến đổi và cách vẽ hình (nếu có).
+- Khi gợi ý suy luận hình học, bạn được khuyến khích vẽ hình minh họa trực tiếp bằng thẻ <svg> (ví dụ: vẽ tam giác, đường tròn, tiếp tuyến). Sử dụng stroke="currentColor" và fill="none" cho nét vẽ để tương thích hoàn hảo cả chế độ sáng/tối. Đánh dấu đỉnh (A, B, C, O) bằng thẻ <text fill="currentColor">. Đảm bảo mã <svg> tự đóng gói và có viewBox hợp lý.
 - Gợi ý học sinh phân tích đề bài, xác định các đại lượng đã biết và cần tìm.`
       : `Hướng dẫn chuyên biệt cho môn Tiếng Anh:
 - Tập trung vào các quy tắc ngữ pháp, cấu trúc câu, nghĩa của từ vựng, từ loại (verb, noun, adjective...) hoặc ngữ cảnh sử dụng từ trong câu.

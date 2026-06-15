@@ -45,6 +45,12 @@ interface StudentProfile {
   lastUpdated?: any;
 }
 
+const generateChatStoragePath = (userId: string, subject: string, fileName: string) => {
+  const fileExtension = fileName.split('.').pop() || 'jpg';
+  const timestamp = Date.now();
+  return `users/${userId}/general_chats/${subject}/msg_img_${timestamp}.${fileExtension}`;
+};
+
 export const GeneralAiTutor: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAppStore();
@@ -411,9 +417,7 @@ export const GeneralAiTutor: React.FC = () => {
 
         if (user?.uid) {
           const userId = user.uid;
-          const timestamp = Date.now();
-          const fileExtension = fileToSend.name.split('.').pop() || 'jpg';
-          const storagePath = `users/${userId}/general_chats/${subject}/msg_img_${timestamp}.${fileExtension}`;
+          const storagePath = generateChatStoragePath(userId, subject, fileToSend.name);
           const storageRef = ref(firebaseStorage, storagePath);
 
           const uploadTask = uploadBytesResumable(storageRef, fileToSend);
@@ -458,6 +462,14 @@ export const GeneralAiTutor: React.FC = () => {
 Nhiệm vụ của bạn là: Hướng dẫn học sinh hiểu các bài toán đại số và hình học.
 Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra đáp án hoặc lời giải đầy đủ ngay lập tức. Hãy gợi ý từng bước, đặt câu hỏi gợi mở, chỉ ra lỗi sai nhỏ để học sinh tự mình tư duy.
 QUY TẮC LATEX BẮT BUỘC: Chỉ sử dụng thẻ LaTeX inline đơn là dấu đô la đơn kẹp hai đầu (ví dụ: $x^2 - 5x + 6 = 0$). Tuyệt đối KHÔNG sử dụng định dạng khối dạng $$ ... $$ hay dấu gạch chéo kép \\ để tránh vỡ giao diện hiển thị.
+
+QUY TẮC VẼ HÌNH MINH HỌA (HÌNH HỌC):
+- Khi hướng dẫn các bài toán hình học (như vẽ đường cao, tiếp tuyến, tam giác, đường tròn nội/ngoại tiếp, hệ trục tọa độ Oxy, parabol...), bạn được KHUYẾN KHÍCH vẽ hình minh họa bằng thẻ <svg> trực tiếp trong nội dung câu trả lời.
+- Cấu trúc SVG bắt buộc: tự đóng gói trong thẻ <svg> ... </svg>, có thuộc tính viewBox hợp lý (ví dụ: viewBox="0 0 200 200" hoặc viewBox="0 0 300 200").
+- Sử dụng thuộc tính stroke="currentColor" và fill="none" cho các đường vẽ (line, circle, polygon, path) để nét vẽ tự động đổi màu tương thích hoàn hảo giữa Light Mode và Dark Mode.
+- Sử dụng thẻ <text fill="currentColor" fontSize="11" fontWeight="bold"> để đánh dấu nhãn các đỉnh (như A, B, C, O, H) hoặc độ dài. Chú ý điều chỉnh tọa độ chữ để không bị đè lên nét vẽ.
+- Đặt đoạn mã <svg> ở một khối dòng riêng biệt.
+
 Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào ngoài lề không liên quan đến ôn luyện môn Toán thi lớp 10 (ví dụ: địa lý, tin tức thời sự xã hội hôm nay, thể thao, giải trí, v.v.). Nếu học sinh hỏi ngoài lề, hãy lịch sự từ chối và hướng học sinh quay lại chủ đề ôn tập Toán.
 
 [BẢO MẬT & PHÒNG VỆ HỆ THỐNG]
@@ -768,12 +780,12 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
 
         {/* Gợi ý câu hỏi nhanh (nếu không loading) */}
         {!isLoading && (
-          <div className="p-2 bg-slate-50/40 dark:bg-slate-900/5 border-t border-border flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin">
+          <div className="px-3 py-2.5 bg-slate-50/40 dark:bg-slate-900/5 border-t border-border flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-none">
             {suggestions.map((s, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSend(undefined, s)}
-                className="px-3 py-1.5 bg-card hover:bg-slate-100 dark:hover:bg-slate-800 border border-border rounded-xl text-[10px] font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-sm shrink-0"
+                className="px-3.5 py-1.5 bg-card hover:bg-amber-500/5 dark:hover:bg-amber-500/10 border border-border/80 hover:border-amber-500/30 rounded-full text-[10px] font-bold text-muted-foreground hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-200 cursor-pointer shadow-sm hover:shadow hover:scale-[1.02] active:scale-[0.98] shrink-0"
               >
                 {s}
               </button>
