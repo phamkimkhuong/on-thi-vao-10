@@ -105,7 +105,7 @@ export const PracticeEngine: React.FC = () => {
 
   const tensesReviewAttemptsCount = useMemo(() => {
     void progressVersion;
-    const userId = user!.uid;
+    const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
     const uniqueSessionIds = new Set<string>();
@@ -125,7 +125,7 @@ export const PracticeEngine: React.FC = () => {
 
   const globalProgressPercent = useMemo(() => {
     void progressVersion;
-    const userId = user!.uid;
+    const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
     const correctQIds = new Set<string>();
     attempts.forEach(a => {
@@ -232,7 +232,7 @@ export const PracticeEngine: React.FC = () => {
       }
     }
 
-    const userId = user!.uid;
+    const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
     
     // Tìm lần làm gần nhất cho từng câu hỏi
@@ -325,7 +325,8 @@ export const PracticeEngine: React.FC = () => {
     loadedQuestionIdRef.current = currentQ.id;
 
     const checkAttempt = async () => {
-      const userAttemptsLocal = storageService.getAttempts(user!.uid);
+      const userId = user?.uid || 'guest';
+      const userAttemptsLocal = storageService.getAttempts(userId);
       const attemptsForQLocal = userAttemptsLocal
         .filter(a => a.questionId === currentQ.id)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -428,7 +429,7 @@ export const PracticeEngine: React.FC = () => {
 
       const attemptData: UserAttempt = {
         id: attemptId,
-        userId: user!.uid,
+        userId: user?.uid || 'guest',
         questionId: q.id,
         questionTypeId: q.questionTypeId,
         userAnswer: finalAns,
@@ -440,7 +441,7 @@ export const PracticeEngine: React.FC = () => {
       };
 
       attemptsToSave.push(attemptData);
-      storageService.saveAttempt(user!.uid, attemptData);
+      storageService.saveAttempt(user?.uid || 'guest', attemptData);
 
       logCustomEvent('request_teacher_grading', {
         subjectId: selectedSubject,
@@ -696,7 +697,7 @@ export const PracticeEngine: React.FC = () => {
 
     let aiEvaluation: AiEvaluation | undefined = undefined;
     let correct = isMath ? true : validateAnswer(currentQ, answerInput);
-    let gradingMode: 'auto' | 'manual' = isMath ? 'manual' : 'auto';
+    let gradingMode: 'auto' | 'manual' = 'manual';
 
     if (isMath && proofImages.length > 0) {
       try {
@@ -732,7 +733,7 @@ export const PracticeEngine: React.FC = () => {
 
     const attemptData: UserAttempt = {
       id: attemptId,
-      userId: user!.uid,
+      userId: user?.uid || 'guest',
       questionId: currentQ.id,
       questionTypeId: currentQ.questionTypeId,
       userAnswer: finalAnswer,
@@ -748,7 +749,7 @@ export const PracticeEngine: React.FC = () => {
     };
 
     setExistingAttempt(attemptData);
-    storageService.saveAttempt(user!.uid, attemptData);
+    storageService.saveAttempt(user?.uid || 'guest', attemptData);
 
     logCustomEvent(gradingMode === 'auto' ? 'ai_grading_completed' : 'request_teacher_grading', {
       subjectId: routeSubject,
