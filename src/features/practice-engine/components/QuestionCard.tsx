@@ -152,6 +152,121 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 })}
               </div>
             </div>
+          ) : currentQuestion.questionTypeId === 'eng-qt13' && currentQuestion.answerSchema ? (
+            // Custom selector for Reading Comprehension (Đọc hiểu trắc nghiệm)
+            <div className="space-y-6 animate-fade-in">
+              <span className="text-xs font-bold text-muted-foreground block">Chọn câu trả lời đúng cho từng câu hỏi bên dưới:</span>
+              <div className="space-y-6">
+                {currentQuestion.answerSchema.fields.map((field, idx) => {
+                  const rawOptions = currentQuestion.options?.[idx] || '';
+                  const choices = rawOptions.split('|').map(c => c.trim());
+                  const letters = ['A', 'B', 'C', 'D'];
+                  const currentValue = structuredAnswer[field.key] ?? '';
+
+                  return (
+                    <div key={field.key} className="p-5 bg-slate-50 dark:bg-slate-900/45 rounded-2xl border border-border/55 space-y-4 transition-all hover:border-primary/20">
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5.5 h-5.5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-black shrink-0 shadow-sm mt-0.5">
+                          {idx + 1}
+                        </span>
+                        <h4 className="text-xs font-extrabold text-foreground leading-relaxed">
+                          {field.label}
+                        </h4>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-2.5">
+                        {choices.map((choice, cIdx) => {
+                          const letter = letters[cIdx];
+                          const isSelected = currentValue === letter || currentValue.toLowerCase() === choice.toLowerCase();
+                          const cleanChoice = choice.replace(/^[A-D]\.\s*/i, '');
+                          
+                          return (
+                            <button
+                              key={letter}
+                              type="button"
+                              onClick={() => {
+                                setStructuredAnswer({
+                                  ...structuredAnswer,
+                                  [field.key]: letter
+                                });
+                              }}
+                              disabled={isSubmitting}
+                              className={cn(
+                                "w-full px-4 py-3 rounded-xl text-xs font-bold border transition-all duration-150 active:scale-[0.99] cursor-pointer text-left flex items-start gap-3",
+                                isSelected
+                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-extrabold"
+                                  : "bg-card border-border hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
+                              )}
+                            >
+                              <span className={cn(
+                                "text-[10px] w-4.5 h-4.5 rounded-md flex items-center justify-center font-black shrink-0 mt-0.5",
+                                isSelected ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
+                              )}>{letter}</span>
+                              <span className="leading-relaxed">{cleanChoice}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : currentQuestion.questionTypeId === 'eng-qt14' && currentQuestion.answerSchema ? (
+            // Custom selector for Reading True/False (Đọc hiểu Đúng / Sai)
+            <div className="space-y-6 animate-fade-in">
+              <span className="text-xs font-bold text-muted-foreground block">Đọc các nhận định dưới đây và chọn Đúng (T - True) hoặc Sai (F - False):</span>
+              <div className="space-y-4">
+                {currentQuestion.answerSchema.fields.map((field, idx) => {
+                  const currentValue = structuredAnswer[field.key] ?? '';
+                  const choices = ['T', 'F'];
+
+                  return (
+                    <div key={field.key} className="p-4 bg-slate-50 dark:bg-slate-900/45 rounded-2xl border border-border/55 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-primary/20">
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5.5 h-5.5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-black shrink-0 shadow-sm mt-0.5">
+                          {idx + 1}
+                        </span>
+                        <p className="text-xs font-bold text-foreground leading-relaxed">
+                          {field.label}
+                        </p>
+                      </div>
+                      
+                      <div className="flex gap-2 shrink-0 self-end sm:self-center">
+                        {choices.map((choice) => {
+                          const isSelected = currentValue === choice;
+                          const isTrue = choice === 'T';
+                          
+                          return (
+                            <button
+                              key={choice}
+                              type="button"
+                              onClick={() => {
+                                setStructuredAnswer({
+                                  ...structuredAnswer,
+                                  [field.key]: choice
+                                });
+                              }}
+                              disabled={isSubmitting}
+                              className={cn(
+                                "px-4 py-2 rounded-xl text-xs font-black border transition-all duration-150 active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 w-24 h-9.5",
+                                isSelected
+                                  ? isTrue
+                                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-extrabold shadow-sm"
+                                    : "bg-rose-500/10 border-rose-500 text-rose-600 dark:text-rose-400 font-extrabold shadow-sm"
+                                  : "bg-card border-border hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
+                              )}
+                            >
+                              {choice === 'T' ? 'True (T)' : 'False (F)'}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           ) : currentQuestion.answerSchema ? (
             <AnswerFormRenderer
               question={currentQuestion}
@@ -183,12 +298,20 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               ) : (
                 // Điền từ tự do (Word Form / etc.)
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground">Đáp án của bạn:</label>
+                  <label className="text-xs font-bold text-muted-foreground">
+                    {currentQuestion.questionTypeId === 'eng-qt11' ? 'Sửa lại từ sai:' : 'Đáp án của bạn:'}
+                  </label>
                   <input
                     type="text"
                     value={selectedOption || ''}
                     onChange={(e) => setSelectedOption(e.target.value)}
-                    placeholder="Nhập từ cần điền (ví dụ: inventions)..."
+                    placeholder={
+                      currentQuestion.questionTypeId === 'eng-qt11'
+                        ? "Nhập từ sửa lại (ví dụ: tired hoặc tiring -> tired)..."
+                        : currentQuestion.questionTypeId === 'eng-qt15'
+                        ? "Nhập phần viết lại (ví dụ: he knew the way hoặc cả câu)..."
+                        : "Nhập từ cần điền (ví dụ: inventions)..."
+                    }
                     className="w-full p-4 rounded-xl text-xs font-semibold border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-150"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && selectedOption && !isSubmitting) {

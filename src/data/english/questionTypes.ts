@@ -283,26 +283,44 @@ export const englishQuestionTypes: QuestionType[] = [
   },
   {
     id: 'eng-qt12',
-    topicId: 'eng-t4',
-    name: 'Sắp xếp hội thoại',
-    slug: 'sap-xep-hoi-thoai',
-    description: 'Sắp xếp các câu thoại rời rạc theo đúng thứ tự logic để tạo thành một cuộc trò chuyện giao tiếp tự nhiên.',
+    topicId: 'eng-t3',
+    name: 'Sắp xếp hội thoại, thư và đoạn văn',
+    slug: 'sap-xep-hoi-thoai-thu-doan-van',
+    description: 'Dạng bài sắp xếp hội thoại ngắn, email/thư hoặc các câu rời rạc thành đoạn văn hoàn chỉnh theo cấu trúc logic, trình tự phát triển ý và từ nối liên kết (Part 3 đề Bình Định 2025).',
     recognitionSigns: [
-      'Đề bài cho 4 câu thoại ký hiệu A, B, C, D không theo thứ tự.',
-      'Yêu cầu viết thứ tự sắp xếp đúng (ví dụ: BDAC).'
+      'Đề bài cung cấp danh sách các câu đơn hoặc lời thoại ký hiệu a, b, c, d, e... không theo thứ tự.',
+      'Các phương án lựa chọn trắc nghiệm A, B, C, D biểu thị chuỗi thứ tự sắp xếp (ví dụ: b - c - e - a - d).',
+      'Kiểm tra tư duy logic về mối quan hệ Hỏi - Đáp, lời mời - phản hồi, hoặc trình tự phát triển ý của đoạn văn.'
     ],
     solvingSteps: [
-      'Đọc và dịch nghĩa của cả 4 câu thoại để hiểu bối cảnh trò chuyện.',
-      'Tìm câu mở đầu tự nhiên (thường là lời chào hoặc câu hỏi khơi gợi vấn đề).',
-      'Liên kết các cặp câu Hỏi - Đáp liên tiếp dựa vào từ khóa và lô-gích hội thoại để hoàn thành chuỗi sắp xếp.'
+      'Bước 1: Tìm câu mở đầu độc lập, không phụ thuộc vào câu khác (thường là lời chào, câu hỏi khơi gợi vấn đề, hoặc câu chủ đề khái quát đoạn văn).',
+      'Bước 2: Ghép cặp liên kết bắt buộc: Tìm các mối quan hệ Hỏi - Đáp, lời mời - từ chối/đồng ý, lời phản hồi cảm thán.',
+      'Bước 3: Theo dõi các từ chỉ định và đại từ liên kết: Chú ý các từ như it, this, they, those, because, therefore... chúng phải đứng sau đối tượng được nhắc đến trước đó.',
+      'Bước 4: Đặt câu kết luận xuống cuối: Các câu chứa từ nối kết quả hoặc kết luận như in conclusion, therefore, as a result, best regards, best wishes thường nằm ở cuối.',
+      'Bước 5: Đối chiếu chuỗi thứ tự vừa xếp với 4 phương án trắc nghiệm A, B, C, D để chọn đáp án đúng.'
     ],
     commonMistakes: [
-      'Xác định sai câu mở đầu dẫn đến toàn bộ chuỗi sắp xếp phía sau bị đảo lộn.',
-      'Bỏ qua các từ nối hoặc đại từ chỉ định liên kết giữa các câu thoại.'
+      'Chọn nhầm câu có chứa trạng từ nối làm câu mở đầu (ví dụ: đặt câu bắt đầu bằng First lên trước câu chủ đề giới thiệu chung).',
+      'Ghép sai các cặp câu đối đáp phản hồi (như đặt câu phản hồi tích cực "That sounds great" trước khi đưa ra thông tin gợi ý).',
+      'Bỏ qua các đại từ chỉ định và trạng từ liên kết (như đặt câu chứa "This habit" lên trước khi định nghĩa thói quen đó là gì).'
     ],
     difficulty: 'medium',
-    examFrequency: 'medium',
-    exampleQuestionId: 'eng-q100'
+    examFrequency: 'high',
+    exampleQuestionId: 'eng-q601',
+    subTypes: [
+      {
+        name: 'Dạng 1: Sắp xếp hội thoại ngắn (Dialogue)',
+        example: 'Sắp xếp cuộc trò chuyện hỏi đáp, rủ rê hoặc trao đổi thông tin giao tiếp hằng ngày.'
+      },
+      {
+        name: 'Dạng 2: Sắp xếp email / thư hỏi thăm / thư yêu cầu (Email/Letter)',
+        example: 'Sắp xếp các phần của bức thư theo bố cục: Lời chào -> Mục đích thư -> Chi tiết -> Yêu cầu/Hẹn gặp -> Lời kết.'
+      },
+      {
+        name: 'Dạng 3: Sắp xếp câu thành đoạn văn hoàn chỉnh (Paragraph)',
+        example: 'Sắp xếp các câu sử dụng từ nối trình tự (First, Next, Finally, Therefore, In conclusion) theo mạch lập luận logic.'
+      }
+    ]
   },
   {
     id: 'eng-qt13',
@@ -326,5 +344,75 @@ export const englishQuestionTypes: QuestionType[] = [
     difficulty: 'hard',
     examFrequency: 'high',
     exampleQuestionId: 'eng-q101'
+  },
+  {
+    id: 'eng-qt14',
+    topicId: 'eng-t3',
+    name: 'Đọc hiểu True / False',
+    slug: 'doc-hieu-true-false',
+    description: 'Đọc một đoạn văn ngắn và xác định 4 nhận định đi kèm là Đúng (True) hay Sai (False) dựa trên thông tin đối chiếu thực tế từ bài đọc (Part 5 đề Bình Định 2025).',
+    recognitionSigns: [
+      'Đề bài cung cấp một đoạn văn đọc hiểu ngắn.',
+      'Đi kèm là 4 câu nhận định khẳng định thông tin.',
+      'Yêu cầu học sinh xác định mỗi câu nhận định là TRUE (Đúng) hoặc FALSE (Sai).'
+    ],
+    solvingSteps: [
+      'Bước 1: Đọc nhanh 4 câu nhận định và gạch chân các từ khóa quan trọng (chủ ngữ, động từ, mốc thời gian, số lượng, mức độ).',
+      'Bước 2: Tìm vùng chứa thông tin tương ứng trong bài đọc bằng cách dò theo từ khóa.',
+      'Bước 3: Đối chiếu cẩn thận từng chi tiết giữa nhận định và câu văn trong bài (đặc biệt lưu ý các từ chỉ số lượng như some/all, can/must, hoặc mốc thời gian/địa điểm).',
+      'Bước 4: Chỉ chọn TRUE (T) khi toàn bộ thông tin khớp hoàn hảo; chọn FALSE (F) nếu có bất kỳ chi tiết nào bị thay đổi, trái ngược hoặc không xuất hiện.'
+    ],
+    commonMistakes: [
+      'Chọn TRUE dựa trên phán đoán đời sống thực tế hoặc kiến thức xã hội thay vì thông tin có sẵn trong bài.',
+      'Bị bẫy bởi các từ chỉ mức độ/số lượng tuyệt đối (ví dụ: bài viết dùng "some students" nhưng nhận định dùng "every student" hoặc "always").',
+      'Nhầm lẫn về mốc thời gian (như last year vs this year) hoặc chủ thể thực hiện hành động.'
+    ],
+    difficulty: 'medium',
+    examFrequency: 'high',
+    exampleQuestionId: 'eng-q801'
+  },
+  {
+    id: 'eng-qt15',
+    topicId: 'eng-t4',
+    name: 'Viết lại câu không đổi nghĩa',
+    slug: 'viet-lai-cau-khong-doi-nghia',
+    description: 'Biến đổi câu gốc sang một câu mới sử dụng cấu trúc tương đương (bao gồm câu tường thuật, nguyên nhân/kết quả, mệnh đề quan hệ và câu điều kiện), bám sát cấu trúc Part 8 của đề thi tuyển sinh lớp 10 Bình Định.',
+    recognitionSigns: [
+      'Đề bài cung cấp câu gốc tiếng Anh kèm theo từ gợi ý viết hoa trong ngoặc đơn như (ALTHOUGH), (BECAUSE), (IF), (WHO), (WHICH), (KNEW)...',
+      'Cung cấp phần đầu của câu thứ hai kết thúc bằng dấu mũi tên và từ nối hoặc ba chấm (ví dụ: -> He told me that..., -> If you...).'
+    ],
+    solvingSteps: [
+      'Bước 1: Xác định cấu trúc ngữ pháp và ý nghĩa của câu gốc (ví dụ: câu trực tiếp dạng nghi vấn Yes/No, câu nguyên nhân có "so", hoặc mệnh đề quan hệ ghép 2 câu).',
+      'Bước 2: Phân tích từ khóa trong ngoặc và phần từ gợi ý ở câu mới để xác định mẫu biến đổi tương đương (ví dụ: because of -> because + mệnh đề, direct speech -> reported speech lùi thì).',
+      'Bước 3: Thực hiện viết lại câu: Chú ý biến đổi thì động từ (lùi thì trong câu tường thuật), đại từ, trạng từ chỉ thời gian/nơi chốn, và kiểm tra sự hòa hợp chủ-vị của câu mới.',
+      'Bước 4: Đối chiếu nghĩa của câu mới viết lại với câu gốc để đảm bảo hoàn toàn đồng nhất về mặt ngữ nghĩa.'
+    ],
+    commonMistakes: [
+      "Quên lùi thì động từ hoặc chia sai thì khi chuyển từ câu trực tiếp sang câu tường thuật.",
+      "Vẫn giữ lại các liên từ đối lập cũ (như 'but') khi đã viết lại câu dùng 'Although', hoặc giữ lại 'so' khi dùng 'Because'.",
+      "Sử dụng nhầm động từ khuyết thiếu 'will/would' trong mệnh đề điều kiện 'if' (mệnh đề if phải chia hiện tại đơn).",
+      "Quên đổi thể khẳng định/phủ định khi viết lại câu điều kiện (or -> if not) hoặc nguyên nhân/kết quả."
+    ],
+    difficulty: 'hard',
+    examFrequency: 'high',
+    exampleQuestionId: 'eng-q831',
+    subTypes: [
+      {
+        name: 'Dạng 1: Viết lại câu chỉ nguyên nhân (Because / Because of)',
+        example: 'It rained heavily, so we stayed at home. -> We stayed at home because it was raining heavily.'
+      },
+      {
+        name: 'Dạng 2: Câu điều kiện loại 1 (Conditional Sentences Type 1)',
+        example: 'Hurry up, or you will miss the bus. -> If you don\'t hurry up, you will miss the bus.'
+      },
+      {
+        name: 'Dạng 3: Mệnh đề quan hệ (Relative Clauses)',
+        example: 'The girl won first prize. She is my cousin. -> The girl who won first prize is my cousin.'
+      },
+      {
+        name: 'Dạng 4: Câu tường thuật (Reported Speech)',
+        example: 'Mary asked Peter, "Do you know the way?" -> Mary asked Peter if he knew the way.'
+      }
+    ]
   }
 ];
