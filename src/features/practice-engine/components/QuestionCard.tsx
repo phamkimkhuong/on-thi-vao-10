@@ -3,7 +3,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 import { ProofImageUploader } from '../../../components/common/ProofImageUploader';
-import { Question, Solution } from '../../../types';
+import { Question, Solution, StructuredAnswer } from '../../../types';
+import { AnswerFormRenderer } from '../../../components/common/AnswerFormRenderer';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
@@ -35,6 +36,8 @@ interface QuestionCardProps {
   setCurrentIdx: (val: number) => void;
   resetQuestionState: () => void;
   routeSubject: 'math' | 'english';
+  structuredAnswer: StructuredAnswer;
+  setStructuredAnswer: (val: StructuredAnswer) => void;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -63,6 +66,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   setCurrentIdx,
   resetQuestionState,
   routeSubject,
+  structuredAnswer,
+  setStructuredAnswer,
 }) => {
   return (
     <Card className="border-indigo-500/10 shadow-md">
@@ -90,6 +95,70 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 Hãy làm bài giải chi tiết ra giấy hoặc vở ghi của bạn. Sau đó, **chụp ảnh bài giải** và tải lên bên dưới để nộp bài làm.
               </p>
             </div>
+          ) : currentQuestion.questionTypeId === 'eng-qt8' ? (
+            // Custom selector for Gap Filling
+            <div className="space-y-4">
+              <span className="text-xs font-bold text-muted-foreground block mb-2">Chọn đáp án cho từng chỗ trống:</span>
+              <div className="space-y-4">
+                {currentQuestion.answerSchema?.fields.map((field, idx) => {
+                  const rawOptions = currentQuestion.options?.[idx] || '';
+                  const choices = rawOptions.split(',').map(c => c.trim());
+                  const letters = ['A', 'B', 'C', 'D'];
+                  const currentValue = structuredAnswer[field.key] ?? '';
+
+                  return (
+                    <div key={field.key} className="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-border/50 flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all">
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-black shadow-sm">
+                          {idx + 1}
+                        </span>
+                        <span className="text-xs font-bold text-foreground">{field.label}</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-1 max-w-xl">
+                        {choices.map((choice, cIdx) => {
+                          const letter = letters[cIdx];
+                          const isSelected = currentValue === letter || currentValue.toLowerCase() === choice.toLowerCase();
+                          
+                          return (
+                            <button
+                              key={letter}
+                              type="button"
+                              onClick={() => {
+                                setStructuredAnswer({
+                                  ...structuredAnswer,
+                                  [field.key]: letter
+                                });
+                              }}
+                              disabled={isSubmitting}
+                              className={cn(
+                                "px-3 py-2 rounded-xl text-xs font-bold border transition-all duration-150 active:scale-95 cursor-pointer text-left flex items-center gap-1.5",
+                                isSelected
+                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-extrabold"
+                                  : "bg-card border-border hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
+                              )}
+                            >
+                              <span className={cn(
+                                "text-[10px] w-4 h-4 rounded-md flex items-center justify-center font-black",
+                                isSelected ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
+                              )}>{letter}</span>
+                              <span className="truncate">{choice}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : currentQuestion.answerSchema ? (
+            <AnswerFormRenderer
+              question={currentQuestion}
+              value={structuredAnswer}
+              onChange={setStructuredAnswer}
+              disabled={isSubmitting}
+            />
           ) : (
             // Trắc nghiệm hoặc tự điền từ (fill-in-the-blank) cho môn Anh
             <div className="grid grid-cols-1 gap-3">

@@ -12,7 +12,7 @@ import { Button } from '../../components/ui/button';
 import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation } from '../../types';
 import { AlertTriangle, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
+import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId } from '../../utils/subject';
 
 import confetti from 'canvas-confetti';
@@ -677,7 +677,9 @@ export const PracticeEngine: React.FC = () => {
 
     const answerInput = isMath
       ? "(Đã nộp ảnh bài làm)"
-      : selectedOption || '';
+      : currentQ.answerSchema
+        ? structuredAnswer
+        : selectedOption || '';
     const finalAnswer = isMath
       ? "(Đã nộp ảnh bài làm)"
       : formatAnswerForDisplay(currentQ, answerInput);
@@ -980,7 +982,9 @@ export const PracticeEngine: React.FC = () => {
   const currentQuestion = questions[currentIdx];
   const submitDisabled = isMath
     ? proofImages.length === 0
-    : !selectedOption;
+    : currentQuestion.answerSchema
+      ? !isAnswerComplete(currentQuestion, structuredAnswer)
+      : !selectedOption;
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto pb-12">
@@ -1047,6 +1051,8 @@ export const PracticeEngine: React.FC = () => {
       {!isSubmitted ? (
         <QuestionCard
           currentQuestion={currentQuestion}
+          structuredAnswer={structuredAnswer}
+          setStructuredAnswer={setStructuredAnswer}
           questionTypeId={questionTypeId}
           selectedOption={selectedOption}
           handleOptionSelect={handleOptionSelect}

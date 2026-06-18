@@ -191,23 +191,49 @@ export const englishQuestionTypes: QuestionType[] = [
     topicId: 'eng-t3',
     name: 'Đọc điền từ quảng cáo/thông báo',
     slug: 'doc-dien-tu-quang-cao-thong-bao',
-    description: 'Đọc hiểu các văn bản ngắn dạng thông báo, quảng cáo, tin nhắn và chọn từ thích hợp (giới từ, từ loại, liên từ) điền vào chỗ trống.',
+    description: 'Chuyên đề Đọc điền từ (Gap Filling) vào văn bản ngắn dạng quảng cáo, thông báo hoặc tin nhắn (Part 2 đề Bình Định 2025). Đây là cầu nối quan trọng giữa các câu ngữ pháp rời rạc và bài đọc hiểu dài. Thay vì kiểm tra công thức khô khan, dạng bài này đòi hỏi học sinh vừa vận dụng linh hoạt kiến thức cũ (giới từ, liên từ, từ nối, từ loại, thì động từ), vừa phải hiểu ngữ cảnh và sự liên kết ý nghĩa giữa các câu trong đoạn văn.',
     recognitionSigns: [
-      'Đề bài cung cấp một bảng thông báo hoặc quảng cáo ngắn kèm theo các chỗ trống được đánh số.',
-      'Có các câu hỏi trắc nghiệm A, B, C, D đi kèm.'
+      'Đề bài cung cấp một bảng thông báo (Announcement/Notice) hoặc quảng cáo ngắn (Advertisement) hoàn chỉnh có chứa các chỗ trống đánh số (1), (2), (3)...',
+      'Đi kèm là các câu hỏi trắc nghiệm A, B, C, D tương ứng cho từng chỗ trống.',
+      'Các phương án lựa chọn trộn lẫn giữa ngữ pháp (giới từ, liên từ, từ loại, cấu trúc song song) và từ vựng liên kết theo ngữ cảnh (feedback, registered, contact...).'
     ],
     solvingSteps: [
-      'Đọc lướt qua văn bản để nắm nội dung chính và định dạng của văn bản (quảng cáo học tập, thông báo hoạt động xã hội...).',
-      'Xem xét kỹ các từ đứng ngay trước và ngay sau chỗ trống để xác định mối liên kết ngữ pháp (ví dụ giới từ đi kèm tính từ, trạng từ chỉ thời gian).',
-      'Loại trừ phương án sai và chọn đáp án thích hợp.'
+      'Bước 1: Xác định loại văn bản và chủ đề chính bằng cách đọc nhanh tiêu đề lớn (ví dụ: SCHOOL ENGLISH CLUB, VOLUNTEER ACTIVITY) và câu đầu tiên để định hình ngữ cảnh từ vựng.',
+      'Bước 2: Phân tích ngữ pháp xung quanh chỗ trống: Xem xét các từ đứng ngay trước và ngay sau chỗ trống để tìm collocations, giới từ cố định (như interested + in, participate + in), cấu trúc song song (đứng sau liên từ "and"), hoặc dạng động từ (to V/V-ing).',
+      'Bước 3: Phân tích tính liên kết và ý nghĩa logic: Đọc cả câu chứa chỗ trống và câu liền trước/sau để xác định mối quan hệ logic (đối lập dùng "however/but", nguyên nhân dùng "because", bổ sung thông tin dùng "also/besides").',
+      'Bước 4: Sử dụng phương pháp loại trừ: Loại các phương án sai cấu trúc hoặc sai từ loại trước, sau đó dịch nghĩa ngữ cảnh để chọn đáp án đúng nhất.'
     ],
     commonMistakes: [
-      'Dịch nghĩa từng từ một mà không chú ý đến cụm từ cố định (collocation) hoặc giới từ đi kèm.',
-      'Nhầm lẫn giới từ chỉ thời gian (như in, on, at).'
+      'Lỗi dịch thô từ tiếng Việt: Dịch nghĩa từng từ rồi tự ghép giới từ theo thói quen tiếng Việt (ví dụ chọn interested with/at thay vì interested in).',
+      'Bỏ qua mối quan hệ liên kết giữa các câu: Chọn trạng từ nối chỉ dựa vào một câu đơn mà không đọc câu trước đó, dẫn đến chọn nhầm từ nối chỉ nguyên nhân (therefore) thay vì đối lập (however).',
+      'Nhầm lẫn từ loại và cấu trúc so sánh: Không xác định được loại từ đứng sau các từ chỉ mức độ (ví dụ sau become more... phải điền một tính từ như confident chứ không điền danh từ confidence hay trạng từ confidently).',
+      'Lỗi giới từ thời gian: Quên quy tắc đặc biệt (ví dụ thấy tháng June vội chọn "in June" mà bỏ quên có ngày cụ thể "Sunday, June 10th" phía trước, đáp án đúng phải là "on").'
     ],
     difficulty: 'medium',
-    examFrequency: 'medium',
-    exampleQuestionId: 'eng-q90'
+    examFrequency: 'high',
+    exampleQuestionId: 'eng-q90',
+    subTypes: [
+      {
+        name: 'Dạng 1: Giới từ & Cụm từ cố định (Prepositions & Collocations)',
+        example: 'Are you interested (1) ______ speaking English? -> choose: in',
+        note: 'Kiểm tra khả năng ghi nhớ các giới từ đi kèm tính từ, động từ cố định hoặc giới từ chỉ thời gian, nơi chốn cụ thể.'
+      },
+      {
+        name: 'Dạng 2: Từ nối & Liên từ liên kết (Connectors & Conjunctions)',
+        example: 'You do not need to be an excellent speaker; (1) ______, you should be ready to communicate. -> choose: however',
+        note: 'Đòi hỏi học sinh phải đọc hiểu ý nghĩa của cả câu trước và sau chỗ trống để tìm ra mối quan hệ logic (đối lập, nguyên nhân, mục đích).'
+      },
+      {
+        name: 'Dạng 3: Vị trí từ loại trong ngữ cảnh (Word Form/Parts of Speech in context)',
+        example: 'By taking part regularly, you will become more (4) ______ when speaking. -> choose: confident',
+        note: 'Cần phân tích cấu trúc câu để xác định chỗ trống cần danh từ, động từ, tính từ hay trạng từ, kết hợp với so sánh hơn hoặc cấu trúc song song (V-ing and V-ing).'
+      },
+      {
+        name: 'Dạng 4: Từ vựng theo ngữ cảnh (Contextual Vocabulary)',
+        example: 'members discuss a topic and receive useful (2) ______ from teachers. -> choose: feedback',
+        note: 'Cả 4 lựa chọn đều cùng từ loại (ví dụ danh từ) nhưng học sinh phải hiểu bối cảnh và ý nghĩa thực tế của đoạn văn để chọn từ phù hợp nhất.'
+      }
+    ]
   },
   {
     id: 'eng-qt10',
