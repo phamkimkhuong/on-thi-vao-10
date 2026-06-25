@@ -431,7 +431,10 @@ export const mathQuestionTypes: QuestionType[] = [
   }
 ];
 
+import { mathMockQuestions, mockSolutionsList } from './mockExamsData';
+
 export const mathQuestions: Question[] = [
+  ...mathMockQuestions,
   {
     id: 'math-q1',
     subjectId: 'math',
@@ -1799,6 +1802,7 @@ export const mathQuestions: Question[] = [
 ];
 
 export const mathSolutions: Solution[] = [
+  ...mockSolutionsList.filter(s => s.questionId.startsWith('mock-math')),
   {
     id: 'math-s1',
     questionId: 'math-q1',
