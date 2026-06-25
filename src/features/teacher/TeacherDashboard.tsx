@@ -11,7 +11,7 @@ import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { SimulatedStudent, UserAttempt, UserProgress, Question, Solution } from '../../types';
+import { SimulatedStudent, UserAttempt, UserProgress, Question, Solution, ExamResult } from '../../types';
 import {
   Users,
   GraduationCap,
@@ -24,10 +24,11 @@ import {
   UserCheck,
   Loader,
   RefreshCw,
-  Timer
+  Timer,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
+import { formatAnswerForDisplay } from '../../utils/answerValidator';
 
 export interface PendingGroup {
   id: string;
@@ -144,6 +145,9 @@ export const TeacherDashboard: React.FC = () => {
   const [selectedStudent, setSelectedStudent] = useState<SimulatedStudent | null>(null);
   const [studentProgress, setStudentProgress] = useState<UserProgress | null>(null);
   const [selectedStudentAttempts, setSelectedStudentAttempts] = useState<UserAttempt[]>([]);
+  const [studentExams, setStudentExams] = useState<ExamResult[]>([]);
+  const [selectedStudentTab, setSelectedStudentTab] = useState<'mastery' | 'exams'>('mastery');
+  const [selectedExamForDetail, setSelectedExamForDetail] = useState<ExamResult | null>(null);
 
   const [reviewingItem, setReviewingItem] = useState<PendingGroup | null>(null);
   const [grades, setGrades] = useState<Record<string, { isCorrect: boolean; feedback: string }>>({});
@@ -403,11 +407,14 @@ export const TeacherDashboard: React.FC = () => {
   // Khi chọn một học sinh để xem báo cáo tiến trình
   const handleSelectStudent = async (student: SimulatedStudent) => {
     setSelectedStudent(student);
+    setSelectedStudentTab('mastery');
+    setSelectedExamForDetail(null);
     setIsLoading(true);
     try {
-      const [prog, atts] = await Promise.all([
+      const [prog, atts, exams] = await Promise.all([
         progressService.getUserProgressFromFirestore(student.id),
-        progressService.getAttempts(student.id)
+        progressService.getAttempts(student.id),
+        progressService.getExamResults(student.id)
       ]);
       setStudentProgress(prog || {
         userId: student.id,
@@ -416,6 +423,7 @@ export const TeacherDashboard: React.FC = () => {
         lastUpdatedAt: new Date().toISOString()
       });
       setSelectedStudentAttempts(atts || []);
+      setStudentExams(exams || []);
     } catch (err) {
       console.error("Lỗi khi lấy thông tin chi tiết học sinh:", err);
     } finally {
@@ -501,7 +509,7 @@ export const TeacherDashboard: React.FC = () => {
         'grantPremiumByEmail'
       );
       const res = await grantPremium({ studentEmail: premiumEmail });
-      
+
       if (res.data.success) {
         setPremiumSuccessMsg(res.data.message);
         setPremiumEmail('');
@@ -745,66 +753,269 @@ export const TeacherDashboard: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Danh sách tiến độ chi tiết từng môn */}
+                    {/* Danh sách tiến độ chi tiết từng môn hoặc Lịch sử thi */}
                     <div className="space-y-4">
-                      <h4 className="text-xs font-black text-foreground border-b border-border/20 pb-2">🎯 Điểm số Mastery theo chuyên đề</h4>
-
-                      <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
-                        {/* Toán */}
-                        <div className="space-y-2.5">
-                          <h5 className="text-[10px] font-extrabold uppercase text-indigo-500">📐 Chuyên đề Toán học</h5>
-                          {mathQuestionTypes.map((type) => {
-                            const score = studentProgress.masteryLevels[type.id] ?? 0;
-                            const stars = getStarsFromScore(score);
-
-                            return (
-                              <div key={type.id} className="flex items-center justify-between gap-4 p-2.5 border border-border/30 bg-slate-50/30 dark:bg-slate-900/5 rounded-lg text-xs">
-                                <span className="font-extrabold text-foreground flex-1 truncate">{type.name}</span>
-                                <div className="flex items-center gap-3 shrink-0">
-                                  <div className="flex gap-0.5">
-                                    {[1, 2, 3].map((s) => (
-                                      <Star
-                                        key={s}
-                                        size={9}
-                                        className={cn(s <= stars ? "text-amber-400 fill-amber-400" : "text-slate-300 dark:text-slate-700")}
-                                      />
-                                    ))}
-                                  </div>
-                                  <span className="text-[10px] font-black text-indigo-500 w-10 text-right">{score}%</span>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-
-                        {/* Tiếng Anh */}
-                        <div className="space-y-2.5 pt-2">
-                          <h5 className="text-[10px] font-extrabold uppercase text-violet-500">🗣️ Chuyên đề Tiếng Anh</h5>
-                          {englishQuestionTypes.map((type) => {
-                            const score = studentProgress.masteryLevels[type.id] ?? 0;
-                            const stars = getStarsFromScore(score);
-
-                            return (
-                              <div key={type.id} className="flex items-center justify-between gap-4 p-2.5 border border-border/30 bg-slate-50/30 dark:bg-slate-900/5 rounded-lg text-xs">
-                                <span className="font-extrabold text-foreground flex-1 truncate">{type.name}</span>
-                                <div className="flex items-center gap-3 shrink-0">
-                                  <div className="flex gap-0.5">
-                                    {[1, 2, 3].map((s) => (
-                                      <Star
-                                        key={s}
-                                        size={9}
-                                        className={cn(s <= stars ? "text-amber-400 fill-amber-400" : "text-slate-300 dark:text-slate-700")}
-                                      />
-                                    ))}
-                                  </div>
-                                  <span className="text-[10px] font-black text-violet-500 w-10 text-right">{score}%</span>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-
+                      <div className="flex border-b border-border/20 pb-2 gap-4 items-center">
+                        <button
+                          onClick={() => setSelectedStudentTab('mastery')}
+                          className={cn(
+                            "text-xs font-black pb-2 px-1 relative -mb-2 border-b-2 transition-all cursor-pointer",
+                            selectedStudentTab === 'mastery'
+                              ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                              : "border-transparent text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          🎯 Điểm số Mastery
+                        </button>
+                        <button
+                          onClick={() => setSelectedStudentTab('exams')}
+                          className={cn(
+                            "text-xs font-black pb-2 px-1 relative -mb-2 border-b-2 transition-all cursor-pointer",
+                            selectedStudentTab === 'exams'
+                              ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                              : "border-transparent text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          📝 Lịch sử Thi thử ({studentExams.length})
+                        </button>
                       </div>
+
+                      {selectedStudentTab === 'mastery' && (
+                        <div className="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+                          {/* Toán */}
+                          <div className="space-y-2.5">
+                            <h5 className="text-[10px] font-extrabold uppercase text-indigo-500">📐 Chuyên đề Toán học</h5>
+                            {mathQuestionTypes.map((type) => {
+                              const score = studentProgress.masteryLevels[type.id] ?? 0;
+                              const stars = getStarsFromScore(score);
+
+                              return (
+                                <div key={type.id} className="flex items-center justify-between gap-4 p-2.5 border border-border/30 bg-slate-50/30 dark:bg-slate-900/5 rounded-lg text-xs">
+                                  <span className="font-extrabold text-foreground flex-1 truncate">{type.name}</span>
+                                  <div className="flex items-center gap-3 shrink-0">
+                                    <div className="flex gap-0.5">
+                                      {[1, 2, 3].map((s) => (
+                                        <Star
+                                          key={s}
+                                          size={9}
+                                          className={cn(s <= stars ? "text-amber-400 fill-amber-400" : "text-slate-300 dark:text-slate-700")}
+                                        />
+                                      ))}
+                                    </div>
+                                    <span className="text-[10px] font-black text-indigo-500 w-10 text-right">{score}%</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Tiếng Anh */}
+                          <div className="space-y-2.5 pt-2">
+                            <h5 className="text-[10px] font-extrabold uppercase text-violet-500">🗣️ Chuyên đề Tiếng Anh</h5>
+                            {englishQuestionTypes.map((type) => {
+                              const score = studentProgress.masteryLevels[type.id] ?? 0;
+                              const stars = getStarsFromScore(score);
+
+                              return (
+                                <div key={type.id} className="flex items-center justify-between gap-4 p-2.5 border border-border/30 bg-slate-50/30 dark:bg-slate-900/5 rounded-lg text-xs">
+                                  <span className="font-extrabold text-foreground flex-1 truncate">{type.name}</span>
+                                  <div className="flex items-center gap-3 shrink-0">
+                                    <div className="flex gap-0.5">
+                                      {[1, 2, 3].map((s) => (
+                                        <Star
+                                          key={s}
+                                          size={9}
+                                          className={cn(s <= stars ? "text-amber-400 fill-amber-400" : "text-slate-300 dark:text-slate-700")}
+                                        />
+                                      ))}
+                                    </div>
+                                    <span className="text-[10px] font-black text-violet-500 w-10 text-right">{score}%</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedStudentTab === 'exams' && (
+                        <div className="space-y-3">
+                          {studentExams.length === 0 ? (
+                            <div className="py-8 text-center text-xs text-muted-foreground font-semibold bg-slate-50/50 dark:bg-slate-900/5 rounded-xl border border-dashed border-border/50">
+                              Học sinh này chưa tham gia đề thi thử nào.
+                            </div>
+                          ) : (
+                            <div className="space-y-2.5 max-h-[350px] overflow-y-auto pr-1">
+                              {studentExams.map((exam) => {
+                                const isMath = exam.examId.includes('math');
+                                const examDate = new Date(exam.completedAt).toLocaleDateString('vi-VN', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                });
+                                const isSelectedExam = selectedExamForDetail?.examId === exam.examId;
+
+                                // Tính toán phân tích dạng bài thi thử này
+                                const getExamAnalysisForTeacher = (ex: ExamResult) => {
+                                  const typeAnalysis: Record<string, { name: string; total: number; correct: number }> = {};
+
+                                  Object.entries(ex.attempts).forEach(([qId, attempt]) => {
+                                    const q = mathQuestions.find(q => q.id === qId) || englishQuestions.find(q => q.id === qId);
+                                    if (!q) return;
+
+                                    const qTypeName = q.id.startsWith('math')
+                                      ? mathQuestionTypes.find(t => t.id === q.questionTypeId)?.name
+                                      : englishQuestionTypes.find(t => t.id === q.questionTypeId)?.name;
+
+                                    if (!qTypeName) return;
+
+                                    if (!typeAnalysis[q.questionTypeId]) {
+                                      typeAnalysis[q.questionTypeId] = {
+                                        name: qTypeName,
+                                        total: 0,
+                                        correct: 0
+                                      };
+                                    }
+
+                                    typeAnalysis[q.questionTypeId].total++;
+                                    if (attempt.isCorrect) {
+                                      typeAnalysis[q.questionTypeId].correct++;
+                                    }
+                                  });
+
+                                  return Object.entries(typeAnalysis).map(([typeId, data]) => ({
+                                    typeId,
+                                    name: data.name,
+                                    total: data.total,
+                                    correct: data.correct,
+                                    percent: Math.round((data.correct / data.total) * 100)
+                                  }));
+                                };
+
+                                return (
+                                  <div key={exam.examId} className="border border-border/45 bg-slate-50/20 dark:bg-slate-900/10 rounded-xl p-3.5 space-y-3.5 transition-all hover:border-emerald-500/25">
+                                    <div className="flex items-center justify-between gap-4">
+                                      <div className="space-y-1">
+                                        <div className="flex items-center gap-1.5">
+                                          <span className={cn(
+                                            "text-[9px] font-bold px-1.5 py-0.5 rounded",
+                                            isMath ? "bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400" : "bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400"
+                                          )}>
+                                            {isMath ? '📐 Toán học' : '🗣️ Tiếng Anh'}
+                                          </span>
+                                          <span className="text-[10px] text-muted-foreground font-semibold">{examDate}</span>
+                                        </div>
+                                        <h6 className="font-extrabold text-xs text-foreground mt-0.5">
+                                          Đề thi thử {isMath ? 'Toán học Vào 10' : 'Tiếng Anh Vào 10'}
+                                        </h6>
+                                      </div>
+
+                                      <div className="text-right shrink-0 flex items-center gap-3">
+                                        <div>
+                                          <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">{exam.score}</span>
+                                          <span className="text-[9px] text-muted-foreground font-bold"> / 10đ</span>
+                                        </div>
+                                        <Button
+                                          onClick={() => setSelectedExamForDetail(isSelectedExam ? null : exam)}
+                                          variant="outline"
+                                          size="sm"
+                                          className="h-6 text-[9px] font-extrabold px-2.5 rounded-lg hover:border-emerald-500/30 hover:bg-emerald-500/5 active:scale-[0.98] transition-all cursor-pointer"
+                                        >
+                                          {isSelectedExam ? 'Ẩn chi tiết' : 'Xem chi tiết'}
+                                        </Button>
+                                      </div>
+                                    </div>
+
+                                    {isSelectedExam && (
+                                      <div className="mt-3 pt-3 border-t border-border/20 space-y-4 animate-fade-in text-xs font-semibold text-muted-foreground">
+
+                                        {/* Nhận xét năng lực */}
+                                        <div className="p-3 bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 rounded-xl space-y-1">
+                                          <span className="font-extrabold text-foreground flex items-center gap-1">⚡ Nhận xét năng lực:</span>
+                                          {exam.score >= 8.0 ? (
+                                            <p className="text-emerald-600 dark:text-emerald-400 text-[11px]">Xuất sắc! Năng lực hiện tại của học sinh đã rất vững chắc.</p>
+                                          ) : exam.score >= 5.0 ? (
+                                            <p className="text-amber-600 dark:text-amber-400 text-[11px]">Khá tốt! Đạt mức trung bình khá nhưng vẫn còn một số lỗ hổng kiến thức.</p>
+                                          ) : (
+                                            <p className="text-rose-600 dark:text-rose-400 text-[11px]">Cần cố gắng nhiều hơn! Học sinh bị hổng nhiều dạng bài cốt lõi, cần bồi dưỡng thêm.</p>
+                                          )}
+                                        </div>
+
+                                        {/* Phân tích theo chuyên đề */}
+                                        <div className="space-y-2">
+                                          <span className="font-extrabold text-foreground flex items-center gap-1.5">📊 Phân tích chi tiết theo dạng bài:</span>
+                                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            {getExamAnalysisForTeacher(exam).map((item) => {
+                                              const isWeak = item.percent < 60;
+                                              return (
+                                                <div key={item.typeId} className={cn(
+                                                  "p-2.5 rounded-lg border flex flex-col justify-between gap-1 bg-card",
+                                                  isWeak ? "border-red-500/20" : "border-border/60"
+                                                )}>
+                                                  <div className="flex items-center justify-between gap-2">
+                                                    <span className="font-bold text-[10px] text-foreground truncate">{item.name}</span>
+                                                    {isWeak && (
+                                                      <span className="text-[7px] bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 font-bold px-1 py-0.2 rounded uppercase">Yếu</span>
+                                                    )}
+                                                  </div>
+                                                  <span className="text-[9px] text-muted-foreground">Tỷ lệ đúng: {item.correct}/{item.total} ({item.percent}%)</span>
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+
+                                        {/* Chi tiết từng câu hỏi */}
+                                        <div className="space-y-2">
+                                          <span className="font-extrabold text-foreground flex items-center gap-1.5">📝 Chi tiết câu trả lời học sinh:</span>
+                                          <div className="space-y-2.5 max-h-[250px] overflow-y-auto pr-1">
+                                            {Object.entries(exam.attempts).map(([qId, att], eIdx) => {
+                                              const q = mathQuestions.find(question => question.id === qId) || englishQuestions.find(question => question.id === qId);
+                                              if (!q) return null;
+
+                                              return (
+                                                <div key={qId} className="p-3 rounded-lg border border-border/50 bg-card space-y-1.5">
+                                                  <div className="flex items-center justify-between gap-2">
+                                                    <span className="text-[9px] font-bold text-muted-foreground">Câu {eIdx + 1}</span>
+                                                    <span className={cn(
+                                                      "text-[8px] font-bold px-1.5 py-0.2 rounded uppercase",
+                                                      att.isCorrect ? "bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600" : "bg-rose-100 dark:bg-rose-950/30 text-rose-600"
+                                                    )}>
+                                                      {att.isCorrect ? 'Đúng' : 'Sai'}
+                                                    </span>
+                                                  </div>
+                                                  <div className="text-[10px] text-foreground/80 leading-relaxed font-medium bg-slate-50/20 p-2 rounded border border-border/10">
+                                                    <LatexRenderer text={q.content} />
+                                                  </div>
+                                                  <div className="grid grid-cols-2 gap-2 text-[9px] font-bold">
+                                                    <div>
+                                                      <span className="text-muted-foreground block">BÀI LÀM:</span>
+                                                      <span className={att.isCorrect ? "text-emerald-600" : "text-rose-600"}>{att.userAnswer || '(Không có)'}</span>
+                                                    </div>
+                                                    <div>
+                                                      <span className="text-muted-foreground block">ĐÁP ÁN ĐÚNG:</span>
+                                                      <span className="text-indigo-600 dark:text-indigo-400">
+                                                        {formatAnswerForDisplay(q, q.answerSchema ? (q.correctFinalAnswer ?? {}) : q.correctAnswer)}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                   </CardContent>
