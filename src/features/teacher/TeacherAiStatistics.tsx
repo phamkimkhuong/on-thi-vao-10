@@ -22,11 +22,16 @@ import {
 
 const getModelInfo = (log: any) => {
   if (log.model) {
-    const provider = log.provider || (log.model.startsWith('kira') ? 'kira' : log.model.startsWith('qwen') || log.model.includes('gpt-oss') ? 'groq' : 'gemini');
+    const provider = log.provider || (
+      log.model.startsWith('kira') ? 'kira' : 
+      log.model.startsWith('qwen') || log.model.includes('gpt-oss') ? 'groq' : 
+      log.model.startsWith('mistral') || log.model.startsWith('codestral') || log.model.startsWith('ministral') ? 'mistral' :
+      'gemini'
+    );
     return {
       model: log.model,
       provider,
-      providerLabel: provider === 'kira' ? 'Kira AI' : provider === 'groq' ? 'Groq AI' : 'Google Gemini'
+      providerLabel: provider === 'kira' ? 'Kira AI' : provider === 'groq' ? 'Groq AI' : provider === 'mistral' ? 'Mistral AI' : 'Google Gemini'
     };
   }
   // Default for older logs
@@ -430,6 +435,8 @@ export const TeacherAiStatistics: React.FC = () => {
                             ? "bg-amber-500/10 text-amber-600 border border-amber-500/20 animate-pulse" 
                             : modelInfo.provider === 'groq'
                             ? "bg-indigo-500/10 text-indigo-600 border border-indigo-500/20"
+                            : modelInfo.provider === 'mistral'
+                            ? "bg-rose-500/10 text-rose-600 border border-rose-500/20"
                             : "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                         )}>
                           {modelInfo.model}

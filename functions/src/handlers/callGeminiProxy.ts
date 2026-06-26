@@ -9,377 +9,9 @@ import {
   FALLBACK_MODELS,
 } from "../services/gemini.js";
 import { createHash } from "crypto";
-
-async function callKiraAiApi(
-  apiKey: string,
-  modelName: string,
-  finalContents: ChatContent[] | undefined,
-  finalSystemInstruction: string,
-  temperature: number | undefined,
-  responseMimeType: string | undefined,
-  image: { mimeType: string; data: string } | undefined
-): Promise<{ text: string; usage: any }> {
-  const messages: Array<{ role: string; content: any }> = [];
-
-  // 1. System instruction
-  if (finalSystemInstruction) {
-    messages.push({
-      role: "system",
-      content: finalSystemInstruction
-    });
-  }
-
-  // 2. Chat history (contents)
-  if (finalContents && finalContents.length > 0) {
-    finalContents.forEach(c => {
-      const role = c.role === "model" ? "assistant" : "user";
-      const textParts = c.parts.filter(p => p.text).map(p => p.text).join("\n");
-      const imageParts = c.parts.filter(p => p.inlineData);
-      
-      if (imageParts.length > 0) {
-        const contentArray: any[] = [];
-        if (textParts) {
-          contentArray.push({ type: "text", text: textParts });
-        }
-        imageParts.forEach(img => {
-          contentArray.push({
-            type: "image_url",
-            image_url: {
-              url: `data:${img.inlineData!.mimeType};base64,${img.inlineData!.data}`
-            }
-          });
-        });
-        messages.push({
-          role,
-          content: contentArray
-        });
-      } else {
-        messages.push({
-          role,
-          content: textParts
-        });
-      }
-    });
-  }
-
-  // 3. Fallback for direct grading (only system message + image)
-  if (messages.length === 1 && messages[0].role === "system" && image) {
-    messages.push({
-      role: "user",
-      content: [
-        { type: "text", text: "Hãy chấm bài làm này theo các chỉ dẫn hệ thống ở trên." },
-        {
-          type: "image_url",
-          image_url: {
-            url: `data:${image.mimeType};base64,${image.data}`
-          }
-        }
-      ]
-    });
-  }
-
-  const payload: any = {
-    model: modelName,
-    messages,
-    temperature: temperature ?? 0.7,
-  };
-
-  const isJsonRequired = responseMimeType === "application/json" || !responseMimeType;
-  if (isJsonRequired) {
-    payload.response_format = { type: "json_object" };
-  }
-
-  const response = await fetch("https://kiraai.vn/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Kira AI API returned ${response.status}: ${errText}`);
-  }
-
-  const data = (await response.json()) as any;
-  const text = data?.choices?.[0]?.message?.content;
-  if (!text) {
-    throw new Error("Empty response from Kira AI API");
-  }
-
-  return {
-    text,
-    usage: {
-      promptTokens: data.usage?.prompt_tokens || 0,
-      candidatesTokens: data.usage?.completion_tokens || 0,
-      totalTokens: data.usage?.total_tokens || 0
-    }
-  };
-}
-
-async function callGroqAiApi(
-  apiKey: string,
-  modelName: string,
-  finalContents: ChatContent[] | undefined,
-  finalSystemInstruction: string,
-  temperature: number | undefined,
-  responseMimeType: string | undefined,
-  image: { mimeType: string; data: string } | undefined
-): Promise<{ text: string; usage: any }> {
-  const messages: Array<{ role: string; content: any }> = [];
-
-  // 1. System instruction
-  if (finalSystemInstruction) {
-    messages.push({
-      role: "system",
-      content: finalSystemInstruction
-    });
-  }
-
-  // 2. Chat history (contents)
-  if (finalContents && finalContents.length > 0) {
-    finalContents.forEach(c => {
-      const role = c.role === "model" ? "assistant" : "user";
-      const textParts = c.parts.filter(p => p.text).map(p => p.text).join("\n");
-      const imageParts = c.parts.filter(p => p.inlineData);
-      
-      if (imageParts.length > 0) {
-        const contentArray: any[] = [];
-        if (textParts) {
-          contentArray.push({ type: "text", text: textParts });
-        }
-        imageParts.forEach(img => {
-          contentArray.push({
-            type: "image_url",
-            image_url: {
-              url: `data:${img.inlineData!.mimeType};base64,${img.inlineData!.data}`
-            }
-          });
-        });
-        messages.push({
-          role,
-          content: contentArray
-        });
-      } else {
-        messages.push({
-          role,
-          content: textParts
-        });
-      }
-    });
-  }
-
-  // 3. Fallback for direct grading (only system message + image)
-  if (messages.length === 1 && messages[0].role === "system" && image) {
-    messages.push({
-      role: "user",
-      content: [
-        { type: "text", text: "Hãy chấm bài làm này theo các chỉ dẫn hệ thống ở trên." },
-        {
-          type: "image_url",
-          image_url: {
-            url: `data:${image.mimeType};base64,${image.data}`
-          }
-        }
-      ]
-    });
-  }
-
-  const payload: any = {
-    model: modelName,
-    messages,
-    temperature: temperature ?? 0.7,
-  };
-
-  // Cấu hình mở khóa thinking và tăng mức độ suy nghĩ theo yêu cầu của user
-  if (modelName.startsWith("qwen/qwen3.6")) {
-    payload.reasoning_effort = "default";
-  } else if (modelName.startsWith("openai/gpt-oss")) {
-    payload.reasoning = { effort: "high" };
-  }
-
-  const isJsonRequired = responseMimeType === "application/json" || !responseMimeType;
-  if (isJsonRequired) {
-    payload.response_format = { type: "json_object" };
-  }
-
-  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Groq AI API returned ${response.status}: ${errText}`);
-  }
-
-  const data = (await response.json()) as any;
-  const text = data?.choices?.[0]?.message?.content;
-  if (!text) {
-    throw new Error("Empty response from Groq AI API");
-  }
-
-  return {
-    text,
-    usage: {
-      promptTokens: data.usage?.prompt_tokens || 0,
-      candidatesTokens: data.usage?.completion_tokens || 0,
-      totalTokens: data.usage?.total_tokens || 0
-    }
-  };
-}
-
-/**
- * Xác định cấp độ gợi ý động (Dynamic Scaffolding Level) dựa trên số lượt trao đổi trong lịch sử chat.
- * - Cấp 1 (Khơi gợi khái niệm): 0-2 lượt trao đổi (mặc định)
- * - Cấp 2 (Gợi ý cấu trúc): 3-4 lượt trao đổi
- * - Cấp 3 (Chỉ điểm chi tiết): ≥5 lượt trao đổi
- */
-function determineScaffoldingLevel(contents?: ChatContent[]): number {
-  if (!contents || contents.length === 0) return 1;
-
-  // Đếm số lượt trao đổi (user→model pairs)
-  let rounds = 0;
-  for (let i = 0; i < contents.length; i++) {
-    if (contents[i].role === "user") {
-      rounds++;
-    }
-  }
-
-  // Trừ đi 1 vì lượt hiện tại chưa được AI trả lời
-  const completedRounds = Math.max(0, rounds - 1);
-
-  if (completedRounds >= 5) return 3;
-  if (completedRounds >= 3) return 2;
-  return 1;
-}
-
-/**
- * Tạo đoạn prompt hướng dẫn AI tuân thủ cấp độ gợi ý tương ứng.
- */
-function getScaffoldingInstruction(level: number, subjectId: string): string {
-  const isMath = subjectId === "math";
-
-  const levelDescriptions: { [key: number]: string } = {
-    1: isMath
-      ? `[CẤP ĐỘ GỢI Ý: 1 - KHƠI GỢI KHÁI NIỆM]
-Học sinh mới bắt đầu trao đổi. Hãy gợi ý ở mức độ tổng quát nhất:
-- Chỉ hỏi về công thức, định lý tổng quát liên quan (ví dụ: "Muốn tính diện tích tam giác ta cần biết các đại lượng nào?").
-- KHÔNG chỉ ra bước giải cụ thể. Chỉ gợi mở hướng suy nghĩ.
-- Khuyến khích học sinh nhớ lại kiến thức nền tảng.`
-      : `[CẤP ĐỘ GỢI Ý: 1 - KHƠI GỢI KHÁI NIỆM]
-Học sinh mới bắt đầu trao đổi. Hãy gợi ý ở mức độ tổng quát nhất:
-- Chỉ hỏi về quy tắc ngữ pháp tổng quát (ví dụ: "Em nhớ cấu trúc thì hiện tại hoàn thành có dạng gì không?").
-- KHÔNG chỉ ra đáp án hay sửa lỗi cụ thể. Chỉ gợi mở hướng suy nghĩ.
-- Khuyến khích học sinh nhớ lại kiến thức nền tảng.`,
-
-    2: isMath
-      ? `[CẤP ĐỘ GỢI Ý: 2 - GỢI Ý CẤU TRÚC BIẾN ĐỔI]
-Học sinh đã trao đổi nhiều lượt mà chưa giải được. Hãy tăng mức hỗ trợ:
-- Hướng dẫn hướng đi cụ thể hơn (ví dụ: "Thử nhóm các hạng tử chứa $x$ chung lại xem sao nhé").
-- Gợi ý bước biến đổi tiếp theo nhưng KHÔNG làm thay.
-- Có thể chỉ ra phương pháp giải (ví dụ: "Bài này nên dùng phương pháp đặt ẩn phụ").`
-      : `[CẤP ĐỘ GỢI Ý: 2 - GỢI Ý CẤU TRÚC]
-Học sinh đã trao đổi nhiều lượt mà chưa giải được. Hãy tăng mức hỗ trợ:
-- Hướng dẫn cấu trúc cụ thể hơn (ví dụ: "Câu này cần dùng mệnh đề quan hệ rút gọn, em thử bỏ 'who' và chuyển động từ sang dạng V-ing xem").
-- Gợi ý dạng ngữ pháp cần dùng nhưng KHÔNG cho đáp án hoàn chỉnh.
-- Có thể đưa ví dụ tương tự để học sinh liên hệ.`,
-
-    3: isMath
-      ? `[CẤP ĐỘ GỢI Ý: 3 - CHỈ ĐIỂM CHI TIẾT]
-Học sinh đã gặp khó khăn kéo dài (≥5 lượt trao đổi). Hãy hỗ trợ tối đa:
-- Chỉ ra lỗi sai số học cụ thể (ví dụ: "Em xem lại phép tính $2 \\times (-3)$ ở dòng thứ 2 xem đã đúng dấu chưa").
-- Có thể giải mẫu 1 bước trung gian để học sinh bắt chước làm bước tiếp.
-- Vẫn giữ tinh thần Socratic nhưng cho phép "mở khoá" nhiều hơn để học sinh không bị bế tắc quá lâu.`
-      : `[CẤP ĐỘ GỢI Ý: 3 - CHỈ ĐIỂM CHI TIẾT]
-Học sinh đã gặp khó khăn kéo dài (≥5 lượt trao đổi). Hãy hỗ trợ tối đa:
-- Chỉ ra lỗi sai cụ thể trong câu trả lời (ví dụ: "Ở đây em dùng 'since' thì động từ phải chia thì hiện tại hoàn thành, không phải quá khứ đơn nhé").
-- Có thể cho ví dụ đáp án đúng của một câu tương tự để học sinh đối chiếu.
-- Vẫn giữ tinh thần Socratic nhưng cho phép "mở khoá" nhiều hơn để học sinh không bị bế tắc quá lâu.`,
-  };
-
-  return "\n\n" + (levelDescriptions[level] || levelDescriptions[1]);
-}
-
-function isRelevantToTopic(item: string, topicName: string): boolean {
-  if (!topicName) return true; // Nếu không có tên chuyên đề, giữ lại tất cả
-  
-  const cleanStr = (s: string) => {
-    return removeAccents(s.toLowerCase())
-      .replace(/[^\w\s]/g, " ")
-      .split(/\s+/)
-      .filter(w => w.length > 2);
-  };
-
-  const topicWords = cleanStr(topicName);
-  const itemWords = cleanStr(item);
-
-  // 1. Kiểm tra từ trùng nhau trực tiếp
-  const hasDirectOverlap = itemWords.some(w => topicWords.includes(w));
-  if (hasDirectOverlap) return true;
-
-  // 2. Tra cứu chéo từ đồng nghĩa/liên quan
-  const topicNormalized = removeAccents(topicName.toLowerCase());
-  const relatedMap: { [key: string]: string[] } = {
-    "vi et": ["vi et", "viét", "delta", "nghiem", "he thuc", "bac hai"],
-    "can thuc": ["can", "rut gon", "bieu thuc", "mau thuc", "hang dang thuc"],
-    "dai so": ["can", "rut gon", "bieu thuc"],
-    "he phuong trinh": ["he", "thuc te", "chuyen dong", "nang suat", "cong viec"],
-    "toan thuc te": ["he", "thuc te", "chuyen dong", "nang suat", "cong viec", "phan tram"],
-    "ham so": ["ham", "parabol", "duong thang", "cat", "giao diem", "toa do", "tiep xuc"],
-    "do thi": ["ham", "parabol", "duong thang", "cat", "giao diem", "toa do", "tiep xuc"],
-    "duong tron": ["tron", "tiep tuyen", "noi tiep", "goc", "cung", "day", "tam giac"],
-    "hinh hoc": ["tron", "tiep tuyen", "noi tiep", "goc", "cung", "day", "tam giac"],
-    "tu vung": ["tu vung", "vocabulary", "word", "nghia"],
-    "ngu phap": ["ngu phap", "grammar", "thi", "tense", "verb", "dong tu", "tu loai"],
-    "viet": ["viet", "bien doi", "rewrite", "dong", "indirect", "gian tiep", "conditional", "dieu kien", "wish", "although", "despite"]
-  };
-
-  for (const [key, relatedWords] of Object.entries(relatedMap)) {
-    if (topicNormalized.includes(key)) {
-      const itemNormalized = removeAccents(item.toLowerCase());
-      const hasRelated = relatedWords.some(word => itemNormalized.includes(word));
-      if (hasRelated) return true;
-    }
-  }
-
-  return false;
-}
-
-function shouldRewriteQuery(query: string, chatHistory?: ChatContent[]): boolean {
-  if (!chatHistory || chatHistory.length === 0) {
-    return false;
-  }
-
-  const cleanQuery = query.toLowerCase().trim();
-  
-  // Các từ khóa chỉ điểm ngữ cảnh phụ thuộc (Việt & Anh)
-  const contextIndicators = [
-    "tại sao", "vì sao", "sao lại", "thế nào", "như vậy", "này", "kia", "đó", 
-    "chỗ", "dòng", "bước", "câu này", "câu đó", "đáp án", "giải thích thêm", 
-    "rõ hơn", "chi tiết hơn", "phần này", "đoạn", "hướng dẫn tiếp", "lại",
-    "why", "how so", "it", "this", "that", "them", "those", "explain more",
-    "why is", "why does", "what about", "again", "then", "step", "đối chiếu"
-  ];
-
-  const hasIndicator = contextIndicators.some(indicator => cleanQuery.includes(indicator));
-  if (hasIndicator) {
-    return true;
-  }
-
-  // Nếu câu hỏi quá ngắn, rất có thể đang phụ thuộc ngữ cảnh trò chuyện trước đó
-  if (cleanQuery.length < 15) {
-    return true;
-  }
-
-  return false;
-}
+import { callKiraAiApi, callGroqAiApi, callMistralAiApi } from "../services/aiProviders.js";
+import { determineScaffoldingLevel, getScaffoldingInstruction } from "../services/scaffolding.js";
+import { isRelevantToTopic, shouldRewriteQuery } from "../services/relevance.js";
 
 export const callGeminiProxy = onCall({
   cors: true,
@@ -992,6 +624,8 @@ Chú ý:
     }
   }
 
+  let geminiSuccess = false;
+
   // Nếu Kira AI và Groq AI không chạy được hoặc không cấu hình key, ta chạy fallback Gemini
   if (!kiraSuccess && !groqSuccess) {
     console.log("[Fallback] Đang chuyển sang gọi các model Gemini...");
@@ -1147,10 +781,48 @@ Chú ý:
         successUsage = data.usageMetadata;
         selectedModel = model;
         selectedProvider = "gemini";
+        geminiSuccess = true;
         console.log(`Gọi thành công model: ${model}`);
         break; // Gọi thành công, thoát khỏi vòng lặp thử model
       } catch (err) {
         console.error(`Lỗi kết nối khi gọi model ${model}:`, err);
+        lastError = err;
+      }
+    }
+  }
+
+  const mistralApiKey = process.env.MISTRAL_API_KEY;
+
+  // Nếu Kira, Groq và Gemini đều thất bại và có Mistral API key, ta gọi thử Mistral cuối cùng
+  if (!kiraSuccess && !groqSuccess && !geminiSuccess && mistralApiKey) {
+    const mistralModels = ["mistral-medium-latest", "mistral-small-2603"];
+    for (const mModel of mistralModels) {
+      try {
+        console.log(`[Mistral AI] Thử kết nối model: ${mModel}...`);
+        const result = await callMistralAiApi(
+          mistralApiKey,
+          mModel,
+          finalContents,
+          finalSystemInstruction,
+          temperature,
+          responseMimeType,
+          image
+        );
+        responseText = result.text;
+        
+        successUsage = {
+          promptTokenCount: result.usage?.promptTokens || 0,
+          candidatesTokenCount: result.usage?.candidatesTokens || 0,
+          cachedContentTokenCount: 0,
+          totalTokenCount: result.usage?.totalTokens || 0
+        };
+        
+        selectedModel = mModel;
+        selectedProvider = "mistral";
+        console.log(`[Mistral AI] Thành công sử dụng model: ${mModel}`);
+        break;
+      } catch (err: any) {
+        console.warn(`[Mistral AI] Thử model ${mModel} thất bại:`, err.message || err);
         lastError = err;
       }
     }
