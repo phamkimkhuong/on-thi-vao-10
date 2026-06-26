@@ -191,7 +191,7 @@ export const callGeminiProxy = onCall({
               totalTokens: rewriteResult.usageMetadata.totalTokenCount || 0,
               timestamp: new Date(),
               type: "rewrite",
-              model: "gemini-1.5-flash",
+              model: "gemini-3.1-flash-lite",
               provider: "gemini"
             }).catch((err) => {
               console.error("Lỗi khi ghi log rewriteQuery:", err);

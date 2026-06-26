@@ -21,24 +21,29 @@ import {
 } from 'recharts';
 
 const getModelInfo = (log: any) => {
-  if (log.model) {
+  let modelName = log.model;
+  if (modelName === 'gemini-1.5-flash') {
+    modelName = 'gemini-3.1-flash-lite';
+  }
+
+  if (modelName) {
     const provider = log.provider || (
-      log.model.startsWith('kira') ? 'kira' : 
-      log.model.startsWith('qwen') || log.model.includes('gpt-oss') ? 'groq' : 
-      log.model.startsWith('mistral') || log.model.startsWith('codestral') || log.model.startsWith('ministral') ? 'mistral' :
+      modelName.startsWith('kira') ? 'kira' : 
+      modelName.startsWith('qwen') || modelName.includes('gpt-oss') ? 'groq' : 
+      modelName.startsWith('mistral') || modelName.startsWith('codestral') || modelName.startsWith('ministral') ? 'mistral' :
       'gemini'
     );
     return {
-      model: log.model,
+      model: modelName,
       provider,
       providerLabel: provider === 'kira' ? 'Kira AI' : provider === 'groq' ? 'Groq AI' : provider === 'mistral' ? 'Mistral AI' : 'Google Gemini'
     };
   }
   // Default for older logs
   if (log.type === 'diagnose' || log.type === 'consolidate' || log.type === 'rewrite' || log.type === 'summary') {
-    return { model: 'gemini-1.5-flash', provider: 'gemini', providerLabel: 'Google Gemini' };
+    return { model: 'gemini-3.1-flash-lite', provider: 'gemini', providerLabel: 'Google Gemini' };
   }
-  return { model: 'gemini-1.5-flash (cũ)', provider: 'gemini', providerLabel: 'Google Gemini' };
+  return { model: 'gemini-3.1-flash-lite (cũ)', provider: 'gemini', providerLabel: 'Google Gemini' };
 };
 
 export const TeacherAiStatistics: React.FC = () => {
