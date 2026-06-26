@@ -119,6 +119,122 @@ async function callKiraAiApi(
   };
 }
 
+async function callGroqAiApi(
+  apiKey: string,
+  modelName: string,
+  finalContents: ChatContent[] | undefined,
+  finalSystemInstruction: string,
+  temperature: number | undefined,
+  responseMimeType: string | undefined,
+  image: { mimeType: string; data: string } | undefined
+): Promise<{ text: string; usage: any }> {
+  const messages: Array<{ role: string; content: any }> = [];
+
+  // 1. System instruction
+  if (finalSystemInstruction) {
+    messages.push({
+      role: "system",
+      content: finalSystemInstruction
+    });
+  }
+
+  // 2. Chat history (contents)
+  if (finalContents && finalContents.length > 0) {
+    finalContents.forEach(c => {
+      const role = c.role === "model" ? "assistant" : "user";
+      const textParts = c.parts.filter(p => p.text).map(p => p.text).join("\n");
+      const imageParts = c.parts.filter(p => p.inlineData);
+      
+      if (imageParts.length > 0) {
+        const contentArray: any[] = [];
+        if (textParts) {
+          contentArray.push({ type: "text", text: textParts });
+        }
+        imageParts.forEach(img => {
+          contentArray.push({
+            type: "image_url",
+            image_url: {
+              url: `data:${img.inlineData!.mimeType};base64,${img.inlineData!.data}`
+            }
+          });
+        });
+        messages.push({
+          role,
+          content: contentArray
+        });
+      } else {
+        messages.push({
+          role,
+          content: textParts
+        });
+      }
+    });
+  }
+
+  // 3. Fallback for direct grading (only system message + image)
+  if (messages.length === 1 && messages[0].role === "system" && image) {
+    messages.push({
+      role: "user",
+      content: [
+        { type: "text", text: "Hãy chấm bài làm này theo các chỉ dẫn hệ thống ở trên." },
+        {
+          type: "image_url",
+          image_url: {
+            url: `data:${image.mimeType};base64,${image.data}`
+          }
+        }
+      ]
+    });
+  }
+
+  const payload: any = {
+    model: modelName,
+    messages,
+    temperature: temperature ?? 0.7,
+  };
+
+  // Cấu hình mở khóa thinking và tăng mức độ suy nghĩ theo yêu cầu của user
+  if (modelName.startsWith("qwen/qwen3.6")) {
+    payload.reasoning_effort = "default";
+  } else if (modelName.startsWith("openai/gpt-oss")) {
+    payload.reasoning = { effort: "high" };
+  }
+
+  const isJsonRequired = responseMimeType === "application/json" || !responseMimeType;
+  if (isJsonRequired) {
+    payload.response_format = { type: "json_object" };
+  }
+
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Groq AI API returned ${response.status}: ${errText}`);
+  }
+
+  const data = (await response.json()) as any;
+  const text = data?.choices?.[0]?.message?.content;
+  if (!text) {
+    throw new Error("Empty response from Groq AI API");
+  }
+
+  return {
+    text,
+    usage: {
+      promptTokens: data.usage?.prompt_tokens || 0,
+      candidatesTokens: data.usage?.completion_tokens || 0,
+      totalTokens: data.usage?.total_tokens || 0
+    }
+  };
+}
+
 /**
  * Xác định cấp độ gợi ý động (Dynamic Scaffolding Level) dựa trên số lượt trao đổi trong lịch sử chat.
  * - Cấp 1 (Khơi gợi khái niệm): 0-2 lượt trao đổi (mặc định)
@@ -837,8 +953,47 @@ Chú ý:
     }
   }
 
-  // Nếu Kira AI không chạy được hoặc không cấu hình key, ta chạy fallback Gemini
-  if (!kiraSuccess) {
+  const groqApiKey = process.env.GROQ_API_KEY;
+  let groqSuccess = false;
+
+  // Nếu Kira thất bại và có Groq API key, ta chạy qua các model của Groq
+  if (!kiraSuccess && groqApiKey) {
+    const groqModels = ["qwen/qwen3.6-27b", "openai/gpt-oss-120b", "openai/gpt-oss-20b"];
+    for (const gModel of groqModels) {
+      try {
+        console.log(`[Groq AI] Thử kết nối model: ${gModel}...`);
+        const result = await callGroqAiApi(
+          groqApiKey,
+          gModel,
+          finalContents,
+          finalSystemInstruction,
+          temperature,
+          responseMimeType,
+          image
+        );
+        responseText = result.text;
+        
+        successUsage = {
+          promptTokenCount: result.usage?.promptTokens || 0,
+          candidatesTokenCount: result.usage?.candidatesTokens || 0,
+          cachedContentTokenCount: 0,
+          totalTokenCount: result.usage?.totalTokens || 0
+        };
+        
+        selectedModel = gModel;
+        selectedProvider = "groq";
+        groqSuccess = true;
+        console.log(`[Groq AI] Thành công sử dụng model: ${gModel}`);
+        break;
+      } catch (err: any) {
+        console.warn(`[Groq AI] Thử model ${gModel} thất bại:`, err.message || err);
+        lastError = err;
+      }
+    }
+  }
+
+  // Nếu Kira AI và Groq AI không chạy được hoặc không cấu hình key, ta chạy fallback Gemini
+  if (!kiraSuccess && !groqSuccess) {
     console.log("[Fallback] Đang chuyển sang gọi các model Gemini...");
     // Chạy vòng lặp thử từng model
     for (const model of FALLBACK_MODELS) {

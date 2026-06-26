@@ -22,11 +22,11 @@ import {
 
 const getModelInfo = (log: any) => {
   if (log.model) {
-    const isKira = log.provider === 'kira' || log.model.startsWith('kira');
+    const provider = log.provider || (log.model.startsWith('kira') ? 'kira' : log.model.startsWith('qwen') || log.model.includes('gpt-oss') ? 'groq' : 'gemini');
     return {
       model: log.model,
-      provider: isKira ? 'kira' : 'gemini',
-      providerLabel: isKira ? 'Kira AI' : 'Google Gemini'
+      provider,
+      providerLabel: provider === 'kira' ? 'Kira AI' : provider === 'groq' ? 'Groq AI' : 'Google Gemini'
     };
   }
   // Default for older logs
@@ -428,6 +428,8 @@ export const TeacherAiStatistics: React.FC = () => {
                         <span className={cn("px-2 py-0.5 rounded text-[8px] font-bold inline-block", 
                           modelInfo.provider === 'kira' 
                             ? "bg-amber-500/10 text-amber-600 border border-amber-500/20 animate-pulse" 
+                            : modelInfo.provider === 'groq'
+                            ? "bg-indigo-500/10 text-indigo-600 border border-indigo-500/20"
                             : "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                         )}>
                           {modelInfo.model}
