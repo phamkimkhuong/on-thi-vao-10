@@ -193,6 +193,8 @@ Kết quả JSON:`;
         totalTokens: usage.totalTokenCount || 0,
         timestamp: new Date(),
         type: "diagnose",
+        model: "gemini-1.5-flash",
+        provider: "gemini"
       }).catch((err) => {
         console.error("Lỗi khi ghi log diagnose:", err);
       });
@@ -367,6 +369,8 @@ Kết quả JSON:`;
         totalTokens: usage.totalTokenCount || 0,
         timestamp: new Date(),
         type: "consolidate",
+        model: "gemini-1.5-flash",
+        provider: "gemini"
       }).catch((err) => {
         console.error("Lỗi khi ghi log consolidate:", err);
       });

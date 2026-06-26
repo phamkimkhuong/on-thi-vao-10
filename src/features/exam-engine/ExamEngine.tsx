@@ -60,7 +60,9 @@ export const ExamEngine: React.FC = () => {
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
 
   const [selectedExamId, setSelectedExamId] = useState<string>('');
-  const subjectExams = mockExamsList.filter(exam => exam.subjectId === selectedSubject);
+  const subjectExams = React.useMemo(() => {
+    return mockExamsList.filter(exam => exam.subjectId === selectedSubject);
+  }, [selectedSubject]);
 
   const [expandedSolutionId, setExpandedSolutionId] = useState<Record<string, boolean>>({});
   const [aiFeedback, setAiFeedback] = useState<Record<string, { isCorrect: boolean; score: number; feedback: string }>>({});
@@ -138,7 +140,7 @@ export const ExamEngine: React.FC = () => {
     } else {
       setSelectedExamId('');
     }
-  }, [selectedSubject]);
+  }, [selectedSubject, subjectExams]);
 
   const proofImagesByQuestionRef = React.useRef(proofImagesByQuestion);
   useEffect(() => {

@@ -10,6 +10,115 @@ import {
 } from "../services/gemini.js";
 import { createHash } from "crypto";
 
+async function callKiraAiApi(
+  apiKey: string,
+  modelName: string,
+  finalContents: ChatContent[] | undefined,
+  finalSystemInstruction: string,
+  temperature: number | undefined,
+  responseMimeType: string | undefined,
+  image: { mimeType: string; data: string } | undefined
+): Promise<{ text: string; usage: any }> {
+  const messages: Array<{ role: string; content: any }> = [];
+
+  // 1. System instruction
+  if (finalSystemInstruction) {
+    messages.push({
+      role: "system",
+      content: finalSystemInstruction
+    });
+  }
+
+  // 2. Chat history (contents)
+  if (finalContents && finalContents.length > 0) {
+    finalContents.forEach(c => {
+      const role = c.role === "model" ? "assistant" : "user";
+      const textParts = c.parts.filter(p => p.text).map(p => p.text).join("\n");
+      const imageParts = c.parts.filter(p => p.inlineData);
+      
+      if (imageParts.length > 0) {
+        const contentArray: any[] = [];
+        if (textParts) {
+          contentArray.push({ type: "text", text: textParts });
+        }
+        imageParts.forEach(img => {
+          contentArray.push({
+            type: "image_url",
+            image_url: {
+              url: `data:${img.inlineData!.mimeType};base64,${img.inlineData!.data}`
+            }
+          });
+        });
+        messages.push({
+          role,
+          content: contentArray
+        });
+      } else {
+        messages.push({
+          role,
+          content: textParts
+        });
+      }
+    });
+  }
+
+  // 3. Fallback for direct grading (only system message + image)
+  if (messages.length === 1 && messages[0].role === "system" && image) {
+    messages.push({
+      role: "user",
+      content: [
+        { type: "text", text: "Hãy chấm bài làm này theo các chỉ dẫn hệ thống ở trên." },
+        {
+          type: "image_url",
+          image_url: {
+            url: `data:${image.mimeType};base64,${image.data}`
+          }
+        }
+      ]
+    });
+  }
+
+  const payload: any = {
+    model: modelName,
+    messages,
+    temperature: temperature ?? 0.7,
+  };
+
+  const isJsonRequired = responseMimeType === "application/json" || !responseMimeType;
+  if (isJsonRequired) {
+    payload.response_format = { type: "json_object" };
+  }
+
+  const response = await fetch("https://kiraai.vn/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Kira AI API returned ${response.status}: ${errText}`);
+  }
+
+  const data = (await response.json()) as any;
+  const text = data?.choices?.[0]?.message?.content;
+  if (!text) {
+    throw new Error("Empty response from Kira AI API");
+  }
+
+  return {
+    text,
+    usage: {
+      promptTokens: data.usage?.prompt_tokens || 0,
+      candidatesTokens: data.usage?.completion_tokens || 0,
+      totalTokens: data.usage?.total_tokens || 0
+    }
+  };
+}
+
 /**
  * Xác định cấp độ gợi ý động (Dynamic Scaffolding Level) dựa trên số lượt trao đổi trong lịch sử chat.
  * - Cấp 1 (Khơi gợi khái niệm): 0-2 lượt trao đổi (mặc định)
@@ -334,6 +443,8 @@ export const callGeminiProxy = onCall({
               totalTokens: rewriteResult.usageMetadata.totalTokenCount || 0,
               timestamp: new Date(),
               type: "rewrite",
+              model: "gemini-1.5-flash",
+              provider: "gemini"
             }).catch((err) => {
               console.error("Lỗi khi ghi log rewriteQuery:", err);
             });
@@ -580,6 +691,8 @@ Câu tóm tắt duy nhất:`;
               totalTokens: summaryUsage.totalTokenCount || 0,
               timestamp: new Date(),
               type: "summary",
+              model: "gemini-3.1-flash-lite",
+              provider: "gemini"
             }).catch((err) => {
               console.error("Lỗi khi ghi log summary:", err);
             });
@@ -680,224 +793,211 @@ Chú ý:
   let responseText = "";
   let lastError: any = null;
   let successUsage: any = null;
+  let selectedModel = "";
+  let selectedProvider = "";
 
   const instructionHash = createHash("md5").update(finalSystemInstruction).digest("hex");
 
-  // Chạy vòng lặp thử từng model
-  for (const model of FALLBACK_MODELS) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const kiraApiKey = process.env.KIRA_API_KEY;
+  let kiraSuccess = false;
 
-    let cachedContentName = "";
-    try {
-      const cacheDocId = `${subjectId || "math"}_${model.replace(/\//g, "_")}`;
-      const cacheDocRef = db.collection("users").doc(uid).collection("cached_contexts").doc(cacheDocId);
-      const cacheDoc = await cacheDocRef.get();
-      const now = new Date();
-      
-      if (cacheDoc.exists) {
-        const cacheData = cacheDoc.data();
-        const expiresAt = cacheData?.expiresAt ? new Date(cacheData.expiresAt.seconds ? cacheData.expiresAt.seconds * 1000 : cacheData.expiresAt) : new Date(0);
+  if (kiraApiKey) {
+    const kiraModels = ["kira-3.5-flash", "kira-2.5-pro"];
+    for (const kModel of kiraModels) {
+      try {
+        console.log(`[Kira AI] Thử kết nối model: ${kModel}...`);
+        const result = await callKiraAiApi(
+          kiraApiKey,
+          kModel,
+          finalContents,
+          finalSystemInstruction,
+          temperature,
+          responseMimeType,
+          image
+        );
+        responseText = result.text;
         
-        if (
-          cacheData?.hash === instructionHash &&
-          cacheData?.model === model &&
-          expiresAt > now
-        ) {
-          cachedContentName = cacheData.cacheName;
-          console.log(`[Cache Hit] Reusing context cache: ${cachedContentName} for model ${model}`);
-        }
+        // Cấu hình successUsage tương thích cấu trúc của Gemini để log Firestore hoạt động bình thường
+        successUsage = {
+          promptTokenCount: result.usage?.promptTokens || 0,
+          candidatesTokenCount: result.usage?.candidatesTokens || 0,
+          cachedContentTokenCount: 0,
+          totalTokenCount: result.usage?.totalTokens || 0
+        };
+        
+        selectedModel = kModel;
+        selectedProvider = "kira";
+        kiraSuccess = true;
+        console.log(`[Kira AI] Thành công sử dụng model: ${kModel}`);
+        break;
+      } catch (err: any) {
+        console.warn(`[Kira AI] Thử model ${kModel} thất bại:`, err.message || err);
+        lastError = err;
       }
-      
-      if (!cachedContentName) {
-        console.log(`[Cache Miss] Creating context cache for model ${model}...`);
-        const fullModelName = model.startsWith("models/") ? model : `models/${model}`;
-        const cacheCreateUrl = `https://generativelanguage.googleapis.com/v1beta/cachedContents?key=${apiKey}`;
+    }
+  }
+
+  // Nếu Kira AI không chạy được hoặc không cấu hình key, ta chạy fallback Gemini
+  if (!kiraSuccess) {
+    console.log("[Fallback] Đang chuyển sang gọi các model Gemini...");
+    // Chạy vòng lặp thử từng model
+    for (const model of FALLBACK_MODELS) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+      let cachedContentName = "";
+      try {
+        const cacheDocId = `${subjectId || "math"}_${model.replace(/\//g, "_")}`;
+        const cacheDocRef = db.collection("users").doc(uid).collection("cached_contexts").doc(cacheDocId);
+        const cacheDoc = await cacheDocRef.get();
+        const now = new Date();
         
-        const cacheResponse = await fetch(cacheCreateUrl, {
+        if (cacheDoc.exists) {
+          const cacheData = cacheDoc.data();
+          const expiresAt = cacheData?.expiresAt ? new Date(cacheData.expiresAt.seconds ? cacheData.expiresAt.seconds * 1000 : cacheData.expiresAt) : new Date(0);
+          
+          if (
+            cacheData?.hash === instructionHash &&
+            cacheData?.model === model &&
+            expiresAt > now
+          ) {
+            cachedContentName = cacheData.cacheName;
+            console.log(`[Cache Hit] Reusing context cache: ${cachedContentName} for model ${model}`);
+          }
+        }
+        
+        if (!cachedContentName) {
+          console.log(`[Cache Miss] Creating context cache for model ${model}...`);
+          const fullModelName = model.startsWith("models/") ? model : `models/${model}`;
+          const cacheCreateUrl = `https://generativelanguage.googleapis.com/v1beta/cachedContents?key=${apiKey}`;
+          
+          const cacheResponse = await fetch(cacheCreateUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: fullModelName,
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: finalSystemInstruction }]
+                }
+              ],
+              ttl: "600s" // 10 minutes cache
+            }),
+          });
+          
+          if (cacheResponse.ok) {
+            const cacheResult = await cacheResponse.json() as any;
+            if (cacheResult?.name) {
+              cachedContentName = cacheResult.name;
+              const expiresAtDate = cacheResult.expireTime ? new Date(cacheResult.expireTime) : new Date(Date.now() + 600 * 1000);
+              
+              await cacheDocRef.set({
+                cacheName: cachedContentName,
+                hash: instructionHash,
+                model: model,
+                expiresAt: expiresAtDate,
+                createdAt: new Date()
+              });
+              console.log(`[Cache Created] Cache ID: ${cachedContentName}, expires: ${expiresAtDate}`);
+            }
+          } else {
+            const errText = await cacheResponse.text();
+            console.warn(`[Cache Failure] Model ${model} does not support caching or error occurred:`, errText);
+          }
+        }
+      } catch (cacheErr) {
+        console.error(`[Cache Error] Failed to handle caching for ${model}:`, cacheErr);
+      }
+
+      const reqPayload: any = {
+        contents: finalContents,
+      };
+      
+      if (cachedContentName) {
+        reqPayload.cachedContent = cachedContentName;
+      } else if (finalSystemInstruction) {
+        reqPayload.systemInstruction = {
+          parts: [{ text: finalSystemInstruction }],
+        };
+      }
+
+      reqPayload.generationConfig = {};
+      if (typeof temperature === "number") {
+        reqPayload.generationConfig.temperature = temperature;
+      }
+
+      if (responseMimeType) {
+        reqPayload.generationConfig.responseMimeType = responseMimeType;
+        if (responseSchema) {
+          reqPayload.generationConfig.responseSchema = responseSchema;
+        }
+      } else {
+        // Bắt buộc đầu ra JSON cấu trúc đối với Chat Tutor
+        reqPayload.generationConfig.responseMimeType = "application/json";
+        reqPayload.generationConfig.responseSchema = {
+          type: "OBJECT",
+          properties: {
+            tutorResponse: {
+              type: "STRING"
+            },
+            newStrengths: {
+              type: "ARRAY",
+              items: { type: "STRING" }
+            },
+            newWeaknesses: {
+              type: "ARRAY",
+              items: { type: "STRING" }
+            },
+            learningSummary: {
+              type: "STRING"
+            }
+          },
+          required: ["tutorResponse", "newStrengths", "newWeaknesses", "learningSummary"]
+        };
+      }
+
+      try {
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            model: fullModelName,
-            contents: [
-              {
-                role: "user",
-                parts: [{ text: finalSystemInstruction }]
-              }
-            ],
-            ttl: "600s" // 10 minutes cache
-          }),
+          body: JSON.stringify(reqPayload),
         });
-        
-        if (cacheResponse.ok) {
-          const cacheResult = await cacheResponse.json() as any;
-          if (cacheResult?.name) {
-            cachedContentName = cacheResult.name;
-            const expiresAtDate = cacheResult.expireTime ? new Date(cacheResult.expireTime) : new Date(Date.now() + 600 * 1000);
-            
-            await cacheDocRef.set({
-              cacheName: cachedContentName,
-              hash: instructionHash,
-              model: model,
-              expiresAt: expiresAtDate,
-              createdAt: new Date()
-            });
-            console.log(`[Cache Created] Cache ID: ${cachedContentName}, expires: ${expiresAtDate}`);
-          }
-        } else {
-          const errText = await cacheResponse.text();
-          console.warn(`[Cache Failure] Model ${model} does not support caching or error occurred:`, errText);
+
+        // Nếu gặp lỗi quá tần suất gọi (429), ghi log và tiếp tục thử model tiếp theo
+        if (response.status === 429) {
+          console.warn(`Model ${model} đã hết hạn mức (429). Đang tự động chuyển sang model dự phòng...`);
+          lastError = new Error(`Model ${model} trả về lỗi quá hạn mức (429)`);
+          continue;
         }
-      }
-    } catch (cacheErr) {
-      console.error(`[Cache Error] Failed to handle caching for ${model}:`, cacheErr);
-    }
 
-    const reqPayload: any = {
-      contents: finalContents,
-    };
-    
-    if (cachedContentName) {
-      reqPayload.cachedContent = cachedContentName;
-    } else if (finalSystemInstruction) {
-      reqPayload.systemInstruction = {
-        parts: [{ text: finalSystemInstruction }],
-      };
-    }
-
-    reqPayload.generationConfig = {};
-    if (typeof temperature === "number") {
-      reqPayload.generationConfig.temperature = temperature;
-    }
-
-    if (responseMimeType) {
-      reqPayload.generationConfig.responseMimeType = responseMimeType;
-      if (responseSchema) {
-        reqPayload.generationConfig.responseSchema = responseSchema;
-      }
-    } else {
-      // Bắt buộc đầu ra JSON cấu trúc đối với Chat Tutor
-      reqPayload.generationConfig.responseMimeType = "application/json";
-      reqPayload.generationConfig.responseSchema = {
-        type: "OBJECT",
-        properties: {
-          tutorResponse: {
-            type: "STRING"
-          },
-          newStrengths: {
-            type: "ARRAY",
-            items: { type: "STRING" }
-          },
-          newWeaknesses: {
-            type: "ARRAY",
-            items: { type: "STRING" }
-          },
-          learningSummary: {
-            type: "STRING"
-          }
-        },
-        required: ["tutorResponse", "newStrengths", "newWeaknesses", "learningSummary"]
-      };
-    }
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reqPayload),
-      });
-
-      // Nếu gặp lỗi quá tần suất gọi (429), ghi log và tiếp tục thử model tiếp theo
-      if (response.status === 429) {
-        console.warn(`Model ${model} đã hết hạn mức (429). Đang tự động chuyển sang model dự phòng...`);
-        lastError = new Error(`Model ${model} trả về lỗi quá hạn mức (429)`);
-        continue;
-      }
-
-      if (!response.ok) {
-        const errData = (await response.json().catch(() => ({}))) as any;
-        const errMsg = errData?.error?.message || `HTTP error! status: ${response.status}`;
-        lastError = new Error(`Lỗi từ ${model}: ${errMsg}`);
-        continue;
-      }
-
-      const data = (await response.json()) as any;
-      responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!responseText) {
-        lastError = new Error(`Không nhận được văn bản trả lời từ ${model}`);
-        continue;
-      }
-
-      // Lấy dữ liệu token tiêu thụ của model chạy thành công
-      successUsage = data.usageMetadata;
-      console.log(`Gọi thành công model: ${model}`);
-
-      // Nếu là cuộc gọi chat (không phải bài tự luận cần JSON từ frontend), bóc tách JSON và tự động cập nhật profile
-      if (!responseMimeType) {
-        try {
-          let cleanJson = responseText.trim();
-          if (cleanJson.startsWith("```")) {
-            cleanJson = cleanJson
-              .replace(/^```json\s*/i, "")
-              .replace(/```\s*$/, "")
-              .trim();
-          }
-          // Chuẩn hóa các dấu backslash đơn (chưa được escape) trước các lệnh LaTeX như \times, \frac để tránh bị JSON.parse chuyển đổi thành phím Tab, phím Form Feed...
-          cleanJson = cleanJson.replace(/(?<!\\)\\([a-zA-Z]+)/g, (match, p1) => {
-            if (p1 === 'n') {
-              return match;
-            }
-            return '\\\\' + p1;
-          });
-          const parsed = JSON.parse(cleanJson);
-          responseText = parsed.tutorResponse || responseText;
-          
-          if (uid) {
-            const hasNewData = (parsed.newStrengths && parsed.newStrengths.length > 0) || 
-                              (parsed.newWeaknesses && parsed.newWeaknesses.length > 0) ||
-                              (parsed.learningSummary && parsed.learningSummary !== studentProfile?.[subjectId || "math"]?.learningSummary);
-            
-            if (hasNewData) {
-              const cleanSubjectId = subjectId || "math";
-              const subProfile = studentProfile?.[cleanSubjectId] || {};
-              const oldStrengths = subProfile.strengths || [];
-              const oldWeaknesses = subProfile.weaknesses || [];
-              const oldSummary = subProfile.learningSummary || "";
-              
-              const mergeAndUnique = (oldArr: string[], newArr: any[]) => {
-                const combined = [...oldArr, ...newArr.map((s) => String(s).trim())].filter(Boolean);
-                return [...new Set(combined)];
-              };
-              
-              const updatedStrengths = mergeAndUnique(oldStrengths, parsed.newStrengths || []);
-              const updatedWeaknesses = mergeAndUnique(oldWeaknesses, parsed.newWeaknesses || []);
-              const finalSummary = parsed.learningSummary || oldSummary;
-              
-              await db.collection("student_profiles").doc(uid).set({
-                [cleanSubjectId]: {
-                  strengths: updatedStrengths,
-                  weaknesses: updatedWeaknesses,
-                  learningSummary: finalSummary,
-                  lastUpdated: new Date()
-                },
-                lastUpdated: new Date()
-              }, { merge: true });
-              
-              console.log(`[Memory] Merged and updated student profile directly via Tutor Socratic response.`);
-            }
-          }
-        } catch (parseErr) {
-          console.error("Lỗi phân tích JSON từ phản hồi Tutor gộp:", responseText, parseErr);
+        if (!response.ok) {
+          const errData = (await response.json().catch(() => ({}))) as any;
+          const errMsg = errData?.error?.message || `HTTP error! status: ${response.status}`;
+          lastError = new Error(`Lỗi từ ${model}: ${errMsg}`);
+          continue;
         }
-      }
 
-      break; // Gọi thành công, thoát khỏi vòng lặp thử model
-    } catch (err) {
-      console.error(`Lỗi kết nối khi gọi model ${model}:`, err);
-      lastError = err;
+        const data = (await response.json()) as any;
+        responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!responseText) {
+          lastError = new Error(`Không nhận được văn bản trả lời từ ${model}`);
+          continue;
+        }
+
+        // Lấy dữ liệu token tiêu thụ của model chạy thành công
+        successUsage = data.usageMetadata;
+        selectedModel = model;
+        selectedProvider = "gemini";
+        console.log(`Gọi thành công model: ${model}`);
+        break; // Gọi thành công, thoát khỏi vòng lặp thử model
+      } catch (err) {
+        console.error(`Lỗi kết nối khi gọi model ${model}:`, err);
+        lastError = err;
+      }
     }
   }
 
@@ -907,6 +1007,65 @@ Chú ý:
       "internal",
       `Tất cả các model AI dự phòng đều đang bận hoặc hết hạn mức. Chi tiết lỗi cuối: ${lastError?.message}`
     );
+  }
+
+  // Nếu là cuộc gọi chat (không phải bài tự luận cần JSON từ frontend), bóc tách JSON và tự động cập nhật profile
+  if (!responseMimeType) {
+    try {
+      let cleanJson = responseText.trim();
+      if (cleanJson.startsWith("```")) {
+        cleanJson = cleanJson
+          .replace(/^```json\s*/i, "")
+          .replace(/```\s*$/, "")
+          .trim();
+      }
+      // Chuẩn hóa các dấu backslash đơn (chưa được escape) trước các lệnh LaTeX như \times, \frac để tránh bị JSON.parse chuyển đổi thành phím Tab, phím Form Feed...
+      cleanJson = cleanJson.replace(/(?<!\\)\\([a-zA-Z]+)/g, (match, p1) => {
+        if (p1 === 'n') {
+          return match;
+        }
+        return '\\\\' + p1;
+      });
+      const parsed = JSON.parse(cleanJson);
+      responseText = parsed.tutorResponse || responseText;
+      
+      if (uid) {
+        const hasNewData = (parsed.newStrengths && parsed.newStrengths.length > 0) || 
+                          (parsed.newWeaknesses && parsed.newWeaknesses.length > 0) ||
+                          (parsed.learningSummary && parsed.learningSummary !== studentProfile?.[subjectId || "math"]?.learningSummary);
+        
+        if (hasNewData) {
+          const cleanSubjectId = subjectId || "math";
+          const subProfile = studentProfile?.[cleanSubjectId] || {};
+          const oldStrengths = subProfile.strengths || [];
+          const oldWeaknesses = subProfile.weaknesses || [];
+          const oldSummary = subProfile.learningSummary || "";
+          
+          const mergeAndUnique = (oldArr: string[], newArr: any[]) => {
+            const combined = [...oldArr, ...newArr.map((s) => String(s).trim())].filter(Boolean);
+            return [...new Set(combined)];
+          };
+          
+          const updatedStrengths = mergeAndUnique(oldStrengths, parsed.newStrengths || []);
+          const updatedWeaknesses = mergeAndUnique(oldWeaknesses, parsed.newWeaknesses || []);
+          const finalSummary = parsed.learningSummary || oldSummary;
+          
+          await db.collection("student_profiles").doc(uid).set({
+            [cleanSubjectId]: {
+              strengths: updatedStrengths,
+              weaknesses: updatedWeaknesses,
+              learningSummary: finalSummary,
+              lastUpdated: new Date()
+            },
+            lastUpdated: new Date()
+          }, { merge: true });
+          
+          console.log(`[Memory] Merged and updated student profile directly via Tutor Socratic response.`);
+        }
+      }
+    } catch (parseErr) {
+      console.error("Lỗi phân tích JSON từ phản hồi Tutor gộp:", responseText, parseErr);
+    }
   }
 
   try {
@@ -921,6 +1080,8 @@ Chú ý:
         totalTokens: successUsage.totalTokenCount || 0,
         timestamp: new Date(),
         type: responseMimeType ? "proof_grading" : "tutor",
+        model: selectedModel,
+        provider: selectedProvider
       });
     }
   } catch (err) {

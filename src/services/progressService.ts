@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc, orderBy, limit } from 'firebase/firestore';
 import { UserAttempt, UserMistake, UserProgress, ExamResult, SimulatedStudent } from '../types';
 import { User } from 'firebase/auth';
 import { storageService } from './storage';
@@ -669,6 +669,30 @@ export const progressService = {
       }
     } catch (e) {
       console.error('Lỗi khi chấm điểm lên Firestore:', e);
+    }
+  },
+
+  async getAiUsageLogs(limitCount = 100): Promise<any[]> {
+    try {
+      const q = query(
+        collection(db, 'ai_usage_logs'),
+        orderBy('timestamp', 'desc'),
+        limit(limitCount)
+      );
+      const querySnapshot = await getDocs(q);
+      const logs: any[] = [];
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        logs.push({
+          id: docSnap.id,
+          ...data,
+          timestamp: data.timestamp ? (data.timestamp.toDate ? data.timestamp.toDate().toISOString() : data.timestamp) : null
+        });
+      });
+      return logs;
+    } catch (e) {
+      console.error('Lỗi khi lấy logs AI:', e);
+      return [];
     }
   }
 };

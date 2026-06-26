@@ -105,6 +105,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /ai_usage_logs/{logId} {
+      allow read: if isTeacher();
+      allow write: if false;
+    }
+
     match /users/{userId} {
       allow get: if isOwner(userId) || isTeacher();
       allow list: if isTeacher();

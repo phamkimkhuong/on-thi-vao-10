@@ -398,7 +398,6 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
             <p className="text-[9px] font-semibold text-muted-foreground">Hỗ trợ gợi ý tư duy Socratic</p>
           </div>
         </div>
-
         <div className="flex items-center gap-2">
           <button
             onClick={handleClearHistory}

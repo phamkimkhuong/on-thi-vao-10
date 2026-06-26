@@ -29,6 +29,7 @@ import {
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
 import { formatAnswerForDisplay } from '../../utils/answerValidator';
+import { TeacherAiStatistics } from './TeacherAiStatistics';
 
 export interface PendingGroup {
   id: string;
@@ -130,7 +131,7 @@ export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium'>('students');
+  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics'>('students');
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
   const [premiumEmail, setPremiumEmail] = useState('');
   const [premiumSubmitting, setPremiumSubmitting] = useState(false);
@@ -582,6 +583,18 @@ export const TeacherDashboard: React.FC = () => {
               {pendingGroups.length}
             </span>
           )}
+        </button>
+        <button
+          onClick={() => { setActiveTab('ai_statistics'); setReviewingItem(null); }}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'ai_statistics'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Activity size={15} />
+          Thống kê AI & Token
         </button>
         <button
           onClick={() => { setActiveTab('premium'); setReviewingItem(null); }}
@@ -1459,6 +1472,9 @@ export const TeacherDashboard: React.FC = () => {
             </div>
           )}
         </div>
+      ) : activeTab === 'ai_statistics' ? (
+        /* Thống kê AI & Token */
+        <TeacherAiStatistics />
       ) : (
         /* Cấp Quyền Premium */
         <div className="max-w-xl mx-auto space-y-6">
