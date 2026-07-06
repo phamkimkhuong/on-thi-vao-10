@@ -21,6 +21,25 @@ export const g10MockExamsList: MockExam[] = [
     createdAt: new Date().toISOString()
   },
   {
+    id: 'mock-math10-gk2',
+    subjectId: 'math',
+    title: 'Đề kiểm tra Giữa học kỳ 1 - Toán 10 (Đề số 2)',
+    duration: 90,
+    questionIds: [
+      'mock-math10-q21',
+      'mock-math10-q22',
+      'mock-math10-q23',
+      'mock-math10-q24',
+      'mock-math10-q25',
+      'mock-math10-q26',
+      'mock-math10-q27',
+      'mock-math10-q28',
+      'mock-math10-q29',
+      'mock-math10-q30'
+    ],
+    createdAt: new Date().toISOString()
+  },
+  {
     id: 'mock-math10-ck1',
     subjectId: 'math',
     title: 'Đề kiểm tra Cuối học kỳ 1 - Toán 10 (Đề số 1)',
@@ -397,6 +416,184 @@ export const g10MockQuestions: Question[] = [
     sourceType: 'mock_exam',
     correctAnswer: '4',
     acceptedAnswers: ['4', '4 triệu', '4 triệu đồng'],
+    validatorType: 'exact'
+  },
+  // ĐỀ GIỮA KỲ 2 (q21 - q30)
+  // Phần I: Trắc nghiệm 4 lựa chọn
+  {
+    id: 'mock-math10-q21',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt1',
+    content: 'Cho tập hợp $A = \\{x \\in \\mathbb{R} \\mid x < 3\\}$ và $B = \\{x \\in \\mathbb{R} \\mid 1 \\le x \\le 5\\}$. Tập hợp $A \\backslash B$ là:',
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    options: [
+      'A. $A \\backslash B = (-\\infty; 1)$',
+      'B. $A \\backslash B = (-\\infty; 1]$',
+      'C. $A \\backslash B = [1; 3)$',
+      'D. $A \\backslash B = (1; 3)$'
+    ],
+    correctAnswer: 'A',
+    validatorType: 'choice'
+  },
+  {
+    id: 'mock-math10-q22',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt1',
+    content: 'Mệnh đề nào sau đây là mệnh đề ĐÚNG?',
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    options: [
+      'A. $\\forall x \\in \\mathbb{R}, x^2 > 0$',
+      'B. $\\exists x \\in \\mathbb{R}, x^2 < 0$',
+      'C. $\\exists x \\in \\mathbb{R}, x^2 - 3x + 2 = 0$',
+      'D. $\\forall x \\in \\mathbb{R}, x^2 - x - 1 \\ge 0$'
+    ],
+    correctAnswer: 'C',
+    validatorType: 'choice'
+  },
+  {
+    id: 'mock-math10-q23',
+    subjectId: 'math',
+    topicId: 'math10-t2',
+    questionTypeId: 'math10-qt3',
+    content: 'Hệ bất phương trình nào sau đây là hệ bất phương trình bậc nhất hai ẩn?',
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    options: [
+      'A. $\\begin{cases} x^2 + y > 3 \\\\ x - y \\le 1 \\end{cases}$',
+      'B. $\\begin{cases} x + 2y \\le 4 \\\\ 2x - 3y > 6 \\end{cases}$',
+      'C. $\\begin{cases} x + y + z > 0 \\\\ x - y \\le 2 \\end{cases}$',
+      'D. $\\begin{cases} xy + x > 1 \\\\ x - y \\le 3 \\end{cases}$'
+    ],
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  {
+    id: 'mock-math10-q24',
+    subjectId: 'math',
+    topicId: 'math10-t3',
+    questionTypeId: 'math10-qt4',
+    content: 'Cho parabol $(P): y = -x^2 + 2x + 3$. Hàm số đồng biến trên khoảng nào sau đây?',
+    difficulty: 'easy',
+    sourceType: 'mock_exam',
+    options: [
+      'A. $(1; +\\infty)$',
+      'B. $(-\\infty; 1)$',
+      'C. $(-\\infty; 2)$',
+      'D. $(2; +\\infty)$'
+    ],
+    correctAnswer: 'B',
+    validatorType: 'choice'
+  },
+  // Phần II: Trắc nghiệm Đúng/Sai
+  {
+    id: 'mock-math10-q25',
+    subjectId: 'math',
+    topicId: 'math10-t3',
+    questionTypeId: 'math10-qt4',
+    content: 'Cho hàm số bậc hai $y = f(x) = -x^2 + 4x - 3$. Xét tính đúng sai của các khẳng định sau:',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: 'a: Đ; b: Đ; c: Đ; d: Đ',
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric',
+      fields: [
+        { key: 'a', label: 'a) Đồ thị hàm số đi qua điểm $M(1; 0)$ và có hoành độ đỉnh là $x = 2$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
+        { key: 'b', label: 'b) Giá trị lớn nhất của hàm số trên toàn bộ tập xác định là $1$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
+        { key: 'c', label: 'c) Đồ thị hàm số cắt trục tung tại điểm có tọa độ $(0; -3)$ và cắt trục hoành tại hai điểm phân biệt.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
+        { key: 'd', label: 'd) Tập hợp tất cả các giá trị của $x$ để $f(x) \\ge 0$ là đoạn $[1; 3]$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' }
+      ]
+    },
+    correctFinalAnswer: { a: 'Đ', b: 'Đ', c: 'Đ', d: 'Đ' },
+    acceptedFinalAnswers: [
+      { a: 'Đ', b: 'Đ', c: 'Đ', d: 'Đ' },
+      { a: 'đ', b: 'đ', c: 'đ', d: 'đ' },
+      { a: 'D', b: 'D', c: 'D', d: 'D' },
+      { a: 'd', b: 'd', c: 'd', d: 'd' }
+    ]
+  },
+  {
+    id: 'mock-math10-q26',
+    subjectId: 'math',
+    topicId: 'math10-t2',
+    questionTypeId: 'math10-qt3',
+    content: 'Một cửa hàng kinh doanh đồ gỗ muốn tối ưu doanh thu từ sản xuất hai loại ghế: ghế bành (x cái) và ghế tựa (y cái). Lợi nhuận thu được khi bán mỗi chiếc ghế bành là 250 nghìn đồng, mỗi chiếc ghế tựa là 150 nghìn đồng. Để sản xuất được một chiếc ghế bành cần 3 giờ làm việc của máy và 2 giờ hoàn thiện. Để sản xuất một chiếc ghế tựa cần 2 giờ làm việc của máy và 1 giờ hoàn thiện. Biết tổng số giờ máy hoạt động tối đa là 120 giờ và thời gian hoàn thiện tối đa là 70 giờ mỗi tuần. Xét tính đúng sai của các khẳng định sau:',
+    difficulty: 'hard',
+    sourceType: 'mock_exam',
+    correctAnswer: 'a: Đ; b: Đ; c: S; d: Đ',
+    validatorType: 'exact',
+    answerSchema: {
+      type: 'expression',
+      proofImageRequired: false,
+      autoCheckMode: 'keyed-numeric',
+      fields: [
+        { key: 'a', label: 'a) Bất phương trình giới hạn thời gian hoạt động của máy là $3x + 2y \\le 120$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
+        { key: 'b', label: 'b) Bất phương trình giới hạn thời gian hoàn thiện là $2x + y \\le 70$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
+        { key: 'c', label: 'c) Hàm số biểu thị lợi nhuận thu được (tính bằng nghìn đồng) là $F(x; y) = 150x + 250y$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
+        { key: 'd', label: 'd) Cửa hàng sẽ đạt lợi nhuận lớn nhất khi sản xuất 20 chiếc ghế bành và 30 chiếc ghế tựa.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' }
+      ]
+    },
+    correctFinalAnswer: { a: 'Đ', b: 'Đ', c: 'S', d: 'Đ' },
+    acceptedFinalAnswers: [
+      { a: 'Đ', b: 'Đ', c: 'S', d: 'Đ' },
+      { a: 'đ', b: 'đ', c: 's', d: 'đ' },
+      { a: 'D', b: 'D', c: 'S', d: 'D' },
+      { a: 'd', b: 'd', c: 's', d: 'd' }
+    ]
+  },
+  // Phần III: Trắc nghiệm Trả lời ngắn
+  {
+    id: 'mock-math10-q27',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt2',
+    content: 'Cho hai tập hợp $A = [m - 3; m + 1]$ và $B = [-2; 5]$. Tìm số lượng các giá trị nguyên của m để $A \\subset B$. (Chỉ điền giá trị số).',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: '4',
+    acceptedAnswers: ['4', '4 giá trị'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'mock-math10-q28',
+    subjectId: 'math',
+    topicId: 'math10-t3',
+    questionTypeId: 'math10-qt4',
+    content: 'Xác định parabol $y = ax^2 + bx + 3$ biết parabol đi qua điểm $A(1; 0)$ và có trục đối xứng là đường thẳng $x = 2$. Nhập phương trình parabol tìm được dạng chuẩn không chứa dấu cách (ví dụ: x^2-4x+3).',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: 'x^2-4x+3',
+    acceptedAnswers: ['x^2-4x+3', 'x^2 - 4x + 3', 'y=x^2-4x+3', 'y = x^2 - 4x + 3'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'mock-math10-q29',
+    subjectId: 'math',
+    topicId: 'math10-t4',
+    questionTypeId: 'math10-qt6',
+    content: 'Một người đứng tại điểm A trên bờ biển quan sát một ngọn hải đăng C ngoài khơi. Người đó đo góc giữa AC với một đường biên AB dài 200m trên bờ biển. Đo góc CAB = 60 độ và góc CBA = 45 độ. Tính khoảng cách AC từ điểm quan sát đến ngọn hải đăng (làm tròn đến hàng đơn vị mét, chỉ điền giá trị số).',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: '146',
+    acceptedAnswers: ['146', '146m', '146 mét'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'mock-math10-q30',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt7',
+    content: 'Trong mặt phẳng tọa độ Oxy, cho ba điểm A(1; 2), B(-2; 5), C(4; 4). Tính tích vô hướng của hai vectơ $\\vec{AB} \\cdot \\vec{AC}$. (Chỉ điền giá trị số).',
+    difficulty: 'medium',
+    sourceType: 'mock_exam',
+    correctAnswer: '-3',
+    acceptedAnswers: ['-3'],
     validatorType: 'exact'
   }
 ];
@@ -892,5 +1089,244 @@ export const g10MockSolutionsList: Solution[] = [
     finalAnswer: '4',
     commonMistakes: ['Nhầm lẫn giữa số lần giảm giá (20 lần) và số tiền giảm tương ứng (4 triệu đồng).'],
     reviewSuggestions: ['Luôn kiểm tra kỹ đơn vị của câu hỏi yêu cầu (ở đây là số triệu đồng cần giảm).']
+  },
+  // ĐỀ GIỮA KỲ 2 (s21 - s30)
+  {
+    id: 'mock-math10-s21',
+    questionId: 'mock-math10-q21',
+    recognition: 'Phép toán hiệu của hai tập hợp số thực.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định các khoảng tập hợp',
+        explanation: 'Ta viết hai tập hợp dưới dạng khoảng: $A = (-\\infty; 3)$, $B = [1; 5]$.',
+        result: 'A = (-\\infty; 3), B = [1; 5]'
+      },
+      {
+        order: 2,
+        title: 'Tính hiệu A \\ B',
+        explanation: 'Phép hiệu $A \\backslash B$ lấy các phần tử thuộc A nhưng loại đi các phần tử thuộc B. Vì B chứa đoạn $[1; 5]$ nên ta gạch đi phần từ $1$ trở đi. Vậy hiệu là khoảng $(-\\infty; 1)$. Chọn A.',
+        result: 'A \\ B = (-\\infty; 1)'
+      }
+    ],
+    finalAnswer: 'A',
+    commonMistakes: ['Lấy nhầm ngoặc vuông tại đầu mút, ví dụ chọn (-\\infty; 1].'],
+    reviewSuggestions: ['Nhớ gạch đi tất cả các phần tử thuộc tập B (kể cả điểm mút 1 nếu nó có trong B).']
+  },
+  {
+    id: 'mock-math10-s22',
+    questionId: 'mock-math10-q22',
+    recognition: 'Xác định tính đúng sai của mệnh đề chứa kí hiệu toán học.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Kiểm tra từng phương án',
+        explanation: '- Phương án A sai vì với $x=0$, $x^2 = 0 \\ngtr 0$.\n- Phương án B sai vì bình phương số thực luôn không âm.\n- Phương án C đúng vì phương trình $x^2 - 3x + 2 = 0$ có nghiệm thực $x=1, x=2$.\n- Phương án D sai vì với $x=1$, $1^2 - 1 - 1 = -1 < 0$.',
+        result: 'Mệnh đề C đúng'
+      }
+    ],
+    finalAnswer: 'C',
+    commonMistakes: ['Bỏ qua các trường hợp biên đặc biệt như x = 0 hoặc x = 1.'],
+    reviewSuggestions: ['Tìm một phản ví dụ (counterexample) để chứng minh một mệnh đề chứa lượng từ \\forall là sai.']
+  },
+  {
+    id: 'mock-math10-s23',
+    questionId: 'mock-math10-q23',
+    recognition: 'Nhận dạng hệ bất phương trình bậc nhất hai ẩn.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Kiểm tra bậc của các ẩn số',
+        explanation: 'Hệ bất phương trình bậc nhất hai ẩn chỉ chứa x, y bậc nhất, không có tích xy hay biến khác. Đối chiếu ta thấy hệ B: $\\begin{cases} x + 2y \\le 4 \\\\ 2x - 3y > 6 \\end{cases}$ thỏa mãn hoàn toàn.',
+        result: 'Chọn B'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: ['Nhầm lẫn hệ bậc nhất hai ẩn với hệ chứa tích xy hoặc biến z.'],
+    reviewSuggestions: ['Định nghĩa hệ bất phương trình bậc nhất hai ẩn có dạng các bất phương trình bậc nhất hai ẩn ghép lại.']
+  },
+  {
+    id: 'mock-math10-s24',
+    questionId: 'mock-math10-q24',
+    recognition: 'Khảo sát chiều biến thiên của hàm số bậc hai.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định hoành độ đỉnh',
+        explanation: 'Parabol có hệ số $a = -1 < 0$ và hoành độ đỉnh $x_I = -\\frac{2}{2(-1)} = 1$.',
+        result: 'x_I = 1'
+      },
+      {
+        order: 2,
+        title: 'Xác định khoảng đồng biến',
+        explanation: 'Vì $a < 0$, đồ thị đi lên rồi đi xuống. Do đó hàm số đồng biến trên khoảng $(-\\infty; 1)$ và nghịch biến trên khoảng $(1; +\\infty)$. Chọn B.',
+        result: 'Đồng biến trên (-\\infty; 1)'
+      }
+    ],
+    finalAnswer: 'B',
+    commonMistakes: ['Nhầm lẫn khoảng đồng biến của a < 0 và a > 0.'],
+    reviewSuggestions: ['Vẽ nhanh bảng biến thiên có hình dạng mũi tên đi lên/xuống để không bị nhầm.']
+  },
+  {
+    id: 'mock-math10-s25',
+    questionId: 'mock-math10-q25',
+    recognition: 'Khảo sát và tính chất đồ thị hàm số bậc hai.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đánh giá khẳng định a',
+        explanation: 'Thay $x = 1 \\Rightarrow y = 0$. Đỉnh $x_I = -\\frac{4}{2(-1)} = 2$. Đúng (Đ).',
+        result: 'a) Đúng'
+      },
+      {
+        order: 2,
+        title: 'Đánh giá khẳng định b',
+        explanation: 'Giá trị lớn nhất đạt tại hoành độ đỉnh $x = 2$, khi đó $y_{\\max} = f(2) = 1$. Đúng (Đ).',
+        result: 'b) Đúng'
+      },
+      {
+        order: 3,
+        title: 'Đánh giá khẳng định c',
+        explanation: 'Đồ thị cắt Oy tại $(0; -3)$. Phương trình hoành độ giao điểm có hai nghiệm phân biệt $x=1, x=3$. Đúng (Đ).',
+        result: 'c) Đúng'
+      },
+      {
+        order: 4,
+        title: 'Đánh giá khẳng định d',
+        explanation: 'Xét bất phương trình $-x^2 + 4x - 3 \\ge 0 \\Leftrightarrow x^2 - 4x + 3 \\le 0 \\Leftrightarrow 1 \\le x \\le 3$. Tập nghiệm là đoạn $[1; 3]$. Đúng (Đ).',
+        result: 'd) Đúng'
+      }
+    ],
+    finalAnswer: 'a: Đ; b: Đ; c: Đ; d: Đ',
+    commonMistakes: ['Tính sai giá trị đỉnh cực trị dẫn đến kết luận b sai.'],
+    reviewSuggestions: ['Thay tọa độ đỉnh trực tiếp vào hàm số ban đầu để kiểm tra lại giá trị cực đại/cực tiểu.']
+  },
+  {
+    id: 'mock-math10-s26',
+    questionId: 'mock-math10-q26',
+    recognition: 'Quy hoạch tuyến tính tối ưu lợi nhuận sản xuất ghế.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đánh giá khẳng định a',
+        explanation: 'Thời gian máy hoạt động tối đa 120 giờ nên $3x + 2y \\le 120$. Đúng (Đ).',
+        result: 'a) Đúng'
+      },
+      {
+        order: 2,
+        title: 'Đánh giá khẳng định b',
+        explanation: 'Thời gian hoàn thiện tối đa 70 giờ nên $2x + y \\le 70$. Đúng (Đ).',
+        result: 'b) Đúng'
+      },
+      {
+        order: 3,
+        title: 'Đánh giá khẳng định c',
+        explanation: 'Lợi nhuận của ghế bành là 250, ghế tựa là 150. Hàm lợi nhuận là $F(x; y) = 250x + 150y$. Khẳng định c ghi $150x + 250y$ là Sai (S).',
+        result: 'c) Sai'
+      },
+      {
+        order: 4,
+        title: 'Đánh giá khẳng định d',
+        explanation: 'Miền nghiệm có các đỉnh $O(0;0), A(35;0), B(0;60), C(20;30)$. Tính F tại các đỉnh:\n- $F(O) = 0$.\n- $F(A) = 250(35) = 8750$.\n- $F(B) = 150(60) = 9000$.\n- $F(C) = 250(20) + 150(30) = 9500$.\nLớn nhất là 9500 nghìn đồng tại $C(20; 30)$. Đúng (Đ).',
+        result: 'd) Đúng'
+      }
+    ],
+    finalAnswer: 'a: Đ; b: Đ; c: S; d: Đ',
+    commonMistakes: ['Tính nhầm tọa độ giao điểm hoặc quên tính giá trị lợi nhuận tại các điểm biên biên trục tọa độ.'],
+    reviewSuggestions: ['Hàm mục tiêu luôn đạt giá trị tối ưu tại một trong các đỉnh lồi của miền nghiệm đa giác.']
+  },
+  {
+    id: 'mock-math10-s27',
+    questionId: 'mock-math10-q27',
+    recognition: 'Tìm tham số m để tập hợp này là con của tập hợp kia.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Thiết lập bất phương trình điều kiện',
+        explanation: 'Để $A = [m - 3; m + 1] \\subset B = [-2; 5]$, ta cần:\n$\\begin{cases} m - 3 \\ge -2 \\\\ m + 1 \\le 5 \\end{cases} \\Leftrightarrow \\begin{cases} m \\ge 1 \\\\ m \\le 4 \\end{cases} \\Leftrightarrow 1 \\le m \\le 4$.',
+        result: '1 <= m <= 4'
+      },
+      {
+        order: 2,
+        title: 'Đếm số lượng giá trị nguyên',
+        explanation: 'Các giá trị nguyên của m là $\\{1; 2; 3; 4\\}$. Tổng cộng có 4 giá trị nguyên thỏa mãn.',
+        result: '4'
+      }
+    ],
+    finalAnswer: '4',
+    commonMistakes: ['Tính sai khoảng m hoặc đếm thiếu phần tử đầu mút.'],
+    reviewSuggestions: ['Vẽ hai đoạn số chồng lên nhau trên giấy để kiểm chứng trực quan điều kiện tập con.']
+  },
+  {
+    id: 'mock-math10-s28',
+    questionId: 'mock-math10-q28',
+    recognition: 'Lập phương trình parabol khi biết trục đối xứng và điểm đi qua.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Sử dụng trục đối xứng lập phương trình thứ nhất',
+        explanation: 'Parabol $y = ax^2 + bx + 3$ có trục đối xứng $x = 2 \\Rightarrow -\\frac{b}{2a} = 2 \\Rightarrow b = -4a$.',
+        result: 'b = -4a'
+      },
+      {
+        order: 2,
+        title: 'Sử dụng điểm đi qua lập phương trình thứ hai',
+        explanation: 'Đi qua $A(1; 0) \\Rightarrow 0 = a(1)^2 + b(1) + 3 \\Rightarrow a + b = -3$.',
+        result: 'a + b = -3'
+      },
+      {
+        order: 3,
+        title: 'Giải hệ tìm a và b',
+        explanation: 'Thay $b = -4a$ vào $a + b = -3$ ta có $a - 4a = -3 \\Rightarrow -3a = -3 \\Rightarrow a = 1 \\Rightarrow b = -4$. Vậy parabol là $y = x^2 - 4x + 3$.',
+        result: 'x^2-4x+3'
+      }
+    ],
+    finalAnswer: 'x^2-4x+3',
+    commonMistakes: ['Tính nhầm dấu khi giải hệ phương trình hoặc viết thừa chữ y = trong kết quả ngắn.'],
+    reviewSuggestions: ['Đọc kĩ định dạng yêu cầu của đáp án ngắn để nhập chính xác biểu thức.']
+  },
+  {
+    id: 'mock-math10-s29',
+    questionId: 'mock-math10-q29',
+    recognition: 'Tính khoảng cách gián tiếp ngoài khơi sử dụng định lý Sin.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính góc đối diện cạnh AB',
+        explanation: 'Trong tam giác ABC, góc $\\angle C = 180^\\circ - 60^\\circ - 45^\\circ = 75^\\circ$.',
+        result: 'Góc C = 75 độ'
+      },
+      {
+        order: 2,
+        title: 'Áp dụng định lý Sin tìm AC',
+        explanation: '$\\frac{AC}{\\sin B} = \\frac{AB}{\\sin C} \\Rightarrow AC = \\frac{200 \\cdot \\sin 45^\\circ}{\\sin 75^\\circ} \\approx \\frac{200 \\cdot 0.7071}{0.9659} \\approx 146.41$ (m). Làm tròn đến đơn vị mét là 146.',
+        result: 'AC = 146'
+      }
+    ],
+    finalAnswer: '146',
+    commonMistakes: ['Tính sai giá trị lượng giác hoặc làm tròn sai chữ số.'],
+    reviewSuggestions: ['Chuyển máy tính bỏ túi về chế độ DEG khi tính các góc dạng độ.']
+  },
+  {
+    id: 'mock-math10-s30',
+    questionId: 'mock-math10-q30',
+    recognition: 'Tính tích vô hướng của hai vectơ từ tọa độ các điểm.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm tọa độ các vectơ',
+        explanation: 'Ta có $\\vec{AB} = (-2 - 1; 5 - 2) = (-3; 3)$, và $\\vec{AC} = (4 - 1; 4 - 2) = (3; 2)$.',
+        result: 'AB = (-3; 3), AC = (3; 2)'
+      },
+      {
+        order: 2,
+        title: 'Tính tích vô hướng của hai vectơ',
+        explanation: '$\\vec{AB} \\cdot \\vec{AC} = x_1x_2 + y_1y_2 = (-3)(3) + 3(2) = -9 + 6 = -3$.',
+        result: '-3'
+      }
+    ],
+    finalAnswer: '-3',
+    commonMistakes: ['Trừ nhầm tọa độ điểm sau cho điểm trước hoặc nhân sai dấu tích.'],
+    reviewSuggestions: ['Công thức tọa độ vectơ: AB = (xB - xA; yB - yA) và tích vô hướng: x1x2 + y1y2.']
   }
 ];
