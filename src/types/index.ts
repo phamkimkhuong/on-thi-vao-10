@@ -96,6 +96,7 @@ export interface QuestionType {
   examFrequency: 'low' | 'medium' | 'high';
   exampleQuestionId?: string; // ID câu hỏi dùng làm ví dụ mẫu trong tab "Ví dụ mẫu"
   subTypes?: SubType[]; // Phân dạng bài tập con chi tiết
+  theory?: string[]; // Lý thuyết & Định nghĩa cơ bản của dạng bài
 }
 
 

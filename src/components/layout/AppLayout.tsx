@@ -113,7 +113,11 @@ export const AppLayout: React.FC = () => {
     { path: '/practice', label: 'Luyện tập', icon: BookOpen },
     { path: '/ai-tutor', label: 'Gia sư AI', icon: Sparkles },
     { path: '/mistakes', label: 'Sổ lỗi sai', icon: Bookmark },
-    { path: '/exam', label: 'Thi thử vào 10', icon: Award }
+    {
+      path: '/exam',
+      label: selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra',
+      icon: Award
+    }
   ];
 
   // Tính toán nhanh tiến độ tổng quát
@@ -136,7 +140,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/practice')) return 'Luyện tập';
     if (path.startsWith('/ai-tutor')) return 'Gia sư AI Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
-    if (path.startsWith('/exam')) return 'Thi thử vào 10';
+    if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';
     return 'Bảng điều khiển';
   };
@@ -151,7 +155,7 @@ export const AppLayout: React.FC = () => {
             10
           </div>
           <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-            ÔN THI VÀO 10
+            {selectedGrade === 'grade9' ? 'ÔN THI VÀO 10' : 'HỌC TỐT LỚP 10'}
           </span>
         </div>
 
@@ -452,7 +456,9 @@ export const AppLayout: React.FC = () => {
                 {getHeaderTitle()}
               </h1>
               <p className="text-xs text-muted-foreground font-semibold mt-0.5">
-                Môn đang chọn: {selectedSubject === 'math' ? '📐 Toán học lớp 9' : '🗣️ Tiếng Anh ôn thi vào 10'}
+                Môn đang chọn: {selectedSubject === 'math'
+                  ? (selectedGrade === 'grade9' ? '📐 Toán học lớp 9' : '📐 Toán học lớp 10')
+                  : (selectedGrade === 'grade9' ? '🗣️ Tiếng Anh ôn thi vào 10' : '🗣️ Tiếng Anh lớp 10')}
               </p>
             </div>
           </div>

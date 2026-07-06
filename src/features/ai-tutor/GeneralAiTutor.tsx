@@ -53,7 +53,7 @@ const generateChatStoragePath = (userId: string, subject: string, fileName: stri
 
 export const GeneralAiTutor: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAppStore();
+  const { user, selectedGrade } = useAppStore();
 
   const [showDiagnostics, setShowDiagnostics] = useState(() => {
     return localStorage.getItem('otv10_ai_show_diagnostics') !== 'false';
@@ -304,8 +304,12 @@ export const GeneralAiTutor: React.FC = () => {
     // Nếu ở trạng thái tạo cuộc hội thoại mới (hoặc không có session nào)
     if (isNewSessionDraft || !activeSessionId) {
       const defaultText = subject === 'math'
-        ? `Chào em! Thầy là Gia sư AI môn Toán ôn thi vào 10. Thầy đã sẵn sàng đồng hành cùng em ôn luyện. Em đang vướng mắc ở chuyên đề nào (Rút gọn biểu thức, Hệ thức Vi-ét, Parabol, Hình học...) hay cần thầy ra bài tập thử thách nào không?`
-        : `Hello! Thầy là Gia sư AI môn Tiếng Anh ôn thi vào 10. Thầy sẽ giúp em làm chủ các chủ điểm ngữ pháp, cấu trúc viết lại câu, từ vựng... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`;
+        ? (selectedGrade === 'grade9'
+            ? `Chào em! Thầy là Gia sư AI môn Toán ôn thi vào 10. Thầy đã sẵn sàng đồng hành cùng em ôn luyện. Em đang vướng mắc ở chuyên đề nào (Rút gọn biểu thức, Hệ thức Vi-ét, Parabol, Hình học...) hay cần thầy ra bài tập thử thách nào không?`
+            : `Chào em! Thầy là Gia sư AI môn Toán lớp 10. Thầy đã sẵn sàng đồng hành cùng em học tập. Em đang vướng mắc ở chuyên đề nào (Mệnh đề & Tập hợp, Hàm số bậc hai, Hệ thức lượng, Vectơ...) hay cần thầy ra bài tập thử thách nào không?`)
+        : (selectedGrade === 'grade9'
+            ? `Hello! Thầy là Gia sư AI môn Tiếng Anh ôn thi vào 10. Thầy sẽ giúp em làm chủ các chủ điểm ngữ pháp, cấu trúc viết lại câu, từ vựng... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`
+            : `Hello! Thầy là Gia sư AI môn Tiếng Anh lớp 10. Thầy sẽ giúp em làm chủ các chủ điểm ngữ pháp, cấu trúc câu, từ vựng... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`);
 
       const welcomeText = (profile && user?.displayName)
         ? getPersonalizedGreeting(user?.displayName, profile, subject)
@@ -313,7 +317,7 @@ export const GeneralAiTutor: React.FC = () => {
 
       setMessages([{ role: 'model', text: welcomeText }]);
     }
-  }, [activeSessionId, sessions, isNewSessionDraft, subject, profile, user?.displayName]);
+  }, [activeSessionId, sessions, isNewSessionDraft, subject, profile, user?.displayName, selectedGrade]);
 
   // Tự động cuộn xuống tin nhắn mới nhất
   useEffect(() => {

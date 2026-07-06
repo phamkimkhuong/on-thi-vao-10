@@ -4,7 +4,7 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getQuestions, getSolutions, getMockExams } from '../../data';
+import { getQuestionTypes, getMockExams, allQuestions, allSolutions } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -36,13 +36,7 @@ export const ExamEngine: React.FC = () => {
   const { selectedSubject, selectedGrade, user } = useAppStore();
 
   const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
-  const mathQuestions = getQuestions(selectedGrade, 'math');
-  const mathSolutions = getSolutions(selectedGrade, 'math');
-
   const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
-  const englishQuestions = getQuestions(selectedGrade, 'english');
-  const englishSolutions = getSolutions(selectedGrade, 'english');
-
   const mockExamsList = getMockExams(selectedGrade, selectedSubject);
 
   useEffect(() => {
@@ -137,18 +131,17 @@ export const ExamEngine: React.FC = () => {
   };
 
   const getSolutionForQuestion = (questionId: string) => {
-    const isMath = selectedSubject === 'math';
-    const solutions = isMath ? mathSolutions : englishSolutions;
-    return solutions.find(s => s.questionId === questionId);
+    return allSolutions.find(s => s.questionId === questionId);
   };
 
   useEffect(() => {
-    if (subjectExams.length > 0) {
-      setSelectedExamId(subjectExams[0].id);
+    const exams = getMockExams(selectedGrade, selectedSubject);
+    if (exams.length > 0) {
+      setSelectedExamId(exams[0].id);
     } else {
       setSelectedExamId('');
     }
-  }, [selectedSubject, subjectExams]);
+  }, [selectedSubject, selectedGrade]);
 
   const proofImagesByQuestionRef = React.useRef(proofImagesByQuestion);
   useEffect(() => {
@@ -182,7 +175,6 @@ export const ExamEngine: React.FC = () => {
 
   const currentExam = mockExamsList.find(exam => exam.id === selectedExamId) || subjectExams[0];
   const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'math' ? 120 : 60);
-  const availableExamQuestions = selectedSubject === 'math' ? mathQuestions : englishQuestions;
 
   const handleSubmitExam = useCallback(async () => {
     if (isSubmittingExam) return;
@@ -311,7 +303,7 @@ export const ExamEngine: React.FC = () => {
     // Bốc các câu hỏi thuộc đề thi thử được chọn
     if (currentExam) {
       const questionsForExam = currentExam.questionIds
-        .map(id => availableExamQuestions.find(q => q.id === id))
+        .map(id => allQuestions.find(q => q.id === id))
         .filter((q): q is Question => q !== undefined);
       setExamQuestions(questionsForExam);
       setTimeLeft(currentExam.duration * 60);
@@ -530,7 +522,7 @@ export const ExamEngine: React.FC = () => {
                             : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
                             }`}
                         >
-                          {opt}
+                          <LatexRenderer text={opt} />
                         </button>
                       );
                     })}
@@ -719,7 +711,7 @@ export const ExamEngine: React.FC = () => {
                                 key={i}
                                 className={`p-3 rounded-xl text-xs font-semibold border flex items-center justify-between ${optStyle}`}
                               >
-                                <span>{opt}</span>
+                                <span className="flex-1"><LatexRenderer text={opt} /></span>
                                 {isCorrectOpt && <span className="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-extrabold uppercase shrink-0 ml-2">Đáp án đúng</span>}
                                 {isUserSelected && !isCorrectOpt && <span className="text-[10px] bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-full font-extrabold uppercase shrink-0 ml-2">Bạn chọn</span>}
                               </div>
@@ -733,12 +725,14 @@ export const ExamEngine: React.FC = () => {
                           <div className="p-2.5 bg-slate-50/50 dark:bg-slate-900/10 rounded-lg border border-border/10">
                             <span className="text-[10px] text-muted-foreground block mb-0.5">BÀI LÀM CỦA BẠN:</span>
                             <span className={isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
-                              {studentAnsText}
+                              <LatexRenderer text={studentAnsText} />
                             </span>
                           </div>
                           <div className="p-2.5 bg-slate-50/50 dark:bg-slate-900/10 rounded-lg border border-border/10">
                             <span className="text-[10px] text-muted-foreground block mb-0.5">ĐÁP ÁN ĐÚNG:</span>
-                            <span className="text-primary">{correctAnsText}</span>
+                            <span className="text-primary">
+                              <LatexRenderer text={correctAnsText} />
+                            </span>
                           </div>
                         </div>
                       )}

@@ -155,8 +155,8 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
       // Xóa trắng container trước khi render mới
       containerRef.current.innerHTML = '';
 
-      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế
-      const normalizedText = text.replace(/\\n/g, '\n');
+      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế (trừ các lệnh LaTeX bắt đầu bằng \n như \neq, \nexists, ...)
+      const normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|geq|leq|parallel|cong|sim|approx)/g, '\n');
 
       // Tách riêng các khối hình ảnh SVG (nếu có) để render đồ họa vector trực tiếp
       const SVG_REGEX = /(<svg[\s\S]*?<\/svg>)/g;
@@ -199,7 +199,7 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
   return (
     <span
       ref={containerRef}
-      className={`inline-block text-left ${className}`}
+      className={`inline-block text-left notranslate ${className}`}
       aria-label={text}
       title={text}
     />

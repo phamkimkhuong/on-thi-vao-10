@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AnswerField, Question, StructuredAnswer } from '../../types';
 import { cn } from '../../utils/cn';
+import { LatexRenderer } from './LatexRenderer';
 
 interface AnswerFormRendererProps {
   question: Question;
@@ -60,7 +61,9 @@ export const AnswerFormRenderer: React.FC<AnswerFormRendererProps> = ({
               key={field.key}
               className={cn('space-y-1.5', isLongField && schema.fields.length > 1 && 'sm:col-span-2')}
             >
-              <span className="text-[11px] font-bold text-foreground">{field.label}</span>
+              <span className="text-[11px] font-bold text-foreground block">
+                <LatexRenderer text={field.label} />
+              </span>
               <input
                 type="text"
                 value={fieldValue}

@@ -14,7 +14,8 @@ import {
   PlayCircle,
   LockKeyhole,
   Lightbulb,
-  CornerDownRight
+  CornerDownRight,
+  BookOpen
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme } from '../../utils/theme';
@@ -77,6 +78,29 @@ export const QuestionTypeDetail: React.FC = () => {
 
   // Xây dựng tab items
   const tabItems: TabItem[] = [];
+
+  if (detail.theory && detail.theory.length > 0) {
+    tabItems.push({
+      id: 'theory',
+      label: '📖 Định nghĩa & Lý thuyết',
+      content: (
+        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
+          <CardContent className="p-6 space-y-4">
+            <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
+              <BookOpen size={16} className="text-primary" /> Khái niệm & Định nghĩa cơ bản cần nắm:
+            </h4>
+            <div className="space-y-4 text-xs font-semibold text-muted-foreground leading-relaxed">
+              {detail.theory.map((para: string, idx: number) => (
+                <div key={idx} className="bg-secondary/50 dark:bg-slate-900/40 p-4.5 rounded-xl border border-border/10">
+                  <LatexRenderer text={para} />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )
+    });
+  }
 
   if (detail.subTypes && detail.subTypes.length > 0) {
     tabItems.push({
@@ -296,7 +320,9 @@ export const QuestionTypeDetail: React.FC = () => {
               'text-[10px] font-bold px-2 py-0.5 rounded-full',
               getSubjectTheme(isMath ? 'math' : 'english').badge
             )}>
-              {isMath ? '📐 Toán học lớp 9' : '🗣️ Tiếng Anh ôn thi'}
+              {isMath 
+                ? (selectedGrade === 'grade9' ? '📐 Toán học lớp 9' : '📐 Toán học lớp 10')
+                : (selectedGrade === 'grade9' ? '🗣️ Tiếng Anh ôn thi' : '🗣️ Tiếng Anh lớp 10')}
             </span>
             <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-muted-foreground font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
               Tần suất: {detail.examFrequency === 'high' ? 'Hay thi (Cao)' : 'Trung bình'}
@@ -339,7 +365,7 @@ export const QuestionTypeDetail: React.FC = () => {
       </div>
 
       {/* Tabs nội dung chi tiết */}
-      <Tabs items={tabItems} defaultTabId={detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition'} />
+      <Tabs items={tabItems} defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')} />
 
     </div>
   );
