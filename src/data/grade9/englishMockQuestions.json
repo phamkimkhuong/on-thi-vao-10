@@ -1,0 +1,549 @@
+[
+  {
+    "id": "mock-eng-1-q1",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "Choose the word whose underlined part is pronounced differently from the others:",
+    "options": [
+      "A. cleaned",
+      "B. helped",
+      "C. worked",
+      "D. watched"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q2",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "Choose the word whose underlined part is pronounced differently from the others:",
+    "options": [
+      "A. great",
+      "B. beautiful",
+      "C. teacher",
+      "D. cheap"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q3",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "Choose the word whose main stress pattern is placed differently from the others:",
+    "options": [
+      "A. return",
+      "B. decide",
+      "C. visit",
+      "D. improve"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q4",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "Choose the word whose main stress pattern is placed differently from the others:",
+    "options": [
+      "A. environment",
+      "B. vocabulary",
+      "C. conversation",
+      "D. original"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q5",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "If we __________ water, we will have to pay more money next month.",
+    "options": [
+      "A. waste",
+      "B. save",
+      "C. protect",
+      "D. clean"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q6",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "She is very proud __________ her daughter who won the first prize in the English contest.",
+    "options": [
+      "A. of",
+      "B. on",
+      "C. at",
+      "D. in"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q7",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "The children were playing soccer when it __________ to rain heavily.",
+    "options": [
+      "A. start",
+      "B. started",
+      "C. starts",
+      "D. was starting"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q8",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "You have read the book about our solar system, __________ you?",
+    "options": [
+      "A. do",
+      "B. don't",
+      "C. have",
+      "D. haven't"
+    ],
+    "correctAnswer": "D",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q9",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "My father suggests __________ to the countryside this weekend to relax.",
+    "options": [
+      "A. go",
+      "B. to go",
+      "C. going",
+      "D. went"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q10",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "The city of Barcelona __________ a lot since it worked on green designs.",
+    "options": [
+      "A. improved",
+      "B. has improved",
+      "C. improves",
+      "D. was improving"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q11",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "What does a \"KEEP OFF THE GRASS\" sign mean?",
+    "options": [
+      "A. You can sit on the grass.",
+      "B. You must not walk on the grass.",
+      "C. You should water the grass.",
+      "D. You are allowed to play here."
+    ],
+    "correctAnswer": "B",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q12",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "What does a \"NO LITTERING\" sign mean?",
+    "options": [
+      "A. You must throw trash here.",
+      "B. You should recycle your paper.",
+      "C. You must not throw trash on the ground.",
+      "D. You are allowed to park your car."
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q13",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt6",
+    "content": "Peter: \"Why don't we go to the beach for a change?\"\nMary: \"__________\"",
+    "options": [
+      "A. That's a good idea.",
+      "B. You're welcome.",
+      "C. Yes, I do.",
+      "D. I don't feel like."
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q14",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt12",
+    "content": "Reorder the following sentences to make a complete dialogue:\n\na. Jane: No, I haven't. I don't feel like reading it right now.\nb. Paul: Have you read the book about our solar system?\nc. Jane: Okay, I'll think about that.\nd. Paul: Why don't you give it a try? I'm sure you'll like it.",
+    "options": [
+      "A. d-b-c-a",
+      "B. a-d-c-b",
+      "C. b-a-d-c",
+      "D. b-c-d-a"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q15",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt12",
+    "content": "Reorder the following sentences to make a complete email:\n\nDear Sir,\na. Please review the agenda I sent earlier and let me know if any changes are required.\nb. I look forward to your feedback and confirmation.\nc. We will also discuss the timeline for the upcoming tasks.\nd. I would like to confirm that the meeting tomorrow at 10 a.m. will cover the project updates and next steps.\nBest regards,",
+    "options": [
+      "A. b-a-d-c",
+      "B. d-a-c-b",
+      "C. c-d-a-b",
+      "D. a-b-d-c"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q16",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt12",
+    "content": "Reorder the following sentences to make a complete paragraph:\n\na. Also, we take care of the garden by watering plants and picking up leaves.\nb. Students at our school help to keep the school clean.\nc. First, we put trash in the bins and never throw litter on the ground.\nd. In conclusion, we all feel proud because a clean school is a nice place to learn.\ne. Then, some students clean the classrooms by sweeping floors and wiping desks.",
+    "options": [
+      "A. e-c-d-a-b",
+      "B. d-a-c-e-b",
+      "C. c-b-d-a-e",
+      "D. b-c-e-a-d"
+    ],
+    "correctAnswer": "D",
+    "difficulty": "hard",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q17",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt13",
+    "content": "Read the following passage and choose the best answer for the question:\n\nWhen we think of cities, we often imagine busy streets, tall buildings, and air pollution. But now, many cities are trying to be greener and cleaner. A green city uses smart ideas to help the environment and raise the quality of life. This means people benefit greatly from more green spaces, better public transport and cleaner energy.\nBarcelona is a good example. Since 1859, it has worked on green designs. In 1992, before the Olympic Games, the city improved a lot. Now, many people use buses and trains, and there are many recycling bins around the city.\nPortland, in the USA, is also a green city. Since 1903, it has made parks and long walking and bike paths. People can even choose clean energy like solar or wind for a small extra cost.\nMore cities around the world are becoming green. This trend is growing and helping the planet.\n\nQuestion 17: The passage is mainly about _______.",
+    "options": [
+      "A. cities with tall buildings and busy roads",
+      "B. how cities are trying to become greener",
+      "C. the best cities to visit on holiday",
+      "D. problems with transport in big cities"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q18",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt13",
+    "content": "[Reading Passage: Green Cities]\n\nQuestion 18: The word \"improved\" in the passage is closest in meaning to _______.",
+    "options": [
+      "A. fixed",
+      "B. changed",
+      "C. built",
+      "D. made better"
+    ],
+    "correctAnswer": "D",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q19",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt13",
+    "content": "[Reading Passage: Green Cities]\n\nQuestion 19: What kind of transport do many people use in Barcelona now?",
+    "options": [
+      "A. taxis and private cars",
+      "B. trains and airplanes",
+      "C. buses and trains",
+      "D. boats and scooters"
+    ],
+    "correctAnswer": "C",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q20",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt13",
+    "content": "[Reading Passage: Green Cities]\n\nQuestion 20: Which of the following is TRUE about Portland?",
+    "options": [
+      "A. It has long bike and walking paths.",
+      "B. It has many shopping malls.",
+      "C. It has very tall office towers.",
+      "D. It has lots of traffic lights."
+    ],
+    "correctAnswer": "A",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q21",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt14",
+    "content": "Read the following passage and decide if the statements that follow are TRUE (T) or FALSE (F):\n\nViet Nam is home to some amazing islands, and three of the best are Côn Đảo, Phú Quốc, and Lý Sơn. Phú Quốc is probably the most popular island among the three. It's a lot more accessible with regular flights connecting to major cities in Viet Nam. It has many scenic attractions including beaches, smaller islands, and a national park. Côn Đảo is the perfect island for people who want to relax. It isn't as exciting as Phú Quốc, but there are still plenty of things to do. Lý Sơn is much smaller and isn't as accessible because you can only reach it by boat from Quảng Ngãi. It doesn't have the typical long, sandy beaches, but the beaches here are far more scenic than in many other places. All three islands have something unique to offer. Therefore, whichever you choose, you can be sure to have an amazing experience.\n\nQuestion 21: Phú Quốc is considered the most popular island because it is easy to reach.",
+    "options": [
+      "A. TRUE (T)",
+      "B. FALSE (F)"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q22",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt14",
+    "content": "[Reading Passage: Amazing Islands in Viet Nam]\n\nQuestion 22: Côn Đảo is the perfect island for people who look for relaxation.",
+    "options": [
+      "A. TRUE (T)",
+      "B. FALSE (F)"
+    ],
+    "correctAnswer": "A",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q23",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt14",
+    "content": "[Reading Passage: Amazing Islands in Viet Nam]\n\nQuestion 23: Lý Sơn is typical of long, sandy beaches, though there're only a few scenic ones.",
+    "options": [
+      "A. TRUE (T)",
+      "B. FALSE (F)"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q24",
+    "subjectId": "english",
+    "topicId": "eng-t3",
+    "questionTypeId": "eng-qt14",
+    "content": "[Reading Passage: Amazing Islands in Viet Nam]\n\nQuestion 24: Whichever island tourists want to visit, there's always a good choice of transport means.",
+    "options": [
+      "A. TRUE (T)",
+      "B. FALSE (F)"
+    ],
+    "correctAnswer": "B",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "choice"
+  },
+  {
+    "id": "mock-eng-1-q25",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt7",
+    "content": "Give the correct form of word in brackets:\n\nThe Internet is one of the most important (invent) ____________________ of our time.",
+    "correctAnswer": "inventions",
+    "acceptedAnswers": [
+      "invention",
+      "inventions"
+    ],
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q26",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt7",
+    "content": "Give the correct form of word in brackets:\n\nMy teacher suggests (study) ____________________ more about space to understand its mysteries.",
+    "correctAnswer": "studying",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q27",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt7",
+    "content": "Give the correct form of word in brackets:\n\nWe should adopt a green lifestyle to help conserve the (nature) ____________________ resources.",
+    "correctAnswer": "natural",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q28",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt7",
+    "content": "Give the correct form of word in brackets:\n\nI'll talk about our (please) ____________________ experience when we couldn't find any lodging in that village.",
+    "correctAnswer": "unpleasant",
+    "acceptedAnswers": [
+      "unpleasant",
+      "unpleasurable"
+    ],
+    "difficulty": "hard",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q29",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt11",
+    "content": "Identify the mistake and write the corrected word in the answer box:\n\n*We were very tiring after the long walk in the mountains.*",
+    "correctAnswer": "tired",
+    "acceptedAnswers": [
+      "tiring -> tired",
+      "tired"
+    ],
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q30",
+    "subjectId": "english",
+    "topicId": "eng-t2",
+    "questionTypeId": "eng-qt11",
+    "content": "Identify the mistake and write the corrected word in the answer box:\n\n*Typical English cuisine has developed since many centuries.*",
+    "correctAnswer": "for",
+    "acceptedAnswers": [
+      "since -> for",
+      "for"
+    ],
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q31",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt15",
+    "content": "\"Do you know the way to the Italian restaurant?\" Mary asked Peter.\n\n-> Mary asked Peter ________________________________________ to the Italian restaurant. (Use NO MORE THAN FOUR WORDS)",
+    "correctAnswer": "if he knew the way",
+    "acceptedAnswers": [
+      "whether he knew the way",
+      "if he knew the way",
+      "whether he knew way"
+    ],
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q32",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt15",
+    "content": "It's raining heavily outside so we can't leave now.\n\n-> We can't leave now ________________________________________ heavily outside. (Use NO MORE THAN FOUR WORDS)",
+    "correctAnswer": "because it is raining",
+    "acceptedAnswers": [
+      "because it's raining",
+      "because it is raining",
+      "as it is raining",
+      "since it is raining"
+    ],
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q33",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt15",
+    "content": "Venus, the second planet from the Sun, is sometimes called the Earth's sister.\n\n-> The second planet from the Sun is Venus, ________________________________________ the Earth's sister. (Use NO MORE THAN FOUR WORDS)",
+    "correctAnswer": "which is sometimes called",
+    "acceptedAnswers": [
+      "sometimes called",
+      "which is sometimes called",
+      "which is called"
+    ],
+    "difficulty": "hard",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  },
+  {
+    "id": "mock-eng-1-q34",
+    "subjectId": "english",
+    "topicId": "eng-t4",
+    "questionTypeId": "eng-qt15",
+    "content": "Do exercise regularly and your health will improve.\n\n-> Your health will improve ________________________________________ regularly. (Use NO MORE THAN FOUR WORDS)",
+    "correctAnswer": "if you exercise",
+    "acceptedAnswers": [
+      "if you do exercise",
+      "if you exercise",
+      "if you work out"
+    ],
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "validatorType": "exact"
+  }
+]

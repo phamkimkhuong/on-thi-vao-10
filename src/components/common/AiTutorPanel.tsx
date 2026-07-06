@@ -8,8 +8,8 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, auth, firebaseStorage } from '../../services/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { getPersonalizedGreeting, StudentProfile } from '../../utils/greetingHelper';
-import { mathTopics } from '../../data/mathData';
-import { englishTopics } from '../../data/englishData';
+import { getTopics } from '../../data';
+import { useAppStore } from '../../services/store';
 
 interface Message {
   role: 'user' | 'model';
@@ -137,6 +137,8 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
   // Khởi động tin nhắn chào mừng hoặc tải lịch sử chat từ Firestore
   useEffect(() => {
     if (isOpen) {
+      const grade = useAppStore.getState().selectedGrade;
+      const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
       if (auth.currentUser?.uid) {
         setIsLoadingHistory(true);
         const userId = auth.currentUser.uid;
@@ -154,7 +156,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
           setMessages([
             {
               role: 'model',
-              text: `Xin chào! Thầy là Gia sư AI ôn thi vào 10. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
+              text: `Xin chào! Thầy là Gia sư AI ${gradeText}. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
             }
           ]);
         }).catch((err) => {
@@ -167,7 +169,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
         setMessages([
           {
             role: 'model',
-            text: `Xin chào! Thầy là Gia sư AI ôn thi vào 10. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
+            text: `Xin chào! Thầy là Gia sư AI ${gradeText}. Thầy thấy em đang làm câu hỏi này. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
           }
         ]);
       }
@@ -188,7 +190,8 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
         
       if (isDefaultOrGenericWelcome) {
         const cleanSubjectId = question.subjectId || 'math';
-        const topicsList = cleanSubjectId === 'math' ? mathTopics : englishTopics;
+        const grade = useAppStore.getState().selectedGrade;
+        const topicsList = getTopics(grade, cleanSubjectId);
         const topic = topicsList.find(t => t.id === question.topicId);
         const topicName = topic ? topic.name : '';
         

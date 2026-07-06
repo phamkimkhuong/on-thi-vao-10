@@ -3,8 +3,7 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { aiService } from '../../services/aiService';
-import { mathQuestions, mathQuestionTypes, mathSolutions } from '../../data/mathData';
-import { englishQuestions, englishQuestionTypes, englishSolutions } from '../../data/englishData';
+import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -51,8 +50,16 @@ interface EnrichedMistake extends UserMistake {
 }
 
 export const MistakeNotebook: React.FC = () => {
-  const { selectedSubject, user, progressVersion, refreshProgress } = useAppStore();
+  const { selectedSubject, selectedGrade, user, progressVersion, refreshProgress } = useAppStore();
   void progressVersion;
+
+  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
+  const mathQuestions = getQuestions(selectedGrade, 'math');
+  const mathSolutions = getSolutions(selectedGrade, 'math');
+
+  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
+  const englishQuestions = getQuestions(selectedGrade, 'english');
+  const englishSolutions = getSolutions(selectedGrade, 'english');
 
   const [mistakes, setMistakes] = useState<EnrichedMistake[]>([]);
 
@@ -98,7 +105,7 @@ export const MistakeNotebook: React.FC = () => {
       .filter((m): m is EnrichedMistake => m.question !== undefined); // Loại bỏ các câu không tìm thấy câu hỏi gốc
 
     setMistakes(filtered);
-  }, [selectedSubject, user]);
+  }, [selectedSubject, user, mathQuestions, englishQuestions, mathQuestionTypes, englishQuestionTypes]);
 
   useEffect(() => {
     loadMistakes();

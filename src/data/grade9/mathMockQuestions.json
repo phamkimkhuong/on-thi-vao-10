@@ -1,0 +1,212 @@
+[
+  {
+    "id": "mock-math-1-q1",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Bài 1. (1,5 điểm)\n\n1. Tính giá trị của biểu thức \\(A = 2\\sqrt{3} - \\sqrt{12} + \\sqrt{4}\\).\n\n2. Giải phương trình \\(2x - 6 = 0\\).\n\n3. Giải bất phương trình \\(4x \\ge x + 3\\).",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "correctAnswer": "A = 2; x = 3; x >= 1",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "A",
+          "label": "A =",
+          "valueType": "number",
+          "placeholder": "2",
+          "hint": "Nhập giá trị biểu thức A."
+        },
+        {
+          "key": "pt",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "3",
+          "hint": "Nhập nghiệm của phương trình 2x - 6 = 0."
+        },
+        {
+          "key": "bpt",
+          "label": "Nghiệm BPT:",
+          "valueType": "expression",
+          "placeholder": "x >= 1",
+          "hint": "Nhập nghiệm của bất phương trình (Ví dụ: x >= 1)."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "A": "2",
+      "pt": "3",
+      "bpt": "x >= 1"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "A": "2",
+        "pt": "3",
+        "bpt": "x>=1"
+      }
+    ]
+  },
+  {
+    "id": "mock-math-1-q2",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Bài 2. (2,0 điểm)\n\n1. Cho hàm số \\(y = ax^2\\) (\\(a \\neq 0\\)) có đồ thị đi qua điểm \\(A(1; 1)\\). Xác định hệ số \\(a\\).\n\n2. Cho hai biểu thức: \\(M = \\frac{2\\sqrt{x}+1}{\\sqrt{x}+1}\\) và \\(N = \\frac{\\sqrt{x}}{\\sqrt{x}+2} + \\frac{1}{\\sqrt{x}-2} - \\frac{4}{x-4}\\) với \\(x \\ge 0, x \\neq 4\\).\n\na) Rút gọn biểu thức \\(N\\).\n\nb) Tìm tất cả giá trị nguyên của \\(x\\) để biểu thức \\(P = M \\cdot N\\) nhận giá trị là số nguyên.",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "a = 1; N = (\\sqrt{x}+1)/(\\sqrt{x}+2); x = 1",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "a",
+          "label": "a =",
+          "valueType": "number",
+          "placeholder": "1",
+          "hint": "Nhập hệ số a của hàm số."
+        },
+        {
+          "key": "N",
+          "label": "N =",
+          "valueType": "expression",
+          "placeholder": "(sqrt(x)+1)/(sqrt(x)+2)",
+          "hint": "Nhập biểu thức N đã rút gọn."
+        },
+        {
+          "key": "x",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "1",
+          "hint": "Nhập giá trị nguyên của x để P nhận giá trị nguyên."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "a": "1",
+      "N": "(sqrt(x)+1)/(sqrt(x)+2)",
+      "x": "1"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "a": "1",
+        "N": "(√x+1)/(√x+2)",
+        "x": "1"
+      },
+      {
+        "a": "1",
+        "N": "(sqrt(x) + 1)/(sqrt(x) + 2)",
+        "x": "1"
+      }
+    ]
+  },
+  {
+    "id": "mock-math-1-q3",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Bài 3. (1,5 điểm)\n\nTại một cửa hàng điện máy, tổng giá tiền niêm yết của một chiếc ti vi và một chiếc tủ lạnh là 25 triệu đồng. Tuy nhiên, trong dịp khai trương cửa hàng giảm 10% giá niêm yết mặt hàng ti vi và giảm 20% giá niêm yết mặt hàng tủ lạnh. Vì thế, bà My đã mua một chiếc ti vi và một chiếc tủ lạnh chỉ với tổng số tiền là 21 triệu đồng. Hỏi giá niêm yết của mỗi mặt hàng ban đầu là bao nhiêu?",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "Tivi: 10 triệu; Tủ lạnh: 15 triệu",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "tivi",
+          "label": "Giá tivi (triệu đồng):",
+          "valueType": "number",
+          "placeholder": "10"
+        },
+        {
+          "key": "tulanh",
+          "label": "Giá tủ lạnh (triệu đồng):",
+          "valueType": "number",
+          "placeholder": "15"
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "tivi": "10",
+      "tulanh": "15"
+    }
+  },
+  {
+    "id": "mock-math-1-q4",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Bài 4. (2,0 điểm)\n\n1. Bác An mua một khúc gỗ hình trụ có đường kính đáy 0,6 mét và chiều cao 2 mét. Biết rằng mỗi mét khối gỗ có giá 5.000.000 đồng. Tính thể tích của khúc gỗ và số tiền bác An mua khúc gỗ đó (làm tròn kết quả đến hàng chục nghìn).\n\n2. Một hộp đựng 15 tấm thẻ cùng loại được ghi số từ 1 đến 15, hai thẻ khác nhau thì ghi hai số khác nhau. Xét phép thử \"Rút ngẫu nhiên một tấm thẻ trong hộp\". Viết không gian mẫu của phép thử và tính xác suất của biến cố \\(A\\): \"Rút được thẻ ghi số chia hết cho 5\".",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "V = 0.57 m3; Tiền = 2,830,000 đồng; P(A) = 1/5",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "V",
+          "label": "V (m³) ≈",
+          "valueType": "number",
+          "placeholder": "0.57",
+          "hint": "Tính thể tích khúc gỗ (Lấy pi ≈ 3.14)"
+        },
+        {
+          "key": "tien",
+          "label": "Số tiền (đồng) =",
+          "valueType": "number",
+          "placeholder": "2830000",
+          "hint": "Làm tròn kết quả đến hàng chục nghìn."
+        },
+        {
+          "key": "P_A",
+          "label": "P(A) =",
+          "valueType": "fraction",
+          "placeholder": "1/5",
+          "hint": "Xác suất rút được thẻ ghi số chia hết cho 5."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "V": "0.57",
+      "tien": "2830000",
+      "P_A": "1/5"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "V": "0.5652",
+        "tien": "2830000",
+        "P_A": "0.2"
+      },
+      {
+        "V": "0.57",
+        "tien": "2830000",
+        "P_A": "1/5"
+      }
+    ]
+  },
+  {
+    "id": "mock-math-1-q5",
+    "subjectId": "math",
+    "topicId": "math-t5",
+    "questionTypeId": "math-qt6",
+    "content": "Bài 5. (3,0 điểm)\n\nCho tam giác nhọn \\(ABC\\) (\\(AB < AC\\)) nội tiếp trong đường tròn \\((O)\\). Hai đường cao \\(BD\\) và \\(CE\\) (\\(D\\) thuộc \\(AC\\); \\(E\\) thuộc \\(AB\\)) của tam giác \\(ABC\\) cắt nhau tại \\(H\\).\n\n1. Chứng minh bốn điểm \\(A, D, H, E\\) cùng thuộc một đường tròn.\n\n2. Tia \\(BD\\) cắt đường tròn \\((O)\\) tại điểm thứ hai là \\(M\\) (\\(M\\) khác \\(B\\)). Gọi \\(K\\) là trung điểm của \\(BC\\). Chứng minh tam giác \\(MHC\\) cân và \\(AH = 2OK\\).\n\n3. Đường thẳng \\(AH\\) cắt đường thẳng \\(BC\\) tại \\(F\\), đường thẳng \\(DE\\) cắt đường thẳng \\(BC\\) tại \\(N\\). Chứng minh \\(BN \\cdot CF = CN \\cdot BF\\).",
+    "difficulty": "hard",
+    "sourceType": "mock_exam",
+    "correctAnswer": "Chứng minh các tính chất hình học theo yêu cầu.",
+    "answerSchema": {
+      "type": "proof-upload",
+      "fields": [],
+      "proofImageRequired": true,
+      "autoCheckMode": "manual"
+    }
+  }
+]

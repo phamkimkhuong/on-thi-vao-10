@@ -5,6 +5,7 @@ import { SubjectCode } from '../types';
 interface AppState {
   darkMode: boolean;
   selectedSubject: SubjectCode;
+  selectedGrade: 'grade9' | 'grade10';
 
   // Auth state
   user: User | null;
@@ -18,6 +19,7 @@ interface AppState {
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
   setSubject: (subject: SubjectCode) => void;
+  setGrade: (grade: 'grade9' | 'grade10') => void;
   refreshProgress: () => void;
 
   // Auth actions
@@ -39,6 +41,7 @@ export const useAppStore = create<AppState>((set) => {
   return {
     darkMode: initialDarkMode,
     selectedSubject: 'math',
+    selectedGrade: (typeof localStorage !== 'undefined' && localStorage.getItem('otv10_selected_grade') as 'grade9' | 'grade10') || 'grade9',
 
     // Auth initial state
     user: null,
@@ -59,6 +62,12 @@ export const useAppStore = create<AppState>((set) => {
     },
 
     setSubject: (subject) => set({ selectedSubject: subject }),
+    setGrade: (grade) => {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('otv10_selected_grade', grade);
+      }
+      set({ selectedGrade: grade });
+    },
     refreshProgress: () => set((state) => ({ progressVersion: state.progressVersion + 1 })),
 
     setUser: (user) => set({ user }),

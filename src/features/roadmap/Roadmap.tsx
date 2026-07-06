@@ -2,8 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
-import { mathTopics, mathQuestionTypes } from '../../data/mathData';
-import { englishTopics, englishQuestionTypes } from '../../data/englishData';
+import { getTopics, getQuestionTypes } from '../../data';
 import { Card, CardContent } from '../../components/ui/card';
 import { Star, ArrowRight, StarOff, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -11,12 +10,12 @@ import { getDifficultyTheme, getStarsFromScore, getTierTheme } from '../../utils
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject, user, progressVersion, isPremium } = useAppStore();
+  const { selectedSubject, selectedGrade, user, progressVersion, isPremium } = useAppStore();
   void progressVersion;
   const progress = storageService.getProgress(user!.uid).masteryLevels;
 
-  const topics = selectedSubject === 'math' ? mathTopics : englishTopics;
-  const questionTypes = selectedSubject === 'math' ? mathQuestionTypes : englishQuestionTypes;
+  const topics = getTopics(selectedGrade, selectedSubject);
+  const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
   const getMasteryStars = (questionTypeId: string) => getStarsFromScore(progress[questionTypeId] ?? 0);
 
   const handleSelectType = (id: string) => {
@@ -24,7 +23,7 @@ export const Roadmap: React.FC = () => {
     const topic = topics.find(t => t.id === qType?.topicId);
     
     if (topic?.tier === 3 && !isPremium) {
-      if (window.confirm("Chặng 3 (Mục tiêu điểm 9-10) là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?")) {
+      if (window.confirm("Chặng 3 / Chuyên đề nâng cao là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?")) {
         navigate('/premium');
       }
       return;
@@ -50,39 +49,63 @@ export const Roadmap: React.FC = () => {
     );
   };
 
-  const tiers = [
-    {
-      id: 1,
-      title: '🎯 CHẶNG 1: ĐẢM BẢO ĐIỂM 5 (Vững vàng nền tảng)',
-      description: selectedSubject === 'math'
-        ? 'Luyện thật chắc Đại số nền tảng & Căn thức để nắm chắc 5 điểm đầu tiên của đề thi.'
-        : 'Ôn luyện các dạng câu hỏi Trắc nghiệm Ngữ pháp & Từ vựng nền tảng để nắm chắc 5 điểm đầu tiên.'
-    },
-    {
-      id: 2,
-      title: '🚀 CHẶNG 2: MỤC TIÊU ĐIỂM 7-8 (Tăng tốc bứt phá)',
-      description: selectedSubject === 'math'
-        ? 'Tăng tốc với Hệ phương trình, Toán thực tế và Hàm số & Đồ thị để đạt điểm 7-8.'
-        : 'Luyện đọc quảng cáo và các cấu trúc biến đổi câu cơ bản (Bị động, Điều kiện...).'
-    },
-    {
-      id: 3,
-      title: '👑 CHẶNG 3: CHINH PHỤC ĐIỂM 9-10 (Thủ khoa bứt phá)',
-      description: selectedSubject === 'math'
-        ? 'Chinh phục chuyên đề Hình học đường tròn để hoàn thiện điểm 9 và vươn tới điểm 10.'
-        : 'Làm chủ viết lại câu nâng cao/giới hạn từ, tìm và sửa lỗi sai, sắp xếp câu và đọc hiểu trắc nghiệm.'
-    }
-  ];
+  const tiers = selectedGrade === 'grade9'
+    ? [
+        {
+          id: 1,
+          title: '🎯 CHẶNG 1: ĐẢM BẢO ĐIỂM 5 (Vững vàng nền tảng)',
+          description: selectedSubject === 'math'
+            ? 'Luyện thật chắc Đại số nền tảng & Căn thức để nắm chắc 5 điểm đầu tiên của đề thi.'
+            : 'Ôn luyện các dạng câu hỏi Trắc nghiệm Ngữ pháp & Từ vựng nền tảng để nắm chắc 5 điểm đầu tiên.'
+        },
+        {
+          id: 2,
+          title: '🚀 CHẶNG 2: MỤC TIÊU ĐIỂM 7-8 (Tăng tốc bứt phá)',
+          description: selectedSubject === 'math'
+            ? 'Tăng tốc với Hệ phương trình, Toán thực tế và Hàm số & Đồ thị để đạt điểm 7-8.'
+            : 'Luyện đọc quảng cáo và các cấu trúc biến đổi câu cơ bản (Bị động, Điều kiện...).'
+        },
+        {
+          id: 3,
+          title: '👑 CHẶNG 3: CHINH PHỤC ĐIỂM 9-10 (Thủ khoa bứt phá)',
+          description: selectedSubject === 'math'
+            ? 'Chinh phục chuyên đề Hình học đường tròn để hoàn thiện điểm 9 và vươn tới điểm 10.'
+            : 'Làm chủ viết lại câu nâng cao/giới hạn từ, tìm và sửa lỗi sai, sắp xếp câu và đọc hiểu trắc nghiệm.'
+        }
+      ]
+    : [
+        {
+          id: 1,
+          title: '🎯 HỌC KỲ I (Nền tảng kiến thức mới)',
+          description: selectedSubject === 'math'
+            ? 'Làm quen và củng cố kiến thức Mệnh đề, Tập hợp, Hàm số bậc hai, Bất phương trình và Hệ thức lượng.'
+            : 'Ôn tập ngữ pháp & từ vựng nửa đầu năm học lớp 10 (Thì hiện tại tiếp diễn, tương lai, gerunds).'
+        },
+        {
+          id: 2,
+          title: '🚀 HỌC KỲ II (Tăng tốc bứt phá)',
+          description: selectedSubject === 'math'
+            ? 'Học tốt các chuyên đề về Vectơ, Đại số tổ hợp, Thống kê, Xác suất và Oxy.'
+            : 'Học tốt ngữ pháp & từ vựng nửa sau năm học lớp 10 (Mệnh đề quan hệ, câu gián tiếp, điều kiện).'
+        },
+        {
+          id: 3,
+          title: '👑 CHUYÊN ĐỀ HỌC TẬP (Mở rộng & Nâng cao)',
+          description: selectedSubject === 'math'
+            ? 'Chinh phục các chuyên đề học tập tự chọn nâng cao (Conic nâng cao, Hệ phương trình 3 ẩn).'
+            : 'Rèn luyện các cấu trúc ngữ pháp học thuật, bài đọc hiểu và viết luận nâng cao.'
+        }
+      ];
 
   return (
     <div className="space-y-12 max-w-4xl mx-auto pb-12">
       {/* Header Giới thiệu Lộ trình */}
       <div className="text-center space-y-3">
         <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2">
-          Lộ trình Ôn thi môn {selectedSubject === 'math' ? '📐 Toán học' : '🗣️ Tiếng Anh'} vào 10
+          {selectedGrade === 'grade9' ? 'Lộ trình Ôn thi' : 'Lộ trình Học tốt'} môn {selectedSubject === 'math' ? '📐 Toán học' : '🗣️ Tiếng Anh'} {selectedGrade === 'grade9' ? 'vào 10' : 'Lớp 10'}
         </h2>
         <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed font-semibold">
-          Lộ trình tinh gọn giúp bạn nắm chắc kiến thức ôn thi vào 10 toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.
+          Lộ trình tinh gọn giúp bạn nắm chắc kiến thức {selectedGrade === 'grade9' ? 'ôn thi vào 10' : 'chương trình lớp 10'} toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.
         </p>
       </div>
 

@@ -5,8 +5,7 @@ import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { aiService } from '../../services/aiService';
 import { logCustomEvent } from '../../services/firebase';
-import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
-import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
+import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
 import { Button } from '../../components/ui/button';
 
 import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation } from '../../types';
@@ -49,8 +48,17 @@ const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: stri
 export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, setSubject, user, progressVersion, refreshProgress, isPremium } = useAppStore();
+  const { selectedSubject, selectedGrade, setSubject, user, progressVersion, refreshProgress, isPremium } = useAppStore();
   void progressVersion;
+
+  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
+  const mathQuestions = getQuestions(selectedGrade, 'math');
+  const mathSolutions = getSolutions(selectedGrade, 'math');
+
+  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
+  const englishQuestions = getQuestions(selectedGrade, 'english');
+  const englishSolutions = getSolutions(selectedGrade, 'english');
+
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
 
   useEffect(() => {
@@ -138,7 +146,7 @@ export const PracticeEngine: React.FC = () => {
     if (totalQCount === 0) return 0;
     const percent = Math.round((correctQIds.size / totalQCount) * 100);
     return Math.max(1, percent);
-  }, [user, progressVersion]);
+  }, [user, progressVersion, englishQuestions]);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
@@ -273,7 +281,17 @@ export const PracticeEngine: React.FC = () => {
     setHintLevel(0);
     setQuestionStartAt(Date.now());
     setPastAttempts([]);
-  }, [clearUpload]);
+  }, [
+    clearUpload,
+    setStructuredAnswer,
+    setSelectedOption,
+    setIsSubmitted,
+    setIsSubmitting,
+    setSubmitError,
+    setHintLevel,
+    setQuestionStartAt,
+    setPastAttempts
+  ]);
 
   useEffect(() => {
     const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);
@@ -490,7 +508,8 @@ export const PracticeEngine: React.FC = () => {
     selectedSubTense,
     user,
     selectedSubject,
-    refreshProgress
+    refreshProgress,
+    setIsExamSubmitted
   ]);
 
   // Hiệu ứng đếm ngược thời gian thi

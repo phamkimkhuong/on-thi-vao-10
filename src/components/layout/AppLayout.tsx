@@ -18,8 +18,7 @@ import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { cn } from '../../utils/cn';
-import { mathQuestionTypes } from '../../data/mathData';
-import { englishQuestionTypes } from '../../data/englishData';
+import { getQuestionTypes } from '../../data';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +26,8 @@ export const AppLayout: React.FC = () => {
   const {
     selectedSubject,
     setSubject,
+    selectedGrade,
+    setGrade,
     user,
     logout,
     progressVersion,
@@ -118,11 +119,13 @@ export const AppLayout: React.FC = () => {
   // Tính toán nhanh tiến độ tổng quát
   const currentUserId = user.uid;
   const progress = storageService.getProgress(currentUserId);
+  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
+  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
 
-  const mathPercent = Math.round((mathCompleted / mathQuestionTypes.length) * 100);
-  const englishPercent = Math.round((englishCompleted / englishQuestionTypes.length) * 100);
+  const mathPercent = mathQuestionTypes.length > 0 ? Math.round((mathCompleted / mathQuestionTypes.length) * 100) : 0;
+  const englishPercent = englishQuestionTypes.length > 0 ? Math.round((englishCompleted / englishQuestionTypes.length) * 100) : 0;
   const canShowTeacherMenu = isTeacher || teacherAccessService.isBootstrapTeacher(user);
 
   const getHeaderTitle = () => {
@@ -196,6 +199,41 @@ export const AppLayout: React.FC = () => {
               </span>
             </div>
           )}
+        </div>
+
+        {/* Cấp Học Toggle */}
+        <div className={cn("px-4 pt-4 border-b border-border/30", isSidebarCollapsed && "px-2 pt-2")}>
+          <div className={cn(
+            "bg-secondary p-1 rounded-xl flex border border-border/10",
+            isSidebarCollapsed ? "flex-col gap-1.5 p-1" : "flex-row gap-1"
+          )}>
+            <button
+              onClick={() => { setGrade('grade9'); setIsSidebarOpen(false); navigate('/roadmap'); }}
+              className={cn(
+                "py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center",
+                isSidebarCollapsed ? "w-full aspect-square text-xs" : "flex-1",
+                selectedGrade === 'grade9'
+                  ? 'bg-card text-primary shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+              title={isSidebarCollapsed ? "Lớp 9" : undefined}
+            >
+              {isSidebarCollapsed ? '9️⃣' : '9️⃣ Ôn vào 10'}
+            </button>
+            <button
+              onClick={() => { setGrade('grade10'); setIsSidebarOpen(false); navigate('/roadmap'); }}
+              className={cn(
+                "py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center",
+                isSidebarCollapsed ? "w-full aspect-square text-xs" : "flex-1",
+                selectedGrade === 'grade10'
+                  ? 'bg-card text-primary shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+              title={isSidebarCollapsed ? "Lớp 10" : undefined}
+            >
+              {isSidebarCollapsed ? '🔟' : '🔟 Lớp 10'}
+            </button>
+          </div>
         </div>
 
         {/* Môn Học Toggle */}

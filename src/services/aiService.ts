@@ -1,8 +1,8 @@
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import { Question, Solution, AiEvaluation } from '../types';
-import { mathTopics } from '../data/mathData';
-import { englishTopics } from '../data/englishData';
+import { getTopics } from '../data';
+import { useAppStore } from './store';
 
 interface CallGeminiParams {
   prompt?: string;
@@ -97,7 +97,8 @@ ${specificGuidelines}`;
     });
 
     const cleanSubjectId = question.subjectId || 'math';
-    const topicsList = cleanSubjectId === 'math' ? mathTopics : englishTopics;
+    const grade = useAppStore.getState().selectedGrade;
+    const topicsList = getTopics(grade, cleanSubjectId);
     const topic = topicsList.find(t => t.id === question.topicId);
     const topicName = topic ? topic.name : '';
 

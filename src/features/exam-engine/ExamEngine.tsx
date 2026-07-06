@@ -4,9 +4,7 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { logCustomEvent } from '../../services/firebase';
-import { mathQuestions, mathQuestionTypes, mathSolutions } from '../../data/mathData';
-import { englishQuestions, englishQuestionTypes, englishSolutions } from '../../data/englishData';
-import { mockExamsList } from '../../data/mockExamsData';
+import { getQuestionTypes, getQuestions, getSolutions, getMockExams } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -35,7 +33,17 @@ import confetti from 'canvas-confetti';
 
 export const ExamEngine: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject, user } = useAppStore();
+  const { selectedSubject, selectedGrade, user } = useAppStore();
+
+  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
+  const mathQuestions = getQuestions(selectedGrade, 'math');
+  const mathSolutions = getSolutions(selectedGrade, 'math');
+
+  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
+  const englishQuestions = getQuestions(selectedGrade, 'english');
+  const englishSolutions = getSolutions(selectedGrade, 'english');
+
+  const mockExamsList = getMockExams(selectedGrade, selectedSubject);
 
   useEffect(() => {
     const start = Date.now();
@@ -62,7 +70,7 @@ export const ExamEngine: React.FC = () => {
   const [selectedExamId, setSelectedExamId] = useState<string>('');
   const subjectExams = React.useMemo(() => {
     return mockExamsList.filter(exam => exam.subjectId === selectedSubject);
-  }, [selectedSubject]);
+  }, [selectedSubject, mockExamsList]);
 
   const [expandedSolutionId, setExpandedSolutionId] = useState<Record<string, boolean>>({});
   const [aiFeedback, setAiFeedback] = useState<Record<string, { isCorrect: boolean; score: number; feedback: string }>>({});

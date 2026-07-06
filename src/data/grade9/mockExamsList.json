@@ -1,0 +1,59 @@
+[
+  {
+    "id": "exam-english-1",
+    "subjectId": "english",
+    "title": "Đề thi thử Tiếng Anh tuyển sinh Vào 10 - Số 1",
+    "duration": 60,
+    "questionIds": [
+      "mock-eng-1-q1",
+      "mock-eng-1-q2",
+      "mock-eng-1-q3",
+      "mock-eng-1-q4",
+      "mock-eng-1-q5",
+      "mock-eng-1-q6",
+      "mock-eng-1-q7",
+      "mock-eng-1-q8",
+      "mock-eng-1-q9",
+      "mock-eng-1-q10",
+      "mock-eng-1-q11",
+      "mock-eng-1-q12",
+      "mock-eng-1-q13",
+      "mock-eng-1-q14",
+      "mock-eng-1-q15",
+      "mock-eng-1-q16",
+      "mock-eng-1-q17",
+      "mock-eng-1-q18",
+      "mock-eng-1-q19",
+      "mock-eng-1-q20",
+      "mock-eng-1-q21",
+      "mock-eng-1-q22",
+      "mock-eng-1-q23",
+      "mock-eng-1-q24",
+      "mock-eng-1-q25",
+      "mock-eng-1-q26",
+      "mock-eng-1-q27",
+      "mock-eng-1-q28",
+      "mock-eng-1-q29",
+      "mock-eng-1-q30",
+      "mock-eng-1-q31",
+      "mock-eng-1-q32",
+      "mock-eng-1-q33",
+      "mock-eng-1-q34"
+    ],
+    "createdAt": "2026-07-06T06:41:53.617Z"
+  },
+  {
+    "id": "exam-math-1",
+    "subjectId": "math",
+    "title": "Đề thi thử Toán học tuyển sinh Vào 10 - Số 1",
+    "duration": 120,
+    "questionIds": [
+      "mock-math-1-q1",
+      "mock-math-1-q2",
+      "mock-math-1-q3",
+      "mock-math-1-q4",
+      "mock-math-1-q5"
+    ],
+    "createdAt": "2026-07-06T06:41:53.618Z"
+  }
+]

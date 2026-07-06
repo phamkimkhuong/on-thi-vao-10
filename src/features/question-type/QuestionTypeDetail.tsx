@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { mathQuestionTypes, mathQuestions, mathSolutions } from '../../data/mathData';
-import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../data/englishData';
+import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
 import { useAppStore } from '../../services/store';
 import { Tabs, TabItem } from '../../components/ui/tabs';
 import { QuestionType, Question, Solution } from '../../types';
@@ -24,7 +23,15 @@ import { getSubjectFromQuestionTypeId } from '../../utils/subject';
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, setSubject, user } = useAppStore();
+  const { selectedSubject, selectedGrade, setSubject, user } = useAppStore();
+
+  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
+  const mathQuestions = getQuestions(selectedGrade, 'math');
+  const mathSolutions = getSolutions(selectedGrade, 'math');
+
+  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
+  const englishQuestions = getQuestions(selectedGrade, 'english');
+  const englishSolutions = getSolutions(selectedGrade, 'english');
 
   useEffect(() => {
     const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);

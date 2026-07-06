@@ -1,0 +1,2285 @@
+[
+  {
+    "id": "mock-math-1-q1",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Bài 1. (1,5 điểm)\n\n1. Tính giá trị của biểu thức \\(A = 2\\sqrt{3} - \\sqrt{12} + \\sqrt{4}\\).\n\n2. Giải phương trình \\(2x - 6 = 0\\).\n\n3. Giải bất phương trình \\(4x \\ge x + 3\\).",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "correctAnswer": "A = 2; x = 3; x >= 1",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "A",
+          "label": "A =",
+          "valueType": "number",
+          "placeholder": "2",
+          "hint": "Nhập giá trị biểu thức A."
+        },
+        {
+          "key": "pt",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "3",
+          "hint": "Nhập nghiệm của phương trình 2x - 6 = 0."
+        },
+        {
+          "key": "bpt",
+          "label": "Nghiệm BPT:",
+          "valueType": "expression",
+          "placeholder": "x >= 1",
+          "hint": "Nhập nghiệm của bất phương trình (Ví dụ: x >= 1)."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "A": "2",
+      "pt": "3",
+      "bpt": "x >= 1"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "A": "2",
+        "pt": "3",
+        "bpt": "x>=1"
+      }
+    ]
+  },
+  {
+    "id": "mock-math-1-q2",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Bài 2. (2,0 điểm)\n\n1. Cho hàm số \\(y = ax^2\\) (\\(a \\neq 0\\)) có đồ thị đi qua điểm \\(A(1; 1)\\). Xác định hệ số \\(a\\).\n\n2. Cho hai biểu thức: \\(M = \\frac{2\\sqrt{x}+1}{\\sqrt{x}+1}\\) và \\(N = \\frac{\\sqrt{x}}{\\sqrt{x}+2} + \\frac{1}{\\sqrt{x}-2} - \\frac{4}{x-4}\\) với \\(x \\ge 0, x \\neq 4\\).\n\na) Rút gọn biểu thức \\(N\\).\n\nb) Tìm tất cả giá trị nguyên của \\(x\\) để biểu thức \\(P = M \\cdot N\\) nhận giá trị là số nguyên.",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "a = 1; N = (\\sqrt{x}+1)/(\\sqrt{x}+2); x = 1",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "a",
+          "label": "a =",
+          "valueType": "number",
+          "placeholder": "1",
+          "hint": "Nhập hệ số a của hàm số."
+        },
+        {
+          "key": "N",
+          "label": "N =",
+          "valueType": "expression",
+          "placeholder": "(sqrt(x)+1)/(sqrt(x)+2)",
+          "hint": "Nhập biểu thức N đã rút gọn."
+        },
+        {
+          "key": "x",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "1",
+          "hint": "Nhập giá trị nguyên của x để P nhận giá trị nguyên."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "a": "1",
+      "N": "(sqrt(x)+1)/(sqrt(x)+2)",
+      "x": "1"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "a": "1",
+        "N": "(√x+1)/(√x+2)",
+        "x": "1"
+      },
+      {
+        "a": "1",
+        "N": "(sqrt(x) + 1)/(sqrt(x) + 2)",
+        "x": "1"
+      }
+    ]
+  },
+  {
+    "id": "mock-math-1-q3",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Bài 3. (1,5 điểm)\n\nTại một cửa hàng điện máy, tổng giá tiền niêm yết của một chiếc ti vi và một chiếc tủ lạnh là 25 triệu đồng. Tuy nhiên, trong dịp khai trương cửa hàng giảm 10% giá niêm yết mặt hàng ti vi và giảm 20% giá niêm yết mặt hàng tủ lạnh. Vì thế, bà My đã mua một chiếc ti vi và một chiếc tủ lạnh chỉ với tổng số tiền là 21 triệu đồng. Hỏi giá niêm yết của mỗi mặt hàng ban đầu là bao nhiêu?",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "Tivi: 10 triệu; Tủ lạnh: 15 triệu",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "tivi",
+          "label": "Giá tivi (triệu đồng):",
+          "valueType": "number",
+          "placeholder": "10"
+        },
+        {
+          "key": "tulanh",
+          "label": "Giá tủ lạnh (triệu đồng):",
+          "valueType": "number",
+          "placeholder": "15"
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "tivi": "10",
+      "tulanh": "15"
+    }
+  },
+  {
+    "id": "mock-math-1-q4",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Bài 4. (2,0 điểm)\n\n1. Bác An mua một khúc gỗ hình trụ có đường kính đáy 0,6 mét và chiều cao 2 mét. Biết rằng mỗi mét khối gỗ có giá 5.000.000 đồng. Tính thể tích của khúc gỗ và số tiền bác An mua khúc gỗ đó (làm tròn kết quả đến hàng chục nghìn).\n\n2. Một hộp đựng 15 tấm thẻ cùng loại được ghi số từ 1 đến 15, hai thẻ khác nhau thì ghi hai số khác nhau. Xét phép thử \"Rút ngẫu nhiên một tấm thẻ trong hộp\". Viết không gian mẫu của phép thử và tính xác suất của biến cố \\(A\\): \"Rút được thẻ ghi số chia hết cho 5\".",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "V = 0.57 m3; Tiền = 2,830,000 đồng; P(A) = 1/5",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "V",
+          "label": "V (m³) ≈",
+          "valueType": "number",
+          "placeholder": "0.57",
+          "hint": "Tính thể tích khúc gỗ (Lấy pi ≈ 3.14)"
+        },
+        {
+          "key": "tien",
+          "label": "Số tiền (đồng) =",
+          "valueType": "number",
+          "placeholder": "2830000",
+          "hint": "Làm tròn kết quả đến hàng chục nghìn."
+        },
+        {
+          "key": "P_A",
+          "label": "P(A) =",
+          "valueType": "fraction",
+          "placeholder": "1/5",
+          "hint": "Xác suất rút được thẻ ghi số chia hết cho 5."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "V": "0.57",
+      "tien": "2830000",
+      "P_A": "1/5"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "V": "0.5652",
+        "tien": "2830000",
+        "P_A": "0.2"
+      },
+      {
+        "V": "0.57",
+        "tien": "2830000",
+        "P_A": "1/5"
+      }
+    ]
+  },
+  {
+    "id": "mock-math-1-q5",
+    "subjectId": "math",
+    "topicId": "math-t5",
+    "questionTypeId": "math-qt6",
+    "content": "Bài 5. (3,0 điểm)\n\nCho tam giác nhọn \\(ABC\\) (\\(AB < AC\\)) nội tiếp trong đường tròn \\((O)\\). Hai đường cao \\(BD\\) và \\(CE\\) (\\(D\\) thuộc \\(AC\\); \\(E\\) thuộc \\(AB\\)) của tam giác \\(ABC\\) cắt nhau tại \\(H\\).\n\n1. Chứng minh bốn điểm \\(A, D, H, E\\) cùng thuộc một đường tròn.\n\n2. Tia \\(BD\\) cắt đường tròn \\((O)\\) tại điểm thứ hai là \\(M\\) (\\(M\\) khác \\(B\\)). Gọi \\(K\\) là trung điểm của \\(BC\\). Chứng minh tam giác \\(MHC\\) cân và \\(AH = 2OK\\).\n\n3. Đường thẳng \\(AH\\) cắt đường thẳng \\(BC\\) tại \\(F\\), đường thẳng \\(DE\\) cắt đường thẳng \\(BC\\) tại \\(N\\). Chứng minh \\(BN \\cdot CF = CN \\cdot BF\\).",
+    "difficulty": "hard",
+    "sourceType": "mock_exam",
+    "correctAnswer": "Chứng minh các tính chất hình học theo yêu cầu.",
+    "answerSchema": {
+      "type": "proof-upload",
+      "fields": [],
+      "proofImageRequired": true,
+      "autoCheckMode": "manual"
+    }
+  },
+  {
+    "id": "math-q1",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Cho biểu thức \\(P = \\left(\\frac{\\sqrt{x}}{\\sqrt{x}-1} - \\frac{1}{x-\\sqrt{x}}\\right) \\div \\left(\\frac{1}{\\sqrt{x}+1} + \\frac{2}{x-1}\\right)\\) với \\(x > 0, x \\neq 1\\).\n\n1. Rút gọn biểu thức \\(P\\).\n\n2. Tìm \\(x\\) để \\(P = -\\frac{3}{2}\\).",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "P = \\frac{x - 1}{\\sqrt{x}}; x = \\frac{1}{4}",
+    "acceptedAnswers": [
+      "x=1/4",
+      "1/4",
+      "0.25",
+      "x = 0.25"
+    ],
+    "validatorType": "number",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "P",
+          "label": "P =",
+          "valueType": "expression",
+          "placeholder": "(x - 1)/sqrt(x)",
+          "hint": "Nhập biểu thức P đã rút gọn."
+        },
+        {
+          "key": "x",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "1/4",
+          "hint": "Nhập giá trị x ở câu phụ."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "P": "(x - 1)/sqrt(x)",
+      "x": "1/4"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "P": "(x-1)/√x",
+        "x": "1/4"
+      },
+      {
+        "P": "(x - 1) / sqrt(x)",
+        "x": "0.25"
+      }
+    ]
+  },
+  {
+    "id": "math-q2",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Cho phương trình bậc hai \\(x^2 - 2(m + 1)x + m^2 + 4 = 0\\).\n\n1. Tìm \\(m\\) để phương trình có hai nghiệm phân biệt \\(x_1, x_2\\).\n\n2. Tìm \\(m\\) để hai nghiệm thỏa mãn \\(x_1^2 + x_2^2 - x_1x_2 = 7\\).",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "m = -4 + \\sqrt{31}",
+    "acceptedAnswers": [
+      "m=-4+√31",
+      "-4+√31",
+      "-4 + sqrt(31)"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m =",
+          "valueType": "expression",
+          "placeholder": "-4 + √31"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "m": "-4 + √31"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "m": "-4 + sqrt(31)"
+      }
+    ]
+  },
+  {
+    "id": "math-q3",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Một cửa hàng bán tivi và tủ lạnh. Tổng giá niêm yết ban đầu của một chiếc tivi và một chiếc tủ lạnh là 25 triệu đồng. Nhân dịp lễ, cửa hàng giảm giá 10% cho tivi và giảm giá 20% cho tủ lạnh, do đó khách hàng chỉ phải trả 21 triệu đồng để mua cả hai mặt hàng. Hỏi giá niêm yết ban đầu của mỗi mặt hàng là bao nhiêu?",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "Tivi: 10 triệu đồng; Tủ lạnh: 15 triệu đồng",
+    "acceptedAnswers": [
+      "Tivi 10, Tủ lạnh 15",
+      "10 15",
+      "Tivi: 10 triệu, Tủ lạnh: 15 triệu"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "tivi",
+          "label": "Tivi =",
+          "valueType": "number",
+          "placeholder": "10"
+        },
+        {
+          "key": "tuLanh",
+          "label": "Tủ lạnh =",
+          "valueType": "number",
+          "placeholder": "15"
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "tivi": "10",
+      "tuLanh": "15"
+    }
+  },
+  {
+    "id": "math-q4",
+    "subjectId": "math",
+    "topicId": "math-t5",
+    "questionTypeId": "math-qt6",
+    "content": "Cho đường tròn \\((O, R)\\) đường kính \\(AB\\). Lấy điểm \\(C\\) trên đường tròn sao cho \\(AC < BC\\). Kẻ đường cao \\(CH\\) của tam giác \\(ABC\\). Gọi \\(I\\) là trung điểm của \\(CH\\). Đường thẳng qua \\(A\\) vuông góc với \\(AB\\) cắt tia \\(BI\\) tại \\(K\\). Chứng minh tứ giác \\(AHCK\\) là tứ giác nội tiếp.",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "Chứng minh tứ giác AHCK nội tiếp.",
+    "validatorType": "manual",
+    "answerSchema": {
+      "type": "proof-upload",
+      "fields": [],
+      "proofImageRequired": true,
+      "autoCheckMode": "manual"
+    }
+  },
+  {
+    "id": "math-q5",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Cho biểu thức \\(A = \\frac{\\sqrt{x} + 1}{\\sqrt{x} - 1} - \\frac{2}{x - 1}\\) với \\(x \\ge 0, x \\neq 1\\).\n\n1. Rút gọn biểu thức \\(A\\).\n\n2. Tính giá trị của \\(A\\) khi \\(x = 4\\).",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "A = \\frac{x + 2\\sqrt{x} - 1}{x - 1}; A(4) = \\frac{7}{3}",
+    "acceptedAnswers": [
+      "7/3",
+      "A=7/3"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "A",
+          "label": "A =",
+          "valueType": "expression",
+          "placeholder": "(x + 2sqrt(x) - 1)/(x - 1)"
+        },
+        {
+          "key": "valueAt4",
+          "label": "A khi x = 4:",
+          "valueType": "fraction",
+          "placeholder": "7/3"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "A": "(x + 2sqrt(x) - 1)/(x - 1)",
+      "valueAt4": "7/3"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "A": "(x + 2√x - 1)/(x - 1)",
+        "valueAt4": "7/3"
+      }
+    ]
+  },
+  {
+    "id": "math-q6",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Cho biểu thức \\(B = \\left(\\frac{1}{\\sqrt{x} - 2} + \\frac{1}{\\sqrt{x} + 2}\\right) \\cdot \\frac{x - 4}{2\\sqrt{x}}\\) với \\(x > 0, x \\neq 4\\).\n\n1. Rút gọn biểu thức \\(B\\).\n\n2. Tìm \\(x\\) để \\(B = 2\\).",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "B = 1; không có giá trị \\(x\\) thỏa mãn \\(B = 2\\)",
+    "acceptedAnswers": [
+      "B=1, không có x",
+      "không có",
+      "vo nghiem"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "B",
+          "label": "B =",
+          "valueType": "expression",
+          "placeholder": "1"
+        },
+        {
+          "key": "x",
+          "label": "x thỏa B = 2:",
+          "valueType": "text",
+          "placeholder": "không có"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "B": "1",
+      "x": "không có"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "B": "1",
+        "x": "vô nghiệm"
+      }
+    ]
+  },
+  {
+    "id": "math-q7",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Cho biểu thức \\(C = \\left(\\frac{\\sqrt{x}}{\\sqrt{x} + 1} + \\frac{1}{x + \\sqrt{x}}\\right) \\div \\left(\\frac{1}{\\sqrt{x}} - \\frac{1}{\\sqrt{x} + 1}\\right)\\) với \\(x > 0\\).\n\n1. Rút gọn biểu thức \\(C\\).\n\n2. Tìm \\(x\\) để \\(C = 6\\).",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "correctAnswer": "\\(C = x + 1\\); \\(x = 5\\)",
+    "acceptedAnswers": [
+      "x=5",
+      "5",
+      "C=x+1, x=5"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "C",
+          "label": "C =",
+          "valueType": "expression",
+          "placeholder": "x + 1"
+        },
+        {
+          "key": "x",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "5"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "C": "x + 1",
+      "x": "5"
+    }
+  },
+  {
+    "id": "math-q8",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt3",
+    "content": "Giải hệ phương trình: \\(\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "x = 3; y = 1",
+    "acceptedAnswers": [
+      "x=3,y=1",
+      "3 1"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "x",
+          "label": "x =",
+          "valueType": "number",
+          "placeholder": "3"
+        },
+        {
+          "key": "y",
+          "label": "y =",
+          "valueType": "number",
+          "placeholder": "1"
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "x": "3",
+      "y": "1"
+    }
+  },
+  {
+    "id": "math-q9",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Tính giá trị của biểu thức số sau:\n\n\\(A = \\sqrt{18} - 2\\sqrt{50} + 3\\sqrt{8}\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "A = -\\sqrt{2}",
+    "acceptedAnswers": [
+      "-√2",
+      "-sqrt(2)",
+      "-sqrt2",
+      "A=-√2"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "A",
+          "label": "A =",
+          "valueType": "expression",
+          "placeholder": "-√2",
+          "hint": "Nhập giá trị rút gọn của biểu thức A."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "A": "-√2"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "A": "-sqrt(2)"
+      }
+    ]
+  },
+  {
+    "id": "math-q10",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Tìm điều kiện xác định của biểu thức sau:\n\n\\(P = \\left(\\frac{1}{\\sqrt{x}-1} + \\frac{1}{\\sqrt{x}+1}\\right) \\cdot \\frac{x-1}{\\sqrt{x}}\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "x > 0, x \\neq 1",
+    "acceptedAnswers": [
+      "x>0, x!=1",
+      "x > 0 và x khác 1",
+      "x > 0, x ≠ 1",
+      "x>0; x khác 1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "dkxd",
+          "label": "Điều kiện xác định:",
+          "valueType": "text",
+          "placeholder": "x > 0, x ≠ 1",
+          "hint": "Nhập điều kiện xác định của biến x."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "dkxd": "x > 0, x ≠ 1"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "dkxd": "x>0, x!=1"
+      }
+    ]
+  },
+  {
+    "id": "math-q11",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Cho biểu thức \\(M = \\frac{\\sqrt{x}+3}{\\sqrt{x}-1}\\) với \\(x \\ge 0, x \\neq 1\\).\n\nTìm các giá trị số nguyên của \\(x\\) để \\(M\\) nhận giá trị nguyên.",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "correctAnswer": "x \\in \\{0, 4, 9, 25\\}",
+    "acceptedAnswers": [
+      "0, 4, 9, 25",
+      "x = 0, 4, 9, 25",
+      "{0, 4, 9, 25}"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "x",
+          "label": "Các giá trị x nguyên:",
+          "valueType": "text",
+          "placeholder": "0, 4, 9, 25",
+          "hint": "Nhập các giá trị x tìm được, cách nhau bằng dấu phẩy."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "x": "0, 4, 9, 25"
+    }
+  },
+  {
+    "id": "math-q12",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt1",
+    "content": "Cho biểu thức \\(Q = \\frac{\\sqrt{x}-1}{\\sqrt{x}+2}\\) với \\(x \\ge 0\\).\n\n1. Chứng minh \\(Q < 1\\) với mọi \\(x \\ge 0\\).\n\n2. Tìm khoảng giá trị của \\(x\\) để \\(Q < 0\\).",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Q < 1; 0 \\le x < 1",
+    "acceptedAnswers": [
+      "0 <= x < 1",
+      "0 < x < 1",
+      "x < 1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "compare",
+          "label": "Kết luận so sánh:",
+          "valueType": "text",
+          "placeholder": "Q < 1"
+        },
+        {
+          "key": "range",
+          "label": "Giá trị x để Q < 0:",
+          "valueType": "text",
+          "placeholder": "0 <= x < 1"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "compare": "Q < 1",
+      "range": "0 <= x < 1"
+    }
+  },
+  {
+    "id": "math-q13",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Một máy giặt và một tủ lạnh có tổng giá niêm yết là 30 triệu đồng. Nhân dịp ngày lễ, máy giặt được giảm giá 15% và tủ lạnh được giảm giá 20%, nên tổng số tiền thực tế khách hàng phải trả để mua cả hai sản phẩm là 24,75 triệu đồng. Tìm giá niêm yết của mỗi sản phẩm.",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Máy giặt: 15 triệu đồng, Tủ lạnh: 15 triệu đồng",
+    "acceptedAnswers": [
+      "Máy giặt 15, Tủ lạnh 15",
+      "15 15",
+      "Máy giặt: 15 triệu, Tủ lạnh: 15 triệu",
+      "15",
+      "15 triệu"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "mayGiat",
+          "label": "Máy giặt =",
+          "valueType": "number",
+          "placeholder": "15",
+          "hint": "Nhập giá niêm yết của máy giặt (triệu đồng)."
+        },
+        {
+          "key": "tuLanh",
+          "label": "Tủ lạnh =",
+          "valueType": "number",
+          "placeholder": "15",
+          "hint": "Nhập giá niêm yết của tủ lạnh (triệu đồng)."
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "mayGiat": "15",
+      "tuLanh": "15"
+    }
+  },
+  {
+    "id": "math-q14",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Hai lớp 9A và 9B có tổng số 82 học sinh. Cuối năm học, lớp 9A có 75% học sinh đạt danh hiệu học sinh khá giỏi, lớp 9B có 80% học sinh đạt danh hiệu học sinh khá giỏi. Biết tổng số học sinh khá giỏi của cả hai lớp là 64 em. Hỏi mỗi lớp có bao nhiêu học sinh?",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Lớp 9A: 32 học sinh, Lớp 9B: 50 học sinh",
+    "acceptedAnswers": [
+      "Lớp 9A 32, Lớp 9B 50",
+      "32 50",
+      "32",
+      "50"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "lop9A",
+          "label": "Lớp 9A =",
+          "valueType": "number",
+          "placeholder": "32",
+          "hint": "Nhập số học sinh của lớp 9A."
+        },
+        {
+          "key": "lop9B",
+          "label": "Lớp 9B =",
+          "valueType": "number",
+          "placeholder": "50",
+          "hint": "Nhập số học sinh của lớp 9B."
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "lop9A": "32",
+      "lop9B": "50"
+    }
+  },
+  {
+    "id": "math-q15",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Một đội xe dự định chở 120 tấn hàng, mỗi xe chở một khối lượng hàng như nhau. Sau đó đội phải chở thêm 40 tấn hàng nên điều thêm 2 xe, và mỗi xe lúc sau phải chở thêm 1 tấn hàng so với dự định. Hỏi ban đầu đội có bao nhiêu xe?",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "8 xe hoặc 30 xe",
+    "acceptedAnswers": [
+      "8 xe hoặc 30 xe",
+      "8 hoặc 30",
+      "8",
+      "30",
+      "8;30",
+      "8, 30"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "soXe",
+          "label": "Số xe ban đầu =",
+          "valueType": "number",
+          "placeholder": "8 hoặc 30",
+          "hint": "Nhập số xe ban đầu (chấp nhận 8 hoặc 30)."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "soXe": "8"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "soXe": "30"
+      }
+    ]
+  },
+  {
+    "id": "math-q16",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Hai địa điểm A và B cách nhau 140 km. Một xe máy khởi hành từ A đi đến B. Sau đó 1 giờ, một ô tô khởi hành từ B đi về A. Hai xe gặp nhau tại địa điểm C cách B là 60 km. Biết vận tốc của ô tô lớn hơn vận tốc của xe máy là 20 km/h. Tính vận tốc của mỗi xe.",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Xe máy: 40 km/h, Ô tô: 60 km/h",
+    "acceptedAnswers": [
+      "Xe máy 40, Ô tô 60",
+      "40 60",
+      "Xe máy: 40, Ô tô: 60",
+      "40",
+      "60"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "xeMay",
+          "label": "Vận tốc xe máy =",
+          "valueType": "number",
+          "placeholder": "40",
+          "hint": "Nhập vận tốc xe máy (km/h)."
+        },
+        {
+          "key": "oTo",
+          "label": "Vận tốc ô tô =",
+          "valueType": "number",
+          "placeholder": "60",
+          "hint": "Nhập vận tốc ô tô (km/h)."
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "xeMay": "40",
+      "oTo": "60"
+    }
+  },
+  {
+    "id": "math-q17",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Hai vòi nước cùng chảy vào một bể không có nước thì đầy bể sau 6 giờ. Nếu chảy riêng một mình, vòi thứ nhất chảy đầy bể nhanh hơn vòi thứ hai là 5 giờ. Hỏi nếu chảy riêng một mình, mỗi vòi chảy đầy bể sau bao lâu?",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Vòi thứ nhất: 10 giờ, Vòi thứ hai: 15 giờ",
+    "acceptedAnswers": [
+      "Vòi 1: 10, Vòi 2: 15",
+      "10 15",
+      "Vòi thứ nhất: 10, Vòi thứ hai: 15",
+      "10",
+      "15"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "voi1",
+          "label": "Vòi thứ nhất =",
+          "valueType": "number",
+          "placeholder": "10",
+          "hint": "Nhập thời gian vòi thứ nhất chảy riêng (giờ)."
+        },
+        {
+          "key": "voi2",
+          "label": "Vòi thứ hai =",
+          "valueType": "number",
+          "placeholder": "15",
+          "hint": "Nhập thời gian vòi thứ hai chảy riêng (giờ)."
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "voi1": "10",
+      "voi2": "15"
+    }
+  },
+  {
+    "id": "math-q18",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Hai tổ sản xuất theo kế hoạch phải làm tổng cộng 700 sản phẩm. Nhưng khi thực hiện, tổ I đã làm vượt mức 15% và tổ II đã làm vượt mức 20% so với kế hoạch, do đó cả hai tổ đã làm được 820 sản phẩm. Hỏi theo kế hoạch, mỗi tổ phải làm bao nhiêu sản phẩm?",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Tổ I: 400 sản phẩm, Tổ II: 300 sản phẩm",
+    "acceptedAnswers": [
+      "Tổ I 400, Tổ II 300",
+      "400 300",
+      "400",
+      "300"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "toI",
+          "label": "Tổ I =",
+          "valueType": "number",
+          "placeholder": "400",
+          "hint": "Nhập số sản phẩm theo kế hoạch của tổ I."
+        },
+        {
+          "key": "toII",
+          "label": "Tổ II =",
+          "valueType": "number",
+          "placeholder": "300",
+          "hint": "Nhập số sản phẩm theo kế hoạch của tổ II."
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "toI": "400",
+      "toII": "300"
+    }
+  },
+  {
+    "id": "math-q19",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Một đoàn xe cần vận chuyển 40 tấn hàng. Khi chuẩn bị khởi hành thì có 2 xe bị hỏng nên mỗi xe còn lại phải chở thêm 1 tấn hàng so với dự định để hoàn thành việc vận chuyển. Hỏi ban đầu đoàn xe có bao nhiêu xe? (Giả định mỗi xe chở một lượng hàng như nhau).",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "10 xe",
+    "acceptedAnswers": [
+      "10",
+      "10 xe"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "soXe",
+          "label": "Số xe ban đầu =",
+          "valueType": "number",
+          "placeholder": "10",
+          "hint": "Nhập số xe dự định ban đầu."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "soXe": "10"
+    }
+  },
+  {
+    "id": "math-q20",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Một người đi xe máy từ A đến B cách nhau 90 km. Khi từ B về A, người đó tăng vận tốc thêm 5 km/h nên thời gian về ít hơn thời gian đi là 15 phút. Tính vận tốc lúc đi của xe máy.",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "40 km/h",
+    "acceptedAnswers": [
+      "40",
+      "40 km/h"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "vDi",
+          "label": "Vận tốc lúc đi =",
+          "valueType": "number",
+          "placeholder": "40",
+          "hint": "Nhập vận tốc lúc đi của xe máy (km/h)."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "vDi": "40"
+    }
+  },
+  {
+    "id": "math-q21",
+    "subjectId": "math",
+    "topicId": "math-t3",
+    "questionTypeId": "math-qt4",
+    "content": "Hai tổ sản xuất cùng làm chung một công việc thì hoàn thành sau 12 giờ. Nếu tổ I làm riêng một mình trong 3 giờ rồi nghỉ, sau đó tổ II làm riêng một mình trong 6 giờ thì cả hai tổ hoàn thành được 40% công việc. Hỏi nếu làm riêng một mình, mỗi tổ cần bao nhiêu thời gian để hoàn thành công việc đó?",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "Tổ I: 30 giờ, Tổ II: 20 giờ",
+    "acceptedAnswers": [
+      "Tổ I 30, Tổ II 20",
+      "30 20",
+      "30",
+      "20"
+    ],
+    "validatorType": "multi-number",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "to1",
+          "label": "Tổ I =",
+          "valueType": "number",
+          "placeholder": "30",
+          "hint": "Nhập thời gian tổ I hoàn thành công việc (giờ)."
+        },
+        {
+          "key": "to2",
+          "label": "Tổ II =",
+          "valueType": "number",
+          "placeholder": "20",
+          "hint": "Nhập thời gian tổ II hoàn thành công việc (giờ)."
+        }
+      ],
+      "proofImageRequired": true,
+      "orderMatters": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "to1": "30",
+      "to2": "20"
+    }
+  },
+  {
+    "id": "math-q22",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau:\n\n\\(4x \\ge x + 3\\)",
+    "difficulty": "easy",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2025,
+    "correctAnswer": "x \\ge 1",
+    "acceptedAnswers": [
+      "x>=1",
+      "x >= 1",
+      ">=1",
+      ">= 1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x >= 1",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x >= 1"
+    }
+  },
+  {
+    "id": "math-q23",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau:\n\n\\(5x + 2 > 2x - 7\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "x > -3",
+    "acceptedAnswers": [
+      "x>-3",
+      "x > -3",
+      ">-3",
+      ">- 3"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x > -3",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x > -3"
+    }
+  },
+  {
+    "id": "math-q24",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau (chú ý đổi chiều khi chia số âm):\n\n\\(-3x + 6 < 0\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "x > 2",
+    "acceptedAnswers": [
+      "x>2",
+      "x > 2",
+      ">2",
+      "> 2"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x > 2",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x > 2"
+    }
+  },
+  {
+    "id": "math-q25",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau (chú ý đổi chiều khi chia số âm):\n\n\\(5 - 2x < 1\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "x > 2",
+    "acceptedAnswers": [
+      "x>2",
+      "x > 2",
+      ">2",
+      "> 2"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x > 2",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x > 2"
+    }
+  },
+  {
+    "id": "math-q26",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau:\n\n\\(2(x - 3) \\le x + 4\\)",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "x \\le 10",
+    "acceptedAnswers": [
+      "x<=10",
+      "x <= 10",
+      "<=10",
+      "<= 10"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x <= 10",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x <= 10"
+    }
+  },
+  {
+    "id": "math-q27",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau:\n\n\\(3(x - 2) > x + 4\\)",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "x > 5",
+    "acceptedAnswers": [
+      "x>5",
+      "x > 5",
+      ">5",
+      "> 5"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x > 5",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x > 5"
+    }
+  },
+  {
+    "id": "math-q28",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau:\n\n\\(\\frac{x - 1}{2} > \\frac{x + 3}{3}\\)",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "x > 9",
+    "acceptedAnswers": [
+      "x>9",
+      "x > 9",
+      ">9",
+      "> 9"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x > 9",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x > 9"
+    }
+  },
+  {
+    "id": "math-q29",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Giải bất phương trình sau:\n\n\\(\\frac{x + 1}{2} \\le \\frac{x + 5}{3}\\)",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "x \\le 7",
+    "acceptedAnswers": [
+      "x<=7",
+      "x <= 7",
+      "<=7",
+      "<= 7"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "nghiem",
+          "label": "Tập nghiệm:",
+          "valueType": "text",
+          "placeholder": "x <= 7",
+          "hint": "Nhập tập nghiệm của bất phương trình."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "expression-loose"
+    },
+    "correctFinalAnswer": {
+      "nghiem": "x <= 7"
+    }
+  },
+  {
+    "id": "math-q30",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Cho biểu thức \\(P = \\frac{2}{\\sqrt{x} + 1}\\) với \\(x \\ge 0\\).\n\nTìm giá trị lớn nhất (GTLN) của biểu thức \\(P\\).",
+    "difficulty": "medium",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2023,
+    "correctAnswer": "2",
+    "acceptedAnswers": [
+      "2",
+      "max = 2",
+      "GTLN = 2"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "gtln",
+          "label": "GTLN =",
+          "valueType": "number",
+          "placeholder": "2",
+          "hint": "Nhập giá trị lớn nhất của biểu thức P."
+        },
+        {
+          "key": "xDatDuoc",
+          "label": "đạt được khi x =",
+          "valueType": "number",
+          "placeholder": "0",
+          "hint": "Nhập giá trị x để dấu bằng xảy ra."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "gtln": "2",
+      "xDatDuoc": "0"
+    }
+  },
+  {
+    "id": "math-q31",
+    "subjectId": "math",
+    "topicId": "math-t1",
+    "questionTypeId": "math-qt7",
+    "content": "Cho biểu thức \\(P = 5 - \\frac{2}{\\sqrt{x} + 1}\\) với \\(x \\ge 0\\).\n\nTìm giá trị nhỏ nhất (GTNN) của biểu thức \\(P\\).",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "3",
+    "acceptedAnswers": [
+      "3",
+      "min = 3",
+      "GTNN = 3"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "gtnn",
+          "label": "GTNN =",
+          "valueType": "number",
+          "placeholder": "3",
+          "hint": "Nhập giá trị nhỏ nhất của biểu thức P."
+        },
+        {
+          "key": "xDatDuoc",
+          "label": "đạt được khi x =",
+          "valueType": "number",
+          "placeholder": "0",
+          "hint": "Nhập giá trị x để dấu bằng xảy ra."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "gtnn": "3",
+      "xDatDuoc": "0"
+    }
+  },
+  {
+    "id": "math-q32",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Tìm giá trị của tham số \\( m \\) để phương trình sau có hai nghiệm phân biệt:\n\n\\(x^2 - 2x + m = 0\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "m < 1",
+    "acceptedAnswers": [
+      "m<1",
+      "m < 1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m <",
+          "valueType": "number",
+          "placeholder": "1",
+          "hint": "Nhập giá trị giới hạn của m."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "1"
+    }
+  },
+  {
+    "id": "math-q33",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Tìm giá trị của tham số \\( m \\) để phương trình sau có nghiệm kép:\n\n\\(x^2 - 2(m + 1)x + m^2 = 0\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "m = -1/2",
+    "acceptedAnswers": [
+      "m=-1/2",
+      "m = -0.5",
+      "-1/2",
+      "-0.5"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m =",
+          "valueType": "fraction",
+          "placeholder": "-1/2",
+          "hint": "Nhập giá trị m."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "-1/2"
+    }
+  },
+  {
+    "id": "math-q34",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Tìm giá trị của tham số \\( m \\) để phương trình sau vô nghiệm:\n\n\\(x^2 - 4x + m = 0\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "m > 4",
+    "acceptedAnswers": [
+      "m>4",
+      "m > 4"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m >",
+          "valueType": "number",
+          "placeholder": "4",
+          "hint": "Nhập giá trị giới hạn của m."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "4"
+    }
+  },
+  {
+    "id": "math-q35",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Cho phương trình: \\(x^2 - 6x + 5 = 0\\) có hai nghiệm \\( x_1, x_2 \\).\n\nTính giá trị của biểu thức: \\(A = x_1^2 + x_2^2\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "26",
+    "acceptedAnswers": [
+      "26",
+      "A=26"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "A",
+          "label": "A =",
+          "valueType": "number",
+          "placeholder": "26",
+          "hint": "Nhập giá trị tính được."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "A": "26"
+    }
+  },
+  {
+    "id": "math-q36",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Cho phương trình: \\(2x^2 - 5x + 1 = 0\\) có hai nghiệm \\( x_1, x_2 \\).\n\nTính giá trị của biểu thức: \\(B = \\frac{1}{x_1} + \\frac{1}{x_2}\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "5",
+    "acceptedAnswers": [
+      "5",
+      "B=5"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "B",
+          "label": "B =",
+          "valueType": "number",
+          "placeholder": "5",
+          "hint": "Nhập giá trị tính được."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "B": "5"
+    }
+  },
+  {
+    "id": "math-q37",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Cho phương trình: \\(x^2 - 3x - 2 = 0\\) có hai nghiệm \\( x_1, x_2 \\).\n\nTính giá trị của biểu thức: \\(C = (x_1 - x_2)^2\\)",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "17",
+    "acceptedAnswers": [
+      "17",
+      "C=17"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "C",
+          "label": "C =",
+          "valueType": "number",
+          "placeholder": "17",
+          "hint": "Nhập giá trị tính được."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "C": "17"
+    }
+  },
+  {
+    "id": "math-q38",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Tìm giá trị của tham số \\( m \\) để phương trình: \\(x^2 - 2mx + m - 1 = 0\\) có hai nghiệm \\( x_1, x_2 \\) thỏa mãn: \\(x_1 + x_2 = 6\\)",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "m = 3",
+    "acceptedAnswers": [
+      "m=3",
+      "3"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m =",
+          "valueType": "number",
+          "placeholder": "3",
+          "hint": "Nhập giá trị m tìm được."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "3"
+    }
+  },
+  {
+    "id": "math-q39",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Tìm giá trị của tham số \\( m \\) để phương trình: \\(x^2 - 2(m + 1)x + m = 0\\) có hai nghiệm dương phân biệt.",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "m > 0",
+    "acceptedAnswers": [
+      "m>0",
+      "m > 0"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m >",
+          "valueType": "number",
+          "placeholder": "0",
+          "hint": "Nhập giá trị giới hạn của m."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "0"
+    }
+  },
+  {
+    "id": "math-q40",
+    "subjectId": "math",
+    "topicId": "math-t2",
+    "questionTypeId": "math-qt2",
+    "content": "Tìm giá trị của tham số \\( m \\) để phương trình: \\(x^2 - 2(m - 1)x - m + 2 = 0\\) có hai nghiệm trái dấu.",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "correctAnswer": "m > 2",
+    "acceptedAnswers": [
+      "m>2",
+      "m > 2"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "m >",
+          "valueType": "number",
+          "placeholder": "2",
+          "hint": "Nhập giá trị giới hạn của m."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "2"
+    }
+  },
+  {
+    "id": "math-q41",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho hàm số \\( y = ax^2 \\) có đồ thị là parabol \\( (P) \\).\n\n1. Xác định hệ số \\( a \\) biết đồ thị \\( (P) \\) đi qua điểm \\( A(1; 1) \\).\n\n2. Tính giá trị của hàm số khi \\( x = -3 \\).",
+    "difficulty": "easy",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2025,
+    "correctAnswer": "a = 1; y = 9",
+    "acceptedAnswers": [
+      "a=1, y=9",
+      "a=1",
+      "1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "a",
+          "label": "Hệ số a =",
+          "valueType": "number",
+          "placeholder": "1",
+          "hint": "Nhập giá trị của hệ số a."
+        },
+        {
+          "key": "yVal",
+          "label": "Giá trị y khi x = -3:",
+          "valueType": "number",
+          "placeholder": "9",
+          "hint": "Nhập giá trị y tính được."
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "a": "1",
+      "yVal": "9"
+    }
+  },
+  {
+    "id": "math-q42",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho đường thẳng \\( (d): y = -3x + 2 \\).\n\n1. Tìm tọa độ giao điểm \\( B \\) của đường thẳng \\( (d) \\) với trục tung \\( Oy \\).\n\n2. Tìm tọa độ giao điểm \\( A \\) của đường thẳng \\( (d) \\) với trục hoành \\( Ox \\).",
+    "difficulty": "easy",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2023,
+    "correctAnswer": "B(0; 2); A(2/3; 0)",
+    "acceptedAnswers": [
+      "(0;2) và (2/3;0)",
+      "B(0;2), A(2/3;0)"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "x_A",
+          "label": "Hoành độ giao điểm A với Ox:",
+          "valueType": "fraction",
+          "placeholder": "2/3",
+          "hint": "Nhập hoành độ x của A."
+        },
+        {
+          "key": "y_B",
+          "label": "Tung độ giao điểm B với Oy:",
+          "valueType": "number",
+          "placeholder": "2",
+          "hint": "Nhập tung độ y của B."
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "x_A": "2/3",
+      "y_B": "2"
+    }
+  },
+  {
+    "id": "math-q43",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho đường thẳng \\( (d): y = x + m \\) (với \\( m \\neq 0 \\)). Tìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) cắt trục hoành tại điểm \\( A \\), cắt trục tung tại điểm \\( B \\) sao cho diện tích tam giác \\( OAB \\) bằng 8 (với \\( O \\) là gốc tọa độ).",
+    "difficulty": "medium",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2024,
+    "correctAnswer": "m = 4 hoặc m = -4",
+    "acceptedAnswers": [
+      "m = 4, m = -4",
+      "4, -4",
+      "4 hoặc -4",
+      "±4",
+      "m=4; m=-4"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m1",
+          "label": "Giá trị m thứ nhất:",
+          "valueType": "number",
+          "placeholder": "4"
+        },
+        {
+          "key": "m2",
+          "label": "Giá trị m thứ hai:",
+          "valueType": "number",
+          "placeholder": "-4"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m1": "4",
+      "m2": "-4"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "m1": "-4",
+        "m2": "4"
+      }
+    ]
+  },
+  {
+    "id": "math-q44",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho parabol \\( (P): y = x^2 \\) và đường thẳng \\( (d): y = x + 2 \\).\n\nTìm tọa độ các giao điểm của \\( (P) \\) và \\( (d) \\).",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "A(-1; 1) và B(2; 4)",
+    "acceptedAnswers": [
+      "(-1;1) và (2;4)",
+      "(-1; 1), (2; 4)"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "x1",
+          "label": "Hoành độ giao điểm 1:",
+          "valueType": "number",
+          "placeholder": "-1"
+        },
+        {
+          "key": "y1",
+          "label": "Tung độ giao điểm 1:",
+          "valueType": "number",
+          "placeholder": "1"
+        },
+        {
+          "key": "x2",
+          "label": "Hoành độ giao điểm 2:",
+          "valueType": "number",
+          "placeholder": "2"
+        },
+        {
+          "key": "y2",
+          "label": "Tung độ giao điểm 2:",
+          "valueType": "number",
+          "placeholder": "4"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "x1": "-1",
+      "y1": "1",
+      "x2": "2",
+      "y2": "4"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "x1": "2",
+        "y1": "4",
+        "x2": "-1",
+        "y2": "1"
+      }
+    ]
+  },
+  {
+    "id": "math-q45",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho parabol \\( (P): y = x^2 \\) và đường thẳng \\( (d): y = 2x + m \\).\n\nTìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) cắt parabol \\( (P) \\) tại hai điểm phân biệt.",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "m > -1",
+    "acceptedAnswers": [
+      "m>-1",
+      "m > -1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "Điều kiện m >",
+          "valueType": "number",
+          "placeholder": "-1",
+          "hint": "Nhập giá trị giới hạn của m."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "-1"
+    }
+  },
+  {
+    "id": "math-q46",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho parabol \\( (P): y = ax^2 \\).\n\n1. Xác định hệ số \\( a \\) biết \\( (P) \\) đi qua điểm \\( M(2; 4) \\).\n\n2. Điểm \\( N(-1; 2) \\) có thuộc parabol \\( (P) \\) vừa tìm được hay không? Giải thích.",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "correctAnswer": "a = 1; N không thuộc (P)",
+    "acceptedAnswers": [
+      "a=1",
+      "1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "a",
+          "label": "Hệ số a =",
+          "valueType": "number",
+          "placeholder": "1"
+        },
+        {
+          "key": "belong",
+          "label": "N thuộc (P) không? (ghi \"có\" hoặc \"không\"):",
+          "valueType": "text",
+          "placeholder": "không"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "a": "1",
+      "belong": "không"
+    }
+  },
+  {
+    "id": "math-q47",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho hàm số \\( y = -0.5x^2 \\) có đồ thị là parabol \\( (P) \\).\n\n1. Lập bảng giá trị tính các giá trị của \\( y \\) tương ứng với \\( x \\in \\{-2, -1, 0, 1, 2\\} \\).\n\n2. Tìm các điểm thuộc parabol \\( (P) \\) có tung độ bằng \\( -8 \\).",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "Các điểm (-4; -8) và (4; -8)",
+    "acceptedAnswers": [
+      "(-4;-8) và (4;-8)",
+      "(-4; -8), (4; -8)",
+      "x=±4"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "x1",
+          "label": "Hoành độ điểm thứ nhất (x1 < 0):",
+          "valueType": "number",
+          "placeholder": "-4"
+        },
+        {
+          "key": "x2",
+          "label": "Hoành độ điểm thứ hai (x2 > 0):",
+          "valueType": "number",
+          "placeholder": "4"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "x1": "-4",
+      "x2": "4"
+    }
+  },
+  {
+    "id": "math-q48",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho đường thẳng \\( (d): y = 2x - 4 \\).\n\n1. Tìm tọa độ giao điểm \\( A \\) của \\( (d) \\) với trục hoành \\( Ox \\).\n\n2. Tìm tọa độ giao điểm \\( B \\) của \\( (d) \\) với trục tung \\( Oy \\).",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "A(2; 0) và B(0; -4)",
+    "acceptedAnswers": [
+      "A(2;0), B(0;-4)",
+      "A(2; 0), B(0; -4)"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "system-solution",
+      "fields": [
+        {
+          "key": "x_A",
+          "label": "Hoành độ giao điểm A với Ox:",
+          "valueType": "number",
+          "placeholder": "2"
+        },
+        {
+          "key": "y_B",
+          "label": "Tung độ giao điểm B với Oy:",
+          "valueType": "number",
+          "placeholder": "-4"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "x_A": "2",
+      "y_B": "-4"
+    }
+  },
+  {
+    "id": "math-q49",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho đường thẳng \\( (d): y = x + m \\) (với \\( m \\neq 0 \\)). Tìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) cắt trục hoành tại điểm \\( A \\), cắt trục tung tại điểm \\( B \\) sao cho diện tích tam giác \\( OAB \\) bằng 18.",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "m = 6 hoặc m = -6",
+    "acceptedAnswers": [
+      "m=6, m=-6",
+      "6, -6",
+      "6 hoặc -6",
+      "±6"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m1",
+          "label": "m1 =",
+          "valueType": "number",
+          "placeholder": "6"
+        },
+        {
+          "key": "m2",
+          "label": "m2 =",
+          "valueType": "number",
+          "placeholder": "-6"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m1": "6",
+      "m2": "-6"
+    },
+    "acceptedFinalAnswers": [
+      {
+        "m1": "-6",
+        "m2": "6"
+      }
+    ]
+  },
+  {
+    "id": "math-q50",
+    "subjectId": "math",
+    "topicId": "math-t4",
+    "questionTypeId": "math-qt5",
+    "content": "Cho parabol \\( (P): y = x^2 \\) và đường thẳng \\( (d): y = 2x + m \\).\n\nTìm tất cả các giá trị của tham số \\( m \\) để đường thẳng \\( (d) \\) tiếp xúc với parabol \\( (P) \\).",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "m = -1",
+    "acceptedAnswers": [
+      "m=-1",
+      "-1"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "m",
+          "label": "Hệ số m =",
+          "valueType": "number",
+          "placeholder": "-1",
+          "hint": "Nhập giá trị m để d tiếp xúc với P."
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "m": "-1"
+    }
+  },
+  {
+    "id": "math-q51",
+    "subjectId": "math",
+    "topicId": "math-t6",
+    "questionTypeId": "math-qt8",
+    "content": "Một hộp đựng 15 tấm thẻ cùng loại được ghi số từ 1 đến 15, hai thẻ khác nhau thì ghi hai số khác nhau. Xét phép thử \"Rút ngẫu nhiên một tấm thẻ trong hộp\".\n\n1. Viết không gian mẫu \\( \\Omega \\) của phép thử.\n\n2. Tính xác suất của biến cố \\( A \\): \"Rút được thẻ ghi số chia hết cho 5\".",
+    "difficulty": "easy",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2025,
+    "correctAnswer": "Ω = {1; 2; ...; 15}; P(A) = 1/5",
+    "acceptedAnswers": [
+      "1/5",
+      "0.2",
+      "P(A)=1/5"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "n_omega",
+          "label": "Số phần tử không gian mẫu n(Ω):",
+          "valueType": "number",
+          "placeholder": "15"
+        },
+        {
+          "key": "prob",
+          "label": "Xác suất P(A):",
+          "valueType": "fraction",
+          "placeholder": "1/5"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "n_omega": "15",
+      "prob": "1/5"
+    }
+  },
+  {
+    "id": "math-q52",
+    "subjectId": "math",
+    "topicId": "math-t6",
+    "questionTypeId": "math-qt8",
+    "content": "Gieo một con xúc xắc cân đối và đồng chất.\n\nTính xác suất của biến cố \\( B \\): \"Mặt xuất hiện có số chấm là số nguyên tố\".",
+    "difficulty": "easy",
+    "sourceType": "mock_exam",
+    "correctAnswer": "P(B) = 1/2",
+    "acceptedAnswers": [
+      "1/2",
+      "0.5",
+      "P(B)=1/2"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "prob",
+          "label": "Xác suất P(B):",
+          "valueType": "fraction",
+          "placeholder": "1/2"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "prob": "1/2"
+    }
+  },
+  {
+    "id": "math-q53",
+    "subjectId": "math",
+    "topicId": "math-t6",
+    "questionTypeId": "math-qt8",
+    "content": "Một hộp chứa 5 viên bi màu đỏ, 3 viên bi màu xanh và 2 viên bi màu vàng có cùng kích thước và khối lượng. Lấy ngẫu nhiên 1 viên bi trong hộp.\n\nTính xác suất để lấy được viên bi màu xanh.",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "correctAnswer": "3/10",
+    "acceptedAnswers": [
+      "3/10",
+      "0.3",
+      "P=3/10"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "prob",
+          "label": "Xác suất lấy bi xanh:",
+          "valueType": "fraction",
+          "placeholder": "3/10"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "prob": "3/10"
+    }
+  },
+  {
+    "id": "math-q54",
+    "subjectId": "math",
+    "topicId": "math-t6",
+    "questionTypeId": "math-qt8",
+    "content": "Chọn ngẫu nhiên một số tự nhiên có hai chữ số (từ 10 đến 99).\n\nTính xác suất để số được chọn là số chính phương.",
+    "difficulty": "medium",
+    "sourceType": "mock_exam",
+    "correctAnswer": "1/15",
+    "acceptedAnswers": [
+      "1/15",
+      "P=1/15"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "n_omega",
+          "label": "Số các số có 2 chữ số n(Ω):",
+          "valueType": "number",
+          "placeholder": "90"
+        },
+        {
+          "key": "prob",
+          "label": "Xác suất để chọn số chính phương:",
+          "valueType": "fraction",
+          "placeholder": "1/15"
+        }
+      ],
+      "proofImageRequired": false,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "n_omega": "90",
+      "prob": "1/15"
+    }
+  },
+  {
+    "id": "math-q55",
+    "subjectId": "math",
+    "topicId": "math-t6",
+    "questionTypeId": "math-qt8",
+    "content": "Một hộp chứa 50 tấm thẻ cùng loại được ghi số từ 1 đến 50. Rút ngẫu nhiên một tấm thẻ ghi số \\( c \\).\n\nTính xác suất của biến cố để phương trình \\( x^2 - 8x + c = 0 \\) có hai nghiệm phân biệt.",
+    "difficulty": "hard",
+    "sourceType": "official_exam",
+    "province": "Bình Định",
+    "year": 2025,
+    "correctAnswer": "3/10",
+    "acceptedAnswers": [
+      "3/10",
+      "0.3",
+      "P=3/10"
+    ],
+    "validatorType": "exact",
+    "answerSchema": {
+      "type": "expression",
+      "fields": [
+        {
+          "key": "prob",
+          "label": "Xác suất cần tính:",
+          "valueType": "fraction",
+          "placeholder": "3/10"
+        }
+      ],
+      "proofImageRequired": true,
+      "autoCheckMode": "keyed-numeric"
+    },
+    "correctFinalAnswer": {
+      "prob": "3/10"
+    }
+  }
+]

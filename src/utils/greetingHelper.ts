@@ -1,8 +1,8 @@
 import { getStarsFromScore } from './theme';
 import { storageService } from '../services/storage';
 import { auth } from '../services/firebase';
-import { mathQuestionTypes } from '../data/mathData';
-import { englishQuestionTypes } from '../data/englishData';
+import { getQuestionTypes } from '../data';
+import { useAppStore } from '../services/store';
 
 export interface SubjectProfile {
   strengths?: string[];
@@ -130,17 +130,21 @@ export function getPersonalizedGreeting(
     }
 
     // 1e. No profile data
+    const grade = useAppStore.getState().selectedGrade;
+    const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
     return subject === 'math'
-      ? `Chào ${name}! Thầy là Gia sư AI môn Toán ôn thi vào 10. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
-      : `Hello ${name}! Thầy là Gia sư AI môn Tiếng Anh ôn thi vào 10. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
+      ? `Chào ${name}! Thầy là Gia sư AI môn Toán ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
+      : `Hello ${name}! Thầy là Gia sư AI môn Tiếng Anh ${gradeText}. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
   }
 
   // Scenario 2: General Chat (GeneralAiTutor)
   // Find recommended topic based on student's actual progress
+  const grade = useAppStore.getState().selectedGrade;
+  const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
   let recommendedTopicName = '';
   const currentUserId = auth.currentUser?.uid || 'guest';
   const progress = storageService.getProgress(currentUserId);
-  const qTypes = subject === 'math' ? mathQuestionTypes : englishQuestionTypes;
+  const qTypes = getQuestionTypes(grade, subject);
   
   // Find first unmastered topic/questionType (stars < 3)
   const nextUnmastered = qTypes.find(qt => {
@@ -168,5 +172,5 @@ export function getPersonalizedGreeting(
 
   // 2c. General fallback
   const subjectText = subject === 'math' ? 'Toán' : 'Tiếng Anh';
-  return `Chào ${name}! Thầy là Gia sư AI môn ${subjectText} ôn thi vào 10. Hôm nay chúng ta cùng chinh phục chuyên đề ${recommendedTopicName} nhé. Em đã sẵn sàng chưa?`;
+  return `Chào ${name}! Thầy là Gia sư AI môn ${subjectText} ${gradeText}. Hôm nay chúng ta cùng chinh phục chuyên đề ${recommendedTopicName} nhé. Em đã sẵn sàng chưa?`;
 }

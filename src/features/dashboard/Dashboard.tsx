@@ -5,8 +5,7 @@ import { storageService } from '../../services/storage';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Progress } from '../../components/ui/progress';
-import { mathQuestionTypes } from '../../data/mathData';
-import { englishQuestionTypes } from '../../data/englishData';
+import { getQuestionTypes } from '../../data';
 import { 
   Bookmark, 
   Award, 
@@ -21,13 +20,16 @@ import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { setSubject, user, progressVersion } = useAppStore();
+  const { setSubject, selectedGrade, user, progressVersion } = useAppStore();
   void progressVersion;
 
   const currentUserId = user!.uid;
   const progress = storageService.getProgress(currentUserId);
   const mistakes = storageService.getMistakes(currentUserId).filter(m => m.reviewStatus !== 'fixed');
   const exams = storageService.getExamResults(currentUserId);
+
+  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
+  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
   
   // Tìm dạng bài dang dở gần nhất
   const attempts = storageService.getAttempts(currentUserId);
@@ -35,11 +37,11 @@ export const Dashboard: React.FC = () => {
   if (attempts.length > 0) {
     lastActiveTypeId = attempts[attempts.length - 1].questionTypeId;
   } else {
-    lastActiveTypeId = 'math-qt1'; // mặc định chuyên đề 1 Toán
+    lastActiveTypeId = selectedGrade === 'grade9' ? 'math-qt1' : 'math10-qt1';
   }
 
   const allQuestionTypes = [...mathQuestionTypes, ...englishQuestionTypes];
-  const lastActiveType = allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0];
+  const lastActiveType = allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0] || { id: '', name: 'Chưa học' };
   const lastActiveSubject = lastActiveType.id.startsWith('math') ? 'math' : 'english';
   const lastActiveLevel = getStarsFromScore(progress.masteryLevels[lastActiveType.id] ?? 0);
   const lastActivePercent = Math.round((lastActiveLevel / 3) * 100);
@@ -48,8 +50,8 @@ export const Dashboard: React.FC = () => {
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
   
-  const mathProgress = Math.round((mathCompleted / mathQuestionTypes.length) * 100);
-  const englishProgress = Math.round((englishCompleted / englishQuestionTypes.length) * 100);
+  const mathProgress = mathQuestionTypes.length > 0 ? Math.round((mathCompleted / mathQuestionTypes.length) * 100) : 0;
+  const englishProgress = englishQuestionTypes.length > 0 ? Math.round((englishCompleted / englishQuestionTypes.length) * 100) : 0;
 
   // Điểm thi thử gần nhất
   const examScore = exams.length > 0 ? `${exams[exams.length - 1].score}/10` : 'Chưa thi';

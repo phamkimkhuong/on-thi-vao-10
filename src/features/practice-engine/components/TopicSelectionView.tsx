@@ -4,8 +4,8 @@ import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
 import { QuestionType } from '../../../types';
-import { mathTopics } from '../../../data/mathData';
-import { englishTopics } from '../../../data/englishData';
+import { getTopics } from '../../../data';
+import { useAppStore } from '../../../services/store';
 
 interface TopicSelectionViewProps {
   routeSubject: 'math' | 'english';
@@ -47,6 +47,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   questionTypeId,
 }) => {
   const navigate = useNavigate();
+  const selectedGrade = useAppStore(state => state.selectedGrade);
   const isMath = routeSubject === 'math';
 
   const dang1QIds = useMemo(() => [
@@ -491,19 +492,23 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   }
 
   // Màn hình chọn dạng bài chính
-  const topics = isMath ? mathTopics : englishTopics;
+  const topics = getTopics(selectedGrade, routeSubject);
   const qTypes = isMath ? mathQuestionTypes : englishQuestionTypes;
+
+  const isG9 = selectedGrade === 'grade9';
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-12 animate-fade-in">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-foreground tracking-tight">
-          {isMath ? '📐 Luyện tập Toán tuyển sinh 10' : '🗣️ Luyện tập Tiếng Anh vào 10'}
+          {isMath 
+            ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : '📐 Học tốt Toán Lớp 10')
+            : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
           {isMath 
-            ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' 
-            : 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.'}
+            ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : 'Bài tập tự luận lớp 10 bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.')
+            : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
         </p>
       </div>
 
