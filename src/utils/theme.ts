@@ -12,21 +12,21 @@ export interface SubjectTheme {
 export const getSubjectTheme = (subject: SubjectCode): SubjectTheme => {
   if (subject === 'math') {
     return {
-      badge: 'bg-indigo-100 dark:bg-indigo-950 text-primary',
-      text: 'text-primary',
-      bg: 'bg-indigo-50 dark:bg-indigo-950/20',
-      border: 'border-indigo-500/10',
-      iconBg: 'bg-indigo-500/10 dark:bg-indigo-500/20',
+      badge: 'bg-indigo-100/80 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-500/20',
+      text: 'text-indigo-600 dark:text-indigo-400 font-extrabold',
+      bg: 'bg-gradient-to-br from-indigo-50 to-blue-50/50 dark:from-indigo-950/20 dark:to-blue-950/10',
+      border: 'border-indigo-500/10 shadow-sm shadow-indigo-500/2',
+      iconBg: 'bg-indigo-500/10 dark:bg-indigo-500/20 shadow-inner',
       iconColor: 'text-indigo-500'
     };
   } else {
     return {
-      badge: 'bg-violet-100 dark:bg-violet-950 text-violet-500',
-      text: 'text-violet-500',
-      bg: 'bg-violet-50 dark:bg-violet-950/20',
-      border: 'border-violet-500/10',
-      iconBg: 'bg-violet-500/10 dark:bg-violet-500/20',
-      iconColor: 'text-violet-500'
+      badge: 'bg-purple-100/80 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-500/20',
+      text: 'text-purple-600 dark:text-purple-400 font-extrabold',
+      bg: 'bg-gradient-to-br from-purple-50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/10',
+      border: 'border-purple-500/10 shadow-sm shadow-purple-500/2',
+      iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 shadow-inner',
+      iconColor: 'text-purple-500'
     };
   }
 };

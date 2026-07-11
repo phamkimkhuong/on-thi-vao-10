@@ -100,73 +100,74 @@ export const Roadmap: React.FC = () => {
   return (
     <div className="space-y-12 max-w-4xl mx-auto pb-12">
       {/* Header Giới thiệu Lộ trình */}
-      <div className="text-center space-y-3">
-        <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2">
+      <div className="text-center space-y-3.5">
+        <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
           {selectedGrade === 'grade9' ? 'Lộ trình Ôn thi' : 'Lộ trình Học tốt'} môn {selectedSubject === 'math' ? '📐 Toán học' : '🗣️ Tiếng Anh'} {selectedGrade === 'grade9' ? 'vào 10' : 'Lớp 10'}
         </h2>
-        <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed font-semibold">
+        <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed font-bold">
           Lộ trình tinh gọn giúp bạn nắm chắc kiến thức {selectedGrade === 'grade9' ? 'ôn thi vào 10' : 'chương trình lớp 10'} toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.
         </p>
       </div>
 
       {/* Render từng Chặng */}
-      <div className="space-y-12">
+      <div className="space-y-16">
         {tiers.map((tier) => {
           const tierTopics = topics.filter(t => t.tier === tier.id);
 
           return (
-            <div key={tier.id} className="space-y-6">
+            <div key={tier.id} className="space-y-8">
               {/* Tiêu đề Chặng */}
               <div className={cn(
-                'p-5 rounded-2xl border transition-all duration-300',
+                'p-6 rounded-2xl border transition-all duration-300 shadow-md relative overflow-hidden group',
                 getTierTheme(tier.id).badgeStyle
               )}>
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <h3 className="text-base font-black tracking-tight">{tier.title}</h3>
+                <div className="absolute top-0 right-0 w-24 h-24 bg-current/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500" />
+                <div className="flex items-center justify-between gap-3 flex-wrap relative z-10">
+                  <h3 className="text-base font-black tracking-tight uppercase tracking-wider font-sans">{tier.title}</h3>
                   {tier.id === 3 && !isPremium && (
-                    <span className="px-2 py-0.5 text-[8px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest uppercase shadow-sm animate-pulse">👑 Khóa Premium</span>
+                    <span className="px-2.5 py-0.75 text-[8px] bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 text-white rounded-md font-black tracking-widest uppercase shadow-sm animate-pulse-glow">👑 Khóa Premium</span>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground font-semibold mt-1.5 leading-relaxed">
+                <p className="text-xs text-muted-foreground font-bold mt-2 leading-relaxed relative z-10">
                   {tier.description}
                 </p>
               </div>
 
               {/* Danh sách các chuyên đề trong chặng */}
               <div className={cn(
-                'relative border-l-2 pl-6 ml-4 space-y-10',
+                'relative border-l-2 pl-8 ml-5 space-y-12',
                 getTierTheme(tier.id).lineStyle
               )}>
                 {tierTopics.map((topic, topicIdx) => {
                   const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
 
                   return (
-                    <div key={topic.id} className="relative">
+                    <div key={topic.id} className="relative group/topic">
                       {/* Điểm nút trên trục thời gian */}
-                      <div className="absolute -left-[35px] top-0.5 w-6 h-6 rounded-full border-4 border-background flex items-center justify-center text-[10px] font-black shadow-sm transition-colors bg-primary text-white">
+                      <div className="absolute -left-[45px] top-0.5 w-8 h-8 rounded-full border-4 border-background flex items-center justify-center text-xs font-black shadow-md transition-all bg-gradient-to-tr from-primary to-indigo-600 text-white group-hover/topic:scale-110 duration-300 animate-pulse-glow">
                         {topicIdx + 1}
                       </div>
 
                       {/* Chi tiết chuyên đề */}
-                      <div className="space-y-4">
+                      <div className="space-y-5">
                         {(() => {
                           const completedCount = filteredTypes.filter(type => getMasteryStars(type.id) >= 2).length;
                           const percent = filteredTypes.length > 0 ? Math.round((completedCount / filteredTypes.length) * 100) : 0;
 
                           return (
-                            <div className="flex flex-col gap-1.5">
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                                <h4 className="text-sm font-black text-foreground flex items-center gap-2">
+                            <div className="flex flex-col gap-1.5 pl-1">
+                              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                                <h4 className="text-base font-extrabold text-foreground flex items-center gap-2 font-sans group-hover/topic:text-primary transition-colors">
                                   {topic.name}
                                 </h4>
-                                <div className="flex items-center gap-1.5">
-                                  <div className="h-1.5 w-16 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0">
+                                <div className="flex items-center gap-2">
+                                  <div className="h-2 w-20 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shrink-0 shadow-inner">
                                     <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
                                   </div>
-                                  <span className="text-[9px] text-primary font-black">{percent}% hoàn thành</span>
+                                  <span className="text-[10px] text-primary font-black">{percent}% hoàn thành</span>
                                 </div>
                               </div>
-                              <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
                                 {filteredTypes.length} dạng bài thi cốt lõi
                               </span>
                             </div>
@@ -182,18 +183,19 @@ export const Roadmap: React.FC = () => {
                             return (
                               <Card
                                 key={type.id}
-                                className={`transition-all duration-200 border bg-card ${
+                                className={cn(
+                                  "transition-all duration-300 border bg-card hover:-translate-y-1 hover:shadow-md active:scale-[0.99] cursor-pointer rounded-2xl",
                                   stars === 3
-                                    ? 'border-emerald-500/20 shadow-sm shadow-emerald-500/5 hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
-                                    : 'hover:translate-x-[2px] cursor-pointer hover:border-primary/40'
-                                }`}
+                                    ? 'border-emerald-500/20 hover:border-emerald-500/40 shadow-sm shadow-emerald-500/2'
+                                    : 'border-border/40 hover:border-primary/30'
+                                )}
                                 onClick={() => handleSelectType(type.id)}
                               >
-                                <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
-                                  <div className="space-y-2 flex-1">
+                                <CardContent className="p-5.5 flex flex-col justify-between h-full gap-4">
+                                  <div className="space-y-2.5 flex-1">
                                     <div className="flex items-center justify-between gap-2">
                                       <span className={cn(
-                                        'text-[9px] font-bold px-2 py-0.5 rounded-full',
+                                        'text-[9px] font-black px-2.5 py-0.5 rounded-lg border',
                                         diff.color
                                       )}>
                                         {diff.text}
@@ -201,7 +203,7 @@ export const Roadmap: React.FC = () => {
                                       {renderMasteryStars(stars)}
                                     </div>
 
-                                    <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5 leading-snug">
+                                    <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5 leading-snug font-sans">
                                       {type.name}
                                       {stars === 3 && (
                                         <span title="Đã Master hoàn hảo!">
@@ -213,19 +215,19 @@ export const Roadmap: React.FC = () => {
                                       {type.description}
                                     </p>
                                     {type.subTypes && type.subTypes.length > 0 && (
-                                      <div className="pt-1.5">
-                                        <span className="text-[9px] font-bold text-primary bg-primary/10 dark:bg-primary/20 px-2 py-0.5 rounded-md inline-block select-none">
+                                      <div className="pt-1">
+                                        <span className="text-[9px] font-black text-primary bg-primary/8 dark:bg-primary/15 px-2.5 py-0.75 rounded-md inline-block select-none border border-primary/5">
                                           🎯 Gồm {type.subTypes.length} dạng bài con
                                         </span>
                                       </div>
                                     )}
                                   </div>
 
-                                  <div className="flex items-center justify-between border-t border-border/30 pt-3 text-[10px] font-bold text-muted-foreground">
+                                  <div className="flex items-center justify-between border-t border-border/20 pt-3.5 text-[10px] font-bold text-muted-foreground">
                                     <span className="flex items-center gap-1">
                                       📅 Tần suất: {type.examFrequency === 'high' ? 'Hay thi' : 'Trung bình'}
                                     </span>
-                                    <span className="text-primary hover:underline flex items-center gap-0.5">
+                                    <span className="text-primary hover:underline flex items-center gap-0.5 font-extrabold">
                                       Học chi tiết <ArrowRight size={10} />
                                     </span>
                                   </div>

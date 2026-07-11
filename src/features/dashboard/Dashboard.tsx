@@ -4,7 +4,6 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { Progress } from '../../components/ui/progress';
 import { getQuestionTypes } from '../../data';
 import { 
   Bookmark, 
@@ -41,7 +40,7 @@ export const Dashboard: React.FC = () => {
   }
 
   const allQuestionTypes = [...mathQuestionTypes, ...englishQuestionTypes];
-  const lastActiveType = allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0] || { id: '', name: 'Chưa học' };
+  const lastActiveType = (allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0] || { id: '', name: 'Chưa học', description: '' }) as any;
   const lastActiveSubject = lastActiveType.id.startsWith('math') ? 'math' : 'english';
   const lastActiveLevel = getStarsFromScore(progress.masteryLevels[lastActiveType.id] ?? 0);
   const lastActivePercent = Math.round((lastActiveLevel / 3) * 100);
@@ -91,265 +90,284 @@ export const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
       
-      {/* 🌟 Welcome Card & Motivational Quote */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 p-6 md:p-8 text-primary-foreground shadow-lg shadow-primary/10">
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-          {/* Cột trái: Lời chào và Quotes */}
-          <div className="space-y-3 md:col-span-2">
-            <h2 className="text-xl md:text-2xl font-black tracking-tight flex items-center gap-2">
-              <Sparkles className="animate-pulse text-amber-400" size={24} />
-              Chào bạn, người chiến binh ôn thi vào 10!
-            </h2>
-            <p className="text-xs md:text-sm text-indigo-100 font-semibold italic max-w-2xl leading-relaxed">
-              "{quote}"
-            </p>
-            <div className="pt-2">
-              <Button 
-                onClick={() => navigate('/roadmap')}
-                variant="secondary"
-                className="font-extrabold text-xs px-4 py-2 bg-white hover:bg-indigo-50 text-primary active:scale-[0.98] rounded-xl flex items-center gap-1 cursor-pointer"
-              >
-                Khám phá bản đồ lộ trình <ArrowRight size={12} />
-              </Button>
-            </div>
-          </div>
-
-          {/* Cột phải: Thẻ "Học tiếp nhanh" (Quick Resume) dạng Glassmorphism */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4.5 rounded-xl space-y-3 shadow-md">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-200 flex items-center gap-1.5">
-              <Zap size={12} className="text-amber-300 animate-pulse fill-amber-300" /> HỌC TIẾP DẠNG BÀI
-            </div>
-            
-            <div className="space-y-1">
-              <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-white/20 text-white">
-                {lastActiveSubject === 'math' ? '📐 Toán' : '🗣️ Anh'}
-              </span>
-              <h4 className="font-extrabold text-xs text-white truncate mt-1">
-                {lastActiveType.name}
-              </h4>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-[9px] font-bold text-indigo-100">
-                <span>Thành thạo: {lastActivePercent}%</span>
-                <span>{lastActiveLevel}/3⭐</span>
-              </div>
-              <div className="h-1 w-full bg-white/25 rounded-full overflow-hidden">
-                <div className="h-full bg-amber-400 rounded-full" style={{ width: `${lastActivePercent}%` }} />
-              </div>
-            </div>
-
-            <Button
-              onClick={() => {
-                setSubject(lastActiveSubject);
-                navigate(`/question-types/${lastActiveType.id}`);
-              }}
-              className="w-full font-black py-2 mt-1 text-[11px] bg-amber-400 hover:bg-amber-300 text-slate-900 border-none shadow-sm active:scale-[0.98] rounded-lg flex items-center justify-center gap-1 cursor-pointer"
-            >
-              Luyện tiếp tục <ArrowRight size={12} />
-            </Button>
-          </div>
+      {/* 🌟 Minimalist Greeting Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1.5">
+          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground flex items-center gap-2 font-sans">
+            <Sparkles className="text-amber-500 fill-amber-500 shrink-0 animate-float" size={24} />
+            Chào {user?.displayName || 'học sinh'}, người chiến thắng!
+          </h2>
+          <p className="text-xs md:text-sm text-muted-foreground font-bold italic max-w-2xl leading-relaxed">
+            "{quote}"
+          </p>
         </div>
         
-        {/* Background decorative bubbles */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />
-        <div className="absolute bottom-0 left-1/3 w-24 h-24 bg-indigo-500/20 rounded-full blur-xl" />
+        {/* Streak/Level Gamified Badge */}
+        <div className="flex items-center gap-2 bg-secondary/40 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-border/20 shadow-sm self-start md:self-center shrink-0">
+          <span className="text-xs font-black text-foreground flex items-center gap-1">
+            🔥 <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Streak:</span> 5 ngày
+          </span>
+          <div className="w-px h-4 bg-border/40" />
+          <span className="text-xs font-black text-primary flex items-center gap-1">
+            ⭐️ <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Level:</span> 12
+          </span>
+        </div>
       </div>
 
-      {/* 📊 Key Progress Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <Card className="hover:translate-y-[-2px] transition-all">
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-500 flex items-center justify-center">
-              <Bookmark size={24} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground font-semibold leading-none mb-1.5">SỔ LỖI SAI</p>
-              <h3 className="text-2xl font-black text-foreground tracking-tight leading-none">
-                {mistakes.length} <span className="text-xs font-bold text-muted-foreground">câu</span>
-              </h3>
-              <p className="text-[10px] text-muted-foreground mt-1 font-semibold">Chưa khắc phục xong</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:translate-y-[-2px] transition-all">
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-500 flex items-center justify-center">
-              <Award size={24} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground font-semibold leading-none mb-1.5">ĐỀ THI GẦN NHẤT</p>
-              <h3 className="text-2xl font-black text-foreground tracking-tight leading-none">
-                {examScore}
-              </h3>
-              <p className="text-[10px] text-muted-foreground mt-1 font-semibold">Đánh giá thực chiến</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:translate-y-[-2px] transition-all">
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor)}>
-              📐
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground font-semibold leading-none mb-1.5">TIẾN ĐỘ TOÁN</p>
-              <h3 className="text-2xl font-black text-foreground tracking-tight leading-none">
-                {mathProgress}%
-              </h3>
-              <Progress value={mathProgress} className="h-1.5 mt-1.5" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:translate-y-[-2px] transition-all">
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", getSubjectTheme('english').iconBg, getSubjectTheme('english').iconColor)}>
-              🗣️
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground font-semibold leading-none mb-1.5">TIẾN ĐỘ ANH</p>
-              <h3 className="text-2xl font-black text-foreground tracking-tight leading-none">
-                {englishProgress}%
-              </h3>
-              <Progress value={englishProgress} className="h-1.5 mt-1.5" />
-            </div>
-          </CardContent>
-        </Card>
-
-      </div>
-
-      {/* ⚡ Split Layout: Weak Zones vs Next Steps */}
+      {/* 📐 Main Workspace Grid: 2 Columns (Left 2/3 - Core Study Actions, Right 1/3 - Stats & Weaknesses) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* 🚨 Red Zone: Weakest Topics (Vùng kiến thức cần khắc phục) */}
-        <Card className="lg:col-span-2 border-red-500/20 dark:border-red-500/10 shadow-sm shadow-red-500/5">
-          <CardHeader className="bg-red-50/30 dark:bg-red-950/10">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="text-red-500 animate-bounce" size={20} />
-                <CardTitle className="text-red-600 dark:text-red-400">Vùng cảnh báo: Điểm yếu của bạn</CardTitle>
+        {/* 👈 Left Column (2/3 width) - Focus actions & Roadmap */}
+        <div className="lg:col-span-2 space-y-6">
+          
+          {/* Card Học tiếp nhanh (Core Resume Card) */}
+          <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden relative group">
+            {/* Background glowing effects */}
+            <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
+            <CardHeader className="bg-secondary/25 border-b border-border/20 p-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Zap size={18} className="text-amber-500 fill-amber-500 animate-pulse" />
+                  <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider font-sans">Học tiếp dạng bài dở dang</CardTitle>
+                </div>
+                <span className={cn(
+                  'text-[9px] font-black px-2.5 py-0.5 rounded-lg border',
+                  getSubjectTheme(lastActiveSubject).badge
+                )}>
+                  {lastActiveSubject === 'math' ? '📐 Toán học' : '🗣️ Tiếng Anh'}
+                </span>
               </div>
-              <span className="text-[10px] bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Khẩn cấp
-              </span>
-            </div>
-            <CardDescription className="text-red-600/80 dark:text-red-400/80 font-medium">
-              Hệ thống tự động phát hiện các dạng bài bạn đang gặp khó khăn (tỷ lệ trả lời sai cao hoặc chưa học sâu).
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            {weakTypes.length === 0 ? (
-              <div className="p-8 text-center flex flex-col items-center gap-3">
-                <CheckCircle className="text-emerald-500" size={40} />
-                <p className="text-sm font-bold text-foreground">Tuyệt vời! Hiện tại bạn không có điểm yếu nào nổi bật.</p>
-                <p className="text-xs text-muted-foreground">Hãy tiếp tục duy trì phong độ bằng cách học bài mới và thi thử.</p>
+            </CardHeader>
+            <CardContent className="p-6 space-y-5">
+              <div className="space-y-2">
+                <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans group-hover:text-primary transition-colors">
+                  {lastActiveType.name}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
+                  {lastActiveType.description || 'Tiếp tục luyện tập dạng bài này để tăng mức độ thành thạo và đạt điểm số tối đa.'}
+                </p>
               </div>
-            ) : (
-              <div className="divide-y divide-border/30">
-                {weakTypes.map((type) => {
-                  const subjectCode = type.id.startsWith('math') ? 'math' : 'english';
-                  const isMath = subjectCode === 'math';
-                  
-                  return (
-                    <div key={type.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/50 dark:hover:bg-slate-900/10 transition-colors">
-                      <div className="space-y-1.5 flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className={cn(
-                            'text-[10px] font-bold px-2 py-0.5 rounded-full',
-                            getSubjectTheme(subjectCode).badge
-                          )}>
-                            {isMath ? '📐 Toán' : '🗣️ Anh'}
-                          </span>
-                          <span className="text-xs text-muted-foreground font-bold flex items-center gap-1">
-                            <Zap size={12} className="text-amber-500" /> Tần suất thi: {type.examFrequency === 'high' ? 'Cao' : 'Trung bình'}
-                          </span>
-                        </div>
-                        <h4 className="font-extrabold text-sm text-foreground truncate">{type.name}</h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{type.description}</p>
-                        
-                        {type.wrongAttempts > 0 && (
-                          <div className="flex items-center gap-1.5 text-[10px] text-red-500 font-semibold mt-1">
-                            <span>Làm sai trong quá khứ: {type.wrongAttempts} lần</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <Button
-                        onClick={() => handleFixWeakType(type.id, subjectCode)}
-                        variant="outline"
-                        size="sm"
-                        className="self-start sm:self-center font-bold text-xs hover:border-red-500/50 border-border/50 text-foreground shrink-0 border"
-                      >
-                        Khắc phục <ArrowRight size={12} className="ml-1" />
-                      </Button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
 
-        {/* 📚 Roadmap & Recommended Study Plan (Tác vụ tiếp theo) */}
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle className="text-foreground">Lộ trình học khuyên dùng</CardTitle>
-            <CardDescription>Các chuyên đề cốt lõi giúp bạn lấy điểm tối đa.</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col gap-4">
-            <div className="space-y-3 flex-1">
+              <div className="space-y-2 bg-secondary/20 p-4.5 rounded-2xl border border-border/10">
+                <div className="flex items-center justify-between text-xs font-black text-foreground">
+                  <span className="flex items-center gap-1">
+                    🎯 Tiến độ dạng bài: <span className="text-primary">{lastActivePercent}%</span>
+                  </span>
+                  <span className="text-amber-500 flex items-center gap-0.5">
+                    {lastActiveLevel}/3 ⭐
+                  </span>
+                </div>
+                {/* Progress bar */}
+                <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                  <div 
+                    className="h-full bg-gradient-to-r from-primary to-indigo-600 rounded-full transition-all duration-500" 
+                    style={{ width: `${lastActivePercent}%` }} 
+                  />
+                </div>
+              </div>
+
+              <Button
+                onClick={() => {
+                  setSubject(lastActiveSubject);
+                  navigate(`/question-types/${lastActiveType.id}`);
+                }}
+                className="w-full font-black py-3.5 text-xs bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 animate-pulse-glow"
+              >
+                Luyện tiếp tục ngay <ArrowRight size={13} />
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Lộ trình học khuyên dùng (Recommended Study Plan) */}
+          <Card className="border border-border/40 rounded-3xl shadow-md overflow-hidden">
+            <CardHeader className="bg-secondary/15 p-5 border-b border-border/20">
+              <CardTitle className="text-foreground font-black text-sm uppercase tracking-wider font-sans">Lộ trình học khuyên dùng hôm nay</CardTitle>
+              <CardDescription className="text-xs font-semibold text-muted-foreground mt-1">Các chuyên đề cốt lõi được cá nhân hóa nhằm giúp bạn bứt phá điểm số.</CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <div className="space-y-3">
+                
+                <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 hover:border-indigo-500/20 transition-all duration-300 group">
+                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 border group-hover:scale-105 transition-transform shadow-inner", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor, getSubjectTheme('math').border)}>
+                    1
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h5 className="text-xs font-black text-foreground group-hover:text-indigo-500 transition-colors">📐 Toán: Lập hệ phương trình thực tế</h5>
+                    <p className="text-[10px] text-muted-foreground font-bold mt-1 leading-relaxed">
+                      Dạng toán chiếm 1.5 - 2 điểm trong cấu trúc đề thi ôn thi vào 10.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 hover:border-purple-500/20 transition-all duration-300 group">
+                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 border group-hover:scale-105 transition-transform shadow-inner", getSubjectTheme('english').iconBg, getSubjectTheme('english').iconColor, getSubjectTheme('english').border)}>
+                    2
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h5 className="text-xs font-black text-foreground group-hover:text-purple-500 transition-colors">🗣️ Anh: Câu bị động (Passive voice)</h5>
+                    <p className="text-[10px] text-muted-foreground font-bold mt-1 leading-relaxed">
+                      Luôn xuất hiện dưới dạng câu hỏi trắc nghiệm chia động từ hoặc viết lại câu.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 opacity-70 group hover:opacity-100 transition-all duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/8 text-emerald-500 border border-emerald-500/10 flex items-center justify-center font-black text-xs shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                    3
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h5 className="text-xs font-black text-foreground group-hover:text-emerald-500 transition-colors">📚 Thi thử tổng hợp</h5>
+                    <p className="text-[10px] text-muted-foreground font-bold mt-1 leading-relaxed">
+                      Làm quen áp lực thời gian và rèn luyện tâm lý phòng thi thực tế.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              <Button 
+                onClick={() => navigate('/roadmap')}
+                variant="outline"
+                className="w-full font-black py-3 text-xs active:scale-[0.98] border border-border/50 text-foreground hover:text-primary rounded-2xl mt-2 cursor-pointer transition-all"
+              >
+                Mở bản đồ lộ trình chi tiết <ArrowRight size={13} className="ml-1" />
+              </Button>
+            </CardContent>
+          </Card>
+
+        </div>
+
+        {/* 👉 Right Column (1/3 width) - Stats Widget & Weakness list */}
+        <div className="space-y-6">
+          
+          {/* Widget Thống kê tổng quan (Mastery Stats Widget) */}
+          <Card className="border border-border/40 rounded-3xl shadow-md overflow-hidden">
+            <CardHeader className="bg-secondary/15 p-5 border-b border-border/20">
+              <CardTitle className="text-foreground font-black text-sm uppercase tracking-wider font-sans">Thống kê tổng quan</CardTitle>
+            </CardHeader>
+            <CardContent className="p-5 space-y-4">
               
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-border/30">
-                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 border", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor, getSubjectTheme('math').border)}>
-                  1
+              {/* Sổ lỗi sai */}
+              <div 
+                onClick={() => navigate('/mistakes')}
+                className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 hover:border-amber-500/20 transition-all cursor-pointer group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-amber-500/8 dark:bg-amber-500/15 text-amber-500 flex items-center justify-center border border-amber-500/10 shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                  <Bookmark size={20} />
                 </div>
-                <div className="min-w-0">
-                  <h5 className="text-xs font-bold text-foreground">📐 Toán: Lập hệ phương trình thực tế</h5>
-                  <p className="text-[10px] text-muted-foreground font-semibold mt-0.5 leading-relaxed">
-                    Dạng toán chiếm 1.5 - 2 điểm trong cấu trúc đề thi.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-border/30">
-                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 border", getSubjectTheme('english').iconBg, getSubjectTheme('english').iconColor, getSubjectTheme('english').border)}>
-                  2
-                </div>
-                <div className="min-w-0">
-                  <h5 className="text-xs font-bold text-foreground">🗣️ Anh: Câu bị động (Passive voice)</h5>
-                  <p className="text-[10px] text-muted-foreground font-semibold mt-0.5 leading-relaxed">
-                    Luôn có trong câu hỏi trắc nghiệm chia động từ/biến đổi câu.
-                  </p>
+                <div className="flex-1 min-w-0">
+                  <span className="text-[9px] text-muted-foreground font-black tracking-wider block uppercase mb-0.5">Sổ lỗi sai</span>
+                  <span className="text-sm font-black text-foreground">
+                    {mistakes.length} câu <span className="text-[10px] text-slate-400 font-bold">chờ ôn tập</span>
+                  </span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-border/30 opacity-70">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-500/10">
-                  3
+              {/* Điểm thi thử */}
+              <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/8 dark:bg-emerald-500/15 text-emerald-500 flex items-center justify-center border border-emerald-500/10 shrink-0 shadow-sm">
+                  <Award size={20} />
                 </div>
-                <div className="min-w-0">
-                  <h5 className="text-xs font-bold text-foreground">📚 Thi thử tổng hợp</h5>
-                  <p className="text-[10px] text-muted-foreground font-semibold mt-0.5 leading-relaxed">
-                    Kiểm tra toàn diện năng lực và làm quen áp lực phòng thi.
-                  </p>
+                <div className="flex-1 min-w-0">
+                  <span className="text-[9px] text-muted-foreground font-black tracking-wider block uppercase mb-0.5">Đề thi mới nhất</span>
+                  <span className="text-sm font-black text-foreground">
+                    {examScore}
+                  </span>
                 </div>
               </div>
 
-            </div>
+              {/* Tiến độ Toán */}
+              <div className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
+                <div className="flex items-center justify-between text-xs font-black text-indigo-600 dark:text-indigo-400">
+                  <span className="flex items-center gap-1">📐 Tiến độ Toán</span>
+                  <span>{mathProgress}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                  <div className="h-full bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full transition-all duration-500" style={{ width: `${mathProgress}%` }} />
+                </div>
+              </div>
 
-            <Button 
-              onClick={() => navigate('/roadmap')}
-              className="w-full font-bold py-2.5 mt-auto text-xs active:scale-[0.98]"
-            >
-              Mở bản đồ lộ trình chi tiết
-            </Button>
-          </CardContent>
-        </Card>
+              {/* Tiến độ Anh */}
+              <div className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
+                <div className="flex items-center justify-between text-xs font-black text-purple-600 dark:text-purple-400">
+                  <span className="flex items-center gap-1">🗣️ Tiến độ Anh</span>
+                  <span>{englishProgress}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                  <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style={{ width: `${englishProgress}%` }} />
+                </div>
+              </div>
+
+            </CardContent>
+          </Card>
+
+          {/* Vùng cảnh báo điểm yếu (Weakness Radar Widget) */}
+          <Card className="border border-red-500/15 dark:border-red-500/10 shadow-md shadow-red-500/2 overflow-hidden rounded-3xl">
+            <CardHeader className="bg-red-500/4 dark:bg-red-950/10 p-5 border-b border-red-500/5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <AlertTriangle className="text-red-500 animate-bounce" size={17} />
+                  <CardTitle className="text-red-700 dark:text-red-400 font-black text-sm uppercase tracking-wider font-sans">Lỗ hổng kiến thức</CardTitle>
+                </div>
+                <span className="text-[8px] bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 font-black px-2 py-0.5 rounded-md border border-red-200/50 dark:border-red-500/10 leading-none">
+                  SOS
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4.5 space-y-3.5">
+              {weakTypes.length === 0 ? (
+                <div className="p-6 text-center flex flex-col items-center gap-2.5">
+                  <CheckCircle className="text-emerald-500" size={36} />
+                  <p className="text-xs font-black text-foreground">Bạn không có lỗ hổng lớn nào.</p>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">Hãy duy trì việc học hàng ngày!</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {weakTypes.map((type) => {
+                    const subjectCode = type.id.startsWith('math') ? 'math' : 'english';
+                    const isMath = subjectCode === 'math';
+                    
+                    return (
+                      <div key={type.id} className="p-3.5 bg-secondary/15 dark:bg-slate-900/30 rounded-2xl border border-border/40 hover:border-red-500/20 transition-all flex flex-col gap-2.5 group">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className={cn(
+                              'text-[8px] font-black px-2 py-0.5 rounded-md border leading-none',
+                              getSubjectTheme(subjectCode).badge
+                            )}>
+                              {isMath ? '📐 Toán' : '🗣️ Anh'}
+                            </span>
+                            <span className="text-[9px] text-muted-foreground font-bold">
+                              Tần suất thi: {type.examFrequency === 'high' ? 'Cao' : 'Thường'}
+                            </span>
+                          </div>
+                          <h4 className="font-extrabold text-xs text-foreground group-hover:text-red-500 transition-colors leading-snug">{type.name}</h4>
+                        </div>
+                        
+                        <div className="flex items-center justify-between gap-2 mt-0.5">
+                          {type.wrongAttempts > 0 && (
+                            <span className="text-[9px] text-red-500 font-extrabold bg-red-500/5 px-2 py-0.5 rounded-md border border-red-500/10">
+                              Làm sai: {type.wrongAttempts} lần
+                            </span>
+                          )}
+                          <button
+                            onClick={() => handleFixWeakType(type.id, subjectCode)}
+                            className="text-[9px] font-black text-red-600 dark:text-red-400 hover:underline flex items-center gap-0.5 cursor-pointer ml-auto"
+                          >
+                            Khắc phục <ArrowRight size={10} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+        </div>
 
       </div>
     </div>

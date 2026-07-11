@@ -70,16 +70,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   setStructuredAnswer,
 }) => {
   return (
-    <Card className="border-indigo-500/10 shadow-md">
-      <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30">
-        <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2">
-          <BookOpen size={16} className="text-primary" />
+    <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden">
+      <CardHeader className="bg-secondary/20 border-b border-border/20 p-5">
+        <CardTitle className="text-foreground text-sm font-black flex items-center gap-2 font-sans">
+          <BookOpen size={17} className="text-primary animate-float shrink-0" />
           Luyện tập: {currentQuestion.questionTypeId ? currentQuestion.questionTypeId : 'Câu hỏi'}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
         {/* Đề bài */}
-        <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
+        <div className="text-sm font-bold leading-relaxed text-foreground bg-secondary/30 dark:bg-slate-950/20 p-5 rounded-2xl border border-border/20 shadow-inner font-sans">
           <LatexRenderer text={currentQuestion.content} />
         </div>
 
@@ -87,18 +87,18 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         <div className="space-y-4">
           {isMath ? (
             // Trình bày hướng dẫn nộp ảnh giải cho môn Toán
-            <div className="bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-500/10 p-4 rounded-xl space-y-2">
-              <h4 className="text-xs font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+            <div className="bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 p-4.5 rounded-2xl space-y-2">
+              <h4 className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
                 📝 Trình bày lời giải tự luận:
               </h4>
-              <p className="text-xs text-muted-foreground font-medium leading-relaxed">
+              <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
                 Hãy làm bài giải chi tiết ra giấy hoặc vở ghi của bạn. Sau đó, **chụp ảnh bài giải** và tải lên bên dưới để nộp bài làm.
               </p>
             </div>
           ) : currentQuestion.questionTypeId === 'eng-qt8' ? (
             // Custom selector for Gap Filling
             <div className="space-y-4">
-              <span className="text-xs font-bold text-muted-foreground block mb-2">Chọn đáp án cho từng chỗ trống:</span>
+              <span className="text-xs font-black text-muted-foreground block mb-2 uppercase tracking-wider">Chọn đáp án cho từng chỗ trống:</span>
               <div className="space-y-4">
                 {currentQuestion.answerSchema?.fields.map((field, idx) => {
                   const rawOptions = currentQuestion.options?.[idx] || '';
@@ -107,12 +107,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   const currentValue = structuredAnswer[field.key] ?? '';
 
                   return (
-                    <div key={field.key} className="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-border/50 flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all">
+                    <div key={field.key} className="p-4.5 bg-secondary/20 dark:bg-slate-900/40 rounded-2xl border border-border/40 flex flex-col md:flex-row md:items-center justify-between gap-3.5 transition-all">
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-black shadow-sm">
+                        <span className="w-6.5 h-6.5 rounded-xl bg-gradient-to-tr from-primary to-indigo-600 text-white flex items-center justify-center text-xs font-black shadow-md shadow-primary/10">
                           {idx + 1}
                         </span>
-                        <span className="text-xs font-bold text-foreground">{field.label}</span>
+                        <span className="text-xs font-extrabold text-foreground">{field.label}</span>
                       </div>
                       
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-1 max-w-xl">
@@ -132,14 +132,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                               }}
                               disabled={isSubmitting}
                               className={cn(
-                                "px-3 py-2 rounded-xl text-xs font-bold border transition-all duration-150 active:scale-95 cursor-pointer text-left flex items-center gap-1.5",
+                                "px-3.5 py-2.5 rounded-xl text-xs font-extrabold border transition-all duration-200 active:scale-95 cursor-pointer text-left flex items-center gap-1.5",
                                 isSelected
-                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-extrabold"
-                                  : "bg-card border-border hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
+                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-black"
+                                  : "bg-card border-border/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
                               )}
                             >
                               <span className={cn(
-                                "text-[10px] w-4 h-4 rounded-md flex items-center justify-center font-black",
+                                "text-[9px] w-4.5 h-4.5 rounded-md flex items-center justify-center font-black shrink-0",
                                 isSelected ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
                               )}>{letter}</span>
                               <span className="truncate">{choice}</span>
@@ -155,7 +155,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           ) : currentQuestion.questionTypeId === 'eng-qt13' && currentQuestion.answerSchema ? (
             // Custom selector for Reading Comprehension (Đọc hiểu trắc nghiệm)
             <div className="space-y-6 animate-fade-in">
-              <span className="text-xs font-bold text-muted-foreground block">Chọn câu trả lời đúng cho từng câu hỏi bên dưới:</span>
+              <span className="text-xs font-black text-muted-foreground block uppercase tracking-wider">Chọn câu trả lời đúng cho từng câu hỏi bên dưới:</span>
               <div className="space-y-6">
                 {currentQuestion.answerSchema.fields.map((field, idx) => {
                   const rawOptions = currentQuestion.options?.[idx] || '';
@@ -164,12 +164,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   const currentValue = structuredAnswer[field.key] ?? '';
 
                   return (
-                    <div key={field.key} className="p-5 bg-slate-50 dark:bg-slate-900/45 rounded-2xl border border-border/55 space-y-4 transition-all hover:border-primary/20">
-                      <div className="flex items-start gap-2.5">
-                        <span className="w-5.5 h-5.5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-black shrink-0 shadow-sm mt-0.5">
+                    <div key={field.key} className="p-5 bg-secondary/15 dark:bg-slate-900/30 rounded-2xl border border-border/40 space-y-4 transition-all hover:border-primary/20">
+                      <div className="flex items-start gap-3">
+                        <span className="w-6 h-6 rounded-xl bg-gradient-to-tr from-primary to-indigo-600 text-white flex items-center justify-center text-[10px] font-black shrink-0 shadow-md shadow-primary/15 mt-0.5 animate-float">
                           {idx + 1}
                         </span>
-                        <h4 className="text-xs font-extrabold text-foreground leading-relaxed">
+                        <h4 className="text-xs font-black text-foreground leading-relaxed font-sans">
                           {field.label}
                         </h4>
                       </div>
@@ -192,15 +192,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                               }}
                               disabled={isSubmitting}
                               className={cn(
-                                "w-full px-4 py-3 rounded-xl text-xs font-bold border transition-all duration-150 active:scale-[0.99] cursor-pointer text-left flex items-start gap-3",
+                                "w-full px-4.5 py-3.5 rounded-2xl text-xs font-extrabold border transition-all duration-200 active:scale-[0.99] cursor-pointer text-left flex items-start gap-3",
                                 isSelected
-                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-extrabold"
-                                  : "bg-card border-border hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
+                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-black"
+                                  : "bg-card border-border/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground hover:translate-x-1"
                               )}
                             >
                               <span className={cn(
-                                "text-[10px] w-4.5 h-4.5 rounded-md flex items-center justify-center font-black shrink-0 mt-0.5",
-                                isSelected ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
+                                "text-[10px] w-5 h-5 rounded-md flex items-center justify-center font-black shrink-0 mt-0.5",
+                                isSelected ? "bg-primary text-white animate-pulse" : "bg-secondary text-muted-foreground"
                               )}>{letter}</span>
                               <span className="leading-relaxed">{cleanChoice}</span>
                             </button>
@@ -215,24 +215,24 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           ) : currentQuestion.questionTypeId === 'eng-qt14' && currentQuestion.answerSchema ? (
             // Custom selector for Reading True/False (Đọc hiểu Đúng / Sai)
             <div className="space-y-6 animate-fade-in">
-              <span className="text-xs font-bold text-muted-foreground block">Đọc các nhận định dưới đây và chọn Đúng (T - True) hoặc Sai (F - False):</span>
+              <span className="text-xs font-black text-muted-foreground block uppercase tracking-wider">Đọc các nhận định dưới đây và chọn Đúng (T - True) hoặc Sai (F - False):</span>
               <div className="space-y-4">
                 {currentQuestion.answerSchema.fields.map((field, idx) => {
                   const currentValue = structuredAnswer[field.key] ?? '';
                   const choices = ['T', 'F'];
 
                   return (
-                    <div key={field.key} className="p-4 bg-slate-50 dark:bg-slate-900/45 rounded-2xl border border-border/55 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-primary/20">
-                      <div className="flex items-start gap-2.5">
-                        <span className="w-5.5 h-5.5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-black shrink-0 shadow-sm mt-0.5">
+                    <div key={field.key} className="p-4.5 bg-secondary/15 dark:bg-slate-900/30 rounded-2xl border border-border/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-primary/20">
+                      <div className="flex items-start gap-3">
+                        <span className="w-6 h-6 rounded-xl bg-gradient-to-tr from-primary to-indigo-600 text-white flex items-center justify-center text-[10px] font-black shrink-0 shadow-md shadow-primary/10 mt-0.5">
                           {idx + 1}
                         </span>
-                        <p className="text-xs font-bold text-foreground leading-relaxed">
+                        <p className="text-xs font-extrabold text-foreground leading-relaxed font-sans">
                           {field.label}
                         </p>
                       </div>
                       
-                      <div className="flex gap-2 shrink-0 self-end sm:self-center">
+                      <div className="flex gap-2.5 shrink-0 self-end sm:self-center">
                         {choices.map((choice) => {
                           const isSelected = currentValue === choice;
                           const isTrue = choice === 'T';
@@ -249,12 +249,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                               }}
                               disabled={isSubmitting}
                               className={cn(
-                                "px-4 py-2 rounded-xl text-xs font-black border transition-all duration-150 active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 w-24 h-9.5",
+                                "px-4.5 py-2.5 rounded-xl text-xs font-black border transition-all duration-200 active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 w-26 h-10",
                                 isSelected
                                   ? isTrue
-                                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-extrabold shadow-sm"
-                                    : "bg-rose-500/10 border-rose-500 text-rose-600 dark:text-rose-400 font-extrabold shadow-sm"
-                                  : "bg-card border-border hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
+                                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-black shadow-sm shadow-emerald-500/5 animate-pulse-glow"
+                                    : "bg-rose-500/10 border-rose-500 text-rose-600 dark:text-rose-400 font-black shadow-sm shadow-rose-500/5 animate-pulse-glow"
+                                  : "bg-card border-border/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
                               )}
                             >
                               {choice === 'T' ? 'True (T)' : 'False (F)'}
@@ -276,29 +276,36 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             />
           ) : (
             // Trắc nghiệm hoặc tự điền từ (fill-in-the-blank) cho môn Anh
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-3.5">
               {currentQuestion.options && currentQuestion.options.length > 0 ? (
                 currentQuestion.options.map((opt: string, i: number) => {
                   const optLetter = opt.charAt(0); // A, B, C, D
                   const isSelected = selectedOption === optLetter;
+                  const cleanOpt = opt.replace(/^[A-D]\.\s*/i, '');
                   return (
                     <button
                       key={i}
                       type="button"
                       onClick={() => handleOptionSelect(optLetter)}
-                      className={`w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
-                        ? 'bg-primary/10 border-primary text-primary shadow-sm shadow-primary/5'
-                        : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
-                        }`}
+                      className={cn(
+                        "w-full text-left p-4.5 rounded-2xl text-xs font-extrabold border transition-all duration-200 active:scale-[0.98] cursor-pointer flex items-center gap-3",
+                        isSelected
+                          ? 'bg-primary/10 border-primary text-primary shadow-sm shadow-primary/5 font-black'
+                          : 'bg-card border-border/60 hover:bg-slate-50/50 dark:hover:bg-slate-900/5 text-foreground hover:translate-x-1'
+                      )}
                     >
-                      {opt}
+                      <span className={cn(
+                        "text-[10px] w-5 h-5 rounded-md flex items-center justify-center font-black shrink-0",
+                        isSelected ? "bg-primary text-white animate-pulse" : "bg-secondary text-muted-foreground"
+                      )}>{optLetter}</span>
+                      <span>{cleanOpt}</span>
                     </button>
                   );
                 })
               ) : (
                 // Điền từ tự do (Word Form / etc.)
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground">
+                <div className="space-y-2.5">
+                  <label className="text-xs font-black text-muted-foreground uppercase tracking-wider">
                     {currentQuestion.questionTypeId === 'eng-qt11' ? 'Sửa lại từ sai:' : 'Đáp án của bạn:'}
                   </label>
                   <input
@@ -309,10 +316,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                       currentQuestion.questionTypeId === 'eng-qt11'
                         ? "Nhập từ sửa lại (ví dụ: tired hoặc tiring -> tired)..."
                         : currentQuestion.questionTypeId === 'eng-qt15'
-                        ? "Nhập phần viết lại (ví dụ: he knew the way hoặc cả câu)..."
+                        ? "Nhập phần viết lại (ví dụ: he knew the way)..."
                         : "Nhập từ cần điền (ví dụ: inventions)..."
                     }
-                    className="w-full p-4 rounded-xl text-xs font-semibold border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-150"
+                    className="w-full p-4.5 rounded-2xl text-xs font-extrabold border border-border/60 bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && selectedOption && !isSubmitting) {
                         handleSubmit();
@@ -326,13 +333,13 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
           {/* Nút gợi ý thông minh */}
           {solutionDetail && questionTypeId !== 'eng-qt6' && (
-            <div className="flex flex-col gap-2 pt-2">
+            <div className="flex flex-col gap-2 pt-3">
               <button
                 type="button"
                 onClick={triggerNextHint}
                 className={cn(
-                  "self-start text-[11px] font-bold flex items-center gap-1 cursor-pointer px-3 py-1.5 rounded-lg border transition-colors",
-                  routeSubject === 'math' ? "text-indigo-500 hover:text-indigo-600" : "text-violet-500 hover:text-violet-600",
+                  "self-start text-[11px] font-black flex items-center gap-1.5 cursor-pointer px-4 py-2 rounded-xl border transition-all duration-300 shadow-sm active:scale-95",
+                  routeSubject === 'math' ? "text-indigo-500 hover:text-indigo-600 hover:bg-indigo-500/5" : "text-violet-500 hover:text-violet-600 hover:bg-violet-500/5",
                   getSubjectTheme(routeSubject).bg,
                   getSubjectTheme(routeSubject).border
                 )}
@@ -342,14 +349,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               </button>
 
               {hintLevel > 0 && (
-                <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl space-y-3 animate-fade-in">
+                <div className="p-4.5 bg-amber-500/5 border border-amber-500/15 rounded-2xl space-y-3.5 animate-fade-in">
                   {solutionDetail.detailedSteps.slice(0, hintLevel).map((step: any, sIdx: number) => (
                     <div key={sIdx} className="text-xs font-semibold text-muted-foreground leading-relaxed flex gap-2">
-                      <span className="text-amber-500 shrink-0 font-extrabold">• Bước {step.order}:</span>
+                      <span className="text-amber-500 shrink-0 font-black">Step {step.order}:</span>
                       <div className="flex-1">
                         <LatexRenderer text={step.explanation} />
                         {step.formula && (
-                          <div className="mt-1 bg-secondary/30 p-1.5 rounded text-foreground overflow-x-auto">
+                          <div className="mt-1.5 bg-secondary/40 p-2.5 rounded-xl text-foreground overflow-x-auto border border-border/10 font-mono text-[11px]">
                             <LatexRenderer text={step.formula} block={true} />
                           </div>
                         )}
@@ -373,26 +380,26 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
           {/* Vùng hiển thị tiến độ tải lên (Upload Progress UI) */}
           {isSubmitting && totalUploadStats && (
-            <div className="bg-indigo-500/5 border border-indigo-500/20 p-4 rounded-xl space-y-3 animate-fade-in my-3">
-              <div className="flex items-center justify-between text-xs font-bold text-foreground">
-                <span className="flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
+            <div className="bg-indigo-500/5 border border-indigo-500/15 p-4.5 rounded-2xl space-y-3.5 animate-fade-in my-3">
+              <div className="flex items-center justify-between text-xs font-black text-foreground">
+                <span className="flex items-center gap-2">
+                  <span className="relative flex h-2.5 w-2.5">
                     {totalUploadStats.isPaused ? (
                       <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                     ) : (
                       <>
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
                       </>
                     )}
                   </span>
                   {totalUploadStats.isPaused ? 'Đã tạm dừng tải ảnh' : 'Đang tải lên ảnh bài làm...'}
                 </span>
-                <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">{totalUploadStats.percent}%</span>
+                <span className="text-indigo-600 dark:text-indigo-400 font-black">{totalUploadStats.percent}%</span>
               </div>
 
               {/* Thanh tiến độ */}
-              <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
                 <div
                   className={cn(
                     "h-full rounded-full transition-all duration-300",
@@ -402,7 +409,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[10px] font-semibold text-muted-foreground">
+              <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground">
                 <span>
                   Đã gửi {((totalUploadStats.bytesTransferred) / (1024 * 1024)).toFixed(2)} MB / {((totalUploadStats.totalBytes) / (1024 * 1024)).toFixed(2)} MB
                 </span>
@@ -437,17 +444,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           )}
 
           {submitError && (
-            <p className="text-xs font-bold text-rose-600 dark:text-rose-400 my-2">
+            <p className="text-xs font-black text-rose-600 dark:text-rose-400 my-2.5">
               {submitError}
             </p>
           )}
 
           {/* Bấm nộp bài & Điều hướng chuyển câu */}
-          <div className="space-y-3 mt-4">
+          <div className="space-y-3.5 mt-5">
             <Button
               onClick={handleSubmit}
               disabled={submitDisabled || isSubmitting}
-              className="w-full font-bold py-3 text-xs active:scale-[0.98]"
+              className="w-full font-black py-3.5 text-xs active:scale-[0.98] rounded-2xl shadow-md hover:shadow-lg transition-all animate-pulse-glow cursor-pointer"
             >
               {isSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài tập'}
             </Button>
@@ -462,7 +469,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   resetQuestionState();
                 }}
                 variant="outline"
-                className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-9 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-1 font-black py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-2xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 <ArrowLeft size={14} /> Câu trước
               </Button>
@@ -475,7 +482,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   resetQuestionState();
                 }}
                 variant="outline"
-                className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-9 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-1 font-black py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-2xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 Câu sau <ArrowRight size={14} />
               </Button>
