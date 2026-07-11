@@ -5,12 +5,12 @@ import { storageService } from '../../services/storage';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { getQuestionTypes } from '../../data';
-import { 
-  Bookmark, 
-  Award, 
-  AlertTriangle, 
-  ArrowRight, 
-  CheckCircle, 
+import {
+  Bookmark,
+  Award,
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle,
   Sparkles,
   Zap
 } from 'lucide-react';
@@ -29,7 +29,7 @@ export const Dashboard: React.FC = () => {
 
   const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
   const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
-  
+
   // Tìm dạng bài dang dở gần nhất
   const attempts = storageService.getAttempts(currentUserId);
   let lastActiveTypeId: string | null = null;
@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
   // Tính toán số dạng đã master/hoàn thành
   const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
   const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
-  
+
   const mathProgress = mathQuestionTypes.length > 0 ? Math.round((mathCompleted / mathQuestionTypes.length) * 100) : 0;
   const englishProgress = englishQuestionTypes.length > 0 ? Math.round((englishCompleted / englishQuestionTypes.length) * 100) : 0;
 
@@ -81,7 +81,7 @@ export const Dashboard: React.FC = () => {
     "Chăm chỉ cộng phương pháp đúng là chìa khóa của thành công. Roadmap đã sẵn sàng, đi thôi!",
     "Từng câu Toán rút gọn, từng cấu trúc bị động bạn luyện hôm nay chính là bậc thang dẫn tới cánh cổng trường cấp 3 mơ ước."
   ];
-  
+
   const [quote] = useState(() => quotes[Math.floor(Math.random() * quotes.length)]);
 
   const handleFixWeakType = (typeId: string, subjectCode: 'math' | 'english') => {
@@ -91,7 +91,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
-      
+
       {/* 🌟 Minimalist Greeting Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1.5">
@@ -103,7 +103,7 @@ export const Dashboard: React.FC = () => {
             "{quote}"
           </p>
         </div>
-        
+
         {/* Streak/Level Gamified Badge */}
         <div className="flex items-center gap-2 bg-secondary/40 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-border/20 shadow-sm self-start md:self-center shrink-0">
           <span className="text-xs font-black text-foreground flex items-center gap-1">
@@ -118,14 +118,14 @@ export const Dashboard: React.FC = () => {
 
       {/* 📐 Main Workspace Grid: 2 Columns (Left 2/3 - Core Study Actions, Right 1/3 - Stats & Weaknesses) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         {/* 👈 Left Column (2/3 width) - Focus actions & Roadmap */}
         <div className="lg:col-span-2 space-y-6">
-          
+
           {/* Card Học tiếp nhanh (Core Resume Card) */}
           <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden relative group">
             {/* Background glowing effects */}
-            <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
+            <div className="absolute top-0 right-0 w-44 h-44 bg-linear-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
             <CardHeader className="bg-secondary/25 border-b border-border/20 p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -161,9 +161,9 @@ export const Dashboard: React.FC = () => {
                 </div>
                 {/* Progress bar */}
                 <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                  <div 
-                    className="h-full bg-gradient-to-r from-primary to-indigo-600 rounded-full transition-all duration-500" 
-                    style={{ width: `${lastActivePercent}%` }} 
+                  <div
+                    className="h-full bg-linear-to-r from-primary to-indigo-600 rounded-full transition-all duration-500"
+                    style={{ width: `${lastActivePercent}%` }}
                   />
                 </div>
               </div>
@@ -173,7 +173,7 @@ export const Dashboard: React.FC = () => {
                   setSubject(lastActiveSubject);
                   navigate(`/question-types/${lastActiveType.id}`);
                 }}
-                className="w-full font-black py-3.5 text-xs bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 animate-pulse-glow"
+                className="w-full font-black py-3.5 text-xs bg-linear-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 animate-pulse-glow"
               >
                 Luyện tiếp tục ngay <ArrowRight size={13} />
               </Button>
@@ -188,7 +188,7 @@ export const Dashboard: React.FC = () => {
             </CardHeader>
             <CardContent className="p-6 space-y-4">
               <div className="space-y-3">
-                
+
                 <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 hover:border-indigo-500/20 transition-all duration-300 group">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 border group-hover:scale-105 transition-transform shadow-inner", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor, getSubjectTheme('math').border)}>
                     1
@@ -227,7 +227,7 @@ export const Dashboard: React.FC = () => {
 
               </div>
 
-              <Button 
+              <Button
                 onClick={() => navigate('/roadmap')}
                 variant="outline"
                 className="w-full font-black py-3 text-xs active:scale-[0.98] border border-border/50 text-foreground hover:text-primary rounded-2xl mt-2 cursor-pointer transition-all"
@@ -241,16 +241,16 @@ export const Dashboard: React.FC = () => {
 
         {/* 👉 Right Column (1/3 width) - Stats Widget & Weakness list */}
         <div className="space-y-6">
-          
+
           {/* Widget Thống kê tổng quan (Mastery Stats Widget) */}
           <Card className="border border-border/40 rounded-3xl shadow-md overflow-hidden">
             <CardHeader className="bg-secondary/15 p-5 border-b border-border/20">
               <CardTitle className="text-foreground font-black text-sm uppercase tracking-wider font-sans">Thống kê tổng quan</CardTitle>
             </CardHeader>
             <CardContent className="p-5 space-y-4">
-              
+
               {/* Sổ lỗi sai */}
-              <div 
+              <div
                 onClick={() => navigate('/mistakes')}
                 className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 hover:border-amber-500/20 transition-all cursor-pointer group"
               >
@@ -285,7 +285,7 @@ export const Dashboard: React.FC = () => {
                   <span>{mathProgress}%</span>
                 </div>
                 <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full transition-all duration-500" style={{ width: `${mathProgress}%` }} />
+                  <div className="h-full bg-linear-to-r from-indigo-500 to-blue-500 rounded-full transition-all duration-500" style={{ width: `${mathProgress}%` }} />
                 </div>
               </div>
 
@@ -296,7 +296,7 @@ export const Dashboard: React.FC = () => {
                   <span>{englishProgress}%</span>
                 </div>
                 <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style={{ width: `${englishProgress}%` }} />
+                  <div className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style={{ width: `${englishProgress}%` }} />
                 </div>
               </div>
 
@@ -328,7 +328,7 @@ export const Dashboard: React.FC = () => {
                   {weakTypes.map((type) => {
                     const subjectCode = type.id.startsWith('math') ? 'math' : 'english';
                     const isMath = subjectCode === 'math';
-                    
+
                     return (
                       <div key={type.id} className="p-3.5 bg-secondary/15 dark:bg-slate-900/30 rounded-2xl border border-border/40 hover:border-red-500/20 transition-all flex flex-col gap-2.5 group">
                         <div className="space-y-1">
@@ -345,7 +345,7 @@ export const Dashboard: React.FC = () => {
                           </div>
                           <h4 className="font-extrabold text-xs text-foreground group-hover:text-red-500 transition-colors leading-snug">{type.name}</h4>
                         </div>
-                        
+
                         <div className="flex items-center justify-between gap-2 mt-0.5">
                           {type.wrongAttempts > 0 && (
                             <span className="text-[9px] text-red-500 font-extrabold bg-red-500/5 px-2 py-0.5 rounded-md border border-red-500/10">
