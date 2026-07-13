@@ -4,9 +4,10 @@ import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
 import { QuestionType, SubjectCode } from '../../../types';
-import { getTopics } from '../../../data';
+import { getTopics, getQuestions } from '../../../data';
 import { useAppStore } from '../../../services/store';
-import { getSubjectTheme } from '../../../utils/theme';
+import { getSubjectTheme, getStarsFromScore } from '../../../utils/theme';
+import { storageService } from '../../../services/storage';
 
 interface TopicSelectionViewProps {
   routeSubject: SubjectCode;
@@ -50,11 +51,18 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   questionTypeId,
 }) => {
   const navigate = useNavigate();
-  const selectedGrade = useAppStore(state => state.selectedGrade);
+  const { selectedGrade, user, progressVersion } = useAppStore();
   const theme = getSubjectTheme(routeSubject);
   const isMath = routeSubject === 'math';
   const isEnglish = routeSubject === 'english';
   const isChemistry = routeSubject === 'chemistry';
+
+  const allQuestions = useMemo(() => getQuestions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
+  const userId = user?.uid || 'guest';
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const progress = useMemo(() => storageService.getProgress(userId), [userId, progressVersion]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const attempts = useMemo(() => storageService.getAttempts(userId), [userId, progressVersion]);
 
   const dang1QIds = useMemo(() => [
     ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
@@ -547,6 +555,49 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
             {/* Grid nâng lên 4 cột trên màn hình Desktop lớn */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
               {topicQTypes.map((qType) => {
+                const qTypeAttempts = attempts.filter(a => a.questionTypeId === qType.id);
+                const qTypeQuestions = allQuestions.filter(q => q.questionTypeId === qType.id);
+                const totalQuestions = qTypeQuestions.length;
+                const solvedQuestionIds = new Set(
+                  qTypeAttempts.filter(a => a.isCorrect).map(a => a.questionId)
+                );
+                const solvedCount = Math.min(solvedQuestionIds.size, totalQuestions);
+                const progressPercent = totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
+                const masteryScore = progress?.masteryLevels[qType.id] ?? 0;
+                const starsCount = getStarsFromScore(masteryScore);
+
+                const statusBadge = (() => {
+                  if (topic.tier === 3 && !isPremium) {
+                    return (
+                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
+                        👑 Khóa Premium
+                      </span>
+                    );
+                  }
+                  if (qTypeAttempts.length === 0) {
+                    return (
+                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground border border-border/40 inline-flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        Sẵn sàng
+                      </span>
+                    );
+                  }
+                  if (solvedCount === totalQuestions || masteryScore >= 80) {
+                    return (
+                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 inline-flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        ✓ Đã luyện xong ({solvedCount}/{totalQuestions})
+                      </span>
+                    );
+                  }
+                  return (
+                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600 border border-blue-500/20 inline-flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 animate-pulse" />
+                      ⏳ Đang luyện ({solvedCount}/{totalQuestions})
+                    </span>
+                  );
+                })();
+
                 return (
                   <Card
                     key={qType.id}
@@ -579,17 +630,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                           <span className={cn("text-[9px] font-bold px-2.5 py-1 rounded-full", theme.badge)}>
                             {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Luyện tập'}
                           </span>
-                          {topic.tier === 3 && !isPremium ? (
-                            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
-                              👑 Khóa Premium
-                            </span>
-                          ) : (
-                            /* Badge Sẵn sàng tối giản trung tính */
-                            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground border border-border/40 inline-flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                              Sẵn sàng
-                            </span>
-                          )}
+                          {statusBadge}
                         </div>
 
                         {/* Hover text color đồng bộ môn học */}
@@ -604,6 +645,41 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                         <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
                           {qType.description}
                         </p>
+
+                        {/* Progress Bar & Stars */}
+                        {qTypeAttempts.length > 0 && totalQuestions > 0 && (
+                          <div className="space-y-2 mt-2 border-t border-border/10 pt-2">
+                            <div className="flex justify-between items-center text-[10px] font-bold">
+                              <span className="text-muted-foreground">
+                                Tiến độ: {solvedCount}/{totalQuestions} ({progressPercent}%)
+                              </span>
+                              <div className="flex gap-0.5">
+                                {[1, 2, 3].map((starNum) => (
+                                  <span
+                                    key={starNum}
+                                    className={cn(
+                                      "text-[10px] transition-all",
+                                      starNum <= starsCount ? "opacity-100 scale-105" : "opacity-25 grayscale"
+                                    )}
+                                  >
+                                    ⭐
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                              <div 
+                                className={cn(
+                                  "h-full rounded-full transition-all duration-500",
+                                  routeSubject === 'math' ? 'bg-indigo-500' :
+                                  routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                                  'bg-purple-500'
+                                )}
+                                style={{ width: `${progressPercent}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       {/* Text link đồng bộ màu môn học */}
