@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { Question, Solution, UserAttempt } from '../../../types';
+import { Question, Solution, UserAttempt, SubjectCode } from '../../../types';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
@@ -16,7 +16,7 @@ interface ResultCardProps {
   existingAttempt: UserAttempt | null;
   pastAttempts: UserAttempt[];
   solutionDetail: Solution | null;
-  routeSubject: 'math' | 'english';
+  routeSubject: SubjectCode;
   selectedOption: string | null;
   currentIdx: number;
   questionsLength: number;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { Question, Solution } from '../../../types';
+import { Question, Solution, SubjectCode } from '../../../types';
 import { validateAnswer } from '../../../utils/answerValidator';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
@@ -30,7 +30,7 @@ interface ExamPracticeViewProps {
   handleOptionSelect: (letter: string) => void;
   handleNext: () => void;
   solutionDetail: Solution | null;
-  routeSubject: 'math' | 'english';
+  routeSubject: SubjectCode;
 }
 
 export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({

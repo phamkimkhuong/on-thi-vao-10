@@ -13,6 +13,8 @@ export interface TabsProps {
   className?: string;
   tabHeaderClassName?: string;
   tabContentClassName?: string;
+  activeTabClassName?: string;
+  inactiveTabClassName?: string;
 }
 
 export const Tabs: React.FC<TabsProps> = ({
@@ -21,16 +23,18 @@ export const Tabs: React.FC<TabsProps> = ({
   className,
   tabHeaderClassName,
   tabContentClassName,
+  activeTabClassName,
+  inactiveTabClassName,
 }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || items[0]?.id);
 
   const activeContent = items.find(item => item.id === activeTabId)?.content;
 
   return (
-    <div className={cn('flex flex-col gap-4', className)}>
+    <div className={cn('flex flex-col gap-5', className)}>
       <div
         className={cn(
-          'flex border-b border-border/30 overflow-x-auto scrollbar-none gap-2',
+          'flex flex-wrap gap-2.5 pb-1',
           tabHeaderClassName
         )}
       >
@@ -39,10 +43,10 @@ export const Tabs: React.FC<TabsProps> = ({
             key={item.id}
             onClick={() => setActiveTabId(item.id)}
             className={cn(
-              'px-4 py-3 font-semibold text-sm transition-all relative border-b-2 whitespace-nowrap -mb-[2px] cursor-pointer',
+              'px-4 py-2.5 font-bold text-xs md:text-sm transition-all duration-200 rounded-xl cursor-pointer shadow-sm border border-transparent',
               activeTabId === item.id
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
+                ? cn('bg-primary text-primary-foreground border-primary/20', activeTabClassName)
+                : cn('bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary/80 border-border/10', inactiveTabClassName)
             )}
           >
             {item.label}

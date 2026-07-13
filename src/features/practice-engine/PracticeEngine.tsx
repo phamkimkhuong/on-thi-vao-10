@@ -8,7 +8,7 @@ import { logCustomEvent } from '../../services/firebase';
 import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
 import { Button } from '../../components/ui/button';
 
-import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation } from '../../types';
+import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '../../types';
 import { AlertTriangle, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '../../utils/answerValidator';
@@ -59,7 +59,11 @@ export const PracticeEngine: React.FC = () => {
   const englishQuestions = getQuestions(selectedGrade, 'english');
   const englishSolutions = getSolutions(selectedGrade, 'english');
 
-  const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as 'math' | 'english';
+  const chemistryQuestionTypes = getQuestionTypes(selectedGrade, 'chemistry');
+  const chemistryQuestions = getQuestions(selectedGrade, 'chemistry');
+  const chemistrySolutions = getSolutions(selectedGrade, 'chemistry');
+
+  const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as SubjectCode;
 
   useEffect(() => {
     const start = Date.now();
@@ -68,7 +72,7 @@ export const PracticeEngine: React.FC = () => {
       const durationMinutes = Math.round((durationSeconds / 60) * 100) / 100;
       if (durationSeconds > 2) {
         logCustomEvent('study_session_end', {
-          subject: routeSubject === 'math' ? 'Toán' : 'Anh',
+          subject: routeSubject === 'math' ? 'Toán' : routeSubject === 'chemistry' ? 'Hóa học' : 'Anh',
           duration_minutes: durationMinutes,
           duration_seconds: durationSeconds,
           mode: 'practice'
@@ -212,7 +216,8 @@ export const PracticeEngine: React.FC = () => {
 
   // Derived States - Tính toán trực tiếp trong lúc render
   const isMath = routeSubject === 'math';
-  const qList = isMath ? mathQuestions : englishQuestions;
+  const isChemistry = routeSubject === 'chemistry';
+  const qList = isMath ? mathQuestions : isChemistry ? chemistryQuestions : englishQuestions;
 
   const questions = useEnglishQuestionFilter(
     questionTypeId,
@@ -228,7 +233,9 @@ export const PracticeEngine: React.FC = () => {
   const solutionDetail: Solution | null = questionAtIdx
     ? (isMath
       ? mathSolutions.find(s => s.questionId === questionAtIdx.id)
-      : englishSolutions.find(s => s.questionId === questionAtIdx.id)) || null
+      : isChemistry
+        ? chemistrySolutions.find(s => s.questionId === questionAtIdx.id)
+        : englishSolutions.find(s => s.questionId === questionAtIdx.id)) || null
     : null;
 
   const completedQuestionIds = useMemo(() => {
@@ -967,6 +974,7 @@ export const PracticeEngine: React.FC = () => {
         routeSubject={routeSubject}
         mathQuestionTypes={mathQuestionTypes}
         englishQuestionTypes={englishQuestionTypes}
+        chemistryQuestionTypes={chemistryQuestionTypes}
         grammarSection={grammarSection}
         setGrammarSection={setGrammarSection}
         setSelectedSubTense={setSelectedSubTense}
@@ -1052,7 +1060,9 @@ export const PracticeEngine: React.FC = () => {
                 className={cn(
                   "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
                   isActive
-                    ? "bg-primary border-primary text-white shadow-sm shadow-primary/20 scale-105"
+                    ? (routeSubject === 'math' ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20 scale-105" :
+                       routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
+                       "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
                     : isCompleted
                       ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
                       : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"

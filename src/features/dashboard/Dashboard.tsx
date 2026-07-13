@@ -346,9 +346,6 @@ export const Dashboard: React.FC = () => {
                             )}>
                               {getSubjectIcon(subjectCode)} {getSubjectName(subjectCode)}
                             </span>
-                            <span className="text-[9px] text-muted-foreground font-bold">
-                              Tần suất thi: {type.examFrequency === 'high' ? 'Cao' : 'Thường'}
-                            </span>
                           </div>
                           <h4 className="font-extrabold text-xs text-foreground group-hover:text-red-500 transition-colors leading-snug">{type.name}</h4>
                         </div>

@@ -3,14 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
-import { QuestionType } from '../../../types';
+import { QuestionType, SubjectCode } from '../../../types';
 import { getTopics } from '../../../data';
 import { useAppStore } from '../../../services/store';
+import { getSubjectTheme } from '../../../utils/theme';
 
 interface TopicSelectionViewProps {
-  routeSubject: 'math' | 'english';
+  routeSubject: SubjectCode;
   mathQuestionTypes: QuestionType[];
   englishQuestionTypes: QuestionType[];
+  chemistryQuestionTypes: QuestionType[];
   grammarSection: 'dang1' | 'dang2' | 'dang3' | 'dang4' | 'dang5' | null;
   setGrammarSection: (val: 'dang1' | 'dang2' | 'dang3' | 'dang4' | 'dang5' | null) => void;
   setSelectedSubTense: (val: any) => void;
@@ -31,6 +33,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   routeSubject,
   mathQuestionTypes,
   englishQuestionTypes,
+  chemistryQuestionTypes,
   grammarSection,
   setGrammarSection,
   setSelectedSubTense,
@@ -48,7 +51,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
 }) => {
   const navigate = useNavigate();
   const selectedGrade = useAppStore(state => state.selectedGrade);
+  const theme = getSubjectTheme(routeSubject);
   const isMath = routeSubject === 'math';
+  const isEnglish = routeSubject === 'english';
+  const isChemistry = routeSubject === 'chemistry';
 
   const dang1QIds = useMemo(() => [
     ...Array.from({ length: 80 }, (_, i) => `eng-q${i + 5}`),
@@ -65,7 +71,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const dang4QIds = useMemo(() => Array.from({ length: 30 }, (_, i) => `eng-q${i + 302}`), []);
   const dang5QIds = useMemo(() => Array.from({ length: 30 }, (_, i) => `eng-q${i + 332}`), []);
 
-  if (!isMath && questionTypeId === 'eng-qt6' && grammarSection === null) {
+  if (isEnglish && questionTypeId === 'eng-qt6' && grammarSection === null) {
     const dangCards = [
       {
         id: 'dang1',
@@ -100,7 +106,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
     ];
 
     return (
-      <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+      <div className="space-y-6 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6 animate-fade-in">
         <button
           onClick={() => {
             navigate('/practice');
@@ -117,7 +123,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-5">
           {dangCards.map((card) => {
             const percent = getSubTenseProgress(card.qIds);
             return (
@@ -388,7 +394,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
     }
 
     return (
-      <div className="space-y-6 max-w-4xl mx-auto pb-12 animate-fade-in">
+      <div className="space-y-6 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6 animate-fade-in">
         <button
           onClick={() => {
             setGrammarSection(null);
@@ -439,7 +445,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           </Card>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-5">
           {subTenseCards.map((card) => {
             const percent = getSubTenseProgress(card.qIds);
             return (
@@ -493,22 +499,26 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
 
   // Màn hình chọn dạng bài chính
   const topics = getTopics(selectedGrade, routeSubject);
-  const qTypes = isMath ? mathQuestionTypes : englishQuestionTypes;
+  const qTypes = isMath ? mathQuestionTypes : isChemistry ? chemistryQuestionTypes : englishQuestionTypes;
 
   const isG9 = selectedGrade === 'grade9';
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto pb-12 animate-fade-in">
+    <div className="space-y-8 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6 animate-fade-in">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-foreground tracking-tight">
           {isMath 
             ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : '📐 Học tốt Toán Lớp 10')
-            : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
+            : isChemistry
+              ? '🧪 Luyện tập Hóa học Lớp 10'
+              : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
           {isMath 
             ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : 'Bài tập tự luận lớp 10 bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.')
-            : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
+            : isChemistry
+              ? 'Luyện tập các dạng bài Hóa học lớp 10 bám sát chương trình GDPT 2018 mới.'
+              : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
         </p>
       </div>
 
@@ -519,7 +529,13 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
         return (
           <div key={topic.id} className="space-y-4">
             <div className="flex items-center gap-2.5 border-b border-border/20 pb-2">
-              <div className="h-4 w-1 bg-primary rounded-full" />
+              {/* Chỉ thị dọc đổi màu theo môn học */}
+              <div className={cn(
+                "h-4 w-1 rounded-full",
+                routeSubject === 'math' ? 'bg-indigo-500' :
+                routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                'bg-purple-500'
+              )} />
               <h3 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
                 {topic.name}
               </h3>
@@ -528,12 +544,16 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
               </span>
             </div>
 
-            <div className={cn("grid gap-4", isMath ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3")}>
+            {/* Grid nâng lên 4 cột trên màn hình Desktop lớn */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
               {topicQTypes.map((qType) => {
                 return (
                   <Card
                     key={qType.id}
-                    className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-primary/50"
+                    className={cn(
+                      "cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md",
+                      routeSubject === 'math' ? 'hover:border-indigo-500/50' : routeSubject === 'chemistry' ? 'hover:border-emerald-500/50' : 'hover:border-purple-500/50'
+                    )}
                     onClick={() => {
                       if (topic.tier === 3 && !isPremium) {
                         if (window.confirm("Chặng 3 (Mục tiêu điểm 9-10) là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa không?")) {
@@ -555,21 +575,30 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400">
-                            {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Bài học'}
+                          {/* Badge đồng bộ màu môn học */}
+                          <span className={cn("text-[9px] font-bold px-2.5 py-1 rounded-full", theme.badge)}>
+                            {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Luyện tập'}
                           </span>
                           {topic.tier === 3 && !isPremium ? (
                             <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
                               👑 Khóa Premium
                             </span>
                           ) : (
-                            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
-                              🔓 Sẵn sàng
+                            /* Badge Sẵn sàng tối giản trung tính */
+                            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground border border-border/40 inline-flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                              Sẵn sàng
                             </span>
                           )}
                         </div>
 
-                        <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors">
+                        {/* Hover text color đồng bộ môn học */}
+                        <h3 className={cn(
+                          "font-extrabold text-base text-foreground transition-colors", 
+                          routeSubject === 'math' ? 'group-hover:text-indigo-600' :
+                          routeSubject === 'chemistry' ? 'group-hover:text-emerald-600' :
+                          'group-hover:text-purple-600'
+                        )}>
                           {qType.name}
                         </h3>
                         <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
@@ -577,9 +606,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                         </p>
                       </div>
 
-                      <div className="flex items-center justify-between border-t border-border/20 pt-4 text-xs font-bold text-primary">
+                      {/* Text link đồng bộ màu môn học */}
+                      <div className={cn("flex items-center justify-between border-t border-border/20 pt-4 text-xs font-black", theme.text)}>
                         <span>
-                          {qType.id === 'eng-qt6' ? 'Khám phá 6 bài học →' : 'Bắt đầu học ngay →'}
+                          {qType.id === 'eng-qt6' ? 'Khám phá 6 chuyên đề →' : 'Luyện tập ngay →'}
                         </span>
                       </div>
                     </CardContent>
@@ -591,7 +621,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
         );
       })}
 
-      {!isMath && (
+      {isEnglish && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-border/50">
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"

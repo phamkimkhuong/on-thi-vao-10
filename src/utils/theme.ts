@@ -62,7 +62,7 @@ export const getSubjectTheme = (subject: SubjectCode): SubjectTheme => {
 
 export interface DifficultyTheme {
   text: string;
-  color: string;
+  dotClass: string;
 }
 
 export const getDifficultyTheme = (difficulty: 'easy' | 'medium' | 'hard'): DifficultyTheme => {
@@ -70,17 +70,17 @@ export const getDifficultyTheme = (difficulty: 'easy' | 'medium' | 'hard'): Diff
     case 'easy':
       return {
         text: 'Cơ bản',
-        color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400'
+        dotClass: 'bg-emerald-500'
       };
     case 'medium':
       return {
         text: 'Trung bình',
-        color: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400'
+        dotClass: 'bg-amber-500'
       };
     case 'hard':
       return {
         text: 'Nâng cao',
-        color: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400'
+        dotClass: 'bg-rose-500'
       };
   }
 };

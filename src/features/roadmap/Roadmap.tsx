@@ -99,7 +99,7 @@ export const Roadmap: React.FC = () => {
       ];
 
   return (
-    <div className="space-y-12 max-w-4xl mx-auto pb-12">
+    <div className="space-y-12 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6">
       {/* Header Giới thiệu Lộ trình */}
       <div className="text-center space-y-3.5">
         <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
@@ -117,10 +117,10 @@ export const Roadmap: React.FC = () => {
 
           return (
             <div key={tier.id} className="space-y-8">
-              {/* Tiêu đề Chặng */}
+              {/* Tiêu đề Chặng - Thiết kế viền trái tối giản kiểu Notion */}
               <div className={cn(
-                'p-6 rounded-2xl border transition-all duration-300 shadow-md relative overflow-hidden group',
-                getTierTheme(tier.id).badgeStyle
+                'p-4 md:p-6 rounded-2xl border border-border/80 border-l-4 bg-card text-foreground transition-all duration-300 shadow-sm relative overflow-hidden group',
+                tier.id === 1 ? 'border-l-emerald-500' : tier.id === 2 ? 'border-l-indigo-500' : 'border-l-violet-500'
               )}>
                 <div className="absolute top-0 right-0 w-24 h-24 bg-current/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500" />
                 <div className="flex items-center justify-between gap-3 flex-wrap relative z-10">
@@ -136,7 +136,7 @@ export const Roadmap: React.FC = () => {
 
               {/* Danh sách các chuyên đề trong chặng */}
               <div className={cn(
-                'relative border-l-2 pl-8 ml-5 space-y-12',
+                'relative border-l-2 pl-5 md:pl-8 ml-2 md:ml-5 space-y-10 md:space-y-12',
                 getTierTheme(tier.id).lineStyle
               )}>
                 {tierTopics.map((topic, topicIdx) => {
@@ -144,8 +144,13 @@ export const Roadmap: React.FC = () => {
 
                   return (
                     <div key={topic.id} className="relative group/topic">
-                      {/* Điểm nút trên trục thời gian */}
-                      <div className="absolute -left-[45px] top-0.5 w-8 h-8 rounded-full border-4 border-background flex items-center justify-center text-xs font-black shadow-md transition-all bg-gradient-to-tr from-primary to-indigo-600 text-white group-hover/topic:scale-110 duration-300 animate-pulse-glow">
+                      {/* Điểm nút trên trục thời gian - Đồng bộ màu theo môn học */}
+                      <div className={cn(
+                        "absolute -left-[31px] md:-left-[45px] top-0.5 w-7 h-7 md:w-8 md:h-8 rounded-full border-4 border-background flex items-center justify-center text-[10px] md:text-xs font-black shadow-md transition-all duration-300 group-hover/topic:scale-110",
+                        selectedSubject === 'math' ? 'bg-indigo-600 text-white border-indigo-100 dark:border-indigo-950 shadow-indigo-600/20' :
+                        selectedSubject === 'chemistry' ? 'bg-emerald-600 text-white border-emerald-100 dark:border-emerald-950 shadow-emerald-600/20' :
+                        'bg-purple-600 text-white border-purple-100 dark:border-purple-950 shadow-purple-600/20'
+                      )}>
                         {topicIdx + 1}
                       </div>
 
@@ -176,7 +181,7 @@ export const Roadmap: React.FC = () => {
                         })()}
 
                         {/* Danh sách dạng bài */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
                           {filteredTypes.map((type) => {
                             const stars = getMasteryStars(type.id);
                             const diff = getDifficultyTheme(type.difficulty);
@@ -195,10 +200,9 @@ export const Roadmap: React.FC = () => {
                                 <CardContent className="p-5.5 flex flex-col justify-between h-full gap-4">
                                   <div className="space-y-2.5 flex-1">
                                     <div className="flex items-center justify-between gap-2">
-                                      <span className={cn(
-                                        'text-[9px] font-black px-2.5 py-0.5 rounded-lg border',
-                                        diff.color
-                                      )}>
+                                      {/* Badge độ khó tối giản với chấm màu */}
+                                      <span className="inline-flex items-center gap-1.5 text-[9px] font-extrabold px-2.5 py-0.75 rounded-lg border border-border/40 bg-secondary/50 text-muted-foreground">
+                                        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", diff.dotClass)} />
                                         {diff.text}
                                       </span>
                                       {renderMasteryStars(stars)}
@@ -217,17 +221,15 @@ export const Roadmap: React.FC = () => {
                                     </p>
                                     {type.subTypes && type.subTypes.length > 0 && (
                                       <div className="pt-1">
-                                        <span className="text-[9px] font-black text-primary bg-primary/8 dark:bg-primary/15 px-2.5 py-0.75 rounded-md inline-block select-none border border-primary/5">
+                                        {/* Badge dạng bài con tối giản trung tính */}
+                                        <span className="text-[9px] font-extrabold text-muted-foreground bg-secondary/50 px-2.5 py-0.75 rounded-md inline-block select-none border border-border/40">
                                           🎯 Gồm {type.subTypes.length} dạng bài con
                                         </span>
                                       </div>
                                     )}
                                   </div>
 
-                                  <div className="flex items-center justify-between border-t border-border/20 pt-3.5 text-[10px] font-bold text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                      📅 Tần suất: {type.examFrequency === 'high' ? 'Hay thi' : 'Trung bình'}
-                                    </span>
+                                  <div className="flex items-center justify-end border-t border-border/20 pt-3.5 text-[10px] font-bold text-muted-foreground">
                                     <span className="text-primary hover:underline flex items-center gap-0.5 font-extrabold">
                                       Học chi tiết <ArrowRight size={10} />
                                     </span>

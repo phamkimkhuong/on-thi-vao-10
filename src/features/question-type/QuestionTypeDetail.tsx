@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
 import { useAppStore } from '../../services/store';
@@ -18,13 +18,35 @@ import {
   BookOpen
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { getSubjectTheme } from '../../utils/theme';
-import { getSubjectFromQuestionTypeId } from '../../utils/subject';
+import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
+import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '../../utils/subject';
+import { storageService } from '../../services/storage';
 
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, setSubject, user } = useAppStore();
+
+  const [showFloatingBar, setShowFloatingBar] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Chỉ kích hoạt Floating Bar trên màn hình Mobile (width < 768px)
+      // và khi học sinh đã cuộn qua khỏi header banner (scrollY > 220px)
+      if (window.innerWidth < 768 && window.scrollY > 220) {
+        setShowFloatingBar(true);
+      } else {
+        setShowFloatingBar(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
   const routeQuestionTypes = getQuestionTypes(selectedGrade, routeSubject);
@@ -63,8 +85,20 @@ export const QuestionTypeDetail: React.FC = () => {
     );
   }
 
-  const isMath = detail.id.startsWith('math');
+  // Lấy chính xác môn học và theme
+  const currentSubject = getSubjectFromQuestionTypeId(detail.id) ?? selectedSubject;
+  const theme = getSubjectTheme(currentSubject);
+  const subjectName = getSubjectName(currentSubject);
+  const subjectIcon = getSubjectIcon(currentSubject);
+  
+  const isMath = currentSubject === 'math';
   const requiresLoginForMathPractice = isMath && !user;
+
+  // Lấy thông tin tiến độ học tập (Mastery Score & Stars) của người học
+  const userId = user?.uid || 'guest';
+  const progress = storageService.getProgress(userId);
+  const masteryScore = progress.masteryLevels[detail.id] || 0;
+  const starsCount = getStarsFromScore(masteryScore);
 
   // Xây dựng tab items
   const tabItems: TabItem[] = [];
@@ -74,14 +108,14 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'theory',
       label: '📖 Định nghĩa & Lý thuyết',
       content: (
-        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
-          <CardContent className="p-6 space-y-4">
-            <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
-              <BookOpen size={16} className="text-primary" /> Khái niệm & Định nghĩa cơ bản cần nắm:
+        <Card className={cn("border bg-card", theme.border)}>
+          <CardContent className="p-5 md:p-6 space-y-4">
+            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+              <BookOpen size={18} className={theme.iconColor} /> Khái niệm & Định nghĩa cơ bản cần nắm:
             </h4>
-            <div className="space-y-4 text-xs font-semibold text-muted-foreground leading-relaxed">
+            <div className="space-y-4 text-xs md:text-sm font-medium text-foreground/90 leading-relaxed pl-1">
               {detail.theory.map((para: string, idx: number) => (
-                <div key={idx} className="bg-secondary/50 dark:bg-slate-900/40 p-4.5 rounded-xl border border-border/10">
+                <div key={idx} className="prose dark:prose-invert max-w-none leading-relaxed">
                   <LatexRenderer text={para} />
                 </div>
               ))}
@@ -97,34 +131,34 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'subtypes',
       label: '🎯 Các dạng toán con',
       content: (
-        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
-          <CardContent className="p-6 space-y-4">
-            <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
-              <PlayCircle size={16} className="text-primary animate-pulse" /> Phân dạng chi tiết thường gặp trong đề thi:
+        <Card className={cn("border bg-card", theme.border)}>
+          <CardContent className="p-5 md:p-6 space-y-4">
+            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+              <PlayCircle size={18} className={cn(theme.iconColor, "animate-pulse")} /> Phân dạng chi tiết thường gặp trong đề thi:
             </h4>
-            <div className="grid grid-cols-1 gap-4.5">
+            <div className="grid grid-cols-1 gap-5">
               {detail.subTypes.map((sub, idx: number) => (
-                <div key={idx} className="flex flex-col bg-secondary/50 dark:bg-slate-900/40 p-4.5 rounded-xl border border-border/10">
+                <div key={idx} className="flex flex-col bg-secondary/30 dark:bg-slate-900/20 p-4.5 rounded-2xl border border-border/10 hover:border-border/30 transition-colors">
                   <div className="flex gap-3 items-start">
-                    <div className="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                    <div className={cn("w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm", theme.badge)}>
                       {idx + 1}
                     </div>
-                    <div className="text-xs font-black text-foreground pt-0.5">
+                    <div className="text-sm font-bold text-foreground pt-0.5">
                       {sub.name}
                     </div>
                   </div>
                   
-                  <div className="mt-3 pl-9 space-y-2.5">
-                    <div className="p-3.5 bg-card border border-border/40 rounded-xl text-xs font-semibold text-foreground shadow-sm">
-                      <span className="text-amber-500 font-extrabold block mb-1.5">
+                  <div className="mt-3.5 pl-9 space-y-3">
+                    <div className="p-4 bg-card border border-border/40 rounded-2xl text-xs md:text-sm font-medium text-foreground shadow-sm leading-relaxed">
+                      <span className="text-amber-500 font-extrabold block mb-2 text-xs">
                         🔬 Ví dụ đề minh họa:
                       </span>
                       <LatexRenderer text={sub.example} />
                     </div>
                     {sub.note && (
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      <div className="text-xs text-muted-foreground leading-relaxed bg-background/50 p-3 rounded-xl border border-border/20">
                         <span className="font-extrabold text-foreground">💡 Phương pháp giải:</span> <LatexRenderer text={sub.note} />
-                      </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -141,15 +175,15 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'recognition',
       label: '💡 Cách nhận biết',
       content: (
-        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
-          <CardContent className="p-6 space-y-4">
-            <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
-              <Lightbulb size={16} className="text-amber-500" /> Dấu hiệu xuất hiện trong đề bài:
+        <Card className={cn("border bg-card", theme.border)}>
+          <CardContent className="p-5 md:p-6 space-y-4">
+            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+              <Lightbulb size={18} className="text-amber-500" /> Dấu hiệu xuất hiện trong đề bài:
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5 pl-1">
               {detail.recognitionSigns.map((sign: string, idx: number) => (
-                <li key={idx} className="text-xs font-semibold text-muted-foreground flex items-start gap-2 leading-relaxed">
-                  <span className="text-primary shrink-0 mt-0.5">•</span>
+                <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
+                  <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", isMath ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
                   <LatexRenderer text={sign} />
                 </li>
               ))}
@@ -162,18 +196,18 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'method',
       label: '📝 Quy trình giải',
       content: (
-        <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
-          <CardContent className="p-6 space-y-4">
-            <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5">
-              <Activity size={16} className="text-primary" /> Các bước thực hiện chuẩn chỉ:
+        <Card className={cn("border bg-card", theme.border)}>
+          <CardContent className="p-5 md:p-6 space-y-4">
+            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+              <Activity size={18} className={theme.iconColor} /> Các bước thực hiện chuẩn chỉ:
             </h4>
-            <div className="space-y-4">
+            <div className="space-y-4 pl-1">
               {detail.solvingSteps.map((step: string, idx: number) => (
-                <div key={idx} className="flex gap-3 items-start">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                <div key={idx} className="flex gap-3.5 items-start">
+                  <div className={cn("w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm", theme.badge)}>
                     {idx + 1}
                   </div>
-                  <div className="text-xs font-semibold text-muted-foreground leading-relaxed pt-0.5">
+                  <div className="text-xs md:text-sm font-medium text-foreground/80 leading-relaxed pt-0.5">
                     <LatexRenderer text={step} />
                   </div>
                 </div>
@@ -188,14 +222,14 @@ export const QuestionTypeDetail: React.FC = () => {
       label: '🚨 Lỗi thường gặp',
       content: (
         <Card className="border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5">
-          <CardContent className="p-6 space-y-4">
-            <h4 className="font-extrabold text-sm text-rose-500 flex items-center gap-1.5">
-              <AlertTriangle size={16} className="text-rose-500 animate-pulse" /> Các bẫy học sinh hay mắc phải:
+          <CardContent className="p-5 md:p-6 space-y-4">
+            <h4 className="font-extrabold text-sm md:text-base text-rose-600 dark:text-rose-400 flex items-center gap-2 pb-2 border-b border-rose-500/10">
+              <AlertTriangle size={18} className="text-rose-500 animate-pulse" /> Các bẫy học sinh hay mắc phải:
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5 pl-1">
               {detail.commonMistakes.map((mistake: string, idx: number) => (
-                <li key={idx} className="text-xs font-semibold text-rose-700 dark:text-rose-400 flex items-start gap-2.5 leading-relaxed bg-rose-100/30 dark:bg-rose-950/20 p-2.5 rounded-xl">
-                  <CornerDownRight size={14} className="shrink-0 mt-0.5 text-rose-500" />
+                <li key={idx} className="text-xs md:text-sm font-medium text-rose-700 dark:text-rose-300 flex items-start gap-3 leading-relaxed bg-rose-100/30 dark:bg-rose-950/20 p-3 rounded-2xl border border-rose-500/10">
+                  <CornerDownRight size={15} className="shrink-0 mt-1 text-rose-500" />
                   <LatexRenderer text={mistake} />
                 </li>
               ))}
@@ -208,20 +242,20 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'example',
       label: '🔬 Ví dụ mẫu',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {exampleQuestion ? (
             <>
               {/* Đề bài ví dụ */}
-              <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
-                <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-4">
-                  <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Đề bài ví dụ</span>
+              <Card className={cn("border bg-card overflow-hidden", theme.border)}>
+                <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-3.5 px-5 border-b border-border/30">
+                  <span className="text-[10px] md:text-xs font-black text-foreground/80 uppercase tracking-wider">Đề bài ví dụ</span>
                 </CardHeader>
-                <CardContent className="p-5 font-semibold text-xs leading-relaxed text-foreground">
+                <CardContent className="p-5 font-semibold text-xs md:text-sm leading-relaxed text-foreground">
                   <LatexRenderer text={exampleQuestion.content} />
                   {exampleQuestion.options && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-5">
                       {exampleQuestion.options.map((opt: string, i: number) => (
-                        <div key={i} className="p-3 bg-secondary rounded-xl border border-border/10">
+                        <div key={i} className="p-4 bg-secondary/40 rounded-2xl border border-border/10 hover:border-border/30 transition-colors font-medium">
                           {opt}
                         </div>
                       ))}
@@ -232,38 +266,42 @@ export const QuestionTypeDetail: React.FC = () => {
 
               {/* Lời giải mẫu */}
               {exampleSolution && (
-                <Card className={cn("border", getSubjectTheme(isMath ? 'math' : 'english').border)}>
-                  <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-4">
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Lời giải phân tích từng bước</span>
+                <Card className={cn("border bg-card overflow-hidden", theme.border)}>
+                  <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-3.5 px-5 border-b border-border/30">
+                    <span className="text-[10px] md:text-xs font-black text-foreground/80 uppercase tracking-wider">Lời giải phân tích từng bước</span>
                   </CardHeader>
                   <CardContent className="p-5 space-y-6">
                     <div className={cn(
-                      "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
-                      getSubjectTheme(isMath ? 'math' : 'english').bg,
-                      getSubjectTheme(isMath ? 'math' : 'english').border
+                      "text-xs md:text-sm font-medium text-foreground/80 p-4 rounded-2xl border leading-relaxed",
+                      theme.bg,
+                      theme.border
                     )}>
-                      <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận diện:</span>
+                      <span className="font-extrabold text-foreground block mb-1.5">💡 Tư duy nhận diện:</span>
                       <LatexRenderer text={exampleSolution.recognition} />
                     </div>
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 pl-1">
                       {exampleSolution.detailedSteps.map((step: any, idx: number) => (
-                        <div key={idx} className="space-y-1.5">
-                          <h5 className="font-extrabold text-xs text-foreground flex items-center gap-2">
-                            <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                        <div key={idx} className="space-y-2">
+                          <h5 className="font-extrabold text-xs md:text-sm text-foreground flex items-center gap-2">
+                            <span className={cn("w-5.5 h-5.5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0 shadow-sm",
+                              currentSubject === 'math' ? 'bg-indigo-600' :
+                              currentSubject === 'chemistry' ? 'bg-emerald-600' :
+                              'bg-purple-600'
+                            )}>
                               {step.order}
                             </span>
                             {step.title}
                           </h5>
-                          <div className="pl-7 space-y-2 text-xs font-semibold text-muted-foreground leading-relaxed">
+                          <div className="pl-7 space-y-2.5 text-xs md:text-sm font-medium text-muted-foreground leading-relaxed">
                             <LatexRenderer text={step.explanation} />
                             {step.formula && (
-                              <div className="p-2.5 bg-secondary/50 rounded-lg text-foreground border border-border/5">
+                              <div className="p-3 bg-secondary/40 rounded-xl text-foreground border border-border/5 my-2">
                                 <LatexRenderer text={step.formula} block={true} />
                               </div>
                             )}
                             {step.result && (
-                              <p className="text-primary font-bold">
+                              <p className={cn("font-bold text-xs md:text-sm", theme.text)}>
                                 👉 Kết quả bước: <LatexRenderer text={step.result} />
                               </p>
                             )}
@@ -272,9 +310,9 @@ export const QuestionTypeDetail: React.FC = () => {
                       ))}
                     </div>
 
-                    <div className="border-t border-border/50 pt-4 flex flex-col sm:flex-row justify-between text-xs gap-3">
+                    <div className="border-t border-border/50 pt-4.5 flex flex-col sm:flex-row justify-between text-xs md:text-sm gap-3 px-1">
                       <div className="font-extrabold text-foreground">
-                        Đáp án cuối cùng: <span className="text-primary font-black"><LatexRenderer text={exampleSolution.finalAnswer} /></span>
+                        Đáp án cuối cùng: <span className={cn("font-black ml-1.5", theme.text)}><LatexRenderer text={exampleSolution.finalAnswer} /></span>
                       </div>
                     </div>
                   </CardContent>
@@ -282,7 +320,7 @@ export const QuestionTypeDetail: React.FC = () => {
               )}
             </>
           ) : (
-            <div className="p-8 text-center text-muted-foreground text-xs font-semibold bg-card rounded-xl border border-border/50">
+            <div className="p-8 text-center text-muted-foreground text-xs md:text-sm font-semibold bg-card rounded-2xl border border-border/50">
               Hiện tại chưa có ví dụ mẫu cho dạng bài này.
             </div>
           )}
@@ -292,7 +330,7 @@ export const QuestionTypeDetail: React.FC = () => {
   );
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-5xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 md:px-6 pb-20 md:pb-6">
       
       {/* Nút Back về lộ trình */}
       <button 
@@ -302,62 +340,219 @@ export const QuestionTypeDetail: React.FC = () => {
         <ChevronLeft size={16} /> Quay lại Lộ trình học
       </button>
 
-      {/* Header Dạng bài */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-card border border-border p-6 rounded-2xl shadow-sm">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className={cn(
-              'text-[10px] font-bold px-2 py-0.5 rounded-full',
-              getSubjectTheme(isMath ? 'math' : 'english').badge
-            )}>
-              {isMath 
-                ? (selectedGrade === 'grade9' ? '📐 Toán học lớp 9' : '📐 Toán học lớp 10')
-                : (selectedGrade === 'grade9' ? '🗣️ Tiếng Anh ôn thi' : '🗣️ Tiếng Anh lớp 10')}
+      {/* Header Dạng bài - Bản nâng cấp Gradient mịn theo môn */}
+      <div className={cn("p-6 md:p-8 xl:p-10 rounded-3xl border shadow-sm relative overflow-hidden transition-all duration-300", theme.bg, theme.border)}>
+        {/* Subtle background decoration */}
+        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+        
+        <div className="space-y-3 relative z-10">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={cn('text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-border/40', theme.badge)}>
+              {subjectIcon} {subjectName} {selectedGrade === 'grade9' ? 'Lớp 9' : 'Lớp 10'}
             </span>
-            <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-muted-foreground font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-              Tần suất: {detail.examFrequency === 'high' ? 'Hay thi (Cao)' : 'Trung bình'}
+            <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs bg-secondary/60 text-muted-foreground border border-border/40 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", 
+                detail.difficulty === 'hard' ? 'bg-rose-500' :
+                detail.difficulty === 'medium' ? 'bg-amber-500' :
+                'bg-emerald-500'
+              )} />
+              Độ khó: {detail.difficulty === 'hard' ? 'Nâng cao' : detail.difficulty === 'medium' ? 'Trung bình' : 'Cơ bản'}
             </span>
           </div>
-          <h2 className="text-xl md:text-2xl font-black text-foreground tracking-tight leading-snug">
+          
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-foreground tracking-tight leading-snug">
             {detail.name}
           </h2>
-          <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl font-semibold">
+          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-3xl font-semibold">
             {detail.description}
           </p>
-          {requiresLoginForMathPractice && (
-            <div className="inline-flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-700 dark:text-amber-400">
-              <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-              <span>Môn Toán yêu cầu đăng nhập trước khi luyện tập hoặc nộp bài.</span>
-            </div>
-          )}
         </div>
-
-        <Button 
-          onClick={() => {
-            if (requiresLoginForMathPractice) {
-              navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } });
-              return;
-            }
-            navigate(`/practice/${detail.id}`);
-          }}
-          className="font-bold text-xs px-5 py-3 shrink-0 active:scale-[0.98] w-full md:w-auto shadow-md"
-        >
-          {requiresLoginForMathPractice ? (
-            <>
-              <LockKeyhole size={16} /> Đăng nhập để luyện Toán
-            </>
-          ) : (
-            <>
-              <PlayCircle size={16} /> Bắt đầu Luyện tập ngay
-            </>
-          )}
-        </Button>
       </div>
 
-      {/* Tabs nội dung chi tiết */}
-      <Tabs items={tabItems} defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')} />
+      {/* Bố cục 2 cột chính - Kích hoạt sớm từ breakpoint md */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8 items-start">
+        {/* Cột trái (70%): Tabs chi tiết học tập */}
+        <div className="md:col-span-2 space-y-6">
+          <Tabs 
+            items={tabItems} 
+            defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')} 
+            className="w-full"
+            tabHeaderClassName="gap-2"
+            tabContentClassName="mt-2"
+            activeTabClassName={cn(
+              currentSubject === 'math' ? 'bg-indigo-600 border-indigo-700 text-white hover:bg-indigo-700' :
+              currentSubject === 'chemistry' ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700' :
+              'bg-purple-600 border-purple-700 text-white hover:bg-purple-700'
+            )}
+          />
+        </div>
+
+        {/* Cột phải (30%): Sidebar thông tin + Mastery + CTA Luyện tập (Sticky & Cuộn độc lập khi quá dài) */}
+        <div className="md:col-span-1 space-y-6 md:sticky md:top-24 md:max-h-[calc(100vh-120px)] md:overflow-y-auto pr-1.5 scrollbar-thin">
+          
+          {/* Card Luyện tập & Mastery */}
+          <Card className={cn("border overflow-hidden bg-card shadow-sm", theme.border)}>
+            <div className={cn("p-4.5 border-b border-border/10", theme.bg)}>
+              <h4 className="font-extrabold text-xs md:text-sm text-foreground flex items-center gap-1.5">
+                🎯 Tiến độ học tập
+              </h4>
+            </div>
+            <CardContent className="p-5 space-y-5">
+              {/* Mastery Progress Bar & Stars */}
+              <div className="space-y-3.5">
+                <div className="flex justify-between items-center text-xs font-bold">
+                  <span className="text-muted-foreground">Mức thành thạo:</span>
+                  <span className={theme.text}>{masteryScore}/100</span>
+                </div>
+                
+                {/* Thanh Progress */}
+                <div className="w-full h-3 bg-secondary rounded-full overflow-hidden border border-border/40 p-0.5">
+                  <div 
+                    className={cn("h-full transition-all duration-500 rounded-full", 
+                      currentSubject === 'math' ? 'bg-indigo-500' :
+                      currentSubject === 'chemistry' ? 'bg-emerald-500' :
+                      'bg-purple-500'
+                    )}
+                    style={{ width: `${masteryScore}%` }}
+                  />
+                </div>
+
+                {/* Stars Display */}
+                <div className="flex justify-between items-center pt-1.5 border-t border-border/20">
+                  <span className="text-xs text-muted-foreground font-semibold">Đánh giá:</span>
+                  <div className="flex gap-1.5">
+                    {[1, 2, 3].map((starNum) => (
+                      <span 
+                        key={starNum} 
+                        className={cn(
+                          "text-base transition-all duration-300", 
+                          starNum <= starsCount ? "scale-110" : "opacity-30 grayscale"
+                        )}
+                      >
+                        ⭐
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-[10px] md:text-xs text-muted-foreground leading-relaxed italic text-center pt-2 font-semibold">
+                  {starsCount === 3 
+                    ? "✨ Đã đạt cấp độ Thành Thạo hoàn hảo!" 
+                    : starsCount === 2 
+                    ? "💪 Đã có 2 sao, luyện thêm chút để đạt đỉnh cao!"
+                    : starsCount === 1 
+                    ? "📚 Đang tiến bộ tốt, hãy tiếp tục luyện tập nhé!" 
+                    : "🌱 Bắt đầu luyện tập để nhận những ngôi sao đầu tiên!"}
+                </p>
+              </div>
+
+              {/* Nút Bắt đầu Luyện tập chính */}
+              {requiresLoginForMathPractice ? (
+                <Button 
+                  onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
+                  className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white"
+                >
+                  <LockKeyhole size={16} /> Đăng nhập để luyện Toán
+                </Button>
+              ) : (
+                <Button 
+                  onClick={() => navigate(`/practice/${detail.id}`)}
+                  className={cn(
+                    "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg",
+                    currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
+                    currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
+                    'bg-purple-600 hover:bg-purple-700 text-white'
+                  )}
+                >
+                  <PlayCircle size={16} /> Bắt đầu Luyện tập ngay
+                </Button>
+              )}
+
+              {requiresLoginForMathPractice && (
+                <div className="flex gap-2 rounded-xl border border-amber-500/10 bg-amber-500/5 p-3 text-[10px] leading-relaxed text-amber-700 dark:text-amber-400 font-semibold">
+                  <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                  <span>Yêu cầu đăng nhập trước khi nộp bài thi/luyện tập môn Toán.</span>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quick Alert Card cho Lỗi thường gặp */}
+          {detail.commonMistakes && detail.commonMistakes.length > 0 && (
+            <Card className="border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5 shadow-sm">
+              <div className="p-3.5 border-b border-rose-500/10 bg-rose-500/5 flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
+                <AlertTriangle size={15} className="animate-pulse" />
+                <span className="font-extrabold text-xs">⚠️ Chú ý bẫy cần tránh</span>
+              </div>
+              <CardContent className="p-4 space-y-3">
+                <ul className="space-y-2.5 pl-0.5">
+                  {detail.commonMistakes.slice(0, 2).map((mistake: string, idx: number) => (
+                    <li key={idx} className="text-[11px] font-semibold text-rose-700 dark:text-rose-400 flex items-start gap-1.5 leading-relaxed">
+                      <span className="text-rose-500 shrink-0 mt-0.5">•</span>
+                      <LatexRenderer text={mistake} />
+                    </li>
+                  ))}
+                </ul>
+                {detail.commonMistakes.length > 2 && (
+                  <p className="text-[10px] text-muted-foreground font-semibold pt-1 italic text-right">
+                    * Xem thêm {detail.commonMistakes.length - 2} lỗi khác trong tab bên
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Card Thông tin chung */}
+          <Card className="border border-border/80 bg-card shadow-sm">
+            <CardContent className="p-4 space-y-3.5 text-xs font-semibold text-muted-foreground">
+              <div className="flex justify-between items-center border-b border-border/30 pb-2">
+                <span>⏱️ Thời gian ôn luyện:</span>
+                <span className="text-foreground font-bold">~15-20 phút</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>🎒 Khối lớp học tập:</span>
+                <span className="text-foreground font-bold">Lớp {selectedGrade === 'grade9' ? '9' : '10'}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+        </div>
+      </div>
+
+      {/* Floating Bottom Action Bar trên Mobile (Chỉ xuất hiện khi cuộn qua Banner tiêu đề) */}
+      <div className={cn(
+        "md:hidden fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-md border-t border-border z-40 shadow-lg flex items-center justify-between gap-3 transition-all duration-300 transform",
+        showFloatingBar ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
+      )}>
+        <div className="flex flex-col truncate max-w-[60%]">
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">Đang xem bài học</span>
+          <span className="text-xs font-black text-foreground truncate">{detail.name}</span>
+        </div>
+        
+        {requiresLoginForMathPractice ? (
+          <Button 
+            onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
+            className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-amber-500 hover:bg-amber-600 text-white"
+          >
+            Đăng nhập
+          </Button>
+        ) : (
+          <Button 
+            onClick={() => navigate(`/practice/${detail.id}`)}
+            className={cn(
+              "font-bold text-xs py-2.5 px-4 shrink-0 shadow-md text-white active:scale-95 transition-transform",
+              currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
+              currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
+              'bg-purple-600 hover:bg-purple-700'
+            )}
+          >
+            Luyện tập ngay
+          </Button>
+        )}
+      </div>
 
     </div>
   );
 };
+
 export default QuestionTypeDetail;

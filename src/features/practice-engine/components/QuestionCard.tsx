@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 import { ProofImageUploader } from '../../../components/common/ProofImageUploader';
-import { Question, Solution, StructuredAnswer } from '../../../types';
+import { Question, Solution, StructuredAnswer, SubjectCode } from '../../../types';
 import { AnswerFormRenderer } from '../../../components/common/AnswerFormRenderer';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
@@ -35,7 +35,7 @@ interface QuestionCardProps {
   questionsLength: number;
   setCurrentIdx: (val: number) => void;
   resetQuestionState: () => void;
-  routeSubject: 'math' | 'english';
+  routeSubject: SubjectCode;
   structuredAnswer: StructuredAnswer;
   setStructuredAnswer: (val: StructuredAnswer) => void;
 }
@@ -69,11 +69,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   structuredAnswer,
   setStructuredAnswer,
 }) => {
+  const theme = getSubjectTheme(routeSubject);
   return (
     <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden">
       <CardHeader className="bg-secondary/20 border-b border-border/20 p-5">
         <CardTitle className="text-foreground text-sm font-black flex items-center gap-2 font-sans">
-          <BookOpen size={17} className="text-primary animate-float shrink-0" />
+          <BookOpen size={17} className={cn("animate-float shrink-0", theme.iconColor)} />
           Luyện tập: {currentQuestion.questionTypeId ? currentQuestion.questionTypeId : 'Câu hỏi'}
         </CardTitle>
       </CardHeader>
@@ -109,7 +110,13 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   return (
                     <div key={field.key} className="p-4.5 bg-secondary/20 dark:bg-slate-900/40 rounded-2xl border border-border/40 flex flex-col md:flex-row md:items-center justify-between gap-3.5 transition-all">
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="w-6.5 h-6.5 rounded-xl bg-gradient-to-tr from-primary to-indigo-600 text-white flex items-center justify-center text-xs font-black shadow-md shadow-primary/10">
+                        {/* Vòng tròn số thứ tự chỗ trống đổi màu theo môn học */}
+                        <span className={cn(
+                          "w-6.5 h-6.5 rounded-xl text-white flex items-center justify-center text-xs font-black shadow-md",
+                          routeSubject === 'math' ? 'bg-gradient-to-tr from-indigo-500 to-indigo-600 shadow-indigo-500/10' :
+                          routeSubject === 'chemistry' ? 'bg-gradient-to-tr from-emerald-500 to-emerald-600 shadow-emerald-500/10' :
+                          'bg-gradient-to-tr from-purple-500 to-purple-600 shadow-purple-500/10'
+                        )}>
                           {idx + 1}
                         </span>
                         <span className="text-xs font-extrabold text-foreground">{field.label}</span>
@@ -134,13 +141,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                               className={cn(
                                 "px-3.5 py-2.5 rounded-xl text-xs font-extrabold border transition-all duration-200 active:scale-95 cursor-pointer text-left flex items-center gap-1.5",
                                 isSelected
-                                  ? "bg-primary/10 border-primary text-primary shadow-sm font-black"
+                                  ? (routeSubject === 'math' ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 dark:text-indigo-400 shadow-sm font-black" :
+                                     routeSubject === 'chemistry' ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm font-black" :
+                                     "bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400 shadow-sm font-black")
                                   : "bg-card border-border/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
                               )}
                             >
                               <span className={cn(
                                 "text-[9px] w-4.5 h-4.5 rounded-md flex items-center justify-center font-black shrink-0",
-                                isSelected ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
+                                isSelected
+                                  ? (routeSubject === 'math' ? "bg-indigo-600 text-white" :
+                                     routeSubject === 'chemistry' ? "bg-emerald-600 text-white" :
+                                     "bg-purple-600 text-white")
+                                  : "bg-secondary text-muted-foreground"
                               )}>{letter}</span>
                               <span className="truncate">{choice}</span>
                             </button>
