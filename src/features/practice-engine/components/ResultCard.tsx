@@ -53,6 +53,18 @@ export const ResultCard: React.FC<ResultCardProps> = ({
     }
   }, [existingAttempt, currentQuestion.id]);
 
+  let displayOptions = currentQuestion.options;
+  if (
+    (!displayOptions || displayOptions.length === 0) &&
+    currentQuestion.validatorType === 'choice' &&
+    currentQuestion.content.includes('\nA.')
+  ) {
+    const parts = currentQuestion.content.split(/\n(?=[A-D]\.\s)/);
+    if (parts.length >= 2) {
+      displayOptions = parts.slice(1).map(opt => opt.trim());
+    }
+  }
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className={cn(
@@ -112,7 +124,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               <h4 className="font-extrabold text-sm">Chính xác! Cực kỳ xuất sắc.</h4>
               <p className="text-xs font-semibold opacity-90">Bạn đã tăng điểm số Mastery cho dạng bài này.</p>
               <p className="text-xs font-bold opacity-90 mt-1">
-                Đáp án bạn đã {currentQuestion.options && currentQuestion.options.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption}</span>
+                Đáp án bạn đã {displayOptions && displayOptions.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption}</span>
               </p>
               {existingAttempt?.teacherFeedback && (
                 <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
@@ -130,7 +142,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 Câu hỏi đã được lưu vào **Sổ lỗi sai**. Hãy xem kỹ lời giải chi tiết dưới đây để khắc phục nhé!
               </p>
               <p className="text-xs font-bold opacity-90 mt-1">
-                Đáp án bạn đã {currentQuestion.options && currentQuestion.options.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption || '(Trống)'}</span>
+                Đáp án bạn đã {displayOptions && displayOptions.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption || '(Trống)'}</span>
               </p>
               {existingAttempt?.teacherFeedback && (
                 <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">

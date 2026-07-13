@@ -70,6 +70,23 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   setStructuredAnswer,
 }) => {
   const theme = getSubjectTheme(routeSubject);
+
+  // Phân tách options từ content nếu validatorType === 'choice' và không có options riêng biệt
+  let displayOptions = currentQuestion.options;
+  let cleanContent = currentQuestion.content;
+
+  if (
+    (!displayOptions || displayOptions.length === 0) &&
+    currentQuestion.validatorType === 'choice' &&
+    currentQuestion.content.includes('\nA.')
+  ) {
+    const parts = currentQuestion.content.split(/\n(?=[A-D]\.\s)/);
+    if (parts.length >= 2) {
+      cleanContent = parts[0];
+      displayOptions = parts.slice(1).map(opt => opt.trim());
+    }
+  }
+
   return (
     <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden">
       <CardHeader className="bg-secondary/20 border-b border-border/20 p-5">
@@ -81,7 +98,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       <CardContent className="p-6 space-y-6">
         {/* Đề bài */}
         <div className="text-sm font-bold leading-relaxed text-foreground bg-secondary/30 dark:bg-slate-950/20 p-5 rounded-2xl border border-border/20 shadow-inner font-sans">
-          <LatexRenderer text={currentQuestion.content} />
+          <LatexRenderer text={cleanContent} />
         </div>
 
         {/* Vùng chọn đáp án */}
@@ -290,8 +307,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           ) : (
             // Trắc nghiệm hoặc tự điền từ (fill-in-the-blank) cho môn Anh
             <div className="grid grid-cols-1 gap-3.5">
-              {currentQuestion.options && currentQuestion.options.length > 0 ? (
-                currentQuestion.options.map((opt: string, i: number) => {
+              {displayOptions && displayOptions.length > 0 ? (
+                displayOptions.map((opt: string, i: number) => {
                   const optLetter = opt.charAt(0); // A, B, C, D
                   const isSelected = selectedOption === optLetter;
                   const cleanOpt = opt.replace(/^[A-D]\.\s*/i, '');

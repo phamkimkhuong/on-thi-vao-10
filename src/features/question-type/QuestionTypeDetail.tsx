@@ -77,6 +77,44 @@ export const QuestionTypeDetail: React.FC = () => {
     ? routeSolutions.find(s => s.questionId === exampleQuestion.id) || null
     : null;
 
+  const [visitedTabIds, setVisitedTabIds] = useState<Set<string>>(new Set());
+  const [showLessonCompletedMsg, setShowLessonCompletedMsg] = useState(false);
+
+  useEffect(() => {
+    if (!detail) return;
+    const defaultTab = detail.theory && detail.theory.length > 0
+      ? 'theory'
+      : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition');
+    
+    setVisitedTabIds(new Set([defaultTab]));
+    setShowLessonCompletedMsg(false);
+    
+    const userId = user?.uid || 'guest';
+    const readLessons = storageService.getReadLessons(userId);
+    if (readLessons.includes(detail.id)) {
+      setShowLessonCompletedMsg(true);
+    } else {
+      const availableIds: string[] = [];
+      if (detail.theory && detail.theory.length > 0) availableIds.push('theory');
+      if (detail.subTypes && detail.subTypes.length > 0) availableIds.push('subtypes');
+      availableIds.push('recognition');
+      availableIds.push('method');
+      availableIds.push('mistakes');
+      availableIds.push('example');
+      
+      if (availableIds.length === 1) {
+        storageService.saveLessonRead(userId, detail.id);
+        setShowLessonCompletedMsg(true);
+      }
+    }
+  }, [questionTypeId, detail, user]);
+
+  useEffect(() => {
+    if (detail) {
+      localStorage.setItem('otv10_last_active_theory', detail.id);
+    }
+  }, [detail]);
+
   if (!detail) {
     return (
       <div className="p-8 text-center text-muted-foreground font-semibold">
@@ -329,6 +367,25 @@ export const QuestionTypeDetail: React.FC = () => {
     }
   );
 
+  const handleTabChange = (tabId: string) => {
+    if (!detail) return;
+    setVisitedTabIds(prev => {
+      const next = new Set(prev);
+      next.add(tabId);
+      
+      const available = tabItems.map(item => item.id);
+      if (available.length > 0 && available.every(id => next.has(id))) {
+        const userId = user?.uid || 'guest';
+        const readLessons = storageService.getReadLessons(userId);
+        if (!readLessons.includes(detail.id)) {
+          storageService.saveLessonRead(userId, detail.id);
+          setShowLessonCompletedMsg(true);
+        }
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="space-y-6 max-w-5xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 md:px-6 pb-20 md:pb-6">
       
@@ -372,7 +429,16 @@ export const QuestionTypeDetail: React.FC = () => {
       {/* Bố cục 2 cột chính - Kích hoạt sớm từ breakpoint md */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8 items-start">
         {/* Cột trái (70%): Tabs chi tiết học tập */}
-        <div className="md:col-span-2 space-y-6">
+        <div className="md:col-span-2 space-y-4">
+          {showLessonCompletedMsg ? (
+            <div className="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs flex items-center gap-2 animate-fade-in shadow-xs">
+              <span>✓ Bạn đã hoàn thành phần đọc lý thuyết và mở khóa bài tiếp theo trong Lộ trình học!</span>
+            </div>
+          ) : (
+            <div className="text-right text-[10px] font-black text-muted-foreground mr-1">
+              Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
+            </div>
+          )}
           <Tabs 
             items={tabItems} 
             defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')} 
@@ -384,6 +450,7 @@ export const QuestionTypeDetail: React.FC = () => {
               currentSubject === 'chemistry' ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700' :
               'bg-purple-600 border-purple-700 text-white hover:bg-purple-700'
             )}
+            onTabChange={handleTabChange}
           />
         </div>
 

@@ -5,7 +5,8 @@ const KEYS = {
   ATTEMPTS: 'otv10_attempts',
   MISTAKES: 'otv10_mistakes',
   PROGRESS: 'otv10_progress',
-  EXAM_RESULTS: 'otv10_exam_results'
+  EXAM_RESULTS: 'otv10_exam_results',
+  READ_THEORY: 'otv10_read_theory'
 };
 
 // Helper để đọc từ localStorage và tự động migrate dữ liệu cũ nếu là Array
@@ -72,6 +73,25 @@ const readProgressMap = (): Record<string, UserProgress> => {
     return {};
   }
 };
+
+const readReadTheoryMap = (): Record<string, string[]> => {
+  try {
+    const data = localStorage.getItem(KEYS.READ_THEORY);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    // Tự động migrate dữ liệu cũ nếu là Array phẳng
+    if (Array.isArray(parsed)) {
+      const migrated = { guest: parsed };
+      localStorage.setItem(KEYS.READ_THEORY, JSON.stringify(migrated));
+      return migrated;
+    }
+    return parsed;
+  } catch (e) {
+    console.error('Lỗi khi đọc read theory từ localStorage', e);
+    return {};
+  }
+};
+
 
 // Helper để ghi vào localStorage an toàn
 const writeToStorage = <T>(key: string, value: T): void => {
@@ -292,12 +312,44 @@ export const storageService = {
     const examResultsMap = readExamResultsMap();
     delete examResultsMap.guest;
     writeToStorage(KEYS.EXAM_RESULTS, examResultsMap);
+
+    const readTheoryMap = readReadTheoryMap();
+    delete readTheoryMap.guest;
+    writeToStorage(KEYS.READ_THEORY, readTheoryMap);
   },
+
+  getReadLessons(userId: string): string[] {
+    const map = readReadTheoryMap();
+    return map[userId] || [];
+  },
+
+  saveLessonRead(userId: string, lessonId: string): void {
+    try {
+      const map = readReadTheoryMap();
+      if (!map[userId]) {
+        map[userId] = [];
+      }
+      if (!map[userId].includes(lessonId)) {
+        map[userId].push(lessonId);
+        writeToStorage(KEYS.READ_THEORY, map);
+      }
+    } catch (e) {
+      console.error('Lỗi khi lưu read lesson vào localStorage', e);
+    }
+  },
+
+  saveReadLessonsLocal(userId: string, lessons: string[]): void {
+    const map = readReadTheoryMap();
+    map[userId] = lessons;
+    writeToStorage(KEYS.READ_THEORY, map);
+  },
+
   // RESET ALL DATA
   resetData(): void {
     localStorage.removeItem(KEYS.ATTEMPTS);
     localStorage.removeItem(KEYS.MISTAKES);
     localStorage.removeItem(KEYS.PROGRESS);
     localStorage.removeItem(KEYS.EXAM_RESULTS);
+    localStorage.removeItem(KEYS.READ_THEORY);
   }
 };

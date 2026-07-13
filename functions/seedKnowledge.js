@@ -2,9 +2,15 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import admin from "firebase-admin";
+import crypto from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function getContentHash(content) {
+  if (!content) return "";
+  return crypto.createHash("md5").update(content).digest("hex");
+}
 
 // Hàm loại bỏ dấu tiếng Việt (đưa về ký tự không dấu)
 function removeAccents(str) {
@@ -43,37 +49,72 @@ function loadApiKey() {
   return match[1].trim();
 }
 
-// 2. Hàm gọi Gemini Embedding API
-async function getEmbedding(text, apiKey) {
+// 2. Hàm gọi Gemini Embedding API (có hỗ trợ tự động retry khi gặp lỗi 429 Rate Limit)
+async function getEmbedding(text, apiKey, retries = 5, delayMs = 3000) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${apiKey}`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "models/gemini-embedding-001",
-      content: {
-        parts: [{ text }]
-      },
-      outputDimensionality: 1536
-    })
-  });
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Lỗi tạo embedding: ${errText}`);
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "models/gemini-embedding-001",
+          content: {
+            parts: [{ text }]
+          },
+          outputDimensionality: 1536
+        })
+      });
+
+      if (response.status === 429) {
+        console.warn(`  [429 Rate Limit] Đang đợi ${delayMs / 1000}s trước khi thử lại lần ${attempt}/${retries}...`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+        delayMs *= 2; // Tăng dần thời gian chờ
+        continue;
+      }
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Lỗi tạo embedding: ${errText}`);
+      }
+
+      const data = await response.json();
+      return data?.embedding?.values;
+    } catch (err) {
+      if (attempt === retries) {
+        throw err;
+      }
+      console.warn(`  [Lỗi kết nối] ${err.message}. Đang thử lại sau ${delayMs / 1000}s...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+      delayMs *= 2;
+    }
   }
-  const data = await response.json();
-  return data?.embedding?.values;
 }
 
 // 3. Hàm phụ trợ loại bỏ cú pháp TypeScript để import dạng JS
 function parseTsFileToJs(tsFilePath, tempJsFileName) {
   const rawCode = fs.readFileSync(tsFilePath, "utf8");
-  // Loại bỏ các câu lệnh import
-  let jsCode = rawCode.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, "");
-  // Loại bỏ khai báo kiểu TypeScript như : Topic[] hoặc : QuestionType[]
+  const tsFileDir = path.dirname(tsFilePath);
+  
+  // 1. Tìm các câu lệnh import JSON và thay thế bằng việc đọc file trực tiếp
+  let jsCode = rawCode.replace(/import\s+(\w+)\s+from\s+['"](.*\.json)['"];?/g, (match, varName, jsonPath) => {
+    const absoluteJsonPath = path.resolve(tsFileDir, jsonPath).replace(/\\/g, '/');
+    return `const ${varName} = JSON.parse(fs.readFileSync("${absoluteJsonPath}", "utf8"));`;
+  });
+
+  // 2. Loại bỏ các câu lệnh import khác
+  jsCode = jsCode.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, "");
+  
+  // 3. Loại bỏ khai báo kiểu TypeScript
   jsCode = jsCode.replace(/:\s*\w+(\[\])?(?=\s*=)/g, "");
+  
+  // 4. Loại bỏ các từ khóa ép kiểu "as Topic[]" hoặc "as const"
+  jsCode = jsCode.replace(/\s+as\s+[A-Za-z0-9_<>\[\]]+/g, "");
+
+  // 5. Chèn thêm import fs để chạy được việc đọc JSON
+  jsCode = `import fs from 'fs';\nimport path from 'path';\n` + jsCode;
   
   const tempPath = path.join(__dirname, tempJsFileName);
   fs.writeFileSync(tempPath, jsCode, "utf8");
@@ -114,35 +155,60 @@ async function run() {
   console.log("\n--- BẮT ĐẦU ĐỌC DỮ LIỆU TỪ SRC/DATA ---");
   
   const mathTsPath = path.resolve(__dirname, "../src/data/mathData.ts");
-  const engTopicsTsPath = path.resolve(__dirname, "../src/data/english/topics.ts");
   const engQTypesTsPath = path.resolve(__dirname, "../src/data/english/questionTypes.ts");
+  const math10QTypesTsPath = path.resolve(__dirname, "../src/data/grade10/math/questionTypes.ts");
+  const eng10QTypesTsPath = path.resolve(__dirname, "../src/data/grade10/english/questionTypes.ts");
+  const chem10QTypesTsPath = path.resolve(__dirname, "../src/data/grade10/chemistry/questionTypes.ts");
 
   const tempMathJs = parseTsFileToJs(mathTsPath, "temp_math.js");
-  const tempEngTopicsJs = parseTsFileToJs(engTopicsTsPath, "temp_eng_topics.js");
   const tempEngQTypesJs = parseTsFileToJs(engQTypesTsPath, "temp_eng_qtypes.js");
+  const tempMath10QTypesJs = parseTsFileToJs(math10QTypesTsPath, "temp_math10_qtypes.js");
+  const tempEng10QTypesJs = parseTsFileToJs(eng10QTypesTsPath, "temp_eng10_qtypes.js");
+  const tempChem10QTypesJs = parseTsFileToJs(chem10QTypesTsPath, "temp_chem10_qtypes.js");
 
   // Import động các file JS tạm thời
   const { mathQuestionTypes } = await import("./temp_math.js");
   const { englishQuestionTypes } = await import("./temp_eng_qtypes.js");
+  const { g10MathQuestionTypes } = await import("./temp_math10_qtypes.js");
+  const { g10EnglishQuestionTypes } = await import("./temp_eng10_qtypes.js");
+  const { g10ChemistryQuestionTypes } = await import("./temp_chem10_qtypes.js");
 
-  console.log(`Đã đọc ${mathQuestionTypes.length} dạng bài Toán và ${englishQuestionTypes.length} dạng bài Tiếng Anh.`);
+  console.log(`Đã đọc:
+- Lớp 9: ${mathQuestionTypes.length} dạng Toán, ${englishQuestionTypes.length} dạng Anh.
+- Lớp 10: ${g10MathQuestionTypes.length} dạng Toán, ${g10EnglishQuestionTypes.length} dạng Anh, ${g10ChemistryQuestionTypes.length} dạng Hóa.`);
 
   const allQuestionTypes = [
     ...mathQuestionTypes.map(q => ({ ...q, subjectId: "math" })),
-    ...englishQuestionTypes.map(q => ({ ...q, subjectId: "english" }))
+    ...englishQuestionTypes.map(q => ({ ...q, subjectId: "english" })),
+    ...g10MathQuestionTypes.map(q => ({ ...q, subjectId: "math" })),
+    ...g10EnglishQuestionTypes.map(q => ({ ...q, subjectId: "english" })),
+    ...g10ChemistryQuestionTypes.map(q => ({ ...q, subjectId: "chemistry" }))
   ];
 
   for (const qType of allQuestionTypes) {
-    const subjectName = qType.subjectId === "math" ? "Toán" : "Tiếng Anh";
+    const subjectName = qType.subjectId === "math" ? "Toán" : qType.subjectId === "chemistry" ? "Hóa học" : "Tiếng Anh";
     console.log(`\nĐang xử lý dạng bài: "${qType.name}" (${subjectName})...`);
 
     // 5.1 Xóa tài liệu lớn cũ (nếu có) để dọn dẹp database
     const oldDocId = `${qType.subjectId}_${qType.id}`;
     await collectionRef.doc(oldDocId).delete().catch(() => {});
 
-    // Helper tạo và lưu từng chunk nhỏ
+    // Helper tạo và lưu từng chunk nhỏ (hỗ trợ kiểm tra trùng lặp và cập nhật tri thức thay đổi)
     const saveChunk = async (chunkId, chunkType, chunkTitle, chunkContent) => {
       try {
+        const currentHash = getContentHash(chunkContent);
+
+        // Kiểm tra xem tài liệu này đã tồn tại trên Firestore chưa
+        const docSnap = await collectionRef.doc(chunkId).get();
+        if (docSnap.exists) {
+          const existingData = docSnap.data();
+          if (existingData && existingData.contentHash === currentHash) {
+            console.log(`  - Bỏ qua: Chunk [${chunkType}] đã tồn tại và không thay đổi (${chunkId})`);
+            return;
+          }
+          console.log(`  - Cập nhật: Phát hiện thay đổi nội dung tại chunk [${chunkType}] (${chunkId}). Đang tạo lại embedding...`);
+        }
+
         const embedding = await getEmbedding(chunkContent, apiKey);
         if (!embedding || embedding.length === 0) {
           console.error(`  - Thất bại: Không nhận được vector embedding cho chunk [${chunkType}].`);
@@ -161,6 +227,7 @@ async function run() {
           difficulty: qType.difficulty || "medium",
           title: chunkTitle,
           content: chunkContent,
+          contentHash: currentHash, // Lưu lại mã băm nội dung để so sánh lần sau
           keywords: keywords,
           embedding: admin.firestore.FieldValue.vector(embedding),
           updatedAt: admin.firestore.FieldValue.serverTimestamp()
@@ -234,8 +301,10 @@ Hướng dẫn/Lưu ý đặc biệt: ${sub.note || "Không có"}`;
   // Dọn dẹp các file tạm thời
   try {
     fs.unlinkSync(tempMathJs);
-    fs.unlinkSync(tempEngTopicsJs);
     fs.unlinkSync(tempEngQTypesJs);
+    fs.unlinkSync(tempMath10QTypesJs);
+    fs.unlinkSync(tempEng10QTypesJs);
+    fs.unlinkSync(tempChem10QTypesJs);
     console.log("\n Đã dọn dẹp các file biên dịch tạm thời.");
   } catch (err) {
     console.error("Lỗi khi dọn dẹp file tạm:", err.message);

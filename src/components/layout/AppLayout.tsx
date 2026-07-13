@@ -53,6 +53,19 @@ export const AppLayout: React.FC = () => {
     return `${icon} ${subjectLabel} - ${gradeLabel}`;
   };
 
+  const handleContextChange = (grade: any, subject: any) => {
+    setGrade(grade);
+    setSubject(subject);
+    setIsContextDropdownOpen(false);
+
+    const path = location.pathname;
+    const stayPaths = ['/dashboard', '/roadmap', '/practice', '/ai-tutor', '/mistakes', '/exam'];
+    
+    if (!stayPaths.includes(path)) {
+      navigate('/roadmap');
+    }
+  };
+
   const courseGroups = [
     {
       grade: 'grade9',
@@ -265,10 +278,7 @@ export const AppLayout: React.FC = () => {
                               disabled={course.isLocked}
                               onClick={() => {
                                 if (course.isLocked) return;
-                                setGrade(group.grade as any);
-                                setSubject(course.code as any);
-                                setIsContextDropdownOpen(false);
-                                navigate('/roadmap');
+                                handleContextChange(group.grade, course.code);
                               }}
                               className={cn(
                                 "w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer relative",
@@ -474,10 +484,7 @@ export const AppLayout: React.FC = () => {
                                   disabled={course.isLocked}
                                   onClick={() => {
                                     if (course.isLocked) return;
-                                    setGrade(group.grade as any);
-                                    setSubject(course.code as any);
-                                    setIsContextDropdownOpen(false);
-                                    navigate('/roadmap');
+                                    handleContextChange(group.grade, course.code);
                                   }}
                                   className={cn(
                                     "w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer relative",

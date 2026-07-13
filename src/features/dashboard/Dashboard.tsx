@@ -2,86 +2,118 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { getQuestionTypes } from '../../data';
+import { getTopics, getQuestionTypes } from '../../data';
 import {
   Bookmark,
   Award,
-  AlertTriangle,
   ArrowRight,
   CheckCircle,
   Sparkles,
-  Zap
+  Zap,
+  BookOpen
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
-import type { SubjectCode } from '../../types';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { setSubject, selectedGrade, user, progressVersion } = useAppStore();
+  const { selectedSubject, selectedGrade, user, progressVersion } = useAppStore();
   void progressVersion;
 
   const currentUserId = user!.uid;
   const progress = storageService.getProgress(currentUserId);
-  const mistakes = storageService.getMistakes(currentUserId).filter(m => m.reviewStatus !== 'fixed');
-  const exams = storageService.getExamResults(currentUserId);
+  const readLessons = storageService.getReadLessons(currentUserId);
+  const readLessonsSet = new Set(readLessons);
+  const completedLessonsSet = new Set(progress.completedLessons);
 
-  const activeSubjects: SubjectCode[] = selectedGrade === 'grade9'
-    ? ['math', 'english']
-    : ['math', 'english', 'chemistry'];
+  // 1. Lấy danh sách chuyên đề & dạng bài của môn/lớp hiện tại theo đúng thứ tự
+  const topics = getTopics(selectedGrade, selectedSubject);
+  const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
 
-  // Tìm dạng bài dạng dở gần nhất
-  const attempts = storageService.getAttempts(currentUserId);
-  let lastActiveTypeId: string | null = null;
-  if (attempts.length > 0) {
-    lastActiveTypeId = attempts[attempts.length - 1].questionTypeId;
-  } else {
-    lastActiveTypeId = selectedGrade === 'grade9' ? 'math-qt1' : 'math10-qt1';
-  }
-
-  const allQuestionTypes = activeSubjects.flatMap(sub => getQuestionTypes(selectedGrade, sub));
-  const lastActiveType = (allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || allQuestionTypes[0] || { id: '', name: 'Chưa học', description: '' }) as any;
-  const lastActiveSubject = getSubjectFromQuestionTypeId(lastActiveType.id) || 'math';
-  const lastActiveLevel = getStarsFromScore(progress.masteryLevels[lastActiveType.id] ?? 0);
-  const lastActivePercent = Math.round((lastActiveLevel / 3) * 100);
-
-  // Tính toán số dạng đã master/hoàn thành của các môn học
-  const subjectProgressList = activeSubjects.map(sub => {
-    const qTypes = getQuestionTypes(selectedGrade, sub);
-    const completed = progress.completedLessons.filter(id => getSubjectFromQuestionTypeId(id) === sub).length;
-    const percent = qTypes.length > 0 ? Math.round((completed / qTypes.length) * 100) : 0;
-    return {
-      code: sub,
-      name: getSubjectName(sub),
-      icon: getSubjectIcon(sub),
-      percent
-    };
+  const sequentialTypes: any[] = [];
+  [1, 2, 3].forEach(tierId => {
+    const tierTopics = topics.filter(t => t.tier === tierId);
+    tierTopics.forEach(topic => {
+      const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
+      sequentialTypes.push(...filteredTypes);
+    });
   });
 
-  // Điểm thi thử gần nhất
-  const examScore = exams.length > 0 ? `${exams[exams.length - 1].score}/10` : 'Chưa thi';
+  const totalTypesCount = sequentialTypes.length;
 
-  // Xác định 3 dạng bài yếu nhất (mastery level thấp nhất và có trong lịch sử làm bài)
-  const allTypes = [...allQuestionTypes];
-  const weakTypes = allTypes
-    .map(type => {
-      const level = getStarsFromScore(progress.masteryLevels[type.id] ?? 0);
-      // Đếm xem làm sai bao nhiêu câu trong dạng này
-      const wrongAttempts = storageService.getAttempts(currentUserId).filter(a => a.questionTypeId === type.id && !a.isCorrect).length;
-      return {
-        ...type,
-        level,
-        wrongAttempts
-      };
-    })
-    // Lọc ra các dạng đã từng sờ vào hoặc có mức master thấp
-    .filter(item => (item.level < 2 || item.wrongAttempts > 0))
-    // Sắp xếp: ưu tiên số lần làm sai nhiều lên trước, rồi tới mức master thấp
-    .sort((a, b) => b.wrongAttempts - a.wrongAttempts || a.level - b.level)
-    .slice(0, 3);
+  // 2. Tính toán thống kê theo môn học hiện tại
+  // Tiến độ Lộ trình học (Lý thuyết)
+  const readTypesCount = sequentialTypes.filter(type => readLessonsSet.has(type.id)).length;
+  const roadmapPercent = totalTypesCount > 0 ? Math.round((readTypesCount / totalTypesCount) * 100) : 0;
+
+  // Tiến độ Luyện tập (Bài tập)
+  const masteredTypesCount = sequentialTypes.filter(type => completedLessonsSet.has(type.id)).length;
+  const practicePercent = totalTypesCount > 0 ? Math.round((masteredTypesCount / totalTypesCount) * 100) : 0;
+
+  // Sổ lỗi sai môn hiện tại
+  const mistakes = storageService.getMistakes(currentUserId)
+    .filter(m => m.reviewStatus !== 'fixed' && getSubjectFromQuestionTypeId(m.questionTypeId) === selectedSubject);
+
+  // Thi thử môn hiện tại
+  const exams = storageService.getExamResults(currentUserId);
+  const subjectExams = exams.filter(e => {
+    if (selectedSubject === 'math') return e.examId.startsWith('math');
+    if (selectedSubject === 'english') return e.examId.startsWith('eng');
+    if (selectedSubject === 'chemistry') return e.examId.startsWith('chem');
+    return true;
+  });
+  const examScore = subjectExams.length > 0 ? `${subjectExams[subjectExams.length - 1].score}/10` : 'Chưa thi';
+
+  // 3. Xử lý "Học tiếp dạng bài dở dang" (Lộ trình lý thuyết)
+  const lastActiveTheoryId = localStorage.getItem('otv10_last_active_theory');
+  let activeTheoryType: any = null;
+  let activeTheoryStatus: 'inprogress' | 'next' | 'completed';
+
+  if (lastActiveTheoryId && sequentialTypes.some(t => t.id === lastActiveTheoryId) && !readLessonsSet.has(lastActiveTheoryId)) {
+    activeTheoryType = sequentialTypes.find(t => t.id === lastActiveTheoryId);
+    activeTheoryStatus = 'inprogress';
+  } else {
+    const nextUnread = sequentialTypes.find(t => !readLessonsSet.has(t.id));
+    if (nextUnread) {
+      activeTheoryType = nextUnread;
+      activeTheoryStatus = 'next';
+    } else {
+      activeTheoryStatus = 'completed';
+    }
+  }
+
+  // 4. Xử lý "Luyện tiếp dạng bài dở dang" (Luyện tập)
+  const attempts = storageService.getAttempts(currentUserId);
+  const subjectAttempts = attempts.filter(a => getSubjectFromQuestionTypeId(a.questionTypeId) === selectedSubject);
+  let lastActivePracticeId: string | null = null;
+  if (subjectAttempts.length > 0) {
+    lastActivePracticeId = subjectAttempts[subjectAttempts.length - 1].questionTypeId;
+  }
+
+  let activePracticeType: any = null;
+  let activePracticeStatus: 'inprogress' | 'next' | 'completed';
+  let activePracticeScore = 0;
+  let activePracticeLevel = 0;
+
+  if (lastActivePracticeId && sequentialTypes.some(t => t.id === lastActivePracticeId) && !completedLessonsSet.has(lastActivePracticeId)) {
+    activePracticeType = sequentialTypes.find(t => t.id === lastActivePracticeId);
+    activePracticeStatus = 'inprogress';
+    activePracticeScore = progress.masteryLevels[lastActivePracticeId] || 0;
+    activePracticeLevel = getStarsFromScore(activePracticeScore);
+  } else {
+    const nextUnmastered = sequentialTypes.find(t => !completedLessonsSet.has(t.id));
+    if (nextUnmastered) {
+      activePracticeType = nextUnmastered;
+      activePracticeStatus = 'next';
+      activePracticeScore = progress.masteryLevels[nextUnmastered.id] || 0;
+      activePracticeLevel = getStarsFromScore(activePracticeScore);
+    } else {
+      activePracticeStatus = 'completed';
+    }
+  }
 
   // Lấy câu trích dẫn ngẫu nhiên truyền động lực học
   const quotes = [
@@ -92,11 +124,6 @@ export const Dashboard: React.FC = () => {
   ];
 
   const [quote] = useState(() => quotes[Math.floor(Math.random() * quotes.length)]);
-
-  const handleFixWeakType = (typeId: string, subjectCode: SubjectCode) => {
-    setSubject(subjectCode);
-    navigate(`/question-types/${typeId}`);
-  };
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
@@ -113,16 +140,6 @@ export const Dashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Streak/Level Gamified Badge */}
-        <div className="flex items-center gap-2 bg-secondary/40 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-border/20 shadow-sm self-start md:self-center shrink-0">
-          <span className="text-xs font-black text-foreground flex items-center gap-1">
-            🔥 <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Streak:</span> 5 ngày
-          </span>
-          <div className="w-px h-4 bg-border/40" />
-          <span className="text-xs font-black text-primary flex items-center gap-1">
-            ⭐️ <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Level:</span> 12
-          </span>
-        </div>
       </div>
 
       {/* 📐 Main Workspace Grid: 2 Columns (Left 2/3 - Core Study Actions, Right 1/3 - Stats & Weaknesses) */}
@@ -131,118 +148,162 @@ export const Dashboard: React.FC = () => {
         {/* 👈 Left Column (2/3 width) - Focus actions & Roadmap */}
         <div className="lg:col-span-2 space-y-6">
 
-          {/* Card Học tiếp nhanh (Core Resume Card) */}
+          {/* Card 1: LỘ TRÌNH HỌC (LÝ THUYẾT) */}
           <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden relative group">
-            {/* Background glowing effects */}
+            <div className="absolute top-0 right-0 w-44 h-44 bg-linear-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
+            <CardHeader className="bg-secondary/25 border-b border-border/20 p-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <BookOpen size={18} className={cn("animate-pulse", getSubjectTheme(selectedSubject).iconColor)} />
+                  <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider font-sans">Lộ trình học (Lý thuyết)</CardTitle>
+                </div>
+                <span className={cn(
+                  'text-[9px] font-black px-2.5 py-0.5 rounded-lg border',
+                  getSubjectTheme(selectedSubject).badge
+                )}>
+                  {`${getSubjectIcon(selectedSubject)} ${getSubjectName(selectedSubject)}`}
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6 space-y-5 flex flex-col">
+              {activeTheoryStatus === 'completed' ? (
+                <div className="space-y-3 py-4 text-center flex flex-col items-center">
+                  <CheckCircle className="text-emerald-500 animate-bounce" size={40} />
+                  <h3 className="text-base font-black text-foreground">Đã học xong lý thuyết!</h3>
+                  <p className="text-xs text-muted-foreground font-semibold max-w-sm leading-relaxed">
+                    Tuyệt vời! Bạn đã hoàn thành đọc toàn bộ lý thuyết lộ trình môn học này. Hãy chuyển sang phần luyện tập để thực chiến.
+                  </p>
+                  <Button
+                    onClick={() => navigate('/roadmap')}
+                    variant="outline"
+                    className="mt-2 font-black py-2.5 px-6 text-xs border border-border text-foreground hover:text-primary rounded-xl cursor-pointer"
+                  >
+                    Xem lại lộ trình học <ArrowRight size={12} className="ml-1" />
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-1.5">
+                    <span className={cn(
+                      "text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md border inline-block leading-none",
+                      activeTheoryStatus === 'inprogress'
+                        ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400"
+                        : "bg-secondary text-muted-foreground border-border/40"
+                    )}>
+                      {activeTheoryStatus === 'inprogress' ? "⚡ Học tiếp dạng bài dở dang" : "🎯 Dạng bài tiếp theo cần học"}
+                    </span>
+                    <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans pt-1">
+                      {activeTheoryType.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed font-semibold max-w-2xl">
+                      {activeTheoryType.description || 'Đọc lý thuyết và cách giải dạng bài này để chuẩn bị làm bài tập.'}
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={() => navigate(`/question-types/${activeTheoryType.id}`)}
+                    className={cn(
+                      "w-fit px-8 font-black py-3 text-xs text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start",
+                      selectedSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
+                        selectedSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
+                          'bg-purple-600 hover:bg-purple-700'
+                    )}
+                  >
+                    {activeTheoryStatus === 'inprogress' ? "Tiếp tục học ngay" : "Bắt đầu học ngay"} <ArrowRight size={13} />
+                  </Button>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Card 2: LUYỆN TẬP (BÀI TẬP) */}
+          <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden relative group">
             <div className="absolute top-0 right-0 w-44 h-44 bg-linear-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
             <CardHeader className="bg-secondary/25 border-b border-border/20 p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Zap size={18} className="text-amber-500 fill-amber-500 animate-pulse" />
-                  <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider font-sans">Học tiếp dạng bài dở dang</CardTitle>
+                  <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider font-sans">Luyện tập (Bài tập)</CardTitle>
                 </div>
                 <span className={cn(
                   'text-[9px] font-black px-2.5 py-0.5 rounded-lg border',
-                  getSubjectTheme(lastActiveSubject).badge
+                  getSubjectTheme(selectedSubject).badge
                 )}>
-                  {`${getSubjectIcon(lastActiveSubject)} ${getSubjectName(lastActiveSubject)}`}
+                  {`${getSubjectIcon(selectedSubject)} ${getSubjectName(selectedSubject)}`}
                 </span>
               </div>
             </CardHeader>
             <CardContent className="p-6 space-y-5 flex flex-col">
-              <div className="space-y-2">
-                <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans group-hover:text-primary transition-colors">
-                  {lastActiveType.name}
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed font-semibold max-w-2xl">
-                  {lastActiveType.description || 'Tiếp tục luyện tập dạng bài này để tăng mức độ thành thạo và đạt điểm số tối đa.'}
-                </p>
-              </div>
-
-              <div className="space-y-2 bg-secondary/20 p-4.5 rounded-2xl border border-border/10">
-                <div className="flex items-center justify-between text-xs font-black text-foreground">
-                  <span className="flex items-center gap-1">
-                    🎯 Tiến độ dạng bài: <span className="text-primary">{lastActivePercent}%</span>
-                  </span>
-                  <span className="text-amber-500 flex items-center gap-0.5">
-                    {lastActiveLevel}/3 ⭐
-                  </span>
+              {activePracticeStatus === 'completed' ? (
+                <div className="space-y-3 py-4 text-center flex flex-col items-center">
+                  <Award className="text-amber-500 animate-bounce" size={40} />
+                  <h3 className="text-base font-black text-foreground">Đã hoàn thành luyện tập!</h3>
+                  <p className="text-xs text-muted-foreground font-semibold max-w-sm leading-relaxed">
+                    Chúc mừng! Bạn đã đạt mức thành thạo tối thiểu 2 sao cho toàn bộ các dạng bài tập môn học này.
+                  </p>
+                  <Button
+                    onClick={() => navigate('/practice')}
+                    variant="outline"
+                    className="mt-2 font-black py-2.5 px-6 text-xs border border-border text-foreground hover:text-primary rounded-xl cursor-pointer"
+                  >
+                    Xem lại các dạng bài luyện tập <ArrowRight size={12} className="ml-1" />
+                  </Button>
                 </div>
-                {/* Progress bar */}
-                <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                  <div
-                    className="h-full bg-linear-to-r from-primary to-indigo-600 rounded-full transition-all duration-500"
-                    style={{ width: `${lastActivePercent}%` }}
-                  />
-                </div>
-              </div>
-
-              <Button
-                onClick={() => {
-                  setSubject(lastActiveSubject);
-                  navigate(`/question-types/${lastActiveType.id}`);
-                }}
-                className="w-fit px-8 font-black py-3 text-xs bg-linear-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 animate-pulse-glow self-start"
-              >
-                Tiếp tục học ngay <ArrowRight size={13} />
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Lộ trình học khuyên dùng (Recommended Study Plan) */}
-          <Card className="border border-border/40 rounded-3xl shadow-md overflow-hidden">
-            <CardHeader className="bg-secondary/15 p-5 border-b border-border/20">
-              <CardTitle className="text-foreground font-black text-sm uppercase tracking-wider font-sans">Lộ trình học khuyên dùng hôm nay</CardTitle>
-              <CardDescription className="text-xs font-semibold text-muted-foreground mt-1">Các chuyên đề cốt lõi được cá nhân hóa nhằm giúp bạn bứt phá điểm số.</CardDescription>
-            </CardHeader>
-            <CardContent className="p-6 space-y-4">
-              <div className="space-y-3">
-
-                <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 hover:border-indigo-500/20 transition-all duration-300 group">
-                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 border group-hover:scale-105 transition-transform shadow-inner", getSubjectTheme('math').iconBg, getSubjectTheme('math').iconColor, getSubjectTheme('math').border)}>
-                    1
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h5 className="text-xs font-black text-foreground group-hover:text-indigo-500 transition-colors">📐 Toán: Lập hệ phương trình thực tế</h5>
-                    <p className="text-[10px] text-muted-foreground font-bold mt-1 leading-relaxed">
-                      Dạng toán chiếm 1.5 - 2 điểm trong cấu trúc đề thi ôn thi vào 10.
+              ) : (
+                <>
+                  <div className="space-y-1.5">
+                    <span className={cn(
+                      "text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md border inline-block leading-none",
+                      activePracticeStatus === 'inprogress'
+                        ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400"
+                        : "bg-secondary text-muted-foreground border-border/40"
+                    )}>
+                      {activePracticeStatus === 'inprogress' ? "⚡ Luyện tiếp dạng bài dở dang" : "🎯 Dạng bài tiếp theo cần luyện"}
+                    </span>
+                    <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans pt-1">
+                      {activePracticeType.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed font-semibold max-w-2xl">
+                      {activePracticeType.description || 'Luyện tập dạng bài này ngay để tăng mức độ thành thạo và tích lũy sao.'}
                     </p>
                   </div>
-                </div>
 
-                <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 hover:border-purple-500/20 transition-all duration-300 group">
-                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 border group-hover:scale-105 transition-transform shadow-inner", getSubjectTheme('english').iconBg, getSubjectTheme('english').iconColor, getSubjectTheme('english').border)}>
-                    2
+                  <div className="space-y-2 bg-secondary/20 p-4.5 rounded-2xl border border-border/10">
+                    <div className="flex items-center justify-between text-xs font-black text-foreground">
+                      <span className="flex items-center gap-1">
+                        🎯 Mức thành thạo: <span className="text-primary">{activePracticeScore}/100</span>
+                      </span>
+                      <span className="text-amber-500 flex items-center gap-0.5 font-bold">
+                        Đánh giá: {activePracticeLevel}/3 ⭐
+                      </span>
+                    </div>
+                    {/* Progress bar */}
+                    <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                      <div
+                        className={cn(
+                          "h-full rounded-full transition-all duration-500",
+                          selectedSubject === 'math' ? 'bg-indigo-600' :
+                            selectedSubject === 'chemistry' ? 'bg-emerald-600' :
+                              'bg-purple-600'
+                        )}
+                        style={{ width: `${activePracticeScore}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h5 className="text-xs font-black text-foreground group-hover:text-purple-500 transition-colors">🗣️ Anh: Câu bị động (Passive voice)</h5>
-                    <p className="text-[10px] text-muted-foreground font-bold mt-1 leading-relaxed">
-                      Luôn xuất hiện dưới dạng câu hỏi trắc nghiệm chia động từ hoặc viết lại câu.
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary/20 border border-border/10 opacity-70 group hover:opacity-100 transition-all duration-300">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-500/8 text-emerald-500 border border-emerald-500/10 flex items-center justify-center font-black text-xs shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                    3
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h5 className="text-xs font-black text-foreground group-hover:text-emerald-500 transition-colors">📚 Thi thử tổng hợp</h5>
-                    <p className="text-[10px] text-muted-foreground font-bold mt-1 leading-relaxed">
-                      Làm quen áp lực thời gian và rèn luyện tâm lý phòng thi thực tế.
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-
-              <Button
-                onClick={() => navigate('/roadmap')}
-                variant="outline"
-                className="w-full font-black py-3 text-xs active:scale-[0.98] border border-border/50 text-foreground hover:text-primary rounded-2xl mt-2 cursor-pointer transition-all"
-              >
-                Mở bản đồ lộ trình chi tiết <ArrowRight size={13} className="ml-1" />
-              </Button>
+                  <Button
+                    onClick={() => navigate(`/practice/${activePracticeType.id}`)}
+                    className={cn(
+                      "w-fit px-8 font-black py-3 text-xs text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start",
+                      selectedSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
+                        selectedSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
+                          'bg-purple-600 hover:bg-purple-700'
+                    )}
+                  >
+                    {activePracticeStatus === 'inprogress' ? "Tiếp tục luyện tập" : "Bắt đầu luyện tập"} <ArrowRight size={13} />
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -287,92 +348,47 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Danh sách tiến độ các môn */}
-              {subjectProgressList.map(subProgress => (
-                <div key={subProgress.code} className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
-                  <div className="flex items-center justify-between text-xs font-black text-foreground">
-                    <span className="flex items-center gap-1">{subProgress.icon} Tiến độ {subProgress.name}</span>
-                    <span>{subProgress.percent}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                    <div 
-                      className={cn(
-                        "h-full rounded-full transition-all duration-500",
-                        subProgress.code === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
-                        subProgress.code === 'english' ? "bg-linear-to-r from-purple-500 to-pink-500" :
-                        "bg-linear-to-r from-emerald-500 to-teal-500"
-                      )} 
-                      style={{ width: `${subProgress.percent}%` }} 
-                    />
-                  </div>
+              {/* Tiến độ Lộ trình học (Lý thuyết) */}
+              <div className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
+                <div className="flex items-center justify-between text-xs font-black text-foreground">
+                  <span className="flex items-center gap-1">📖 Tiến độ Lộ trình học (Lý thuyết)</span>
+                  <span>{roadmapPercent}%</span>
                 </div>
-              ))}
-
-            </CardContent>
-          </Card>
-
-          {/* Vùng cảnh báo điểm yếu (Weakness Radar Widget) */}
-          <Card className="border border-red-500/15 dark:border-red-500/10 shadow-md shadow-red-500/2 overflow-hidden rounded-3xl">
-            <CardHeader className="bg-red-500/4 dark:bg-red-950/10 p-5 border-b border-red-500/5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <AlertTriangle className="text-red-500 animate-bounce" size={17} />
-                  <CardTitle className="text-red-700 dark:text-red-400 font-black text-sm uppercase tracking-wider font-sans">Lỗ hổng kiến thức</CardTitle>
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all duration-500",
+                      selectedSubject === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
+                        selectedSubject === 'chemistry' ? "bg-linear-to-r from-emerald-500 to-teal-500" :
+                          "bg-linear-to-r from-purple-500 to-pink-500"
+                    )}
+                    style={{ width: `${roadmapPercent}%` }}
+                  />
                 </div>
-                <span className="text-[8px] bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 font-black px-2 py-0.5 rounded-md border border-red-200/50 dark:border-red-500/10 leading-none">
-                  SOS
-                </span>
               </div>
-            </CardHeader>
-            <CardContent className="p-4.5 space-y-3.5">
-              {weakTypes.length === 0 ? (
-                <div className="p-6 text-center flex flex-col items-center gap-2.5">
-                  <CheckCircle className="text-emerald-500" size={36} />
-                  <p className="text-xs font-black text-foreground">Bạn không có lỗ hổng lớn nào.</p>
-                  <p className="text-[10px] text-muted-foreground leading-relaxed">Hãy duy trì việc học hàng ngày!</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {weakTypes.map((type) => {
-                    const subjectCode = getSubjectFromQuestionTypeId(type.id) || 'math';
 
-                    return (
-                      <div key={type.id} className="p-3.5 bg-secondary/15 dark:bg-slate-900/30 rounded-2xl border border-border/40 hover:border-red-500/20 transition-all flex flex-col gap-2.5 group">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-1.5">
-                            <span className={cn(
-                              'text-[8px] font-black px-2 py-0.5 rounded-md border leading-none',
-                              getSubjectTheme(subjectCode).badge
-                            )}>
-                              {getSubjectIcon(subjectCode)} {getSubjectName(subjectCode)}
-                            </span>
-                          </div>
-                          <h4 className="font-extrabold text-xs text-foreground group-hover:text-red-500 transition-colors leading-snug">{type.name}</h4>
-                        </div>
-
-                        <div className="flex items-center justify-between gap-2 mt-0.5">
-                          {type.wrongAttempts > 0 && (
-                            <span className="text-[9px] text-red-500 font-extrabold bg-red-500/5 px-2 py-0.5 rounded-md border border-red-500/10">
-                              Làm sai: {type.wrongAttempts} lần
-                            </span>
-                          )}
-                          <button
-                            onClick={() => handleFixWeakType(type.id, subjectCode)}
-                            className="text-[9px] font-black text-red-600 dark:text-red-400 hover:underline flex items-center gap-0.5 cursor-pointer ml-auto"
-                          >
-                            Khắc phục <ArrowRight size={10} />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
+              {/* Tiến độ Luyện tập (Bài tập) */}
+              <div className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
+                <div className="flex items-center justify-between text-xs font-black text-foreground">
+                  <span className="flex items-center gap-1">🎯 Tiến độ Luyện tập (Bài tập)</span>
+                  <span>{practicePercent}%</span>
                 </div>
-              )}
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all duration-500",
+                      selectedSubject === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
+                        selectedSubject === 'chemistry' ? "bg-linear-to-r from-emerald-500 to-teal-500" :
+                          "bg-linear-to-r from-purple-500 to-pink-500"
+                    )}
+                    style={{ width: `${practicePercent}%` }}
+                  />
+                </div>
+              </div>
+
             </CardContent>
           </Card>
-
         </div>
-
       </div>
     </div>
   );

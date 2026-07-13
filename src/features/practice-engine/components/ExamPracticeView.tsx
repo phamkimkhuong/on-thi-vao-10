@@ -60,6 +60,22 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
   if (questions.length === 0) return null;
 
   const currentQuestion = questions[currentIdx];
+
+  // Phân tách options từ content nếu validatorType === 'choice' và không có options riêng biệt
+  let displayOptions = currentQuestion.options;
+  let cleanContent = currentQuestion.content;
+
+  if (
+    (!displayOptions || displayOptions.length === 0) &&
+    currentQuestion.validatorType === 'choice' &&
+    currentQuestion.content.includes('\nA.')
+  ) {
+    const parts = currentQuestion.content.split(/\n(?=[A-D]\.\s)/);
+    if (parts.length >= 2) {
+      cleanContent = parts[0];
+      displayOptions = parts.slice(1).map(opt => opt.trim());
+    }
+  }
   const score = questions.filter(q => validateAnswer(q, examAnswers[q.id] || '')).length;
   const correctAnswersCount = score;
   const incorrectAnswersCount = questions.length - score;
@@ -240,13 +256,13 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
         <CardContent className="p-6 space-y-6">
           {/* Content */}
           <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
-            <LatexRenderer text={currentQuestion.content} />
+            <LatexRenderer text={cleanContent} />
           </div>
 
           {/* Answer Options list or text input for fill-in-the-blank */}
           <div className="grid grid-cols-1 gap-3">
-            {currentQuestion.options && currentQuestion.options.length > 0 ? (
-              currentQuestion.options.map((opt: string, i: number) => {
+            {displayOptions && displayOptions.length > 0 ? (
+              displayOptions.map((opt: string, i: number) => {
                 const optLetter = opt.charAt(0);
                 const isSelected = examAnswers[currentQuestion.id] === optLetter;
                 const isCorrectAnswer = currentQuestion.correctAnswer === optLetter;
@@ -324,7 +340,7 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
                   <div>
                     <h4 className="font-extrabold text-sm">Chính xác!</h4>
                     <p className="text-xs font-semibold opacity-90">
-                      {currentQuestion.options && currentQuestion.options.length > 0 ? (
+                      {displayOptions && displayOptions.length > 0 ? (
                         `Bạn đã chọn đáp án đúng.`
                       ) : (
                         `Bạn đã nhập đúng đáp án: "${examAnswers[currentQuestion.id]}".`
@@ -338,7 +354,7 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
                   <div>
                     <h4 className="font-extrabold text-sm">Chưa chính xác!</h4>
                     <p className="text-xs font-semibold opacity-90">
-                      {currentQuestion.options && currentQuestion.options.length > 0 ? (
+                      {displayOptions && displayOptions.length > 0 ? (
                         examAnswers[currentQuestion.id]
                           ? `Bạn đã chọn đáp án ${examAnswers[currentQuestion.id]}. Đáp án đúng là ${currentQuestion.correctAnswer}.`
                           : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là ${currentQuestion.correctAnswer}.`

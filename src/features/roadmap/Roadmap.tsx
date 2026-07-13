@@ -4,20 +4,40 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { getTopics, getQuestionTypes } from '../../data';
 import { Card, CardContent } from '../../components/ui/card';
-import { Star, ArrowRight, StarOff, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { getDifficultyTheme, getStarsFromScore, getTierTheme } from '../../utils/theme';
+import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon } from '../../utils/subject';
+import type { QuestionType } from '../../types';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject, selectedGrade, user, progressVersion, isPremium } = useAppStore();
+  const { selectedSubject, selectedGrade, progressVersion, isPremium, user } = useAppStore();
   void progressVersion;
-  const progress = storageService.getProgress(user!.uid).masteryLevels;
 
   const topics = getTopics(selectedGrade, selectedSubject);
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
-  const getMasteryStars = (questionTypeId: string) => getStarsFromScore(progress[questionTypeId] ?? 0);
+
+  const userId = user?.uid || 'guest';
+  const readLessons = storageService.getReadLessons(userId);
+  const readLessonsSet = new Set(readLessons);
+
+  // Tạo danh sách phẳng toàn bộ dạng bài theo đúng thứ tự chặng & chuyên đề render
+  const sequentialTypes: QuestionType[] = [];
+  [1, 2, 3].forEach(tierId => {
+    const tierTopics = topics.filter(t => t.tier === tierId);
+    tierTopics.forEach(topic => {
+      const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
+      sequentialTypes.push(...filteredTypes);
+    });
+  });
+
+  const isUnlocked = (typeId: string) => {
+    const idx = sequentialTypes.findIndex(t => t.id === typeId);
+    if (idx === -1) return false;
+    if (idx === 0) return true; // Dạng bài đầu tiên luôn luôn mở khóa
+    return readLessonsSet.has(sequentialTypes[idx - 1].id);
+  };
 
   const handleSelectType = (id: string) => {
     const qType = questionTypes.find(t => t.id === id);
@@ -32,23 +52,6 @@ export const Roadmap: React.FC = () => {
     navigate(`/question-types/${id}`);
   };
 
-
-
-  const renderMasteryStars = (starsCount: number) => {
-    const stars = [];
-    for (let i = 1; i <= 3; i++) {
-      if (i <= starsCount) {
-        stars.push(<Star key={i} size={15} className="fill-amber-400 text-amber-400 animate-pulse" />);
-      } else {
-        stars.push(<StarOff key={i} size={15} className="text-slate-300 dark:text-slate-700" />);
-      }
-    }
-    return (
-      <div className="flex gap-0.5" title={`Mức độ thành thạo: ${starsCount}/3 (Master)`}>
-        {stars}
-      </div>
-    );
-  };
 
   const tiers = selectedGrade === 'grade9'
     ? [
@@ -114,6 +117,15 @@ export const Roadmap: React.FC = () => {
       <div className="space-y-16">
         {tiers.map((tier) => {
           const tierTopics = topics.filter(t => t.tier === tier.id);
+          
+          // Lọc ra các chuyên đề có ít nhất 1 dạng bài được mở khóa
+          const visibleTopics = tierTopics.filter(topic => {
+            const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
+            return filteredTypes.some(type => isUnlocked(type.id));
+          });
+
+          // Nếu chặng không có chuyên đề nào được mở khóa, ẩn cả chặng
+          if (visibleTopics.length === 0) return null;
 
           return (
             <div key={tier.id} className="space-y-8">
@@ -139,8 +151,9 @@ export const Roadmap: React.FC = () => {
                 'relative border-l-2 pl-5 md:pl-8 ml-2 md:ml-5 space-y-10 md:space-y-12',
                 getTierTheme(tier.id).lineStyle
               )}>
-                {tierTopics.map((topic, topicIdx) => {
+                {visibleTopics.map((topic, topicIdx) => {
                   const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
+                  const visibleTypes = filteredTypes.filter(type => isUnlocked(type.id));
 
                   return (
                     <div key={topic.id} className="relative group/topic">
@@ -157,7 +170,7 @@ export const Roadmap: React.FC = () => {
                       {/* Chi tiết chuyên đề */}
                       <div className="space-y-5">
                         {(() => {
-                          const completedCount = filteredTypes.filter(type => getMasteryStars(type.id) >= 2).length;
+                          const completedCount = filteredTypes.filter(type => readLessonsSet.has(type.id)).length;
                           const percent = filteredTypes.length > 0 ? Math.round((completedCount / filteredTypes.length) * 100) : 0;
 
                           return (
@@ -182,17 +195,17 @@ export const Roadmap: React.FC = () => {
 
                         {/* Danh sách dạng bài */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
-                          {filteredTypes.map((type) => {
-                            const stars = getMasteryStars(type.id);
+                          {visibleTypes.map((type) => {
                             const diff = getDifficultyTheme(type.difficulty);
+                            const isRead = readLessonsSet.has(type.id);
 
                             return (
                               <Card
                                 key={type.id}
                                 className={cn(
                                   "transition-all duration-300 border bg-card hover:-translate-y-1 hover:shadow-md active:scale-[0.99] cursor-pointer rounded-2xl",
-                                  stars === 3
-                                    ? 'border-emerald-500/20 hover:border-emerald-500/40 shadow-sm shadow-emerald-500/2'
+                                  isRead
+                                    ? 'border-emerald-500/20 hover:border-emerald-500/40 shadow-sm shadow-emerald-500/2 bg-emerald-500/[0.01]'
                                     : 'border-border/40 hover:border-primary/30'
                                 )}
                                 onClick={() => handleSelectType(type.id)}
@@ -205,16 +218,15 @@ export const Roadmap: React.FC = () => {
                                         <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", diff.dotClass)} />
                                         {diff.text}
                                       </span>
-                                      {renderMasteryStars(stars)}
+                                      {isRead && (
+                                        <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                                          ✓ Đã đọc lý thuyết
+                                        </span>
+                                      )}
                                     </div>
 
                                     <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5 leading-snug font-sans">
                                       {type.name}
-                                      {stars === 3 && (
-                                        <span title="Đã Master hoàn hảo!">
-                                          <Sparkles size={14} className="text-emerald-500 fill-emerald-500 shrink-0 animate-pulse" />
-                                        </span>
-                                      )}
                                     </h5>
                                     <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
                                       {type.description}
@@ -231,7 +243,7 @@ export const Roadmap: React.FC = () => {
 
                                   <div className="flex items-center justify-end border-t border-border/20 pt-3.5 text-[10px] font-bold text-muted-foreground">
                                     <span className="text-primary hover:underline flex items-center gap-0.5 font-extrabold">
-                                      Học chi tiết <ArrowRight size={10} />
+                                      {isRead ? 'Xem lại lý thuyết' : 'Học chi tiết'} <ArrowRight size={10} />
                                     </span>
                                   </div>
                                 </CardContent>

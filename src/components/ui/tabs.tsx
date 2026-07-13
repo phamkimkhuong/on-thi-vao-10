@@ -15,6 +15,7 @@ export interface TabsProps {
   tabContentClassName?: string;
   activeTabClassName?: string;
   inactiveTabClassName?: string;
+  onTabChange?: (tabId: string) => void;
 }
 
 export const Tabs: React.FC<TabsProps> = ({
@@ -25,6 +26,7 @@ export const Tabs: React.FC<TabsProps> = ({
   tabContentClassName,
   activeTabClassName,
   inactiveTabClassName,
+  onTabChange,
 }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || items[0]?.id);
 
@@ -41,7 +43,10 @@ export const Tabs: React.FC<TabsProps> = ({
         {items.map(item => (
           <button
             key={item.id}
-            onClick={() => setActiveTabId(item.id)}
+            onClick={() => {
+              setActiveTabId(item.id);
+              onTabChange?.(item.id);
+            }}
             className={cn(
               'px-4 py-2.5 font-bold text-xs md:text-sm transition-all duration-200 rounded-xl cursor-pointer shadow-sm border border-transparent',
               activeTabId === item.id
