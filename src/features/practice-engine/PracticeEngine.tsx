@@ -59,7 +59,7 @@ export const PracticeEngine: React.FC = () => {
   const englishQuestions = getQuestions(selectedGrade, 'english');
   const englishSolutions = getSolutions(selectedGrade, 'english');
 
-  const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
+  const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as 'math' | 'english';
 
   useEffect(() => {
     const start = Date.now();

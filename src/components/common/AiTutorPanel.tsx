@@ -189,7 +189,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
         currentText.startsWith('Hello ');
         
       if (isDefaultOrGenericWelcome) {
-        const cleanSubjectId = question.subjectId || 'math';
+        const cleanSubjectId = (question.subjectId || 'math') as 'math' | 'english';
         const grade = useAppStore.getState().selectedGrade;
         const topicsList = getTopics(grade, cleanSubjectId);
         const topic = topicsList.find(t => t.id === question.topicId);

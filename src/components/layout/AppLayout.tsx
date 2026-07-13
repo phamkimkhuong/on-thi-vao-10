@@ -10,6 +10,9 @@ import {
   Menu,
   X,
   ChevronRight,
+  ChevronDown,
+  Check,
+  Lock,
   Users,
   Sparkles
 } from 'lucide-react';
@@ -40,6 +43,42 @@ export const AppLayout: React.FC = () => {
   });
   const [isTeacher, setIsTeacher] = useState(false);
   const [realPendingCount, setRealPendingCount] = useState(0);
+  const [isContextDropdownOpen, setIsContextDropdownOpen] = useState(false);
+
+  const getActiveContextLabel = () => {
+    const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : 'Lớp 10';
+    const subjectLabel = selectedSubject === 'math' ? 'Toán học' : 'Tiếng Anh';
+    const icon = selectedSubject === 'math' ? '📐' : '🗣️';
+    return `${icon} ${subjectLabel} - ${gradeLabel}`;
+  };
+
+  const courseGroups = [
+    {
+      grade: 'grade9',
+      gradeTitle: 'Lớp 9 Ôn vào 10',
+      courses: [
+        { code: 'math', name: 'Toán học', icon: '📐', isLocked: false },
+        { code: 'english', name: 'Tiếng Anh', icon: '🗣️', isLocked: false },
+      ]
+    },
+    {
+      grade: 'grade10',
+      gradeTitle: 'Lớp 10',
+      courses: [
+        { code: 'math', name: 'Toán học', icon: '📐', isLocked: false },
+        { code: 'english', name: 'Tiếng Anh', icon: '🗣️', isLocked: false },
+      ]
+    },
+    {
+      grade: 'future',
+      gradeTitle: 'Lớp 11 & 12 (Sắp ra mắt)',
+      courses: [
+        { code: 'physics', name: 'Vật lý', icon: '🧪', isLocked: true },
+        { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: true },
+        { code: 'biology', name: 'Sinh học', icon: '🧬', isLocked: true },
+      ]
+    }
+  ];
 
   const toggleSidebarCollapse = () => {
     setIsSidebarCollapsed(prev => {
@@ -199,67 +238,61 @@ export const AppLayout: React.FC = () => {
           )}
         </div>
 
-        <div className={cn("px-4 pt-5 border-b border-border/20 md:hidden", isSidebarCollapsed && "px-2.5 pt-3")}>
-          <div className={cn(
-            "bg-secondary/50 backdrop-blur-sm p-1 rounded-2xl flex border border-border/10 shadow-inner",
-            isSidebarCollapsed ? "flex-col gap-1.5 p-1" : "flex-row gap-1"
-          )}>
+        <div className={cn("px-4 py-3.5 border-b border-border/20 md:hidden", isSidebarCollapsed && "px-2.5 py-3")}>
+          <div className="relative">
             <button
-              onClick={() => { setGrade('grade9'); setIsSidebarOpen(false); navigate('/roadmap'); }}
-              className={cn(
-                "py-2 text-[10px] font-black rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center active:scale-95",
-                isSidebarCollapsed ? "w-full aspect-square text-sm" : "flex-1",
-                selectedGrade === 'grade9'
-                  ? 'bg-gradient-to-r from-primary to-indigo-600 text-white shadow-md shadow-primary/20'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
-              )}
+              onClick={() => setIsContextDropdownOpen(!isContextDropdownOpen)}
+              className="w-full px-4 py-2.5 text-xs font-black rounded-2xl bg-secondary/50 border border-border/30 text-foreground transition-all flex items-center justify-between cursor-pointer shadow-sm active:scale-95"
             >
-              {isSidebarCollapsed ? '9️⃣' : '9️⃣ Ôn vào 10'}
+              <span className="truncate">{getActiveContextLabel()}</span>
+              <ChevronDown size={14} className={cn("transition-transform duration-200 shrink-0 ml-1.5", isContextDropdownOpen && "rotate-180")} />
             </button>
-            <button
-              onClick={() => { setGrade('grade10'); setIsSidebarOpen(false); navigate('/roadmap'); }}
-              className={cn(
-                "py-2 text-[10px] font-black rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center active:scale-95",
-                isSidebarCollapsed ? "w-full aspect-square text-sm" : "flex-1",
-                selectedGrade === 'grade10'
-                  ? 'bg-gradient-to-r from-primary to-indigo-600 text-white shadow-md shadow-primary/20'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
-              )}
-            >
-              {isSidebarCollapsed ? '🔟' : '🔟 Lớp 10'}
-            </button>
-          </div>
-        </div>
 
-        <div className={cn("px-4 py-5 border-b border-border/20 md:hidden", isSidebarCollapsed && "px-2.5 py-4")}>
-          <div className={cn(
-            "bg-secondary/50 backdrop-blur-sm p-1 rounded-2xl flex border border-border/10 shadow-inner",
-            isSidebarCollapsed ? "flex-col gap-1.5 p-1" : "flex-row gap-1"
-          )}>
-            <button
-              onClick={() => { setSubject('math'); setIsSidebarOpen(false); navigate('/roadmap'); }}
-              className={cn(
-                "py-2 text-xs font-black rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center active:scale-95",
-                isSidebarCollapsed ? "w-full aspect-square text-base" : "flex-1",
-                selectedSubject === 'math'
-                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
-              )}
-            >
-              {isSidebarCollapsed ? '📐' : '📐 Toán học'}
-            </button>
-            <button
-              onClick={() => { setSubject('english'); setIsSidebarOpen(false); navigate('/roadmap'); }}
-              className={cn(
-                "py-2 text-xs font-black rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center active:scale-95",
-                isSidebarCollapsed ? "w-full aspect-square text-base" : "flex-1",
-                selectedSubject === 'english'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md shadow-purple-500/20'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
-              )}
-            >
-              {isSidebarCollapsed ? '🗣️' : '🗣️ Tiếng Anh'}
-            </button>
+            {isContextDropdownOpen && (
+              <>
+                <div className="fixed inset-0 z-30" onClick={() => setIsContextDropdownOpen(false)} />
+                <div className="absolute left-0 right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/40 rounded-3xl shadow-xl p-3 space-y-3 z-40 max-h-[300px] overflow-y-auto">
+                  {courseGroups.map((group) => (
+                    <div key={group.grade} className="space-y-1.5">
+                      <span className="text-[9px] text-muted-foreground font-black uppercase tracking-wider px-2 block">
+                        {group.gradeTitle}
+                      </span>
+                      <div className="space-y-0.5">
+                        {group.courses.map((course) => {
+                          const isActive = !course.isLocked && selectedGrade === group.grade && selectedSubject === course.code;
+                          return (
+                            <button
+                              key={course.code}
+                              disabled={course.isLocked}
+                              onClick={() => {
+                                if (course.isLocked) return;
+                                setGrade(group.grade as any);
+                                setSubject(course.code as any);
+                                setIsContextDropdownOpen(false);
+                                navigate('/roadmap');
+                              }}
+                              className={cn(
+                                "w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer relative",
+                                course.isLocked
+                                  ? "text-muted-foreground/50 cursor-not-allowed opacity-60"
+                                  : isActive
+                                    ? "bg-primary/10 text-primary font-black border-l-4 border-primary pl-2 shadow-inner"
+                                    : "text-foreground hover:bg-secondary/60"
+                              )}
+                            >
+                              <span className="shrink-0">{course.icon}</span>
+                              <span className="flex-1 truncate">{course.name}</span>
+                              {isActive && <Check size={14} className="text-primary absolute right-3" />}
+                              {course.isLocked && <Lock size={10} className="text-muted-foreground/40 absolute right-3" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -415,62 +448,65 @@ export const AppLayout: React.FC = () => {
               <h1 className="text-xl font-black tracking-tight text-foreground capitalize leading-tight shrink-0">
                 {getHeaderTitle()}
               </h1>
-              
-              <div className="hidden md:flex items-center gap-2 bg-secondary/35 backdrop-blur-sm p-1 rounded-2xl border border-border/20 shadow-inner">
-                <div className="flex gap-0.5">
-                  <button
-                    onClick={() => { setGrade('grade9'); navigate('/roadmap'); }}
-                    className={cn(
-                      "px-3 py-1.5 text-[10px] font-black rounded-xl transition-all duration-200 cursor-pointer active:scale-95",
-                      selectedGrade === 'grade9'
-                        ? 'bg-gradient-to-r from-primary to-indigo-600 text-white shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/30'
-                    )}
-                  >
-                    Lớp 9 Ôn vào 10
-                  </button>
-                  <button
-                    onClick={() => { setGrade('grade10'); navigate('/roadmap'); }}
-                    className={cn(
-                      "px-3 py-1.5 text-[10px] font-black rounded-xl transition-all duration-200 cursor-pointer active:scale-95",
-                      selectedGrade === 'grade10'
-                        ? 'bg-gradient-to-r from-primary to-indigo-600 text-white shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/30'
-                    )}
-                  >
-                    Lớp 10
-                  </button>
-                </div>
-                <div className="h-4 w-px bg-border/20 mx-1" />
-                <div className="flex gap-0.5">
-                  <button
-                    onClick={() => { setSubject('math'); navigate('/roadmap'); }}
-                    className={cn(
-                      "px-3 py-1.5 text-[10px] font-black rounded-xl transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-1",
-                      selectedSubject === 'math'
-                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/30'
-                    )}
-                  >
-                    📐 Toán học
-                  </button>
-                  <button
-                    onClick={() => { setSubject('english'); navigate('/roadmap'); }}
-                    className={cn(
-                      "px-3 py-1.5 text-[10px] font-black rounded-xl transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-1",
-                      selectedSubject === 'english'
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-slate-100/50 dark:hover:bg-slate-800/30'
-                    )}
-                  >
-                    🗣️ Tiếng Anh
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+              <div className="relative">
+                <button
+                  onClick={() => setIsContextDropdownOpen(!isContextDropdownOpen)}
+                  className="px-3.5 py-1.5 text-xs font-black rounded-2xl bg-secondary/50 hover:bg-secondary border border-border/40 hover:border-primary/30 text-foreground transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                >
+                  <span>{getActiveContextLabel()}</span>
+                  <ChevronDown size={14} className={cn("transition-transform duration-200 shrink-0", isContextDropdownOpen && "rotate-180")} />
+                </button>
 
-          <div className="flex items-center gap-4.5">
+                {isContextDropdownOpen && (
+                  <>
+                    <div className="fixed inset-0 z-30" onClick={() => setIsContextDropdownOpen(false)} />
+                    <div className="absolute left-0 mt-2 w-64 bg-card/95 backdrop-blur-xl border border-border/40 rounded-3xl shadow-xl p-3 space-y-3.5 z-40 animate-fade-in">
+                      {courseGroups.map((group) => (
+                        <div key={group.grade} className="space-y-1.5">
+                          <span className="text-[9px] text-muted-foreground font-black uppercase tracking-wider px-2 block">
+                            {group.gradeTitle}
+                          </span>
+                          <div className="space-y-0.5">
+                            {group.courses.map((course) => {
+                              const isActive = !course.isLocked && selectedGrade === group.grade && selectedSubject === course.code;
+                              return (
+                                <button
+                                  key={course.code}
+                                  disabled={course.isLocked}
+                                  onClick={() => {
+                                    if (course.isLocked) return;
+                                    setGrade(group.grade as any);
+                                    setSubject(course.code as any);
+                                    setIsContextDropdownOpen(false);
+                                    navigate('/roadmap');
+                                  }}
+                                  className={cn(
+                                    "w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-extrabold transition-all cursor-pointer relative",
+                                    course.isLocked
+                                      ? "text-muted-foreground/50 cursor-not-allowed opacity-60"
+                                      : isActive
+                                        ? "bg-primary/10 text-primary font-black border-l-4 border-primary pl-2 shadow-inner"
+                                        : "text-foreground hover:bg-secondary/60 hover:translate-x-1"
+                                  )}
+                                >
+                                  <span className="shrink-0">{course.icon}</span>
+                                  <span className="flex-1 truncate">{course.name}</span>
+                                  {isActive && <Check size={14} className="text-primary absolute right-3" />}
+                                  {course.isLocked && <Lock size={10} className="text-muted-foreground/40 absolute right-3" />}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4.5">
             <div className="flex items-center gap-1.5 bg-secondary/40 backdrop-blur-sm px-3.5 py-2 rounded-2xl border border-border/20 shadow-sm">
               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Mastery:</span>
               <span className="text-xs font-black text-primary bg-primary/8 px-2 py-0.5 rounded-lg border border-primary/10">
@@ -488,31 +524,6 @@ export const AppLayout: React.FC = () => {
                 👑 Lên Premium
               </button>
             )}
-
-            <div className="flex items-center gap-3 pl-3.5 border-l border-border/20">
-              <div className={cn(
-                "w-9 h-9 rounded-full bg-primary/8 flex items-center justify-center border shrink-0",
-                isPremium ? "border-amber-400/60 shadow-md shadow-amber-400/5" : "border-primary/10"
-              )}>
-                <span className={cn("text-xs font-black", isPremium ? "text-amber-500" : "text-primary")}>
-                  {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
-                </span>
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xs font-extrabold leading-none flex items-center gap-1.5">
-                  {user.displayName || 'Học sinh'}
-                  {isPremium && (
-                    <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PRO</span>
-                  )}
-                </span>
-                <button
-                  onClick={() => { logout(); navigate('/auth'); }}
-                  className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2 self-start cursor-pointer active:scale-95"
-                >
-                  Đăng xuất
-                </button>
-              </div>
-            </div>
           </div>
         </header>
 

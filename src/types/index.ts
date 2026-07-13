@@ -1,4 +1,4 @@
-export type SubjectCode = 'math' | 'english';
+export type SubjectCode = 'math' | 'english' | 'physics' | 'chemistry' | 'biology';
 
 export type ValidatorType =
   | 'exact'

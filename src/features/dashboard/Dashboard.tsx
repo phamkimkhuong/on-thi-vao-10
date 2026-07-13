@@ -140,12 +140,12 @@ export const Dashboard: React.FC = () => {
                 </span>
               </div>
             </CardHeader>
-            <CardContent className="p-6 space-y-5">
+            <CardContent className="p-6 space-y-5 flex flex-col">
               <div className="space-y-2">
                 <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans group-hover:text-primary transition-colors">
                   {lastActiveType.name}
                 </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
+                <p className="text-xs text-muted-foreground leading-relaxed font-semibold max-w-2xl">
                   {lastActiveType.description || 'Tiếp tục luyện tập dạng bài này để tăng mức độ thành thạo và đạt điểm số tối đa.'}
                 </p>
               </div>
@@ -173,9 +173,9 @@ export const Dashboard: React.FC = () => {
                   setSubject(lastActiveSubject);
                   navigate(`/question-types/${lastActiveType.id}`);
                 }}
-                className="w-full font-black py-3.5 text-xs bg-linear-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 animate-pulse-glow"
+                className="w-fit px-8 font-black py-3 text-xs bg-linear-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 animate-pulse-glow self-start"
               >
-                Luyện tiếp tục ngay <ArrowRight size={13} />
+                Tiếp tục học ngay <ArrowRight size={13} />
               </Button>
             </CardContent>
           </Card>
