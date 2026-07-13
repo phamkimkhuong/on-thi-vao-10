@@ -31,6 +31,7 @@ import { g10ChemistryTopics } from './grade10/chemistry/topics';
 import { g10ChemistryQuestionTypes } from './grade10/chemistry/questionTypes';
 import { g10ChemistryQuestions } from './grade10/chemistry/questions';
 import { g10ChemistrySolutions } from './grade10/chemistry/solutions';
+import { g10ChemistryMisconceptions, g10ChemistryOutcomes } from './grade10/chemistry/learningPath';
 
 import { g10MockExamsList, g10MockQuestions, g10MockSolutionsList } from './grade10/mockExams';
 
@@ -105,3 +106,9 @@ export const getMockExams = (grade: 'grade9' | 'grade10', subject: SubjectCode):
   const exams = grade === 'grade9' ? (g9MockExamsList as MockExam[]) : g10MockExamsList;
   return exams.filter(exam => exam.subjectId === subject);
 };
+
+export const getLearningOutcomes = (grade: 'grade9' | 'grade10', subject: SubjectCode) =>
+  grade === 'grade10' && subject === 'chemistry' ? g10ChemistryOutcomes : [];
+
+export const getLearningMisconceptions = (grade: 'grade9' | 'grade10', subject: SubjectCode) =>
+  grade === 'grade10' && subject === 'chemistry' ? g10ChemistryMisconceptions : [];

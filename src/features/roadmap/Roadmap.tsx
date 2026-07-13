@@ -7,6 +7,7 @@ import { Card, CardContent } from '../../components/ui/card';
 import { Star, ArrowRight, StarOff, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getDifficultyTheme, getStarsFromScore, getTierTheme } from '../../utils/theme';
+import { getSubjectName, getSubjectIcon } from '../../utils/subject';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ export const Roadmap: React.FC = () => {
       {/* Header Giới thiệu Lộ trình */}
       <div className="text-center space-y-3.5">
         <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
-          {selectedGrade === 'grade9' ? 'Lộ trình Ôn thi' : 'Lộ trình Học tốt'} môn {selectedSubject === 'math' ? '📐 Toán học' : '🗣️ Tiếng Anh'} {selectedGrade === 'grade9' ? 'vào 10' : 'Lớp 10'}
+          {selectedGrade === 'grade9' ? 'Lộ trình Ôn thi' : 'Lộ trình Học tốt'} môn {getSubjectIcon(selectedSubject)} {getSubjectName(selectedSubject)} {selectedGrade === 'grade9' ? 'vào 10' : 'Lớp 10'}
         </h2>
         <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed font-bold">
           Lộ trình tinh gọn giúp bạn nắm chắc kiến thức {selectedGrade === 'grade9' ? 'ôn thi vào 10' : 'chương trình lớp 10'} toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.

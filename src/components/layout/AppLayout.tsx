@@ -21,6 +21,7 @@ import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { cn } from '../../utils/cn';
 import { getQuestionTypes } from '../../data';
+import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -47,8 +48,8 @@ export const AppLayout: React.FC = () => {
 
   const getActiveContextLabel = () => {
     const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : 'Lớp 10';
-    const subjectLabel = selectedSubject === 'math' ? 'Toán học' : 'Tiếng Anh';
-    const icon = selectedSubject === 'math' ? '📐' : '🗣️';
+    const subjectLabel = getSubjectName(selectedSubject);
+    const icon = getSubjectIcon(selectedSubject);
     return `${icon} ${subjectLabel} - ${gradeLabel}`;
   };
 
@@ -161,10 +162,8 @@ export const AppLayout: React.FC = () => {
   // Tính toán nhanh tiến độ tổng quát
   const currentUserId = user.uid;
   const progress = storageService.getProgress(currentUserId);
-  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
-  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
-  const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
-  const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
+  const currentQuestionTypes = getQuestionTypes(selectedGrade, selectedSubject);
+  const currentCompletedCount = progress.completedLessons.filter(id => getSubjectFromQuestionTypeId(id) === selectedSubject).length;
 
   const canShowTeacherMenu = isTeacher || teacherAccessService.isBootstrapTeacher(user);
 
@@ -510,9 +509,7 @@ export const AppLayout: React.FC = () => {
             <div className="flex items-center gap-1.5 bg-secondary/40 backdrop-blur-sm px-3.5 py-2 rounded-2xl border border-border/20 shadow-sm">
               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Mastery:</span>
               <span className="text-xs font-black text-primary bg-primary/8 px-2 py-0.5 rounded-lg border border-primary/10">
-                {selectedSubject === 'math'
-                  ? `${mathCompleted}/${mathQuestionTypes.length} dạng`
-                  : `${englishCompleted}/${englishQuestionTypes.length} dạng`}
+                {`${currentCompletedCount}/${currentQuestionTypes.length} dạng`}
               </span>
             </div>
 

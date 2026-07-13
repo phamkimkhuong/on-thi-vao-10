@@ -3,6 +3,7 @@ import { storageService } from '../services/storage';
 import { auth } from '../services/firebase';
 import { getQuestionTypes } from '../data';
 import { useAppStore } from '../services/store';
+import type { SubjectCode } from '../types';
 
 export interface SubjectProfile {
   strengths?: string[];
@@ -14,11 +15,10 @@ export interface SubjectProfile {
 export interface StudentProfile {
   math?: SubjectProfile;
   english?: SubjectProfile;
-  // Legacy fields for backward compatibility
-  strengths?: string[];
-  weaknesses?: string[];
-  learningSummary?: string;
-  lastUpdated?: any;
+  chemistry?: SubjectProfile;
+  physics?: SubjectProfile;
+  biology?: SubjectProfile;
+  [key: string]: any;
 }
 
 export function removeAccents(str: string): string {
@@ -78,7 +78,7 @@ export function isRelevantToTopic(item: string, topicName: string): boolean {
 export function getPersonalizedGreeting(
   displayName: string | null | undefined,
   profile: StudentProfile | null | undefined,
-  subject: 'math' | 'english',
+  subject: SubjectCode,
   topicName?: string
 ): string {
   // Extract student's first name
@@ -89,9 +89,9 @@ export function getPersonalizedGreeting(
     name = parts[parts.length - 1] || trimmed;
   }
 
-  const subProfile = profile?.[subject];
-  let strengths = subProfile?.strengths || [];
-  let weaknesses = subProfile?.weaknesses || [];
+  const subProfile = profile?.[subject] as SubjectProfile | undefined;
+  let strengths: string[] = subProfile?.strengths || [];
+  let weaknesses: string[] = subProfile?.weaknesses || [];
 
   // Backward compatibility for flat math profile
   if (subject === 'math' && !subProfile) {
@@ -132,9 +132,17 @@ export function getPersonalizedGreeting(
     // 1e. No profile data
     const grade = useAppStore.getState().selectedGrade;
     const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
-    return subject === 'math'
-      ? `Chào ${name}! Thầy là Gia sư AI môn Toán ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`
-      : `Hello ${name}! Thầy là Gia sư AI môn Tiếng Anh ${gradeText}. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
+    if (subject === 'math') {
+      return `Chào ${name}! Thầy là Gia sư AI môn Toán ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+    } else if (subject === 'chemistry') {
+      return `Chào ${name}! Thầy là Gia sư AI môn Hóa học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+    } else if (subject === 'physics') {
+      return `Chào ${name}! Thầy là Gia sư AI môn Vật lý ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+    } else if (subject === 'biology') {
+      return `Chào ${name}! Thầy là Gia sư AI môn Sinh học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+    } else {
+      return `Hello ${name}! Thầy là Gia sư AI môn Tiếng Anh ${gradeText}. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
+    }
   }
 
   // Scenario 2: General Chat (GeneralAiTutor)
@@ -171,6 +179,12 @@ export function getPersonalizedGreeting(
   }
 
   // 2c. General fallback
-  const subjectText = subject === 'math' ? 'Toán' : 'Tiếng Anh';
+  let subjectText = 'Học tốt';
+  if (subject === 'math') subjectText = 'Toán';
+  else if (subject === 'english') subjectText = 'Tiếng Anh';
+  else if (subject === 'chemistry') subjectText = 'Hóa học';
+  else if (subject === 'physics') subjectText = 'Vật lý';
+  else if (subject === 'biology') subjectText = 'Sinh học';
+
   return `Chào ${name}! Thầy là Gia sư AI môn ${subjectText} ${gradeText}. Hôm nay chúng ta cùng chinh phục chuyên đề ${recommendedTopicName} nhé. Em đã sẵn sàng chưa?`;
 }

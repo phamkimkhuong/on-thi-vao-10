@@ -10,24 +10,53 @@ export interface SubjectTheme {
 }
 
 export const getSubjectTheme = (subject: SubjectCode): SubjectTheme => {
-  if (subject === 'math') {
-    return {
-      badge: 'bg-indigo-100/80 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-500/20',
-      text: 'text-indigo-600 dark:text-indigo-400 font-extrabold',
-      bg: 'bg-gradient-to-br from-indigo-50 to-blue-50/50 dark:from-indigo-950/20 dark:to-blue-950/10',
-      border: 'border-indigo-500/10 shadow-sm shadow-indigo-500/2',
-      iconBg: 'bg-indigo-500/10 dark:bg-indigo-500/20 shadow-inner',
-      iconColor: 'text-indigo-500'
-    };
-  } else {
-    return {
-      badge: 'bg-purple-100/80 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-500/20',
-      text: 'text-purple-600 dark:text-purple-400 font-extrabold',
-      bg: 'bg-gradient-to-br from-purple-50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/10',
-      border: 'border-purple-500/10 shadow-sm shadow-purple-500/2',
-      iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 shadow-inner',
-      iconColor: 'text-purple-500'
-    };
+  switch (subject) {
+    case 'math':
+      return {
+        badge: 'bg-indigo-100/80 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-500/20',
+        text: 'text-indigo-600 dark:text-indigo-400 font-extrabold',
+        bg: 'bg-gradient-to-br from-indigo-50 to-blue-50/50 dark:from-indigo-950/20 dark:to-blue-950/10',
+        border: 'border-indigo-500/10 shadow-sm shadow-indigo-500/2',
+        iconBg: 'bg-indigo-500/10 dark:bg-indigo-500/20 shadow-inner',
+        iconColor: 'text-indigo-500'
+      };
+    case 'chemistry':
+      return {
+        badge: 'bg-emerald-100/80 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-500/20',
+        text: 'text-emerald-600 dark:text-emerald-400 font-extrabold',
+        bg: 'bg-gradient-to-br from-emerald-50 to-teal-50/50 dark:from-emerald-950/20 dark:to-teal-950/10',
+        border: 'border-emerald-500/10 shadow-sm shadow-emerald-500/2',
+        iconBg: 'bg-emerald-500/10 dark:bg-emerald-500/20 shadow-inner',
+        iconColor: 'text-emerald-500'
+      };
+    case 'physics':
+      return {
+        badge: 'bg-cyan-100/80 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400 border border-cyan-200/50 dark:border-cyan-500/20',
+        text: 'text-cyan-600 dark:text-cyan-400 font-extrabold',
+        bg: 'bg-gradient-to-br from-cyan-50 to-sky-50/50 dark:from-cyan-950/20 dark:to-sky-950/10',
+        border: 'border-cyan-500/10 shadow-sm shadow-cyan-500/2',
+        iconBg: 'bg-cyan-500/10 dark:bg-cyan-500/20 shadow-inner',
+        iconColor: 'text-cyan-500'
+      };
+    case 'biology':
+      return {
+        badge: 'bg-green-100/80 dark:bg-green-950/50 text-green-600 dark:text-green-400 border border-green-200/50 dark:border-green-500/20',
+        text: 'text-green-600 dark:text-green-400 font-extrabold',
+        bg: 'bg-gradient-to-br from-green-50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/10',
+        border: 'border-green-500/10 shadow-sm shadow-green-500/2',
+        iconBg: 'bg-green-500/10 dark:bg-green-500/20 shadow-inner',
+        iconColor: 'text-green-500'
+      };
+    case 'english':
+    default:
+      return {
+        badge: 'bg-purple-100/80 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-500/20',
+        text: 'text-purple-600 dark:text-purple-400 font-extrabold',
+        bg: 'bg-gradient-to-br from-purple-50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/10',
+        border: 'border-purple-500/10 shadow-sm shadow-purple-500/2',
+        iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 shadow-inner',
+        iconColor: 'text-purple-500'
+      };
   }
 };
 

@@ -441,11 +441,26 @@ Client (aiService.ts)
 
 | Thành phần | Trạng thái | Chi tiết |
 |---|---|---|
-| Module 0: Cầu nối THCS | ✅ Hoàn thành | 4 dạng bài + 4 câu hỏi + 4 lời giải |
-| Module 1: Cấu tạo nguyên tử | ✅ Hoàn thành | 7 dạng bài (H10-A01→A07) + 7 câu hỏi + 7 lời giải |
-| Module 2-8 | ❌ Chưa bắt đầu | Cần lập ma trận chuẩn đầu ra trước |
+| Module 0: Nhập môn & Cầu nối THCS | ✅ MVP | 2 bài nhập môn + 4 dạng cầu nối; 8 câu hỏi và 8 lời giải |
+| Module 1: Cấu tạo nguyên tử | ✅ MVP mở rộng | 7 dạng bài (H10-A01→A07) + 14 câu hỏi + 14 lời giải; giới hạn cốt lõi trong 20 nguyên tố đầu |
+| Module 2: Bảng tuần hoàn | ✅ MVP | 5 outcome, 5 dạng bài, 10 câu hỏi và 10 lời giải theo quan hệ cấu tạo–vị trí–tính chất |
+| Module 3: Liên kết hóa học | ✅ MVP | 5 outcome, 5 dạng bài, 10 câu hỏi và 10 lời giải; không trộn VSEPR/lai hóa vào cốt lõi |
+| Module 4: Phản ứng oxi hóa–khử | ✅ MVP | 4 outcome, 4 dạng bài, 8 câu hỏi và 8 lời giải; có remediation về cân bằng phương trình |
+| Module 5: Năng lượng hóa học | ✅ MVP | 4 outcome, 4 dạng bài, 8 câu hỏi và 8 lời giải; ưu tiên hiểu sơ đồ và dấu ΔH trước công thức |
+| Module 6: Tốc độ phản ứng | ✅ MVP | 4 outcome, 4 dạng bài, 8 câu hỏi và 8 lời giải; tích hợp đồ thị, va chạm và thiết kế thí nghiệm |
+| Module 7: Halogen | ✅ MVP | 5 outcome, 5 dạng bài, 10 câu hỏi và 10 lời giải; tích hợp tuần hoàn, liên kết và redox |
+| Module 8: Tổng hợp | ❌ Chưa bắt đầu | Cần thiết kế đánh giá tích lũy theo outcome thay vì thêm dạng bài rời rạc |
 | Đặc tả sản phẩm | ✅ Hoàn thành | Ma trận Module 1, phân nhóm HS, tiêu chuẩn mastery |
 | UI Integration | ✅ Hoàn thành | Hóa học hiện trong dropdown, Roadmap, PracticeEngine |
+
+### 9.4.1 Lớp domain lộ trình Hóa học
+
+- `src/data/grade10/chemistry/learningPath.ts`: chuẩn đầu ra, quan hệ tiền đề và ngộ nhận.
+- `src/utils/learningPath.ts`: suy ra trạng thái `ready/in_progress/mastered/blocked` từ mastery hiện có.
+- `src/features/roadmap/ChemistryLearningPath.tsx`: lộ trình riêng cho Hóa 10, tách nội dung cốt lõi với kho cầu nối THCS.
+- `docs/chemistry-learning-path.md`: quy tắc mở rộng Module 2-7.
+
+`LearningOutcome` là đơn vị mastery; `QuestionType` chỉ là lớp luyện tập. Không dùng `tier` để thay thế dependency graph.
 
 ### 9.5 Lưu ý quan trọng về GDPT 2018
 

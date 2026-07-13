@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
+import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
+import type { SubjectCode } from '../../types';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -27,10 +29,11 @@ export const Dashboard: React.FC = () => {
   const mistakes = storageService.getMistakes(currentUserId).filter(m => m.reviewStatus !== 'fixed');
   const exams = storageService.getExamResults(currentUserId);
 
-  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
-  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
+  const activeSubjects: SubjectCode[] = selectedGrade === 'grade9'
+    ? ['math', 'english']
+    : ['math', 'english', 'chemistry'];
 
-  // Tìm dạng bài dang dở gần nhất
+  // Tìm dạng bài dạng dở gần nhất
   const attempts = storageService.getAttempts(currentUserId);
   let lastActiveTypeId: string | null = null;
   if (attempts.length > 0) {
@@ -39,24 +42,30 @@ export const Dashboard: React.FC = () => {
     lastActiveTypeId = selectedGrade === 'grade9' ? 'math-qt1' : 'math10-qt1';
   }
 
-  const allQuestionTypes = [...mathQuestionTypes, ...englishQuestionTypes];
-  const lastActiveType = (allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || mathQuestionTypes[0] || { id: '', name: 'Chưa học', description: '' }) as any;
-  const lastActiveSubject = lastActiveType.id.startsWith('math') ? 'math' : 'english';
+  const allQuestionTypes = activeSubjects.flatMap(sub => getQuestionTypes(selectedGrade, sub));
+  const lastActiveType = (allQuestionTypes.find(qt => qt.id === lastActiveTypeId) || allQuestionTypes[0] || { id: '', name: 'Chưa học', description: '' }) as any;
+  const lastActiveSubject = getSubjectFromQuestionTypeId(lastActiveType.id) || 'math';
   const lastActiveLevel = getStarsFromScore(progress.masteryLevels[lastActiveType.id] ?? 0);
   const lastActivePercent = Math.round((lastActiveLevel / 3) * 100);
 
-  // Tính toán số dạng đã master/hoàn thành
-  const mathCompleted = progress.completedLessons.filter(id => id.startsWith('math')).length;
-  const englishCompleted = progress.completedLessons.filter(id => id.startsWith('eng')).length;
-
-  const mathProgress = mathQuestionTypes.length > 0 ? Math.round((mathCompleted / mathQuestionTypes.length) * 100) : 0;
-  const englishProgress = englishQuestionTypes.length > 0 ? Math.round((englishCompleted / englishQuestionTypes.length) * 100) : 0;
+  // Tính toán số dạng đã master/hoàn thành của các môn học
+  const subjectProgressList = activeSubjects.map(sub => {
+    const qTypes = getQuestionTypes(selectedGrade, sub);
+    const completed = progress.completedLessons.filter(id => getSubjectFromQuestionTypeId(id) === sub).length;
+    const percent = qTypes.length > 0 ? Math.round((completed / qTypes.length) * 100) : 0;
+    return {
+      code: sub,
+      name: getSubjectName(sub),
+      icon: getSubjectIcon(sub),
+      percent
+    };
+  });
 
   // Điểm thi thử gần nhất
   const examScore = exams.length > 0 ? `${exams[exams.length - 1].score}/10` : 'Chưa thi';
 
   // Xác định 3 dạng bài yếu nhất (mastery level thấp nhất và có trong lịch sử làm bài)
-  const allTypes = [...mathQuestionTypes, ...englishQuestionTypes];
+  const allTypes = [...allQuestionTypes];
   const weakTypes = allTypes
     .map(type => {
       const level = getStarsFromScore(progress.masteryLevels[type.id] ?? 0);
@@ -84,7 +93,7 @@ export const Dashboard: React.FC = () => {
 
   const [quote] = useState(() => quotes[Math.floor(Math.random() * quotes.length)]);
 
-  const handleFixWeakType = (typeId: string, subjectCode: 'math' | 'english') => {
+  const handleFixWeakType = (typeId: string, subjectCode: SubjectCode) => {
     setSubject(subjectCode);
     navigate(`/question-types/${typeId}`);
   };
@@ -136,7 +145,7 @@ export const Dashboard: React.FC = () => {
                   'text-[9px] font-black px-2.5 py-0.5 rounded-lg border',
                   getSubjectTheme(lastActiveSubject).badge
                 )}>
-                  {lastActiveSubject === 'math' ? '📐 Toán học' : '🗣️ Tiếng Anh'}
+                  {`${getSubjectIcon(lastActiveSubject)} ${getSubjectName(lastActiveSubject)}`}
                 </span>
               </div>
             </CardHeader>
@@ -278,27 +287,26 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Tiến độ Toán */}
-              <div className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
-                <div className="flex items-center justify-between text-xs font-black text-indigo-600 dark:text-indigo-400">
-                  <span className="flex items-center gap-1">📐 Tiến độ Toán</span>
-                  <span>{mathProgress}%</span>
+              {/* Danh sách tiến độ các môn */}
+              {subjectProgressList.map(subProgress => (
+                <div key={subProgress.code} className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-black text-foreground">
+                    <span className="flex items-center gap-1">{subProgress.icon} Tiến độ {subProgress.name}</span>
+                    <span>{subProgress.percent}%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                    <div 
+                      className={cn(
+                        "h-full rounded-full transition-all duration-500",
+                        subProgress.code === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
+                        subProgress.code === 'english' ? "bg-linear-to-r from-purple-500 to-pink-500" :
+                        "bg-linear-to-r from-emerald-500 to-teal-500"
+                      )} 
+                      style={{ width: `${subProgress.percent}%` }} 
+                    />
+                  </div>
                 </div>
-                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full bg-linear-to-r from-indigo-500 to-blue-500 rounded-full transition-all duration-500" style={{ width: `${mathProgress}%` }} />
-                </div>
-              </div>
-
-              {/* Tiến độ Anh */}
-              <div className="p-4 rounded-2xl bg-secondary/25 border border-border/10 space-y-2">
-                <div className="flex items-center justify-between text-xs font-black text-purple-600 dark:text-purple-400">
-                  <span className="flex items-center gap-1">🗣️ Tiến độ Anh</span>
-                  <span>{englishProgress}%</span>
-                </div>
-                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                  <div className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500" style={{ width: `${englishProgress}%` }} />
-                </div>
-              </div>
+              ))}
 
             </CardContent>
           </Card>
@@ -326,8 +334,7 @@ export const Dashboard: React.FC = () => {
               ) : (
                 <div className="space-y-3">
                   {weakTypes.map((type) => {
-                    const subjectCode = type.id.startsWith('math') ? 'math' : 'english';
-                    const isMath = subjectCode === 'math';
+                    const subjectCode = getSubjectFromQuestionTypeId(type.id) || 'math';
 
                     return (
                       <div key={type.id} className="p-3.5 bg-secondary/15 dark:bg-slate-900/30 rounded-2xl border border-border/40 hover:border-red-500/20 transition-all flex flex-col gap-2.5 group">
@@ -337,7 +344,7 @@ export const Dashboard: React.FC = () => {
                               'text-[8px] font-black px-2 py-0.5 rounded-md border leading-none',
                               getSubjectTheme(subjectCode).badge
                             )}>
-                              {isMath ? '📐 Toán' : '🗣️ Anh'}
+                              {getSubjectIcon(subjectCode)} {getSubjectName(subjectCode)}
                             </span>
                             <span className="text-[9px] text-muted-foreground font-bold">
                               Tần suất thi: {type.examFrequency === 'high' ? 'Cao' : 'Thường'}

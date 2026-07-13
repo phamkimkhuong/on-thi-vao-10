@@ -77,6 +77,47 @@ export interface Topic {
   tier: 1 | 2 | 3; // Chặng học tập: 1 (điểm 5), 2 (điểm 7-8), 3 (điểm 9-10)
 }
 
+export type LearningScope = 'bridge' | 'core' | 'specialized' | 'advanced';
+export type LearningEvidenceType =
+  | 'recognition'
+  | 'representation'
+  | 'explanation'
+  | 'calculation'
+  | 'data'
+  | 'experiment'
+  | 'application';
+
+export interface LearningOutcome {
+  id: string;
+  topicId: string;
+  title: string;
+  description: string;
+  scope: LearningScope;
+  orderIndex: number;
+  questionTypeIds: string[];
+  prerequisiteOutcomeIds: string[];
+  misconceptionIds: string[];
+  evidenceTypes: LearningEvidenceType[];
+  remediationOutcomeIds?: string[];
+  estimatedMinutes?: number;
+  isCritical?: boolean;
+}
+
+export interface LearningMisconception {
+  id: string;
+  outcomeId: string;
+  statement: string;
+  correction: string;
+  severity: 'normal' | 'critical';
+}
+
+export interface LearningOutcomeStatus {
+  outcome: LearningOutcome;
+  masteryScore: number;
+  state: 'not_started' | 'ready' | 'in_progress' | 'mastered' | 'blocked';
+  unmetPrerequisites: LearningOutcome[];
+}
+
 export interface SubType {
   name: string;
   example: string;

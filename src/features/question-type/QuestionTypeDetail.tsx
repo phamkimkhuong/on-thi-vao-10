@@ -26,13 +26,10 @@ export const QuestionTypeDetail: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, setSubject, user } = useAppStore();
 
-  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
-  const mathQuestions = getQuestions(selectedGrade, 'math');
-  const mathSolutions = getSolutions(selectedGrade, 'math');
-
-  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
-  const englishQuestions = getQuestions(selectedGrade, 'english');
-  const englishSolutions = getSolutions(selectedGrade, 'english');
+  const routeSubject = getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject;
+  const routeQuestionTypes = getQuestionTypes(selectedGrade, routeSubject);
+  const routeQuestions = getQuestions(selectedGrade, routeSubject);
+  const routeSolutions = getSolutions(selectedGrade, routeSubject);
 
   useEffect(() => {
     const subjectFromRoute = getSubjectFromQuestionTypeId(questionTypeId);
@@ -43,26 +40,19 @@ export const QuestionTypeDetail: React.FC = () => {
 
   // Tìm dạng bài trực tiếp trong quá trình render (Derived State)
   const detail: QuestionType | null = questionTypeId
-    ? (mathQuestionTypes.find(t => t.id === questionTypeId) || 
-       englishQuestionTypes.find(t => t.id === questionTypeId) || null)
+    ? (routeQuestionTypes.find(t => t.id === questionTypeId) || null)
     : null;
 
   // Tìm câu hỏi mẫu đi kèm trực tiếp (Derived State)
   const exampleQuestion: Question | null = detail
     ? (detail.exampleQuestionId
-       ? (detail.id.startsWith('math')
-          ? mathQuestions.find(item => item.id === detail.exampleQuestionId)
-          : englishQuestions.find(item => item.id === detail.exampleQuestionId))
-       : (detail.id.startsWith('math') 
-          ? mathQuestions.find(item => item.questionTypeId === detail.id)
-          : englishQuestions.find(item => item.questionTypeId === detail.id))) || null
+       ? routeQuestions.find(item => item.id === detail.exampleQuestionId)
+       : routeQuestions.find(item => item.questionTypeId === detail.id)) || null
     : null;
 
   // Tìm lời giải mẫu đi kèm trực tiếp (Derived State)
   const exampleSolution: Solution | null = exampleQuestion
-    ? (detail?.id.startsWith('math')
-       ? mathSolutions.find(s => s.questionId === exampleQuestion.id)
-       : englishSolutions.find(s => s.questionId === exampleQuestion.id)) || null
+    ? routeSolutions.find(s => s.questionId === exampleQuestion.id) || null
     : null;
 
   if (!detail) {

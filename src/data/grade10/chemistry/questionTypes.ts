@@ -2,6 +2,50 @@ import { QuestionType } from '@/types';
 
 export const g10ChemistryQuestionTypes: QuestionType[] = [
   {
+    id: 'chem10-qt-intro-object',
+    topicId: 'chem10-t0',
+    name: 'Hóa học nghiên cứu điều gì?',
+    slug: 'hoa-hoc-nghien-cuu-dieu-gi',
+    description: 'Phân biệt vật thể với chất và nhận diện bốn góc nhìn của hóa học: thành phần, cấu trúc, tính chất và sự biến đổi của chất.',
+    exampleQuestionId: 'chem10-q-intro-object-1',
+    difficulty: 'easy',
+    examFrequency: 'medium',
+    theory: [
+      '**1. Đối tượng nghiên cứu của hóa học**:\nHóa học nghiên cứu **thành phần**, **cấu trúc**, **tính chất** và **sự biến đổi** của chất. Một câu hỏi hóa học tốt không chỉ hỏi “chất này tên gì?” mà còn tìm mối quan hệ giữa cấu trúc và hành vi của chất.',
+      '**2. Phân biệt vật thể và chất**:\nVật thể là đối tượng cụ thể; chất là vật liệu tạo nên vật thể. Ví dụ, “cốc” là vật thể, còn thủy tinh hoặc nhựa là chất tạo nên cốc. Một vật thể có thể gồm nhiều chất và một chất có thể tạo nên nhiều vật thể.',
+      '**3. Ba tầng biểu diễn hóa học**:\n- **Vĩ mô**: điều quan sát hoặc đo được như màu, khí, kết tủa, nhiệt độ.\n- **Vi mô**: nguyên tử, ion, phân tử và tương tác giữa chúng.\n- **Ký hiệu**: công thức, phương trình, bảng và đồ thị.\nHọc tốt Hóa học là chuyển đổi đúng giữa cả ba tầng.'
+    ],
+    subTypes: [
+      { name: 'Phân biệt vật thể và chất', example: 'Một dây điện gồm lõi đồng và lớp nhựa bọc ngoài.', note: 'Dây điện là vật thể; đồng và nhựa là các chất cấu tạo nên vật thể.' },
+      { name: 'Phân loại câu hỏi nghiên cứu', example: 'Vì sao muối tan trong nước?', note: 'Câu hỏi liên hệ tính chất quan sát được với cấu trúc và tương tác vi mô.' }
+    ],
+    recognitionSigns: ['Câu hỏi yêu cầu phân biệt vật thể với chất.', 'Câu hỏi đề cập thành phần, cấu trúc, tính chất hoặc sự biến đổi.', 'Cần nối hiện tượng vĩ mô với mô hình vi mô hoặc ký hiệu hóa học.'],
+    solvingSteps: ['Bước 1: Xác định đối tượng được nói tới là vật thể hay chất.', 'Bước 2: Xác định câu hỏi đang xét thành phần, cấu trúc, tính chất hay sự biến đổi.', 'Bước 3: Chỉ kết luận trong phạm vi bằng chứng được cung cấp; không biến suy đoán vi mô thành điều đã quan sát.'],
+    commonMistakes: ['Đồng nhất vật thể với chất tạo nên nó.', 'Cho rằng hóa học chỉ nghiên cứu phản ứng hoặc hóa chất nhân tạo.', 'Trộn lẫn điều quan sát được với lời giải thích ở cấp độ hạt.']
+  },
+  {
+    id: 'chem10-qt-intro-inquiry',
+    topicId: 'chem10-t0',
+    name: 'Quan sát, bằng chứng và kết luận',
+    slug: 'quan-sat-bang-chung-ket-luan',
+    description: 'Phân biệt quan sát với suy luận, xác định biến thí nghiệm và đánh giá kết luận có thực sự được dữ liệu hỗ trợ hay không.',
+    exampleQuestionId: 'chem10-q-intro-inquiry-1',
+    difficulty: 'easy',
+    examFrequency: 'high',
+    theory: [
+      '**1. Quan sát không phải suy luận**:\nQuan sát là điều đo hoặc ghi nhận trực tiếp, ví dụ “nhiệt độ tăng từ 25 °C lên 31 °C”. Suy luận là cách giải thích dữ kiện, ví dụ “quá trình đã giải phóng nhiệt”. Một suy luận phải dựa trên quan sát nhưng không được viết như thể nó là dữ kiện trực tiếp.',
+      '**2. Ba loại biến trong thí nghiệm**:\n- **Biến độc lập**: yếu tố người nghiên cứu chủ động thay đổi.\n- **Biến phụ thuộc**: đại lượng được đo để xem ảnh hưởng.\n- **Biến kiểm soát**: những yếu tố cần giữ giống nhau để so sánh công bằng.',
+      '**3. Kết luận đúng phạm vi**:\nKết luận phải trả lời đúng câu hỏi nghiên cứu, phù hợp dữ liệu và nêu giới hạn khi cần. Phản ứng nhanh hơn không tự động có nghĩa là tạo nhiều sản phẩm cuối cùng hơn.'
+    ],
+    subTypes: [
+      { name: 'Phân biệt quan sát và suy luận', example: 'Dung dịch chuyển từ không màu sang hồng.', note: 'Đây là quan sát. “Đã tạo ra chất mới màu hồng” là suy luận cần thêm bằng chứng.' },
+      { name: 'Xác định biến thí nghiệm', example: 'Đo thời gian viên sủi tan ở ba nhiệt độ nước.', note: 'Nhiệt độ là biến độc lập; thời gian là biến phụ thuộc; lượng nước và kích thước viên là biến kiểm soát.' }
+    ],
+    recognitionSigns: ['Đề mô tả một thí nghiệm hoặc bảng dữ liệu.', 'Yêu cầu xác định biến, giả thuyết, quan sát hoặc kết luận.', 'Cần đánh giá dữ liệu có đủ chứng minh một khẳng định hay không.'],
+    solvingSteps: ['Bước 1: Viết chính xác câu hỏi mà thí nghiệm muốn trả lời.', 'Bước 2: Xác định yếu tố được thay đổi, đại lượng được đo và các yếu tố phải giữ cố định.', 'Bước 3: Tách dữ kiện quan sát khỏi cách giải thích.', 'Bước 4: Chọn kết luận hẹp nhất nhưng vẫn trả lời được câu hỏi nghiên cứu.'],
+    commonMistakes: ['Gọi suy luận là quan sát.', 'Thay đổi đồng thời nhiều biến nhưng vẫn quy kết kết quả cho một biến.', 'Kết luận về lượng sản phẩm chỉ từ dữ liệu tốc độ phản ứng.', 'Dùng một lần đo duy nhất để khẳng định quy luật tuyệt đối.']
+  },
+  {
     id: 'chem10-qt01',
     topicId: 'chem10-t0',
     name: 'Cân bằng phương trình & Bảo toàn khối lượng',
@@ -411,5 +455,75 @@ export const g10ChemistryQuestionTypes: QuestionType[] = [
       'Đếm nhầm electron ở phân lớp sát ngoài cùng (như d) vào electron lớp ngoài cùng.',
       'Quên các ngoại lệ như Hydrogen (Z = 1 có 1e lớp ngoài cùng nhưng là phi kim), Helium (Z = 2 có 2e lớp ngoài cùng nhưng là khí hiếm).'
     ]
-  }
+  },
+  {
+    id: 'chem10-qt8', topicId: 'chem10-t2', name: 'Ô nguyên tố, Chu kì & Nhóm', slug: 'o-nguyen-to-chu-ki-nhom', description: 'Đọc vị trí và cấu trúc cơ bản của bảng tuần hoàn.', exampleQuestionId: 'chem10-q8a', difficulty: 'easy', examFrequency: 'high',
+    theory: ['**Chu kì** gồm các nguyên tố có cùng số lớp electron. **Nhóm A** tập hợp các nguyên tố có cấu hình electron lớp ngoài cùng tương tự và tính chất gần nhau. Số thứ tự ô bằng số hiệu nguyên tử Z.'],
+    recognitionSigns: ['Yêu cầu xác định ô, chu kì hoặc nhóm.', 'Cho vị trí và yêu cầu suy ra đặc điểm cấu tạo.'], solvingSteps: ['Xác định Z của ô nguyên tố.', 'Đếm số lớp electron để tìm chu kì.', 'Với nguyên tố nhóm A, xét electron lớp ngoài cùng để tìm nhóm.'], commonMistakes: ['Nhầm số thứ tự chu kì với tổng số electron.', 'Cho rằng mọi nguyên tố cùng chu kì có tính chất giống nhau.']
+  },
+  {
+    id: 'chem10-qt9', topicId: 'chem10-t2', name: 'Cấu hình electron & Vị trí trong bảng tuần hoàn', slug: 'cau-hinh-electron-vi-tri', description: 'Suy ra vị trí nguyên tố từ cấu hình electron và thực hiện chiều ngược lại.', exampleQuestionId: 'chem10-q9a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Số lớp electron cho biết chu kì. Với nguyên tố nhóm A, tổng electron lớp ngoài cùng thường cho biết số thứ tự nhóm A. Cần xác định lớp có số $n$ lớn nhất, không chỉ nhìn phân lớp viết cuối.'],
+    recognitionSigns: ['Đề cho cấu hình electron và hỏi vị trí.', 'Đề cho chu kì, nhóm và hỏi cấu hình lớp ngoài cùng.'], solvingSteps: ['Kiểm tra tổng electron bằng Z.', 'Tìm số n lớn nhất để xác định chu kì.', 'Đếm electron lớp ngoài cùng để xác định nhóm A.'], commonMistakes: ['Chỉ nhìn phân lớp cuối mà bỏ qua toàn bộ lớp ngoài cùng.']
+  },
+  {
+    id: 'chem10-qt10', topicId: 'chem10-t2', name: 'Xu hướng Bán kính nguyên tử', slug: 'xu-huong-ban-kinh-nguyen-tu', description: 'So sánh và giải thích bán kính nguyên tử trong chu kì, nhóm.', exampleQuestionId: 'chem10-q10a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Trong một chu kì, số lớp không đổi nhưng điện tích hạt nhân tăng nên bán kính nhìn chung giảm. Trong một nhóm, số lớp electron tăng và che chắn mạnh hơn nên bán kính nhìn chung tăng từ trên xuống.'],
+    recognitionSigns: ['Yêu cầu sắp xếp bán kính.', 'Yêu cầu giải thích xu hướng trong chu kì hoặc nhóm.'], solvingSteps: ['Xác định các nguyên tố cùng chu kì hay cùng nhóm.', 'So sánh số lớp electron trước.', 'Nếu cùng số lớp, so sánh lực hút hạt nhân.'], commonMistakes: ['Học thuộc mũi tên nhưng áp dụng sai khi các nguyên tố không cùng chu kì hoặc nhóm.']
+  },
+  {
+    id: 'chem10-qt11', topicId: 'chem10-t2', name: 'Độ âm điện & Tính Kim loại–Phi kim', slug: 'do-am-dien-kim-loai-phi-kim', description: 'Giải thích xu hướng hút electron và tính chất nguyên tố.', exampleQuestionId: 'chem10-q11a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Trong chu kì, độ âm điện và tính phi kim nhìn chung tăng từ trái sang phải; tính kim loại giảm. Trong nhóm A, đi xuống dưới, bán kính và che chắn tăng nên khả năng hút electron liên kết thường giảm.'],
+    recognitionSigns: ['So sánh độ âm điện.', 'Sắp xếp tính kim loại hoặc phi kim.'], solvingSteps: ['Xác định vị trí tương đối.', 'Liên hệ bán kính và lực hút hạt nhân.', 'Suy ra khả năng nhường hoặc hút electron.'], commonMistakes: ['Đồng nhất độ âm điện với ái lực electron hoặc khả năng nhận electron tự do trong mọi tình huống.']
+  },
+  {
+    id: 'chem10-qt12', topicId: 'chem10-t2', name: 'Oxide, Hydroxide & Định luật tuần hoàn', slug: 'oxide-hydroxide-dinh-luat-tuan-hoan', description: 'Dự đoán xu hướng acid–base của hợp chất và phát biểu định luật tuần hoàn.', exampleQuestionId: 'chem10-q12a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Trong một chu kì, khi tính kim loại giảm và tính phi kim tăng, oxide/hydroxide thường chuyển dần từ tính base qua lưỡng tính đến acid. Tính chất các nguyên tố và hợp chất biến đổi tuần hoàn theo điện tích hạt nhân.'],
+    recognitionSigns: ['So sánh tính acid–base của oxide/hydroxide.', 'Yêu cầu phát biểu hoặc vận dụng định luật tuần hoàn.'], solvingSteps: ['Xác định vị trí trong chu kì.', 'Suy ra tính kim loại–phi kim.', 'Liên hệ với tính base–acid của hợp chất.'], commonMistakes: ['Cho rằng mọi oxide kim loại đều chỉ có tính base hoặc mọi oxide phi kim đều có cùng độ acid.']
+  },
+  {
+    id: 'chem10-qt13', topicId: 'chem10-t3', name: 'Quy tắc Octet & Sự hình thành Ion', slug: 'octet-hinh-thanh-ion', description: 'Giải thích nguyên tử nhường hoặc nhận electron để hình thành ion.', exampleQuestionId: 'chem10-q13a', difficulty: 'easy', examFrequency: 'high',
+    theory: ['Quy tắc octet là mô hình hữu ích: nhiều nguyên tử có xu hướng nhường, nhận hoặc dùng chung electron để đạt lớp ngoài cùng bền như khí hiếm. Mất electron tạo cation; nhận electron tạo anion.'], recognitionSigns: ['Yêu cầu viết quá trình tạo ion.', 'Dự đoán điện tích ion từ electron ngoài cùng.'], solvingSteps: ['Viết cấu hình electron lớp ngoài cùng.', 'Chọn số electron ít nhất cần nhường/nhận để đạt cấu hình bền.', 'Kiểm tra dấu và độ lớn điện tích ion.'], commonMistakes: ['Nhầm nhường electron tạo ion âm.', 'Coi octet là quy luật tuyệt đối không có giới hạn.']
+  },
+  {
+    id: 'chem10-qt14', topicId: 'chem10-t3', name: 'Liên kết Ion & Tinh thể Ion', slug: 'lien-ket-ion-tinh-the-ion', description: 'Giải thích lực hút ion và tính chất của hợp chất ion.', exampleQuestionId: 'chem10-q14a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Liên kết ion là lực hút tĩnh điện giữa các ion trái dấu. Chất ion thường tạo mạng tinh thể, có nhiệt độ nóng chảy cao và chỉ dẫn điện khi ion có thể chuyển động trong trạng thái nóng chảy hoặc dung dịch.'], recognitionSigns: ['Hợp chất giữa kim loại điển hình và phi kim điển hình.', 'Giải thích nóng chảy hoặc dẫn điện của tinh thể ion.'], solvingSteps: ['Xác định ion tạo thành.', 'Cân bằng tổng điện tích để lập tỉ lệ.', 'Liên hệ trạng thái chuyển động của ion với tính chất.'], commonMistakes: ['Coi NaCl là các phân tử riêng lẻ.', 'Cho rằng tinh thể NaCl rắn dẫn điện vì có ion.']
+  },
+  {
+    id: 'chem10-qt15', topicId: 'chem10-t3', name: 'Liên kết Cộng hóa trị & Công thức Lewis', slug: 'cong-hoa-tri-lewis', description: 'Biểu diễn electron hóa trị và cặp electron dùng chung.', exampleQuestionId: 'chem10-q15a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Liên kết cộng hóa trị hình thành bởi một hay nhiều cặp electron dùng chung. Công thức Lewis biểu diễn liên kết và các cặp electron chưa tham gia liên kết. Liên kết đơn, đôi, ba tương ứng một, hai, ba cặp dùng chung.'], recognitionSigns: ['Yêu cầu vẽ Lewis.', 'Đếm cặp electron dùng chung hoặc electron hóa trị.'], solvingSteps: ['Tính tổng electron hóa trị.', 'Chọn khung liên kết.', 'Phân bố electron để thỏa cấu hình bền và kiểm tra tổng.'], commonMistakes: ['Chỉ vẽ liên kết mà quên cặp electron tự do.', 'Đếm electron liên kết hai lần sai quy tắc.']
+  },
+  {
+    id: 'chem10-qt16', topicId: 'chem10-t3', name: 'Phân cực Liên kết & Phân tử', slug: 'phan-cuc-lien-ket-phan-tu', description: 'Dùng độ âm điện và tính đối xứng để xét phân cực.', exampleQuestionId: 'chem10-q16a', difficulty: 'medium', examFrequency: 'high',
+    theory: ['Chênh lệch độ âm điện làm cặp electron liên kết lệch về nguyên tử hút mạnh hơn. Tuy nhiên, phân tử có các liên kết phân cực vẫn có thể không phân cực nếu các moment liên kết triệt tiêu do cấu trúc đối xứng.'], recognitionSigns: ['So sánh độ phân cực liên kết.', 'Phân biệt liên kết phân cực và phân tử phân cực.'], solvingSteps: ['Xét độ âm điện từng liên kết.', 'Xét sự sắp xếp các liên kết trong toàn phân tử.', 'Tổng hợp các moment liên kết.'], commonMistakes: ['Có liên kết phân cực thì kết luận ngay phân tử phân cực.']
+  },
+  {
+    id: 'chem10-qt17', topicId: 'chem10-t3', name: 'Liên kết Hydrogen & Tương tác van der Waals', slug: 'hydrogen-van-der-waals', description: 'Giải thích lực giữa các phân tử và ảnh hưởng tới tính chất vật lí.', exampleQuestionId: 'chem10-q17a', difficulty: 'medium', examFrequency: 'medium',
+    theory: ['Liên kết hydrogen xuất hiện mạnh khi H liên kết với nguyên tử có độ âm điện lớn như N, O, F và tương tác với cặp electron tự do. Van der Waals yếu hơn nhưng tồn tại rộng rãi; độ lớn tăng khi đám mây electron dễ phân cực hơn.'], recognitionSigns: ['So sánh nhiệt độ sôi.', 'Giải thích lực hút giữa các phân tử.'], solvingSteps: ['Xác định liên kết H–N/O/F và cặp electron tự do.', 'Phân biệt lực trong phân tử với lực giữa phân tử.', 'Liên hệ lực hút mạnh hơn với năng lượng tách phân tử lớn hơn.'], commonMistakes: ['Gọi liên kết O–H trong nước là liên kết hydrogen.', 'Cho rằng van der Waals không đáng kể trong mọi trường hợp.']
+  },
+  {
+    id: 'chem10-qt18', topicId: 'chem10-t4', name: 'Xác định Số oxi hóa', slug: 'xac-dinh-so-oxi-hoa', description: 'Tính số oxi hóa của nguyên tố trong đơn chất, ion và hợp chất.', exampleQuestionId: 'chem10-q18a', difficulty: 'easy', examFrequency: 'high', theory: ['Đơn chất có số oxi hóa 0. Ion đơn nguyên tử có số oxi hóa bằng điện tích. Tổng số oxi hóa trong phân tử trung hòa bằng 0; trong ion đa nguyên tử bằng điện tích ion. O thường −2 và H thường +1 trong các trường hợp cơ bản.'], recognitionSigns: ['Yêu cầu tìm số oxi hóa.', 'Cần nhận diện nguyên tố thay đổi số oxi hóa.'], solvingSteps: ['Gán các số oxi hóa đã biết.', 'Lập tổng đại số theo điện tích tiểu phân.', 'Giải và kiểm tra kết quả.'], commonMistakes: ['Nhầm số oxi hóa với điện tích thật trên nguyên tử trong liên kết cộng hóa trị.']
+  },
+  {
+    id: 'chem10-qt19', topicId: 'chem10-t4', name: 'Quá trình Oxi hóa & Khử', slug: 'qua-trinh-oxi-hoa-khu', description: 'Viết và phân biệt quá trình nhường, nhận electron.', exampleQuestionId: 'chem10-q19a', difficulty: 'medium', examFrequency: 'high', theory: ['Oxi hóa là nhường electron, số oxi hóa tăng. Khử là nhận electron, số oxi hóa giảm. Hai quá trình luôn xảy ra đồng thời trong phản ứng oxi hóa–khử.'], recognitionSigns: ['Có sự thay đổi số oxi hóa.', 'Yêu cầu viết bán phản ứng electron.'], solvingSteps: ['Xác định số oxi hóa trước và sau.', 'Số tăng: viết quá trình nhường e.', 'Số giảm: viết quá trình nhận e.'], commonMistakes: ['Đồng nhất oxi hóa với tác dụng oxygen.', 'Đảo chiều electron nhường–nhận.']
+  },
+  {
+    id: 'chem10-qt20', topicId: 'chem10-t4', name: 'Chất Oxi hóa & Chất khử', slug: 'chat-oxi-hoa-chat-khu', description: 'Xác định vai trò của các chất trong phản ứng redox.', exampleQuestionId: 'chem10-q20a', difficulty: 'medium', examFrequency: 'high', theory: ['Chất oxi hóa nhận electron và bị khử. Chất khử nhường electron và bị oxi hóa. Tên gọi mô tả tác dụng của chất lên chất khác, không phải quá trình nó tự trải qua.'], recognitionSigns: ['Yêu cầu chỉ ra chất oxi hóa/chất khử.', 'Cho phản ứng có số oxi hóa thay đổi.'], solvingSteps: ['Theo dõi nguyên tố thay đổi trong từng chất.', 'Chất chứa nguyên tố giảm số oxi hóa là chất oxi hóa.', 'Chất chứa nguyên tố tăng số oxi hóa là chất khử.'], commonMistakes: ['Gọi chất bị oxi hóa là chất oxi hóa.']
+  },
+  {
+    id: 'chem10-qt21', topicId: 'chem10-t4', name: 'Cân bằng bằng Phương pháp Electron', slug: 'can-bang-phuong-phap-electron', description: 'Cân bằng hệ số dựa trên bảo toàn electron.', exampleQuestionId: 'chem10-q21a', difficulty: 'medium', examFrequency: 'high', theory: ['Tổng electron chất khử nhường bằng tổng electron chất oxi hóa nhận. Sau khi cân bằng nguyên tố thay đổi số oxi hóa, tiếp tục cân bằng các nguyên tố còn lại và kiểm tra toàn phương trình.'], recognitionSigns: ['Phản ứng có nguyên tố đổi số oxi hóa.', 'Yêu cầu cân bằng theo electron.'], solvingSteps: ['Xác định số oxi hóa thay đổi.', 'Viết quá trình nhường và nhận electron.', 'Nhân hệ số để bảo toàn electron.', 'Đặt hệ số và cân bằng phần còn lại.', 'Kiểm tra nguyên tử.'], commonMistakes: ['Thay chỉ số trong công thức.', 'Bảo toàn electron nhưng quên kiểm tra nguyên tử khác.']
+  },
+  { id: 'chem10-qt22', topicId: 'chem10-t5', name: 'Hệ, Môi trường & Tỏa–Thu nhiệt', slug: 'he-moi-truong-toa-thu-nhiet', description: 'Nhận diện hướng truyền năng lượng trong phản ứng.', exampleQuestionId: 'chem10-q22a', difficulty: 'easy', examFrequency: 'high', theory: ['Hệ là phần đang nghiên cứu; phần còn lại là môi trường. Phản ứng tỏa nhiệt truyền năng lượng từ hệ ra môi trường; phản ứng thu nhiệt nhận năng lượng từ môi trường.'], recognitionSigns: ['Nhiệt độ môi trường tăng/giảm.', 'Yêu cầu phân loại tỏa hoặc thu nhiệt.'], solvingSteps: ['Chọn ranh giới hệ.', 'Xác định hướng truyền nhiệt.', 'Kết luận tỏa hay thu nhiệt.'], commonMistakes: ['Đồng nhất nhiệt độ của hệ với nhiệt độ môi trường.'] },
+  { id: 'chem10-qt23', topicId: 'chem10-t5', name: 'Biến thiên Enthalpy & Sơ đồ Năng lượng', slug: 'bien-thien-enthalpy-so-do', description: 'Đọc và biểu diễn dấu ΔH.', exampleQuestionId: 'chem10-q23a', difficulty: 'medium', examFrequency: 'high', theory: ['$\\Delta H=H_{sản phẩm}-H_{chất đầu}$. Tỏa nhiệt: ΔH < 0, sản phẩm thấp năng lượng hơn. Thu nhiệt: ΔH > 0. Đảo chiều phản ứng phải đổi dấu ΔH; nhân phương trình phải nhân ΔH.'], recognitionSigns: ['Cho sơ đồ mức năng lượng.', 'Đổi chiều hoặc nhân hệ số phương trình nhiệt hóa học.'], solvingSteps: ['So sánh mức năng lượng.', 'Tính sản phẩm trừ chất đầu.', 'Kiểm tra chiều và hệ số.'], commonMistakes: ['Đảo phản ứng nhưng giữ nguyên dấu.', 'Nhân hệ số mà không nhân ΔH.'] },
+  { id: 'chem10-qt24', topicId: 'chem10-t5', name: 'Enthalpy Tạo thành & ΔH Phản ứng', slug: 'enthalpy-tao-thanh', description: 'Tính ΔH từ dữ liệu tạo thành chuẩn.', exampleQuestionId: 'chem10-q24a', difficulty: 'medium', examFrequency: 'high', theory: ['$\\Delta H^\\circ_{phản ứng}=\\sum \\nu\\Delta_fH^\\circ(sản phẩm)-\\sum \\nu\\Delta_fH^\\circ(chất đầu)$. Enthalpy tạo thành chuẩn của đơn chất bền ở trạng thái chuẩn bằng 0.'], recognitionSigns: ['Cho bảng ΔfH°.', 'Yêu cầu tính nhiệt phản ứng.'], solvingSteps: ['Cân bằng phương trình.', 'Nhân mỗi giá trị với hệ số.', 'Lấy tổng sản phẩm trừ tổng chất đầu.'], commonMistakes: ['Bỏ hệ số.', 'Đảo thứ tự chất đầu và sản phẩm.'] },
+  { id: 'chem10-qt25', topicId: 'chem10-t5', name: 'Năng lượng Liên kết & ΔH', slug: 'nang-luong-lien-ket', description: 'Ước tính ΔH bằng liên kết bị phá và được tạo.', exampleQuestionId: 'chem10-q25a', difficulty: 'medium', examFrequency: 'high', theory: ['$\\Delta H\\approx\\sum E(liên kết bị phá)-\\sum E(liên kết được tạo)$. Phá liên kết cần năng lượng; tạo liên kết giải phóng năng lượng. Giá trị năng lượng liên kết thường là trung bình nên kết quả là gần đúng.'], recognitionSigns: ['Cho bảng năng lượng liên kết.', 'Phản ứng ở pha khí với cấu tạo liên kết rõ.'], solvingSteps: ['Đếm liên kết bị phá.', 'Đếm liên kết được tạo.', 'Tính phá trừ tạo và xét dấu.'], commonMistakes: ['Dùng tạo trừ phá.', 'Đếm sai số liên kết theo hệ số.'] },
+  { id: 'chem10-qt26', topicId: 'chem10-t6', name: 'Tốc độ Trung bình', slug: 'toc-do-trung-binh', description: 'Tính biến thiên nồng độ theo thời gian.', exampleQuestionId: 'chem10-q26a', difficulty: 'easy', examFrequency: 'high', theory: ['Tốc độ trung bình là độ biến thiên nồng độ trong một khoảng thời gian. Chất đầu giảm nên dùng dấu âm để tốc độ dương; sản phẩm tăng.'], recognitionSigns: ['Cho nồng độ ở hai thời điểm.'], solvingSteps: ['Tính ΔC.', 'Tính Δt.', 'Xét dấu, hệ số và đơn vị.'], commonMistakes: ['Quên dấu hoặc đơn vị.'] },
+  { id: 'chem10-qt27', topicId: 'chem10-t6', name: 'Đồ thị Nồng độ–Thời gian', slug: 'do-thi-nong-do-thoi-gian', description: 'Đọc xu hướng và độ dốc.', exampleQuestionId: 'chem10-q27a', difficulty: 'medium', examFrequency: 'high', theory: ['Chất đầu thường giảm, sản phẩm tăng. Độ lớn độ dốc biểu thị tốc độ tức thời tương đối; đường thường phẳng dần khi chất đầu bị tiêu thụ.'], recognitionSigns: ['Cho đồ thị C–t.'], solvingSteps: ['Đọc trục.', 'Xác định đường tăng/giảm.', 'So sánh độ dốc.'], commonMistakes: ['Đồng nhất nồng độ lớn với tốc độ lớn.'] },
+  { id: 'chem10-qt28', topicId: 'chem10-t6', name: 'Va chạm & Yếu tố Ảnh hưởng', slug: 'va-cham-yeu-to', description: 'Giải thích các yếu tố làm đổi tốc độ.', exampleQuestionId: 'chem10-q28a', difficulty: 'medium', examFrequency: 'high', theory: ['Va chạm hiệu quả cần đủ năng lượng và định hướng phù hợp. Nồng độ/áp suất tăng tần suất va chạm; nhiệt độ tăng tỉ lệ hạt đủ năng lượng; nghiền nhỏ tăng diện tích tiếp xúc.'], recognitionSigns: ['So sánh điều kiện phản ứng.'], solvingSteps: ['Xác định yếu tố thay đổi.', 'Liên hệ va chạm hiệu quả.', 'Chỉ kết luận về tốc độ.'], commonMistakes: ['Cho rằng nhanh hơn luôn tạo nhiều sản phẩm hơn.'] },
+  { id: 'chem10-qt29', topicId: 'chem10-t6', name: 'Xúc tác & Thiết kế Thí nghiệm', slug: 'xuc-tac-thi-nghiem', description: 'Giải thích xúc tác và kiểm soát biến.', exampleQuestionId: 'chem10-q29a', difficulty: 'medium', examFrequency: 'high', theory: ['Xúc tác tạo con đường có năng lượng hoạt hóa thấp hơn, tăng tốc độ nhưng không đổi ΔH. Thí nghiệm công bằng chỉ thay một biến và giữ các biến khác ổn định.'], recognitionSigns: ['So sánh có/không xúc tác.'], solvingSteps: ['Xác định biến.', 'Kiểm tra biến kiểm soát.', 'Giải thích bằng năng lượng hoạt hóa.'], commonMistakes: ['Cho rằng xúc tác đổi ΔH hoặc lượng sản phẩm cuối.'] },
+  { id: 'chem10-qt30', topicId: 'chem10-t7', name: 'Vị trí & Xu hướng Halogen', slug: 'xu-huong-halogen', description: 'Giải thích cấu hình và xu hướng nhóm VIIA.', exampleQuestionId: 'chem10-q30a', difficulty: 'easy', examFrequency: 'high', theory: ['Halogen có lớp ngoài cùng $ns^2np^5$. Đi xuống nhóm, bán kính và nhiệt độ sôi thường tăng, tính oxi hóa giảm.'], recognitionSigns: ['So sánh F, Cl, Br, I.'], solvingSteps: ['Xét cấu hình.', 'Xét bán kính.', 'Suy xu hướng.'], commonMistakes: ['Cho rằng mọi tính chất tăng cùng chiều.'] },
+  { id: 'chem10-qt31', topicId: 'chem10-t7', name: 'Tính Oxi hóa & Phản ứng Thế', slug: 'the-halogen', description: 'Dự đoán phản ứng halogen–halide.', exampleQuestionId: 'chem10-q31a', difficulty: 'medium', examFrequency: 'high', theory: ['Tính oxi hóa giảm $F_2>Cl_2>Br_2>I_2$. Halogen mạnh hơn oxi hóa được halide yếu hơn.'], recognitionSigns: ['Halogen gặp muối halide.'], solvingSteps: ['Xếp tính oxi hóa.', 'Chọn chiều phản ứng.', 'Cân bằng electron.'], commonMistakes: ['Đảo chiều phản ứng thế.'] },
+  { id: 'chem10-qt32', topicId: 'chem10-t7', name: 'Phản ứng Đặc trưng Halogen', slug: 'phan-ung-halogen', description: 'Phản ứng với H2, nước và kiềm.', exampleQuestionId: 'chem10-q32a', difficulty: 'medium', examFrequency: 'high', theory: ['Halogen phản ứng H2 tạo HX. Chlorine với nước tạo HCl và HClO; với kiềm lạnh loãng tạo chloride và hypochlorite.'], recognitionSigns: ['Halogen gặp H2, nước, NaOH.'], solvingSteps: ['Xác định điều kiện.', 'Theo dõi số oxi hóa.', 'Cân bằng.'], commonMistakes: ['Bỏ qua điều kiện phản ứng.'] },
+  { id: 'chem10-qt33', topicId: 'chem10-t7', name: 'Hydrogen Halide & Acid', slug: 'hydrogen-halide', description: 'So sánh HF, HCl, HBr, HI.', exampleQuestionId: 'chem10-q33a', difficulty: 'medium', examFrequency: 'high', theory: ['Liên kết H–F rất bền và HF tạo liên kết hydrogen. Độ mạnh acid trong nước tăng HF < HCl < HBr < HI; tính khử halide tăng từ F− đến I−.'], recognitionSigns: ['So sánh HX.'], solvingSteps: ['Xét độ bền H–X.', 'Xét phân li.', 'Xét khả năng nhường electron.'], commonMistakes: ['Suy acid mạnh chỉ từ độ âm điện.'] },
+  { id: 'chem10-qt34', topicId: 'chem10-t7', name: 'Nhận biết Ion Halide', slug: 'nhan-biet-halide', description: 'Nhận biết bằng ion bạc.', exampleQuestionId: 'chem10-q34a', difficulty: 'medium', examFrequency: 'high', theory: ['AgCl trắng, AgBr vàng nhạt/kem, AgI vàng. Cần kết hợp hiện tượng với phương trình ion và an toàn hóa chất.'], recognitionSigns: ['Thêm AgNO3 vào halide.'], solvingSteps: ['Xác định ion.', 'Dự đoán kết tủa.', 'Viết phương trình ion.'], commonMistakes: ['Nhớ màu nhưng nhầm ion.'] }
 ];
