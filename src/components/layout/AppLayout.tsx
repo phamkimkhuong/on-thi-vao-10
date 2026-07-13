@@ -67,6 +67,7 @@ export const AppLayout: React.FC = () => {
       courses: [
         { code: 'math', name: 'Toán học', icon: '📐', isLocked: false },
         { code: 'english', name: 'Tiếng Anh', icon: '🗣️', isLocked: false },
+        { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: false },
       ]
     },
     {
@@ -74,7 +75,6 @@ export const AppLayout: React.FC = () => {
       gradeTitle: 'Lớp 11 & 12 (Sắp ra mắt)',
       courses: [
         { code: 'physics', name: 'Vật lý', icon: '🧪', isLocked: true },
-        { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: true },
         { code: 'biology', name: 'Sinh học', icon: '🧬', isLocked: true },
       ]
     }

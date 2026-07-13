@@ -1,148 +1,291 @@
-# 🎓 Hướng Dẫn Kiến Trúc & Cấu Trúc Mã Nguồn (src/) - Ôn Thi Vào Lớp 10
+# 🎓 Ôn Thi Vào 10 — Hệ Thống Ôn Luyện Trực Tuyến
 
-Hệ thống ôn thi trực tuyến lớp 9 lên lớp 10 dành cho hai môn học cốt lõi: **Toán học** và **Tiếng Anh**. Dự án được xây dựng dựa trên kiến trúc **Local-first** kết hợp đồng bộ hóa đám mây đám mây thông qua **Firebase**, mang lại trải nghiệm mượt mà, phản hồi tức thì và hoạt động tốt ngay cả khi không có kết nối mạng (offline).
+Nền tảng ôn luyện cá nhân hóa cho học sinh từ **Lớp 9** (ôn thi tuyển sinh vào lớp 10) đến **Lớp 10** (THPT). Hỗ trợ đa môn: **Toán học**, **Tiếng Anh**, **Hóa học** và đang mở rộng thêm Vật lý, Sinh học.
+
+🔗 **Live**: [Firebase Hosting](https://on-thi-vao-10.web.app)
 
 ---
 
-## 🗺️ Bản Đồ Cấu Trúc Thư Mục `src/`
+## ✨ Điểm Nổi Bật
 
-Mã nguồn được tổ chức theo mô hình kết hợp giữa **Feature-based** (quản lý theo tính năng nghiệp vụ) và **Layer-based** (quản lý theo các lớp dịch vụ dùng chung). Dưới đây là cấu trúc chi tiết:
+| Tính năng | Mô tả |
+|---|---|
+| 🧠 **AI Gia Sư** | Chat trực tiếp với AI (Google Gemini) để giải đáp thắc mắc — nhận phân tích bài giải từng bước |
+| 📐 **Đa Môn Học** | Toán, Tiếng Anh, Hóa học (Lớp 10) — tất cả trong một ứng dụng duy nhất |
+| 🗺️ **Lộ Trình Học** | Bản đồ học tập 3 chặng, mở khóa dần theo mastery — không bao giờ bị ngợp |
+| 🔥 **Gamification** | XP, Level, Streak ngày học, thanh tiến trình — thúc đẩy động lực học |
+| 📓 **Sổ Lỗi Sai** | Tự động gom nhóm câu sai theo dạng bài, cho phép làm lại đến khi đúng |
+| ⚡ **Local-First** | Phản hồi tức thì, hoạt động offline — đồng bộ lên Cloud khi có mạng |
+| 👩‍🏫 **Dashboard Giáo Viên** | Giáo viên chấm bài, ghi nhận xét, theo dõi tiến độ lớp |
+| 📱 **Responsive** | Tối ưu cho mọi thiết bị: Desktop, Tablet, Mobile |
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Công nghệ | Phiên bản |
+|---|---|---|
+| **Frontend** | React + TypeScript | React 19, TS 6 |
+| **Build Tool** | Vite | 8.x |
+| **Styling** | Tailwind CSS (qua `@tailwindcss/vite` plugin) | 4.x |
+| **State** | Zustand (global) + LocalStorage (persistence) | 5.x |
+| **Routing** | React Router DOM | 7.x |
+| **Math Rendering** | KaTeX | 0.17.x |
+| **Charts** | Recharts | 3.x |
+| **Icons** | Lucide React | 1.x |
+| **Backend** | Firebase (Auth, Firestore, Functions, Hosting, Storage) | 12.x |
+| **AI Engine** | Google Gemini (qua Cloud Function proxy) | — |
+| **UI Components** | Shadcn/ui primitives (Button, Card, Progress, Tabs) | — |
+
+---
+
+## 🗺️ Cấu Trúc Thư Mục
 
 ```text
 src/
-├── assets/                  # Tài nguyên tĩnh (Hình ảnh, minh họa, icons...)
-├── types/                   # Định nghĩa các TypeScript interfaces cốt lõi
-│   └── index.ts             # Kiểu dữ liệu cho Question, Subject, Milestone, Progress...
-├── data/                    # Dữ liệu tĩnh và ngân hàng câu hỏi ôn tập
-│   ├── mathData.ts          # Cấu trúc lộ trình & câu hỏi môn Toán học (Hỗ trợ LaTeX)
-│   └── englishData.ts       # Cấu trúc lộ trình & câu hỏi môn Tiếng Anh
-├── services/                # Các dịch vụ xử lý dữ liệu và đồng bộ
-│   ├── firebase.ts          # Khởi tạo SDK Firebase (Auth, Firestore)
-│   ├── storage.ts           # Trình bao bọc (Wrapper) làm việc an toàn với LocalStorage
-│   ├── progressService.ts   # Core engine quản lý tiến trình, XP, Level, Streak & Cloud Sync
-│   └── store.ts             # Quản lý State toàn cục của ứng dụng bằng Zustand
-├── components/              # Các UI Components dùng chung
-│   ├── ui/                  # Các component UI cơ bản (Button, Card, Progress, Tabs)
-│   ├── common/              # Các logic component dùng chung
-│   │   └── LatexRenderer.tsx # Bộ giải mã và hiển thị công thức Toán học bằng KaTeX
-│   ├── layout/              # Khung giao diện chính
-│   │   └── AppLayout.tsx    # Bố cục sidebar, header điều hướng, hiển thị XP/Streak
-│   └── mistakes/            # Thành phần Sổ lỗi sai
-│       └── MistakeNotebook.tsx # Sổ lỗi sai 2 tầng: Gom nhóm theo Dạng bài & Chi tiết câu sai
-└── features/                # Các màn hình tính năng độc lập
-    ├── auth/                # Màn hình đăng nhập/đăng ký & đồng bộ dữ liệu đám mây
-    │   └── AuthPage.tsx
-    ├── dashboard/           # Bảng điều khiển chính hiển thị XP, Level, Streak & Biểu đồ tiến độ
-    │   └── Dashboard.tsx
-    ├── roadmap/             # Bản đồ lộ trình học theo chặng (Milestones) mở khóa dần
-    │   └── Roadmap.tsx
-    ├── question-type/       # Trang chi tiết dạng bài (Lý thuyết, Ví dụ mẫu & Hướng dẫn giải)
-    │   └── QuestionTypeDetail.tsx
-    ├── practice-engine/     # Bộ máy luyện tập tự do (Đồng bộ ẩn các dạng bài chưa học)
-    │   └── PracticeEngine.tsx
-    └── exam-engine/         # Bộ máy thi thử (Tính thời gian làm bài & Chấm điểm tự động)
-        └── ExamEngine.tsx   # (Đang tạm ẩn để tối ưu hóa lộ trình)
+├── types/index.ts               # Mọi TypeScript interface của toàn app
+├── data/                        # Ngân hàng nội dung tĩnh (câu hỏi, lời giải, dạng bài)
+│   ├── index.ts                 # Bộ nạp trung tâm (getTopics, getQuestionTypes, getQuestions, getSolutions)
+│   ├── grade9/                  # Dữ liệu Lớp 9 (JSON): math/, english/
+│   └── grade10/                 # Dữ liệu Lớp 10 (TypeScript): math/, english/, chemistry/
+├── services/                    # Lớp dịch vụ
+│   ├── firebase.ts              # Khởi tạo Firebase SDK
+│   ├── storage.ts               # LocalStorage wrapper (attempts, mistakes, progress)
+│   ├── progressService.ts       # Core engine: mastery, XP, streak, cloud sync
+│   ├── store.ts                 # Zustand store (subject, grade, auth, darkMode)
+│   ├── aiService.ts             # Client AI wrapper (gọi Cloud Function)
+│   ├── proofImageService.ts     # Upload ảnh bài giải
+│   └── teacherAccessService.ts  # Kiểm tra quyền giáo viên
+├── components/
+│   ├── ui/                      # Primitives: Button, Card, Progress, Tabs
+│   ├── common/                  # LatexRenderer, AiTutorPanel, AnswerFormRenderer, ProofImageUploader
+│   ├── layout/AppLayout.tsx     # Shell chính: Sidebar + Header + Context Dropdown (Lớp/Môn)
+│   └── mistakes/MistakeNotebook.tsx  # Sổ lỗi sai 2 tầng
+├── features/                    # Các màn hình chính
+│   ├── auth/AuthPage.tsx
+│   ├── dashboard/Dashboard.tsx
+│   ├── roadmap/Roadmap.tsx
+│   ├── question-type/QuestionTypeDetail.tsx
+│   ├── practice-engine/PracticeEngine.tsx
+│   ├── exam-engine/ExamEngine.tsx
+│   ├── ai-tutor/GeneralAiTutor.tsx
+│   ├── premium/PremiumPricing.tsx
+│   └── teacher/TeacherDashboard.tsx
+└── utils/                       # Utilities: theme.ts, answerValidator.ts, cn.ts, ...
+
+functions/                       # Firebase Cloud Functions (Backend)
+├── src/handlers/
+│   ├── callGeminiProxy.ts       # Proxy gọi Gemini AI
+│   ├── diagnose.ts              # Chẩn đoán học lực
+│   └── payment.ts               # Xử lý thanh toán
+└── src/services/                # gemini.ts, aiProviders.ts, profile.ts, ...
 ```
 
 ---
 
-## 🛠️ Chi Tiết Các Lớp & Thành Phần Cốt Lõi
+## 🏗️ Kiến Trúc Hệ Thống
 
-### 1. Quản Lý Kiểu Dữ Liệu (`src/types/index.ts`)
-Định nghĩa mô hình dữ liệu chặt chẽ cho toàn bộ ứng dụng:
-*   `Subject`: Đại diện cho môn học (`math` hoặc `english`).
-*   `Topic`: Các chương lớn của môn học. Có thuộc tính `tier` (1, 2, 3) đại diện cho các chặng học tập:
-    *   **Tier 1 (Chặng 1)**: Mục tiêu điểm 5 (Đại số cơ bản, căn thức, ngữ pháp cơ bản).
-    *   **Tier 2 (Chặng 2)**: Mục tiêu điểm 7-8 (Phương trình bậc hai, hệ thức Vi-ét, từ vựng nâng cao).
-    *   **Tier 3 (Chặng 3)**: Mục tiêu điểm 9-10 (Bất đẳng thức, hình học phân loại học sinh giỏi).
-*   `QuestionType`: Từng dạng bài chi tiết nằm trong Topic (chứa dấu hiệu nhận biết, các bước giải, lỗi sai thường gặp).
-*   `Question`: Cấu trúc câu hỏi trắc nghiệm hoặc tự điền đáp án, hỗ trợ LaTeX cho công thức toán học.
-*   `Solution`: Lời giải chi tiết của các ví dụ mẫu (gồm các bước giải chi tiết và đáp án cuối cùng).
-*   `UserProgress`: Trạng thái học tập của học sinh, lưu trữ mức độ thành thạo (`masteryLevels` từ 0 đến 3) của từng dạng bài.
+### Mô Hình Dữ Liệu
 
----
+```
+Grade (grade9 | grade10)
+  └── Subject (math | english | chemistry | physics | biology)
+        └── Topic (Chương, có tier: 1 | 2 | 3)
+              └── QuestionType (Dạng bài: theory, solvingSteps, commonMistakes)
+                    └── Question (Câu hỏi: LaTeX, options, answerSchema)
+                          └── Solution (Lời giải: detailedSteps, reviewSuggestions)
+```
 
-### 2. Dịch Vụ & Quản Lý Trạng Thái (`src/services/`)
-Được thiết kế theo nguyên tắc **Local-First**, bảo đảm hiệu năng tối đa:
+### Kiến Trúc Local-First
 
-*   **`storage.ts`**: Quản lý việc lưu trữ ngoại tuyến. Mọi hành động của học sinh (làm đúng/sai, nhận XP, tích lũy Streak) được ghi nhận tức thì vào LocalStorage.
-*   **`progressService.ts`**: Trọng tâm xử lý logic gamification và đồng bộ:
-    *   Tính toán XP nhận được sau mỗi câu trả lời đúng (dựa trên độ khó câu hỏi).
-    *   Tự động tính toán Level (Cấp độ) dựa trên tổng XP tích lũy.
-    *   Kiểm tra và cập nhật Streak (chuỗi ngày học liên tục) hàng ngày.
-    *   Kích hoạt cơ chế tự động gửi dữ liệu tiến độ (`UserProgress`, `Mistakes`, `Attempts`) lên Firebase Firestore khi thiết bị trực tuyến và người dùng đã đăng nhập.
-*   **`store.ts`**: Quản lý State toàn cục bằng **Zustand** giúp chuyển đổi nhanh chóng giữa các màn hình, cập nhật giao diện thời gian thực và quản lý phiên đăng nhập của người dùng.
-*   **`firebase.ts`**: Cấu hình kết nối Firebase Authentication và Cloud Firestore Database.
+```
+┌─────────────────────────────────────────────────────────────┐
+│  BROWSER (React App)                                        │
+│  ┌──────────┐  ┌───────────┐  ┌──────────────────────────┐ │
+│  │ Zustand   │  │ storage   │  │ progressService          │ │
+│  │ Store     │←→│ Service   │←→│ (XP, mastery, streak,    │ │
+│  │           │  │ (LS CRUD) │  │  merge guest↔auth)       │ │
+│  └──────────┘  └───────────┘  └──────────┬───────────────┘ │
+│                                           │ sync (online)   │
+└───────────────────────────────────────────┼─────────────────┘
+                                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│  FIREBASE                                                    │
+│  ┌──────────┐  ┌───────────┐  ┌──────────────────────────┐ │
+│  │ Auth     │  │ Firestore │  │ Cloud Functions          │ │
+│  │ (Google, │  │ (progress,│  │ ├─ callGeminiProxy       │ │
+│  │  Email)  │  │  attempts,│  │ ├─ diagnose              │ │
+│  │          │  │  mistakes)│  │ └─ payment               │ │
+│  └──────────┘  └───────────┘  └──────────────────────────┘ │
+│  ┌──────────┐  ┌───────────┐                                │
+│  │ Storage  │  │ Hosting   │                                │
+│  │ (proof   │  │ (SPA)     │                                │
+│  │  images) │  │           │                                │
+│  └──────────┘  └───────────┘                                │
+└─────────────────────────────────────────────────────────────┘
+```
 
----
+### Gamification
 
-### 3. Giao Diện Bố Cục (`src/components/layout/AppLayout.tsx`)
-Bao bọc toàn bộ ứng dụng, đóng vai trò như một bảng thông tin điều hướng:
-*   **Thanh điều hướng bên (Sidebar)**: Chuyển đổi linh hoạt giữa các tab: Bảng điều khiển, Lộ trình học, Luyện tập tự do, Sổ lỗi sai.
-*   **Hệ thống Gamification Header**: Hiển thị theo thời gian thực:
-    *   **Cấp độ (Level)** & Thanh tiến trình XP để kích thích học tập.
-    *   **Chuỗi ngày học tập (Streak)** đi kèm hiệu ứng ngọn lửa.
-    *   **Trạng thái đồng bộ đám mây (Cloud Sync)**: Cho học sinh biết dữ liệu đã được lưu trữ an toàn trên máy chủ hay chưa.
-    *   **Môn học hiện tại (Toán/Anh)**: Cho phép chuyển đổi nhanh chóng ở đầu trang.
-
----
-
-### 4. Sổ Lỗi Sai Phân Cấp (`src/components/mistakes/MistakeNotebook.tsx`)
-Sổ lỗi sai được thiết kế thông minh nhằm tránh việc học sinh bị quá tải khi tích tụ nhiều câu sai:
-*   **Tầng 1 (Gom nhóm dạng bài)**: Gom nhóm tất cả các câu làm sai theo từng **Dạng bài cụ thể**. Hiển thị tổng số lỗi sai tích lũy của dạng bài đó để học sinh ưu tiên sửa đổi.
-*   **Tầng 2 (Chi tiết sửa lỗi)**: Khi nhấn vào một dạng bài, học sinh sẽ thấy chi tiết các câu hỏi mình từng làm sai, câu trả lời sai trước đó, và có nút để **Làm lại** câu hỏi đó trực tiếp. Khi làm lại đúng, câu hỏi sẽ được xóa khỏi Sổ lỗi sai hoặc đánh dấu là đã khắc phục.
-
----
-
-### 5. Lộ Trình Học & Luyện Tập Đồng Bộ Chặt Chẽ
-
-#### 🛣️ Lộ Trình Học (`src/features/roadmap/Roadmap.tsx`)
-Hiển thị tiến trình học tập dưới dạng một bản đồ chặng đường. Học sinh phải tích lũy đủ điểm tiến trình ở chặng hiện tại để có thể mở khóa các chặng tiếp theo (ví dụ: Hoàn thành chặng 1 - điểm 5 mới mở khóa được chặng 2 - điểm 7-8).
-
-#### 🎯 Bộ Máy Luyện Tập (`src/features/practice-engine/PracticeEngine.tsx`)
-Để tránh hiện tượng học sinh bị ngợp trước hàng trăm dạng bài tập, hệ thống áp dụng cơ chế **đồng bộ khóa nghiêm ngặt**:
-*   Chỉ hiển thị các dạng bài thuộc các chặng đã được mở khóa trên **Lộ trình học**.
-*   Các dạng bài thuộc chặng bị khóa sẽ hoàn toàn ẩn đi trong danh sách luyện tập tự do cho đến khi học sinh mở khóa chặng đó trên lộ trình học tập.
+| Metric | Cách tính |
+|---|---|
+| **Mastery Score** (0-100) | Accuracy (8 lần gần nhất) × 70 + Streak bonus/penalty (±30) |
+| **Stars** (0-3) | 0-39 → 0⭐, 40-59 → 1⭐, 60-79 → 2⭐, 80-100 → 3⭐ |
+| **XP** | +XP mỗi câu đúng (theo difficulty) |
+| **Level** | Tính từ tổng XP tích lũy |
+| **Streak** | Số ngày học liên tục |
 
 ---
 
-### 6. Hiển Thị Công Thức Toán Học LaTeX (`src/components/common/LatexRenderer.tsx`)
-Đảm bảo các công thức toán học phức tạp (như căn thức, phân số, phương trình) được hiển thị trực quan và sắc nét:
-*   Sử dụng thư viện **KaTeX** để render công thức siêu tốc.
-*   Hỗ trợ tự động nhận diện và phân tách các chuỗi LaTeX toán học được bao bọc trong định dạng `\\( ... \\)`.
+## 📚 Nội Dung Học Tập Hiện Có
+
+### Lớp 9 — Ôn Thi Vào 10
+
+| Môn | Trạng thái | Nội dung |
+|---|---|---|
+| **Toán học** | ✅ Đầy đủ | 3 chặng: Đại số cơ bản → Phương trình/Hệ thức → Hình học nâng cao |
+| **Tiếng Anh** | ✅ Đầy đủ | Ngữ pháp, từ vựng, đọc hiểu |
+
+### Lớp 10
+
+| Môn | Trạng thái | Nội dung |
+|---|---|---|
+| **Toán học** | ✅ Đầy đủ | Tập hợp, mệnh đề, hàm số, phương trình, bất phương trình, ... |
+| **Tiếng Anh** | ✅ Đầy đủ | Ngữ pháp nâng cao, từ vựng, kỹ năng đọc viết |
+| **Hóa học** | 🔨 Đang phát triển | Module 0 (Cầu nối THCS) + Module 1 (Cấu tạo nguyên tử) hoàn thành; Module 2-8 chờ lập ma trận chuẩn đầu ra |
+| **Vật lý** | 🔒 Sắp ra mắt | — |
+| **Sinh học** | 🔒 Sắp ra mắt | — |
+
+### Khóa Hóa Học 10 — "Làm Chủ Hóa Học 10"
+
+Khóa học được thiết kế theo chuẩn đầu ra **Chương trình GDPT 2018**, sử dụng **SGK Kết nối tri thức với cuộc sống** làm trục triển khai chính.
+
+**Cấu trúc 9 Module:**
+
+| Module | Nội dung | Tier | Trạng thái |
+|---|---|---|---|
+| 0 | Nhập môn & Cầu nối THCS | 1 | ✅ 4 dạng bài |
+| 1 | Cấu tạo nguyên tử | 1 | ✅ 7 dạng bài |
+| 2 | Bảng tuần hoàn & Định luật tuần hoàn | 1 | ❌ |
+| 3 | Liên kết hóa học | 1 | ❌ |
+| 4 | Phản ứng oxi hóa – khử | 2 | ❌ |
+| 5 | Năng lượng hóa học | 2 | ❌ |
+| 6 | Tốc độ phản ứng | 2 | ❌ |
+| 7 | Halogen (Nhóm VIIA) | 3 | ❌ |
+| 8 | Tổng hợp & Đánh giá | 3 | ❌ |
+
+**Phân luồng học sinh:**
+- **Nhóm 1** (Mất gốc): Đi qua Module 0 bổ trợ → Module 1 trở đi
+- **Nhóm 2** (Trung bình - Khá): Module 1-7 bám sát SGK, mục tiêu 7-9 điểm
+- **Nhóm 3** (B00/HSG): Tất cả + chuyên đề nâng cao (lượng tử, nhiệt động)
+
+**Hệ thống đánh giá 4 tầng** (theo Thông tư 22/2021):
+1. Chẩn đoán đầu vào
+2. Exit Quiz sau bài
+3. Kiểm tra cuối chương
+4. Spaced Retrieval (1 ngày → 3 ngày → 7 ngày → 3 tuần)
 
 ---
 
-## ⚡ Hướng Dẫn Khởi Chạy & Triển Khai (Deployment)
+## ⚡ Khởi Chạy & Phát Triển
 
-### 📋 Yêu Cầu Hệ Thống
-*   **Node.js**: Phiên bản 18.x trở lên.
-*   **npm**: Phiên bản 9.x trở lên.
+### Yêu Cầu
 
-### 🏃 Chạy Dưới Môi Trường Local
-1. Cài đặt các gói phụ thuộc:
-   ```bash
-   npm install
-   ```
-2. Chạy ứng dụng ở chế độ phát triển (Development):
-   ```bash
-   npm run dev
-   ```
-3. Kiểm tra lỗi TypeScript & ESLint (Trước khi build):
-   ```bash
-   npm run type-check
-   npm run lint
-   ```
+- **Node.js** ≥ 18.x
+- **npm** ≥ 9.x
 
-### 🚀 Triển Khai Lên Firebase Hosting (Deploy)
-Dự án được cấu hình script tự động đóng gói và đẩy lên Firebase Hosting:
-*   Chạy câu lệnh duy nhất sau để build production và deploy trực tiếp:
-    ```bash
-    npm run deploy
-    ```
-    *(Script này sẽ tự động chạy biên dịch kiểu dữ liệu `tsc`, đóng gói tối ưu hóa qua `vite build` và gọi lệnh CLI của Firebase để upload bản phân phối lên host).*
+### Cài Đặt & Chạy
+
+```bash
+# 1. Cài đặt dependencies
+npm install
+
+# 2. Chạy development server
+npm run dev
+
+# 3. Kiểm tra lỗi TypeScript
+npm run type-check
+
+# 4. Kiểm tra lỗi ESLint
+npm run lint
+
+# 5. Build production
+npm run build
+
+# 6. Deploy lên Firebase Hosting
+npm run deploy
+```
+
+### Cấu Hình
+
+| File | Mục đích |
+|---|---|
+| `vite.config.ts` | Vite plugins (react, tailwind), alias `@/` → `src/` |
+| `tsconfig.json` | TypeScript root config |
+| `tsconfig.app.json` | TS config cho `src/` |
+| `eslint.config.js` | ESLint flat config |
+| `firebase.json` | Firebase project config (Firestore, Functions, Hosting, Storage) |
+| `firestore.rules` | Quy tắc bảo mật Firestore |
+| `storage.rules` | Quy tắc bảo mật Storage |
+
+---
+
+## 🧩 Hướng Dẫn Mở Rộng
+
+### Thêm Môn Học Mới
+
+1. **Tạo thư mục dữ liệu**: `src/data/grade{X}/{subject}/` với 4 file:
+   - `topics.ts` — Danh sách chương (export named array)
+   - `questionTypes.ts` — Danh sách dạng bài (**bắt buộc** có `difficulty` + `examFrequency`)
+   - `questions.ts` — Ngân hàng câu hỏi
+   - `solutions.ts` — Lời giải (**bắt buộc** có `reviewSuggestions: string[]`)
+
+2. **Đăng ký vào bộ nạp trung tâm** (`src/data/index.ts`):
+   - Import 4 arrays mới
+   - Thêm vào `allQuestions`, `allSolutions`
+   - Thêm `if (subject === '{code}')` vào 4 hàm getter + `getMockExams`
+
+3. **Hiển thị trong UI** (`src/components/layout/AppLayout.tsx`):
+   - Thêm entry mới vào mảng `courseGroups` → courses
+
+4. **Kiểm tra**: `npm run type-check && npm run lint`
+
+### Convention Đặt ID
+
+```
+Lớp 9 Toán:    math-t{N}, math-qt{N}, math-q{N}, math-s{N}
+Lớp 9 Anh:     eng-t{N}, eng-qt{N}, eng-q{N}, eng-s{N}
+Lớp 10 Toán:   math10-t{N}, math10-qt{N}, math10-q{N}, math10-s{N}
+Lớp 10 Anh:    eng10-t{N}, eng10-qt{N}, eng10-q{N}, eng10-s{N}
+Lớp 10 Hóa:    chem10-t{N}, chem10-qt{NN}, chem10-q{NN}, chem10-s{NN}
+```
+
+### Lưu Ý Khi Sửa Code
+
+| ⚠️ Lỗi phổ biến | Nguyên nhân | Cách phòng tránh |
+|---|---|---|
+| Type error `subjectId` | Dùng `string` thay vì `SubjectCode` | Luôn dùng union type đúng |
+| QuestionType compile error | Thiếu `difficulty` hoặc `examFrequency` | Cả 2 là **bắt buộc** |
+| Solution compile error | Thiếu `reviewSuggestions` | Luôn thêm `reviewSuggestions: string[]` |
+| Dữ liệu mới không hiển thị | Chưa cập nhật `data/index.ts` | Import + thêm vào getter functions |
+| Môn mới không có trong dropdown | Chưa sửa `AppLayout.tsx` | Thêm vào `courseGroups` |
+
+---
+
+## 📁 Tài Liệu Bổ Sung
+
+| Đường dẫn | Nội dung |
+|---|---|
+| `AGENT.md` | Tài liệu kỹ thuật chi tiết cho AI Agent (đọc trước khi code) |
+| `docs/content-guidelines.md` | Quy cách soạn nội dung câu hỏi |
+| `docs/question-authoring-guide.md` | Hướng dẫn tạo câu hỏi mới |
+| `docs/learning-roadmap.md` | Lộ trình học tập tổng quan |
+| `docs/student-learning-flow.md` | Luồng trải nghiệm học sinh |
 
 ---
 
 > [!NOTE]
-> Dự án được xây dựng với mục tiêu nâng cao trải nghiệm tự học cá nhân hóa. Mọi điều chỉnh logic nghiệp vụ hoặc cấu trúc dữ liệu đều cần được cập nhật vào tệp định nghĩa kiểu `src/types/index.ts` để đảm bảo tính an toàn dữ liệu.
+> Dự án sử dụng kiến trúc **Local-First**: mọi dữ liệu lưu vào LocalStorage trước, sync lên Firebase Cloud khi có mạng. Mọi thay đổi logic nghiệp vụ hoặc mô hình dữ liệu cần cập nhật `src/types/index.ts` để đảm bảo type safety.
+
+> [!IMPORTANT]
+> Khi phát triển khóa **Hóa học 10**, cần tuân thủ **Chương trình GDPT 2018**: thể tích mol khí ở đkc = **24,79 lít/mol** (25°C, 1 bar), không dùng hằng số cũ 22,4 lít/mol.

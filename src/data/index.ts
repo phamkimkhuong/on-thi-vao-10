@@ -27,6 +27,11 @@ import { g10EnglishQuestionTypes } from './grade10/english/questionTypes';
 import { g10EnglishQuestions } from './grade10/english/questions';
 import { g10EnglishSolutions } from './grade10/english/solutions';
 
+import { g10ChemistryTopics } from './grade10/chemistry/topics';
+import { g10ChemistryQuestionTypes } from './grade10/chemistry/questionTypes';
+import { g10ChemistryQuestions } from './grade10/chemistry/questions';
+import { g10ChemistrySolutions } from './grade10/chemistry/solutions';
+
 import { g10MockExamsList, g10MockQuestions, g10MockSolutionsList } from './grade10/mockExams';
 
 // Combined questions for cross-referencing
@@ -37,6 +42,7 @@ export const allQuestions: Question[] = [
   ...(g9EnglishMockQuestions as Question[]),
   ...g10MathQuestions,
   ...g10EnglishQuestions,
+  ...g10ChemistryQuestions,
   ...g10MockQuestions
 ];
 
@@ -46,6 +52,7 @@ export const allSolutions: Solution[] = [
   ...(g9MockSolutionsList as Solution[]),
   ...g10MathSolutions,
   ...g10EnglishSolutions,
+  ...g10ChemistrySolutions,
   ...g10MockSolutionsList
 ];
 
@@ -54,7 +61,10 @@ export const getTopics = (grade: 'grade9' | 'grade10', subject: SubjectCode): To
   if (grade === 'grade9') {
     return subject === 'math' ? (g9MathTopics as Topic[]) : (g9EnglishTopics as Topic[]);
   } else {
-    return subject === 'math' ? g10MathTopics : g10EnglishTopics;
+    if (subject === 'math') return g10MathTopics;
+    if (subject === 'english') return g10EnglishTopics;
+    if (subject === 'chemistry') return g10ChemistryTopics;
+    return [];
   }
 };
 
@@ -62,7 +72,10 @@ export const getQuestionTypes = (grade: 'grade9' | 'grade10', subject: SubjectCo
   if (grade === 'grade9') {
     return subject === 'math' ? (g9MathQuestionTypes as QuestionType[]) : (g9EnglishQuestionTypes as QuestionType[]);
   } else {
-    return subject === 'math' ? g10MathQuestionTypes : g10EnglishQuestionTypes;
+    if (subject === 'math') return g10MathQuestionTypes;
+    if (subject === 'english') return g10EnglishQuestionTypes;
+    if (subject === 'chemistry') return g10ChemistryQuestionTypes;
+    return [];
   }
 };
 
@@ -70,7 +83,10 @@ export const getQuestions = (grade: 'grade9' | 'grade10', subject: SubjectCode):
   if (grade === 'grade9') {
     return subject === 'math' ? (g9MathQuestions as Question[]) : (g9EnglishQuestions as Question[]);
   } else {
-    return subject === 'math' ? g10MathQuestions : g10EnglishQuestions;
+    if (subject === 'math') return g10MathQuestions;
+    if (subject === 'english') return g10EnglishQuestions;
+    if (subject === 'chemistry') return g10ChemistryQuestions;
+    return [];
   }
 };
 
@@ -78,7 +94,10 @@ export const getSolutions = (grade: 'grade9' | 'grade10', subject: SubjectCode):
   if (grade === 'grade9') {
     return subject === 'math' ? (g9MathSolutions as Solution[]) : (g9EnglishSolutions as Solution[]);
   } else {
-    return subject === 'math' ? g10MathSolutions : g10EnglishSolutions;
+    if (subject === 'math') return g10MathSolutions;
+    if (subject === 'english') return g10EnglishSolutions;
+    if (subject === 'chemistry') return g10ChemistrySolutions;
+    return [];
   }
 };
 
