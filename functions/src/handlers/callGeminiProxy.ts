@@ -9,7 +9,7 @@ import {
   FALLBACK_MODELS,
 } from "../services/gemini.js";
 import { createHash } from "crypto";
-import { callKiraAiApi, callGroqAiApi, callMistralAiApi } from "../services/aiProviders.js";
+import { callGroqAiApi, callMistralAiApi } from "../services/aiProviders.js";
 import { determineScaffoldingLevel, getScaffoldingInstruction } from "../services/scaffolding.js";
 import { isRelevantToTopic, shouldRewriteQuery } from "../services/relevance.js";
 
@@ -546,50 +546,10 @@ Chú ý:
 
   const instructionHash = createHash("md5").update(finalSystemInstruction).digest("hex");
 
-  const kiraApiKey = process.env.KIRA_API_KEY;
-  let kiraSuccess = false;
-
-  if (kiraApiKey) {
-    const kiraModels = ["kira-3.5-flash", "kira-2.5-pro"];
-    for (const kModel of kiraModels) {
-      try {
-        console.log(`[Kira AI] Thử kết nối model: ${kModel}...`);
-        const result = await callKiraAiApi(
-          kiraApiKey,
-          kModel,
-          finalContents,
-          finalSystemInstruction,
-          temperature,
-          responseMimeType,
-          image
-        );
-        responseText = result.text;
-        
-        // Cấu hình successUsage tương thích cấu trúc của Gemini để log Firestore hoạt động bình thường
-        successUsage = {
-          promptTokenCount: result.usage?.promptTokens || 0,
-          candidatesTokenCount: result.usage?.candidatesTokens || 0,
-          cachedContentTokenCount: 0,
-          totalTokenCount: result.usage?.totalTokens || 0
-        };
-        
-        selectedModel = kModel;
-        selectedProvider = "kira";
-        kiraSuccess = true;
-        console.log(`[Kira AI] Thành công sử dụng model: ${kModel}`);
-        break;
-      } catch (err: any) {
-        console.warn(`[Kira AI] Thử model ${kModel} thất bại:`, err.message || err);
-        lastError = err;
-      }
-    }
-  }
-
   const groqApiKey = process.env.GROQ_API_KEY;
   let groqSuccess = false;
 
-  // Nếu Kira thất bại và có Groq API key, ta chạy qua các model của Groq
-  if (!kiraSuccess && groqApiKey) {
+  if (groqApiKey) {
     const groqModels = ["qwen/qwen3.6-27b", "openai/gpt-oss-120b", "openai/gpt-oss-20b"];
     for (const gModel of groqModels) {
       try {
@@ -626,8 +586,8 @@ Chú ý:
 
   let geminiSuccess = false;
 
-  // Nếu Kira AI và Groq AI không chạy được hoặc không cấu hình key, ta chạy fallback Gemini
-  if (!kiraSuccess && !groqSuccess) {
+  // Nếu Groq AI không chạy được hoặc không cấu hình key, ta chạy fallback Gemini
+  if (!groqSuccess) {
     console.log("[Fallback] Đang chuyển sang gọi các model Gemini...");
     // Chạy vòng lặp thử từng model
     for (const model of FALLBACK_MODELS) {
@@ -793,8 +753,8 @@ Chú ý:
 
   const mistralApiKey = process.env.MISTRAL_API_KEY;
 
-  // Nếu Kira, Groq và Gemini đều thất bại và có Mistral API key, ta gọi thử Mistral cuối cùng
-  if (!kiraSuccess && !groqSuccess && !geminiSuccess && mistralApiKey) {
+  // Nếu Groq và Gemini đều thất bại và có Mistral API key, ta gọi thử Mistral cuối cùng
+  if (!groqSuccess && !geminiSuccess && mistralApiKey) {
     const mistralModels = ["mistral-medium-latest", "mistral-small-2603"];
     for (const mModel of mistralModels) {
       try {
