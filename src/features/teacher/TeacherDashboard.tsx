@@ -1394,7 +1394,7 @@ export const TeacherDashboard: React.FC = () => {
                                       <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
                                         <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
                                         {solutionDetail.commonMistakes.map((m: string, i: number) => (
-                                          <p key={i}>• {m}</p>
+                                          <p key={i}>• <LatexRenderer text={m} /></p>
                                         ))}
                                       </div>
                                     )}

@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon } from '../../utils/subject';
+import { LatexRenderer } from '../../components/common/LatexRenderer';
 import type { QuestionType } from '../../types';
 
 export const Roadmap: React.FC = () => {
@@ -39,7 +40,27 @@ export const Roadmap: React.FC = () => {
     return readLessonsSet.has(sequentialTypes[idx - 1].id);
   };
 
+  const firstLockedIdx = sequentialTypes.findIndex(t => !isUnlocked(t.id));
+
+  const shouldShowType = (typeId: string) => {
+    const idx = sequentialTypes.findIndex(t => t.id === typeId);
+    if (idx === -1) return false;
+    if (isUnlocked(typeId)) return true; // Hiển thị các bài đã mở khóa
+    return idx === firstLockedIdx;       // Chỉ hiển thị thêm duy nhất 1 bài khóa tiếp theo
+  };
+
   const handleSelectType = (id: string) => {
+    if (!isUnlocked(id)) {
+      const idx = sequentialTypes.findIndex(t => t.id === id);
+      const prevType = idx > 0 ? sequentialTypes[idx - 1] : null;
+      if (prevType) {
+        alert(`Dạng bài này đang khóa. Hãy hoàn thành lý thuyết dạng bài trước: "${prevType.name}" để mở khóa bài học này nhé!`);
+      } else {
+        alert("Dạng bài này hiện đang khóa.");
+      }
+      return;
+    }
+
     const qType = questionTypes.find(t => t.id === id);
     const topic = topics.find(t => t.id === qType?.topicId);
     
@@ -118,13 +139,13 @@ export const Roadmap: React.FC = () => {
         {tiers.map((tier) => {
           const tierTopics = topics.filter(t => t.tier === tier.id);
           
-          // Lọc ra các chuyên đề có ít nhất 1 dạng bài được mở khóa
+          // Lọc ra các chuyên đề có ít nhất 1 dạng bài được hiển thị
           const visibleTopics = tierTopics.filter(topic => {
             const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
-            return filteredTypes.some(type => isUnlocked(type.id));
+            return filteredTypes.some(type => shouldShowType(type.id));
           });
-
-          // Nếu chặng không có chuyên đề nào được mở khóa, ẩn cả chặng
+          
+          // Nếu chặng không có chuyên đề nào được hiển thị, ẩn cả chặng
           if (visibleTopics.length === 0) return null;
 
           return (
@@ -153,16 +174,19 @@ export const Roadmap: React.FC = () => {
               )}>
                 {visibleTopics.map((topic, topicIdx) => {
                   const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
-                  const visibleTypes = filteredTypes.filter(type => isUnlocked(type.id));
+                  const visibleTypes = filteredTypes.filter(type => shouldShowType(type.id));
+                  const isTopicUnlocked = filteredTypes.some(type => isUnlocked(type.id));
 
                   return (
                     <div key={topic.id} className="relative group/topic">
                       {/* Điểm nút trên trục thời gian - Đồng bộ màu theo môn học */}
                       <div className={cn(
                         "absolute -left-[31px] md:-left-[45px] top-0.5 w-7 h-7 md:w-8 md:h-8 rounded-full border-4 border-background flex items-center justify-center text-[10px] md:text-xs font-black shadow-md transition-all duration-300 group-hover/topic:scale-110",
-                        selectedSubject === 'math' ? 'bg-indigo-600 text-white border-indigo-100 dark:border-indigo-950 shadow-indigo-600/20' :
-                        selectedSubject === 'chemistry' ? 'bg-emerald-600 text-white border-emerald-100 dark:border-emerald-950 shadow-emerald-600/20' :
-                        'bg-purple-600 text-white border-purple-100 dark:border-purple-950 shadow-purple-600/20'
+                        !isTopicUnlocked
+                          ? "bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-100 dark:border-slate-900 shadow-none"
+                          : selectedSubject === 'math' ? 'bg-indigo-600 text-white border-indigo-100 dark:border-indigo-950 shadow-indigo-600/20' :
+                            selectedSubject === 'chemistry' ? 'bg-emerald-600 text-white border-emerald-100 dark:border-emerald-950 shadow-emerald-600/20' :
+                            'bg-purple-600 text-white border-purple-100 dark:border-purple-950 shadow-purple-600/20'
                       )}>
                         {topicIdx + 1}
                       </div>
@@ -176,7 +200,12 @@ export const Roadmap: React.FC = () => {
                           return (
                             <div className="flex flex-col gap-1.5 pl-1">
                               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                                <h4 className="text-base font-extrabold text-foreground flex items-center gap-2 font-sans group-hover/topic:text-primary transition-colors">
+                                <h4 className={cn(
+                                  "text-base font-extrabold flex items-center gap-2 font-sans transition-colors",
+                                  isTopicUnlocked
+                                    ? "text-foreground group-hover/topic:text-primary"
+                                    : "text-muted-foreground/75"
+                                )}>
                                   {topic.name}
                                 </h4>
                                 <div className="flex items-center gap-2">
@@ -198,15 +227,18 @@ export const Roadmap: React.FC = () => {
                           {visibleTypes.map((type) => {
                             const diff = getDifficultyTheme(type.difficulty);
                             const isRead = readLessonsSet.has(type.id);
+                            const unlocked = isUnlocked(type.id);
 
                             return (
                               <Card
                                 key={type.id}
                                 className={cn(
                                   "transition-all duration-300 border bg-card hover:-translate-y-1 hover:shadow-md active:scale-[0.99] cursor-pointer rounded-2xl",
-                                  isRead
-                                    ? 'border-emerald-500/20 hover:border-emerald-500/40 shadow-sm shadow-emerald-500/2 bg-emerald-500/[0.01]'
-                                    : 'border-border/40 hover:border-primary/30'
+                                  !unlocked
+                                    ? "opacity-60 grayscale-[40%] bg-secondary/10 dark:bg-slate-900/10 border-dashed border-border/80 hover:shadow-none hover:translate-y-0 cursor-not-allowed"
+                                    : isRead
+                                      ? 'border-emerald-500/20 hover:border-emerald-500/40 shadow-sm shadow-emerald-500/2 bg-emerald-500/[0.01]'
+                                      : 'border-border/40 hover:border-primary/30'
                                 )}
                                 onClick={() => handleSelectType(type.id)}
                               >
@@ -218,15 +250,23 @@ export const Roadmap: React.FC = () => {
                                         <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", diff.dotClass)} />
                                         {diff.text}
                                       </span>
-                                      {isRead && (
+                                      {!unlocked ? (
+                                        <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-slate-500/10 border border-slate-500/20 text-slate-500">
+                                          🔒 Đang khóa
+                                        </span>
+                                      ) : isRead ? (
                                         <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                                           ✓ Đã đọc lý thuyết
+                                        </span>
+                                      ) : (
+                                        <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-primary/10 border border-primary/20 text-primary animate-pulse">
+                                          ✨ Sẵn sàng học
                                         </span>
                                       )}
                                     </div>
 
                                     <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5 leading-snug font-sans">
-                                      {type.name}
+                                      <LatexRenderer text={type.name} />
                                     </h5>
                                     <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
                                       {type.description}
@@ -242,9 +282,15 @@ export const Roadmap: React.FC = () => {
                                   </div>
 
                                   <div className="flex items-center justify-end border-t border-border/20 pt-3.5 text-[10px] font-bold text-muted-foreground">
-                                    <span className="text-primary hover:underline flex items-center gap-0.5 font-extrabold">
-                                      {isRead ? 'Xem lại lý thuyết' : 'Học chi tiết'} <ArrowRight size={10} />
-                                    </span>
+                                    {!unlocked ? (
+                                      <span className="text-slate-400 dark:text-slate-600 flex items-center gap-0.5 font-bold">
+                                        Học bài trước để mở khóa
+                                      </span>
+                                    ) : (
+                                      <span className="text-primary hover:underline flex items-center gap-0.5 font-extrabold">
+                                        {isRead ? 'Xem lại lý thuyết' : 'Học chi tiết'} <ArrowRight size={10} />
+                                      </span>
+                                    )}
                                   </div>
                                 </CardContent>
                               </Card>

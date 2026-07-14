@@ -7,10 +7,10 @@ import { QuestionType, Question, Solution } from '../../types';
 import { Card, CardHeader, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { 
-  AlertTriangle, 
-  Activity, 
-  ChevronLeft, 
+import {
+  AlertTriangle,
+  Activity,
+  ChevronLeft,
   PlayCircle,
   LockKeyhole,
   Lightbulb,
@@ -68,8 +68,8 @@ export const QuestionTypeDetail: React.FC = () => {
   // Tìm câu hỏi mẫu đi kèm trực tiếp (Derived State)
   const exampleQuestion: Question | null = detail
     ? (detail.exampleQuestionId
-       ? routeQuestions.find(item => item.id === detail.exampleQuestionId)
-       : routeQuestions.find(item => item.questionTypeId === detail.id)) || null
+      ? routeQuestions.find(item => item.id === detail.exampleQuestionId)
+      : routeQuestions.find(item => item.questionTypeId === detail.id)) || null
     : null;
 
   // Tìm lời giải mẫu đi kèm trực tiếp (Derived State)
@@ -85,10 +85,10 @@ export const QuestionTypeDetail: React.FC = () => {
     const defaultTab = detail.theory && detail.theory.length > 0
       ? 'theory'
       : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition');
-    
+
     setVisitedTabIds(new Set([defaultTab]));
     setShowLessonCompletedMsg(false);
-    
+
     const userId = user?.uid || 'guest';
     const readLessons = storageService.getReadLessons(userId);
     if (readLessons.includes(detail.id)) {
@@ -101,7 +101,7 @@ export const QuestionTypeDetail: React.FC = () => {
       availableIds.push('method');
       availableIds.push('mistakes');
       availableIds.push('example');
-      
+
       if (availableIds.length === 1) {
         storageService.saveLessonRead(userId, detail.id);
         setShowLessonCompletedMsg(true);
@@ -128,7 +128,7 @@ export const QuestionTypeDetail: React.FC = () => {
   const theme = getSubjectTheme(currentSubject);
   const subjectName = getSubjectName(currentSubject);
   const subjectIcon = getSubjectIcon(currentSubject);
-  
+
   const isMath = currentSubject === 'math';
   const requiresLoginForMathPractice = isMath && !user;
 
@@ -182,10 +182,10 @@ export const QuestionTypeDetail: React.FC = () => {
                       {idx + 1}
                     </div>
                     <div className="text-sm font-bold text-foreground pt-0.5">
-                      {sub.name}
+                      <LatexRenderer text={sub.name} />
                     </div>
                   </div>
-                  
+
                   <div className="mt-3.5 pl-9 space-y-3">
                     <div className="p-4 bg-card border border-border/40 rounded-2xl text-xs md:text-sm font-medium text-foreground shadow-sm leading-relaxed">
                       <span className="text-amber-500 font-extrabold block mb-2 text-xs">
@@ -324,12 +324,12 @@ export const QuestionTypeDetail: React.FC = () => {
                           <h5 className="font-extrabold text-xs md:text-sm text-foreground flex items-center gap-2">
                             <span className={cn("w-5.5 h-5.5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0 shadow-sm",
                               currentSubject === 'math' ? 'bg-indigo-600' :
-                              currentSubject === 'chemistry' ? 'bg-emerald-600' :
-                              'bg-purple-600'
+                                currentSubject === 'chemistry' ? 'bg-emerald-600' :
+                                  'bg-purple-600'
                             )}>
                               {step.order}
                             </span>
-                            {step.title}
+                            <LatexRenderer text={step.title} />
                           </h5>
                           <div className="pl-7 space-y-2.5 text-xs md:text-sm font-medium text-muted-foreground leading-relaxed">
                             <LatexRenderer text={step.explanation} />
@@ -372,7 +372,7 @@ export const QuestionTypeDetail: React.FC = () => {
     setVisitedTabIds(prev => {
       const next = new Set(prev);
       next.add(tabId);
-      
+
       const available = tabItems.map(item => item.id);
       if (available.length > 0 && available.every(id => next.has(id))) {
         const userId = user?.uid || 'guest';
@@ -388,9 +388,9 @@ export const QuestionTypeDetail: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-5xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 md:px-6 pb-20 md:pb-6">
-      
+
       {/* Nút Back về lộ trình */}
-      <button 
+      <button
         onClick={() => navigate('/roadmap')}
         className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
       >
@@ -401,22 +401,22 @@ export const QuestionTypeDetail: React.FC = () => {
       <div className={cn("p-6 md:p-8 xl:p-10 rounded-3xl border shadow-sm relative overflow-hidden transition-all duration-300", theme.bg, theme.border)}>
         {/* Subtle background decoration */}
         <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
-        
+
         <div className="space-y-3 relative z-10">
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn('text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-border/40', theme.badge)}>
               {subjectIcon} {subjectName} {selectedGrade === 'grade9' ? 'Lớp 9' : 'Lớp 10'}
             </span>
             <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs bg-secondary/60 text-muted-foreground border border-border/40 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-              <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", 
+              <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
                 detail.difficulty === 'hard' ? 'bg-rose-500' :
-                detail.difficulty === 'medium' ? 'bg-amber-500' :
-                'bg-emerald-500'
+                  detail.difficulty === 'medium' ? 'bg-amber-500' :
+                    'bg-emerald-500'
               )} />
               Độ khó: {detail.difficulty === 'hard' ? 'Nâng cao' : detail.difficulty === 'medium' ? 'Trung bình' : 'Cơ bản'}
             </span>
           </div>
-          
+
           <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-foreground tracking-tight leading-snug">
             {detail.name}
           </h2>
@@ -439,16 +439,16 @@ export const QuestionTypeDetail: React.FC = () => {
               Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
             </div>
           )}
-          <Tabs 
-            items={tabItems} 
-            defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')} 
+          <Tabs
+            items={tabItems}
+            defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')}
             className="w-full"
             tabHeaderClassName="gap-2"
             tabContentClassName="mt-2"
             activeTabClassName={cn(
               currentSubject === 'math' ? 'bg-indigo-600 border-indigo-700 text-white hover:bg-indigo-700' :
-              currentSubject === 'chemistry' ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700' :
-              'bg-purple-600 border-purple-700 text-white hover:bg-purple-700'
+                currentSubject === 'chemistry' ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700' :
+                  'bg-purple-600 border-purple-700 text-white hover:bg-purple-700'
             )}
             onTabChange={handleTabChange}
           />
@@ -456,7 +456,7 @@ export const QuestionTypeDetail: React.FC = () => {
 
         {/* Cột phải (30%): Sidebar thông tin + Mastery + CTA Luyện tập (Sticky & Cuộn độc lập khi quá dài) */}
         <div className="md:col-span-1 space-y-6 md:sticky md:top-24 md:max-h-[calc(100vh-120px)] md:overflow-y-auto pr-1.5 scrollbar-thin">
-          
+
           {/* Card Luyện tập & Mastery */}
           <Card className={cn("border overflow-hidden bg-card shadow-sm", theme.border)}>
             <div className={cn("p-4.5 border-b border-border/10", theme.bg)}>
@@ -471,14 +471,14 @@ export const QuestionTypeDetail: React.FC = () => {
                   <span className="text-muted-foreground">Mức thành thạo:</span>
                   <span className={theme.text}>{masteryScore}/100</span>
                 </div>
-                
+
                 {/* Thanh Progress */}
                 <div className="w-full h-3 bg-secondary rounded-full overflow-hidden border border-border/40 p-0.5">
-                  <div 
-                    className={cn("h-full transition-all duration-500 rounded-full", 
+                  <div
+                    className={cn("h-full transition-all duration-500 rounded-full",
                       currentSubject === 'math' ? 'bg-indigo-500' :
-                      currentSubject === 'chemistry' ? 'bg-emerald-500' :
-                      'bg-purple-500'
+                        currentSubject === 'chemistry' ? 'bg-emerald-500' :
+                          'bg-purple-500'
                     )}
                     style={{ width: `${masteryScore}%` }}
                   />
@@ -489,10 +489,10 @@ export const QuestionTypeDetail: React.FC = () => {
                   <span className="text-xs text-muted-foreground font-semibold">Đánh giá:</span>
                   <div className="flex gap-1.5">
                     {[1, 2, 3].map((starNum) => (
-                      <span 
-                        key={starNum} 
+                      <span
+                        key={starNum}
                         className={cn(
-                          "text-base transition-all duration-300", 
+                          "text-base transition-all duration-300",
                           starNum <= starsCount ? "scale-110" : "opacity-30 grayscale"
                         )}
                       >
@@ -503,32 +503,32 @@ export const QuestionTypeDetail: React.FC = () => {
                 </div>
 
                 <p className="text-[10px] md:text-xs text-muted-foreground leading-relaxed italic text-center pt-2 font-semibold">
-                  {starsCount === 3 
-                    ? "✨ Đã đạt cấp độ Thành Thạo hoàn hảo!" 
-                    : starsCount === 2 
-                    ? "💪 Đã có 2 sao, luyện thêm chút để đạt đỉnh cao!"
-                    : starsCount === 1 
-                    ? "📚 Đang tiến bộ tốt, hãy tiếp tục luyện tập nhé!" 
-                    : "🌱 Bắt đầu luyện tập để nhận những ngôi sao đầu tiên!"}
+                  {starsCount === 3
+                    ? "✨ Đã đạt cấp độ Thành Thạo hoàn hảo!"
+                    : starsCount === 2
+                      ? "💪 Đã có 2 sao, luyện thêm chút để đạt đỉnh cao!"
+                      : starsCount === 1
+                        ? "📚 Đang tiến bộ tốt, hãy tiếp tục luyện tập nhé!"
+                        : "🌱 Bắt đầu luyện tập để nhận những ngôi sao đầu tiên!"}
                 </p>
               </div>
 
               {/* Nút Bắt đầu Luyện tập chính */}
               {requiresLoginForMathPractice ? (
-                <Button 
+                <Button
                   onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
                   className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white"
                 >
                   <LockKeyhole size={16} /> Đăng nhập để luyện Toán
                 </Button>
               ) : (
-                <Button 
+                <Button
                   onClick={() => navigate(`/practice/${detail.id}`)}
                   className={cn(
                     "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg",
                     currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
-                    currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
-                    'bg-purple-600 hover:bg-purple-700 text-white'
+                      currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
+                        'bg-purple-600 hover:bg-purple-700 text-white'
                   )}
                 >
                   <PlayCircle size={16} /> Bắt đầu Luyện tập ngay
@@ -543,32 +543,6 @@ export const QuestionTypeDetail: React.FC = () => {
               )}
             </CardContent>
           </Card>
-
-          {/* Quick Alert Card cho Lỗi thường gặp */}
-          {detail.commonMistakes && detail.commonMistakes.length > 0 && (
-            <Card className="border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5 shadow-sm">
-              <div className="p-3.5 border-b border-rose-500/10 bg-rose-500/5 flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
-                <AlertTriangle size={15} className="animate-pulse" />
-                <span className="font-extrabold text-xs">⚠️ Chú ý bẫy cần tránh</span>
-              </div>
-              <CardContent className="p-4 space-y-3">
-                <ul className="space-y-2.5 pl-0.5">
-                  {detail.commonMistakes.slice(0, 2).map((mistake: string, idx: number) => (
-                    <li key={idx} className="text-[11px] font-semibold text-rose-700 dark:text-rose-400 flex items-start gap-1.5 leading-relaxed">
-                      <span className="text-rose-500 shrink-0 mt-0.5">•</span>
-                      <LatexRenderer text={mistake} />
-                    </li>
-                  ))}
-                </ul>
-                {detail.commonMistakes.length > 2 && (
-                  <p className="text-[10px] text-muted-foreground font-semibold pt-1 italic text-right">
-                    * Xem thêm {detail.commonMistakes.length - 2} lỗi khác trong tab bên
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
           {/* Card Thông tin chung */}
           <Card className="border border-border/80 bg-card shadow-sm">
             <CardContent className="p-4 space-y-3.5 text-xs font-semibold text-muted-foreground">
@@ -595,22 +569,22 @@ export const QuestionTypeDetail: React.FC = () => {
           <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">Đang xem bài học</span>
           <span className="text-xs font-black text-foreground truncate">{detail.name}</span>
         </div>
-        
+
         {requiresLoginForMathPractice ? (
-          <Button 
+          <Button
             onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
             className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-amber-500 hover:bg-amber-600 text-white"
           >
             Đăng nhập
           </Button>
         ) : (
-          <Button 
+          <Button
             onClick={() => navigate(`/practice/${detail.id}`)}
             className={cn(
               "font-bold text-xs py-2.5 px-4 shrink-0 shadow-md text-white active:scale-95 transition-transform",
               currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
-              currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-              'bg-purple-600 hover:bg-purple-700'
+                currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
+                  'bg-purple-600 hover:bg-purple-700'
             )}
           >
             Luyện tập ngay

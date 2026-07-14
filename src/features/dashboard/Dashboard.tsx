@@ -17,6 +17,7 @@ import {
 import { cn } from '../../utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
+import { LatexRenderer } from '../../components/common/LatexRenderer';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -193,7 +194,7 @@ export const Dashboard: React.FC = () => {
                       {activeTheoryStatus === 'inprogress' ? "⚡ Học tiếp dạng bài dở dang" : "🎯 Dạng bài tiếp theo cần học"}
                     </span>
                     <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans pt-1">
-                      {activeTheoryType.name}
+                      <LatexRenderer text={activeTheoryType.name} />
                     </h3>
                     <p className="text-xs text-muted-foreground leading-relaxed font-semibold max-w-2xl">
                       {activeTheoryType.description || 'Đọc lý thuyết và cách giải dạng bài này để chuẩn bị làm bài tập.'}
@@ -261,7 +262,7 @@ export const Dashboard: React.FC = () => {
                       {activePracticeStatus === 'inprogress' ? "⚡ Luyện tiếp dạng bài dở dang" : "🎯 Dạng bài tiếp theo cần luyện"}
                     </span>
                     <h3 className="text-base md:text-lg font-black text-foreground leading-snug font-sans pt-1">
-                      {activePracticeType.name}
+                      <LatexRenderer text={activePracticeType.name} />
                     </h3>
                     <p className="text-xs text-muted-foreground leading-relaxed font-semibold max-w-2xl">
                       {activePracticeType.description || 'Luyện tập dạng bài này ngay để tăng mức độ thành thạo và tích lũy sao.'}

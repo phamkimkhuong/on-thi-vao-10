@@ -54,12 +54,6 @@ const shouldRenderAsLatex = (text: string, block: boolean): boolean => {
   return false;
 };
 
-/**
- * Kiểm tra xem chuỗi có chứa delimiters LaTeX hay không: \\( ... \\) hoặc \\[ ... \\]
- */
-const hasLatexDelimiters = (text: string): boolean => {
-  return text.includes('\\(') || text.includes('\\[') || text.includes('$');
-};
 
 /**
  * Regex phân tách chuỗi theo delimiters LaTeX: $...$, $$...$$, \\( ... \\) hoặc \\[ ... \\]
@@ -69,52 +63,6 @@ const DELIMITER_REGEX = /(\$\$.*?\$\$|\$.*?\$|\\\(.*?\\\)|\\\[.*?\\\])/gs;
 /**
  * Render phần text thuần (không phải LaTeX) với hỗ trợ xuống dòng.
  */
-const appendMarkdownText = (container: HTMLElement, text: string) => {
-  const lines = text.split('\n');
-  lines.forEach((line, index) => {
-    if (index > 0) {
-      container.appendChild(document.createElement('br'));
-    }
-    if (line) {
-      let targetContainer: HTMLElement = container;
-      let currentLine = line;
-
-      // Kiểm tra danh sách bullet point: bắt đầu bằng "- " hoặc "* " hoặc "• " ở đầu dòng
-      const bulletMatch = currentLine.match(/^(\s*)[-*•]\s+(.*)/);
-      if (bulletMatch) {
-        const li = document.createElement('li');
-        li.className = 'list-disc ml-5 my-1 pl-1 text-muted-foreground';
-        container.appendChild(li);
-        targetContainer = li;
-        currentLine = bulletMatch[2];
-      }
-
-      // Parse **bold**
-      const boldRegex = /\*\*(.*?)\*\*/g;
-      let lastIndex = 0;
-      let match;
-      const fragment = document.createDocumentFragment();
-
-      while ((match = boldRegex.exec(currentLine)) !== null) {
-        if (match.index > lastIndex) {
-          fragment.appendChild(document.createTextNode(currentLine.substring(lastIndex, match.index)));
-        }
-        const strong = document.createElement('strong');
-        strong.className = 'font-bold text-foreground';
-        strong.textContent = match[1];
-        fragment.appendChild(strong);
-        lastIndex = boldRegex.lastIndex;
-      }
-
-      if (lastIndex < currentLine.length) {
-        fragment.appendChild(document.createTextNode(currentLine.substring(lastIndex)));
-      }
-
-      targetContainer.appendChild(fragment);
-    }
-  });
-};
-
 /**
  * Render một đoạn LaTeX vào element, xử lý lỗi graceful.
  */
@@ -127,10 +75,34 @@ const renderKatex = (formula: string, element: HTMLElement, displayMode: boolean
 };
 
 /**
- * Render chuỗi có chứa delimiters LaTeX xen lẫn text thường.
- * Phân tách theo \\( ... \\) (inline) và \\[ ... \\] (display), phần còn lại là text thuần.
+ * Render nội dung của một dòng văn bản đơn lẻ, xử lý xen lẫn in đậm **...** và công thức LaTeX.
  */
-const renderMixedContent = (container: HTMLElement, text: string, defaultDisplayMode: boolean) => {
+const renderLineContent = (container: HTMLElement, text: string, defaultDisplayMode: boolean) => {
+  // 1. Kiểm tra xem có cặp ** nào không để xử lý in đậm trước nhằm tránh đứt gãy khi split theo LaTeX delimiters
+  if (text.includes('**')) {
+    const boldRegex = /(\*\*.*?\*\*)/gs;
+    const parts = text.split(boldRegex);
+    
+    // Chỉ xử lý đệ quy nếu thực sự chia tách thành nhiều phần (có cặp ** hợp lệ)
+    if (parts.length > 1) {
+      parts.forEach((part) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          const content = part.slice(2, -2);
+          if (content) {
+            const strong = document.createElement('strong');
+            strong.className = 'font-bold text-foreground';
+            container.appendChild(strong);
+            renderLineContent(strong, content, defaultDisplayMode);
+          }
+        } else if (part) {
+          renderLineContent(container, part, defaultDisplayMode);
+        }
+      });
+      return;
+    }
+  }
+
+  // 2. Phân tách theo LaTeX delimiters như bình thường
   const parts = text.split(DELIMITER_REGEX);
 
   parts.forEach((part) => {
@@ -173,7 +145,7 @@ const renderMixedContent = (container: HTMLElement, text: string, defaultDisplay
           container.appendChild(span);
         }
       } else {
-        appendMarkdownText(container, part);
+        container.appendChild(document.createTextNode(part));
       }
     }
   });
@@ -193,8 +165,8 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
       // Xóa trắng container trước khi render mới
       containerRef.current.innerHTML = '';
 
-      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế (trừ các lệnh LaTeX bắt đầu bằng \n như \neq, \nexists, ...)
-      const normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|geq|leq|parallel|cong|sim|approx)/g, '\n');
+      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế (trừ các lệnh LaTeX bắt đầu bằng \n như \neq, \nexists, \notin, ...)
+      const normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|otin|geq|leq|parallel|cong|sim|approx)/g, '\n');
 
       // Tách riêng các khối hình ảnh SVG (nếu có) để render đồ họa vector trực tiếp
       const SVG_REGEX = /(<svg[\s\S]*?<\/svg>)/g;
@@ -210,20 +182,31 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
           svgDiv.innerHTML = segment;
           containerRef.current?.appendChild(svgDiv);
         } else {
-          // Xử lý đoạn văn bản / công thức Toán bình thường
-          const hasDelims = hasLatexDelimiters(segment);
-          if (hasDelims) {
-            renderMixedContent(containerRef.current!, segment, block);
-          } else if (shouldRenderAsLatex(segment, block)) {
-            const span = document.createElement('span');
-            span.className = 'inline-block px-0.5';
-            renderKatex(segment, span, block);
-            containerRef.current?.appendChild(span);
-          } else {
-            const span = document.createElement('span');
-            appendMarkdownText(span, segment);
-            containerRef.current?.appendChild(span);
-          }
+          // Xử lý đoạn văn bản / công thức Toán bình thường theo từng dòng
+          const lines = segment.split('\n');
+          lines.forEach((line, lineIdx) => {
+            if (lineIdx > 0) {
+              containerRef.current?.appendChild(document.createElement('br'));
+            }
+
+            if (line) {
+              let lineContainer: HTMLElement = containerRef.current!;
+              let contentToRender = line;
+
+              // Kiểm tra danh sách bullet point: bắt đầu bằng "- " hoặc "* " hoặc "• " ở đầu dòng
+              const bulletMatch = line.match(/^(\s*)[-*•]\s+(.*)/);
+              if (bulletMatch) {
+                const li = document.createElement('li');
+                li.className = 'list-disc ml-5 my-1 pl-1 text-muted-foreground';
+                containerRef.current?.appendChild(li);
+                lineContainer = li;
+                contentToRender = bulletMatch[2];
+              }
+
+              // Render nội dung của dòng vào lineContainer tương ứng
+              renderLineContent(lineContainer, contentToRender, block);
+            }
+          });
         }
       });
     } catch (error) {
