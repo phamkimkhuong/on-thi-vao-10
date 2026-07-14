@@ -11,7 +11,7 @@ import { englishQuestionTypes, englishQuestions, englishSolutions } from '../../
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
-import { SimulatedStudent, UserAttempt, UserProgress, Question, Solution, ExamResult } from '../../types';
+import { SimulatedStudent, UserAttempt, UserProgress, Question, Solution, ExamResult, SupportTicket } from '../../types';
 import {
   Users,
   GraduationCap,
@@ -25,11 +25,13 @@ import {
   Loader,
   RefreshCw,
   Timer,
+  LifeBuoy,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
 import { formatAnswerForDisplay } from '../../utils/answerValidator';
 import { TeacherAiStatistics } from './TeacherAiStatistics';
+import { supportService } from '../../services/supportService';
 
 export interface PendingGroup {
   id: string;
@@ -131,13 +133,70 @@ export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics'>('students');
+  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics' | 'support'>('students');
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
   const [premiumEmail, setPremiumEmail] = useState('');
   const [premiumSubmitting, setPremiumSubmitting] = useState(false);
   const [premiumSuccessMsg, setPremiumSuccessMsg] = useState<string | null>(null);
   const [premiumErrorMsg, setPremiumErrorMsg] = useState<string | null>(null);
   const [pendingAttempts, setPendingAttempts] = useState<Array<{ student: SimulatedStudent; attempt: UserAttempt }>>([]);
+
+  // Support states
+  const [tickets, setTickets] = useState<SupportTicket[]>([]);
+  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
+  const [responseText, setResponseText] = useState('');
+  const [ticketSubmitting, setTicketSubmitting] = useState(false);
+  const [isTicketsLoading, setIsTicketsLoading] = useState(false);
+  const [ticketStatusFilter, setTicketStatusFilter] = useState<'all' | 'pending' | 'resolved' | 'rejected'>('all');
+  const [ticketCategoryFilter, setTicketCategoryFilter] = useState<'all' | 'bug' | 'feature' | 'question' | 'other'>('all');
+
+  const loadTickets = async () => {
+    setIsTicketsLoading(true);
+    try {
+      const data = await supportService.getAllTickets();
+      setTickets(data);
+    } catch (e) {
+      console.error("Lỗi khi load support tickets ở Dashboard:", e);
+    } finally {
+      setIsTicketsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'support') {
+      loadTickets();
+    }
+  }, [activeTab]);
+
+  const handleUpdateTicket = async (newStatus: 'resolved' | 'rejected') => {
+    if (!selectedTicket) return;
+    setTicketSubmitting(true);
+    try {
+      await supportService.updateTicketResponse(
+        selectedTicket.userId,
+        selectedTicket.id,
+        responseText,
+        newStatus
+      );
+      alert('Đã cập nhật phản hồi hỗ trợ thành công!');
+      setResponseText('');
+      setSelectedTicket(null);
+      loadTickets();
+    } catch (err: any) {
+      console.error('Lỗi khi cập nhật phản hồi ticket:', err);
+      alert(err.message || 'Có lỗi xảy ra khi cập nhật phản hồi.');
+    } finally {
+      setTicketSubmitting(false);
+    }
+  };
+
+  const filteredTickets = useMemo(() => {
+    return tickets.filter(tk => {
+      const matchStatus = ticketStatusFilter === 'all' || tk.status === ticketStatusFilter;
+      const matchCategory = ticketCategoryFilter === 'all' || tk.category === ticketCategoryFilter;
+      return matchStatus && matchCategory;
+    });
+  }, [tickets, ticketStatusFilter, ticketCategoryFilter]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [accessStatus, setAccessStatus] = useState<'checking' | 'allowed' | 'role-missing' | 'denied'>('checking');
@@ -607,6 +666,18 @@ export const TeacherDashboard: React.FC = () => {
         >
           <Award size={15} />
           Cấp Quyền Premium
+        </button>
+        <button
+          onClick={() => { setActiveTab('support'); setReviewingItem(null); }}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'support'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <LifeBuoy size={15} />
+          Yêu cầu Hỗ trợ
         </button>
       </div>
 
@@ -1475,6 +1546,235 @@ export const TeacherDashboard: React.FC = () => {
       ) : activeTab === 'ai_statistics' ? (
         /* Thống kê AI & Token */
         <TeacherAiStatistics />
+      ) : activeTab === 'support' ? (
+        /* Hỗ trợ Học sinh */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+          {/* Cột trái: Danh sách các ticket */}
+          <div className="lg:col-span-1 space-y-4">
+            <Card className="border-border/50 bg-card shadow-sm">
+              <CardHeader className="p-4 border-b border-border/20 flex flex-col gap-3">
+                <div>
+                  <CardTitle className="text-foreground text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                    <LifeBuoy size={16} className="text-emerald-500" />
+                    Danh sách yêu cầu ({filteredTickets.length})
+                  </CardTitle>
+                  <CardDescription className="text-[10px] font-semibold text-muted-foreground mt-0.5">
+                    Lọc và xem các yêu cầu trợ giúp từ học sinh.
+                  </CardDescription>
+                </div>
+                
+                {/* Bộ lọc */}
+                <div className="space-y-2">
+                  <div className="flex gap-1.5 flex-wrap">
+                    <span className="text-[9px] font-black text-muted-foreground uppercase flex items-center">Trạng thái:</span>
+                    {(['all', 'pending', 'resolved', 'rejected'] as const).map(status => (
+                      <button
+                        key={status}
+                        onClick={() => setTicketStatusFilter(status)}
+                        className={cn(
+                          "px-2 py-0.5 rounded text-[9px] font-bold border transition-all cursor-pointer",
+                          ticketStatusFilter === status
+                            ? "bg-emerald-600 border-emerald-600 text-white font-black"
+                            : "border-border text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {status === 'all' && 'Tất cả'}
+                        {status === 'pending' && 'Chờ duyệt'}
+                        {status === 'resolved' && 'Đã giải quyết'}
+                        {status === 'rejected' && 'Từ chối'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex gap-1.5 flex-wrap">
+                    <span className="text-[9px] font-black text-muted-foreground uppercase flex items-center">Danh mục:</span>
+                    {(['all', 'bug', 'feature', 'question', 'other'] as const).map(cat => (
+                      <button
+                        key={cat}
+                        onClick={() => setTicketCategoryFilter(cat)}
+                        className={cn(
+                          "px-2 py-0.5 rounded text-[9px] font-bold border transition-all cursor-pointer",
+                          ticketCategoryFilter === cat
+                            ? "bg-indigo-600 border-indigo-600 text-white font-black"
+                            : "border-border text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {cat === 'all' && 'Tất cả'}
+                        {cat === 'bug' && 'Báo lỗi'}
+                        {cat === 'feature' && 'Góp ý'}
+                        {cat === 'question' && 'Hỏi đáp'}
+                        {cat === 'other' && 'Khác'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardContent className="p-2 max-h-[500px] overflow-y-auto space-y-2">
+                {isTicketsLoading ? (
+                  <div className="py-12 flex flex-col items-center justify-center gap-2">
+                    <Loader size={20} className="animate-spin text-emerald-600" />
+                    <span className="text-[10px] font-bold text-muted-foreground">Đang tải yêu cầu...</span>
+                  </div>
+                ) : filteredTickets.length === 0 ? (
+                  <div className="py-12 text-center text-xs text-muted-foreground font-semibold">
+                    Không có yêu cầu hỗ trợ nào phù hợp bộ lọc.
+                  </div>
+                ) : (
+                  filteredTickets.map(tk => (
+                    <button
+                      key={tk.id}
+                      onClick={() => {
+                        setSelectedTicket(tk);
+                        setResponseText(tk.teacherResponse || '');
+                      }}
+                      className={cn(
+                        "w-full p-3 rounded-xl border text-left transition-all cursor-pointer shadow-sm hover:shadow flex flex-col gap-1.5",
+                        selectedTicket?.id === tk.id
+                          ? "border-emerald-500 bg-emerald-500/5"
+                          : "border-border/60 bg-card/50 hover:border-border"
+                      )}
+                    >
+                      <div className="flex justify-between items-start w-full gap-2">
+                        <span className="text-[10px] font-extrabold text-foreground truncate max-w-[70%]">
+                          👤 {tk.userName}
+                        </span>
+                        {tk.status === 'resolved' ? (
+                          <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-extrabold">Đã giải quyết</span>
+                        ) : tk.status === 'rejected' ? (
+                          <span className="text-[9px] text-rose-500 font-extrabold">Từ chối</span>
+                        ) : (
+                          <span className="text-[9px] text-amber-500 font-extrabold animate-pulse">Chờ duyệt</span>
+                        )}
+                      </div>
+
+                      <h4 className="font-extrabold text-[11px] text-foreground leading-tight truncate w-full">{tk.title}</h4>
+                      
+                      <div className="flex justify-between items-center w-full text-[9px] text-muted-foreground font-semibold mt-1">
+                        <span className="px-1.5 py-0.5 rounded bg-secondary/80 text-[8px] uppercase tracking-wider font-extrabold">
+                          {tk.category}
+                        </span>
+                        <span>{new Date(tk.createdAt).toLocaleDateString('vi-VN')}</span>
+                      </div>
+                    </button>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Cột phải: Chi tiết và Phản hồi */}
+          <div className="lg:col-span-2">
+            {selectedTicket ? (
+              <Card className="border-border/50 bg-card shadow-sm h-full flex flex-col">
+                <CardHeader className="p-5 border-b border-border/20">
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="px-2 py-0.5 rounded-md text-[9px] font-black bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 uppercase tracking-wider">
+                          {selectedTicket.category}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground font-bold">
+                          Mã yêu cầu: {selectedTicket.id}
+                        </span>
+                      </div>
+                      <CardTitle className="text-foreground text-sm font-black leading-snug">
+                        {selectedTicket.title}
+                      </CardTitle>
+                      <CardDescription className="text-[10px] font-semibold text-muted-foreground mt-1">
+                        Gửi bởi: <span className="font-extrabold text-foreground">{selectedTicket.userName}</span> ({selectedTicket.userEmail}) vào {new Date(selectedTicket.createdAt).toLocaleString('vi-VN')}
+                      </CardDescription>
+                    </div>
+
+                    <div className="shrink-0">
+                      {selectedTicket.status === 'resolved' ? (
+                        <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          ✓ Đã giải quyết
+                        </span>
+                      ) : selectedTicket.status === 'rejected' ? (
+                        <span className="px-3 py-1 rounded-full text-xs font-black bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                          ✗ Từ chối
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 animate-pulse">
+                          ⏳ Chờ giải quyết
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="p-5 flex-1 space-y-5 overflow-y-auto">
+                  <div className="space-y-1.5">
+                    <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Nội dung học sinh viết:</span>
+                    <div className="p-4 rounded-2xl bg-secondary/30 border border-border/20 text-xs font-semibold leading-relaxed text-foreground whitespace-pre-wrap">
+                      {selectedTicket.description}
+                    </div>
+                  </div>
+
+                  {selectedTicket.screenshotUrl && (
+                    <div className="space-y-1.5">
+                      <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Ảnh đính kèm từ học sinh:</span>
+                      <a
+                        href={selectedTicket.screenshotUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block w-fit max-w-full overflow-hidden rounded-2xl border border-border/30 hover:border-primary/40 transition-colors shadow-sm cursor-zoom-in"
+                      >
+                        <img
+                          src={selectedTicket.screenshotUrl}
+                          alt="Student Screenshot"
+                          className="max-h-[300px] object-contain rounded-2xl hover:scale-[1.01] transition-transform duration-300"
+                        />
+                      </a>
+                    </div>
+                  )}
+
+                  {/* Form phản hồi */}
+                  <div className="border-t border-border/40 pt-4 space-y-4">
+                    <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Gửi phản hồi cho học sinh:</span>
+                    
+                    <div className="space-y-2">
+                      <textarea
+                        rows={5}
+                        placeholder="Nhập nội dung phản hồi, hướng dẫn khắc phục hoặc trả lời câu hỏi..."
+                        value={responseText}
+                        onChange={(e) => setResponseText(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-border/60 focus:border-emerald-500 rounded-2xl px-4 py-3 text-xs font-semibold outline-none transition-all leading-relaxed"
+                        disabled={ticketSubmitting}
+                      />
+                    </div>
+
+                    <div className="flex gap-3 justify-end">
+                      <Button
+                        onClick={() => handleUpdateTicket('rejected')}
+                        disabled={ticketSubmitting || !responseText.trim()}
+                        className="font-bold text-xs py-2 px-5 border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 cursor-pointer h-10 transition-all"
+                      >
+                        ✗ Từ chối yêu cầu
+                      </Button>
+                      <Button
+                        onClick={() => handleUpdateTicket('resolved')}
+                        disabled={ticketSubmitting || !responseText.trim()}
+                        className="font-bold text-xs py-2 px-5 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer h-10 transition-all"
+                      >
+                        ✓ Giải quyết xong
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-8 bg-card border border-dashed border-border/40 rounded-2xl min-h-[300px]">
+                <LifeBuoy size={48} className="text-muted-foreground/30 mb-3 animate-float" />
+                <h4 className="font-extrabold text-sm text-foreground">Chưa chọn yêu cầu hỗ trợ</h4>
+                <p className="text-[10px] text-muted-foreground font-semibold max-w-[280px] mt-1 leading-relaxed">
+                  Chọn một yêu cầu hỗ trợ từ danh sách bên trái để xem thông tin chi tiết và gửi phản hồi.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       ) : (
         /* Cấp Quyền Premium */
         <div className="max-w-xl mx-auto space-y-6">

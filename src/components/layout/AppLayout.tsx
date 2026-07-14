@@ -14,7 +14,8 @@ import {
   Check,
   Lock,
   Users,
-  Sparkles
+  Sparkles,
+  LifeBuoy
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
@@ -169,6 +170,11 @@ export const AppLayout: React.FC = () => {
       path: '/exam',
       label: selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra',
       icon: Award
+    },
+    {
+      path: '/support',
+      label: 'Hỗ trợ & Góp ý',
+      icon: LifeBuoy
     }
   ];
 
@@ -190,6 +196,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';
+    if (path.startsWith('/support')) return 'Hỗ trợ & Góp ý';
     return 'Bảng điều khiển';
   };
 

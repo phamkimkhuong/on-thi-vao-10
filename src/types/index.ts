@@ -265,3 +265,18 @@ export interface SimulatedStudent {
   email: string;
   isPremium?: boolean;
 }
+
+export interface SupportTicket {
+  id: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  category: 'bug' | 'feature' | 'question' | 'other';
+  title: string;
+  description: string;
+  screenshotUrl?: string;
+  status: 'pending' | 'resolved' | 'rejected';
+  teacherResponse?: string;
+  createdAt: string;
+  updatedAt: string;
+}

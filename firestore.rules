@@ -159,6 +159,14 @@ service cloud.firestore {
           allow read: if isTeacher();
         }
       }
+
+      match /tickets/{ticketId} {
+        allow read, write: if isOwner(userId) || isTeacher();
+      }
+    }
+
+    match /{path=**}/tickets/{ticketId} {
+      allow read, write: if isTeacher();
     }
   }
 }

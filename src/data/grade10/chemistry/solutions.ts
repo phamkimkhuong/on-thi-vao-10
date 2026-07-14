@@ -1,13 +1,13 @@
 import { Solution } from '@/types';
-import { m0Solutions } from './modules/m0_intro';
-import { m1Solutions } from './modules/m1_atoms';
-import { m2Solutions } from './modules/m2_periodic';
-import { m3Solutions } from './modules/m3_bond';
-import { m4Solutions } from './modules/m4_redox';
-import { m5Solutions } from './modules/m5_energy';
-import { m6Solutions } from './modules/m6_rate';
-import { m7Solutions } from './modules/m7_halogen';
-import { m8Solutions } from './modules/m8_synthesis';
+import { m0Solutions } from './modules/module0_intro';
+import { m1Solutions } from './modules/module1_atoms';
+import { m2Solutions } from './modules/module2_periodic';
+import { m3Solutions } from './modules/module3_bond';
+import { m4Solutions } from './modules/module4_redox';
+import { m5Solutions } from './modules/module5_energy';
+import { m6Solutions } from './modules/module6_rate';
+import { m7Solutions } from './modules/module7_halogen';
+import { m8Solutions } from './modules/module8_synthesis';
 
 export const g10ChemistrySolutions: Solution[] = [
   ...m0Solutions,
