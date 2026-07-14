@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
+import { getQuestionTypes, getQuestions, getSolutions, getLearningOutcomes } from '../../data';
 import { useAppStore } from '../../services/store';
 import { Tabs, TabItem } from '../../components/ui/tabs';
+import { TextbookDrawer } from '../../components/common/TextbookDrawer';
 import { QuestionType, Question, Solution } from '../../types';
 import { Card, CardHeader, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -84,6 +85,11 @@ export const QuestionTypeDetail: React.FC = () => {
   const [showLessonCompletedMsg, setShowLessonCompletedMsg] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('theory');
   const [isPlayingSpeech, setIsPlayingSpeech] = useState(false);
+  const [isTextbookOpen, setIsTextbookOpen] = useState(false);
+
+  const outcomes = getLearningOutcomes(selectedGrade, routeSubject);
+  const currentOutcome = outcomes.find(o => o.questionTypeIds.includes(detail?.id || ''));
+  const textbookData = currentOutcome?.textbook;
 
   useEffect(() => {
     if (!detail) return;
@@ -523,41 +529,6 @@ export const QuestionTypeDetail: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8 items-start">
         {/* Cột trái (70%): Tabs chi tiết học tập */}
         <div className="md:col-span-2 space-y-4">
-          <div className="flex items-center justify-between gap-4 px-1 pb-1">
-            {showLessonCompletedMsg ? (
-              <div className="p-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-extrabold text-[10px] flex items-center gap-1.5 animate-fade-in shadow-xs">
-                <span>✓ Bạn đã hoàn thành lý thuyết và mở khóa bài tiếp theo!</span>
-              </div>
-            ) : (
-              <div className="text-[10px] font-black text-muted-foreground">
-                Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
-              </div>
-            )}
-
-            <button
-              onClick={toggleSpeechPlayback}
-              className={cn(
-                "inline-flex items-center gap-1 text-[10px] font-extrabold px-3 py-1.5 rounded-xl border shadow-xs transition-all active:scale-95 cursor-pointer h-7",
-                isPlayingSpeech
-                  ? "bg-rose-500 border-rose-600 text-white hover:bg-rose-600 animate-pulse"
-                  : (currentSubject === 'math'
-                    ? "text-indigo-600 border-indigo-200 hover:bg-indigo-50"
-                    : currentSubject === 'chemistry'
-                      ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50"
-                      : "text-purple-600 border-purple-200 hover:bg-purple-50")
-              )}
-            >
-              {isPlayingSpeech ? (
-                <>
-                  <VolumeX size={12} /> Dừng đọc bài
-                </>
-              ) : (
-                <>
-                  <Volume2 size={12} /> 🔊 Nghe đọc bài giảng
-                </>
-              )}
-            </button>
-          </div>
           <Tabs
             items={tabItems}
             defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition_mistakes')}
@@ -570,6 +541,59 @@ export const QuestionTypeDetail: React.FC = () => {
                   'bg-purple-600 border-purple-700 text-white hover:bg-purple-700'
             )}
             onTabChange={handleTabChange}
+            afterHeader={
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 py-1 select-none">
+                {showLessonCompletedMsg ? (
+                  <div className="p-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-extrabold text-[10px] flex items-center gap-1.5 animate-fade-in shadow-xs">
+                    <span>✓ Bạn đã hoàn thành lý thuyết và mở khóa bài tiếp theo!</span>
+                  </div>
+                ) : (
+                  <div className="text-[10px] font-black text-muted-foreground pt-1">
+                    Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  {textbookData && (
+                    <button
+                      onClick={() => setIsTextbookOpen(true)}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 text-[10px] font-extrabold px-3 py-1.5 rounded-xl border shadow-xs transition-all active:scale-95 cursor-pointer h-7",
+                        currentSubject === 'chemistry'
+                          ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50 bg-emerald-500/5"
+                          : "text-indigo-600 border-indigo-200 hover:bg-indigo-50 bg-indigo-500/5"
+                      )}
+                    >
+                      <BookOpen size={12} /> Tương ứng với SGK (Trang {textbookData.pages[0]} - {textbookData.pages[textbookData.pages.length - 1]})
+                    </button>
+                  )}
+
+                  <button
+                    onClick={toggleSpeechPlayback}
+                    className={cn(
+                      "inline-flex items-center gap-1 text-[10px] font-extrabold px-3 py-1.5 rounded-xl border shadow-xs transition-all active:scale-95 cursor-pointer h-7",
+                      isPlayingSpeech
+                        ? "bg-rose-500 border-rose-600 text-white hover:bg-rose-600 animate-pulse"
+                        : (currentSubject === 'math'
+                          ? "text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+                          : currentSubject === 'chemistry'
+                            ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                            : "text-purple-600 border-purple-200 hover:bg-purple-50")
+                    )}
+                  >
+                    {isPlayingSpeech ? (
+                      <>
+                        <VolumeX size={12} /> Dừng đọc bài
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 size={12} /> 🔊 Nghe đọc bài giảng
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            }
           />
         </div>
 
@@ -710,6 +734,15 @@ export const QuestionTypeDetail: React.FC = () => {
           </Button>
         )}
       </div>
+
+      {textbookData && (
+        <TextbookDrawer
+          isOpen={isTextbookOpen}
+          onClose={() => setIsTextbookOpen(false)}
+          pages={textbookData.pages}
+          bookName={textbookData.bookName}
+        />
+      )}
 
     </div>
   );

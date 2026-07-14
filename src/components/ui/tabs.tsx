@@ -16,6 +16,7 @@ export interface TabsProps {
   activeTabClassName?: string;
   inactiveTabClassName?: string;
   onTabChange?: (tabId: string) => void;
+  afterHeader?: React.ReactNode;
 }
 
 export const Tabs: React.FC<TabsProps> = ({
@@ -27,6 +28,7 @@ export const Tabs: React.FC<TabsProps> = ({
   activeTabClassName,
   inactiveTabClassName,
   onTabChange,
+  afterHeader,
 }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || items[0]?.id);
 
@@ -58,6 +60,7 @@ export const Tabs: React.FC<TabsProps> = ({
           </button>
         ))}
       </div>
+      {afterHeader}
       <div className={cn('mt-1 animate-fade-in', tabContentClassName)}>
         {activeContent}
       </div>

@@ -101,6 +101,11 @@ export interface LearningOutcome {
   remediationOutcomeIds?: string[];
   estimatedMinutes?: number;
   isCritical?: boolean;
+  textbook?: {
+    bookId: string;
+    bookName: string;
+    pages: number[];
+  };
 }
 
 export interface LearningMisconception {
