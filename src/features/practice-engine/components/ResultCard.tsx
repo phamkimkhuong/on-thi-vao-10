@@ -54,6 +54,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
   }, [existingAttempt, currentQuestion.id]);
 
   let displayOptions = currentQuestion.options;
+  let cleanContent = currentQuestion.content;
   if (
     (!displayOptions || displayOptions.length === 0) &&
     currentQuestion.validatorType === 'choice' &&
@@ -61,14 +62,68 @@ export const ResultCard: React.FC<ResultCardProps> = ({
   ) {
     const parts = currentQuestion.content.split(/\n(?=[A-D]\.\s)/);
     if (parts.length >= 2) {
+      cleanContent = parts[0];
       displayOptions = parts.slice(1).map(opt => opt.trim());
     }
   }
 
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* Đề bài (Xem lại câu hỏi) */}
+      <div className="bg-card border border-border/40 shadow-sm rounded-2xl overflow-hidden text-left">
+        <div className="bg-secondary/15 border-b border-border/20 px-5 py-3">
+          <h4 className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wider">
+            📖 Đề bài:
+          </h4>
+        </div>
+        <div className="p-5 text-sm font-bold leading-relaxed text-foreground bg-secondary/10 dark:bg-slate-950/10 font-sans">
+          <LatexRenderer text={cleanContent} />
+        </div>
+        {/* Nếu có options (đối với trắc nghiệm) thì hiển thị các lựa chọn cho học sinh dễ đối chiếu */}
+        {displayOptions && displayOptions.length > 0 && (
+          <div className="px-5 pb-5 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-card">
+            {displayOptions.map((opt, oIdx) => {
+              const letters = ['A', 'B', 'C', 'D'];
+              const letter = letters[oIdx] || String.fromCharCode(65 + oIdx);
+              // Lọc bỏ tiền tố dạng "A. " nếu có trong text
+              const cleanOpt = opt.replace(/^[A-D]\.\s*/, '');
+              const isSelected = selectedOption === letter || selectedOption === cleanOpt || selectedOption === opt;
+              const isCorrectAnswer = currentQuestion.correctAnswer === letter || currentQuestion.correctAnswer === cleanOpt || currentQuestion.correctAnswer === opt;
+              
+              return (
+                <div
+                  key={oIdx}
+                  className={cn(
+                    "p-3 rounded-xl border text-xs font-bold flex items-center gap-2.5",
+                    isCorrectAnswer
+                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800 dark:text-emerald-300"
+                      : isSelected
+                        ? "bg-rose-500/10 border-rose-500/20 text-rose-800 dark:text-rose-300"
+                        : "bg-secondary/10 border-border/40 text-muted-foreground"
+                  )}
+                >
+                  <span className={cn(
+                    "w-6 h-6 rounded-lg flex items-center justify-center font-extrabold shadow-sm text-[11px] shrink-0",
+                    isCorrectAnswer
+                      ? "bg-emerald-500 text-white"
+                      : isSelected
+                        ? "bg-rose-500 text-white"
+                        : "bg-secondary text-foreground"
+                  )}>
+                    {letter}
+                  </span>
+                  <div className="leading-relaxed">
+                    <LatexRenderer text={cleanOpt} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
       <div className={cn(
-        "p-4 rounded-xl border flex items-center gap-3",
+        "p-4 rounded-xl border flex items-center gap-3 text-left",
         isCorrect
           ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
           : 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400'

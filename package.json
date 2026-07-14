@@ -10,7 +10,7 @@
     "type-check": "tsc -b --noEmit",
     "preview": "vite preview",
     "deploy": "npm run build && firebase deploy --only hosting --project on-thi-vao-10-7d87c",
-    "deploy-rules": "firebase deploy --only firestore:rules --project on-thi-vao-10-7d87c"
+    "deploy-rules": "firebase deploy --only firestore:rules,storage --project on-thi-vao-10-7d87c"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.2",

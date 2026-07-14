@@ -110,6 +110,52 @@ export const AppLayout: React.FC = () => {
     }
   }, [user]);
 
+  // Cập nhật tiêu đề động (Dynamic Title SEO)
+  useEffect(() => {
+    const path = location.pathname;
+    const brandName = 'Dạng Bài Thực Chiến';
+    
+    if (path.startsWith('/teacher')) {
+      document.title = `Góc Giáo Viên | ${brandName}`;
+      return;
+    }
+    if (path.startsWith('/premium')) {
+      document.title = `Nâng cấp Premium | ${brandName}`;
+      return;
+    }
+    if (path.startsWith('/support')) {
+      document.title = `Hỗ Trợ & Góp Ý | ${brandName}`;
+      return;
+    }
+    if (path.startsWith('/mistakes')) {
+      document.title = `Sổ Tay Sửa Lỗi Sai | ${brandName}`;
+      return;
+    }
+    if (path.startsWith('/exam')) {
+      const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : '9 - 12';
+      document.title = `Thi Thử & Kiểm Tra ${gradeLabel} | ${brandName}`;
+      return;
+    }
+    if (path.startsWith('/ai-tutor')) {
+      document.title = `Gia Sư AI Socratic | ${brandName}`;
+      return;
+    }
+    
+    // Theo môn và lớp
+    const subjectLabel = selectedSubject === 'math' ? 'Toán Học' : selectedSubject === 'english' ? 'Tiếng Anh' : selectedSubject === 'chemistry' ? 'Hóa Học' : '';
+    const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : '9-12';
+    
+    if (selectedGrade === 'grade9' && selectedSubject === 'english') {
+      document.title = `Luyện Thi Vào 10 Môn Tiếng Anh | ${brandName}`;
+    } else if (selectedGrade === 'grade9' && selectedSubject === 'math') {
+      document.title = `Luyện Thi Vào 10 Môn Toán | ${brandName}`;
+    } else if (subjectLabel) {
+      document.title = `Học Tốt ${subjectLabel} ${gradeLabel} | ${brandName}`;
+    } else {
+      document.title = `${brandName} | Web Học Tốt & Luyện Thi Lớp 9 - 12`;
+    }
+  }, [selectedGrade, selectedSubject, location.pathname]);
+
   useEffect(() => {
     let cancelled = false;
     setIsTeacher(false);
@@ -210,7 +256,7 @@ export const AppLayout: React.FC = () => {
             10
           </div>
           <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-            {selectedGrade === 'grade9' ? 'ÔN THI VÀO 10' : 'HỌC TỐT LỚP 10'}
+            {selectedGrade === 'grade9' ? 'ÔN THI VÀO 10' : selectedGrade === 'grade10' ? 'HỌC TỐT LỚP 10' : 'HỌC TỐT 9 - 12'}
           </span>
         </div>
 
@@ -247,11 +293,11 @@ export const AppLayout: React.FC = () => {
           </div>
           {!isSidebarCollapsed && (
             <div className="flex flex-col animate-fade-in">
-              <span className="font-black text-base tracking-tight leading-none bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                DẠNG BÀI 10
+              <span className="font-black text-xs tracking-tight leading-none bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
+                DẠNG BÀI THỰC CHIẾN
               </span>
               <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-1.5">
-                LỘ TRÌNH THỰC CHIẾN
+                LỘ TRÌNH 9 - 12
               </span>
             </div>
           )}
