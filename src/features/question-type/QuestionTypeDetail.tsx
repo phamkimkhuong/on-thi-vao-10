@@ -15,12 +15,15 @@ import {
   LockKeyhole,
   Lightbulb,
   CornerDownRight,
-  BookOpen
+  BookOpen,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '../../utils/subject';
 import { storageService } from '../../services/storage';
+import { convertLatexToSpeechText } from '../../utils/speech';
 
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
@@ -79,14 +82,17 @@ export const QuestionTypeDetail: React.FC = () => {
 
   const [visitedTabIds, setVisitedTabIds] = useState<Set<string>>(new Set());
   const [showLessonCompletedMsg, setShowLessonCompletedMsg] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('theory');
+  const [isPlayingSpeech, setIsPlayingSpeech] = useState(false);
 
   useEffect(() => {
     if (!detail) return;
     const defaultTab = detail.theory && detail.theory.length > 0
       ? 'theory'
-      : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition');
+      : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition_mistakes');
 
     setVisitedTabIds(new Set([defaultTab]));
+    setActiveTab(defaultTab);
     setShowLessonCompletedMsg(false);
 
     const userId = user?.uid || 'guest';
@@ -97,9 +103,8 @@ export const QuestionTypeDetail: React.FC = () => {
       const availableIds: string[] = [];
       if (detail.theory && detail.theory.length > 0) availableIds.push('theory');
       if (detail.subTypes && detail.subTypes.length > 0) availableIds.push('subtypes');
-      availableIds.push('recognition');
+      availableIds.push('recognition_mistakes');
       availableIds.push('method');
-      availableIds.push('mistakes');
       availableIds.push('example');
 
       if (availableIds.length === 1) {
@@ -108,6 +113,19 @@ export const QuestionTypeDetail: React.FC = () => {
       }
     }
   }, [questionTypeId, detail, user]);
+
+  // Hủy đọc thoại khi rời trang
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  // Hủy đọc thoại khi chuyển tab
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+    setIsPlayingSpeech(false);
+  }, [activeTab]);
 
   useEffect(() => {
     if (detail) {
@@ -210,24 +228,44 @@ export const QuestionTypeDetail: React.FC = () => {
 
   tabItems.push(
     {
-      id: 'recognition',
-      label: '💡 Cách nhận biết',
+      id: 'recognition_mistakes',
+      label: '💡 Nhận biết & Tránh lỗi',
       content: (
-        <Card className={cn("border bg-card", theme.border)}>
-          <CardContent className="p-5 md:p-6 space-y-4">
-            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
-              <Lightbulb size={18} className="text-amber-500" /> Dấu hiệu xuất hiện trong đề bài:
-            </h4>
-            <ul className="space-y-3.5 pl-1">
-              {detail.recognitionSigns.map((sign: string, idx: number) => (
-                <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
-                  <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", isMath ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
-                  <LatexRenderer text={sign} />
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <div className="space-y-5">
+          <Card className={cn("border bg-card", theme.border)}>
+            <CardContent className="p-5 md:p-6 space-y-4">
+              <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+                <Lightbulb size={18} className="text-amber-500" /> Dấu hiệu nhận biết trong đề bài:
+              </h4>
+              <ul className="space-y-3.5 pl-1">
+                {detail.recognitionSigns.map((sign: string, idx: number) => (
+                  <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
+                    <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", isMath ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
+                    <LatexRenderer text={sign} />
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+
+          {detail.commonMistakes && detail.commonMistakes.length > 0 && (
+            <Card className="border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5">
+              <CardContent className="p-5 md:p-6 space-y-4">
+                <h4 className="font-extrabold text-sm md:text-base text-rose-600 dark:text-rose-400 flex items-center gap-2 pb-2 border-b border-rose-500/10">
+                  <AlertTriangle size={18} className="text-rose-500 animate-pulse" /> Các bẫy học sinh hay mắc phải (Lỗi thường gặp):
+                </h4>
+                <ul className="space-y-3.5 pl-1">
+                  {detail.commonMistakes.map((mistake: string, idx: number) => (
+                    <li key={idx} className="text-xs md:text-sm font-medium text-rose-700 dark:text-rose-300 flex items-start gap-3 leading-relaxed bg-rose-100/30 dark:bg-rose-950/20 p-3 rounded-2xl border border-rose-500/10">
+                      <CornerDownRight size={15} className="shrink-0 mt-1 text-rose-500" />
+                      <LatexRenderer text={mistake} />
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       )
     },
     {
@@ -251,27 +289,6 @@ export const QuestionTypeDetail: React.FC = () => {
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      )
-    },
-    {
-      id: 'mistakes',
-      label: '🚨 Lỗi thường gặp',
-      content: (
-        <Card className="border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5">
-          <CardContent className="p-5 md:p-6 space-y-4">
-            <h4 className="font-extrabold text-sm md:text-base text-rose-600 dark:text-rose-400 flex items-center gap-2 pb-2 border-b border-rose-500/10">
-              <AlertTriangle size={18} className="text-rose-500 animate-pulse" /> Các bẫy học sinh hay mắc phải:
-            </h4>
-            <ul className="space-y-3.5 pl-1">
-              {detail.commonMistakes.map((mistake: string, idx: number) => (
-                <li key={idx} className="text-xs md:text-sm font-medium text-rose-700 dark:text-rose-300 flex items-start gap-3 leading-relaxed bg-rose-100/30 dark:bg-rose-950/20 p-3 rounded-2xl border border-rose-500/10">
-                  <CornerDownRight size={15} className="shrink-0 mt-1 text-rose-500" />
-                  <LatexRenderer text={mistake} />
-                </li>
-              ))}
-            </ul>
           </CardContent>
         </Card>
       )
@@ -367,7 +384,83 @@ export const QuestionTypeDetail: React.FC = () => {
     }
   );
 
+  const activeTabTextArray = React.useMemo(() => {
+    if (!detail) return [];
+    switch (activeTab) {
+      case 'theory':
+        return detail.theory || [];
+      case 'subtypes':
+        return (detail.subTypes || []).flatMap(s => [
+          s.name,
+          'Ví dụ minh họa: ' + s.example,
+          s.note ? 'Phương pháp giải: ' + s.note : ''
+        ]).filter(Boolean);
+      case 'recognition_mistakes':
+        return [
+          'Dấu hiệu nhận biết trong đề bài:',
+          ...(detail.recognitionSigns || []),
+          ...(detail.commonMistakes && detail.commonMistakes.length > 0
+            ? ['Các lỗi thường gặp và bẫy cần tránh:', ...(detail.commonMistakes || [])]
+            : [])
+        ];
+      case 'method':
+        return (detail.solvingSteps || []).map((s, i) => `Bước ${i + 1}: ${s}`);
+      case 'example':
+        if (!exampleQuestion) return [];
+        return [
+          'Ví dụ mẫu:',
+          exampleQuestion.content,
+          ...(exampleQuestion.options || []),
+          ...(exampleSolution
+            ? [
+              'Phân tích giải mẫu:',
+              'Tư duy nhận diện: ' + exampleSolution.recognition,
+              ...exampleSolution.detailedSteps.map(s => `Bước ${s.order}: ${s.title}. ${s.explanation}`),
+              'Đáp án cuối cùng: ' + exampleSolution.finalAnswer
+            ]
+            : [])
+        ];
+      default:
+        return [];
+    }
+  }, [activeTab, detail, exampleQuestion, exampleSolution]);
+
+  const toggleSpeechPlayback = () => {
+    if (isPlayingSpeech) {
+      window.speechSynthesis.cancel();
+      setIsPlayingSpeech(false);
+    } else {
+      window.speechSynthesis.cancel();
+      if (activeTabTextArray.length === 0) return;
+
+      const fullSpeechText = activeTabTextArray
+        .map(t => convertLatexToSpeechText(t, currentSubject))
+        .join('. ');
+
+      const utterance = new SpeechSynthesisUtterance(fullSpeechText);
+      utterance.lang = 'vi-VN';
+
+      const voices = window.speechSynthesis.getVoices();
+      const viVoice = voices.find(v => v.lang.includes('vi') || v.lang.includes('VI'));
+      if (viVoice) {
+        utterance.voice = viVoice;
+      }
+
+      utterance.onend = () => {
+        setIsPlayingSpeech(false);
+      };
+
+      utterance.onerror = () => {
+        setIsPlayingSpeech(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+      setIsPlayingSpeech(true);
+    }
+  };
+
   const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
     if (!detail) return;
     setVisitedTabIds(prev => {
       const next = new Set(prev);
@@ -430,18 +523,44 @@ export const QuestionTypeDetail: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8 items-start">
         {/* Cột trái (70%): Tabs chi tiết học tập */}
         <div className="md:col-span-2 space-y-4">
-          {showLessonCompletedMsg ? (
-            <div className="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs flex items-center gap-2 animate-fade-in shadow-xs">
-              <span>✓ Bạn đã hoàn thành phần đọc lý thuyết và mở khóa bài tiếp theo trong Lộ trình học!</span>
-            </div>
-          ) : (
-            <div className="text-right text-[10px] font-black text-muted-foreground mr-1">
-              Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
-            </div>
-          )}
+          <div className="flex items-center justify-between gap-4 px-1 pb-1">
+            {showLessonCompletedMsg ? (
+              <div className="p-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-extrabold text-[10px] flex items-center gap-1.5 animate-fade-in shadow-xs">
+                <span>✓ Bạn đã hoàn thành lý thuyết và mở khóa bài tiếp theo!</span>
+              </div>
+            ) : (
+              <div className="text-[10px] font-black text-muted-foreground">
+                Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
+              </div>
+            )}
+
+            <button
+              onClick={toggleSpeechPlayback}
+              className={cn(
+                "inline-flex items-center gap-1 text-[10px] font-extrabold px-3 py-1.5 rounded-xl border shadow-xs transition-all active:scale-95 cursor-pointer h-7",
+                isPlayingSpeech
+                  ? "bg-rose-500 border-rose-600 text-white hover:bg-rose-600 animate-pulse"
+                  : (currentSubject === 'math'
+                    ? "text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+                    : currentSubject === 'chemistry'
+                      ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                      : "text-purple-600 border-purple-200 hover:bg-purple-50")
+              )}
+            >
+              {isPlayingSpeech ? (
+                <>
+                  <VolumeX size={12} /> Dừng đọc bài
+                </>
+              ) : (
+                <>
+                  <Volume2 size={12} /> 🔊 Nghe đọc bài giảng
+                </>
+              )}
+            </button>
+          </div>
           <Tabs
             items={tabItems}
-            defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition')}
+            defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition_mistakes')}
             className="w-full"
             tabHeaderClassName="gap-2"
             tabContentClassName="mt-2"

@@ -510,7 +510,7 @@ export const MistakeNotebook: React.FC = () => {
                   disabled={reviewSubmitDisabled || isReSubmitting}
                   className="w-full font-bold py-3 mt-4 text-xs active:scale-[0.98]"
                 >
-                  {isReSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài giải lại'}
+                  {isReSubmitting ? (reProofImages && reProofImages.length > 0 ? 'Giáo viên đang chấm lại bài...' : 'Đang gửi bài làm...') : 'Nộp bài giải lại'}
                 </Button>
               </div>
             ) : (
@@ -544,7 +544,7 @@ export const MistakeNotebook: React.FC = () => {
                   <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm text-left">
                     <div className="flex items-center justify-between border-b border-border/40 pb-3 flex-wrap gap-2">
                       <h4 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
-                        🤖 Báo cáo chấm tự luận từ AI:
+                        📝 Nhận xét và chấm điểm chi tiết:
                       </h4>
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold text-muted-foreground">Điểm số:</span>
@@ -564,7 +564,7 @@ export const MistakeNotebook: React.FC = () => {
                     {/* Nhận xét tổng quan */}
                     <div className="p-3 bg-secondary/30 rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground leading-relaxed">
                       <span className="font-extrabold text-foreground block mb-1">💬 Nhận xét tổng quan:</span>
-                      {latestAttempt.aiEvaluation.summaryFeedback}
+                      <LatexRenderer text={latestAttempt.aiEvaluation.summaryFeedback} />
                     </div>
 
                     {/* Đánh giá chi tiết từng bước */}
@@ -573,7 +573,7 @@ export const MistakeNotebook: React.FC = () => {
                         📋 Chi tiết đánh giá từng bước:
                       </span>
                       <div className="space-y-3">
-                        {latestAttempt.aiEvaluation.stepsEvaluation.map((step) => {
+                        {(latestAttempt.aiEvaluation.stepsEvaluation || []).map((step) => {
                           const isCorrect = step.status === 'correct';
                           const isMissing = step.status === 'missing';
                           
@@ -616,7 +616,7 @@ export const MistakeNotebook: React.FC = () => {
                               )}
 
                               <div className="text-xs text-muted-foreground font-semibold leading-relaxed pl-6.5 mt-0.5">
-                                {step.feedback}
+                                <LatexRenderer text={step.feedback} />
                               </div>
                             </div>
                           );

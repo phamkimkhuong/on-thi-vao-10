@@ -8,7 +8,7 @@ import { AnswerFormRenderer } from '../../../components/common/AnswerFormRendere
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
-import { BookOpen, Lightbulb, ArrowLeft, ArrowRight } from 'lucide-react';
+import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp } from 'lucide-react';
 
 interface QuestionCardProps {
   currentQuestion: Question;
@@ -374,8 +374,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   getSubjectTheme(routeSubject).border
                 )}
               >
-                <Lightbulb size={14} className="text-amber-500 animate-pulse" />
-                {hintLevel === 0 ? 'Gợi ý giải từng bước' : `Gợi ý tiếp theo (Bước ${hintLevel + 1})`}
+                {hintLevel === solutionDetail.detailedSteps.length ? (
+                  <>
+                    <ChevronUp size={14} className="text-amber-500 animate-bounce" />
+                    <span>Thu gọn gợi ý</span>
+                  </>
+                ) : (
+                  <>
+                    <Lightbulb size={14} className="text-amber-500 animate-pulse" />
+                    <span>{hintLevel === 0 ? 'Gợi ý giải từng bước' : `Gợi ý tiếp theo (Bước ${hintLevel + 1})`}</span>
+                  </>
+                )}
               </button>
 
               {hintLevel > 0 && (
@@ -423,7 +432,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                       </>
                     )}
                   </span>
-                  {totalUploadStats.isPaused ? 'Đã tạm dừng tải ảnh' : 'Đang tải lên ảnh bài làm...'}
+                  {totalUploadStats.isPaused ? 'Đã tạm dừng tải ảnh' : 'Đang tải lên bài giải...'}
                 </span>
                 <span className="text-indigo-600 dark:text-indigo-400 font-black">{totalUploadStats.percent}%</span>
               </div>
@@ -486,7 +495,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               disabled={submitDisabled || isSubmitting}
               className="w-full font-black py-3.5 text-xs active:scale-[0.98] rounded-2xl shadow-md hover:shadow-lg transition-all animate-pulse-glow cursor-pointer"
             >
-              {isSubmitting ? 'Đang lưu bài làm...' : 'Nộp bài tập'}
+              {isSubmitting ? (proofImages && proofImages.length > 0 ? 'Giáo viên đang chấm bài...' : 'Đang gửi bài làm...') : 'Nộp bài tập'}
             </Button>
 
             <div className="flex gap-3 w-full">

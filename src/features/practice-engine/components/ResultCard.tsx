@@ -53,6 +53,39 @@ export const ResultCard: React.FC<ResultCardProps> = ({
     }
   }, [existingAttempt, currentQuestion.id]);
 
+  // Cơ chế giãn cách 3 ngày (Spaced Repetition)
+  const retryStatus = React.useMemo(() => {
+    if (!existingAttempt) return { canRetry: true, daysRemaining: 0, unlockDateStr: '' };
+
+    const attemptDate = new Date(existingAttempt.createdAt);
+    const currentDate = new Date();
+
+    // Loại bỏ giờ/phút/giây để so sánh ngày
+    const d1 = new Date(attemptDate.getFullYear(), attemptDate.getMonth(), attemptDate.getDate());
+    const d2 = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    const diffDays = Math.round((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+
+    const canRetry = diffDays >= 3;
+    const daysRemaining = Math.max(0, 3 - diffDays);
+
+    const unlockDate = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate() + 3);
+    const unlockDateStr = unlockDate.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    return { canRetry, daysRemaining, unlockDateStr };
+  }, [existingAttempt]);
+
+  const showBannerFeedback = React.useMemo(() => {
+    if (!existingAttempt?.teacherFeedback) return false;
+    if (existingAttempt.aiEvaluation && existingAttempt.teacherFeedback === existingAttempt.aiEvaluation.summaryFeedback) {
+      return false;
+    }
+    return true;
+  }, [existingAttempt]);
+
   let displayOptions = currentQuestion.options;
   let cleanContent = currentQuestion.content;
   if (
@@ -89,7 +122,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               const cleanOpt = opt.replace(/^[A-D]\.\s*/, '');
               const isSelected = selectedOption === letter || selectedOption === cleanOpt || selectedOption === opt;
               const isCorrectAnswer = currentQuestion.correctAnswer === letter || currentQuestion.correctAnswer === cleanOpt || currentQuestion.correctAnswer === opt;
-              
+
               return (
                 <div
                   key={oIdx}
@@ -135,7 +168,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 <CheckCircle size={24} className="text-emerald-500 shrink-0" />
                 <div>
                   <h4 className="font-extrabold text-sm">Kết quả: Đạt yêu cầu (Giáo viên đã duyệt) ✅</h4>
-                  {existingAttempt.teacherFeedback && (
+                  {showBannerFeedback && (
                     <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
                       💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
                     </p>
@@ -147,7 +180,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 <XCircle size={24} className="text-rose-500 shrink-0" />
                 <div>
                   <h4 className="font-extrabold text-sm">Kết quả: Cần sửa lại (Chấm sai) ❌</h4>
-                  {existingAttempt.teacherFeedback && (
+                  {showBannerFeedback && (
                     <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
                       💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
                     </p>
@@ -214,7 +247,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
         <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in text-left">
           <div className="flex items-center justify-between border-b border-border/40 pb-3 flex-wrap gap-2">
             <h4 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
-              🤖 Báo cáo chấm tự luận từ AI:
+              📝 Nhận xét và chấm điểm chi tiết:
             </h4>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold text-muted-foreground">Điểm số:</span>
@@ -234,7 +267,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
           {/* Nhận xét tổng quan */}
           <div className="p-3 bg-secondary/30 rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground leading-relaxed">
             <span className="font-extrabold text-foreground block mb-1">💬 Nhận xét tổng quan:</span>
-            {existingAttempt.aiEvaluation.summaryFeedback}
+            <LatexRenderer text={existingAttempt.aiEvaluation.summaryFeedback} />
           </div>
 
           {/* Đánh giá chi tiết từng bước */}
@@ -243,17 +276,17 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               📋 Chi tiết đánh giá từng bước:
             </span>
             <div className="space-y-3">
-              {existingAttempt.aiEvaluation.stepsEvaluation.map((step) => {
+              {(existingAttempt.aiEvaluation.stepsEvaluation || []).map((step) => {
                 const isCorrect = step.status === 'correct';
                 const isMissing = step.status === 'missing';
-                
+
                 return (
-                  <div 
-                    key={step.stepOrder} 
+                  <div
+                    key={step.stepOrder}
                     className={cn(
                       "p-3 rounded-xl border transition-all duration-150 relative flex flex-col gap-2 bg-card",
-                      isCorrect 
-                        ? "border-emerald-500/20 hover:border-emerald-500/35" 
+                      isCorrect
+                        ? "border-emerald-500/20 hover:border-emerald-500/35"
                         : isMissing
                           ? "border-amber-500/20 hover:border-amber-500/35"
                           : "border-rose-500/20 hover:border-rose-500/35"
@@ -286,7 +319,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                     )}
 
                     <div className="text-xs text-muted-foreground font-semibold leading-relaxed pl-6.5 mt-0.5">
-                      {step.feedback}
+                      <LatexRenderer text={step.feedback} />
                     </div>
                   </div>
                 );
@@ -342,16 +375,16 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 hour: '2-digit',
                 minute: '2-digit'
               });
-              
+
               const isPastCorrect = past.isCorrect;
-              
+
               return (
-                <div 
-                  key={past.id} 
+                <div
+                  key={past.id}
                   className={cn(
                     "p-4 rounded-xl border transition-all duration-150 relative flex flex-col justify-between gap-3 bg-card",
-                    isPastCorrect 
-                      ? "border-emerald-500/20 hover:border-emerald-500/35" 
+                    isPastCorrect
+                      ? "border-emerald-500/20 hover:border-emerald-500/35"
                       : "border-rose-500/20 hover:border-rose-500/35"
                   )}
                 >
@@ -386,9 +419,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                             <div className="flex gap-1.5 overflow-x-auto py-1">
                               {past.proofImages.map((img) => (
                                 <div key={img.id} className="relative rounded-lg overflow-hidden border border-border bg-black w-14 h-14 shrink-0 flex items-center justify-center">
-                                  <img 
-                                    src={img.downloadUrl || img.storagePath} 
-                                    alt="Minh chứng" 
+                                  <img
+                                    src={img.downloadUrl || img.storagePath}
+                                    alt="Minh chứng"
                                     className="w-full h-full object-cover cursor-pointer"
                                     onClick={() => window.open(img.downloadUrl || img.storagePath, '_blank')}
                                   />
@@ -411,7 +444,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                   {past.teacherFeedback && (
                     <div className={cn(
                       "text-[10px] font-bold p-2 rounded-lg border",
-                      isPastCorrect 
+                      isPastCorrect
                         ? "bg-emerald-500/5 border-emerald-500/10 text-emerald-800 dark:text-emerald-300"
                         : "bg-rose-500/5 border-rose-500/10 text-rose-800 dark:text-rose-300"
                     )}>
@@ -502,14 +535,21 @@ export const ResultCard: React.FC<ResultCardProps> = ({
         >
           <ArrowLeft size={16} /> Câu trước
         </Button>
-        {(!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
-          <Button
-            onClick={handleRetry}
-            variant="outline"
-            className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
-          >
-            🔄 Làm lại bài này
-          </Button>
+        {existingAttempt && !retryStatus.canRetry ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-2.5 bg-slate-500/10 border border-slate-500/20 rounded-xl text-[10px] text-muted-foreground font-black text-center leading-relaxed">
+            <span>⏱️Làm lại sau {retryStatus.daysRemaining} ngày để ôn tập</span>
+            <span className="text-[9px] opacity-75 font-semibold">(Mở khóa vào ngày {retryStatus.unlockDateStr})</span>
+          </div>
+        ) : (
+          (!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
+            <Button
+              onClick={handleRetry}
+              variant="outline"
+              className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
+            >
+              🔄 Làm lại bài này
+            </Button>
+          )
         )}
         <Button
           onClick={handleNext}

@@ -20,6 +20,65 @@ interface CallGeminiParams {
   chatId?: string;
 }
 
+const normalizeAiEvaluation = (parsed: any): AiEvaluation => {
+  if (!parsed || typeof parsed !== 'object') {
+    return {
+      isCorrect: false,
+      score: 0,
+      summaryFeedback: 'Đã hoàn thành chấm bài.',
+      stepsEvaluation: []
+    };
+  }
+
+  const keys = Object.keys(parsed);
+  
+  // Tự động tìm nhận xét tổng quan (Là String dài nhất ở root)
+  const summaryFeedback = 
+    parsed.summaryFeedback || 
+    parsed.comment || 
+    parsed.feedback || 
+    keys.find(k => typeof parsed[k] === 'string' && parsed[k].length > 20) || 
+    'Đã hoàn thành chấm bài.';
+
+  // Tự động tìm mảng chứa các bước chấm điểm (Là Array duy nhất ở root)
+  const stepsArray = 
+    parsed.stepsEvaluation || 
+    parsed.steps || 
+    Object.values(parsed).find(val => Array.isArray(val)) || 
+    [];
+
+  // Chuẩn hóa từng phần tử trong mảng bước giải
+  const stepsEvaluation = stepsArray.map((s: any, idx: number) => {
+    if (!s || typeof s !== 'object') {
+      return {
+        stepOrder: idx + 1,
+        title: `Bước ${idx + 1}`,
+        status: 'incorrect' as const,
+        feedback: String(s || 'Đã hoàn thành.')
+      };
+    }
+    const sKeys = Object.keys(s);
+    // Tên bước giải thường là String ngắn, nhận xét từng bước thường là String dài
+    const title = s.title || s.step || s.name || sKeys.find(k => typeof s[k] === 'string' && s[k].length < 50) || `Bước ${idx + 1}`;
+    const feedback = s.feedback || s.comment || s.desc || sKeys.find(k => typeof s[k] === 'string' && s[k].length >= 50) || 'Không có nhận xét chi tiết.';
+    
+    return {
+      stepOrder: typeof s.stepOrder === 'number' ? s.stepOrder : (idx + 1),
+      title,
+      status: (['correct', 'incorrect', 'missing'].includes(s.status) ? s.status : 'incorrect') as any,
+      studentContent: s.studentContent || '',
+      feedback
+    };
+  });
+
+  return {
+    isCorrect: typeof parsed.isCorrect === 'boolean' ? parsed.isCorrect : (typeof parsed.score === 'number' ? parsed.score >= 5 : false),
+    score: typeof parsed.score === 'number' ? parsed.score : 0,
+    summaryFeedback,
+    stepsEvaluation
+  };
+};
+
 export const aiService = {
   async callGemini(params: CallGeminiParams): Promise<string> {
     try {
@@ -223,13 +282,14 @@ Bạn phải trả về kết quả dưới định dạng JSON chính xác theo
 
     try {
       const cleanedText = cleanJson(textResponse.trim());
-      return JSON.parse(cleanedText);
+      const parsed = JSON.parse(cleanedText);
+      return normalizeAiEvaluation(parsed);
     } catch (err) {
       console.error("Lỗi parse JSON kết quả chấm của Gemini:", textResponse, err);
-      // Fallback clean-up in case of unexpected format issues
       try {
         const cleaned = cleanJson(textResponse.replace(/```json/g, '').replace(/```/g, '').trim());
-        return JSON.parse(cleaned);
+        const parsed = JSON.parse(cleaned);
+        return normalizeAiEvaluation(parsed);
       } catch {
         return {
           isCorrect: textResponse.toLowerCase().includes('"iscorrect": true') || textResponse.toLowerCase().includes('"iscorrect":true'),

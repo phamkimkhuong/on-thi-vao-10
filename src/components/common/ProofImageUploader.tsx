@@ -40,9 +40,9 @@ export const ProofImageUploader: React.FC<ProofImageUploaderProps> = ({
   const canAddMore = images.length < maxImages;
   const helperText = useMemo(() => {
     if (cloudEnabled) {
-      return 'Ảnh sẽ được lưu lên Firebase Storage khi nộp bài.';
+      return 'Ảnh bài giải của bạn sẽ được tự động lưu trữ trên hệ thống khi nộp bài.';
     }
-    return 'Chế độ Guest: ảnh chỉ dùng để đối chiếu trong lượt làm này. Đăng nhập để lưu cloud.';
+    return 'Chế độ Guest: ảnh chỉ dùng để đối chiếu trong lượt làm này. Đăng nhập để lưu trên hệ thống.';
   }, [cloudEnabled]);
 
   const handleFilesSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +101,7 @@ export const ProofImageUploader: React.FC<ProofImageUploaderProps> = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Camera size={15} className="text-primary" />
-            <span className="text-xs font-extrabold text-foreground">Ảnh bài làm</span>
+            <span className="text-xs font-extrabold text-foreground">Bài giải viết tay (Ảnh chụp)</span>
             {required && (
               <span className="text-[9px] font-bold text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 px-1.5 py-0.5 rounded-full">
                 Bắt buộc
@@ -109,7 +109,7 @@ export const ProofImageUploader: React.FC<ProofImageUploaderProps> = ({
             )}
           </div>
           <p className="text-[10px] font-semibold text-muted-foreground leading-relaxed">
-            Chụp hoặc tải ảnh lời giải trên giấy để tự đối chiếu và gửi giáo viên review sau này.
+            Chụp hoặc tải ảnh bài giải tự luận của bạn để giáo viên chấm điểm và nhận xét chi tiết.
           </p>
         </div>
 

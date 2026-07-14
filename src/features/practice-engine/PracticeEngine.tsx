@@ -262,10 +262,8 @@ export const PracticeEngine: React.FC = () => {
     });
 
     const completed = new Set<string>();
-    Object.entries(latestAttemptsByQId).forEach(([qId, attempt]) => {
-      if (attempt.gradingMode === 'manual') {
-        completed.add(qId);
-      }
+    Object.entries(latestAttemptsByQId).forEach(([qId]) => {
+      completed.add(qId);
     });
 
     void progressVersion;
@@ -360,17 +358,10 @@ export const PracticeEngine: React.FC = () => {
 
       if (latestAttemptLocal) {
         if (isMounted) {
-          if (latestAttemptLocal.gradingMode !== 'manual') {
-            setExistingAttempt(null);
-            setIsSubmitted(false);
-            setIsCorrect(false);
-            setPastAttempts(attemptsForQLocal.slice(0, 2));
-          } else {
-            setExistingAttempt(latestAttemptLocal);
-            setIsSubmitted(true);
-            setIsCorrect(latestAttemptLocal.isCorrect);
-            setPastAttempts(attemptsForQLocal.slice(1, 3));
-          }
+          setExistingAttempt(latestAttemptLocal);
+          setIsSubmitted(true);
+          setIsCorrect(latestAttemptLocal.isCorrect);
+          setPastAttempts(attemptsForQLocal.slice(1, 3));
         }
       }
 
@@ -387,17 +378,10 @@ export const PracticeEngine: React.FC = () => {
 
           if (isMounted) {
             if (latestAttemptRemote) {
-              if (latestAttemptRemote.gradingMode !== 'manual') {
-                setExistingAttempt(null);
-                setIsSubmitted(false);
-                setIsCorrect(false);
-                setPastAttempts(attemptsForQRemote.slice(0, 2));
-              } else {
-                setExistingAttempt(latestAttemptRemote);
-                setIsSubmitted(true);
-                setIsCorrect(latestAttemptRemote.isCorrect);
-                setPastAttempts(attemptsForQRemote.slice(1, 3));
-              }
+              setExistingAttempt(latestAttemptRemote);
+              setIsSubmitted(true);
+              setIsCorrect(latestAttemptRemote.isCorrect);
+              setPastAttempts(attemptsForQRemote.slice(1, 3));
             } else {
               setExistingAttempt(null);
               setIsSubmitted(false);
@@ -725,26 +709,37 @@ export const PracticeEngine: React.FC = () => {
 
     let aiEvaluation: AiEvaluation | undefined = undefined;
     let correct = isMath ? true : validateAnswer(currentQ, answerInput);
-    let gradingMode: 'auto' | 'manual' = 'manual';
+    // Tự động phân loại chế độ chấm điểm:
+    // Môn Toán hoặc các câu tự luận cần upload ảnh/chấm thủ công -> 'manual'
+    // Các câu hỏi trắc nghiệm (choice), điền số (number), điền từ (exact) -> 'auto'
+    let gradingMode: 'auto' | 'manual' = 'auto';
 
-    if (isMath && proofImages.length > 0) {
-      try {
-        const base64Image = await convertFileToBase64(proofImages[0].file);
-        const evaluation = await aiService.gradeProofAttempt(
-          currentQ,
-          solutionDetail || undefined,
-          finalAnswer,
-          base64Image
-        );
-        aiEvaluation = evaluation;
-        correct = evaluation.isCorrect;
-        gradingMode = 'auto';
-      } catch (err) {
-        console.error("Lỗi khi gọi AI chấm bài tự luận:", err);
-        // Fallback: keep manual grading
-        gradingMode = 'manual';
-        correct = true;
+    if (isMath) {
+      gradingMode = 'manual';
+      if (proofImages.length > 0) {
+        try {
+          const base64Image = await convertFileToBase64(proofImages[0].file);
+          const evaluation = await aiService.gradeProofAttempt(
+            currentQ,
+            solutionDetail || undefined,
+            finalAnswer,
+            base64Image
+          );
+          aiEvaluation = evaluation;
+          correct = evaluation.isCorrect;
+          gradingMode = 'auto';
+        } catch (err) {
+          console.error("Lỗi khi gọi AI chấm bài tự luận:", err);
+          gradingMode = 'manual';
+          correct = true;
+        }
       }
+    } else {
+      const isManualQuestion =
+        currentQ.validatorType === 'manual' ||
+        currentQ.answerSchema?.autoCheckMode === 'manual' ||
+        currentQ.answerSchema?.type === 'proof-upload';
+      gradingMode = isManualQuestion ? 'manual' : 'auto';
     }
 
     setIsCorrect(correct);
@@ -773,7 +768,7 @@ export const PracticeEngine: React.FC = () => {
       createdAt: new Date().toISOString(),
       ...(selectedSubTense ? { selectedSubTense } : {}),
       ...(aiEvaluation ? { aiEvaluation } : {}),
-      ...(aiEvaluation ? { teacherFeedback: aiEvaluation.summaryFeedback } : {})
+      ...(aiEvaluation ? { teacherFeedback: aiEvaluation.summaryFeedback || 'Đã chấm bài giải.' } : {})
     };
 
     setExistingAttempt(attemptData);
@@ -905,7 +900,7 @@ export const PracticeEngine: React.FC = () => {
   const triggerNextHint = () => {
     if (solutionDetail) {
       const maxSteps = solutionDetail.detailedSteps.length;
-      setHintLevel(prev => (prev < maxSteps ? prev + 1 : prev));
+      setHintLevel(prev => (prev < maxSteps ? prev + 1 : 0));
     }
   };
 
