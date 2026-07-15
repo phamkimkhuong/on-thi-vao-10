@@ -496,72 +496,76 @@ export const ExamEngine: React.FC = () => {
 
         {/* Danh sách câu hỏi */}
         <div className="space-y-6">
-          {examQuestions.map((q, idx) => (
-            <Card key={q.id} className="border-border">
-              <CardHeader className="bg-slate-50/30 dark:bg-slate-900/5 py-3 border-b border-border/30">
-                <span className="text-xs font-bold text-muted-foreground">Câu hỏi số {idx + 1}</span>
-              </CardHeader>
-              <CardContent className="p-6 space-y-5">
-                <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/10 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
-                  <LatexRenderer text={q.content} />
-                </div>
+          {examQuestions.map((q, idx) => {
+            const isChoice = q.options && q.options.length > 0;
 
-                {/* Phần trả lời */}
-                {q.options && q.options.length > 0 ? (
-                  // Chọn trắc nghiệm (Dành cho Tiếng Anh MCQ hoặc Câu hỏi có sẵn phương án)
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {q.options.map((opt: string, i: number) => {
-                      const optLetter = opt.charAt(0);
-                      const isSelected = answers[q.id] === optLetter;
-                      return (
-                        <button
-                          key={i}
-                          onClick={() => handleOptionSelect(q.id, optLetter)}
-                          className={`w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
-                            ? 'bg-primary/10 border-primary text-primary shadow-sm'
-                            : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
-                            }`}
-                        >
-                          <LatexRenderer text={opt} />
-                        </button>
-                      );
-                    })}
+            return (
+              <Card key={q.id} className="border-border">
+                <CardHeader className="bg-slate-50/30 dark:bg-slate-900/5 py-3 border-b border-border/30">
+                  <span className="text-xs font-bold text-muted-foreground">Câu hỏi số {idx + 1}</span>
+                </CardHeader>
+                <CardContent className="p-6 space-y-5">
+                  <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/10 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
+                    <LatexRenderer text={q.content} />
                   </div>
-                ) : q.answerSchema ? (
-                  // Nhập tự luận có Schema phức tạp (Dành cho Toán)
-                  <AnswerFormRenderer
-                    question={q}
-                    value={finalAnswers[q.id] ?? {}}
-                    onChange={(value) => handleFinalAnswerChange(q.id, value)}
-                  />
-                ) : (
-                  // Nhập tự luận/điền từ ngắn (Dành cho Toán hoặc Tiếng Anh viết/wordform)
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-muted-foreground block">
-                      {selectedSubject === 'math' ? 'Đáp số của bạn:' : 'Đáp án của bạn:'}
-                    </label>
-                    <input
-                      type="text"
-                      value={answers[q.id] || ''}
-                      onChange={(e) => handleInputChange(q.id, e.target.value)}
-                      placeholder={selectedSubject === 'math' ? 'Nhập đáp số...' : 'Nhập câu trả lời...'}
-                      className="w-full sm:max-w-md bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold"
+
+                  {/* Phần trả lời */}
+                  {isChoice && q.options ? (
+                    // Chọn trắc nghiệm (Dành cho Tiếng Anh MCQ hoặc Câu hỏi có sẵn phương án)
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {q.options.map((opt: string, i: number) => {
+                        const optLetter = opt.charAt(0);
+                        const isSelected = answers[q.id] === optLetter;
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => handleOptionSelect(q.id, optLetter)}
+                            className={`w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
+                              ? 'bg-primary/10 border-primary text-primary shadow-sm'
+                              : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
+                              }`}
+                          >
+                            <LatexRenderer text={opt} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : q.answerSchema ? (
+                    // Nhập tự luận có Schema phức tạp (Dành cho Toán)
+                    <AnswerFormRenderer
+                      question={q}
+                      value={finalAnswers[q.id] ?? {}}
+                      onChange={(value) => handleFinalAnswerChange(q.id, value)}
                     />
-                  </div>
-                )}
+                  ) : (
+                    // Nhập tự luận/điền từ ngắn (Dành cho Toán hoặc Tiếng Anh viết/wordform)
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-muted-foreground block">
+                        {selectedSubject === 'math' ? 'Đáp số của bạn:' : 'Đáp án của bạn:'}
+                      </label>
+                      <input
+                        type="text"
+                        value={answers[q.id] || ''}
+                        onChange={(e) => handleInputChange(q.id, e.target.value)}
+                        placeholder={selectedSubject === 'math' ? 'Nhập đáp số...' : 'Nhập câu trả lời...'}
+                        className="w-full sm:max-w-md bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold"
+                      />
+                    </div>
+                  )}
 
-                {selectedSubject === 'math' && (
-                  <ProofImageUploader
-                    images={proofImagesByQuestion[q.id] ?? []}
-                    onChange={(images) => handleProofImagesChange(q.id, images)}
-                    disabled={isSubmittingExam}
-                    required={q.answerSchema?.proofImageRequired ?? false}
-                    cloudEnabled={Boolean(user)}
-                  />
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  {selectedSubject === 'math' && q.answerSchema?.proofImageRequired && (
+                    <ProofImageUploader
+                      images={proofImagesByQuestion[q.id] ?? []}
+                      onChange={(images) => handleProofImagesChange(q.id, images)}
+                      disabled={isSubmittingExam}
+                      required={q.answerSchema?.proofImageRequired ?? false}
+                      cloudEnabled={Boolean(user)}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {examSubmitError && (

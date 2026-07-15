@@ -328,7 +328,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                         "text-[10px] w-5 h-5 rounded-md flex items-center justify-center font-black shrink-0",
                         isSelected ? "bg-primary text-white animate-pulse" : "bg-secondary text-muted-foreground"
                       )}>{optLetter}</span>
-                      <span>{cleanOpt}</span>
+                      <LatexRenderer text={cleanOpt} />
                     </button>
                   );
                 })

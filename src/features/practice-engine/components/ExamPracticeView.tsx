@@ -289,7 +289,7 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
                       buttonStyle
                     )}
                   >
-                    {opt}
+                    <LatexRenderer text={opt} />
                   </button>
                 );
               })

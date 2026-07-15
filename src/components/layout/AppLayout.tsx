@@ -247,7 +247,7 @@ export const AppLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen md:h-screen md:overflow-hidden bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
+    <div className="min-h-screen md:min-h-0 md:h-screen md:overflow-hidden bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
 
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
@@ -495,7 +495,7 @@ export const AppLayout: React.FC = () => {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-h-screen md:max-h-screen md:overflow-y-auto bg-background">
+      <main className="flex-1 flex flex-col min-h-screen md:min-h-0 md:max-h-screen md:overflow-y-auto bg-background">
 
         <header className="hidden md:flex items-center justify-between px-8 py-4.5 bg-card/60 backdrop-blur-lg border-b border-border/30 shadow-sm sticky top-0 z-20">
           <div className="flex items-center gap-4.5">
