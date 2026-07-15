@@ -10,6 +10,7 @@ import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon } from '../../utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
+import { authService } from '../../services/authService';
 import type { QuestionType } from '../../types';
 
 export const Roadmap: React.FC = () => {
@@ -66,9 +67,14 @@ export const Roadmap: React.FC = () => {
     return idx === firstLockedIdx;       // Chỉ hiển thị thêm duy nhất 1 bài khóa tiếp theo
   };
 
-  const handleSelectType = (id: string) => {
+  const handleSelectType = async (id: string) => {
     if (!user) {
-      navigate('/auth', { state: { returnTo: `/question-types/${id}` } });
+      try {
+        await authService.signInWithGoogle();
+        navigate(`/question-types/${id}`);
+      } catch (err: any) {
+        alert(err.message || 'Lỗi đăng nhập bằng Google.');
+      }
       return;
     }
 

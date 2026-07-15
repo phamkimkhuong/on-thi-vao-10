@@ -9,7 +9,6 @@ import PracticeEngine from './features/practice-engine/PracticeEngine';
 import MistakeNotebook from './components/mistakes/MistakeNotebook';
 import ExamEngine from './features/exam-engine/ExamEngine';
 import TeacherDashboard from './features/teacher/TeacherDashboard';
-import { AuthPage } from './features/auth/AuthPage';
 import { PremiumPricing } from './features/premium/PremiumPricing';
 import { GeneralAiTutor } from './features/ai-tutor/GeneralAiTutor';
 import { SupportPage } from './features/support/SupportPage';
@@ -20,10 +19,6 @@ import { progressService } from './services/progressService';
 import { Loader } from 'lucide-react';
 
 const router = createBrowserRouter([
-  {
-    path: '/auth',
-    element: <AuthPage />
-  },
   {
     path: '/',
     element: <AppLayout />,

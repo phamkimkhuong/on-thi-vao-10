@@ -1,9 +1,10 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { LockKeyhole, LogIn, ArrowLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LockKeyhole, LogIn, ArrowLeft, Loader } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { cn } from '../../utils/cn';
+import { authService } from '../../services/authService';
 
 interface MathLoginRequiredProps {
   title?: string;
@@ -17,8 +18,18 @@ export const MathLoginRequired: React.FC<MathLoginRequiredProps> = ({
   className
 }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const returnTo = `${location.pathname}${location.search}${location.hash}`;
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setIsAuthLoading(true);
+    try {
+      await authService.signInWithGoogle();
+    } catch (err: any) {
+      alert(err.message || 'Lỗi đăng nhập bằng Google.');
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
 
   return (
     <div className={cn('max-w-xl mx-auto py-8', className)}>
@@ -37,10 +48,17 @@ export const MathLoginRequired: React.FC<MathLoginRequiredProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button
-              onClick={() => navigate('/auth', { state: { returnTo } })}
-              className="font-bold text-xs"
+              disabled={isAuthLoading}
+              onClick={handleGoogleSignIn}
+              className="font-bold text-xs flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:pointer-events-none"
             >
-              <LogIn size={14} /> Đăng nhập để tiếp tục
+              {isAuthLoading ? (
+                <Loader size={14} className="animate-spin" />
+              ) : (
+                <>
+                  <LogIn size={14} /> Đăng nhập bằng Google
+                </>
+              )}
             </Button>
             <Button
               variant="outline"

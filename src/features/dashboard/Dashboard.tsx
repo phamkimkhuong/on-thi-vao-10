@@ -12,17 +12,32 @@ import {
   CheckCircle,
   Sparkles,
   Zap,
-  BookOpen
+  BookOpen,
+  Loader
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
+import { authService } from '../../services/authService';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, user, progressVersion } = useAppStore();
   void progressVersion;
+
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const handleGoogleSignIn = async () => {
+    setIsAuthLoading(true);
+    try {
+      await authService.signInWithGoogle();
+      useAppStore.getState().refreshProgress();
+    } catch (err: any) {
+      alert(err.message || 'Lỗi đăng nhập bằng Google.');
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
 
   const currentUserId = user?.uid || 'guest';
   const progress = storageService.getProgress(currentUserId);
@@ -150,10 +165,15 @@ export const Dashboard: React.FC = () => {
             <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để học lý thuyết đầy đủ, lưu kết quả học tập và bắt đầu làm bài luyện tập/thi thử.</p>
           </div>
           <button
-            onClick={() => navigate('/auth')}
-            className="px-6 py-2.5 font-bold text-xs bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0"
+            disabled={isAuthLoading}
+            onClick={handleGoogleSignIn}
+            className="px-6 py-2.5 font-bold text-xs bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:pointer-events-none min-w-[120px]"
           >
-            Đăng nhập ngay
+            {isAuthLoading ? (
+              <Loader size={14} className="animate-spin" />
+            ) : (
+              <>Đăng nhập ngay</>
+            )}
           </button>
         </div>
       )}

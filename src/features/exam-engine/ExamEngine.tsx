@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/ca
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
+import { authService } from '../../services/authService';
 import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
 import { aiService } from '../../services/aiService';
 
@@ -757,9 +758,13 @@ export const ExamEngine: React.FC = () => {
           description="Bạn cần đăng nhập học tập để bắt đầu tính giờ làm bài và lưu kết quả thi thử."
           confirmLabel="Đăng nhập ngay"
           cancelLabel="Hủy bỏ"
-          onConfirm={() => {
+          onConfirm={async () => {
             setShowLoginConfirm(false);
-            navigate('/auth', { state: { returnTo: `/exam` } });
+            try {
+              await authService.signInWithGoogle();
+            } catch (err: any) {
+              alert(err.message || 'Lỗi đăng nhập bằng Google.');
+            }
           }}
           onCancel={() => setShowLoginConfirm(false)}
         />

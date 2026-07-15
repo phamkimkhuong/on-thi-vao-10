@@ -10,7 +10,7 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
-  MessageSquare,
+  GraduationCap,
   ChevronRight,
   Inbox,
   X,
@@ -482,88 +482,115 @@ export const SupportPage: React.FC = () => {
 
       {/* Detail Overlay Modal when selectedTicket is set */}
       {selectedTicket && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-card/95 border border-border/40 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in max-h-[85vh] flex flex-col glass">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in max-h-[85vh] flex flex-col glass">
 
             {/* Modal Header */}
-            <div className="p-4 bg-gradient-to-r from-emerald-600/90 via-teal-600/90 to-indigo-600/90 text-white flex items-center justify-between shadow-md">
+            <div className="px-6 py-4 border-b border-border/40 flex items-center justify-between bg-secondary/15">
               <div className="flex items-center gap-2">
-                <LifeBuoy size={18} />
-                <span className="font-black text-xs uppercase tracking-wider">Chi tiết yêu cầu hỗ trợ</span>
+                <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <LifeBuoy size={16} />
+                </div>
+                <span className="font-black text-xs uppercase tracking-wider text-foreground">Chi tiết yêu cầu hỗ trợ</span>
               </div>
               <button
                 onClick={() => setSelectedTicket(null)}
-                className="p-1.5 rounded-xl hover:bg-white/10 text-white transition-all cursor-pointer"
+                className="p-1.5 rounded-xl hover:bg-secondary text-muted-foreground transition-all cursor-pointer hover:text-foreground active:scale-95 shrink-0"
               >
                 <X size={16} />
               </button>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 overflow-y-auto space-y-4 flex-1">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={cn("px-2 py-0.5 rounded text-[9px] font-black border uppercase tracking-wider", getCategoryBadgeColor(selectedTicket.category))}>
-                    {getCategoryLabel(selectedTicket.category)}
+            <div className="p-6 overflow-y-auto space-y-5 flex-1">
+              
+              {/* Badges, Date and Title */}
+              <div className="space-y-3 pb-4 border-b border-border/40">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className={cn("px-2 py-0.5 rounded-lg text-[9px] font-black border uppercase tracking-wider", getCategoryBadgeColor(selectedTicket.category))}>
+                      {getCategoryLabel(selectedTicket.category)}
+                    </span>
+                    {getStatusBadge(selectedTicket.status)}
+                  </div>
+                  <span className="text-[9px] text-muted-foreground font-bold">
+                    {new Date(selectedTicket.createdAt).toLocaleString('vi-VN')}
                   </span>
-                  {getStatusBadge(selectedTicket.status)}
                 </div>
-                <h3 className="font-black text-sm text-foreground leading-snug">{selectedTicket.title}</h3>
-                <span className="text-[10px] text-muted-foreground font-semibold block">
-                  Mã yêu cầu: {selectedTicket.id} | Ngày gửi: {new Date(selectedTicket.createdAt).toLocaleString('vi-VN')}
-                </span>
+                <div className="space-y-1">
+                  <h3 className="font-black text-base text-foreground leading-snug">{selectedTicket.title}</h3>
+                  <span className="text-[9px] text-muted-foreground font-semibold block bg-secondary/40 px-2.5 py-0.75 rounded-md w-fit font-mono select-all">
+                    Mã: {selectedTicket.id}
+                  </span>
+                </div>
               </div>
 
-              <div className="p-4 bg-secondary/35 rounded-2xl border border-border/20 text-xs font-semibold text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {selectedTicket.description}
+              {/* Student Question Description */}
+              <div className="space-y-2">
+                <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Nội dung câu hỏi / ý kiến:</span>
+                <div className="p-4 bg-slate-50 dark:bg-slate-900/30 rounded-2xl border border-border/40 text-xs font-semibold text-foreground/80 leading-relaxed whitespace-pre-wrap shadow-inner">
+                  {selectedTicket.description}
+                </div>
               </div>
 
+              {/* Screenshot attached */}
               {selectedTicket.screenshotUrl && (
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Ảnh minh họa đính kèm:</span>
                   <a
                     href={selectedTicket.screenshotUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="block overflow-hidden rounded-2xl border border-border/30 hover:border-primary/40 transition-colors shadow-sm cursor-zoom-in"
+                    className="block overflow-hidden rounded-2xl border border-border/30 hover:border-primary/40 transition-all shadow-xs hover:shadow-md cursor-zoom-in group max-w-sm"
                   >
                     <img
                       src={selectedTicket.screenshotUrl}
                       alt="Student Screenshot"
-                      className="max-h-[180px] w-full object-cover hover:scale-102 transition-transform duration-300 animate-fade-in"
+                      className="max-h-[160px] w-full object-cover group-hover:scale-102 transition-transform duration-300 animate-fade-in"
                     />
                   </a>
                 </div>
               )}
 
               {/* Teacher response */}
-              <div className="border-t border-border/40 pt-4 space-y-3">
+              <div className="border-t border-border/30 pt-4 space-y-3">
                 <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Phản hồi của Giáo viên:</span>
 
                 {selectedTicket.teacherResponse ? (
-                  <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs leading-relaxed space-y-2">
-                    <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-extrabold">
-                      <MessageSquare size={14} />
-                      <span>Thầy cô phản hồi:</span>
+                  <div className="flex gap-3 items-start">
+                    {/* Teacher Icon Avatar */}
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-indigo-600 text-white flex items-center justify-center shadow-md shrink-0">
+                      <GraduationCap size={15} />
                     </div>
-                    <p className="font-semibold text-foreground whitespace-pre-wrap leading-relaxed">{selectedTicket.teacherResponse}</p>
-                    <span className="text-[9px] text-muted-foreground font-semibold block pt-1.5 border-t border-indigo-500/5">
-                      Cập nhật lúc: {new Date(selectedTicket.updatedAt).toLocaleString('vi-VN')}
-                    </span>
+                    <div className="flex-1 p-4 rounded-2xl bg-primary/8 border border-primary/15 text-xs leading-relaxed space-y-2 shadow-xs">
+                      <div className="flex items-center justify-between gap-2 border-b border-primary/10 pb-1.5 mb-1">
+                        <span className="text-[10px] font-black text-primary uppercase tracking-wider">Ban chuyên môn</span>
+                        <span className="text-[8px] text-muted-foreground font-bold">
+                          {new Date(selectedTicket.updatedAt).toLocaleString('vi-VN')}
+                        </span>
+                      </div>
+                      <p className="font-bold text-foreground/90 whitespace-pre-wrap leading-relaxed">{selectedTicket.teacherResponse}</p>
+                    </div>
                   </div>
                 ) : (
-                  <div className="p-5 rounded-2xl bg-slate-500/5 border border-dashed border-border/45 text-center text-xs text-muted-foreground font-semibold leading-relaxed">
-                    💬 Thầy cô đang xử lý yêu cầu hỗ trợ này của em. Em vui lòng tải lại hoặc check lại lịch sử sau nhé!
+                  <div className="flex gap-3 items-start">
+                    <div className="w-8 h-8 rounded-xl bg-slate-200 dark:bg-slate-800 text-muted-foreground flex items-center justify-center shrink-0">
+                      <GraduationCap size={15} />
+                    </div>
+                    <div className="flex-1 p-4 rounded-2xl bg-secondary/35 border border-dashed border-border/60 text-xs text-muted-foreground font-semibold leading-relaxed">
+                      💬 Ban chuyên môn đang xử lý yêu cầu hỗ trợ này của em. Câu trả lời của thầy cô sẽ hiển thị tại đây ngay khi hoàn tất.
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-border/20 flex justify-end bg-card/60 shrink-0">
+            <div className="px-6 py-4.5 border-t border-border/30 flex justify-end bg-secondary/10 shrink-0">
               <Button
                 onClick={() => setSelectedTicket(null)}
-                className="font-bold text-xs bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-5 py-2 cursor-pointer h-9 rounded-xl"
+                variant="outline"
+                className="font-bold text-xs border border-border bg-card hover:bg-secondary px-6 py-2 cursor-pointer h-9.5 rounded-xl transition-all active:scale-95"
               >
                 Đóng
               </Button>
