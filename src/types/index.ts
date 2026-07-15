@@ -87,6 +87,47 @@ export type LearningEvidenceType =
   | 'experiment'
   | 'application';
 
+export type AssessmentKind =
+  | 'diagnostic'
+  | 'module_checkpoint'
+  | 'midterm'
+  | 'final'
+  | 'full_course';
+
+export type AssessmentCompetency =
+  | 'chemical_cognition'
+  | 'chemical_inquiry'
+  | 'chemical_application';
+
+export type AssessmentCognitiveLevel =
+  | 'recognition'
+  | 'understanding'
+  | 'application';
+
+export interface AssessmentBlueprintSection {
+  id: string;
+  title: string;
+  itemCount: number;
+  points: number;
+  responseType: 'multiple_choice' | 'true_false_cluster' | 'short_answer' | 'constructed_response';
+}
+
+export interface AssessmentBlueprint {
+  id: string;
+  subjectId: SubjectCode;
+  title: string;
+  kind: AssessmentKind;
+  duration: number;
+  totalPoints: number;
+  scopeTopicIds: string[];
+  /** Trọng số điểm theo chủ đề; tổng các giá trị phải bằng 1 khi được khai báo. */
+  topicWeights?: Partial<Record<string, number>>;
+  outcomeIds: string[];
+  competencyWeights: Partial<Record<AssessmentCompetency, number>>;
+  difficultyWeights: Record<'easy' | 'medium' | 'hard', number>;
+  sections: AssessmentBlueprintSection[];
+}
+
 export interface LearningOutcome {
   id: string;
   topicId: string;
@@ -163,6 +204,13 @@ export interface Question {
   answerSchema?: AnswerSchema;
   correctFinalAnswer?: StructuredAnswer;
   acceptedFinalAnswers?: StructuredAnswer[];
+  /** Metadata dùng khi câu hỏi xuất hiện trong bài kiểm tra/thi thử. */
+  points?: number;
+  outcomeIds?: string[];
+  competency?: AssessmentCompetency;
+  cognitiveLevel?: AssessmentCognitiveLevel;
+  estimatedSeconds?: number;
+  variantGroupId?: string;
 }
 
 export interface SolutionStep {
@@ -246,11 +294,20 @@ export interface MockExam {
   duration: number; // đơn vị: phút
   questionIds: string[];
   createdAt: string;
+  kind?: AssessmentKind;
+  scopeTopicIds?: string[];
+  totalPoints?: number;
+  formCode?: string;
+  instructions?: string[];
+  resultReleasePolicy?: 'immediate' | 'after_submit' | 'teacher_release';
 }
 
 export interface ExamResult {
   examId: string;
+  sourceExamId?: string;
   score: number;
+  earnedPoints?: number;
+  maxPoints?: number;
   correctCount: number;
   totalCount: number;
   timeSpent: number; // đơn vị: giây
@@ -260,6 +317,8 @@ export interface ExamResult {
     finalAnswer?: StructuredAnswer;
     proofImages?: ProofImage[];
     isCorrect: boolean;
+    earnedPoints?: number;
+    maxPoints?: number;
   }>;
 }
 

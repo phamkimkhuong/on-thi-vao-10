@@ -165,8 +165,8 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
       // Xóa trắng container trước khi render mới
       containerRef.current.innerHTML = '';
 
-      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế (trừ các lệnh LaTeX bắt đầu bằng \n như \neq, \nexists, \notin, ...)
-      const normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|otin|geq|leq|parallel|cong|sim|approx)/g, '\n');
+      // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế (trừ các lệnh LaTeX bắt đầu bằng \n như \neq, \nexists, \notin, \nu, \nabla, \neg, ...)
+      const normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|otin|geq|leq|parallel|cong|sim|approx|u|abla|eg)/g, '\n');
 
       // Tách riêng các khối hình ảnh SVG (nếu có) để render đồ họa vector trực tiếp
       const SVG_REGEX = /(<svg[\s\S]*?<\/svg>)/g;

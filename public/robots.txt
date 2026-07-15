@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /dashboard
+Allow: /roadmap
+Allow: /premium
+Allow: /support
+Disallow: /practice/
+Disallow: /exam/
+Disallow: /teacher/
+
+Sitemap: https://on-thi-vao-10.web.app/sitemap.xml

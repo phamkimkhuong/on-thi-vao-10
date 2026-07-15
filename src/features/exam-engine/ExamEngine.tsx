@@ -4,7 +4,7 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getMockExams, allQuestions, allSolutions } from '../../data';
+import { getQuestionTypes, getMockExams, getLearningOutcomes, allQuestions, allSolutions } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -12,7 +12,7 @@ import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
 import { aiService } from '../../services/aiService';
 
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
-import { Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
+import { MockExam, Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
 import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
@@ -35,9 +35,25 @@ export const ExamEngine: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, user } = useAppStore();
 
-  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
-  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
+  const subjectQuestionTypes = getQuestionTypes(selectedGrade, selectedSubject);
+  const subjectLearningOutcomes = getLearningOutcomes(selectedGrade, selectedSubject);
   const mockExamsList = getMockExams(selectedGrade, selectedSubject);
+
+  const subjectLabels: Record<string, string> = {
+    math: 'Toán học',
+    english: 'Tiếng Anh',
+    chemistry: 'Hóa học',
+    physics: 'Vật lí',
+    biology: 'Sinh học'
+  };
+  const subjectLabel = subjectLabels[selectedSubject] ?? 'Môn học';
+  const assessmentKindLabels: Record<string, string> = {
+    diagnostic: 'Chẩn đoán',
+    module_checkpoint: 'Kiểm tra Chuyên đề',
+    midterm: 'Giữa kỳ',
+    final: 'Cuối kỳ',
+    full_course: 'Tổng hợp toàn khóa'
+  };
 
   useEffect(() => {
     const start = Date.now();
@@ -46,14 +62,14 @@ export const ExamEngine: React.FC = () => {
       const durationMinutes = Math.round((durationSeconds / 60) * 100) / 100;
       if (durationSeconds > 2) {
         logCustomEvent('study_session_end', {
-          subject: selectedSubject === 'math' ? 'Toán' : 'Anh',
+          subject: subjectLabel,
           duration_minutes: durationMinutes,
           duration_seconds: durationSeconds,
           mode: 'exam'
         });
       }
     };
-  }, [selectedSubject]);
+  }, [selectedSubject, subjectLabel]);
 
   const [examState, setExamState] = useState<'intro' | 'testing' | 'result'>('intro');
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -62,9 +78,47 @@ export const ExamEngine: React.FC = () => {
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
 
   const [selectedExamId, setSelectedExamId] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'all' | 'checkpoint' | 'midterm' | 'final'>('all');
+
   const subjectExams = React.useMemo(() => {
     return mockExamsList.filter(exam => exam.subjectId === selectedSubject);
   }, [selectedSubject, mockExamsList]);
+
+  // Lọc đề thi theo tab đang chọn
+  const filteredExams = React.useMemo(() => {
+    return subjectExams.filter(exam => {
+      if (activeTab === 'all') return true;
+      if (activeTab === 'checkpoint') return exam.kind === 'module_checkpoint';
+      if (activeTab === 'midterm') return exam.kind === 'midterm';
+      if (activeTab === 'final') return exam.kind === 'final';
+      return true;
+    });
+  }, [subjectExams, activeTab]);
+
+  // Gộp các đề thi trùng tên (chỉ khác mã đề A/B)
+  const groupedExams = React.useMemo(() => {
+    const groups: Record<string, { baseTitle: string; exams: MockExam[] }> = {};
+    filteredExams.forEach(exam => {
+      const baseTitle = exam.title.replace(/\s*\(Mã\s+[A-Z]\)\s*$/, '').trim();
+      if (!groups[baseTitle]) {
+        groups[baseTitle] = { baseTitle, exams: [] };
+      }
+      groups[baseTitle].exams.push(exam);
+    });
+    return Object.values(groups);
+  }, [filteredExams]);
+
+  // Tự động cập nhật selectedExamId khi đổi tab hoặc đổi môn học
+  useEffect(() => {
+    if (filteredExams.length > 0) {
+      const stillAvailable = filteredExams.some(e => e.id === selectedExamId);
+      if (!stillAvailable) {
+        setSelectedExamId(filteredExams[0].id);
+      }
+    } else {
+      setSelectedExamId('');
+    }
+  }, [activeTab, filteredExams, selectedExamId]);
 
   const [expandedSolutionId, setExpandedSolutionId] = useState<Record<string, boolean>>({});
   const [aiFeedback, setAiFeedback] = useState<Record<string, { isCorrect: boolean; score: number; feedback: string }>>({});
@@ -174,7 +228,7 @@ export const ExamEngine: React.FC = () => {
   const [examSubmitError, setExamSubmitError] = useState<string | null>(null);
 
   const currentExam = mockExamsList.find(exam => exam.id === selectedExamId) || subjectExams[0];
-  const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'math' ? 120 : 60);
+  const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'chemistry' ? 45 : selectedSubject === 'math' ? 120 : 60);
 
   const handleSubmitExam = useCallback(async () => {
     if (isSubmittingExam) return;
@@ -183,7 +237,9 @@ export const ExamEngine: React.FC = () => {
     setExamSubmitError(null);
 
     let correctCount = 0;
+    let earnedPoints = 0;
     const totalCount = examQuestions.length;
+    const maxPoints = examQuestions.reduce((sum, question) => sum + (question.points ?? 1), 0);
     const attemptResults: ExamResult['attempts'] = {};
     const currentUserId = user!.uid;
     const completedAt = new Date().toISOString();
@@ -194,6 +250,8 @@ export const ExamEngine: React.FC = () => {
       const answerInput = q.answerSchema ? (finalAnswers[q.id] ?? {}) : answers[q.id] || '';
       const userAns = formatAnswerForDisplay(q, answerInput);
       const isCorrect = validateAnswer(q, answerInput);
+      const questionPoints = q.points ?? 1;
+      const awardedPoints = isCorrect ? questionPoints : 0;
       const attemptId = `attempt-${examId}-${q.id}`;
       const localProofImages = proofImagesByQuestion[q.id] ?? [];
       let uploadedProofImages: UserAttempt['proofImages'] = [];
@@ -214,11 +272,14 @@ export const ExamEngine: React.FC = () => {
       }
 
       if (isCorrect) correctCount++;
+      earnedPoints += awardedPoints;
       attemptResults[q.id] = {
         userAnswer: userAns,
         ...(q.answerSchema ? { finalAnswer: finalAnswers[q.id] ?? {} } : {}),
         ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
-        isCorrect
+        isCorrect,
+        earnedPoints: awardedPoints,
+        maxPoints: questionPoints
       };
 
       // Tự động ghi nhận lịch sử làm bài vào LocalStorage để đồng bộ tiến độ
@@ -248,11 +309,16 @@ export const ExamEngine: React.FC = () => {
       });
     }
 
-    const score = Math.round((correctCount / totalCount) * 10 * 10) / 10; // Thang điểm 10 làm tròn 1 chữ số
+    const score = maxPoints > 0
+      ? Math.round((earnedPoints / maxPoints) * 10 * 10) / 10
+      : 0;
 
     const result: ExamResult = {
       examId,
+      sourceExamId: currentExam?.id,
       score,
+      earnedPoints,
+      maxPoints,
       correctCount,
       totalCount,
       timeSpent,
@@ -282,7 +348,7 @@ export const ExamEngine: React.FC = () => {
         origin: { y: 0.6 }
       });
     }
-  }, [examQuestions, answers, finalAnswers, proofImagesByQuestion, selectedSubject, timeSpent, user, isSubmittingExam]);
+  }, [examQuestions, answers, finalAnswers, proofImagesByQuestion, selectedSubject, timeSpent, user, isSubmittingExam, currentExam]);
 
   useEffect(() => {
     let timer: any;
@@ -364,8 +430,7 @@ export const ExamEngine: React.FC = () => {
   const getExamAnalysis = () => {
     if (!examResult) return [];
 
-    const isMath = selectedSubject === 'math';
-    const typeList = isMath ? mathQuestionTypes : englishQuestionTypes;
+    const typeList = subjectQuestionTypes;
 
     // Group kết quả theo QuestionType
     const analysis: Record<string, { name: string, total: number, correct: number }> = {};
@@ -396,78 +461,247 @@ export const ExamEngine: React.FC = () => {
     }));
   };
 
+  const getOutcomeAnalysis = () => {
+    if (!examResult) return [];
+
+    const analysis: Record<string, { title: string; earned: number; maximum: number; questionTypeId?: string }> = {};
+
+    examQuestions.forEach(question => {
+      const outcomeIds = question.outcomeIds ?? [];
+      if (outcomeIds.length === 0) return;
+
+      const attempt = examResult.attempts[question.id];
+      const questionMaximum = question.points ?? 1;
+      const questionEarned = attempt?.earnedPoints ?? (attempt?.isCorrect ? questionMaximum : 0);
+      const maximumShare = questionMaximum / outcomeIds.length;
+      const earnedShare = questionEarned / outcomeIds.length;
+
+      outcomeIds.forEach(outcomeId => {
+        const outcome = subjectLearningOutcomes.find(item => item.id === outcomeId);
+        if (!analysis[outcomeId]) {
+          analysis[outcomeId] = {
+            title: outcome?.title ?? outcomeId,
+            earned: 0,
+            maximum: 0,
+            questionTypeId: outcome?.questionTypeIds[0]
+          };
+        }
+        analysis[outcomeId].earned += earnedShare;
+        analysis[outcomeId].maximum += maximumShare;
+      });
+    });
+
+    return Object.entries(analysis)
+      .map(([outcomeId, data]) => ({
+        outcomeId,
+        ...data,
+        percent: data.maximum > 0 ? Math.round((data.earned / data.maximum) * 100) : 0
+      }))
+      .sort((a, b) => a.percent - b.percent);
+  };
+
   // RENDER GIAO DIỆN GIỚI THIỆU ĐỀ THI
   if (examState === 'intro') {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-black text-foreground">Phòng thi thử tuyển sinh vào lớp 10</h2>
-          <p className="text-xs text-muted-foreground font-semibold">Đánh giá chuẩn xác năng lực học tập và rèn luyện tâm lý phòng thi thực tế.</p>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-border/60 pb-6">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
+              <Award className="text-primary w-8 h-8" />
+              Thi thử & Kiểm tra {subjectLabel}
+            </h2>
+            <p className="text-sm text-muted-foreground font-medium">
+              Đánh giá mức độ làm chủ kiến thức bằng đề kiểm tra có phạm vi và thời gian rõ ràng.
+            </p>
+          </div>
 
-        {/* Danh sách đề thi */}
-        <div className="space-y-3">
-          <label className="text-xs font-extrabold text-muted-foreground uppercase tracking-wider block">Hãy chọn đề thi thử:</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {subjectExams.map(exam => {
-              const isSelected = selectedExamId === exam.id;
+          {/* Lọc đề thi theo Tab */}
+          <div className="flex items-center gap-1 bg-secondary/80 p-1.5 rounded-2xl border border-border/20 self-start">
+            {(['all', 'checkpoint', 'midterm', 'final'] as const).map(tab => {
+              const tabLabels = {
+                all: 'Tất cả',
+                checkpoint: 'Chuyên đề',
+                midterm: 'Giữa kỳ',
+                final: 'Cuối kỳ'
+              };
+              const isActive = activeTab === tab;
               return (
                 <button
-                  key={exam.id}
-                  onClick={() => setSelectedExamId(exam.id)}
-                  className={`text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${isSelected
-                      ? 'bg-primary/5 border-primary shadow-sm shadow-primary/5'
-                      : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/5 text-foreground'
-                    }`}
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? 'bg-card text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
                 >
-                  <h4 className="font-extrabold text-xs text-foreground mb-1">{exam.title}</h4>
-                  <p className="text-[10px] text-muted-foreground font-semibold">
-                    ⏱️ {exam.duration} phút • 📝 {exam.questionIds.length} câu hỏi
-                  </p>
+                  {tabLabels[tab]}
                 </button>
               );
             })}
           </div>
         </div>
 
-        {currentExam && (
-          <Card className="border-indigo-500/10 shadow-md">
-            <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30">
-              <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2">
-                <Award className="text-primary" size={18} />
-                Thông tin chi tiết: {currentExam.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary rounded-xl border border-border/10">
-                  <span className="text-[10px] font-bold text-muted-foreground block mb-1">THỜI GIAN LÀM BÀI</span>
-                  <span className="text-xs font-extrabold text-foreground">{currentExam.duration} phút</span>
-                </div>
-                <div className="p-4 bg-secondary rounded-xl border border-border/10">
-                  <span className="text-[10px] font-bold text-muted-foreground block mb-1">SỐ CÂU HỎI TRỰC CHIẾN</span>
-                  <span className="text-xs font-extrabold text-foreground">
-                    {currentExam.questionIds.length} câu
-                  </span>
-                </div>
-              </div>
+        {/* Main Layout 2-Column */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Cột trái: Danh sách đề thi */}
+          <div className="lg:col-span-7 xl:col-span-8 space-y-6">
+            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block mb-1">
+              Danh sách đề thi ({filteredExams.length} đề):
+            </label>
+            
+            {groupedExams.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {groupedExams.map(group => {
+                  const isGroupSelected = group.exams.some(e => e.id === selectedExamId);
+                  const selectedExamInGroup = group.exams.find(e => e.id === selectedExamId) || group.exams[0];
+                  const isSelected = selectedExamId === selectedExamInGroup.id;
+                  
+                  return (
+                    <div
+                      key={group.baseTitle}
+                      className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-lg hover:-translate-y-0.5 ${
+                        isGroupSelected
+                          ? 'border-primary shadow-md shadow-primary/5 ring-1 ring-primary/20'
+                          : 'border-border/65 hover:border-border-hover'
+                      }`}
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-primary">
+                            {assessmentKindLabels[selectedExamInGroup.kind ?? 'module_checkpoint']}
+                          </span>
+                          {group.exams.length > 1 && (
+                            <span className="text-[10px] text-muted-foreground font-bold bg-secondary/80 px-2 py-0.5 rounded-md">
+                              {group.exams.length} mã đề
+                            </span>
+                          )}
+                        </div>
 
-              <div className="space-y-3 bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-400">
-                <h4 className="font-extrabold flex items-center gap-1.5"><AlertTriangle size={14} /> Quy chế phòng thi thử:</h4>
-                <p>• Hệ thống sẽ tự động chuyển sang **Focus Mode** (Chế độ tập trung), ẩn các thanh sidebar gây xao nhãng.</p>
-                <p>• Hết giờ làm bài hệ thống sẽ tự động nộp bài thi.</p>
-                <p>• Dữ liệu bài thi sẽ được phân tích sâu để tìm điểm yếu của bạn.</p>
-              </div>
+                        <h4 className="font-extrabold text-sm text-foreground line-clamp-2">
+                          {group.baseTitle}
+                        </h4>
+                      </div>
 
-              <Button
-                onClick={handleStartExam}
-                className="w-full font-bold py-3.5 text-xs active:scale-[0.98] shadow-md shadow-primary/20 flex items-center justify-center gap-1.5"
-              >
-                <Play size={14} className="fill-white" /> Bắt đầu tính giờ thi thử
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+                      {/* Variant selector & action */}
+                      <div className="space-y-4 pt-4 border-t border-border/40 mt-5">
+                        {group.exams.length > 1 && (
+                          <div className="space-y-1.5">
+                            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider block">Chọn mã đề:</span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {group.exams.map(exam => {
+                                const isVariantSelected = selectedExamId === exam.id;
+                                return (
+                                  <button
+                                    key={exam.id}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSelectedExamId(exam.id);
+                                    }}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${
+                                      isVariantSelected
+                                        ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                                        : 'bg-secondary text-muted-foreground border-transparent hover:bg-secondary-hover'
+                                    }`}
+                                  >
+                                    Mã {exam.formCode}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        <button
+                          onClick={() => setSelectedExamId(selectedExamInGroup.id)}
+                          className={`w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-[0.98] ${
+                            isSelected
+                              ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                              : 'bg-secondary text-foreground hover:bg-secondary-hover'
+                          }`}
+                        >
+                          {isSelected ? 'Đang chọn' : 'Xem chi tiết'}
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center space-y-2">
+                <p className="text-sm font-extrabold text-foreground">Không tìm thấy đề thi phù hợp</p>
+                <p className="text-xs text-muted-foreground font-semibold">Vui lòng quay lại sau hoặc thử chọn danh mục khác.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Cột phải: Sticky chi tiết đề thi */}
+          <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24">
+            {currentExam && filteredExams.some(e => e.id === currentExam.id) ? (
+              <Card className="border-border shadow-lg overflow-hidden rounded-2xl bg-card">
+                <div className="h-2 bg-gradient-to-r from-primary to-indigo-500" />
+                <CardHeader className="p-6 border-b border-border/40">
+                  <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2.5">
+                    <Award className="text-primary" size={18} />
+                    Chi tiết: {currentExam.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 space-y-6">
+                  <div className="grid grid-cols-2 gap-3.5">
+                    <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
+                      <span className="text-[9px] font-bold text-muted-foreground block mb-1">THỜI GIAN LÀM BÀI</span>
+                      <span className="text-xs font-extrabold text-foreground">{currentExam.duration} phút</span>
+                    </div>
+                    <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
+                      <span className="text-[9px] font-bold text-muted-foreground block mb-1">SỐ CÂU HỎI TRỰC CHIẾN</span>
+                      <span className="text-xs font-extrabold text-foreground">
+                        {currentExam.questionIds.length} câu
+                      </span>
+                    </div>
+                    {currentExam.kind && (
+                      <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
+                        <span className="text-[9px] font-bold text-muted-foreground block mb-1">LOẠI ĐÁNH GIÁ</span>
+                        <span className="text-xs font-extrabold text-foreground">{assessmentKindLabels[currentExam.kind]}</span>
+                      </div>
+                    )}
+                    {currentExam.formCode && (
+                      <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
+                        <span className="text-[9px] font-bold text-muted-foreground block mb-1">MÃ ĐỀ</span>
+                        <span className="text-xs font-extrabold text-foreground">{currentExam.formCode}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-3 bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-400">
+                    <h4 className="font-extrabold flex items-center gap-1.5"><AlertTriangle size={14} /> Quy chế phòng thi thử:</h4>
+                    {(currentExam.instructions ?? [
+                      'Hệ thống chuyển sang chế độ tập trung trong thời gian làm bài.',
+                      'Hết giờ hệ thống sẽ tự động nộp bài.',
+                      'Kết quả được phân tích để xác định nội dung cần ôn lại.'
+                    ]).map((instruction) => <p key={instruction}>• {instruction}</p>)}
+                  </div>
+
+                  <Button
+                    onClick={handleStartExam}
+                    className="w-full font-bold py-4 text-xs active:scale-[0.98] shadow-md shadow-primary/20 flex items-center justify-center gap-2 rounded-xl"
+                  >
+                    <Play size={14} className="fill-white" /> Bắt đầu tính giờ thi thử
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-border bg-card/50 p-8 text-center space-y-3">
+                <Sparkles className="text-muted-foreground mx-auto w-8 h-8 opacity-40 animate-pulse" />
+                <p className="text-xs font-extrabold text-muted-foreground">Vui lòng chọn đề thi để xem chi tiết</p>
+              </div>
+            )}
+          </div>
+
+        </div>
       </div>
     );
   }
@@ -482,7 +716,7 @@ export const ExamEngine: React.FC = () => {
           <div className="flex flex-col">
             <span className="text-[9px] font-bold text-red-500 animate-pulse uppercase tracking-wider">● Đang trong giờ thi thử nghiêm túc</span>
             <h3 className="text-sm font-extrabold text-foreground">
-              Đề thi thử {selectedSubject === 'math' ? 'Toán học Vào 10' : 'Tiếng Anh Vào 10'}
+              {currentExam?.title ?? `Bài kiểm tra ${subjectLabel}`}
             </h3>
           </div>
 
@@ -589,6 +823,7 @@ export const ExamEngine: React.FC = () => {
   // RENDER TRANG BÁO CÁO KẾT QUẢ THI THỬ (RESULT MODE)
   if (examState === 'result' && examResult) {
     const analysis = getExamAnalysis();
+    const outcomeAnalysis = getOutcomeAnalysis();
 
     return (
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
@@ -601,6 +836,11 @@ export const ExamEngine: React.FC = () => {
             <p className="text-xs text-indigo-100 font-semibold mt-2.5">
               Đúng {examResult.correctCount} / {examResult.totalCount} câu • Thời gian làm bài: {formatTime(examResult.timeSpent)}
             </p>
+            {examResult.earnedPoints !== undefined && examResult.maxPoints !== undefined && (
+              <p className="text-[11px] text-indigo-100 font-semibold mt-1">
+                Điểm thô: {examResult.earnedPoints} / {examResult.maxPoints}
+              </p>
+            )}
           </CardHeader>
           <CardContent className="p-6 space-y-6">
 
@@ -615,6 +855,44 @@ export const ExamEngine: React.FC = () => {
                 <p className="text-rose-600 dark:text-rose-400">Cần cố gắng nhiều hơn! Điểm số này báo hiệu bạn đang bị hổng nhiều dạng bài cốt lõi. Hãy làm theo đề xuất rèn luyện dưới đây.</p>
               )}
             </div>
+
+            {outcomeAnalysis.length > 0 && (
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5"><Award size={16} /> Mức độ làm chủ theo chuẩn đầu ra:</h4>
+                  <p className="mt-1 text-[10px] font-semibold text-muted-foreground">Câu gắn nhiều chuẩn được chia đều trọng số để kết quả không bị tính trùng.</p>
+                </div>
+                <div className="space-y-3">
+                  {outcomeAnalysis.map(item => {
+                    const isWeak = item.percent < 60;
+                    const earned = Math.round(item.earned * 100) / 100;
+                    const maximum = Math.round(item.maximum * 100) / 100;
+                    return (
+                      <div key={item.outcomeId} className={`rounded-xl border p-4 ${isWeak ? 'border-rose-500/20 bg-rose-500/5' : 'border-border bg-card'}`}>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <h5 className="text-xs font-extrabold text-foreground">{item.title}</h5>
+                              {isWeak && <span className="shrink-0 rounded-full bg-rose-100 px-2 py-0.5 text-[8px] font-bold uppercase text-rose-600 dark:bg-rose-950 dark:text-rose-400">Cần củng cố</span>}
+                            </div>
+                            <p className="mt-1 text-[10px] font-semibold text-muted-foreground">{earned} / {maximum} điểm quy đổi</p>
+                          </div>
+                          <span className={`text-sm font-black ${isWeak ? 'text-rose-500' : 'text-emerald-500'}`}>{item.percent}%</span>
+                        </div>
+                        <div className="mt-3 h-2 overflow-hidden rounded-full bg-secondary">
+                          <div className={`h-full rounded-full ${isWeak ? 'bg-rose-500' : 'bg-emerald-500'}`} style={{ width: `${item.percent}%` }} />
+                        </div>
+                        {isWeak && item.questionTypeId && (
+                          <Button onClick={() => navigate(`/question-types/${item.questionTypeId}`)} variant="outline" size="sm" className="mt-3 h-8 text-[10px] font-bold">
+                            Học lại chuẩn này <ArrowRight size={11} className="ml-1" />
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Phân tích theo từng QuestionType */}
             <div className="space-y-4">

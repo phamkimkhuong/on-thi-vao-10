@@ -1,15 +1,17 @@
 import React from 'react';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { Question, Solution, UserAttempt, SubjectCode } from '../../../types';
+import { Question, QuestionType, Solution, UserAttempt, SubjectCode } from '../../../types';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
 import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { logCustomEvent } from '../../../services/firebase';
+import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
 interface ResultCardProps {
   currentQuestion: Question;
+  currentQuestionType: QuestionType | null;
   isCorrect: boolean;
   isMath: boolean;
   proofImages: LocalProofImage[];
@@ -28,6 +30,7 @@ interface ResultCardProps {
 
 export const ResultCard: React.FC<ResultCardProps> = ({
   currentQuestion,
+  currentQuestionType,
   isCorrect,
   isMath,
   proofImages,
@@ -463,12 +466,14 @@ export const ResultCard: React.FC<ResultCardProps> = ({
         <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
           <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
 
+          {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} />}
+
           <div className={cn(
             "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
             getSubjectTheme(routeSubject).bg,
             getSubjectTheme(routeSubject).border
           )}>
-            <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
+            <span className="font-extrabold text-foreground block mb-1">💡 Áp dụng vào câu hỏi này:</span>
             <LatexRenderer text={solutionDetail.recognition} />
           </div>
 

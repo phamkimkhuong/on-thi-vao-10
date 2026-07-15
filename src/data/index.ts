@@ -32,8 +32,17 @@ import { g10ChemistryQuestionTypes } from './grade10/chemistry/questionTypes';
 import { g10ChemistryQuestions } from './grade10/chemistry/questions';
 import { g10ChemistrySolutions } from './grade10/chemistry/solutions';
 import { g10ChemistryMisconceptions, g10ChemistryOutcomes } from './grade10/chemistry/learningPath';
+import {
+  g10ChemistryAssessmentExams,
+  g10ChemistryAssessmentQuestions,
+  g10ChemistryAssessmentSolutions
+} from './grade10/chemistry/assessments';
 
-import { g10MockExamsList, g10MockQuestions, g10MockSolutionsList } from './grade10/mockExams';
+import {
+  g10MathAssessmentExams,
+  g10MathAssessmentQuestions,
+  g10MathAssessmentSolutions
+} from './grade10/math/assessments';
 
 // Combined questions for cross-referencing
 export const allQuestions: Question[] = [
@@ -44,7 +53,8 @@ export const allQuestions: Question[] = [
   ...g10MathQuestions,
   ...g10EnglishQuestions,
   ...g10ChemistryQuestions,
-  ...g10MockQuestions
+  ...g10ChemistryAssessmentQuestions,
+  ...g10MathAssessmentQuestions
 ];
 
 export const allSolutions: Solution[] = [
@@ -54,7 +64,8 @@ export const allSolutions: Solution[] = [
   ...g10MathSolutions,
   ...g10EnglishSolutions,
   ...g10ChemistrySolutions,
-  ...g10MockSolutionsList
+  ...g10ChemistryAssessmentSolutions,
+  ...g10MathAssessmentSolutions
 ];
 
 // Helper functions to get data dynamically based on grade
@@ -103,7 +114,9 @@ export const getSolutions = (grade: 'grade9' | 'grade10', subject: SubjectCode):
 };
 
 export const getMockExams = (grade: 'grade9' | 'grade10', subject: SubjectCode): MockExam[] => {
-  const exams = grade === 'grade9' ? (g9MockExamsList as MockExam[]) : g10MockExamsList;
+  const exams = grade === 'grade9'
+    ? (g9MockExamsList as MockExam[])
+    : [...g10MathAssessmentExams, ...g10ChemistryAssessmentExams];
   return exams.filter(exam => exam.subjectId === subject);
 };
 

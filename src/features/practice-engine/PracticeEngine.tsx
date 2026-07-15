@@ -29,6 +29,12 @@ import { useProofUpload } from './hooks/useProofUpload';
 
 const getNow = () => Date.now();
 
+const chemistryDifficultyRank: Record<Question['difficulty'], number> = {
+  easy: 0,
+  medium: 1,
+  hard: 2
+};
+
 const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: string }> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -219,7 +225,7 @@ export const PracticeEngine: React.FC = () => {
   const isChemistry = routeSubject === 'chemistry';
   const qList = isMath ? mathQuestions : isChemistry ? chemistryQuestions : englishQuestions;
 
-  const questions = useEnglishQuestionFilter(
+  const filteredQuestions = useEnglishQuestionFilter(
     questionTypeId,
     qList,
     selectedSubTense,
@@ -228,7 +234,32 @@ export const PracticeEngine: React.FC = () => {
     examQuestions
   );
 
+  // Trong chế độ luyện tập Hóa học, học sinh đi từ nhận biết nền tảng đến
+  // vận dụng cao. Giữ nguyên thứ tự đề trong chế độ thi để không làm biến đổi đề.
+  const questions = useMemo(() => {
+    if (!isChemistry || isExamMode) return filteredQuestions;
+
+    return filteredQuestions
+      .map((question, sourceIndex) => ({ question, sourceIndex }))
+      .sort((left, right) => (
+        chemistryDifficultyRank[left.question.difficulty]
+        - chemistryDifficultyRank[right.question.difficulty]
+        || left.sourceIndex - right.sourceIndex
+      ))
+      .map(({ question }) => question);
+  }, [filteredQuestions, isChemistry, isExamMode]);
+
   const questionAtIdx = questions[currentIdx] || null;
+
+  const currentQuestionType = useMemo(() => {
+    if (!questionAtIdx) return null;
+    const availableTypes = isMath
+      ? mathQuestionTypes
+      : isChemistry
+        ? chemistryQuestionTypes
+        : englishQuestionTypes;
+    return availableTypes.find(type => type.id === questionAtIdx.questionTypeId) || null;
+  }, [questionAtIdx, isMath, isChemistry, mathQuestionTypes, chemistryQuestionTypes, englishQuestionTypes]);
 
   const solutionDetail: Solution | null = questionAtIdx
     ? (isMath
@@ -899,7 +930,7 @@ export const PracticeEngine: React.FC = () => {
 
   const triggerNextHint = () => {
     if (solutionDetail) {
-      const maxSteps = solutionDetail.detailedSteps.length;
+      const maxSteps = solutionDetail.detailedSteps.length + (isChemistry && currentQuestionType ? 1 : 0);
       setHintLevel(prev => (prev < maxSteps ? prev + 1 : 0));
     }
   };
@@ -1075,6 +1106,7 @@ export const PracticeEngine: React.FC = () => {
       {!isSubmitted ? (
         <QuestionCard
           currentQuestion={currentQuestion}
+          currentQuestionType={isChemistry ? currentQuestionType : null}
           structuredAnswer={structuredAnswer}
           setStructuredAnswer={setStructuredAnswer}
           questionTypeId={questionTypeId}
@@ -1105,6 +1137,7 @@ export const PracticeEngine: React.FC = () => {
       ) : (
         <ResultCard
           currentQuestion={currentQuestion}
+          currentQuestionType={isChemistry ? currentQuestionType : null}
           isCorrect={isCorrect}
           isMath={isMath}
           proofImages={proofImages}

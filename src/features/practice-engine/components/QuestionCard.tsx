@@ -3,15 +3,17 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 import { ProofImageUploader } from '../../../components/common/ProofImageUploader';
-import { Question, Solution, StructuredAnswer, SubjectCode } from '../../../types';
+import { Question, QuestionType, Solution, StructuredAnswer, SubjectCode } from '../../../types';
 import { AnswerFormRenderer } from '../../../components/common/AnswerFormRenderer';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
 import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp } from 'lucide-react';
+import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
 interface QuestionCardProps {
   currentQuestion: Question;
+  currentQuestionType: QuestionType | null;
   questionTypeId: string | undefined;
   selectedOption: string | null;
   handleOptionSelect: (letter: string) => void;
@@ -42,6 +44,7 @@ interface QuestionCardProps {
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   currentQuestion,
+  currentQuestionType,
   questionTypeId,
   selectedOption,
   handleOptionSelect,
@@ -374,7 +377,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   getSubjectTheme(routeSubject).border
                 )}
               >
-                {hintLevel === solutionDetail.detailedSteps.length ? (
+                {hintLevel === solutionDetail.detailedSteps.length + (currentQuestionType ? 1 : 0) ? (
                   <>
                     <ChevronUp size={14} className="text-amber-500 animate-bounce" />
                     <span>Thu gọn gợi ý</span>
@@ -382,14 +385,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 ) : (
                   <>
                     <Lightbulb size={14} className="text-amber-500 animate-pulse" />
-                    <span>{hintLevel === 0 ? 'Gợi ý giải từng bước' : `Gợi ý tiếp theo (Bước ${hintLevel + 1})`}</span>
+                    <span>{hintLevel === 0 ? 'Nhận dạng dạng bài' : `Gợi ý tiếp theo (${hintLevel + 1})`}</span>
                   </>
                 )}
               </button>
 
               {hintLevel > 0 && (
                 <div className="p-4.5 bg-amber-500/5 border border-amber-500/15 rounded-2xl space-y-3.5 animate-fade-in">
-                  {solutionDetail.detailedSteps.slice(0, hintLevel).map((step: any, sIdx: number) => (
+                  {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} compact />}
+                  {solutionDetail.detailedSteps.slice(0, Math.max(0, hintLevel - (currentQuestionType ? 1 : 0))).map((step: any, sIdx: number) => (
                     <div key={sIdx} className="text-xs font-semibold text-muted-foreground leading-relaxed flex gap-2">
                       <span className="text-amber-500 shrink-0 font-black">Step {step.order}:</span>
                       <div className="flex-1">

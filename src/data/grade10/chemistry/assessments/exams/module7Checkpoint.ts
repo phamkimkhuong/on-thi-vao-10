@@ -1,0 +1,24 @@
+import type { MockExam } from '@/types';
+
+const instructions = [
+  'Bài gồm 8 câu nhiều lựa chọn và 4 câu trả lời ngắn.',
+  'Dùng xu hướng tính oxi hóa F₂ > Cl₂ > Br₂ > I₂ để kiểm tra chiều phản ứng thế.',
+  'Phân biệt màu AgCl trắng, AgBr vàng nhạt/kem và AgI vàng.'
+];
+
+export const module7CheckpointExams: MockExam[] = [
+  {
+    id: 'chem10-module7-checkpoint-a', subjectId: 'chemistry', title: 'Chuyên đề 7 – Halogen (Mã A)',
+    duration: 20, kind: 'module_checkpoint', scopeTopicIds: ['chem10-t7'], totalPoints: 10, formCode: 'A',
+    resultReleasePolicy: 'after_submit', instructions,
+    questionIds: Array.from({ length: 12 }, (_, index) => 'chem10-assess-m7-cp-a-q' + String(index + 1).padStart(2, '0')),
+    createdAt: '2026-07-15T00:00:00.000Z'
+  },
+  {
+    id: 'chem10-module7-checkpoint-b', subjectId: 'chemistry', title: 'Chuyên đề 7 – Halogen (Mã B)',
+    duration: 20, kind: 'module_checkpoint', scopeTopicIds: ['chem10-t7'], totalPoints: 10, formCode: 'B',
+    resultReleasePolicy: 'after_submit', instructions,
+    questionIds: Array.from({ length: 12 }, (_, index) => 'chem10-assess-m7-cp-b-q' + String(index + 1).padStart(2, '0')),
+    createdAt: '2026-07-15T00:00:00.000Z'
+  }
+];
