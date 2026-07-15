@@ -94,6 +94,10 @@ export type AssessmentKind =
   | 'final'
   | 'full_course';
 
+/** Trọng tâm đánh giá, tách biệt với phạm vi/thời điểm của bài kiểm tra. */
+export type AssessmentFocus = 'mixed' | 'theory';
+export type TheoryAssessmentScope = 'module' | 'comprehensive';
+
 export type AssessmentCompetency =
   | 'chemical_cognition'
   | 'chemical_inquiry'
@@ -117,6 +121,8 @@ export interface AssessmentBlueprint {
   subjectId: SubjectCode;
   title: string;
   kind: AssessmentKind;
+  focus?: AssessmentFocus;
+  theoryScope?: TheoryAssessmentScope;
   duration: number;
   totalPoints: number;
   scopeTopicIds: string[];
@@ -295,6 +301,8 @@ export interface MockExam {
   questionIds: string[];
   createdAt: string;
   kind?: AssessmentKind;
+  focus?: AssessmentFocus;
+  theoryScope?: TheoryAssessmentScope;
   scopeTopicIds?: string[];
   totalPoints?: number;
   formCode?: string;

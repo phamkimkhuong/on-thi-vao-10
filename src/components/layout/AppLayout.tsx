@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Outlet, Navigate } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import {
   BookOpen,
@@ -202,9 +202,7 @@ export const AppLayout: React.FC = () => {
     return () => clearInterval(interval);
   }, [user, isTeacher]);
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
+
 
   const menuItems = [
     { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
@@ -225,12 +223,12 @@ export const AppLayout: React.FC = () => {
   ];
 
   // Tính toán nhanh tiến độ tổng quát
-  const currentUserId = user.uid;
+  const currentUserId = user?.uid || 'guest';
   const progress = storageService.getProgress(currentUserId);
   const currentQuestionTypes = getQuestionTypes(selectedGrade, selectedSubject);
   const currentCompletedCount = progress.completedLessons.filter(id => getSubjectFromQuestionTypeId(id) === selectedSubject).length;
 
-  const canShowTeacherMenu = isTeacher || teacherAccessService.isBootstrapTeacher(user);
+  const canShowTeacherMenu = user ? (isTeacher || teacherAccessService.isBootstrapTeacher(user)) : false;
 
   const getHeaderTitle = () => {
     const path = location.pathname;
@@ -442,46 +440,57 @@ export const AppLayout: React.FC = () => {
 
         <div className={cn("p-4 border-t border-border/20 bg-slate-50/20 dark:bg-slate-900/5", isSidebarCollapsed && "p-3")}>
           <div className={cn("flex items-center gap-3", isSidebarCollapsed && "flex-col gap-1.5 justify-center")}>
-            <div
-              className={cn(
-                "w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center border shrink-0 cursor-pointer transition-transform hover:scale-105 active:scale-95",
-                isPremium ? "border-amber-400/60 shadow-md shadow-amber-400/10" : "border-primary/20"
-              )}
-              title={`${user.displayName || 'Học sinh'} (${user.email})`}
-              onClick={() => {
-                if (isSidebarCollapsed && window.confirm("Đăng xuất tài khoản?")) {
-                  logout();
-                  navigate('/auth');
-                }
-              }}
-            >
-              <span className={cn("text-xs font-black", isPremium ? "text-amber-500" : "text-primary")}>
-                {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
-              </span>
-            </div>
-            {!isSidebarCollapsed ? (
-              <div className="flex flex-col min-w-0 flex-1 text-left">
-                <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
-                  {user.displayName || 'Học sinh'}
-                  {isPremium && (
-                    <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PRO</span>
+            {user ? (
+              <>
+                <div
+                  className={cn(
+                    "w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center border shrink-0 cursor-pointer transition-transform hover:scale-105 active:scale-95",
+                    isPremium ? "border-amber-400/60 shadow-md shadow-amber-400/10" : "border-primary/20"
                   )}
-                </span>
-                <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
-                <button
-                  onClick={() => { logout(); setIsSidebarOpen(false); navigate('/auth'); }}
-                  className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2.5 self-start cursor-pointer active:scale-95"
+                  title={`${user.displayName || 'Học sinh'} (${user.email})`}
+                  onClick={() => {
+                    if (isSidebarCollapsed && window.confirm("Đăng xuất tài khoản?")) {
+                      logout();
+                      navigate('/auth');
+                    }
+                  }}
                 >
-                  Đăng xuất
-                </button>
-              </div>
+                  <span className={cn("text-xs font-black", isPremium ? "text-amber-500" : "text-primary")}>
+                    {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+                  </span>
+                </div>
+                {!isSidebarCollapsed ? (
+                  <div className="flex flex-col min-w-0 flex-1 text-left">
+                    <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
+                      {user.displayName || 'Học sinh'}
+                      {isPremium && (
+                        <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PRO</span>
+                      )}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
+                    <button
+                      onClick={() => { logout(); setIsSidebarOpen(false); navigate('/auth'); }}
+                      className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2.5 self-start cursor-pointer active:scale-95"
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => { logout(); navigate('/auth'); }}
+                    className="text-[9px] text-rose-500 font-black hover:underline cursor-pointer active:scale-95 mt-1"
+                    title="Đăng xuất"
+                  >
+                    Thoát
+                  </button>
+                )}
+              </>
             ) : (
               <button
-                onClick={() => { logout(); navigate('/auth'); }}
-                className="text-[9px] text-rose-500 font-black hover:underline cursor-pointer active:scale-95 mt-1"
-                title="Đăng xuất"
+                onClick={() => navigate('/auth')}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-extrabold text-[11px] py-2 px-3 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5"
               >
-                Thoát
+                🔑 Đăng nhập
               </button>
             )}
           </div>

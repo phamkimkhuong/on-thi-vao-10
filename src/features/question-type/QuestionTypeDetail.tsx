@@ -153,8 +153,7 @@ export const QuestionTypeDetail: React.FC = () => {
   const subjectName = getSubjectName(currentSubject);
   const subjectIcon = getSubjectIcon(currentSubject);
 
-  const isMath = currentSubject === 'math';
-  const requiresLoginForMathPractice = isMath && !user;
+  const requiresLoginForPractice = !user;
 
   // Lấy thông tin tiến độ học tập (Mastery Score & Stars) của người học
   const userId = user?.uid || 'guest';
@@ -246,7 +245,7 @@ export const QuestionTypeDetail: React.FC = () => {
               <ul className="space-y-3.5 pl-1">
                 {detail.recognitionSigns.map((sign: string, idx: number) => (
                   <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
-                    <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", isMath ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
+                    <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", currentSubject === 'math' ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
                     <LatexRenderer text={sign} />
                   </li>
                 ))}
@@ -657,12 +656,12 @@ export const QuestionTypeDetail: React.FC = () => {
               </div>
 
               {/* Nút Bắt đầu Luyện tập chính */}
-              {requiresLoginForMathPractice ? (
+              {requiresLoginForPractice ? (
                 <Button
                   onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
                   className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white"
                 >
-                  <LockKeyhole size={16} /> Đăng nhập để luyện Toán
+                  <LockKeyhole size={16} /> Đăng nhập để luyện tập
                 </Button>
               ) : (
                 <Button
@@ -678,10 +677,10 @@ export const QuestionTypeDetail: React.FC = () => {
                 </Button>
               )}
 
-              {requiresLoginForMathPractice && (
+              {requiresLoginForPractice && (
                 <div className="flex gap-2 rounded-xl border border-amber-500/10 bg-amber-500/5 p-3 text-[10px] leading-relaxed text-amber-700 dark:text-amber-400 font-semibold">
                   <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-                  <span>Yêu cầu đăng nhập trước khi nộp bài thi/luyện tập môn Toán.</span>
+                  <span>Yêu cầu đăng nhập trước khi nộp bài thi/luyện tập môn học.</span>
                 </div>
               )}
             </CardContent>
@@ -713,7 +712,7 @@ export const QuestionTypeDetail: React.FC = () => {
           <span className="text-xs font-black text-foreground truncate">{detail.name}</span>
         </div>
 
-        {requiresLoginForMathPractice ? (
+        {requiresLoginForPractice ? (
           <Button
             onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
             className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-amber-500 hover:bg-amber-600 text-white"

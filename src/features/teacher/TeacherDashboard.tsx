@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
 import { teacherAccessService } from '../../services/teacherAccessService';
@@ -132,6 +132,10 @@ const fetchImageAsBase64 = async (url: string): Promise<{ data: string; mimeType
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
+
+  if (!user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics' | 'support'>('students');
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
@@ -440,6 +444,10 @@ export const TeacherDashboard: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (accessStatus === 'denied') {
+    return <Navigate to="/dashboard" replace />;
   }
 
   if (accessStatus !== 'allowed') {
@@ -1123,7 +1131,7 @@ export const TeacherDashboard: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1">
-                  <BookOpen size={14} /> Bài làm Toán & Tiếng Anh chờ duyệt ({pendingGroups.length})
+                  <BookOpen size={14} /> Bài làm chờ duyệt ({pendingGroups.length})
                 </h3>
                 <Button
                   onClick={() => loadData()}

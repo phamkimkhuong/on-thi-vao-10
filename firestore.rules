@@ -161,7 +161,8 @@ service cloud.firestore {
       }
 
       match /tickets/{ticketId} {
-        allow read, write: if isOwner(userId) || isTeacher();
+        allow create: if userId == 'guests' || isOwner(userId);
+        allow read, update, delete: if isOwner(userId) || isTeacher();
       }
     }
 

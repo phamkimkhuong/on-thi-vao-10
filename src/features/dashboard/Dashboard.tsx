@@ -24,7 +24,7 @@ export const Dashboard: React.FC = () => {
   const { selectedSubject, selectedGrade, user, progressVersion } = useAppStore();
   void progressVersion;
 
-  const currentUserId = user!.uid;
+  const currentUserId = user?.uid || 'guest';
   const progress = storageService.getProgress(currentUserId);
   const readLessons = storageService.getReadLessons(currentUserId);
   const readLessonsSet = new Set(readLessons);
@@ -134,14 +134,29 @@ export const Dashboard: React.FC = () => {
         <div className="space-y-1.5">
           <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground flex items-center gap-2 font-sans">
             <Sparkles className="text-amber-500 fill-amber-500 shrink-0 animate-float" size={24} />
-            Chào {user?.displayName || 'học sinh'}, người chiến thắng!
+            Chào {user?.displayName || 'bạn'}, người chiến thắng!
           </h2>
           <p className="text-xs md:text-sm text-muted-foreground font-bold italic max-w-2xl leading-relaxed">
             "{quote}"
           </p>
         </div>
-
       </div>
+
+      {/* 🌟 Guest Mode Banner */}
+      {!user && (
+        <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-left">
+            <h3 className="text-sm font-black text-foreground">Bạn đang học ở chế độ xem thử (Guest Mode)</h3>
+            <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để học lý thuyết đầy đủ, lưu kết quả học tập và bắt đầu làm bài luyện tập/thi thử.</p>
+          </div>
+          <button
+            onClick={() => navigate('/auth')}
+            className="px-6 py-2.5 font-bold text-xs bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0"
+          >
+            Đăng nhập ngay
+          </button>
+        </div>
+      )}
 
       {/* 📐 Main Workspace Grid: 2 Columns (Left 2/3 - Core Study Actions, Right 1/3 - Stats & Weaknesses) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

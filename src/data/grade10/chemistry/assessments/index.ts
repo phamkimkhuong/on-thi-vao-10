@@ -16,6 +16,7 @@ import { midterm1Questions, midterm1Solutions } from './midterm1';
 import { final2Questions, final2Solutions } from './final2';
 import { midterm1Exams } from './exams/midterm1';
 import { final2Exams } from './exams/final2';
+import { chemistryTheoryExams } from './exams/theory';
 
 export { module1CheckpointBlueprint } from './blueprints/module1Checkpoint';
 export { module2CheckpointBlueprint } from './blueprints/module2Checkpoint';
@@ -26,6 +27,7 @@ export { module6CheckpointBlueprint } from './blueprints/module6Checkpoint';
 export { module7CheckpointBlueprint } from './blueprints/module7Checkpoint';
 export { midterm1Blueprint } from './blueprints/midterm1';
 export { final2Blueprint } from './blueprints/final2';
-export const g10ChemistryAssessmentExams = [...module1CheckpointExams, ...module2CheckpointExams, ...module3CheckpointExams, ...module4CheckpointExams, ...module5CheckpointExams, ...module6CheckpointExams, ...module7CheckpointExams, ...midterm1Exams, ...final2Exams];
+export { chemistryTheoryModuleBlueprints, chemistryTheoryComprehensiveBlueprint } from './blueprints/theory';
+export const g10ChemistryAssessmentExams = [...module1CheckpointExams, ...module2CheckpointExams, ...module3CheckpointExams, ...module4CheckpointExams, ...module5CheckpointExams, ...module6CheckpointExams, ...module7CheckpointExams, ...chemistryTheoryExams, ...midterm1Exams, ...final2Exams];
 export const g10ChemistryAssessmentQuestions = [...m1AssessmentQuestions, ...m2AssessmentQuestions, ...m3AssessmentQuestions, ...m4AssessmentQuestions, ...m5AssessmentQuestions, ...m6AssessmentQuestions, ...m7AssessmentQuestions, ...midterm1Questions, ...final2Questions];
 export const g10ChemistryAssessmentSolutions = [...m1AssessmentSolutions, ...m2AssessmentSolutions, ...m3AssessmentSolutions, ...m4AssessmentSolutions, ...m5AssessmentSolutions, ...m6AssessmentSolutions, ...m7AssessmentSolutions, ...midterm1Solutions, ...final2Solutions];

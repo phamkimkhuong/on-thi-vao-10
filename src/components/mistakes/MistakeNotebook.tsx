@@ -28,6 +28,7 @@ import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
 import { AiTutorPanel } from '../common/AiTutorPanel';
+import { MathLoginRequired } from '../common/MathLoginRequired';
 
 const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: string }> => {
   return new Promise((resolve, reject) => {
@@ -53,6 +54,15 @@ interface EnrichedMistake extends UserMistake {
 export const MistakeNotebook: React.FC = () => {
   const { selectedSubject, selectedGrade, user, progressVersion, refreshProgress } = useAppStore();
   void progressVersion;
+
+  if (!user) {
+    return (
+      <MathLoginRequired
+        title="Sổ tay sửa lỗi sai thông minh"
+        description="Tính năng Sổ tay sửa lỗi sai giúp lưu trữ tự động các câu hỏi làm sai từ các bài luyện tập và thi thử để bạn ôn luyện lại. Đăng nhập để sử dụng tính năng này."
+      />
+    );
+  }
 
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
   const questions = getQuestions(selectedGrade, selectedSubject);

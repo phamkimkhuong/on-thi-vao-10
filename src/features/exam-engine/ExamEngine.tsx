@@ -4,10 +4,11 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getMockExams, getLearningOutcomes, allQuestions, allSolutions } from '../../data';
+import { getQuestionTypes, getMockExams, getLearningOutcomes, getTopics, allQuestions, allSolutions } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
+import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
 import { aiService } from '../../services/aiService';
 
@@ -27,7 +28,8 @@ import {
   TrendingUp,
   Zap,
   X,
-  Sparkles
+  Sparkles,
+  BookOpen
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -37,6 +39,7 @@ export const ExamEngine: React.FC = () => {
 
   const subjectQuestionTypes = getQuestionTypes(selectedGrade, selectedSubject);
   const subjectLearningOutcomes = getLearningOutcomes(selectedGrade, selectedSubject);
+  const subjectTopics = getTopics(selectedGrade, selectedSubject);
   const mockExamsList = getMockExams(selectedGrade, selectedSubject);
 
   const subjectLabels: Record<string, string> = {
@@ -72,13 +75,14 @@ export const ExamEngine: React.FC = () => {
   }, [selectedSubject, subjectLabel]);
 
   const [examState, setExamState] = useState<'intro' | 'testing' | 'result'>('intro');
+  const [showLoginConfirm, setShowLoginConfirm] = useState(false);
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({}); // Lưu trữ câu trả lời của học sinh
   const [finalAnswers, setFinalAnswers] = useState<Record<string, StructuredAnswer>>({});
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
 
   const [selectedExamId, setSelectedExamId] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'all' | 'checkpoint' | 'midterm' | 'final'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'theory' | 'checkpoint' | 'midterm' | 'final'>('all');
 
   const subjectExams = React.useMemo(() => {
     return mockExamsList.filter(exam => exam.subjectId === selectedSubject);
@@ -88,9 +92,10 @@ export const ExamEngine: React.FC = () => {
   const filteredExams = React.useMemo(() => {
     return subjectExams.filter(exam => {
       if (activeTab === 'all') return true;
-      if (activeTab === 'checkpoint') return exam.kind === 'module_checkpoint';
-      if (activeTab === 'midterm') return exam.kind === 'midterm';
-      if (activeTab === 'final') return exam.kind === 'final';
+      if (activeTab === 'theory') return exam.focus === 'theory';
+      if (activeTab === 'checkpoint') return exam.kind === 'module_checkpoint' && exam.focus !== 'theory';
+      if (activeTab === 'midterm') return exam.kind === 'midterm' && exam.focus !== 'theory';
+      if (activeTab === 'final') return exam.kind === 'final' && exam.focus !== 'theory';
       return true;
     });
   }, [subjectExams, activeTab]);
@@ -119,6 +124,13 @@ export const ExamEngine: React.FC = () => {
       setSelectedExamId('');
     }
   }, [activeTab, filteredExams, selectedExamId]);
+
+  const getExamCategoryLabel = (exam: MockExam) => {
+    if (exam.focus === 'theory') {
+      return exam.theoryScope === 'comprehensive' ? 'Lý thuyết tổng hợp' : 'Lý thuyết chuyên đề';
+    }
+    return assessmentKindLabels[exam.kind ?? 'module_checkpoint'];
+  };
 
   const [expandedSolutionId, setExpandedSolutionId] = useState<Record<string, boolean>>({});
   const [aiFeedback, setAiFeedback] = useState<Record<string, { isCorrect: boolean; score: number; feedback: string }>>({});
@@ -365,6 +377,10 @@ export const ExamEngine: React.FC = () => {
   }, [examState, timeLeft, handleSubmitExam]);
 
   const handleStartExam = () => {
+    if (!user) {
+      setShowLoginConfirm(true);
+      return;
+    }
     clearAllProofImages();
     // Bốc các câu hỏi thuộc đề thi thử được chọn
     if (currentExam) {
@@ -500,6 +516,33 @@ export const ExamEngine: React.FC = () => {
       .sort((a, b) => a.percent - b.percent);
   };
 
+  const getTopicAnalysis = () => {
+    if (!examResult) return [];
+
+    const analysis: Record<string, { title: string; orderIndex: number; total: number; correct: number }> = {};
+    examQuestions.forEach(question => {
+      const topic = subjectTopics.find(item => item.id === question.topicId);
+      if (!analysis[question.topicId]) {
+        analysis[question.topicId] = {
+          title: topic?.name ?? question.topicId,
+          orderIndex: topic?.orderIndex ?? Number.MAX_SAFE_INTEGER,
+          total: 0,
+          correct: 0
+        };
+      }
+      analysis[question.topicId].total += 1;
+      if (examResult.attempts[question.id]?.isCorrect) analysis[question.topicId].correct += 1;
+    });
+
+    return Object.entries(analysis)
+      .map(([topicId, data]) => ({
+        topicId,
+        ...data,
+        percent: Math.round((data.correct / data.total) * 100)
+      }))
+      .sort((a, b) => a.orderIndex - b.orderIndex);
+  };
+
   // RENDER GIAO DIỆN GIỚI THIỆU ĐỀ THI
   if (examState === 'intro') {
     return (
@@ -518,10 +561,11 @@ export const ExamEngine: React.FC = () => {
           </div>
 
           {/* Lọc đề thi theo Tab */}
-          <div className="flex items-center gap-1 bg-secondary/80 p-1.5 rounded-2xl border border-border/20 self-start">
-            {(['all', 'checkpoint', 'midterm', 'final'] as const).map(tab => {
+          <div className="flex w-full items-center gap-1 overflow-x-auto bg-secondary/80 p-1.5 rounded-2xl border border-border/20 self-start md:w-auto">
+            {(['all', 'theory', 'checkpoint', 'midterm', 'final'] as const).map(tab => {
               const tabLabels = {
                 all: 'Tất cả',
+                theory: 'Lý thuyết',
                 checkpoint: 'Chuyên đề',
                 midterm: 'Giữa kỳ',
                 final: 'Cuối kỳ'
@@ -531,7 +575,7 @@ export const ExamEngine: React.FC = () => {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                  className={`shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
                     isActive
                       ? 'bg-card text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground'
@@ -563,7 +607,8 @@ export const ExamEngine: React.FC = () => {
                   return (
                     <div
                       key={group.baseTitle}
-                      className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-lg hover:-translate-y-0.5 ${
+                      onClick={() => setSelectedExamId(selectedExamInGroup.id)}
+                      className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-lg hover:-translate-y-0.5 cursor-pointer select-none ${
                         isGroupSelected
                           ? 'border-primary shadow-md shadow-primary/5 ring-1 ring-primary/20'
                           : 'border-border/65 hover:border-border-hover'
@@ -572,7 +617,7 @@ export const ExamEngine: React.FC = () => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between gap-2">
                           <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-primary">
-                            {assessmentKindLabels[selectedExamInGroup.kind ?? 'module_checkpoint']}
+                            {getExamCategoryLabel(selectedExamInGroup)}
                           </span>
                           {group.exams.length > 1 && (
                             <span className="text-[10px] text-muted-foreground font-bold bg-secondary/80 px-2 py-0.5 rounded-md">
@@ -664,8 +709,8 @@ export const ExamEngine: React.FC = () => {
                     </div>
                     {currentExam.kind && (
                       <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
-                        <span className="text-[9px] font-bold text-muted-foreground block mb-1">LOẠI ĐÁNH GIÁ</span>
-                        <span className="text-xs font-extrabold text-foreground">{assessmentKindLabels[currentExam.kind]}</span>
+                        <span className="text-[9px] font-bold text-muted-foreground block mb-1">TRỌNG TÂM ĐÁNH GIÁ</span>
+                        <span className="text-xs font-extrabold text-foreground">{getExamCategoryLabel(currentExam)}</span>
                       </div>
                     )}
                     {currentExam.formCode && (
@@ -677,7 +722,10 @@ export const ExamEngine: React.FC = () => {
                   </div>
 
                   <div className="space-y-3 bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-400">
-                    <h4 className="font-extrabold flex items-center gap-1.5"><AlertTriangle size={14} /> Quy chế phòng thi thử:</h4>
+                    <h4 className="font-extrabold flex items-center gap-1.5">
+                      {currentExam.focus === 'theory' ? <BookOpen size={14} /> : <AlertTriangle size={14} />}
+                      {currentExam.focus === 'theory' ? 'Hướng dẫn kiểm tra lý thuyết:' : 'Quy chế phòng thi thử:'}
+                    </h4>
                     {(currentExam.instructions ?? [
                       'Hệ thống chuyển sang chế độ tập trung trong thời gian làm bài.',
                       'Hết giờ hệ thống sẽ tự động nộp bài.',
@@ -689,7 +737,7 @@ export const ExamEngine: React.FC = () => {
                     onClick={handleStartExam}
                     className="w-full font-bold py-4 text-xs active:scale-[0.98] shadow-md shadow-primary/20 flex items-center justify-center gap-2 rounded-xl"
                   >
-                    <Play size={14} className="fill-white" /> Bắt đầu tính giờ thi thử
+                    <Play size={14} className="fill-white" /> {currentExam.focus === 'theory' ? 'Bắt đầu kiểm tra lý thuyết' : 'Bắt đầu tính giờ thi thử'}
                   </Button>
                 </CardContent>
               </Card>
@@ -702,6 +750,19 @@ export const ExamEngine: React.FC = () => {
           </div>
 
         </div>
+
+        <ConfirmationModal
+          isOpen={showLoginConfirm}
+          title="Yêu cầu đăng nhập học tập"
+          description="Bạn cần đăng nhập học tập để bắt đầu tính giờ làm bài và lưu kết quả thi thử."
+          confirmLabel="Đăng nhập ngay"
+          cancelLabel="Hủy bỏ"
+          onConfirm={() => {
+            setShowLoginConfirm(false);
+            navigate('/auth', { state: { returnTo: `/exam` } });
+          }}
+          onCancel={() => setShowLoginConfirm(false)}
+        />
       </div>
     );
   }
@@ -714,7 +775,9 @@ export const ExamEngine: React.FC = () => {
         {/* Header phòng thi nổi (Sticky) */}
         <div className="sticky top-0 bg-background/80 backdrop-blur-md py-4 border-b border-border/50 flex items-center justify-between z-30 px-2">
           <div className="flex flex-col">
-            <span className="text-[9px] font-bold text-red-500 animate-pulse uppercase tracking-wider">● Đang trong giờ thi thử nghiêm túc</span>
+            <span className="text-[9px] font-bold text-red-500 animate-pulse uppercase tracking-wider">
+              ● {currentExam?.focus === 'theory' ? 'Đang kiểm tra kiến thức lý thuyết' : 'Đang trong giờ thi thử nghiêm túc'}
+            </span>
             <h3 className="text-sm font-extrabold text-foreground">
               {currentExam?.title ?? `Bài kiểm tra ${subjectLabel}`}
             </h3>
@@ -824,6 +887,7 @@ export const ExamEngine: React.FC = () => {
   if (examState === 'result' && examResult) {
     const analysis = getExamAnalysis();
     const outcomeAnalysis = getOutcomeAnalysis();
+    const topicAnalysis = getTopicAnalysis();
 
     return (
       <div className="max-w-3xl mx-auto space-y-6 pb-12">
@@ -831,7 +895,9 @@ export const ExamEngine: React.FC = () => {
         {/* Kết quả chung */}
         <Card className="border-indigo-500/10 shadow-md overflow-hidden relative">
           <CardHeader className="bg-gradient-to-r from-primary to-indigo-600 text-primary-foreground p-6 md:p-8 text-center">
-            <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Báo cáo kết quả thi thử</span>
+            <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+              {currentExam?.focus === 'theory' ? 'Báo cáo kiến thức lý thuyết' : 'Báo cáo kết quả thi thử'}
+            </span>
             <h2 className="text-4xl md:text-5xl font-black mt-3 tracking-tight leading-none">{examResult.score} <span className="text-sm font-bold opacity-75">/ 10 điểm</span></h2>
             <p className="text-xs text-indigo-100 font-semibold mt-2.5">
               Đúng {examResult.correctCount} / {examResult.totalCount} câu • Thời gian làm bài: {formatTime(examResult.timeSpent)}
@@ -855,6 +921,34 @@ export const ExamEngine: React.FC = () => {
                 <p className="text-rose-600 dark:text-rose-400">Cần cố gắng nhiều hơn! Điểm số này báo hiệu bạn đang bị hổng nhiều dạng bài cốt lõi. Hãy làm theo đề xuất rèn luyện dưới đây.</p>
               )}
             </div>
+
+            {currentExam?.focus === 'theory' && topicAnalysis.length > 1 && (
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1.5"><BookOpen size={16} /> Bản đồ ghi nhớ theo chuyên đề:</h4>
+                  <p className="mt-1 text-[10px] font-semibold text-muted-foreground">Ưu tiên ôn lại các chuyên đề dưới 60%, sau đó làm bài lý thuyết riêng của chuyên đề đó.</p>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {topicAnalysis.map(item => {
+                    const isWeak = item.percent < 60;
+                    return (
+                      <div key={item.topicId} className={`rounded-xl border p-3.5 ${isWeak ? 'border-rose-500/20 bg-rose-500/5' : 'border-border bg-card'}`}>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="truncate text-[11px] font-extrabold text-foreground">{item.title}</p>
+                            <p className="mt-1 text-[9px] font-semibold text-muted-foreground">Đúng {item.correct}/{item.total} câu</p>
+                          </div>
+                          <span className={`text-xs font-black ${isWeak ? 'text-rose-500' : 'text-emerald-500'}`}>{item.percent}%</span>
+                        </div>
+                        <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-secondary">
+                          <div className={`h-full rounded-full ${isWeak ? 'bg-rose-500' : 'bg-emerald-500'}`} style={{ width: `${item.percent}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {outcomeAnalysis.length > 0 && (
               <div className="space-y-4">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
@@ -9,6 +9,7 @@ import { cn } from '../../utils/cn';
 import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon } from '../../utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
+import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 import type { QuestionType } from '../../types';
 
 export const Roadmap: React.FC = () => {
@@ -18,6 +19,22 @@ export const Roadmap: React.FC = () => {
 
   const topics = getTopics(selectedGrade, selectedSubject);
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
+
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    confirmLabel?: string;
+    cancelLabel?: string;
+    onConfirm: () => void;
+    onCancel?: () => void;
+    variant?: 'primary' | 'danger' | 'warning';
+  }>({
+    isOpen: false,
+    title: '',
+    description: '',
+    onConfirm: () => {}
+  });
 
   const userId = user?.uid || 'guest';
   const readLessons = storageService.getReadLessons(userId);
@@ -50,14 +67,25 @@ export const Roadmap: React.FC = () => {
   };
 
   const handleSelectType = (id: string) => {
+    if (!user) {
+      navigate('/auth', { state: { returnTo: `/question-types/${id}` } });
+      return;
+    }
+
     if (!isUnlocked(id)) {
       const idx = sequentialTypes.findIndex(t => t.id === id);
       const prevType = idx > 0 ? sequentialTypes[idx - 1] : null;
-      if (prevType) {
-        alert(`Dạng bài này đang khóa. Hãy hoàn thành lý thuyết dạng bài trước: "${prevType.name}" để mở khóa bài học này nhé!`);
-      } else {
-        alert("Dạng bài này hiện đang khóa.");
-      }
+      setModalConfig({
+        isOpen: true,
+        title: "Dạng bài đang khóa 🔒",
+        description: prevType
+          ? `Dạng bài này đang khóa. Hãy hoàn thành lý thuyết dạng bài trước: "${prevType.name}" để mở khóa bài học này nhé!`
+          : "Dạng bài này hiện đang khóa.",
+        confirmLabel: "Tôi đã hiểu",
+        cancelLabel: "Đóng",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, isOpen: false })),
+        onCancel: () => setModalConfig(prev => ({ ...prev, isOpen: false }))
+      });
       return;
     }
 
@@ -65,9 +93,19 @@ export const Roadmap: React.FC = () => {
     const topic = topics.find(t => t.id === qType?.topicId);
     
     if (topic?.tier === 3 && !isPremium) {
-      if (window.confirm("Chặng 3 / Chuyên đề nâng cao là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?")) {
-        navigate('/premium');
-      }
+      setModalConfig({
+        isOpen: true,
+        title: "Mở khóa đặc quyền Premium 🌟",
+        description: "Chặng 3 / Chuyên đề nâng cao là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?",
+        confirmLabel: "Nâng cấp Premium",
+        cancelLabel: "Để sau",
+        variant: "warning",
+        onConfirm: () => {
+          setModalConfig(prev => ({ ...prev, isOpen: false }));
+          navigate('/premium');
+        },
+        onCancel: () => setModalConfig(prev => ({ ...prev, isOpen: false }))
+      });
       return;
     }
     navigate(`/question-types/${id}`);
@@ -133,6 +171,22 @@ export const Roadmap: React.FC = () => {
           Lộ trình tinh gọn giúp bạn nắm chắc kiến thức {selectedGrade === 'grade9' ? 'ôn thi vào 10' : 'chương trình lớp 10'} toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.
         </p>
       </div>
+
+      {/* 🌟 Guest Mode Banner */}
+      {!user && (
+        <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 max-w-4xl mx-auto mb-8">
+          <div className="space-y-1 text-left">
+            <h3 className="text-sm font-black text-foreground">Bạn đang xem lộ trình học ở chế độ xem thử</h3>
+            <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để lưu tiến trình học tập, mở khóa toàn bộ lộ trình và bắt đầu thực hành luyện tập.</p>
+          </div>
+          <button
+            onClick={() => navigate('/auth')}
+            className="px-6 py-2.5 font-bold text-xs bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0"
+          >
+            Đăng nhập ngay
+          </button>
+        </div>
+      )}
 
       {/* Render từng Chặng */}
       <div className="space-y-16">
@@ -306,6 +360,17 @@ export const Roadmap: React.FC = () => {
           );
         })}
       </div>
+
+      <ConfirmationModal
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        description={modalConfig.description}
+        confirmLabel={modalConfig.confirmLabel}
+        cancelLabel={modalConfig.cancelLabel}
+        variant={modalConfig.variant}
+        onConfirm={modalConfig.onConfirm}
+        onCancel={modalConfig.onCancel || (() => setModalConfig(prev => ({ ...prev, isOpen: false })))}
+      />
     </div>
   );
 };

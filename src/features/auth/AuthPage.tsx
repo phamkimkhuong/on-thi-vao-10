@@ -137,10 +137,10 @@ export const AuthPage: React.FC = () => {
             <GraduationCap size={36} className="text-primary" />
           </div>
           <h1 className="text-3xl font-black tracking-tight text-foreground bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-            Chinh Phục Lớp 10
+            Dạng Bài Thực Chiến
           </h1>
           <p className="text-xs text-muted-foreground font-semibold">
-            Hệ thống ôn luyện thông minh môn Toán & Tiếng Anh vào 10
+            Hệ thống ôn luyện thông minh môn Toán, Tiếng Anh & Hóa học Lớp 9 - 12
           </p>
         </div>
 

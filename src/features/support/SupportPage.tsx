@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '../../services/store';
 import { supportService } from '../../services/supportService';
+
 import { SupportTicket } from '../../types';
-import { 
-  LifeBuoy, 
-  Send, 
-  Image as ImageIcon, 
-  Loader2, 
-  CheckCircle2, 
+import {
+  LifeBuoy,
+  Send,
+  Image as ImageIcon,
+  Loader2,
+  CheckCircle2,
   AlertCircle,
   MessageSquare,
   ChevronRight,
@@ -21,14 +22,14 @@ import { Button } from '../../components/ui/button';
 
 export const SupportPage: React.FC = () => {
   const { user } = useAppStore();
-  
+
   // Form states
   const [category, setCategory] = useState<'bug' | 'feature' | 'question' | 'other'>('bug');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
-  
+
   // Action states
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -68,14 +69,9 @@ export const SupportPage: React.FC = () => {
     };
   }, [screenshotPreview]);
 
-  if (!user) {
-    return (
-      <div className="max-w-md mx-auto my-12 text-center p-8 bg-card border rounded-2xl">
-        <Loader2 size={24} className="animate-spin text-primary mx-auto mb-2" />
-        <p className="text-xs text-muted-foreground font-semibold">Đang xác thực thông tin...</p>
-      </div>
-    );
-  }
+  // Guest states
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -111,15 +107,21 @@ export const SupportPage: React.FC = () => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
 
+    if (!user && (!guestName.trim() || !guestEmail.trim())) {
+      setSubmitError('Vui lòng điền Họ tên và Email để chúng tôi liên hệ phản hồi.');
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
 
     try {
-      const email = user.email || 'guest@example.com';
-      const name = user.displayName || email.split('@')[0] || 'Học sinh';
+      const uid = user?.uid || 'guests';
+      const email = user?.email || guestEmail.trim();
+      const name = user?.displayName || guestName.trim();
 
       await supportService.createTicket(
-        user.uid,
+        uid,
         email,
         name,
         category,
@@ -131,15 +133,21 @@ export const SupportPage: React.FC = () => {
       setSubmitSuccess(true);
       setTitle('');
       setDescription('');
+      if (!user) {
+        setGuestEmail('');
+        setGuestName('');
+      }
       handleRemoveFile();
-      
-      // Reload tickets history
-      loadTickets();
 
-      // Reset success status after 3 seconds
+      // Reload tickets history if logged in
+      if (user) {
+        loadTickets();
+      }
+
+      // Reset success status after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
-      }, 3000);
+      }, 5000);
     } catch (err: any) {
       console.error('Lỗi khi gửi yêu cầu hỗ trợ:', err);
       setSubmitError(err.message || 'Có lỗi xảy ra khi gửi yêu cầu hỗ trợ. Vui lòng thử lại.');
@@ -214,9 +222,9 @@ export const SupportPage: React.FC = () => {
 
       {/* Main Grid: Form on the Left, History on the Right */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        
+
         {/* Left Column: Create ticket Form */}
-        <div className="lg:col-span-3">
+        <div className={user ? "lg:col-span-3" : "lg:col-span-5 max-w-3xl mx-auto w-full"}>
           <Card className="border-border/50 bg-card shadow-sm h-full flex flex-col">
             <CardHeader className="p-6 border-b border-border/20">
               <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider flex items-center gap-2">
@@ -236,10 +244,17 @@ export const SupportPage: React.FC = () => {
                     </div>
                     <div className="space-y-1.5">
                       <h4 className="font-black text-sm text-foreground">Gửi yêu cầu thành công!</h4>
-                      <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
-                        Yêu cầu hỗ trợ của em đã được gửi trực tiếp đến thầy cô.
-                        <br />Vui lòng theo dõi tiến trình phản hồi ở cột "Yêu cầu đã gửi" bên cạnh.
-                      </p>
+                      {user ? (
+                        <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
+                          Yêu cầu hỗ trợ của em đã được gửi trực tiếp đến thầy cô.
+                          <br />Vui lòng theo dõi tiến trình phản hồi ở cột "Yêu cầu đã gửi" bên cạnh.
+                        </p>
+                      ) : (
+                        <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
+                          Yêu cầu hỗ trợ của bạn đã được gửi trực tiếp đến thầy cô.
+                          <br />Thầy cô sẽ xem xét và phản hồi sớm nhất qua email liên hệ của bạn.
+                        </p>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -269,6 +284,36 @@ export const SupportPage: React.FC = () => {
                       </div>
                     </div>
 
+                    {!user && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label htmlFor="guest-name" className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Họ và tên của bạn <span className="text-rose-500">*</span></label>
+                          <input
+                            id="guest-name"
+                            type="text"
+                            required
+                            placeholder="Nhập họ và tên..."
+                            value={guestName}
+                            onChange={(e) => setGuestName(e.target.value)}
+                            className="w-full bg-slate-50 dark:bg-slate-900 border border-border/60 focus:border-emerald-500 rounded-xl px-4 py-3 text-xs font-semibold outline-none transition-all"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label htmlFor="guest-email" className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Email nhận phản hồi <span className="text-rose-500">*</span></label>
+                          <input
+                            id="guest-email"
+                            type="email"
+                            required
+                            placeholder="VD: email@example.com"
+                            value={guestEmail}
+                            onChange={(e) => setGuestEmail(e.target.value)}
+                            className="w-full bg-slate-50 dark:bg-slate-900 border border-border/60 focus:border-emerald-500 rounded-xl px-4 py-3 text-xs font-semibold outline-none transition-all"
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     <div className="space-y-1.5">
                       <label htmlFor="ticket-title" className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Tiêu đề yêu cầu</label>
                       <input
@@ -297,12 +342,12 @@ export const SupportPage: React.FC = () => {
 
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Ảnh minh họa đính kèm (nếu có)</label>
-                      
+
                       {screenshotPreview ? (
                         <div className="relative border border-border/30 rounded-2xl overflow-hidden shadow-sm group max-w-md">
-                          <img 
-                            src={screenshotPreview} 
-                            alt="Preview đính kèm" 
+                          <img
+                            src={screenshotPreview}
+                            alt="Preview đính kèm"
                             className="max-h-[180px] w-full object-cover"
                           />
                           <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -367,63 +412,71 @@ export const SupportPage: React.FC = () => {
         </div>
 
         {/* Right Column: History of requests */}
-        <div className="lg:col-span-2">
-          <Card className="border-border/50 bg-card shadow-sm h-full flex flex-col">
-            <CardHeader className="p-6 border-b border-border/20">
-              <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider flex items-center gap-2">
-                <Inbox size={16} className="text-indigo-500" />
-                Yêu cầu đã gửi ({tickets.length})
-              </CardTitle>
-              <CardDescription className="text-[10px] font-semibold text-muted-foreground mt-0.5">
-                Nhấn vào từng yêu cầu bên dưới để xem chi tiết phản hồi từ thầy cô.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-4 flex-1 overflow-y-auto max-h-[600px] space-y-3">
-              {isLoadingTickets ? (
-                <div className="py-12 flex flex-col items-center justify-center gap-2">
-                  <Loader2 size={24} className="animate-spin text-primary" />
-                  <span className="text-xs font-bold text-muted-foreground animate-pulse">Đang tải lịch sử hỗ trợ...</span>
-                </div>
-              ) : tickets.length === 0 ? (
-                <div className="h-48 flex flex-col items-center justify-center gap-3 text-center py-12 bg-secondary/15 rounded-2xl border border-dashed border-border/20">
-                  <Inbox size={32} className="text-muted-foreground/30 animate-bounce" />
-                  <div className="space-y-1">
-                    <span className="font-extrabold text-xs text-foreground block">Chưa gửi yêu cầu nào</span>
-                    <span className="text-[10px] text-muted-foreground font-semibold">Các yêu cầu em gửi sẽ hiển thị tại đây.</span>
+        {user && (
+          <div className="lg:col-span-2">
+            <Card className="border-border/50 bg-card shadow-sm h-full flex flex-col">
+              <CardHeader className="p-6 border-b border-border/20">
+                <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                  <Inbox size={16} className="text-indigo-500" />
+                  Yêu cầu đã gửi ({tickets.length})
+                </CardTitle>
+                <CardDescription className="text-[10px] font-semibold text-muted-foreground mt-0.5">
+                  Nhấn vào từng yêu cầu bên dưới để xem chi tiết phản hồi từ thầy cô.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 flex-1 overflow-y-auto max-h-[600px] space-y-3">
+                {isLoadingTickets ? (
+                  <div className="py-12 flex flex-col items-center justify-center gap-2">
+                    <Loader2 size={24} className="animate-spin text-primary" />
+                    <span className="text-xs font-bold text-muted-foreground animate-pulse">Đang tải lịch sử hỗ trợ...</span>
                   </div>
-                </div>
-              ) : (
-                tickets.map((ticket) => (
-                  <button
-                    key={ticket.id}
-                    onClick={() => setSelectedTicket(ticket)}
-                    className="w-full p-4 rounded-2xl bg-card border border-border/40 hover:border-primary/30 text-left transition-all cursor-pointer shadow-sm hover:shadow flex items-center justify-between group active:scale-98"
-                  >
-                    <div className="space-y-2 max-w-[85%]">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className={cn("px-2 py-0.5 rounded text-[8px] font-black border uppercase tracking-wider", getCategoryBadgeColor(ticket.category))}>
-                          {ticket.category}
-                        </span>
-                        {ticket.status === 'resolved' ? (
-                          <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-extrabold">● Đã giải quyết</span>
-                        ) : ticket.status === 'rejected' ? (
-                          <span className="text-[9px] text-rose-500 font-extrabold">● Từ chối</span>
-                        ) : (
-                          <span className="text-[9px] text-amber-500 font-extrabold">● Đang chờ</span>
-                        )}
-                      </div>
-                      <h4 className="font-black text-xs text-foreground truncate">{ticket.title}</h4>
-                      <span className="text-[9px] text-muted-foreground font-semibold block">
-                        Ngày gửi: {new Date(ticket.createdAt).toLocaleDateString('vi-VN')}
-                      </span>
+                ) : tickets.length === 0 ? (
+                  <div className="h-48 flex flex-col items-center justify-center gap-3 text-center py-12 bg-secondary/15 rounded-2xl border border-dashed border-border/20">
+                    <Inbox size={32} className="text-muted-foreground/30 animate-bounce" />
+                    <div className="space-y-1">
+                      <span className="font-extrabold text-xs text-foreground block">Chưa gửi yêu cầu nào</span>
+                      <span className="text-[10px] text-muted-foreground font-semibold">Các yêu cầu em gửi sẽ hiển thị tại đây.</span>
                     </div>
-                    <ChevronRight size={15} className="text-muted-foreground group-hover:translate-x-1.5 transition-transform" />
-                  </button>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </div>
+                  </div>
+                ) : (
+                  tickets.map((ticket) => (
+                    <button
+                      key={ticket.id}
+                      onClick={() => setSelectedTicket(ticket)}
+                      className="w-full p-4 rounded-2xl bg-card border border-border/40 hover:border-primary/30 text-left transition-all cursor-pointer shadow-sm hover:shadow flex items-center justify-between group active:scale-98"
+                    >
+                      <div className="space-y-2 max-w-[85%]">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={cn("px-2 py-0.5 rounded text-[8px] font-black border uppercase tracking-wider", getCategoryBadgeColor(ticket.category))}>
+                            {getCategoryLabel(ticket.category)}
+                          </span>
+                          {ticket.status === 'resolved' ? (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/10">
+                              Đã giải quyết
+                            </span>
+                          ) : ticket.status === 'rejected' ? (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-black bg-rose-500/10 text-rose-500 border border-rose-500/10">
+                              Từ chối
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-black bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/10 animate-pulse">
+                              Đang chờ
+                            </span>
+                          )}
+                        </div>
+                        <h4 className="font-black text-xs text-foreground truncate">{ticket.title}</h4>
+                        <span className="text-[9px] text-muted-foreground font-semibold block">
+                          Ngày gửi: {new Date(ticket.createdAt).toLocaleDateString('vi-VN')}
+                        </span>
+                      </div>
+                      <ChevronRight size={15} className="text-muted-foreground group-hover:translate-x-1.5 transition-transform" />
+                    </button>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
       </div>
 
@@ -431,15 +484,15 @@ export const SupportPage: React.FC = () => {
       {selectedTicket && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
           <div className="bg-card/95 border border-border/40 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in max-h-[85vh] flex flex-col glass">
-            
+
             {/* Modal Header */}
             <div className="p-4 bg-gradient-to-r from-emerald-600/90 via-teal-600/90 to-indigo-600/90 text-white flex items-center justify-between shadow-md">
               <div className="flex items-center gap-2">
                 <LifeBuoy size={18} />
                 <span className="font-black text-xs uppercase tracking-wider">Chi tiết yêu cầu hỗ trợ</span>
               </div>
-              <button 
-                onClick={() => setSelectedTicket(null)} 
+              <button
+                onClick={() => setSelectedTicket(null)}
                 className="p-1.5 rounded-xl hover:bg-white/10 text-white transition-all cursor-pointer"
               >
                 <X size={16} />
@@ -468,15 +521,15 @@ export const SupportPage: React.FC = () => {
               {selectedTicket.screenshotUrl && (
                 <div className="space-y-1.5">
                   <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Ảnh minh họa đính kèm:</span>
-                  <a 
-                    href={selectedTicket.screenshotUrl} 
-                    target="_blank" 
+                  <a
+                    href={selectedTicket.screenshotUrl}
+                    target="_blank"
                     rel="noreferrer"
                     className="block overflow-hidden rounded-2xl border border-border/30 hover:border-primary/40 transition-colors shadow-sm cursor-zoom-in"
                   >
-                    <img 
-                      src={selectedTicket.screenshotUrl} 
-                      alt="Student Screenshot" 
+                    <img
+                      src={selectedTicket.screenshotUrl}
+                      alt="Student Screenshot"
                       className="max-h-[180px] w-full object-cover hover:scale-102 transition-transform duration-300 animate-fade-in"
                     />
                   </a>
@@ -486,7 +539,7 @@ export const SupportPage: React.FC = () => {
               {/* Teacher response */}
               <div className="border-t border-border/40 pt-4 space-y-3">
                 <span className="text-[9px] font-black text-muted-foreground block uppercase tracking-wider">Phản hồi của Giáo viên:</span>
-                
+
                 {selectedTicket.teacherResponse ? (
                   <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs leading-relaxed space-y-2">
                     <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-extrabold">
@@ -508,7 +561,7 @@ export const SupportPage: React.FC = () => {
 
             {/* Modal Footer */}
             <div className="p-4 border-t border-border/20 flex justify-end bg-card/60 shrink-0">
-              <Button 
+              <Button
                 onClick={() => setSelectedTicket(null)}
                 className="font-bold text-xs bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-5 py-2 cursor-pointer h-9 rounded-xl"
               >

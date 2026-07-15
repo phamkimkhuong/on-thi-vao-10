@@ -4,6 +4,7 @@
     "subjectId": "english",
     "title": "Đề thi thử Tiếng Anh tuyển sinh Vào 10 - Số 1",
     "duration": 60,
+    "kind": "final",
     "questionIds": [
       "mock-eng-1-q1",
       "mock-eng-1-q2",
@@ -47,6 +48,7 @@
     "subjectId": "math",
     "title": "Đề thi thử Toán học tuyển sinh Vào 10 - Số 1",
     "duration": 120,
+    "kind": "final",
     "questionIds": [
       "mock-math-1-q1",
       "mock-math-1-q2",

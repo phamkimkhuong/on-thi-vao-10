@@ -53,7 +53,7 @@ service firebase.storage {
     match /users/{userId}/tickets/{ticketId}/{fileName} {
       allow read: if isOwner(userId) || isTeacher();
 
-      allow write: if isOwner(userId)
+      allow write: if (userId == 'guests' || isOwner(userId))
         && request.resource.size < 5 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
     }

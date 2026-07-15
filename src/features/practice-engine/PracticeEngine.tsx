@@ -7,6 +7,7 @@ import { aiService } from '../../services/aiService';
 import { logCustomEvent } from '../../services/firebase';
 import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
 import { Button } from '../../components/ui/button';
+import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 
 import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '../../types';
 import { AlertTriangle, Sparkles } from 'lucide-react';
@@ -56,6 +57,15 @@ export const PracticeEngine: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, setSubject, user, progressVersion, refreshProgress, isPremium } = useAppStore();
   void progressVersion;
+
+  if (!user) {
+    return (
+      <MathLoginRequired
+        title="Yêu cầu đăng nhập luyện tập"
+        description="Bạn cần đăng nhập học tập để thực hiện các bài tập giải đề, lưu lịch sử tiến trình học tập và nhận đánh giá phản hồi từ AI."
+      />
+    );
+  }
 
   const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
   const mathQuestions = getQuestions(selectedGrade, 'math');

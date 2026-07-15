@@ -6,6 +6,7 @@ export const g10MathAssessmentExams: MockExam[] = [
     subjectId: 'math',
     title: 'Đề kiểm tra Giữa học kỳ 1 - Toán 10 (Đề số 1)',
     duration: 90,
+    kind: 'midterm',
     questionIds: [
       'mock-math10-q1',
       'mock-math10-q2',
@@ -25,6 +26,7 @@ export const g10MathAssessmentExams: MockExam[] = [
     subjectId: 'math',
     title: 'Đề kiểm tra Giữa học kỳ 1 - Toán 10 (Đề số 2)',
     duration: 90,
+    kind: 'midterm',
     questionIds: [
       'mock-math10-q21',
       'mock-math10-q22',
@@ -44,6 +46,7 @@ export const g10MathAssessmentExams: MockExam[] = [
     subjectId: 'math',
     title: 'Đề kiểm tra Cuối học kỳ 1 - Toán 10 (Đề số 1)',
     duration: 90,
+    kind: 'final',
     questionIds: [
       'mock-math10-q31',
       'mock-math10-q32',
@@ -75,6 +78,7 @@ export const g10MathAssessmentExams: MockExam[] = [
     subjectId: 'math',
     title: 'Đề kiểm tra Cuối học kỳ 1 - Toán 10 (Đề số 2)',
     duration: 90,
+    kind: 'final',
     questionIds: [
       'mock-math10-q53',
       'mock-math10-q54',

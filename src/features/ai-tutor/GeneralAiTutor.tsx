@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getPersonalizedGreeting } from '../../utils/greetingHelper';
+import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 
 interface Message {
   role: 'user' | 'model';
@@ -55,6 +56,15 @@ const generateChatStoragePath = (userId: string, subject: string, fileName: stri
 export const GeneralAiTutor: React.FC = () => {
   const navigate = useNavigate();
   const { user, selectedGrade, selectedSubject: subject, setSubject } = useAppStore();
+
+  if (!user) {
+    return (
+      <MathLoginRequired
+        title="Gia sư AI Socratic"
+        description="Gia sư AI Socratic giúp bạn giải thích chi tiết, gợi ý phương pháp giải và đồng hành cùng bạn học tập 24/7. Đăng nhập để bắt đầu trò chuyện cùng AI."
+      />
+    );
+  }
 
   const [showDiagnostics, setShowDiagnostics] = useState(() => {
     return localStorage.getItem('otv10_ai_show_diagnostics') !== 'false';
