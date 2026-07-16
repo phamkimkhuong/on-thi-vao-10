@@ -134,7 +134,7 @@ export const g10MathSolutions: Solution[] = [
       {
         order: 2,
         title: 'So sánh vectơ AN và vectơ AM để chứng minh thẳng hàng',
-        explanation: 'Theo đề bài ta có $\\vec{AN} = \\frac{1}{3}\\vec{AB} + \\frac{2}{9}\\vec{AC}$. Đặt nhân tử chung $\\frac{1}{3}$ ra ngoài ta thu được:\n$\\vec{AN} = \\frac{1}{3}\\left(\\vec{AB} + \\frac{2}{3}\\vec{AC}\\right)$.\nThế biểu thức $\\vec{AM}$ ở bước 1 vào ta được: $\\vec{AN} = \\frac{1}{3}\\vec{AM}$.\nVì $\\vec{AN}$ và $\\vec{AM}$ cùng phương (đều có chung điểm đầu A), do đó ba điểm A, N, M thẳng hàng.',
+        explanation: 'Theo đề bài ta có $\\vec{AN} = \\frac{1}{9}\\vec{AB} + \\frac{2}{9}\\vec{AC}$. Đặt nhân tử chung $\\frac{1}{3}$ ta được:\n$\\vec{AN} = \\frac{1}{3}\\left(\\frac{1}{3}\\vec{AB} + \\frac{2}{3}\\vec{AC}\\right)$.\nThế biểu thức $\\vec{AM}$ ở bước 1 vào, suy ra $\\vec{AN} = \\frac{1}{3}\\vec{AM}$.\nVì hai vectơ khác vectơ-không, cùng phương và cùng có điểm đầu A nên ba điểm A, N, M thẳng hàng.',
         result: 'AN = 1/3AM'
       }
     ],
@@ -1892,5 +1892,489 @@ export const g10MathSolutions: Solution[] = [
     reviewSuggestions: [
       'Nhớ quy tắc phân phối giống như nhân đa thức bình thường đối với phép nhân tích vô hướng các vectơ.'
     ]
+  },
+  {
+    id: 'math10-s64',
+    questionId: 'math10-q64',
+    recognition: 'Dấu hiệu nhận biết: yêu cầu đếm phần tử không thuộc hai nhóm có phần giao; dùng nguyên lý bù và công thức cộng của hai tập hợp.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đếm từng tập và phần giao',
+        explanation: 'Trong $U=\\{1;2;\\ldots;30\\}$ có 15 số chia hết cho 2 và 10 số chia hết cho 3. Các số vừa chia hết cho 2 vừa chia hết cho 3 là các bội của 6, có $\\lfloor 30/6\\rfloor=5$ số.',
+        result: '|A|=15, |B|=10, |A \\cap B|=5'
+      },
+      {
+        order: 2,
+        title: 'Dùng nguyên lý bù',
+        explanation: '$|A\\cup B|=|A|+|B|-|A\\cap B|=15+10-5=20$. Vì $|U|=30$ nên $|U\\setminus(A\\cup B)|=30-20=10$.',
+        result: '10'
+      }
+    ],
+    finalAnswer: '10',
+    commonMistakes: ['Cộng $15+10$ mà không trừ 5 phần tử đã bị đếm hai lần.'],
+    reviewSuggestions: ['Khi hai tập có thể giao nhau, luôn dùng $|A\\cup B|=|A|+|B|-|A\\cap B|$.']
+  },
+  {
+    id: 'math10-s65',
+    questionId: 'math10-q65',
+    recognition: 'Dấu hiệu nhận biết: biểu thức có phép hợp rồi phép hiệu; phải thực hiện phép toán trong ngoặc trước và kiểm tra ngoặc tại từng mốc biên.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tìm hợp A và B',
+        explanation: 'Hai khoảng $[-4;5]$ và $(-2;7)$ chồng lên nhau, nên hợp kéo dài từ $-4$ được lấy đến $7$ không được lấy.',
+        result: 'A \\cup B=[-4;7)'
+      },
+      {
+        order: 2,
+        title: 'Loại đoạn C',
+        explanation: 'Loại toàn bộ $[0;3]$ khỏi $[-4;7)$. Hai điểm 0 và 3 thuộc C nên không còn trong kết quả.',
+        result: '[-4;0) \\cup (3;7)'
+      }
+    ],
+    finalAnswer: '[-4; 0) \\cup (3; 7)',
+    commonMistakes: ['Giữ lại 0 hoặc 3 dù hai điểm này thuộc tập bị trừ C.', 'Thực hiện phép hiệu trước phép hợp trong ngoặc.'],
+    reviewSuggestions: ['Thực hiện phép toán tập hợp theo thứ tự dấu ngoặc, rồi xét riêng từng đầu mút.']
+  },
+  {
+    id: 'math10-s66',
+    questionId: 'math10-q66',
+    recognition: 'Dấu hiệu nhận biết: hai đoạn giao khác rỗng; so sánh đầu trái lớn nhất với đầu phải nhỏ nhất.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định điều kiện hai đoạn còn chạm nhau',
+        explanation: 'Đoạn A kết thúc tại 1, còn đoạn B bắt đầu tại m. Hai đoạn có điểm chung khi đầu trái của B không vượt quá đầu phải của A.',
+        result: 'm \\le 1'
+      },
+      {
+        order: 2,
+        title: 'Kiểm tra biên',
+        explanation: 'Tại $m=1$, cả hai đoạn đều chứa điểm 1 nên giao vẫn khác rỗng; vì vậy phải lấy dấu bằng.',
+        result: 'm \\le 1'
+      }
+    ],
+    finalAnswer: 'm <= 1',
+    commonMistakes: ['Viết $m<1$ vì quên cả hai đầu mút tại 1 đều là ngoặc vuông.'],
+    reviewSuggestions: ['Sau khi so sánh đầu mút, thay trực tiếp giá trị biên để quyết định dấu bằng.']
+  },
+  {
+    id: 'math10-s67',
+    questionId: 'math10-q67',
+    recognition: 'Dấu hiệu nhận biết: đoạn chứa tham số phải vừa tồn tại vừa nằm hoàn toàn trong một đoạn cố định.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt điều kiện A khác rỗng',
+        explanation: 'Đoạn $[m;4]$ khác rỗng khi đầu trái không lớn hơn đầu phải.',
+        result: 'm \\le 4'
+      },
+      {
+        order: 2,
+        title: 'Đặt điều kiện tập con',
+        explanation: 'Để $[m;4]\\subset[1;6]$, đầu trái m không được nhỏ hơn 1. Đầu phải 4 đã nằm trong B.',
+        result: 'm \\ge 1'
+      },
+      {
+        order: 3,
+        title: 'Kết hợp điều kiện',
+        explanation: 'Kết hợp $m\\le4$ và $m\\ge1$.',
+        result: '1 \\le m \\le 4'
+      }
+    ],
+    finalAnswer: '1 <= m <= 4',
+    commonMistakes: ['Chỉ xét tập con mà quên điều kiện để đoạn $[m;4]$ tồn tại.'],
+    reviewSuggestions: ['Với khoảng hoặc đoạn có hai đầu phụ thuộc tham số, luôn kiểm tra điều kiện khác rỗng trước.']
+  },
+  {
+    id: 'math10-s68',
+    questionId: 'math10-q68',
+    recognition: 'Dấu hiệu nhận biết: một khoảng di động phải nằm trong đoạn cố định rồi yêu cầu lấy giá trị nguyên lớn nhất.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'So sánh hai đầu mút',
+        explanation: 'Để $(m-1;m+1)\\subset[-3;2]$, cần $m-1\\ge-3$ và $m+1\\le2$. Dấu bằng được phép vì khoảng A không lấy hai đầu mút, còn B lại chứa chúng.',
+        result: '-2 \\le m \\le 1'
+      },
+      {
+        order: 2,
+        title: 'Chọn số nguyên lớn nhất',
+        explanation: 'Trong đoạn $[-2;1]$, số nguyên lớn nhất là 1.',
+        result: 'm=1'
+      }
+    ],
+    finalAnswer: '1',
+    commonMistakes: ['Dùng bất đẳng thức nghiêm chỉ vì A có ngoặc tròn.'],
+    reviewSuggestions: ['Ngoặc tròn của tập con vẫn có thể trùng biên với ngoặc vuông của tập chứa.']
+  },
+  {
+    id: 'math10-s69',
+    questionId: 'math10-q69',
+    recognition: 'Dấu hiệu nhận biết: kiểm tra một điểm có thuộc miền nghiệm; thay trực tiếp tọa độ điểm vào tất cả bất phương trình.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Thay tọa độ M',
+        explanation: 'Với $M(1;2)$: $2x+y=2\\cdot1+2=4\\le5$, đồng thời $1\\ge0$ và $2\\ge0$.',
+        result: 'Cả ba bất phương trình đều đúng'
+      },
+      {
+        order: 2,
+        title: 'Kết luận',
+        explanation: 'Một điểm thuộc miền nghiệm của hệ khi thỏa mãn đồng thời mọi bất phương trình trong hệ.',
+        result: 'M thuộc miền nghiệm'
+      }
+    ],
+    finalAnswer: 'Có',
+    commonMistakes: ['Chỉ kiểm tra bất phương trình đầu tiên mà không kiểm tra các điều kiện $x\\ge0$, $y\\ge0$.'],
+    reviewSuggestions: ['Từ “hệ” có nghĩa là các điều kiện phải đồng thời đúng.']
+  },
+  {
+    id: 'math10-s70',
+    questionId: 'math10-q70',
+    recognition: 'Dấu hiệu nhận biết: đề hỏi trục đối xứng của parabol $y=ax^2+bx+c$; dùng $x=-b/(2a)$.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Xác định hệ số',
+        explanation: 'Với $y=2x^2-8x+3$, ta có $a=2$, $b=-8$.',
+        result: 'a=2, b=-8'
+      },
+      {
+        order: 2,
+        title: 'Tính trục đối xứng',
+        explanation: '$x=-\\dfrac{b}{2a}=-\\dfrac{-8}{2\\cdot2}=2$.',
+        result: 'x=2'
+      }
+    ],
+    finalAnswer: '2',
+    commonMistakes: ['Quên dấu trừ trong công thức hoặc thay $b=8$ thay vì $b=-8$.'],
+    reviewSuggestions: ['Đọc hệ số kèm theo dấu của nó trước khi thay vào công thức.']
+  },
+  {
+    id: 'math10-s71',
+    questionId: 'math10-q71',
+    recognition: 'Dấu hiệu nhận biết: trung điểm của BC; chèn điểm B rồi dùng $\\vec{BM}=\\frac12\\vec{BC}$.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chèn điểm B',
+        explanation: '$\\vec{AM}=\\vec{AB}+\\vec{BM}$ và $\\vec{BM}=\\frac12\\vec{BC}=\\frac12(\\vec{AC}-\\vec{AB})$.',
+        result: 'AM=AB+1/2(AC-AB)'
+      },
+      {
+        order: 2,
+        title: 'Thu gọn theo hai vectơ cơ sở',
+        explanation: 'Gom hệ số của $\\vec{AB}$ và $\\vec{AC}$.',
+        result: 'AM=1/2AB+1/2AC'
+      }
+    ],
+    finalAnswer: 'AM = 1/2AB + 1/2AC',
+    commonMistakes: ['Viết $\\vec{BC}=\\vec{AB}+\\vec{AC}$ thay vì $\\vec{AC}-\\vec{AB}$.'],
+    reviewSuggestions: ['Ghi nhớ công thức vectơ trung điểm: $\\vec{AM}=\\frac12(\\vec{AB}+\\vec{AC})$.']
+  },
+  {
+    id: 'math10-s72',
+    questionId: 'math10-q72',
+    recognition: 'Dấu hiệu nhận biết: điểm chia trong đoạn theo tỉ số; đổi toàn bộ độ dài về cùng một phần.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt một phần tỉ lệ',
+        explanation: 'Vì $AN=2NB$, đặt $NB=t$ thì $AN=2t$ và $AB=AN+NB=3t$.',
+        result: 'AN/AB=2/3'
+      },
+      {
+        order: 2,
+        title: 'Đưa về vectơ',
+        explanation: 'N nằm giữa A và B nên $\\vec{AN}$ cùng hướng với $\\vec{AB}$.',
+        result: 'AN=2/3AB'
+      }
+    ],
+    finalAnswer: 'AN = 2/3AB',
+    commonMistakes: ['Dùng hệ số $2$ mà quên tổng đoạn AB gồm ba phần.'],
+    reviewSuggestions: ['Nếu $AN:NB=p:q$ thì $\\vec{AN}=\\frac{p}{p+q}\\vec{AB}$.']
+  },
+  {
+    id: 'math10-s73',
+    questionId: 'math10-q73',
+    recognition: 'Dấu hiệu nhận biết: đường chéo hình bình hành; áp dụng trực tiếp quy tắc hình bình hành.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chèn điểm B',
+        explanation: '$\\vec{AC}=\\vec{AB}+\\vec{BC}$. Trong hình bình hành, $\\vec{BC}=\\vec{AD}$.',
+        result: 'AC=AB+AD'
+      }
+    ],
+    finalAnswer: 'AC = AB + AD',
+    commonMistakes: ['Viết dấu trừ do nhầm chiều của $\\vec{BC}$ và $\\vec{AD}$.'],
+    reviewSuggestions: ['Hai cạnh đối cùng chiều của hình bình hành biểu diễn cùng một vectơ.']
+  },
+  {
+    id: 'math10-s74',
+    questionId: 'math10-q74',
+    recognition: 'Dấu hiệu nhận biết: trọng tâm tam giác; nối trọng tâm với trung điểm và dùng tỉ lệ $AG:GM=2:1$.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Dùng trung tuyến AM',
+        explanation: 'Gọi M là trung điểm BC. Ta có $\\vec{AM}=\\frac12(\\vec{AB}+\\vec{AC})$.',
+        result: 'AM=1/2(AB+AC)'
+      },
+      {
+        order: 2,
+        title: 'Dùng tính chất trọng tâm',
+        explanation: '$\\vec{AG}=\\frac23\\vec{AM}=\\frac13(\\vec{AB}+\\vec{AC})$.',
+        result: 'AG=1/3AB+1/3AC'
+      }
+    ],
+    finalAnswer: 'AG = 1/3AB + 1/3AC',
+    commonMistakes: ['Nhầm $AG=\\frac13AM$ thay vì $AG=\\frac23AM$.'],
+    reviewSuggestions: ['Trọng tâm chia mỗi trung tuyến theo tỉ lệ 2:1 kể từ đỉnh.']
+  },
+  {
+    id: 'math10-s75',
+    questionId: 'math10-q75',
+    recognition: 'Dấu hiệu nhận biết: hai điểm nằm trên hai cạnh; biểu diễn riêng $\\vec{AM}$, $\\vec{AN}$ rồi lấy hiệu.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Biểu diễn hai vectơ vị trí',
+        explanation: 'M là trung điểm AB nên $\\vec{AM}=\\frac12\\vec{AB}$. Vì $AN:NC=2:1$ nên $\\vec{AN}=\\frac23\\vec{AC}$.',
+        result: 'AM=1/2AB, AN=2/3AC'
+      },
+      {
+        order: 2,
+        title: 'Tính MN',
+        explanation: '$\\vec{MN}=\\vec{AN}-\\vec{AM}$.',
+        result: 'MN=-1/2AB+2/3AC'
+      }
+    ],
+    finalAnswer: 'MN = -1/2AB + 2/3AC',
+    commonMistakes: ['Đảo hiệu thành $\\vec{AM}-\\vec{AN}$, thu được vectơ NM.'],
+    reviewSuggestions: ['Với cùng gốc A: $\\vec{MN}=\\vec{AN}-\\vec{AM}$.']
+  },
+  {
+    id: 'math10-s76',
+    questionId: 'math10-q76',
+    recognition: 'Dấu hiệu nhận biết: hai vectơ đã được biểu diễn theo cùng cặp vectơ cơ sở; so sánh trực tiếp các hệ số.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đặt nhân tử chung',
+        explanation: '$\\vec{AQ}=4\\vec{AB}-2\\vec{AC}=2(2\\vec{AB}-\\vec{AC})$.',
+        result: 'AQ=2AP'
+      },
+      {
+        order: 2,
+        title: 'Đọc hệ số',
+        explanation: 'So sánh với $\\vec{AQ}=k\\vec{AP}$ suy ra $k=2$. Đồng thời A, P, Q thẳng hàng.',
+        result: 'k=2'
+      }
+    ],
+    finalAnswer: '2',
+    commonMistakes: ['Chỉ so sánh một hệ số mà không kiểm tra hệ số còn lại.'],
+    reviewSuggestions: ['Hai vectơ tỉ lệ khi mọi hệ số theo cùng một cặp vectơ cơ sở có cùng tỉ số.']
+  },
+  {
+    id: 'math10-s77',
+    questionId: 'math10-q77',
+    recognition: 'Dấu hiệu nhận biết: M chia cạnh BC theo tỉ số 2:1; đổi $\\vec{BM}$ thành một phần của $\\vec{BC}$ rồi chèn B.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Đổi tỉ số đoạn thẳng',
+        explanation: '$BM:MC=2:1$ nên $\\vec{BM}=\\frac23\\vec{BC}=\\frac23(\\vec{AC}-\\vec{AB})$.',
+        result: 'BM=2/3(AC-AB)'
+      },
+      {
+        order: 2,
+        title: 'Tính AM',
+        explanation: '$\\vec{AM}=\\vec{AB}+\\vec{BM}=\\vec{AB}+\\frac23(\\vec{AC}-\\vec{AB})$.',
+        result: 'AM=1/3AB+2/3AC'
+      }
+    ],
+    finalAnswer: 'AM = 1/3AB + 2/3AC',
+    commonMistakes: ['Đổi nhầm $BM=\\frac13BC$ vì nhìn vào phần MC thay vì BM.'],
+    reviewSuggestions: ['Đoạn ứng với số 2 chiếm $2/(2+1)$ độ dài toàn cạnh.']
+  },
+  {
+    id: 'math10-s78',
+    questionId: 'math10-q78',
+    recognition: 'Dấu hiệu nhận biết: trung điểm trên cạnh đối của hình bình hành; chèn qua đỉnh D.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chèn điểm D',
+        explanation: '$\\vec{AM}=\\vec{AD}+\\vec{DM}$. Vì M là trung điểm CD nên $\\vec{DM}=\\frac12\\vec{DC}$.',
+        result: 'AM=AD+1/2DC'
+      },
+      {
+        order: 2,
+        title: 'Dùng tính chất hình bình hành',
+        explanation: '$\\vec{DC}=\\vec{AB}$, do đó thu được biểu thức cần tìm.',
+        result: 'AM=1/2AB+AD'
+      }
+    ],
+    finalAnswer: 'AM = 1/2AB + AD',
+    commonMistakes: ['Nhầm $\\vec{DC}=-\\vec{AB}$; thực tế hai vectơ này cùng hướng.'],
+    reviewSuggestions: ['Quan sát chiều mũi tên trước khi thay các cạnh đối bằng nhau.']
+  },
+  {
+    id: 'math10-s79',
+    questionId: 'math10-q79',
+    recognition: 'Dấu hiệu nhận biết: tìm tham số để A, M, N thẳng hàng; đặt $\\vec{AN}=k\\vec{AM}$ rồi so sánh hệ số.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Lập điều kiện cùng phương',
+        explanation: 'Vì $\\vec{AB}$ và $\\vec{AC}$ không cùng phương, $A,M,N$ thẳng hàng khi tồn tại k sao cho $(m+1;3)=k(2;1)$ theo các hệ số tương ứng.',
+        result: 'm+1=2k, 3=k'
+      },
+      {
+        order: 2,
+        title: 'Giải hệ hệ số',
+        explanation: 'Từ $k=3$, suy ra $m+1=6$, nên $m=5$.',
+        result: 'm=5'
+      }
+    ],
+    finalAnswer: '5',
+    commonMistakes: ['Cho hai hệ số bằng nhau trực tiếp thay vì cho chúng cùng tỉ lệ.'],
+    reviewSuggestions: ['Khi đã có cùng cặp vectơ cơ sở, điều kiện cùng phương trở thành điều kiện hai cặp hệ số tỉ lệ.']
+  },
+  {
+    id: 'math10-s80',
+    questionId: 'math10-q80',
+    recognition: 'Dấu hiệu nhận biết: hai vectơ chứa tham số theo cùng cơ sở; dùng định thức hệ số bằng 0 để tránh chia cho hệ số có thể bằng 0.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Lập điều kiện tỉ lệ',
+        explanation: 'Hai cặp hệ số $(2;-1)$ và $(m-1;2m-5)$ phải tỉ lệ. Điều kiện tương đương là định thức bằng 0.',
+        result: '2(2m-5)-(-1)(m-1)=0'
+      },
+      {
+        order: 2,
+        title: 'Giải phương trình',
+        explanation: '$4m-10+m-1=0 \\Leftrightarrow 5m-11=0$.',
+        result: 'm=11/5'
+      }
+    ],
+    finalAnswer: '11/5',
+    commonMistakes: ['Làm mất dấu âm của hệ số $-1$ khi khai triển định thức.'],
+    reviewSuggestions: ['Với $(a;b)$ và $(c;d)$, điều kiện tỉ lệ an toàn là $ad-bc=0$.']
+  },
+  {
+    id: 'math10-s81',
+    questionId: 'math10-q81',
+    recognition: 'Dấu hiệu nhận biết: hai điểm chia hai cạnh theo tỉ số; biểu diễn vectơ vị trí từ cùng gốc A rồi lấy hiệu.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Biểu diễn AM và AN',
+        explanation: '$BM:MC=2:1$ nên $\\vec{AM}=\\frac13\\vec{AB}+\\frac23\\vec{AC}$. Vì $CN=3NA$, điểm N nằm trên CA và $AN=\\frac14AC$, nên $\\vec{AN}=\\frac14\\vec{AC}$.',
+        result: 'AM=1/3AB+2/3AC, AN=1/4AC'
+      },
+      {
+        order: 2,
+        title: 'Tính MN và đọc x, y',
+        explanation: '$\\vec{MN}=\\vec{AN}-\\vec{AM}=-\\frac13\\vec{AB}+(\\frac14-\\frac23)\\vec{AC}=-\\frac13\\vec{AB}-\\frac5{12}\\vec{AC}$. Do đó $x=-\\frac13$, $y=-\\frac5{12}$.',
+        result: 'x+y=-1/3-5/12=-3/4'
+      }
+    ],
+    finalAnswer: '-3/4',
+    commonMistakes: ['Suy ra $AN=\\frac34AC$ thay vì $\\frac14AC$ từ điều kiện $CN=3NA$.'],
+    reviewSuggestions: ['Vẽ thứ tự C–N–A và đánh dấu 3 phần, 1 phần trước khi chuyển tỉ số sang vectơ.']
+  },
+  {
+    id: 'math10-s82',
+    questionId: 'math10-q82',
+    recognition: 'Dấu hiệu nhận biết: biết hai cạnh và góc xen giữa, cần cạnh còn lại; dùng định lý cosin.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Áp dụng định lý cosin',
+        explanation: '$BC^2=AB^2+AC^2-2\\cdot AB\\cdot AC\\cos A=25+25-50\\cdot\\frac12=25$.',
+        result: 'BC^2=25'
+      },
+      {
+        order: 2,
+        title: 'Lấy độ dài dương',
+        explanation: 'Độ dài cạnh luôn dương nên $BC=5$.',
+        result: 'BC=5'
+      }
+    ],
+    finalAnswer: '5',
+    commonMistakes: ['Quên hệ số 2 trong số hạng $2AB\\cdot AC\\cos A$.'],
+    reviewSuggestions: ['Nhận diện dữ kiện cạnh–góc xen giữa–cạnh là tín hiệu trực tiếp của định lý cosin.']
+  },
+  {
+    id: 'math10-s83',
+    questionId: 'math10-q83',
+    recognition: 'Dấu hiệu nhận biết: biết hai cạnh và góc xen giữa, yêu cầu diện tích; dùng $S=\\frac12ab\\sin C$.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Chọn đúng hai cạnh kề góc A',
+        explanation: 'Hai cạnh AB và AC kề góc A nên $S=\\frac12\\cdot AB\\cdot AC\\cdot\\sin A$.',
+        result: 'S=1/2·6·8·sin30°'
+      },
+      {
+        order: 2,
+        title: 'Tính giá trị',
+        explanation: 'Vì $\\sin30^\\circ=\\frac12$, suy ra $S=\\frac12\\cdot6\\cdot8\\cdot\\frac12=12$.',
+        result: 'S=12'
+      }
+    ],
+    finalAnswer: '12',
+    commonMistakes: ['Dùng cosin thay cho sin trong công thức diện tích.', 'Quên hệ số $\\frac12$.'],
+    reviewSuggestions: ['Công thức diện tích dùng sin của góc xen giữa hai cạnh được nhân.']
+  },
+  {
+    id: 'math10-s84',
+    questionId: 'math10-q84',
+    recognition: 'Dấu hiệu nhận biết: hai vectơ được cho bằng tọa độ; nhân các tọa độ cùng vị trí rồi cộng.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Áp dụng công thức tọa độ',
+        explanation: '$\\vec{u}\\cdot\\vec{v}=2\\cdot3+(-1)\\cdot4=6-4$.',
+        result: '2'
+      }
+    ],
+    finalAnswer: '2',
+    commonMistakes: ['Bỏ dấu âm của tung độ $-1$.'],
+    reviewSuggestions: ['Với $u=(x_1;y_1)$, $v=(x_2;y_2)$: $u\\cdot v=x_1x_2+y_1y_2$.']
+  },
+  {
+    id: 'math10-s85',
+    questionId: 'math10-q85',
+    recognition: 'Dấu hiệu nhận biết: biết độ dài và góc giữa hai vectơ, cần độ dài của hiệu; bình phương biểu thức rồi dùng tích vô hướng.',
+    detailedSteps: [
+      {
+        order: 1,
+        title: 'Tính tích vô hướng a.b',
+        explanation: '$\\vec{a}\\cdot\\vec{b}=|\\vec{a}||\\vec{b}|\\cos60^\\circ=5\\cdot2\\cdot\\frac12=5$.',
+        result: 'a.b=5'
+      },
+      {
+        order: 2,
+        title: 'Bình phương độ dài hiệu',
+        explanation: '$|\\vec{a}-\\vec{b}|^2=|\\vec{a}|^2+|\\vec{b}|^2-2\\vec{a}\\cdot\\vec{b}=25+4-10=19$.',
+        result: '|a-b|^2=19'
+      },
+      {
+        order: 3,
+        title: 'Lấy căn dương',
+        explanation: 'Độ dài không âm nên $|\\vec{a}-\\vec{b}|=\\sqrt{19}$.',
+        result: '\\sqrt{19}'
+      }
+    ],
+    finalAnswer: '\\sqrt{19}',
+    commonMistakes: ['Dùng dấu cộng ở hạng tử $2\\vec{a}\\cdot\\vec{b}$ dù đang tính hiệu hai vectơ.'],
+    reviewSuggestions: ['Ghi nhớ $|a\\pm b|^2=|a|^2+|b|^2\\pm2a\\cdot b$.']
   }
 ];

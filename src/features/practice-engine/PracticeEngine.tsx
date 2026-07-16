@@ -102,7 +102,7 @@ export const PracticeEngine: React.FC = () => {
     const userId = user!.uid;
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
-    
+
     const sessions: Record<string, { correct: number; total: number }> = {};
     reviewAttempts.forEach(a => {
       let sessionId = '';
@@ -170,7 +170,7 @@ export const PracticeEngine: React.FC = () => {
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
-  
+
   const {
     proofImages,
     setProofImages,
@@ -290,7 +290,7 @@ export const PracticeEngine: React.FC = () => {
 
     const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
-    
+
     // Tìm lần làm gần nhất cho từng câu hỏi
     const latestAttemptsByQId: Record<string, UserAttempt> = {};
     attempts.forEach(a => {
@@ -1076,7 +1076,7 @@ export const PracticeEngine: React.FC = () => {
           >
             ← Quay lại
           </button>
-          
+
           {!isExamMode && currentQuestion && (
             <button
               onClick={() => setIsTutorOpen(true)}
@@ -1084,7 +1084,7 @@ export const PracticeEngine: React.FC = () => {
               className="text-xs font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm border border-emerald-500/25"
             >
               <Sparkles size={13} className="text-emerald-500 fill-emerald-500 animate-pulse" />
-              Hỏi Gia sư AI
+              Hỏi Gia sư
             </button>
           )}
         </div>
@@ -1107,8 +1107,8 @@ export const PracticeEngine: React.FC = () => {
                   "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
                   isActive
                     ? (routeSubject === 'math' ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20 scale-105" :
-                       routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
-                       "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
+                      routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
+                        "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
                     : isCompleted
                       ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
                       : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"

@@ -28,10 +28,10 @@ const getModelInfo = (log: any) => {
 
   if (modelName) {
     const provider = log.provider || (
-      modelName.startsWith('kira') ? 'kira' : 
-      modelName.startsWith('qwen') || modelName.includes('gpt-oss') ? 'groq' : 
-      modelName.startsWith('mistral') || modelName.startsWith('codestral') || modelName.startsWith('ministral') ? 'mistral' :
-      'gemini'
+      modelName.startsWith('kira') ? 'kira' :
+        modelName.startsWith('qwen') || modelName.includes('gpt-oss') ? 'groq' :
+          modelName.startsWith('mistral') || modelName.startsWith('codestral') || modelName.startsWith('ministral') ? 'mistral' :
+            'gemini'
     );
     return {
       model: modelName,
@@ -75,7 +75,7 @@ export const TeacherAiStatistics: React.FC = () => {
     });
 
     const avgTokens = totalCalls > 0 ? Math.round(totalAll / totalCalls) : 0;
-    
+
     // Cost estimation based on Gemini 3.1 Flash Lite
     // Prompt: $0.075 / 1M tokens
     // Completion: $0.30 / 1M tokens
@@ -98,7 +98,7 @@ export const TeacherAiStatistics: React.FC = () => {
   // 1. Daily usage data (ComposedChart)
   const dailyData = useMemo(() => {
     const groups: Record<string, { date: string; inputTokens: number; outputTokens: number; calls: number }> = {};
-    
+
     // Sort logs ascending by date first to group them chronologically
     const sortedLogs = [...logs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
@@ -119,7 +119,7 @@ export const TeacherAiStatistics: React.FC = () => {
   // 2. Task Breakdown (PieChart)
   const taskData = useMemo(() => {
     const typeMapNames: Record<string, string> = {
-      "tutor": "Gia sư AI (Tutor)",
+      "tutor": "Gia sư (Tutor)",
       "rewrite": "Viết lại câu (Rewrite)",
       "summary": "Tóm tắt (Summary)",
       "diagnose": "Chẩn đoán (Diagnose)",
@@ -173,7 +173,7 @@ export const TeacherAiStatistics: React.FC = () => {
   };
 
   const typeMapNames: Record<string, string> = {
-    "tutor": "Gia sư AI (Tutor)",
+    "tutor": "Gia sư (Tutor)",
     "rewrite": "Viết lại câu",
     "summary": "Tóm tắt",
     "diagnose": "Chẩn đoán",
@@ -416,13 +416,13 @@ export const TeacherAiStatistics: React.FC = () => {
                 {logs.slice(0, 10).map((log, idx) => {
                   const localTime = log.timestamp
                     ? new Date(log.timestamp).toLocaleString('vi-VN', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                      })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })
                     : 'N/A';
                   const modelInfo = getModelInfo(log);
                   return (
@@ -435,14 +435,14 @@ export const TeacherAiStatistics: React.FC = () => {
                         </span>
                       </td>
                       <td className="p-3">
-                        <span className={cn("px-2 py-0.5 rounded text-[8px] font-bold inline-block", 
-                          modelInfo.provider === 'kira' 
-                            ? "bg-amber-500/10 text-amber-600 border border-amber-500/20 animate-pulse" 
+                        <span className={cn("px-2 py-0.5 rounded text-[8px] font-bold inline-block",
+                          modelInfo.provider === 'kira'
+                            ? "bg-amber-500/10 text-amber-600 border border-amber-500/20 animate-pulse"
                             : modelInfo.provider === 'groq'
-                            ? "bg-indigo-500/10 text-indigo-600 border border-indigo-500/20"
-                            : modelInfo.provider === 'mistral'
-                            ? "bg-rose-500/10 text-rose-600 border border-rose-500/20"
-                            : "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
+                              ? "bg-indigo-500/10 text-indigo-600 border border-indigo-500/20"
+                              : modelInfo.provider === 'mistral'
+                                ? "bg-rose-500/10 text-rose-600 border border-rose-500/20"
+                                : "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                         )}>
                           {modelInfo.model}
                         </span>

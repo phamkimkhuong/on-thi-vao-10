@@ -270,7 +270,7 @@ export async function consolidateProfile(
 
     // 2. Tải các attempts của học sinh từ Firestore subcollection
     const attemptsSnap = await db.collection("users").doc(uid).collection("attempts").get();
-    
+
     // Gom nhóm attempts theo questionTypeId
     const attemptsMap: Record<string, any[]> = {};
     attemptsSnap.forEach(docSnap => {
@@ -285,7 +285,7 @@ export async function consolidateProfile(
 
     // 3. Tìm các dạng bài đã làm đúng 3 câu liên tiếp gần nhất
     const masteredQuestionTypeIds: string[] = [];
-    
+
     for (const [qtId, list] of Object.entries(attemptsMap)) {
       const sorted = [...list].sort((a, b) => {
         return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();

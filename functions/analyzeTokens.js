@@ -65,7 +65,7 @@ async function run() {
 
   if (shouldClear) {
     console.log("Quyết định xóa sạch dữ liệu nhật ký sử dụng trong collection 'ai_usage_logs'...");
-    
+
     // Lấy số lượng tài liệu trước khi xóa
     const countSnapshot = await db.collection("ai_usage_logs").get();
     const count = countSnapshot.size;
@@ -96,7 +96,7 @@ async function run() {
   }
 
   const typeMapNames = {
-    "tutor": "Gia sư AI (Tutor)",
+    "tutor": "Gia sư(Tutor)",
     "rewrite": "Viết lại câu hỏi (Rewrite)",
     "summary": "Tóm tắt lịch sử (Summary)",
     "diagnose": "Chẩn đoán phiên (Diagnose)",
@@ -155,12 +155,12 @@ async function run() {
 
   const costUSD = (totalPrompt * rateInput) + (totalCandidates * rateOutput);
   const costVND = costUSD * usdToVnd;
-  
+
   const avgCostUSD = costUSD / count;
   const avgCostVND = costVND / count;
 
   console.log(`=== BÁO CÁO THỐNG KÊ TOKEN VÀ CHI PHÍ (${count} LƯỢT GỌI GẦN NHẤT) ===\n`);
-  
+
   console.log("📊 CHI TIẾT THEO PHÂN LOẠI TÁC VỤ (BREAKDOWN):");
   const breakdownTable = [];
   Object.entries(breakdown).forEach(([key, stats]) => {

@@ -82,7 +82,11 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       ? 'inequality'
       : currentQuestion.topicId === 'math10-t4'
         ? 'geometry'
-        : 'set';
+        : currentQuestion.questionTypeId === 'math10-qt7'
+          ? 'dot-product'
+          : currentQuestion.topicId === 'math10-t5'
+            ? 'vector'
+            : 'set';
 
   // Phân tách options từ content nếu validatorType === 'choice' và không có options riêng biệt
   let displayOptions = currentQuestion.options;

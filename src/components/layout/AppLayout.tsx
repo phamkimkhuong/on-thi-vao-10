@@ -78,7 +78,7 @@ export const AppLayout: React.FC = () => {
 
     const path = location.pathname;
     const stayPaths = ['/dashboard', '/roadmap', '/practice', '/ai-tutor', '/mistakes', '/exam'];
-    
+
     if (!stayPaths.includes(path)) {
       navigate('/roadmap');
     }
@@ -131,7 +131,7 @@ export const AppLayout: React.FC = () => {
   useEffect(() => {
     const path = location.pathname;
     const brandName = 'Dạng Bài Thực Chiến';
-    
+
     if (path.startsWith('/teacher')) {
       document.title = `Góc Giáo Viên | ${brandName}`;
       return;
@@ -154,14 +154,14 @@ export const AppLayout: React.FC = () => {
       return;
     }
     if (path.startsWith('/ai-tutor')) {
-      document.title = `Gia Sư AI Socratic | ${brandName}`;
+      document.title = `Gia Sư Socratic | ${brandName}`;
       return;
     }
-    
+
     // Theo môn và lớp
     const subjectLabel = selectedSubject === 'math' ? 'Toán Học' : selectedSubject === 'english' ? 'Tiếng Anh' : selectedSubject === 'chemistry' ? 'Hóa Học' : '';
     const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : '9-12';
-    
+
     if (selectedGrade === 'grade9' && selectedSubject === 'english') {
       document.title = `Luyện Thi Vào 10 Môn Tiếng Anh | ${brandName}`;
     } else if (selectedGrade === 'grade9' && selectedSubject === 'math') {
@@ -225,7 +225,7 @@ export const AppLayout: React.FC = () => {
     { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
     { path: '/roadmap', label: 'Lộ trình học', icon: Map },
     { path: '/practice', label: 'Luyện tập', icon: BookOpen },
-    { path: '/ai-tutor', label: 'Gia sư AI', icon: Sparkles },
+    { path: '/ai-tutor', label: 'Gia sư', icon: Sparkles },
     { path: '/mistakes', label: 'Sổ lỗi sai', icon: Bookmark },
     {
       path: '/exam',
@@ -253,7 +253,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/roadmap')) return 'Lộ trình học';
     if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
     if (path.startsWith('/practice')) return 'Luyện tập';
-    if (path.startsWith('/ai-tutor')) return 'Gia sư AI Socratic';
+    if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';
@@ -445,7 +445,7 @@ export const AppLayout: React.FC = () => {
             <span className="text-[10px] font-black text-amber-600 dark:text-amber-400 block mb-1 tracking-wider uppercase flex items-center justify-center gap-1">
               👑 NÂNG CẤP PREMIUM
             </span>
-            <p className="text-[9px] text-amber-700/80 dark:text-amber-300/80 font-bold mb-3">Mở khóa Gia sư AI & Chặng 3</p>
+            <p className="text-[9px] text-amber-700/80 dark:text-amber-300/80 font-bold mb-3">Mở khóa Gia sư & Chặng 3</p>
             <button
               onClick={() => { setIsSidebarOpen(false); navigate('/premium'); }}
               className="w-full py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-[11px] rounded-xl shadow-md hover:shadow-lg hover:shadow-amber-500/10 active:scale-95 transition-all cursor-pointer animate-pulse-glow"
@@ -606,10 +606,10 @@ export const AppLayout: React.FC = () => {
                   </>
                 )}
               </div>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-4.5">
+          <div className="flex items-center gap-4.5">
             <div className="flex items-center gap-1.5 bg-secondary/40 backdrop-blur-sm px-3.5 py-2 rounded-2xl border border-border/20 shadow-sm">
               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Mastery:</span>
               <span className="text-xs font-black text-primary bg-primary/8 px-2 py-0.5 rounded-lg border border-primary/10">

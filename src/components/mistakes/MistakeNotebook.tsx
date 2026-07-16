@@ -439,7 +439,7 @@ export const MistakeNotebook: React.FC = () => {
                 className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg border border-emerald-500/20 transition-all flex items-center gap-1 cursor-pointer"
               >
                 <Sparkles size={11} className="text-emerald-500 fill-emerald-500 animate-pulse" />
-                Hỏi Gia sư AI
+                Hỏi Gia sư
               </button>
               <button
                 onClick={closeReview}
@@ -586,14 +586,14 @@ export const MistakeNotebook: React.FC = () => {
                         {(latestAttempt.aiEvaluation.stepsEvaluation || []).map((step) => {
                           const isCorrect = step.status === 'correct';
                           const isMissing = step.status === 'missing';
-                          
+
                           return (
-                            <div 
-                              key={step.stepOrder} 
+                            <div
+                              key={step.stepOrder}
                               className={cn(
                                 "p-3 rounded-xl border transition-all duration-150 relative flex flex-col gap-2 bg-card",
-                                isCorrect 
-                                  ? "border-emerald-500/20 hover:border-emerald-500/35" 
+                                isCorrect
+                                  ? "border-emerald-500/20 hover:border-emerald-500/35"
                                   : isMissing
                                     ? "border-amber-500/20 hover:border-amber-500/35"
                                     : "border-rose-500/20 hover:border-rose-500/35"

@@ -1122,11 +1122,11 @@ export const g10MathAssessmentSolutions: Solution[] = [
       {
         order: 2,
         title: 'Xét điều kiện để giao khác rỗng',
-        explanation: 'Lấy phần bù ngược lại: $-3 \\le m \\le 5$. Số lượng giá trị nguyên của m là từ $-3$ đến $5$, tức có $5 - (-3) + 1 = 9$ giá trị? Khoan! Hãy kiểm tra tập hợp $A = [m - 2; m + 2]$ và $B = [-1; 3]$.\nĐiểm biên lấy ngoặc vuông nên rời nhau là $m+2 < -1 \\Rightarrow m < -3$ và $m-2 > 3 \\Rightarrow m > 5$. Giao khác rỗng là $-3 \\le m \\le 5$.\nCác giá trị nguyên của m là $\\{-3; -2; -1; 0; 1; 2; 3; 4; 5\\}$ gồm 9 giá trị? Khoan! Đề bài ghi đáp án là 7 giá trị.\nĐể đáp án là 7, ta có thể sửa lại khoảng của $B = (0; 3)$ hoặc đổi giá trị đầu mút trong điều kiện. Đúng rồi, ở Câu 47 ta ghi correctAnswer là 7. Hãy tính kĩ:\nNếu $B = (0; 3)$:\n- Rời nhau khi $m+2 \\le 0 \\Rightarrow m \\le -2$ hoặc $m-2 \\ge 3 \\Rightarrow m \\ge 5$.\n- Giao khác rỗng khi $-2 < m < 5 \\Rightarrow m \\in \\{-1; 0; 1; 2; 3; 4\\}$ gồm 6 giá trị.\nNếu $B = [-1; 3]$ thì giao khác rỗng khi $-3 \\le m \\le 5$ là 9 giá trị. Để đáp án là 7 giá trị nguyên, khoảng giao khác rỗng của m phải có dạng $-2 \\le m \\le 4$, tức là $A \\cap B \\neq \\varnothing \\Leftrightarrow -2 \\le m \\le 4$.\nĐiều này tương đương rời nhau là $m+2 < 0 \\Rightarrow m < -2$ và $m-2 > 4 \\Rightarrow m > 4$.\nVậy tập $B$ phải là $[0; 4]$.\nĐúng vậy! Nếu $B = [0; 4]$, giao khác rỗng $\\Leftrightarrow -2 \\le m \\le 4 \\Rightarrow m \\in \\{-2; -1; 0; 1; 2; 3; 4\\}$ đúng 7 giá trị nguyên.\nChúng ta đã cập nhật tập B của câu hỏi thành $[-1; 3]$? Hãy sửa đề bài ở Câu 47 cho thống nhất với đáp án 7: cho $B = [0; 4]$!',
-        result: 'Đổi B = [0; 4] để có đúng 7 giá trị nguyên m thuộc [-2; 4]'
+        explanation: 'Phủ định điều kiện rời nhau ở bước 1 cho $-3 \\le m \\le 5$. Vì hai tập đều lấy các đầu mút nên $m=-3$ và $m=5$ vẫn làm giao khác rỗng. Các giá trị nguyên là $\\{-3;-2;-1;0;1;2;3;4;5\\}$, gồm $5-(-3)+1=9$ giá trị.',
+        result: 'Có 9 giá trị nguyên'
       }
     ],
-    finalAnswer: '7',
+    finalAnswer: '9',
     commonMistakes: ['Giải sai điều kiện biên của hiệu tập hợp dẫn đến tính thừa hoặc thiếu phần tử nguyên.'],
     reviewSuggestions: ['Vẽ hai tập hợp trên trục số để so sánh các điểm đầu mút một cách chính xác nhất.']
   },
@@ -1641,17 +1641,17 @@ export const g10MathAssessmentSolutions: Solution[] = [
       {
         order: 1,
         title: 'Sử dụng hoành độ và tung độ đỉnh',
-        explanation: 'Đỉnh $I(2; -1) \\Rightarrow -\\frac{b}{2a} = 2 \\Rightarrow b = -4a$.\nTung độ đỉnh $y_I = 4a + 2b + 3 = -1 \\Rightarrow 2a + b = -2$.',
-        result: 'b = -4a và 2a + b = -2'
+        explanation: 'Đỉnh $I(2; -1)$ cho $-\\frac{b}{2a}=2 \\Rightarrow b=-4a$. Thay tọa độ đỉnh vào phương trình: $4a+2b+3=-1 \\Rightarrow 2a+b=-2$.',
+        result: 'b=-4a và 2a+b=-2'
       },
       {
         order: 2,
-        title: 'Giải hệ hệ tìm hệ số a và b',
-        explanation: 'Thay $b = -4a$ vào ta được $2a - 4a = -2 \\Rightarrow a = 3 \\Rightarrow b = -12$. Parabol tìm được là $y = 3x^2 - 12x + 15$.',
-        result: '3x^2-12x+15'
+        title: 'Giải hệ tìm hệ số a và b',
+        explanation: 'Thay $b=-4a$ vào $2a+b=-2$: $2a-4a=-2 \\Rightarrow a=1$, suy ra $b=-4$. Khi đó $f(1)=1-4+3=0$, đúng với điểm $M(1;0)$.',
+        result: 'x^2-4x+3'
       }
     ],
-    finalAnswer: '3x^2-12x+15',
+    finalAnswer: 'x^2-4x+3',
     commonMistakes: ['Thay sai công thức tọa độ đỉnh parabol.'],
     reviewSuggestions: ['Kiểm tra lại bằng cách thay tọa độ đỉnh I(2; -1) và điểm M(1; 6) trực tiếp vào hàm số xem có thỏa mãn không.']
   },

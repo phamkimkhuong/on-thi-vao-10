@@ -4,9 +4,9 @@ import { cn } from '../../utils/cn';
 
 interface MathKeyboardProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
-  value: string;
+  value?: string;
   onChange: (val: string) => void;
-  layout?: 'set' | 'algebra' | 'inequality' | 'geometry';
+  layout?: 'set' | 'algebra' | 'inequality' | 'geometry' | 'vector' | 'dot-product';
   className?: string;
 }
 
@@ -168,6 +168,80 @@ export const MathKeyboard: React.FC<MathKeyboardProps> = ({
       ];
     }
 
+    if (layout === 'vector') {
+      return [
+        // Hàng 1: A, B, C, M, N, P, Q, G
+        [
+          { label: 'A', value: 'A' },
+          { label: 'B', value: 'B' },
+          { label: 'C', value: 'C' },
+          { label: 'M', value: 'M' },
+          { label: 'N', value: 'N' },
+          { label: 'P', value: 'P' },
+          { label: 'Q', value: 'Q' },
+          { label: 'G', value: 'G' },
+        ],
+        // Hàng 2: 1, 2, 3, 4, 5, =, +, -
+        [
+          { label: '1', value: '1' },
+          { label: '2', value: '2' },
+          { label: '3', value: '3' },
+          { label: '4', value: '4' },
+          { label: '5', value: '5' },
+          { label: '=', value: '=' },
+          { label: '+', value: '+' },
+          { label: '-', value: '-' },
+        ],
+        // Hàng 3: 6, 7, 8, 9, 0, /, (, ), xóa
+        [
+          { label: '6', value: '6' },
+          { label: '7', value: '7' },
+          { label: '8', value: '8' },
+          { label: '9', value: '9' },
+          { label: '0', value: '0' },
+          { label: '/', value: '/' },
+          { label: '(', value: '(' },
+          { label: ')', value: ')' },
+          { label: 'xóa', value: 'backspace', isSpecial: true },
+        ]
+      ];
+    }
+
+    if (layout === 'dot-product') {
+      return [
+        // Hàng 1: √, ², a, b, u, v, °
+        [
+          { label: '√', value: '√' },
+          { label: '²', value: '^2' },
+          { label: 'a', value: 'a' },
+          { label: 'b', value: 'b' },
+          { label: 'u', value: 'u' },
+          { label: 'v', value: 'v' },
+          { label: '°', value: '°' },
+        ],
+        // Hàng 2: 1, 2, 3, 4, 5, +, -
+        [
+          { label: '1', value: '1' },
+          { label: '2', value: '2' },
+          { label: '3', value: '3' },
+          { label: '4', value: '4' },
+          { label: '5', value: '5' },
+          { label: '+', value: '+' },
+          { label: '-', value: '-' },
+        ],
+        // Hàng 3: 6, 7, 8, 9, 0, /, xóa
+        [
+          { label: '6', value: '6' },
+          { label: '7', value: '7' },
+          { label: '8', value: '8' },
+          { label: '9', value: '9' },
+          { label: '0', value: '0' },
+          { label: '/', value: '/' },
+          { label: 'xóa', value: 'backspace', isSpecial: true },
+        ]
+      ];
+    }
+
     // Mặc định: layout = 'set' (Toán tập hợp)
     return [
       [
@@ -203,6 +277,10 @@ export const MathKeyboard: React.FC<MathKeyboardProps> = ({
           ? "Bàn phím hỗ trợ Bất phương trình:"
           : layout === 'geometry'
           ? "Bàn phím hỗ trợ Hình học & Hệ thức lượng:"
+          : layout === 'vector'
+          ? "Bàn phím hỗ trợ Vectơ & Biến đổi:"
+          : layout === 'dot-product'
+          ? "Bàn phím hỗ trợ Tích vô hướng & Góc:"
           : "Bàn phím hỗ trợ toán tập hợp:"}
       </span>
       <div className="space-y-1.5">

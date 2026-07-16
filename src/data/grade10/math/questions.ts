@@ -54,7 +54,7 @@ export const g10MathQuestions: Question[] = [
     subjectId: 'math',
     topicId: 'math10-t5',
     questionTypeId: 'math10-qt5',
-    content: 'Cho tam giác ABC. Điểm M thỏa mãn $\\vec{MB} = -2\\vec{MC}$ và điểm N thỏa mãn $\\vec{AN} = \\frac{1}{3}\\vec{AB} + \\frac{2}{9}\\vec{AC}$. Gọi G là trọng tâm tam giác ABC. Hãy phân tích vectơ $\\vec{AM}$ theo hai vectơ $\\vec{AB}$ và $\\vec{AC}$, từ đó chứng minh ba điểm A, N, M thẳng hàng.',
+    content: 'Cho tam giác ABC. Điểm M thỏa mãn $\\vec{MB} = -2\\vec{MC}$ và điểm N thỏa mãn $\\vec{AN} = \\frac{1}{9}\\vec{AB} + \\frac{2}{9}\\vec{AC}$. Hãy phân tích vectơ $\\vec{AM}$ theo hai vectơ $\\vec{AB}$ và $\\vec{AC}$, từ đó chứng minh ba điểm A, N, M thẳng hàng.',
     difficulty: 'hard',
     sourceType: 'manual',
     correctAnswer: 'AM = 1/3AB + 2/3AC',
@@ -164,7 +164,7 @@ export const g10MathQuestions: Question[] = [
     difficulty: 'medium',
     sourceType: 'manual',
     correctAnswer: '(0; 2]',
-    acceptedAnswers: ['(0; 2]', '(0;2)', '(0; 2]'],
+    acceptedAnswers: ['(0; 2]', '(0;2]'],
     validatorType: 'exact'
   },
   {
@@ -221,11 +221,7 @@ export const g10MathQuestions: Question[] = [
       'm < -1 hoặc 1 <= m <= 7',
       'm < -1 hoac 1 <= m <= 7',
       '(-\\infty; -1) \\cup [1; 7]',
-      '(-\\infty;-1) \\cup [1;7]',
-      'm <= -1 hoặc 1 <= m <= 7',
-      'm <= -1 hoac 1 <= m <= 7',
-      '(-\\infty; -1] \\cup [1; 7]',
-      '(-\\infty;-1] \\cup [1;7]'
+      '(-\\infty;-1) \\cup [1;7]'
     ],
     validatorType: 'exact'
   },
@@ -249,8 +245,8 @@ export const g10MathQuestions: Question[] = [
     content: 'Cho hai tập hợp $A = (m - 3; m]$ và $B = (1; 4)$. Tìm tất cả các giá trị của tham số m để $A \\cap B = \\varnothing$.',
     difficulty: 'medium',
     sourceType: 'manual',
-    correctAnswer: 'm <= 1 hoặc m > 7',
-    acceptedAnswers: ['m <= 1 hoặc m > 7', 'm <= 1 hoac m > 7', 'm <= 1 hoặc m >= 7', 'm <= 1 hoac m >= 7'],
+    correctAnswer: 'm <= 1 hoặc m >= 7',
+    acceptedAnswers: ['m <= 1 hoặc m >= 7', 'm <= 1 hoac m >= 7', '(-\\infty; 1] \\cup [7; +\\infty)'],
     validatorType: 'exact'
   },
   {
@@ -476,7 +472,7 @@ export const g10MathQuestions: Question[] = [
     topicId: 'math10-t2',
     questionTypeId: 'math10-qt3',
     content: 'Một cửa hàng bán hai loại bánh: bánh mì và bánh ngọt. Mỗi ngày cửa hàng sản xuất tối đa 100 chiếc bánh, trong đó số bánh ngọt không vượt quá 60 chiếc và số bánh mì không ít hơn 20 chiếc. Lợi nhuận từ mỗi chiếc bánh mì là 5 nghìn đồng, mỗi chiếc bánh ngọt là 8 nghìn đồng. Hỏi cửa hàng cần sản xuất bao nhiêu chiếc mỗi loại để lợi nhuận lớn nhất?',
-    difficulty: 'medium',
+    difficulty: 'hard',
     sourceType: 'manual',
     correctAnswer: '40 bánh mì, 60 bánh ngọt',
     acceptedAnswers: [
@@ -949,6 +945,350 @@ export const g10MathQuestions: Question[] = [
     sourceType: 'manual',
     correctAnswer: 'k = 3',
     acceptedAnswers: ['k = 3', 'k=3', '3', 'k = 3'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q64',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt1',
+    content: 'Cho $U = \\{1;2;\\ldots;30\\}$, $A$ là tập các phần tử của $U$ chia hết cho 2 và $B$ là tập các phần tử của $U$ chia hết cho 3. Tính số phần tử của $U \\setminus (A \\cup B)$.',
+    difficulty: 'hard',
+    sourceType: 'manual',
+    correctAnswer: '10',
+    acceptedAnswers: ['10', '10 phần tử', '10 phan tu'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '10' },
+    acceptedFinalAnswers: [{ value: '10' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Số phần tử:', valueType: 'number', placeholder: 'Nhập số phần tử' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q65',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt1',
+    content: 'Cho $A=[-4;5]$, $B=(-2;7)$ và $C=[0;3]$. Xác định tập hợp $(A \\cup B) \\setminus C$.',
+    difficulty: 'hard',
+    sourceType: 'manual',
+    correctAnswer: '[-4; 0) \\cup (3; 7)',
+    acceptedAnswers: ['[-4; 0) \\cup (3; 7)', '[-4;0)\\cup(3;7)', '[-4; 0) U (3; 7)'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q66',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt2',
+    content: 'Cho $A=[-2;1]$ và $B=[m;4]$. Tìm điều kiện của $m$ để $A \\cap B \\ne \\varnothing$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'm <= 1',
+    acceptedAnswers: ['m <= 1', 'm ≤ 1', '(-\\infty; 1]'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q67',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt2',
+    content: 'Cho $A=[m;4]$ và $B=[1;6]$. Tìm tất cả giá trị thực của $m$ để $A$ khác rỗng và $A \\subset B$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '1 <= m <= 4',
+    acceptedAnswers: ['1 <= m <= 4', '1 ≤ m ≤ 4', '[1;4]', 'm \\in [1;4]'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q68',
+    subjectId: 'math',
+    topicId: 'math10-t1',
+    questionTypeId: 'math10-qt2',
+    content: 'Cho $A=(m-1;m+1)$ và $B=[-3;2]$. Tìm số nguyên lớn nhất $m$ để $A \\subset B$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '1',
+    acceptedAnswers: ['1', 'm = 1', 'm=1'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '1' },
+    acceptedFinalAnswers: [{ value: '1' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Giá trị lớn nhất của m:', valueType: 'number', placeholder: 'Nhập m' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q69',
+    subjectId: 'math',
+    topicId: 'math10-t2',
+    questionTypeId: 'math10-qt3',
+    content: 'Điểm $M(1;2)$ có thuộc miền nghiệm của hệ sau hay không?\\n$$\\begin{cases}2x+y\\le5\\\\x\\ge0\\\\y\\ge0\\end{cases}$$',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'Có',
+    acceptedAnswers: ['Có', 'co', 'có', 'Có, vì M thỏa mãn hệ'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q70',
+    subjectId: 'math',
+    topicId: 'math10-t3',
+    questionTypeId: 'math10-qt4',
+    content: 'Tìm hoành độ trục đối xứng của parabol $y=2x^2-8x+3$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '2',
+    acceptedAnswers: ['2', 'x = 2', 'x=2'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '2' },
+    acceptedFinalAnswers: [{ value: '2' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Hoành độ trục đối xứng:', valueType: 'number', placeholder: 'Nhập giá trị' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q71',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$, $M$ là trung điểm của $BC$. Biểu diễn $\\vec{AM}$ theo $\\vec{AB}$ và $\\vec{AC}$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'AM = 1/2AB + 1/2AC',
+    acceptedAnswers: ['AM = 1/2AB + 1/2AC', 'AM=1/2AB+1/2AC', '1/2(AB+AC)'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q72',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Điểm $N$ thuộc đoạn $AB$ và $AN=2NB$. Biểu diễn $\\vec{AN}$ theo $\\vec{AB}$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'AN = 2/3AB',
+    acceptedAnswers: ['AN = 2/3AB', 'AN=2/3AB', '2/3AB'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q73',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho hình bình hành $ABCD$. Biểu diễn $\\vec{AC}$ theo $\\vec{AB}$ và $\\vec{AD}$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: 'AC = AB + AD',
+    acceptedAnswers: ['AC = AB + AD', 'AC=AB+AD', 'AB + AD'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q74',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$ có trọng tâm $G$. Biểu diễn $\\vec{AG}$ theo $\\vec{AB}$ và $\\vec{AC}$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'AG = 1/3AB + 1/3AC',
+    acceptedAnswers: ['AG = 1/3AB + 1/3AC', 'AG=1/3AB+1/3AC', '1/3(AB+AC)'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q75',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$. Điểm $M$ là trung điểm $AB$, điểm $N$ thuộc $AC$ sao cho $AN:NC=2:1$. Biểu diễn $\\vec{MN}$ theo $\\vec{AB}$ và $\\vec{AC}$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'MN = -1/2AB + 2/3AC',
+    acceptedAnswers: ['MN = -1/2AB + 2/3AC', 'MN=-1/2AB+2/3AC', '2/3AC - 1/2AB'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q76',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$. Hai điểm $P,Q$ thỏa mãn $\\vec{AP}=2\\vec{AB}-\\vec{AC}$ và $\\vec{AQ}=4\\vec{AB}-2\\vec{AC}$. Tìm $k$ sao cho $\\vec{AQ}=k\\vec{AP}$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '2',
+    acceptedAnswers: ['2', 'k = 2', 'k=2'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '2' },
+    acceptedFinalAnswers: [{ value: '2' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Hệ số k:', valueType: 'number', placeholder: 'Nhập k' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q77',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$. Điểm $M$ thuộc $BC$ và $BM:MC=2:1$. Biểu diễn $\\vec{AM}$ theo $\\vec{AB}$ và $\\vec{AC}$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'AM = 1/3AB + 2/3AC',
+    acceptedAnswers: ['AM = 1/3AB + 2/3AC', 'AM=1/3AB+2/3AC', '1/3AB + 2/3AC'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q78',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho hình bình hành $ABCD$, $M$ là trung điểm của $CD$. Biểu diễn $\\vec{AM}$ theo $\\vec{AB}$ và $\\vec{AD}$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: 'AM = 1/2AB + AD',
+    acceptedAnswers: ['AM = 1/2AB + AD', 'AM=1/2AB+AD', '1/2AB + AD'],
+    validatorType: 'exact'
+  },
+  {
+    id: 'math10-q79',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$. Hai điểm $M,N$ thỏa mãn $\\vec{AM}=2\\vec{AB}+\\vec{AC}$ và $\\vec{AN}=(m+1)\\vec{AB}+3\\vec{AC}$. Tìm $m$ để $A,M,N$ thẳng hàng.',
+    difficulty: 'hard',
+    sourceType: 'manual',
+    correctAnswer: '5',
+    acceptedAnswers: ['5', 'm = 5', 'm=5'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '5' },
+    acceptedFinalAnswers: [{ value: '5' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Giá trị m:', valueType: 'number', placeholder: 'Nhập m' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q80',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$. Hai điểm $M,N$ thỏa mãn $\\vec{AM}=2\\vec{AB}-\\vec{AC}$ và $\\vec{AN}=(m-1)\\vec{AB}+(2m-5)\\vec{AC}$. Tìm $m$ để $A,M,N$ thẳng hàng.',
+    difficulty: 'hard',
+    sourceType: 'manual',
+    correctAnswer: '11/5',
+    acceptedAnswers: ['11/5', 'm = 11/5', 'm=11/5', '2.2', '2,2'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '11/5' },
+    acceptedFinalAnswers: [{ value: '11/5' }, { value: '2.2' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Giá trị m:', valueType: 'fraction', placeholder: 'Ví dụ: 11/5' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q81',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt5',
+    content: 'Cho tam giác $ABC$. Điểm $M$ thuộc $BC$ sao cho $BM=2MC$; điểm $N$ thuộc $CA$ sao cho $CN=3NA$. Viết $\\vec{MN}=x\\vec{AB}+y\\vec{AC}$ và tính $x+y$.',
+    difficulty: 'hard',
+    sourceType: 'manual',
+    correctAnswer: '-3/4',
+    acceptedAnswers: ['-3/4', '-0.75', '-0,75', 'x + y = -3/4'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '-3/4' },
+    acceptedFinalAnswers: [{ value: '-3/4' }, { value: '-0.75' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Giá trị x + y:', valueType: 'fraction', placeholder: 'Nhập kết quả' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q82',
+    subjectId: 'math',
+    topicId: 'math10-t4',
+    questionTypeId: 'math10-qt6',
+    content: 'Tam giác $ABC$ có $AB=AC=5$ và $\\widehat{A}=60^\\circ$. Tính độ dài cạnh $BC$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '5',
+    acceptedAnswers: ['5', 'BC = 5', 'BC=5'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '5' },
+    acceptedFinalAnswers: [{ value: '5' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Độ dài BC:', valueType: 'number', placeholder: 'Nhập độ dài' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q83',
+    subjectId: 'math',
+    topicId: 'math10-t4',
+    questionTypeId: 'math10-qt6',
+    content: 'Tam giác $ABC$ có $AB=6$, $AC=8$ và $\\widehat{A}=30^\\circ$. Tính diện tích tam giác $ABC$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '12',
+    acceptedAnswers: ['12', '12 đơn vị diện tích', 'S = 12', 'S=12'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '12' },
+    acceptedFinalAnswers: [{ value: '12' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Diện tích tam giác:', valueType: 'number', placeholder: 'Nhập diện tích' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q84',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt7',
+    content: 'Cho $\\vec{u}=(2;-1)$ và $\\vec{v}=(3;4)$. Tính $\\vec{u}\\cdot\\vec{v}$.',
+    difficulty: 'easy',
+    sourceType: 'manual',
+    correctAnswer: '2',
+    acceptedAnswers: ['2', 'u.v = 2', 'u · v = 2'],
+    validatorType: 'number',
+    correctFinalAnswer: { value: '2' },
+    acceptedFinalAnswers: [{ value: '2' }],
+    answerSchema: {
+      type: 'single-number',
+      fields: [{ key: 'value', label: 'Tích vô hướng:', valueType: 'number', placeholder: 'Nhập kết quả' }],
+      proofImageRequired: false,
+      autoCheckMode: 'numeric'
+    }
+  },
+  {
+    id: 'math10-q85',
+    subjectId: 'math',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt7',
+    content: 'Cho hai vectơ $\\vec{a},\\vec{b}$ có $|\\vec{a}|=5$, $|\\vec{b}|=2$ và góc giữa chúng bằng $60^\\circ$. Tính $|\\vec{a}-\\vec{b}|$.',
+    difficulty: 'medium',
+    sourceType: 'manual',
+    correctAnswer: '\\sqrt{19}',
+    acceptedAnswers: ['\\sqrt{19}', 'sqrt(19)', '√19'],
     validatorType: 'exact'
   }
 ];

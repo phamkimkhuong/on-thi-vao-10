@@ -60,8 +60,8 @@ export const GeneralAiTutor: React.FC = () => {
   if (!user) {
     return (
       <MathLoginRequired
-        title="Gia sư AI Socratic"
-        description="Gia sư AI Socratic giúp bạn giải thích chi tiết, gợi ý phương pháp giải và đồng hành cùng bạn học tập 24/7. Đăng nhập để bắt đầu trò chuyện cùng AI."
+        title="Gia sư Socratic"
+        description="Gia sư Socratic giúp bạn giải thích chi tiết, gợi ý phương pháp giải và đồng hành cùng bạn học tập 24/7. Đăng nhập để bắt đầu trò chuyện cùng AI."
       />
     );
   }
@@ -76,6 +76,14 @@ export const GeneralAiTutor: React.FC = () => {
       localStorage.setItem('otv10_ai_show_diagnostics', String(next));
       return next;
     });
+  };
+
+  const handleDiagnosticsClick = () => {
+    if (window.innerWidth < 1024) {
+      setIsMobileDiagOpen(true);
+    } else {
+      toggleDiagnostics();
+    }
   };
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -95,7 +103,13 @@ export const GeneralAiTutor: React.FC = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isNewSessionDraft, setIsNewSessionDraft] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024;
+    }
+    return false;
+  });
+  const [isMobileDiagOpen, setIsMobileDiagOpen] = useState(false);
   const [isLoadingSessions, setIsLoadingSessions] = useState(false);
   const [activeLightboxUrl, setActiveLightboxUrl] = useState<string | null>(null);
 
@@ -245,7 +259,7 @@ export const GeneralAiTutor: React.FC = () => {
           ...docSnap.data()
         } as ChatSession);
       });
-      
+
       // Di trú lịch sử chat cũ (legacy single-document) sang định dạng sessions mới nếu chưa có session nào
       if (loadedSessions.length === 0) {
         try {
@@ -257,7 +271,7 @@ export const GeneralAiTutor: React.FC = () => {
               const newSessionDocRef = doc(sessionsCollectionRef);
               const firstMsg = legacyData.messages.find((m: any) => m.role === 'user');
               const title = firstMsg ? (firstMsg.text.substring(0, 30) + (firstMsg.text.length > 30 ? '...' : '')) : "Cuộc trò chuyện cũ";
-              
+
               await setDoc(newSessionDocRef, {
                 title,
                 messages: legacyData.messages,
@@ -265,7 +279,7 @@ export const GeneralAiTutor: React.FC = () => {
                 createdAt: legacyData.updatedAt || new Date().toISOString(),
                 updatedAt: legacyData.updatedAt || new Date().toISOString()
               });
-              
+
               // Xóa file chat cũ để tránh lặp lại di trú
               await deleteDoc(legacyDocRef);
               console.log("[GeneralAiTutor] Di trú thành công cuộc hội thoại cũ.");
@@ -276,7 +290,7 @@ export const GeneralAiTutor: React.FC = () => {
           console.error("Lỗi khi di trú cuộc hội thoại cũ:", err);
         }
       }
-      
+
       setSessions(loadedSessions);
       setIsLoadingSessions(false);
 
@@ -310,16 +324,16 @@ export const GeneralAiTutor: React.FC = () => {
         return;
       }
     }
-    
+
     // Nếu ở trạng thái tạo cuộc hội thoại mới (hoặc không có session nào)
     if (isNewSessionDraft || !activeSessionId) {
       const defaultText = subject === 'math'
         ? (selectedGrade === 'grade9'
-            ? `Chào em! Thầy là Gia sư AI môn Toán ôn thi vào 10. Thầy đã sẵn sàng đồng hành cùng em ôn luyện. Em đang vướng mắc ở chuyên đề nào (Rút gọn biểu thức, Hệ thức Vi-ét, Parabol, Hình học...) hay cần thầy ra bài tập thử thách nào không?`
-            : `Chào em! Thầy là Gia sư AI môn Toán lớp 10. Thầy đã sẵn sàng đồng hành cùng em học tập. Em đang vướng mắc ở chuyên đề nào (Mệnh đề & Tập hợp, Hàm số bậc hai, Hệ thức lượng, Vectơ...) hay cần thầy ra bài tập thử thách nào không?`)
+          ? `Chào em! Thầy là Gia sư AI môn Toán ôn thi vào 10. Thầy đã sẵn sàng đồng hành cùng em ôn luyện. Em đang vướng mắc ở chuyên đề nào (Rút gọn biểu thức, Hệ thức Vi-ét, Parabol, Hình học...) hay cần thầy ra bài tập thử thách nào không?`
+          : `Chào em! Thầy là Gia sư AI môn Toán lớp 10. Thầy đã sẵn sàng đồng hành cùng em học tập. Em đang vướng mắc ở chuyên đề nào (Mệnh đề & Tập hợp, Hàm số bậc hai, Hệ thức lượng, Vectơ...) hay cần thầy ra bài tập thử thách nào không?`)
         : subject === 'chemistry'
-        ? `Chào em! Thầy là Gia sư AI môn Hóa học lớp 10. Thầy sẽ giúp em làm chủ các chủ điểm hóa học như Bảng tuần hoàn, Liên kết hóa học, Phản ứng oxi hóa - khử, Năng lượng hóa học... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`
-        : (selectedGrade === 'grade9'
+          ? `Chào em! Thầy là Gia sư AI môn Hóa học lớp 10. Thầy sẽ giúp em làm chủ các chủ điểm hóa học như Bảng tuần hoàn, Liên kết hóa học, Phản ứng oxi hóa - khử, Năng lượng hóa học... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`
+          : (selectedGrade === 'grade9'
             ? `Hello! Thầy là Gia sư AI môn Tiếng Anh ôn thi vào 10. Thầy sẽ giúp em làm chủ các chủ điểm ngữ pháp, cấu trúc viết lại câu, từ vựng... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`
             : `Hello! Thầy là Gia sư AI môn Tiếng Anh lớp 10. Thầy sẽ giúp em làm chủ các chủ điểm ngữ pháp, cấu trúc câu, từ vựng... Em có thắc mắc gì hoặc cần thầy ra đề luyện tập không?`);
 
@@ -457,7 +471,7 @@ export const GeneralAiTutor: React.FC = () => {
       };
 
       const updatedMessages = isNewSession ? [newUserMsg] : [...messages, newUserMsg];
-      
+
       // Update local state instantly
       setMessages(updatedMessages);
 
@@ -487,11 +501,11 @@ export const GeneralAiTutor: React.FC = () => {
 - Sử dụng thẻ <text fill="currentColor" fontSize="11" fontWeight="bold"> để đánh dấu nhãn các đỉnh (như A, B, C, O, H) hoặc độ dài. Chú ý điều chỉnh tọa độ chữ để không bị đè lên nét vẽ.
 - Đặt đoạn mã <svg> ở một khối dòng riêng biệt.`
         : subject === 'chemistry'
-        ? `Hướng dẫn chuyên biệt cho môn Hóa học:
+          ? `Hướng dẫn chuyên biệt cho môn Hóa học:
 - Hướng dẫn học sinh hiểu các cấu trúc nguyên tử, bảng tuần hoàn, liên kết hóa học, phản ứng hóa học, năng lượng hóa học và halogen.
 - Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra đáp án hoặc phương trình hoàn chỉnh ngay lập tức. Hãy gợi ý các định luật bảo toàn, tỉ lệ phản ứng, hoặc cấu hình electron để học sinh tự làm.
 - QUY TẮC LATEX BẮT BUỘC: Sử dụng các công thức hóa học, ký hiệu hóa học, phương trình phản ứng hóa học định dạng LaTeX chính xác và chỉ sử dụng thẻ LaTeX inline đơn là dấu đô la đơn kẹp hai đầu (ví dụ: $\\text{CO}_2$, $\\text{H}_2\\text{SO}_4$, $\\text{Mg} + \\text{O}_2 \\rightarrow \\text{MgO}$).`
-        : `Hướng dẫn chuyên biệt cho môn Tiếng Anh:
+          : `Hướng dẫn chuyên biệt cho môn Tiếng Anh:
 - Hướng dẫn học sinh hiểu các cấu trúc ngữ pháp, từ vựng và phương pháp viết lại câu.
 - Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết quả làm bài ngay lập tức. Hãy gợi ý các quy tắc ngữ pháp, chỉ ra lỗi sai nhỏ, hoặc lấy ví dụ tương tự để học sinh tự sửa.`;
 
@@ -585,16 +599,16 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
   const suggestions = subject === 'math'
     ? mathSuggestions
     : subject === 'chemistry'
-    ? chemistrySuggestions
-    : englishSuggestions;
+      ? chemistrySuggestions
+      : englishSuggestions;
 
   const cleanSubject = subject || 'math';
   const subProfile = cleanSubject === 'math'
     ? profile?.math
     : cleanSubject === 'chemistry'
-    ? profile?.chemistry
-    : profile?.english;
-  
+      ? profile?.chemistry
+      : profile?.english;
+
   let strengths: string[] = subProfile?.strengths || [];
   let weaknesses: string[] = subProfile?.weaknesses || [];
   let learningSummary = subProfile?.learningSummary || "";
@@ -611,71 +625,89 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
   const hasProfileData = strengths.length > 0 || weaknesses.length > 0 || !!learningSummary;
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-100px)] lg:overflow-hidden p-0 gap-3 bg-slate-50/50 dark:bg-slate-950/20">
+    <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-110px)] lg:h-[calc(100vh-100px)] overflow-hidden p-0 gap-3 bg-slate-50/50 dark:bg-slate-950/20 relative">
 
       {/* 1. Cột trái: Khung Chat */}
-      <div className="flex-1 flex flex-row bg-card border border-border/80 rounded-2xl shadow-xl overflow-hidden min-h-[500px] lg:min-h-0">
-        
+      <div className="flex-1 flex flex-row bg-card border border-border/80 rounded-2xl shadow-xl overflow-hidden h-full relative">
+
         {/* Sidebar: Lịch sử trò chuyện */}
         {isSidebarOpen && (
-          <div className="w-64 border-r border-border bg-slate-50/50 dark:bg-slate-900/10 flex flex-col shrink-0">
-            {/* Sidebar Header */}
-            <div className="p-3 border-b border-border flex items-center justify-between">
-              <span className="text-xs font-black text-foreground">Lịch sử chat</span>
-              <button
-                onClick={() => {
-                  setIsNewSessionDraft(true);
-                  setActiveSessionId(null);
-                }}
-                className="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] rounded-lg transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
-                title="Tạo cuộc hội thoại mới"
-              >
-                + Hội thoại mới
-              </button>
-            </div>
+          <>
+            {/* Backdrop cho di động */}
+            <div 
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden fixed inset-0 bg-black/45 backdrop-blur-xs z-35"
+            />
+            <div className="absolute lg:relative inset-y-0 left-0 w-64 border-r border-border bg-card dark:bg-slate-900 flex flex-col shrink-0 z-40 lg:z-auto shadow-xl lg:shadow-none animate-in slide-in-from-left duration-200">
+              {/* Sidebar Header */}
+              <div className="p-3 border-b border-border flex items-center justify-between">
+                <span className="text-xs font-black text-foreground">Lịch sử chat</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setIsNewSessionDraft(true);
+                      setActiveSessionId(null);
+                      if (window.innerWidth < 1024) setIsSidebarOpen(false);
+                    }}
+                    className="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] rounded-lg transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
+                    title="Tạo cuộc hội thoại mới"
+                  >
+                    + Mới
+                  </button>
+                  <button
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="lg:hidden p-1.5 hover:bg-secondary rounded-lg text-muted-foreground hover:text-foreground cursor-pointer flex items-center justify-center"
+                    title="Đóng lịch sử"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
 
-            {/* Sessions List */}
-            <div className="flex-grow overflow-y-auto p-2 space-y-1">
-              {isLoadingSessions ? (
-                <div className="flex items-center justify-center p-4 text-muted-foreground gap-2 text-[10px] font-semibold animate-pulse">
-                  <Loader size={12} className="animate-spin text-amber-500" />
-                  Đang tải...
-                </div>
-              ) : sessions.length === 0 ? (
-                <div className="text-center p-4 text-muted-foreground text-[10px] italic">
-                  Chưa có cuộc trò chuyện nào. Hãy gửi câu hỏi để bắt đầu!
-                </div>
-              ) : (
-                sessions.map((s) => {
-                  const isActive = s.id === activeSessionId;
-                  return (
-                    <div
-                      key={s.id}
-                      onClick={() => {
-                        setActiveSessionId(s.id);
-                        setIsNewSessionDraft(false);
-                      }}
-                      className={cn(
-                        "group p-2 rounded-xl text-left cursor-pointer transition-all flex items-center justify-between gap-2 border text-[11px] font-bold",
-                        isActive
-                          ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 font-black"
-                          : "border-transparent text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-foreground"
-                      )}
-                    >
-                      <span className="truncate flex-1 pr-1">{s.title || "Cuộc trò chuyện mới"}</span>
-                      <button
-                        onClick={(e) => handleDeleteSession(s.id, e)}
-                        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-destructive/10 rounded-md text-muted-foreground hover:text-destructive transition-all cursor-pointer shrink-0"
-                        title="Xóa cuộc trò chuyện"
+              {/* Sessions List */}
+              <div className="flex-grow overflow-y-auto p-2 space-y-1">
+                {isLoadingSessions ? (
+                  <div className="flex items-center justify-center p-4 text-muted-foreground gap-2 text-[10px] font-semibold animate-pulse">
+                    <Loader size={12} className="animate-spin text-amber-500" />
+                    Đang tải...
+                  </div>
+                ) : sessions.length === 0 ? (
+                  <div className="text-center p-4 text-muted-foreground text-[10px] italic">
+                    Chưa có cuộc trò chuyện nào. Hãy gửi câu hỏi để bắt đầu!
+                  </div>
+                ) : (
+                  sessions.map((s) => {
+                    const isActive = s.id === activeSessionId;
+                    return (
+                      <div
+                        key={s.id}
+                        onClick={() => {
+                          setActiveSessionId(s.id);
+                          setIsNewSessionDraft(false);
+                          if (window.innerWidth < 1024) setIsSidebarOpen(false);
+                        }}
+                        className={cn(
+                          "group p-2 rounded-xl text-left cursor-pointer transition-all flex items-center justify-between gap-2 border text-[11px] font-bold",
+                          isActive
+                            ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 font-black"
+                            : "border-transparent text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-foreground"
+                        )}
                       >
-                        <Trash2 size={11} />
-                      </button>
-                    </div>
-                  );
-                })
-              )}
+                        <span className="truncate flex-1 pr-1">{s.title || "Cuộc trò chuyện mới"}</span>
+                        <button
+                          onClick={(e) => handleDeleteSession(s.id, e)}
+                          className="opacity-0 group-hover:opacity-100 p-1 hover:bg-destructive/10 rounded-md text-muted-foreground hover:text-destructive transition-all cursor-pointer shrink-0"
+                          title="Xóa cuộc trò chuyện"
+                        >
+                          <Trash2 size={11} />
+                        </button>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Chat Area (Right side of row) */}
@@ -706,238 +738,238 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
               </div>
             </div>
 
-          <div className="flex items-center gap-2">
-            {/* Subject selector tabs */}
-            <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1 text-[11px] font-bold">
-              <button
-                onClick={() => setSubject('math')}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg transition-all cursor-pointer",
-                  subject === 'math'
-                    ? "bg-card text-foreground shadow-sm font-black"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                Môn Toán
-              </button>
-              <button
-                onClick={() => setSubject('english')}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg transition-all cursor-pointer",
-                  subject === 'english'
-                    ? "bg-card text-foreground shadow-sm font-black"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                Tiếng Anh
-              </button>
-              {selectedGrade === 'grade10' && (
+            <div className="flex items-center gap-2">
+              {/* Subject selector tabs */}
+              <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1 text-[11px] font-bold">
                 <button
-                  onClick={() => setSubject('chemistry')}
+                  onClick={() => setSubject('math')}
                   className={cn(
                     "px-3 py-1.5 rounded-lg transition-all cursor-pointer",
-                    subject === 'chemistry'
+                    subject === 'math'
                       ? "bg-card text-foreground shadow-sm font-black"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  Hóa học
+                  Môn Toán
                 </button>
-              )}
-            </div>
+                <button
+                  onClick={() => setSubject('english')}
+                  className={cn(
+                    "px-3 py-1.5 rounded-lg transition-all cursor-pointer",
+                    subject === 'english'
+                      ? "bg-card text-foreground shadow-sm font-black"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Tiếng Anh
+                </button>
+                {selectedGrade === 'grade10' && (
+                  <button
+                    onClick={() => setSubject('chemistry')}
+                    className={cn(
+                      "px-3 py-1.5 rounded-lg transition-all cursor-pointer",
+                      subject === 'chemistry'
+                        ? "bg-card text-foreground shadow-sm font-black"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    Hóa học
+                  </button>
+                )}
+              </div>
 
-            <button
-              onClick={toggleDiagnostics}
-              title={showDiagnostics ? "Ẩn Hồ sơ năng lực AI" : "Hiện Hồ sơ năng lực AI"}
-              className={cn(
-                "p-2 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs font-bold border",
-                showDiagnostics
-                  ? "bg-amber-500/10 text-amber-600 border-amber-500/20 hover:bg-amber-500/20"
-                  : "text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-foreground border-border/60"
-              )}
-            >
-              <Brain size={16} />
-              <span className="hidden sm:inline">{showDiagnostics ? "Ẩn Hồ sơ AI" : "Hiện Hồ sơ AI"}</span>
-            </button>
-
-            <button
-              onClick={handleClearHistory}
-              title="Làm mới cuộc trò chuyện"
-              className="p-2 rounded-xl text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-foreground transition-all cursor-pointer"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        </div>
-
-        {/* Chat Messages */}
-        <div className="flex-grow overflow-y-auto p-3 space-y-3 bg-slate-50/20 dark:bg-slate-900/5">
-          {messages.map((m, idx) => {
-            const isBot = m.role === 'model';
-            return (
-              <div
-                key={idx}
+              <button
+                onClick={handleDiagnosticsClick}
+                title={showDiagnostics ? "Ẩn Hồ sơ năng lực" : "Hiện Hồ sơ năng lực"}
                 className={cn(
-                  "flex items-start gap-3 max-w-[85%] animate-fade-in",
-                  isBot ? "self-start" : "ml-auto flex-row-reverse"
+                  "p-2 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs font-bold border",
+                  showDiagnostics
+                    ? "bg-amber-500/10 text-amber-600 border-amber-500/20 hover:bg-amber-500/20"
+                    : "text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-foreground border-border/60"
                 )}
               >
-                <div className={cn(
-                  "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-sm",
-                  isBot
-                    ? "bg-gradient-to-tr from-amber-500/10 to-orange-500/10 text-amber-600 border border-amber-500/20"
-                    : "bg-primary text-primary-foreground"
-                )}>
-                  {isBot ? <Bot size={15} /> : <User size={15} />}
-                </div>
-                <div className={cn(
-                  "p-3.5 rounded-2xl text-[12px] font-semibold leading-relaxed shadow-sm overflow-x-auto flex flex-col gap-2",
-                  isBot
-                    ? "bg-card text-foreground rounded-tl-none border border-border/60"
-                    : "bg-primary text-primary-foreground rounded-tr-none"
-                )}>
-                  {m.imageUrl && (
-                    <div className="relative max-w-full overflow-hidden rounded-lg border border-border/30 bg-background/50">
-                      <img 
-                        src={m.imageUrl} 
-                        alt="Hình ảnh đính kèm" 
-                        className="max-h-60 w-auto object-contain cursor-pointer rounded-lg hover:opacity-90 transition-opacity"
-                        onClick={() => setActiveLightboxUrl(m.imageUrl || null)}
-                      />
-                    </div>
-                  )}
-                  {m.text && <LatexRenderer text={m.text} />}
-                </div>
-              </div>
-            );
-          })}
+                <Brain size={16} />
+                <span className="hidden sm:inline">{showDiagnostics ? "Ẩn Hồ sơ" : "Hiện Hồ sơ"}</span>
+              </button>
 
-          {isLoading && (
-            <div className="flex items-start gap-3 max-w-[80%] animate-pulse">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center border border-amber-500/20 shadow-sm">
-                <Loader size={15} className="animate-spin text-amber-600" />
+              <button
+                onClick={handleClearHistory}
+                title="Làm mới cuộc trò chuyện"
+                className="p-2 rounded-xl text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-foreground transition-all cursor-pointer"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="flex-grow overflow-y-auto p-3 space-y-3 bg-slate-50/20 dark:bg-slate-900/5">
+            {messages.map((m, idx) => {
+              const isBot = m.role === 'model';
+              return (
+                <div
+                  key={idx}
+                  className={cn(
+                    "flex items-start gap-3 max-w-[85%] animate-fade-in",
+                    isBot ? "self-start" : "ml-auto flex-row-reverse"
+                  )}
+                >
+                  <div className={cn(
+                    "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-sm",
+                    isBot
+                      ? "bg-gradient-to-tr from-amber-500/10 to-orange-500/10 text-amber-600 border border-amber-500/20"
+                      : "bg-primary text-primary-foreground"
+                  )}>
+                    {isBot ? <Bot size={15} /> : <User size={15} />}
+                  </div>
+                  <div className={cn(
+                    "p-3.5 rounded-2xl text-[12px] font-semibold leading-relaxed shadow-sm overflow-x-auto flex flex-col gap-2",
+                    isBot
+                      ? "bg-card text-foreground rounded-tl-none border border-border/60"
+                      : "bg-primary text-primary-foreground rounded-tr-none"
+                  )}>
+                    {m.imageUrl && (
+                      <div className="relative max-w-full overflow-hidden rounded-lg border border-border/30 bg-background/50">
+                        <img
+                          src={m.imageUrl}
+                          alt="Hình ảnh đính kèm"
+                          className="max-h-60 w-auto object-contain cursor-pointer rounded-lg hover:opacity-90 transition-opacity"
+                          onClick={() => setActiveLightboxUrl(m.imageUrl || null)}
+                        />
+                      </div>
+                    )}
+                    {m.text && <LatexRenderer text={m.text} />}
+                  </div>
+                </div>
+              );
+            })}
+
+            {isLoading && (
+              <div className="flex items-start gap-3 max-w-[80%] animate-pulse">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center border border-amber-500/20 shadow-sm">
+                  <Loader size={15} className="animate-spin text-amber-600" />
+                </div>
+                <div className="p-3.5 bg-card text-muted-foreground border border-border/60 rounded-2xl rounded-tl-none text-[12px] font-bold">
+                  {isUploadingImage ? "Đang tải ảnh lên..." : "Gia sư đang suy nghĩ..."}
+                </div>
               </div>
-              <div className="p-3.5 bg-card text-muted-foreground border border-border/60 rounded-2xl rounded-tl-none text-[12px] font-bold">
-                {isUploadingImage ? "Đang tải ảnh lên..." : "Gia sư đang suy nghĩ..."}
-              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Gợi ý câu hỏi nhanh (nếu không loading) */}
+          {!isLoading && (
+            <div className="px-3 py-2.5 bg-slate-50/40 dark:bg-slate-900/5 border-t border-border flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-none">
+              {suggestions.map((s, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSend(undefined, s)}
+                  className="px-3.5 py-1.5 bg-card hover:bg-amber-500/5 dark:hover:bg-amber-500/10 border border-border/80 hover:border-amber-500/30 rounded-full text-[10px] font-bold text-muted-foreground hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-200 cursor-pointer shadow-sm hover:shadow hover:scale-[1.02] active:scale-[0.98] shrink-0"
+                >
+                  {s}
+                </button>
+              ))}
             </div>
           )}
 
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Gợi ý câu hỏi nhanh (nếu không loading) */}
-        {!isLoading && (
-          <div className="px-3 py-2.5 bg-slate-50/40 dark:bg-slate-900/5 border-t border-border flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-none">
-            {suggestions.map((s, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSend(undefined, s)}
-                className="px-3.5 py-1.5 bg-card hover:bg-amber-500/5 dark:hover:bg-amber-500/10 border border-border/80 hover:border-amber-500/30 rounded-full text-[10px] font-bold text-muted-foreground hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-200 cursor-pointer shadow-sm hover:shadow hover:scale-[1.02] active:scale-[0.98] shrink-0"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Hạn mức Premium Gate Banner */}
-        {errorMsg === "LIMIT_EXHAUSTED" && (
-          <div className="mx-4 mt-2 p-4 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in">
-            <div className="flex items-center gap-2">
-              <Award className="text-amber-500 shrink-0" size={24} />
-              <div className="text-left">
-                <h4 className="text-xs font-black text-amber-700 dark:text-amber-400">Nâng cấp Premium - Không giới hạn AI</h4>
-                <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">Mở khóa chặng 9-10 điểm và trò chuyện không giới hạn với Gia sư AI</p>
+          {/* Hạn mức Premium Gate Banner */}
+          {errorMsg === "LIMIT_EXHAUSTED" && (
+            <div className="mx-4 mt-2 p-4 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in">
+              <div className="flex items-center gap-2">
+                <Award className="text-amber-500 shrink-0" size={24} />
+                <div className="text-left">
+                  <h4 className="text-xs font-black text-amber-700 dark:text-amber-400">Nâng cấp Premium - Không giới hạn AI</h4>
+                  <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">Mở khóa chặng 9-10 điểm và trò chuyện không giới hạn với Gia sư AI</p>
+                </div>
               </div>
+              <button
+                onClick={() => navigate('/premium')}
+                className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90 text-white font-black text-[10px] rounded-xl shadow-md transition-all cursor-pointer shrink-0"
+              >
+                Nâng Cấp Ngay
+              </button>
             </div>
-            <button
-              onClick={() => navigate('/premium')}
-              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90 text-white font-black text-[10px] rounded-xl shadow-md transition-all cursor-pointer shrink-0"
-            >
-              Nâng Cấp Ngay
-            </button>
-          </div>
-        )}
+          )}
 
-        {/* Chat Input Form Container */}
-        <div className="border-t border-border bg-slate-50/50 dark:bg-slate-900/20 p-3">
-          {/* Preview Image Container */}
-          {previewUrl && (
-            <div className="relative inline-block mb-3 p-1 bg-background border border-border rounded-lg shadow-sm group">
-              <img 
-                src={previewUrl} 
-                alt="Xem trước bài làm" 
-                className="max-h-24 max-w-full rounded-md object-contain"
+          {/* Chat Input Form Container */}
+          <div className="border-t border-border bg-slate-50/50 dark:bg-slate-900/20 p-3">
+            {/* Preview Image Container */}
+            {previewUrl && (
+              <div className="relative inline-block mb-3 p-1 bg-background border border-border rounded-lg shadow-sm group">
+                <img
+                  src={previewUrl}
+                  alt="Xem trước bài làm"
+                  className="max-h-24 max-w-full rounded-md object-contain"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md hover:bg-destructive/90 transition-colors cursor-pointer"
+                  title="Xóa ảnh"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            )}
+
+            <form onSubmit={(e) => handleSend(e)} className="flex gap-2 items-center">
+              {/* Hidden File Input */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
               />
+
+              {/* Attachment Button */}
               <button
                 type="button"
-                onClick={handleRemoveImage}
-                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md hover:bg-destructive/90 transition-colors cursor-pointer"
-                title="Xóa ảnh"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading || isUploadingImage || errorMsg === "LIMIT_EXHAUSTED"}
+                className="w-11 h-11 rounded-2xl border border-border bg-background hover:bg-secondary disabled:opacity-50 flex items-center justify-center shrink-0 cursor-pointer transition-all shadow-sm text-muted-foreground"
+                title="Đính kèm hình ảnh bài làm"
               >
-                <X size={12} />
+                <Paperclip size={16} />
               </button>
-            </div>
-          )}
 
-          <form onSubmit={(e) => handleSend(e)} className="flex gap-2 items-center">
-            {/* Hidden File Input */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              accept="image/*"
-              className="hidden"
-            />
-
-            {/* Attachment Button */}
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading || isUploadingImage || errorMsg === "LIMIT_EXHAUSTED"}
-              className="w-11 h-11 rounded-2xl border border-border bg-background hover:bg-secondary disabled:opacity-50 flex items-center justify-center shrink-0 cursor-pointer transition-all shadow-sm text-muted-foreground"
-              title="Đính kèm hình ảnh bài làm"
-            >
-              <Paperclip size={16} />
-            </button>
-
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={isLoading || isUploadingImage || errorMsg === "LIMIT_EXHAUSTED"}
-              placeholder={
-                errorMsg === "LIMIT_EXHAUSTED"
-                  ? "Bạn đã hết lượt hỏi hôm nay. Vui lòng nâng cấp..."
-                  : subject === 'math'
-                    ? "Hỏi Gia sư về công thức delta, Vi-ét hoặc gửi hình ảnh, câu hỏi..."
-                    : "Hỏi về câu bị động, điều kiện, gửi hình ảnh hoặc các dạng từ..."
-              }
-              className="flex-1 bg-background border border-border rounded-2xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 text-foreground font-semibold disabled:bg-secondary/40 placeholder:text-muted-foreground"
-            />
-            <button
-              type="submit"
-              disabled={(!input.trim() && !selectedFile) || isLoading || isUploadingImage || errorMsg === "LIMIT_EXHAUSTED"}
-              className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white hover:opacity-95 disabled:opacity-40 flex items-center justify-center shrink-0 cursor-pointer shadow-md shadow-orange-500/10 transition-all"
-            >
-              <Send size={16} />
-            </button>
-          </form>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                disabled={isLoading || isUploadingImage || errorMsg === "LIMIT_EXHAUSTED"}
+                placeholder={
+                  errorMsg === "LIMIT_EXHAUSTED"
+                    ? "Bạn đã hết lượt hỏi hôm nay. Vui lòng nâng cấp..."
+                    : subject === 'math'
+                      ? "Hỏi Gia sư về công thức delta, Vi-ét hoặc gửi hình ảnh, câu hỏi..."
+                      : "Hỏi về câu bị động, điều kiện, gửi hình ảnh hoặc các dạng từ..."
+                }
+                className="flex-1 bg-background border border-border rounded-2xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 text-foreground font-semibold disabled:bg-secondary/40 placeholder:text-muted-foreground"
+              />
+              <button
+                type="submit"
+                disabled={(!input.trim() && !selectedFile) || isLoading || isUploadingImage || errorMsg === "LIMIT_EXHAUSTED"}
+                className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white hover:opacity-95 disabled:opacity-40 flex items-center justify-center shrink-0 cursor-pointer shadow-md shadow-orange-500/10 transition-all"
+              >
+                <Send size={16} />
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
 
-      {/* 2. Cột phải: Hồ sơ năng lực (Real-time Profile) */}
+      {/* 2. Cột phải: Hồ sơ năng lực (Real-time Profile - Chỉ hiện trên Desktop) */}
       {showDiagnostics && (
-        <div className="w-full lg:w-80 shrink-0 flex flex-col lg:h-full pr-1 animate-fade-in">
+        <div className="hidden lg:flex w-full lg:w-80 shrink-0 flex-col lg:h-full pr-1 animate-fade-in">
 
           {/* Real-time Diagnostics Card */}
           <div className="flex-1 bg-card border border-border/80 rounded-2xl p-4 shadow-xl flex flex-col overflow-hidden min-h-[350px] shrink-0">
             <div className="flex items-center gap-2 pb-4 border-b border-border">
               <Brain className="text-amber-500" size={18} />
               <div className="text-left">
-                <h3 className="text-xs font-black text-foreground">Hồ Sơ Năng Lực AI</h3>
+                <h3 className="text-xs font-black text-foreground">Hồ Sơ Năng Lực</h3>
                 <p className="text-[8px] font-semibold text-muted-foreground mt-0.5">Chẩn đoán điểm mạnh/yếu thời gian thực</p>
               </div>
             </div>
@@ -1011,9 +1043,106 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
         </div>
       )}
 
+      {/* Mobile Real-time Diagnostics Drawer (Bottom Sheet) */}
+      {isMobileDiagOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            onClick={() => setIsMobileDiagOpen(false)}
+            className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-xs z-50 animate-fade-in"
+          />
+          {/* Bottom Sheet Card */}
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 max-h-[75vh] bg-card rounded-t-3xl border-t border-border shadow-2xl z-55 flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-300">
+            <div className="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mx-auto my-3 shrink-0" />
+            
+            <div className="flex items-center justify-between px-5 pb-3 border-b border-border">
+              <div className="flex items-center gap-2">
+                <Brain className="text-amber-500" size={18} />
+                <div className="text-left">
+                  <h3 className="text-sm font-black text-foreground">Hồ Sơ Năng Lực Của Bạn</h3>
+                  <p className="text-[9px] font-semibold text-muted-foreground">Chẩn đoán điểm mạnh/yếu thời gian thực</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsMobileDiagOpen(false)}
+                className="p-1.5 hover:bg-secondary rounded-full text-muted-foreground hover:text-foreground cursor-pointer flex items-center justify-center border border-border/40"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5 space-y-5 text-left pb-10">
+              {isLoadingProfile ? (
+                <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2 text-xs font-bold animate-pulse">
+                  <Loader size={20} className="animate-spin text-amber-500" />
+                  Đang tải dữ liệu hồ sơ...
+                </div>
+              ) : (profile && hasProfileData) ? (
+                <>
+                  {/* 1. Tóm tắt học lực */}
+                  {learningSummary && (
+                    <div className="p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/40">
+                      <span className="text-[9px] font-black text-amber-600 dark:text-amber-400 block mb-1">TIẾN TRÌNH HIỆN TẠI</span>
+                      <p className="text-xs font-bold leading-relaxed text-foreground">{learningSummary}</p>
+                    </div>
+                  )}
+
+                  {/* 2. Điểm mạnh */}
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-black text-emerald-600 block">ĐIỂM MẠNH ({strengths.length || 0})</span>
+                    {strengths.length > 0 ? (
+                      <ul className="space-y-2.5">
+                        {strengths.map((s, idx) => (
+                          <li key={idx} className="flex items-start gap-2 text-xs font-bold text-muted-foreground leading-tight">
+                            <CheckCircle className="text-emerald-500 shrink-0 mt-0.5" size={14} />
+                            <span>{s}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-muted-foreground italic pl-1">Chưa ghi nhận điểm mạnh đặc biệt.</p>
+                    )}
+                  </div>
+
+                  {/* 3. Điểm yếu */}
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-black text-orange-600 block">ĐIỂM YẾU / LỖI SAI ({weaknesses.length || 0})</span>
+                    {weaknesses.length > 0 ? (
+                      <ul className="space-y-2.5">
+                        {weaknesses.map((w, idx) => (
+                          <li key={idx} className="flex items-start gap-2 text-xs font-bold text-muted-foreground leading-tight">
+                            <AlertTriangle className="text-orange-500 shrink-0 mt-0.5" size={14} />
+                            <span>{w}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-muted-foreground italic pl-1">Tuyệt vời! Chưa phát hiện lỗi sai hệ thống nào.</p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
+                  <Brain className="text-slate-300 dark:text-slate-700" size={40} />
+                  <p className="text-xs font-bold text-muted-foreground leading-relaxed px-4">
+                    Chưa có dữ liệu chẩn đoán cho môn học này. Thầy sẽ phân tích và tự động ghi nhận các điểm mạnh, lỗi sai thường gặp khi em gửi câu hỏi ôn luyện!
+                  </p>
+                </div>
+              )}
+
+              {lastUpdated && (
+                <div className="pt-4 border-t border-border text-[9px] text-muted-foreground font-semibold text-right">
+                  Cập nhật mới nhất: {new Date(lastUpdated.seconds ? lastUpdated.seconds * 1000 : new Date(lastUpdated).getTime()).toLocaleString("vi-VN")}
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Lightbox / Modal xem ảnh trực tiếp */}
       {activeLightboxUrl && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm animate-fade-in cursor-zoom-out"
           onClick={() => setActiveLightboxUrl(null)}
         >
@@ -1024,13 +1153,13 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
           >
             <X size={20} />
           </button>
-          <div 
+          <div
             className="relative max-w-[90vw] max-h-[85vh] overflow-hidden rounded-xl bg-card border border-border/10 shadow-2xl p-1 animate-scale-up"
             onClick={(e) => e.stopPropagation()}
           >
-            <img 
-              src={activeLightboxUrl} 
-              alt="Hình ảnh phóng to" 
+            <img
+              src={activeLightboxUrl}
+              alt="Hình ảnh phóng to"
               className="max-w-full max-h-[80vh] object-contain rounded-lg select-none"
             />
           </div>

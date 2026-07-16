@@ -125,3 +125,7 @@ export const getLearningOutcomes = (grade: 'grade9' | 'grade10', subject: Subjec
 
 export const getLearningMisconceptions = (grade: 'grade9' | 'grade10', subject: SubjectCode) =>
   grade === 'grade10' && subject === 'chemistry' ? g10ChemistryMisconceptions : [];
+
+import { g10ChemistryVideos } from './grade10/chemistry/videos';
+export { g10ChemistryVideos };
+

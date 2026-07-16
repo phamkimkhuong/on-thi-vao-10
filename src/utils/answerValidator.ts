@@ -239,12 +239,14 @@ const compareFieldValue = (
   candidateValue: string,
   mode: AnswerSchema['autoCheckMode']
 ): boolean => {
-  if (mode === 'keyed-numeric' || mode === 'numeric' || field.valueType === 'number' || field.valueType === 'fraction') {
-    return compareNumericValue(userValue, candidateValue);
-  }
-
+  // Trường lựa chọn phải được so sánh như nhãn lựa chọn trước khi xét chế độ
+  // số. Điều này đặc biệt quan trọng với cụm Đúng/Sai dùng các giá trị Đ/S.
   if (field.valueType === 'choice') {
     return compareChoiceValue(userValue, candidateValue);
+  }
+
+  if (mode === 'keyed-numeric' || mode === 'numeric' || field.valueType === 'number' || field.valueType === 'fraction') {
+    return compareNumericValue(userValue, candidateValue);
   }
 
   return compareTextValue(field, userValue, candidateValue);
@@ -319,7 +321,7 @@ const parseCoordinates = (text: string): Array<[number, number]> => {
   const coords: Array<[number, number]> = [];
   for (const match of matches) {
     const content = match.slice(1, -1).trim();
-    let parts: string[] = [];
+    let parts: string[];
     if (content.includes(';')) {
       parts = content.split(';').map(p => p.trim());
     } else if (content.includes(',')) {

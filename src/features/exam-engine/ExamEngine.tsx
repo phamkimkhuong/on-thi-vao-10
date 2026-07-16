@@ -15,7 +15,8 @@ import { aiService } from '../../services/aiService';
 
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
 import { MockExam, Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
-import { formatAnswerForDisplay, validateAnswer } from '../../utils/answerValidator';
+import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../utils/answerValidator';
+import { cn } from '../../utils/cn';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
 import {
@@ -239,6 +240,7 @@ export const ExamEngine: React.FC = () => {
   const [examResult, setExamResult] = useState<ExamResult | null>(null);
   const [isSubmittingExam, setIsSubmittingExam] = useState(false);
   const [examSubmitError, setExamSubmitError] = useState<string | null>(null);
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
 
   const currentExam = mockExamsList.find(exam => exam.id === selectedExamId) || subjectExams[0];
   const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'chemistry' ? 45 : selectedSubject === 'math' ? 120 : 60);
@@ -398,6 +400,7 @@ export const ExamEngine: React.FC = () => {
     setFinalAnswers({});
     setIsSubmittingExam(false);
     setExamSubmitError(null);
+    setShowSubmitConfirm(false);
     setTimeSpent(0);
     setExamState('testing');
   };
@@ -550,19 +553,23 @@ export const ExamEngine: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-border/60 pb-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
-              <Award className="text-primary w-8 h-8" />
+        <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-indigo-500/5 via-primary/5 to-purple-500/5 border border-primary/10 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+          <div className="space-y-2 relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/15 text-xs font-black text-primary uppercase tracking-wider mb-1">
+              <Award className="w-3.5 h-3.5" />
+              Phòng Thi Thử Thực Chiến
+            </div>
+            <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground">
               Thi thử & Kiểm tra {subjectLabel}
             </h2>
-            <p className="text-sm text-muted-foreground font-medium">
+            <p className="text-xs md:text-sm text-muted-foreground font-semibold">
               Đánh giá mức độ làm chủ kiến thức bằng đề kiểm tra có phạm vi và thời gian rõ ràng.
             </p>
           </div>
 
           {/* Lọc đề thi theo Tab */}
-          <div className="flex w-full items-center gap-1 overflow-x-auto bg-secondary/80 p-1.5 rounded-2xl border border-border/20 self-start md:w-auto">
+          <div className="flex w-full items-center gap-1 overflow-x-auto bg-slate-200/60 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-border/40 self-start md:w-auto relative z-10 shrink-0">
             {(['all', 'theory', 'checkpoint', 'midterm', 'final'] as const).map(tab => {
               const tabLabels = {
                 all: 'Tất cả',
@@ -576,10 +583,10 @@ export const ExamEngine: React.FC = () => {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                  className={`shrink-0 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-card text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground'
+                      ? 'bg-card text-foreground shadow-sm scale-102 font-black'
+                      : 'text-muted-foreground hover:text-foreground font-bold'
                   }`}
                 >
                   {tabLabels[tab]}
@@ -609,48 +616,55 @@ export const ExamEngine: React.FC = () => {
                     <div
                       key={group.baseTitle}
                       onClick={() => setSelectedExamId(selectedExamInGroup.id)}
-                      className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-lg hover:-translate-y-0.5 cursor-pointer select-none ${
+                      className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-lg hover:-translate-y-0.5 cursor-pointer select-none relative overflow-hidden group ${
                         isGroupSelected
-                          ? 'border-primary shadow-md shadow-primary/5 ring-1 ring-primary/20'
-                          : 'border-border/65 hover:border-border-hover'
+                          ? 'border-primary shadow-md shadow-primary/5 ring-1 ring-primary/25 bg-gradient-to-br from-card to-primary/[0.01]'
+                          : 'border-border/65 hover:border-border/100'
                       }`}
                     >
+                      {/* Selected gradient indicator left bar */}
+                      {isGroupSelected && (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-indigo-500" />
+                      )}
+
                       <div className="space-y-4">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-primary">
+                          <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-primary flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                             {getExamCategoryLabel(selectedExamInGroup)}
                           </span>
                           {group.exams.length > 1 && (
-                            <span className="text-[10px] text-muted-foreground font-bold bg-secondary/80 px-2 py-0.5 rounded-md">
+                            <span className="text-[9px] text-muted-foreground font-bold bg-secondary/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                               {group.exams.length} mã đề
                             </span>
                           )}
                         </div>
 
-                        <h4 className="font-extrabold text-sm text-foreground line-clamp-2">
+                        <h4 className="font-extrabold text-xs sm:text-sm text-foreground line-clamp-2 leading-relaxed group-hover:text-primary transition-colors">
                           {group.baseTitle}
                         </h4>
                       </div>
 
-                      {/* Variant selector & action */}
+                      {/* Variant selector & select status */}
                       <div className="space-y-4 pt-4 border-t border-border/40 mt-5">
                         {group.exams.length > 1 && (
                           <div className="space-y-1.5">
-                            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider block">Chọn mã đề:</span>
+                            <span className="text-[9px] font-black text-muted-foreground uppercase tracking-wider block">Chọn mã đề:</span>
                             <div className="flex flex-wrap gap-1.5">
                               {group.exams.map(exam => {
                                 const isVariantSelected = selectedExamId === exam.id;
                                 return (
                                   <button
                                     key={exam.id}
+                                    type="button"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setSelectedExamId(exam.id);
                                     }}
-                                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${
+                                    className={`px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold border transition-all cursor-pointer ${
                                       isVariantSelected
-                                        ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                                        : 'bg-secondary text-muted-foreground border-transparent hover:bg-secondary-hover'
+                                        ? 'bg-primary text-primary-foreground border-primary shadow-xs'
+                                        : 'bg-secondary text-muted-foreground border-transparent hover:bg-secondary/80'
                                     }`}
                                   >
                                     Mã {exam.formCode}
@@ -661,17 +675,20 @@ export const ExamEngine: React.FC = () => {
                           </div>
                         )}
 
-                        <button
-                          onClick={() => setSelectedExamId(selectedExamInGroup.id)}
-                          className={`w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-[0.98] ${
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-[10px] font-bold text-muted-foreground">
+                            Thời gian: <span className="font-extrabold text-foreground">{selectedExamInGroup.duration} phút</span>
+                          </span>
+                          <span className={cn(
+                            "inline-flex items-center gap-1 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider transition-all",
                             isSelected
-                              ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                              : 'bg-secondary text-foreground hover:bg-secondary-hover'
-                          }`}
-                        >
-                          {isSelected ? 'Đang chọn' : 'Xem chi tiết'}
-                          <ArrowRight size={14} />
-                        </button>
+                              ? "bg-primary text-primary-foreground shadow-xs"
+                              : "bg-secondary text-muted-foreground hover:text-foreground"
+                          )}>
+                            {isSelected ? 'Đang chọn' : 'Xem chi tiết'}
+                            <ArrowRight size={10} className={cn("transition-transform", isSelected ? "translate-x-0.5" : "")} />
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -693,52 +710,67 @@ export const ExamEngine: React.FC = () => {
                 <CardHeader className="p-6 border-b border-border/40">
                   <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2.5">
                     <Award className="text-primary" size={18} />
-                    Chi tiết: {currentExam.title}
+                    Chi tiết đề thi
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
                   <div className="grid grid-cols-2 gap-3.5">
-                    <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
-                      <span className="text-[9px] font-bold text-muted-foreground block mb-1">THỜI GIAN LÀM BÀI</span>
-                      <span className="text-xs font-extrabold text-foreground">{currentExam.duration} phút</span>
+                    <div className="p-4 rounded-2xl border border-rose-500/10 bg-rose-500/[0.02] dark:bg-rose-500/[0.01] flex flex-col gap-1">
+                      <span className="text-[9px] font-black text-rose-600 dark:text-rose-400 block tracking-wider uppercase flex items-center gap-1">
+                        <Timer size={10} /> THỜI GIAN LÀM BÀI
+                      </span>
+                      <span className="text-xs font-black text-foreground">{currentExam.duration} phút</span>
                     </div>
-                    <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
-                      <span className="text-[9px] font-bold text-muted-foreground block mb-1">SỐ CÂU HỎI TRỰC CHIẾN</span>
-                      <span className="text-xs font-extrabold text-foreground">
+                    <div className="p-4 rounded-2xl border border-blue-500/10 bg-blue-500/[0.02] dark:bg-blue-500/[0.01] flex flex-col gap-1">
+                      <span className="text-[9px] font-black text-blue-600 dark:text-blue-400 block tracking-wider uppercase flex items-center gap-1">
+                        <BookOpen size={10} /> SỐ CÂU THỰC CHIẾN
+                      </span>
+                      <span className="text-xs font-black text-foreground">
                         {currentExam.questionIds.length} câu
                       </span>
                     </div>
                     {currentExam.kind && (
-                      <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
-                        <span className="text-[9px] font-bold text-muted-foreground block mb-1">TRỌNG TÂM ĐÁNH GIÁ</span>
-                        <span className="text-xs font-extrabold text-foreground">{getExamCategoryLabel(currentExam)}</span>
+                      <div className="p-4 rounded-2xl border border-purple-500/10 bg-purple-500/[0.02] dark:bg-purple-500/[0.01] flex flex-col gap-1">
+                        <span className="text-[9px] font-black text-purple-600 dark:text-purple-400 block tracking-wider uppercase flex items-center gap-1">
+                          <Award size={10} /> TRỌNG TÂM ĐÁNH GIÁ
+                        </span>
+                        <span className="text-xs font-black text-foreground truncate">{getExamCategoryLabel(currentExam)}</span>
                       </div>
                     )}
                     {currentExam.formCode && (
-                      <div className="p-4 bg-secondary/60 rounded-xl border border-border/10">
-                        <span className="text-[9px] font-bold text-muted-foreground block mb-1">MÃ ĐỀ</span>
-                        <span className="text-xs font-extrabold text-foreground">{currentExam.formCode}</span>
+                      <div className="p-4 rounded-2xl border border-emerald-500/10 bg-emerald-500/[0.02] dark:bg-emerald-500/[0.01] flex flex-col gap-1">
+                        <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 block tracking-wider uppercase flex items-center gap-1">
+                          <Zap size={10} /> MÃ ĐỀ THI
+                        </span>
+                        <span className="text-xs font-black text-foreground">{currentExam.formCode}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="space-y-3 bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-400">
-                    <h4 className="font-extrabold flex items-center gap-1.5">
-                      {currentExam.focus === 'theory' ? <BookOpen size={14} /> : <AlertTriangle size={14} />}
-                      {currentExam.focus === 'theory' ? 'Hướng dẫn kiểm tra lý thuyết:' : 'Quy chế phòng thi thử:'}
+                  <div className="space-y-3 bg-amber-500/[0.03] border border-amber-500/15 p-4.5 rounded-2xl text-xs font-semibold text-amber-700 dark:text-amber-400">
+                    <h4 className="font-black text-xs flex items-center gap-1.5 uppercase tracking-wider">
+                      {currentExam.focus === 'theory' ? <BookOpen size={13} /> : <AlertTriangle size={13} className="animate-pulse" />}
+                      {currentExam.focus === 'theory' ? 'Hướng dẫn kiểm tra lý thuyết' : 'Quy chế phòng thi thử'}
                     </h4>
-                    {(currentExam.instructions ?? [
-                      'Hệ thống chuyển sang chế độ tập trung trong thời gian làm bài.',
-                      'Hết giờ hệ thống sẽ tự động nộp bài.',
-                      'Kết quả được phân tích để xác định nội dung cần ôn lại.'
-                    ]).map((instruction) => <p key={instruction}>• {instruction}</p>)}
+                    <div className="space-y-2">
+                      {(currentExam.instructions ?? [
+                        'Hệ thống chuyển sang chế độ tập trung trong thời gian làm bài.',
+                        'Hết giờ hệ thống sẽ tự động nộp bài.',
+                        'Kết quả được phân tích để xác định nội dung cần ôn lại.'
+                      ]).map((instruction, idx) => (
+                        <div key={idx} className="flex gap-2 items-start">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
+                          <span className="text-[11px] leading-relaxed text-muted-foreground font-semibold">{instruction}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <Button
                     onClick={handleStartExam}
-                    className="w-full font-bold py-4 text-xs active:scale-[0.98] shadow-md shadow-primary/20 flex items-center justify-center gap-2 rounded-xl"
+                    className="w-full font-black py-4.5 text-xs bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 hover:opacity-95 active:scale-[0.98] shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 rounded-2xl border-none cursor-pointer text-white"
                   >
-                    <Play size={14} className="fill-white" /> {currentExam.focus === 'theory' ? 'Bắt đầu kiểm tra lý thuyết' : 'Bắt đầu tính giờ thi thử'}
+                    <Play size={13} className="fill-white" /> {currentExam.focus === 'theory' ? 'Bắt đầu kiểm tra lý thuyết' : 'Bắt đầu tính giờ thi thử'}
                   </Button>
                 </CardContent>
               </Card>
@@ -774,6 +806,18 @@ export const ExamEngine: React.FC = () => {
 
   // RENDER GIAO DIỆN LÀM BÀI THI THỬ (TESTING MODE - FOCUS MODE)
   if (examState === 'testing') {
+    const answeredQuestionIds = new Set(
+      examQuestions
+        .filter(question => {
+          if (question.answerSchema) {
+            return isAnswerComplete(question, finalAnswers[question.id] ?? {});
+          }
+          return Boolean(answers[question.id]?.trim());
+        })
+        .map(question => question.id)
+    );
+    const unansweredCount = examQuestions.length - answeredQuestionIds.size;
+
     return (
       <div className="max-w-4xl mx-auto space-y-6 pb-20">
 
@@ -786,6 +830,9 @@ export const ExamEngine: React.FC = () => {
             <h3 className="text-sm font-extrabold text-foreground">
               {currentExam?.title ?? `Bài kiểm tra ${subjectLabel}`}
             </h3>
+            <span className="mt-1 text-[10px] font-bold text-muted-foreground">
+              Đã trả lời {answeredQuestionIds.size}/{examQuestions.length} câu
+            </span>
           </div>
 
           <div className="flex items-center gap-3 bg-card border border-border px-4 py-2 rounded-xl shadow-sm">
@@ -796,13 +843,43 @@ export const ExamEngine: React.FC = () => {
           </div>
         </div>
 
+        <nav aria-label="Điều hướng câu hỏi" className="rounded-2xl border border-border/60 bg-card p-3 shadow-sm">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">Điều hướng nhanh</span>
+            <span className={`text-[10px] font-bold ${unansweredCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+              {unansweredCount > 0 ? `Còn ${unansweredCount} câu chưa trả lời` : 'Đã hoàn thành tất cả câu'}
+            </span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {examQuestions.map((question, index) => {
+              const answered = answeredQuestionIds.has(question.id);
+              return (
+                <button
+                  key={question.id}
+                  type="button"
+                  aria-label={`Đi tới câu ${index + 1}${answered ? ', đã trả lời' : ', chưa trả lời'}`}
+                  onClick={() => document.getElementById(`exam-question-${index + 1}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                  className={cn(
+                    'h-9 min-w-9 rounded-lg border px-2 text-xs font-extrabold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                    answered
+                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                      : 'border-border bg-secondary/50 text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                  )}
+                >
+                  {index + 1}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+
         {/* Danh sách câu hỏi */}
         <div className="space-y-6">
           {examQuestions.map((q, idx) => {
             const isChoice = q.options && q.options.length > 0;
 
             return (
-              <Card key={q.id} className="border-border">
+              <Card id={`exam-question-${idx + 1}`} key={q.id} className="scroll-mt-32 border-border">
                 <CardHeader className="bg-slate-50/30 dark:bg-slate-900/5 py-3 border-b border-border/30">
                   <span className="text-xs font-bold text-muted-foreground">Câu hỏi số {idx + 1}</span>
                 </CardHeader>
@@ -878,12 +955,27 @@ export const ExamEngine: React.FC = () => {
 
         {/* Nộp bài thi */}
         <Button
-          onClick={handleSubmitExam}
+          onClick={() => setShowSubmitConfirm(true)}
           disabled={isSubmittingExam}
           className="w-full font-bold py-4 text-xs bg-red-500 hover:bg-red-600 active:scale-[0.98] shadow-md shadow-red-500/10 flex items-center justify-center gap-1.5"
         >
           <CheckSquare size={16} /> {isSubmittingExam ? 'Đang lưu bài thi...' : 'Nộp bài thi thử & Xem kết quả'}
         </Button>
+
+        <ConfirmationModal
+          isOpen={showSubmitConfirm}
+          title="Xác nhận nộp bài"
+          description={unansweredCount > 0
+            ? `Bạn còn ${unansweredCount} câu chưa trả lời. Các câu này sẽ được tính là sai nếu bạn nộp bài ngay.`
+            : 'Bạn đã trả lời tất cả câu hỏi. Hãy xác nhận để nộp bài và xem kết quả.'}
+          confirmLabel={unansweredCount > 0 ? 'Vẫn nộp bài' : 'Nộp bài'}
+          cancelLabel="Kiểm tra lại"
+          onConfirm={() => {
+            setShowSubmitConfirm(false);
+            void handleSubmitExam();
+          }}
+          onCancel={() => setShowSubmitConfirm(false)}
+        />
       </div>
     );
   }

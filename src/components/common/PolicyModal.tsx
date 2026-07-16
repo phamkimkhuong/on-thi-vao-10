@@ -13,7 +13,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose }) => 
   return (
     <div className="fixed inset-0 bg-slate-950/45 backdrop-blur-xs flex items-center justify-center p-4 z-55 animate-fade-in">
       <div className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-scale-in max-h-[85vh] flex flex-col glass">
-        
+
         {/* Modal Header */}
         <div className="px-6 py-4.5 border-b border-border/40 flex items-center justify-between bg-secondary/15">
           <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose }) => 
 
         {/* Modal Content */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 text-left">
-          
+
           {/* Section 1: Điều khoản dịch vụ */}
           <div className="space-y-2.5">
             <h4 className="font-black text-sm text-foreground flex items-center gap-1.5 border-b border-border/40 pb-1.5">
@@ -46,7 +46,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose }) => 
               <ul className="list-disc pl-4 space-y-1">
                 <li><strong>Quyền sở hữu trí tuệ:</strong> Toàn bộ đề thi, lời giải chi tiết, sơ đồ tư duy lý thuyết và nội dung hỗ trợ học tập đều thuộc bản quyền của chúng tôi. Nghiêm cấm sao chép, phân phối hoặc bán lại nội dung này dưới mọi hình thức thương mại.</li>
                 <li><strong>Quy định sử dụng tài khoản:</strong> Mỗi tài khoản Premium chỉ dành cho một học sinh duy nhất sử dụng. Hệ thống hỗ trợ đăng nhập trên nhiều thiết bị nhưng không cho phép sử dụng đồng thời (học chung nhóm). Tài khoản vi phạm có thể bị khóa tạm thời.</li>
-                <li><strong>Miễn trừ trách nhiệm:</strong> Kết quả thi thử và phản hồi của Gia sư AI Socratic chỉ mang tính chất tham khảo, giúp học sinh rèn luyện tư duy và kiểm tra lỗ hổng kiến thức, không thay thế cho điểm thi thật của Bộ Giáo dục & Đào tạo.</li>
+                <li><strong>Miễn trừ trách nhiệm:</strong> Kết quả thi thử và phản hồi của Gia sư Socratic chỉ mang tính chất tham khảo, giúp học sinh rèn luyện tư duy và kiểm tra lỗ hổng kiến thức, không thay thế cho điểm thi thật của Bộ Giáo dục & Đào tạo.</li>
               </ul>
             </div>
           </div>

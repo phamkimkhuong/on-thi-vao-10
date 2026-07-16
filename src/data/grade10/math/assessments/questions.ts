@@ -25,7 +25,7 @@ export const g10MathAssessmentQuestions: Question[] = [
     subjectId: 'math',
     topicId: 'math10-t1',
     questionTypeId: 'math10-qt1',
-    content: 'Cho hai tập hợp $A = [-2; 3)$ and $B = (1; 5]$. Xác định tập hợp $A \\cap B$.',
+    content: 'Cho hai tập hợp $A = [-2; 3)$ và $B = (1; 5]$. Xác định tập hợp $A \\cap B$.',
     difficulty: 'easy',
     sourceType: 'mock_exam',
     options: [
@@ -83,9 +83,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Khi $m = 0$ thì $A = [-1; 3]$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ (Đúng) hoặc S (Sai)' },
         { key: 'b', label: 'b) Khi $m = 0$ thì $A \\cap B = [-1; 3]$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ (Đúng) hoặc S (Sai)' },
@@ -112,9 +112,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: S',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Điều kiện giới hạn lượng thịt mua là $0 \\le x \\le 1,6$ và $0 \\le y \\le 1,4$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Bất phương trình biểu diễn lượng protein tối thiểu cần là $800x + 600y \\le 900$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -262,9 +262,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Đồ thị hàm số có đỉnh là $I(2; -1)$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Hàm số đồng biến trên khoảng $(-\\infty; 2)$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -291,9 +291,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Độ dài cạnh $BC$ bằng $7$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Diện tích tam giác $ABC$ bằng $10\\sqrt{3}$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -440,9 +440,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Đồ thị hàm số đi qua điểm $M(1; 0)$ và có hoành độ đỉnh là $x = 2$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Giá trị lớn nhất của hàm số trên toàn bộ tập xác định là $1$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -469,9 +469,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: S; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Bất phương trình giới hạn thời gian hoạt động của máy là $3x + 2y \\le 120$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Bất phương trình giới hạn thời gian hoàn thiện là $2x + y \\le 70$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -754,9 +754,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Khi $m = 1$ thì $A = [0; 4]$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Khi $m = 1$ thì $A \\cap B = [0; 4]$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -783,9 +783,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: S; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Bất phương trình thời gian hoạt động của máy I là $2x + y \\le 10$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Bất phương trình thời gian hoạt động của máy II là $x + 3y \\le 15$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -812,9 +812,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Đồ thị hàm số có trục đối xứng là đường thẳng $x = 1$ và đi qua điểm $A(0; 3)$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Hàm số nghịch biến trên khoảng $(-\\infty; 1)$ và đồng biến trên khoảng $(1; +\\infty)$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -841,9 +841,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Độ dài cạnh $BC$ bằng $5$ và độ dài đường trung tuyến $AM$ bằng $2,5$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Diện tích tam giác $ABC$ bằng $12$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -868,8 +868,8 @@ export const g10MathAssessmentQuestions: Question[] = [
     content: 'Cho hai tập hợp $A = [m - 2; m + 2]$ và $B = [-1; 3]$. Tìm số lượng các giá trị nguyên của m để $A \\cap B \\neq \\varnothing$. (Chỉ điền giá trị số).',
     difficulty: 'medium',
     sourceType: 'mock_exam',
-    correctAnswer: '7',
-    acceptedAnswers: ['7', '7 giá trị'],
+    correctAnswer: '9',
+    acceptedAnswers: ['9', '9 giá trị'],
     validatorType: 'exact'
   },
   {
@@ -911,8 +911,8 @@ export const g10MathAssessmentQuestions: Question[] = [
   {
     id: 'mock-math10-q51',
     subjectId: 'math',
-    topicId: 'math10-t4',
-    questionTypeId: 'math10-qt6',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt7',
     content: 'Cho hình vuông $ABCD$ cạnh $a$. Tính tích vô hướng của hai vectơ $\\vec{AB} \\cdot \\vec{BD}$ theo $a^2$ (nhập hệ số trước $a^2$, ví dụ nếu kết quả là -a^2 thì điền -1).',
     difficulty: 'medium',
     sourceType: 'mock_exam',
@@ -1150,9 +1150,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: S; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Đồ thị hàm số có đỉnh là $I(1; -4)$ và trục đối xứng là đường thẳng $x = 1$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Hàm số đồng biến trên khoảng $(1; +\\infty)$ và nghịch biến trên khoảng $(-\\infty; 1)$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -1179,9 +1179,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Bất phương trình mô tả giới hạn về ngày công lao động là $10x + 15y \\le 90$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Bất phương trình giới hạn diện tích đất trồng hoa là $x + y \\le 8$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -1208,9 +1208,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: Đ; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Độ dài cạnh $BC$ bằng $2\\sqrt{19}$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Tích vô hướng $\\vec{AB} \\cdot \\vec{AC}$ bằng $-12$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -1237,9 +1237,9 @@ export const g10MathAssessmentQuestions: Question[] = [
     correctAnswer: 'a: Đ; b: S; c: Đ; d: Đ',
     validatorType: 'exact',
     answerSchema: {
-      type: 'expression',
+      type: 'true-false-cluster',
       proofImageRequired: false,
-      autoCheckMode: 'keyed-numeric',
+      autoCheckMode: 'exact',
       fields: [
         { key: 'a', label: 'a) Tọa độ trọng tâm $G$ của tam giác $ABC$ là $G(1; \\frac{5}{3})$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
         { key: 'b', label: 'b) Tích vô hướng $\\vec{AB} \\cdot \\vec{AC}$ bằng $-3$.', valueType: 'choice', placeholder: 'Đ hoặc S', hint: 'Nhập Đ hoặc S' },
@@ -1273,11 +1273,11 @@ export const g10MathAssessmentQuestions: Question[] = [
     subjectId: 'math',
     topicId: 'math10-t3',
     questionTypeId: 'math10-qt4',
-    content: 'Xác định parabol $y = ax^2 + bx + 3$ biết parabol đi qua điểm $M(1; 6)$ và có đỉnh $I$ có tung độ bằng -1 đạt được tại hoành độ bằng 2. Nhập phương trình parabol tìm được dạng chuẩn không chứa dấu cách (ví dụ: 3x^2-12x+15).',
+    content: 'Xác định parabol $y = ax^2 + bx + 3$ biết parabol đi qua điểm $M(1; 0)$ và có đỉnh $I(2; -1)$. Nhập phương trình parabol tìm được dạng chuẩn không chứa dấu cách (ví dụ: x^2-4x+3).',
     difficulty: 'medium',
     sourceType: 'mock_exam',
-    correctAnswer: '3x^2-12x+15',
-    acceptedAnswers: ['3x^2-12x+15', '3x^2 - 12x + 15', 'y=3x^2-12x+15', 'y = 3x^2 - 12x + 15'],
+    correctAnswer: 'x^2-4x+3',
+    acceptedAnswers: ['x^2-4x+3', 'x^2 - 4x + 3', 'y=x^2-4x+3', 'y = x^2 - 4x + 3'],
     validatorType: 'exact'
   },
   {
@@ -1307,8 +1307,8 @@ export const g10MathAssessmentQuestions: Question[] = [
   {
     id: 'mock-math10-q73',
     subjectId: 'math',
-    topicId: 'math10-t4',
-    questionTypeId: 'math10-qt6',
+    topicId: 'math10-t5',
+    questionTypeId: 'math10-qt7',
     content: 'Cho tam giác $ABC$ đều cạnh $a$. Tính tích vô hướng của hai vectơ $\\vec{AB} \\cdot \\vec{BC}$ theo $a^2$ (chỉ điền hệ số trước $a^2$, ví dụ nếu kết quả là -0,5a^2 thì điền -0,5).',
     difficulty: 'medium',
     sourceType: 'mock_exam',

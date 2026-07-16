@@ -22,6 +22,7 @@ export type AnswerSchemaType =
   | 'equation-roots'
   | 'system-solution'
   | 'expression'
+  | 'true-false-cluster'
   | 'proof-upload'
   | 'self-check';
 

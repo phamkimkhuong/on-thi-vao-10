@@ -4,9 +4,18 @@ export const g10MathAssessmentExams: MockExam[] = [
   {
     id: 'mock-math10-gk1',
     subjectId: 'math',
-    title: 'Đề kiểm tra Giữa học kỳ 1 - Toán 10 (Đề số 1)',
+    title: 'Giữa học kỳ I – Toán 10 (Mã A)',
     duration: 90,
     kind: 'midterm',
+    scopeTopicIds: ['math10-t1', 'math10-t2', 'math10-t3', 'math10-t4', 'math10-t5'],
+    totalPoints: 10,
+    formCode: 'A',
+    resultReleasePolicy: 'after_submit',
+    instructions: [
+      'Bài gồm 4 câu nhiều lựa chọn, 2 cụm Đúng/Sai và 4 câu trả lời ngắn.',
+      'Chọn đủ Đúng hoặc Sai cho từng phát biểu trong mỗi cụm trước khi nộp bài.',
+      'Hết 90 phút hệ thống sẽ tự động nộp bài và hiển thị kết quả.'
+    ],
     questionIds: [
       'mock-math10-q1',
       'mock-math10-q2',
@@ -19,14 +28,23 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q9',
       'mock-math10-q10'
     ],
-    createdAt: new Date().toISOString()
+    createdAt: '2026-07-16T00:00:00.000Z'
   },
   {
     id: 'mock-math10-gk2',
     subjectId: 'math',
-    title: 'Đề kiểm tra Giữa học kỳ 1 - Toán 10 (Đề số 2)',
+    title: 'Giữa học kỳ I – Toán 10 (Mã B)',
     duration: 90,
     kind: 'midterm',
+    scopeTopicIds: ['math10-t1', 'math10-t2', 'math10-t3', 'math10-t4', 'math10-t5'],
+    totalPoints: 10,
+    formCode: 'B',
+    resultReleasePolicy: 'after_submit',
+    instructions: [
+      'Bài gồm 4 câu nhiều lựa chọn, 2 cụm Đúng/Sai và 4 câu trả lời ngắn.',
+      'Chọn đủ Đúng hoặc Sai cho từng phát biểu trong mỗi cụm trước khi nộp bài.',
+      'Hết 90 phút hệ thống sẽ tự động nộp bài và hiển thị kết quả.'
+    ],
     questionIds: [
       'mock-math10-q21',
       'mock-math10-q22',
@@ -39,14 +57,23 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q29',
       'mock-math10-q30'
     ],
-    createdAt: new Date().toISOString()
+    createdAt: '2026-07-16T00:00:00.000Z'
   },
   {
     id: 'mock-math10-ck1',
     subjectId: 'math',
-    title: 'Đề kiểm tra Cuối học kỳ 1 - Toán 10 (Đề số 1)',
+    title: 'Cuối học kỳ I – Toán 10 (Mã A)',
     duration: 90,
     kind: 'final',
+    scopeTopicIds: ['math10-t1', 'math10-t2', 'math10-t3', 'math10-t4', 'math10-t5'],
+    totalPoints: 10,
+    formCode: 'A',
+    resultReleasePolicy: 'after_submit',
+    instructions: [
+      'Bài gồm 12 câu nhiều lựa chọn, 4 cụm Đúng/Sai và 6 câu trả lời ngắn.',
+      'Kiểm tra lại các câu chưa trả lời và từng phát biểu Đúng/Sai trước khi nộp.',
+      'Hết 90 phút hệ thống sẽ tự động nộp bài và hiển thị kết quả.'
+    ],
     questionIds: [
       'mock-math10-q31',
       'mock-math10-q32',
@@ -71,14 +98,23 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q51',
       'mock-math10-q52'
     ],
-    createdAt: new Date().toISOString()
+    createdAt: '2026-07-16T00:00:00.000Z'
   },
   {
     id: 'mock-math10-ck2',
     subjectId: 'math',
-    title: 'Đề kiểm tra Cuối học kỳ 1 - Toán 10 (Đề số 2)',
+    title: 'Cuối học kỳ I – Toán 10 (Mã B)',
     duration: 90,
     kind: 'final',
+    scopeTopicIds: ['math10-t1', 'math10-t2', 'math10-t3', 'math10-t4', 'math10-t5'],
+    totalPoints: 10,
+    formCode: 'B',
+    resultReleasePolicy: 'after_submit',
+    instructions: [
+      'Bài gồm 12 câu nhiều lựa chọn, 4 cụm Đúng/Sai và 6 câu trả lời ngắn.',
+      'Kiểm tra lại các câu chưa trả lời và từng phát biểu Đúng/Sai trước khi nộp.',
+      'Hết 90 phút hệ thống sẽ tự động nộp bài và hiển thị kết quả.'
+    ],
     questionIds: [
       'mock-math10-q53',
       'mock-math10-q54',
@@ -103,6 +139,6 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q73',
       'mock-math10-q74'
     ],
-    createdAt: new Date().toISOString()
+    createdAt: '2026-07-16T00:00:00.000Z'
   }
 ];
