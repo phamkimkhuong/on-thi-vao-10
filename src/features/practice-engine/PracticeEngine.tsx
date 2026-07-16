@@ -725,15 +725,22 @@ export const PracticeEngine: React.FC = () => {
 
     const currentQ = questions[currentIdx];
     const isMath = routeSubject === 'math';
+    const isAutoCheckMath = isMath && currentQ.validatorType && currentQ.validatorType !== 'manual';
 
-    const answerInput = isMath
-      ? "(Đã nộp ảnh bài làm)"
-      : currentQ.answerSchema
-        ? structuredAnswer
-        : selectedOption || '';
-    const finalAnswer = isMath
-      ? "(Đã nộp ảnh bài làm)"
-      : formatAnswerForDisplay(currentQ, answerInput);
+    const answerInput = currentQ.answerSchema
+      ? structuredAnswer
+      : isAutoCheckMath
+        ? selectedOption || ''
+        : isMath
+          ? "(Đã nộp ảnh bài làm)"
+          : selectedOption || '';
+    const finalAnswer = currentQ.answerSchema
+      ? formatAnswerForDisplay(currentQ, answerInput)
+      : isAutoCheckMath
+        ? formatAnswerForDisplay(currentQ, answerInput)
+        : isMath
+          ? "(Đã nộp ảnh bài làm)"
+          : formatAnswerForDisplay(currentQ, answerInput);
     const attemptId = `attempt-${getNow()}`;
     let uploadedProofImages: UserAttempt['proofImages'] = [];
 
@@ -749,13 +756,13 @@ export const PracticeEngine: React.FC = () => {
     }
 
     let aiEvaluation: AiEvaluation | undefined = undefined;
-    let correct = isMath ? true : validateAnswer(currentQ, answerInput);
+    let correct = (isMath && !isAutoCheckMath) ? true : validateAnswer(currentQ, answerInput);
     // Tự động phân loại chế độ chấm điểm:
     // Môn Toán hoặc các câu tự luận cần upload ảnh/chấm thủ công -> 'manual'
     // Các câu hỏi trắc nghiệm (choice), điền số (number), điền từ (exact) -> 'auto'
     let gradingMode: 'auto' | 'manual' = 'auto';
 
-    if (isMath) {
+    if (isMath && !isAutoCheckMath) {
       gradingMode = 'manual';
       if (proofImages.length > 0) {
         try {
@@ -775,7 +782,7 @@ export const PracticeEngine: React.FC = () => {
           correct = true;
         }
       }
-    } else {
+    } else if (!isMath) {
       const isManualQuestion =
         currentQ.validatorType === 'manual' ||
         currentQ.answerSchema?.autoCheckMode === 'manual' ||
@@ -1043,14 +1050,17 @@ export const PracticeEngine: React.FC = () => {
   }
 
   const currentQuestion = questions[currentIdx];
-  const submitDisabled = isMath
-    ? proofImages.length === 0
-    : currentQuestion.answerSchema
-      ? !isAnswerComplete(currentQuestion, structuredAnswer)
-      : !selectedOption;
+  const isAutoCheckMath = isMath && currentQuestion.validatorType && currentQuestion.validatorType !== 'manual';
+  const submitDisabled = currentQuestion.answerSchema
+    ? !isAnswerComplete(currentQuestion, structuredAnswer)
+    : isAutoCheckMath
+      ? !selectedOption
+      : isMath
+        ? proofImages.length === 0
+        : !selectedOption;
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto pb-12">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12 px-4">
       {/* Header trạng thái luyện tập */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
         <div className="flex gap-2">

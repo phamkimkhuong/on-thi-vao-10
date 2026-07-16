@@ -6,7 +6,8 @@ export type ValidatorType =
   | 'number'
   | 'multi-number'
   | 'text-includes'
-  | 'manual';
+  | 'manual'
+  | 'coordinates';
 
 export type AnswerFieldType =
   | 'number'

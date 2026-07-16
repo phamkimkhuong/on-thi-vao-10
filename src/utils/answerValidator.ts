@@ -19,6 +19,12 @@ const normalizeAnswerText = (value: string): string => {
     .replace(/\bcan\s*\(([^()]+)\)/g, 'sqrt($1)')
     .replace(/\bcan\s+([a-z0-9]+)/g, 'sqrt($1)')
     .replace(/[–—−]/g, '-')
+    .replace(/\\cup|∪/g, 'u')
+    .replace(/\\cap|∩/g, 'n')
+    .replace(/\\setminus|\\|∖/g, 'setminus')
+    .replace(/\\infty|∞/g, 'infty')
+    .replace(/≤/g, '<=')
+    .replace(/≥/g, '>=')
     .replace(/[{}]/g, '')
     .replace(/\s+/g, '');
 };
@@ -307,6 +313,51 @@ const validateStructuredAnswer = (question: Question, userAnswer: StructuredAnsw
   }
 };
 
+const parseCoordinates = (text: string): Array<[number, number]> => {
+  const matches = text.match(/\(([^)]+)\)/g);
+  if (!matches) return [];
+  const coords: Array<[number, number]> = [];
+  for (const match of matches) {
+    const content = match.slice(1, -1).trim();
+    let parts: string[] = [];
+    if (content.includes(';')) {
+      parts = content.split(';').map(p => p.trim());
+    } else if (content.includes(',')) {
+      const commaParts = content.split(',');
+      if (commaParts.length === 2) {
+        parts = commaParts.map(p => p.trim());
+      } else {
+        parts = content.split(/\s+/).map(p => p.trim());
+      }
+    } else {
+      parts = content.split(/\s+/).map(p => p.trim());
+    }
+
+    const numbers = parts.map(p => {
+      const clean = p.replace(',', '.');
+      return Number(clean);
+    });
+
+    if (numbers.length === 2 && !numbers.some(isNaN)) {
+      coords.push([numbers[0], numbers[1]]);
+    }
+  }
+  return coords;
+};
+
+const compareCoordinates = (userAnswer: string, correctAnswer: string): boolean => {
+  const userCoords = parseCoordinates(userAnswer);
+  const correctCoords = parseCoordinates(correctAnswer);
+  if (userCoords.length === 0 || correctCoords.length === 0) return false;
+  if (userCoords.length !== correctCoords.length) return false;
+
+  return correctCoords.every(([cx, cy]) => {
+    return userCoords.some(([ux, uy]) => {
+      return Math.abs(ux - cx) < 1e-5 && Math.abs(uy - cy) < 1e-5;
+    });
+  });
+};
+
 export function validateAnswer(question: Question, userAnswer: AnswerInput): boolean {
   if (isStructuredAnswer(userAnswer)) {
     return validateStructuredAnswer(question, userAnswer);
@@ -315,6 +366,8 @@ export function validateAnswer(question: Question, userAnswer: AnswerInput): boo
   const validatorType: ValidatorType = question.validatorType ?? (question.options ? 'choice' : 'exact');
 
   switch (validatorType) {
+    case 'coordinates':
+      return answerCandidates(question).some(candidate => compareCoordinates(userAnswer, candidate));
     case 'choice': {
       const normalizedUser = normalizeChoiceAnswer(userAnswer);
       if (!normalizedUser) return false;

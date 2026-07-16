@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 import { ProofImageUploader } from '../../../components/common/ProofImageUploader';
+import { MathKeyboard } from '../../../components/common/MathKeyboard';
 import { Question, QuestionType, Solution, StructuredAnswer, SubjectCode } from '../../../types';
 import { AnswerFormRenderer } from '../../../components/common/AnswerFormRenderer';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
@@ -73,6 +74,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   setStructuredAnswer,
 }) => {
   const theme = getSubjectTheme(routeSubject);
+  const mathInputRef = useRef<HTMLInputElement>(null);
+  const isAutoCheckMath = isMath && currentQuestion.validatorType && currentQuestion.validatorType !== 'manual';
+  const keyboardLayout = currentQuestion.topicId === 'math10-t3'
+    ? 'algebra'
+    : currentQuestion.topicId === 'math10-t2'
+      ? 'inequality'
+      : currentQuestion.topicId === 'math10-t4'
+        ? 'geometry'
+        : 'set';
 
   // Phân tách options từ content nếu validatorType === 'choice' và không có options riêng biệt
   let displayOptions = currentQuestion.options;
@@ -106,7 +116,46 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
         {/* Vùng chọn đáp án */}
         <div className="space-y-4">
-          {isMath ? (
+          {isAutoCheckMath ? (
+            currentQuestion.answerSchema ? (
+              <AnswerFormRenderer
+                question={currentQuestion}
+                value={structuredAnswer}
+                onChange={setStructuredAnswer}
+                disabled={isSubmitting}
+              />
+            ) : (
+              // Ô nhập liệu kèm bàn phím ảo toán học
+              <div className="space-y-4 animate-fade-in">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-muted-foreground uppercase tracking-wider block">
+                    Nhập đáp án cuối cùng của em:
+                  </label>
+                  <input
+                    ref={mathInputRef}
+                    type="text"
+                    value={selectedOption || ''}
+                    onChange={(e) => setSelectedOption(e.target.value)}
+                    placeholder="Ví dụ: (1; 3] hoặc [0; 2)..."
+                    disabled={isSubmitting}
+                    className="w-full p-4.5 rounded-2xl text-xs font-black border border-border/60 bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && selectedOption && !isSubmitting) {
+                        handleSubmit();
+                      }
+                    }}
+                  />
+                </div>
+                
+                <MathKeyboard
+                  inputRef={mathInputRef}
+                  value={selectedOption || ''}
+                  onChange={setSelectedOption}
+                  layout={keyboardLayout}
+                />
+              </div>
+            )
+          ) : isMath ? (
             // Trình bày hướng dẫn nộp ảnh giải cho môn Toán
             <div className="bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 p-4.5 rounded-2xl space-y-2">
               <h4 className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
@@ -411,7 +460,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </div>
           )}
 
-          {isMath && (
+          {isMath && !isAutoCheckMath && (
             <ProofImageUploader
               images={proofImages}
               onChange={setProofImages}

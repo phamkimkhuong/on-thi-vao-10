@@ -103,367 +103,420 @@ export const ResultCard: React.FC<ResultCardProps> = ({
     }
   }
 
+  const userAnswerToShow = existingAttempt?.userAnswer || selectedOption;
+  const hasTypedAnswer = userAnswerToShow && userAnswerToShow !== "(Đã nộp ảnh bài làm)";
+
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Đề bài (Xem lại câu hỏi) */}
-      <div className="bg-card border border-border/40 shadow-sm rounded-2xl overflow-hidden text-left">
-        <div className="bg-secondary/15 border-b border-border/20 px-5 py-3">
-          <h4 className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wider">
-            📖 Đề bài:
-          </h4>
-        </div>
-        <div className="p-5 text-sm font-bold leading-relaxed text-foreground bg-secondary/10 dark:bg-slate-950/10 font-sans">
-          <LatexRenderer text={cleanContent} />
-        </div>
-        {/* Nếu có options (đối với trắc nghiệm) thì hiển thị các lựa chọn cho học sinh dễ đối chiếu */}
-        {displayOptions && displayOptions.length > 0 && (
-          <div className="px-5 pb-5 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-card">
-            {displayOptions.map((opt, oIdx) => {
-              const letters = ['A', 'B', 'C', 'D'];
-              const letter = letters[oIdx] || String.fromCharCode(65 + oIdx);
-              // Lọc bỏ tiền tố dạng "A. " nếu có trong text
-              const cleanOpt = opt.replace(/^[A-D]\.\s*/, '');
-              const isSelected = selectedOption === letter || selectedOption === cleanOpt || selectedOption === opt;
-              const isCorrectAnswer = currentQuestion.correctAnswer === letter || currentQuestion.correctAnswer === cleanOpt || currentQuestion.correctAnswer === opt;
-
-              return (
-                <div
-                  key={oIdx}
-                  className={cn(
-                    "p-3 rounded-xl border text-xs font-bold flex items-center gap-2.5",
-                    isCorrectAnswer
-                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800 dark:text-emerald-300"
-                      : isSelected
-                        ? "bg-rose-500/10 border-rose-500/20 text-rose-800 dark:text-rose-300"
-                        : "bg-secondary/10 border-border/40 text-muted-foreground"
-                  )}
-                >
-                  <span className={cn(
-                    "w-6 h-6 rounded-lg flex items-center justify-center font-extrabold shadow-sm text-[11px] shrink-0",
-                    isCorrectAnswer
-                      ? "bg-emerald-500 text-white"
-                      : isSelected
-                        ? "bg-rose-500 text-white"
-                        : "bg-secondary text-foreground"
-                  )}>
-                    {letter}
-                  </span>
-                  <div className="leading-relaxed">
-                    <LatexRenderer text={cleanOpt} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      <div className={cn(
-        "p-4 rounded-xl border flex items-center gap-3 text-left",
-        isCorrect
-          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
-          : 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400'
-      )}>
-        {isMath ? (
-          existingAttempt && existingAttempt.gradingMode === 'auto' ? (
-            existingAttempt.isCorrect ? (
-              <>
-                <CheckCircle size={24} className="text-emerald-500 shrink-0" />
-                <div>
-                  <h4 className="font-extrabold text-sm">Kết quả: Đạt yêu cầu (Giáo viên đã duyệt) ✅</h4>
-                  {showBannerFeedback && (
-                    <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
-                      💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
-                    </p>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <XCircle size={24} className="text-rose-500 shrink-0" />
-                <div>
-                  <h4 className="font-extrabold text-sm">Kết quả: Cần sửa lại (Chấm sai) ❌</h4>
-                  {showBannerFeedback && (
-                    <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
-                      💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
-                    </p>
-                  )}
-                </div>
-              </>
-            )
-          ) : (
-            <>
-              <CheckCircle size={24} className="text-emerald-500 shrink-0" />
-              <div>
-                <h4 className="font-extrabold text-sm">Đã nộp bài giải thành công!</h4>
-                <p className="text-xs font-semibold opacity-90">Ảnh bài làm đã được lưu. Thầy cô sẽ sớm review và chấm bài cho bạn.</p>
-              </div>
-            </>
-          )
-        ) : existingAttempt && existingAttempt.gradingMode === 'manual' ? (
-          <>
-            <HelpCircle size={24} className="text-amber-500 shrink-0 animate-pulse" />
-            <div>
-              <h4 className="font-extrabold text-sm">Đã nộp đáp án thành công!</h4>
-              <p className="text-xs font-semibold opacity-90">Đáp án của bạn đang chờ thầy cô kiểm tra và phê duyệt. Bạn chưa thể làm lại câu này cho đến khi thầy cô duyệt.</p>
-            </div>
-          </>
-        ) : isCorrect ? (
-          <>
-            <CheckCircle size={24} className="text-emerald-500 shrink-0" />
-            <div>
-              <h4 className="font-extrabold text-sm">Chính xác! Cực kỳ xuất sắc.</h4>
-              <p className="text-xs font-semibold opacity-90">Bạn đã tăng điểm số Mastery cho dạng bài này.</p>
-              <p className="text-xs font-bold opacity-90 mt-1">
-                Đáp án bạn đã {displayOptions && displayOptions.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption}</span>
-              </p>
-              {existingAttempt?.teacherFeedback && (
-                <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
-                  💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
-                </p>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            <XCircle size={24} className="text-rose-500 shrink-0" />
-            <div>
-              <h4 className="font-extrabold text-sm">Chưa đúng rồi! Nhưng không sao.</h4>
-              <p className="text-xs font-semibold opacity-90">
-                Câu hỏi đã được lưu vào **Sổ lỗi sai**. Hãy xem kỹ lời giải chi tiết dưới đây để khắc phục nhé!
-              </p>
-              <p className="text-xs font-bold opacity-90 mt-1">
-                Đáp án bạn đã {displayOptions && displayOptions.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{selectedOption || '(Trống)'}</span>
-              </p>
-              {existingAttempt?.teacherFeedback && (
-                <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
-                  💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
-                </p>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Báo cáo chấm điểm tự luận từ AI */}
-      {isMath && existingAttempt?.aiEvaluation && (
-        <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in text-left">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 flex-wrap gap-2">
-            <h4 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
-              📝 Nhận xét và chấm điểm chi tiết:
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-fade-in">
+      <div className="lg:col-span-7 space-y-6">
+        {/* Đề bài (Xem lại câu hỏi) */}
+        <div className="bg-card border border-border/40 shadow-sm rounded-2xl overflow-hidden text-left">
+          <div className="bg-secondary/15 border-b border-border/20 px-5 py-3">
+            <h4 className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wider">
+              📖 Đề bài:
             </h4>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-muted-foreground">Điểm số:</span>
-              <span className={cn(
-                "px-2.5 py-1 rounded-full text-xs font-black shadow-sm border",
-                existingAttempt.aiEvaluation.score >= 8
-                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                  : existingAttempt.aiEvaluation.score >= 5
-                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                    : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
-              )}>
-                {existingAttempt.aiEvaluation.score} / 10 điểm
-              </span>
-            </div>
           </div>
-
-          {/* Nhận xét tổng quan */}
-          <div className="p-3 bg-secondary/30 rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground leading-relaxed">
-            <span className="font-extrabold text-foreground block mb-1">💬 Nhận xét tổng quan:</span>
-            <LatexRenderer text={existingAttempt.aiEvaluation.summaryFeedback} />
+          <div className="p-5 text-sm font-bold leading-relaxed text-foreground bg-secondary/10 dark:bg-slate-950/10 font-sans">
+            <LatexRenderer text={cleanContent} />
           </div>
-
-          {/* Đánh giá chi tiết từng bước */}
-          <div className="space-y-3 pt-2">
-            <span className="text-[10px] font-black uppercase text-muted-foreground tracking-wider block mb-2">
-              📋 Chi tiết đánh giá từng bước:
-            </span>
-            <div className="space-y-3">
-              {(existingAttempt.aiEvaluation.stepsEvaluation || []).map((step) => {
-                const isCorrect = step.status === 'correct';
-                const isMissing = step.status === 'missing';
+          {/* Nếu có options (đối với trắc nghiệm) thì hiển thị các lựa chọn cho học sinh dễ đối chiếu */}
+          {displayOptions && displayOptions.length > 0 && (
+            <div className="px-5 pb-5 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-card">
+              {displayOptions.map((opt, oIdx) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                const letter = letters[oIdx] || String.fromCharCode(65 + oIdx);
+                // Lọc bỏ tiền tố dạng "A. " nếu có trong text
+                const cleanOpt = opt.replace(/^[A-D]\.\s*/, '');
+                const isSelected = selectedOption === letter || selectedOption === cleanOpt || selectedOption === opt;
+                const isCorrectAnswer = currentQuestion.correctAnswer === letter || currentQuestion.correctAnswer === cleanOpt || currentQuestion.correctAnswer === opt;
 
                 return (
                   <div
-                    key={step.stepOrder}
+                    key={oIdx}
                     className={cn(
-                      "p-3 rounded-xl border transition-all duration-150 relative flex flex-col gap-2 bg-card",
-                      isCorrect
-                        ? "border-emerald-500/20 hover:border-emerald-500/35"
-                        : isMissing
-                          ? "border-amber-500/20 hover:border-amber-500/35"
-                          : "border-rose-500/20 hover:border-rose-500/35"
+                      "p-3 rounded-xl border text-xs font-bold flex items-center gap-2.5",
+                      isCorrectAnswer
+                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-800 dark:text-emerald-300"
+                        : isSelected
+                          ? "bg-rose-500/10 border-rose-500/20 text-rose-800 dark:text-rose-300"
+                          : "bg-secondary/10 border-border/40 text-muted-foreground"
                     )}
                   >
-                    <div className="flex items-start justify-between gap-3 flex-wrap">
-                      <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
-                        <span className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-foreground flex items-center justify-center text-[10px] shrink-0 font-bold">
-                          {step.stepOrder}
-                        </span>
-                        {step.title}
-                      </h5>
-                      <span className={cn(
-                        "text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0",
-                        isCorrect
-                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                          : isMissing
-                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                            : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                      )}>
-                        {isCorrect ? '✓ Đạt' : isMissing ? '⚠️ Thiếu' : '✗ Lỗi'}
-                      </span>
-                    </div>
-
-                    {step.studentContent && (
-                      <div className="text-[11px] bg-slate-100/50 dark:bg-slate-900/30 p-2 rounded-lg text-muted-foreground font-semibold leading-relaxed border border-border/5 mt-1">
-                        <span className="text-[9px] font-black text-muted-foreground uppercase block mb-1">Nội dung bạn viết:</span>
-                        <LatexRenderer text={step.studentContent} />
-                      </div>
-                    )}
-
-                    <div className="text-xs text-muted-foreground font-semibold leading-relaxed pl-6.5 mt-0.5">
-                      <LatexRenderer text={step.feedback} />
+                    <span className={cn(
+                      "w-6 h-6 rounded-lg flex items-center justify-center font-extrabold shadow-sm text-[11px] shrink-0",
+                      isCorrectAnswer
+                        ? "bg-emerald-500 text-white"
+                        : isSelected
+                          ? "bg-rose-500 text-white"
+                          : "bg-secondary text-foreground"
+                    )}>
+                      {letter}
+                    </span>
+                    <div className="leading-relaxed">
+                      <LatexRenderer text={cleanOpt} />
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
+          )}
         </div>
-      )}
 
-      {/* Ảnh bài làm đã nộp */}
-      {isMath && (proofImages.length > 0 || (existingAttempt?.proofImages && existingAttempt.proofImages.length > 0)) && (
-        <div className="space-y-3 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in">
-          <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
-            🖼️ Ảnh bài làm bạn đã gửi:
-          </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-            {proofImages.length > 0
-              ? proofImages.map((img) => (
-                <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
-                  <img
-                    src={img.previewUrl}
-                    alt="Bài làm đã nộp"
-                    className="max-h-[300px] object-contain rounded-lg p-1"
-                  />
+        <div className={cn(
+          "p-4 rounded-xl border flex items-center gap-3 text-left",
+          isCorrect
+            ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
+            : 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400'
+        )}>
+          {isMath ? (
+            existingAttempt && existingAttempt.gradingMode === 'auto' ? (
+              existingAttempt.isCorrect ? (
+                <>
+                  <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                  <div>
+                    <h4 className="font-extrabold text-sm">Kết quả: Đạt yêu cầu (Giáo viên đã duyệt) ✅</h4>
+                    {hasTypedAnswer && (
+                      <p className="text-xs font-bold opacity-90 mt-1">
+                        Đáp án bạn đã nhập: <span className="underline font-black">{userAnswerToShow}</span>
+                      </p>
+                    )}
+                    {showBannerFeedback && (
+                      <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
+                        💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                      </p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <XCircle size={24} className="text-rose-500 shrink-0" />
+                  <div>
+                    <h4 className="font-extrabold text-sm">Kết quả: Cần sửa lại (Chấm sai) ❌</h4>
+                    {hasTypedAnswer && (
+                      <p className="text-xs font-bold opacity-90 mt-1">
+                        Đáp án bạn đã nhập: <span className="underline font-black">{userAnswerToShow}</span>
+                      </p>
+                    )}
+                    {showBannerFeedback && (
+                      <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
+                        💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                      </p>
+                    )}
+                  </div>
+                </>
+              )
+            ) : (
+              <>
+                <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                <div>
+                  <h4 className="font-extrabold text-sm">Đã nộp bài giải thành công!</h4>
+                  <p className="text-xs font-semibold opacity-90">Ảnh bài làm đã được lưu. Thầy cô sẽ sớm review và chấm bài cho bạn.</p>
                 </div>
-              ))
-              : existingAttempt?.proofImages?.map((img) => (
-                <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
-                  <img
-                    src={img.downloadUrl || img.storagePath}
-                    alt="Bài làm đã nộp"
-                    className="max-h-[300px] object-contain rounded-lg p-1"
-                  />
-                </div>
-              ))
-            }
-          </div>
+              </>
+            )
+          ) : existingAttempt && existingAttempt.gradingMode === 'manual' ? (
+            <>
+              <HelpCircle size={24} className="text-amber-500 shrink-0 animate-pulse" />
+              <div>
+                <h4 className="font-extrabold text-sm">Đã nộp đáp án thành công!</h4>
+                <p className="text-xs font-semibold opacity-90">Đáp án của bạn đang chờ thầy cô kiểm tra và phê duyệt. Bạn chưa thể làm lại câu này cho đến khi thầy cô duyệt.</p>
+              </div>
+            </>
+          ) : isCorrect ? (
+            <>
+              <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+              <div>
+                <h4 className="font-extrabold text-sm">Chính xác! Cực kỳ xuất sắc.</h4>
+                <p className="text-xs font-semibold opacity-90">Bạn đã tăng điểm số Mastery cho dạng bài này.</p>
+                <p className="text-xs font-bold opacity-90 mt-1">
+                  Đáp án bạn đã {displayOptions && displayOptions.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{userAnswerToShow}</span>
+                </p>
+                {existingAttempt?.teacherFeedback && (
+                  <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-emerald-500/10 rounded-lg text-emerald-800 dark:text-emerald-300">
+                    💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                  </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <XCircle size={24} className="text-rose-500 shrink-0" />
+              <div>
+                <h4 className="font-extrabold text-sm">Chưa đúng rồi! Nhưng không sao.</h4>
+                <p className="text-xs font-semibold opacity-90">
+                  Câu hỏi đã được lưu vào **Sổ lỗi sai**. Hãy xem kỹ lời giải chi tiết dưới đây để khắc phục nhé!
+                </p>
+                <p className="text-xs font-bold opacity-90 mt-1">
+                  Đáp án bạn đã {displayOptions && displayOptions.length > 0 ? "chọn" : "nhập"}: <span className="underline font-black">{userAnswerToShow || '(Trống)'}</span>
+                </p>
+                {existingAttempt?.teacherFeedback && (
+                  <p className="text-xs font-bold opacity-90 mt-1.5 p-2 bg-rose-500/10 rounded-lg text-rose-800 dark:text-rose-300">
+                    💬 Nhận xét của thầy cô: "{existingAttempt.teacherFeedback}"
+                  </p>
+                )}
+              </div>
+            </>
+          )}
         </div>
-      )}
 
-      {/* Lịch sử so sánh các lần làm trước */}
-      {pastAttempts.length > 0 && (
-        <div className="space-y-3 p-5 bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-border/50 shadow-sm animate-fade-in">
-          <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
-            ⏳ So sánh với các lần làm trước đó (Tối đa 2 lần gần nhất):
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            {pastAttempts.map((past, idx) => {
-              const dateStr = new Date(past.createdAt).toLocaleDateString('vi-VN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              });
+        {/* Báo cáo chấm điểm tự luận từ AI */}
+        {isMath && existingAttempt?.aiEvaluation && (
+          <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in text-left">
+            <div className="flex items-center justify-between border-b border-border/40 pb-3 flex-wrap gap-2">
+              <h4 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-1.5">
+                📝 Nhận xét và chấm điểm chi tiết:
+              </h4>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-muted-foreground">Điểm số:</span>
+                <span className={cn(
+                  "px-2.5 py-1 rounded-full text-xs font-black shadow-sm border",
+                  existingAttempt.aiEvaluation.score >= 8
+                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                    : existingAttempt.aiEvaluation.score >= 5
+                      ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                      : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                )}>
+                  {existingAttempt.aiEvaluation.score} / 10 điểm
+                </span>
+              </div>
+            </div>
 
-              const isPastCorrect = past.isCorrect;
+            {/* Nhận xét tổng quan */}
+            <div className="p-3 bg-secondary/30 rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground leading-relaxed">
+              <span className="font-extrabold text-foreground block mb-1">💬 Nhận xét tổng quan:</span>
+              <LatexRenderer text={existingAttempt.aiEvaluation.summaryFeedback} />
+            </div>
 
-              return (
-                <div
-                  key={past.id}
-                  className={cn(
-                    "p-4 rounded-xl border transition-all duration-150 relative flex flex-col justify-between gap-3 bg-card",
-                    isPastCorrect
-                      ? "border-emerald-500/20 hover:border-emerald-500/35"
-                      : "border-rose-500/20 hover:border-rose-500/35"
-                  )}
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-bold text-muted-foreground">
-                        Lần làm {pastAttempts.length - idx}: {dateStr}
-                      </span>
-                      <span className={cn(
-                        "text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1",
-                        isPastCorrect
-                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                          : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                      )}>
-                        {isPastCorrect ? (
-                          <>
-                            <CheckCircle size={10} /> Đúng / Đạt
-                          </>
-                        ) : (
-                          <>
-                            <XCircle size={10} /> Sai / Cần sửa
-                          </>
-                        )}
-                      </span>
-                    </div>
+            {/* Đánh giá chi tiết từng bước */}
+            <div className="space-y-3 pt-2">
+              <span className="text-[10px] font-black uppercase text-muted-foreground tracking-wider block mb-2">
+                📋 Chi tiết đánh giá từng bước:
+              </span>
+              <div className="space-y-3">
+                {(existingAttempt.aiEvaluation.stepsEvaluation || []).map((step) => {
+                  const isCorrect = step.status === 'correct';
+                  const isMissing = step.status === 'missing';
 
-                    <div className="text-xs font-semibold text-foreground">
-                      {isMath ? (
-                        <div className="space-y-2">
-                          <span className="text-muted-foreground block text-[11px]">Bài giải tự luận:</span>
-                          {past.proofImages && past.proofImages.length > 0 ? (
-                            <div className="flex gap-1.5 overflow-x-auto py-1">
-                              {past.proofImages.map((img) => (
-                                <div key={img.id} className="relative rounded-lg overflow-hidden border border-border bg-black w-14 h-14 shrink-0 flex items-center justify-center">
-                                  <img
-                                    src={img.downloadUrl || img.storagePath}
-                                    alt="Minh chứng"
-                                    className="w-full h-full object-cover cursor-pointer"
-                                    onClick={() => window.open(img.downloadUrl || img.storagePath, '_blank')}
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <span className="text-muted-foreground italic text-[11px]">Không có ảnh bài làm</span>
-                          )}
-                        </div>
-                      ) : (
-                        <div>
-                          <span className="text-muted-foreground text-[11px]">Đáp án đã chọn: </span>
-                          <span className="font-extrabold text-primary">{past.userAnswer}</span>
+                  return (
+                    <div
+                      key={step.stepOrder}
+                      className={cn(
+                        "p-3 rounded-xl border transition-all duration-150 relative flex flex-col gap-2 bg-card",
+                        isCorrect
+                          ? "border-emerald-500/20 hover:border-emerald-500/35"
+                          : isMissing
+                            ? "border-amber-500/20 hover:border-amber-500/35"
+                            : "border-rose-500/20 hover:border-rose-500/35"
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-3 flex-wrap">
+                        <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
+                          <span className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-foreground flex items-center justify-center text-[10px] shrink-0 font-bold">
+                            {step.stepOrder}
+                          </span>
+                          {step.title}
+                        </h5>
+                        <span className={cn(
+                          "text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0",
+                          isCorrect
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                            : isMissing
+                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                              : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+                        )}>
+                          {isCorrect ? '✓ Đạt' : isMissing ? '⚠️ Thiếu' : '✗ Lỗi'}
+                        </span>
+                      </div>
+
+                      {step.studentContent && (
+                        <div className="text-[11px] bg-slate-100/50 dark:bg-slate-900/30 p-2 rounded-lg text-muted-foreground font-semibold leading-relaxed border border-border/5 mt-1">
+                          <span className="text-[9px] font-black text-muted-foreground uppercase block mb-1">Nội dung bạn viết:</span>
+                          <LatexRenderer text={step.studentContent} />
                         </div>
                       )}
-                    </div>
-                  </div>
 
-                  {past.teacherFeedback && (
-                    <div className={cn(
-                      "text-[10px] font-bold p-2 rounded-lg border",
-                      isPastCorrect
-                        ? "bg-emerald-500/5 border-emerald-500/10 text-emerald-800 dark:text-emerald-300"
-                        : "bg-rose-500/5 border-rose-500/10 text-rose-800 dark:text-rose-300"
-                    )}>
-                      💬 Nhận xét: "{past.teacherFeedback}"
+                      <div className="text-xs text-muted-foreground font-semibold leading-relaxed pl-6.5 mt-0.5">
+                        <LatexRenderer text={step.feedback} />
+                      </div>
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Lời giải chi tiết hiện lên */}
+        {/* Ảnh bài làm đã nộp */}
+        {isMath && (proofImages.length > 0 || (existingAttempt?.proofImages && existingAttempt.proofImages.length > 0)) && (
+          <div className="space-y-3 p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-border/50 shadow-sm animate-fade-in">
+            <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
+              🖼️ Ảnh bài làm bạn đã gửi:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+              {proofImages.length > 0
+                ? proofImages.map((img) => (
+                  <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
+                    <img
+                      src={img.previewUrl}
+                      alt="Bài làm đã nộp"
+                      className="max-h-[300px] object-contain rounded-lg p-1"
+                    />
+                  </div>
+                ))
+                : existingAttempt?.proofImages?.map((img) => (
+                  <div key={img.id} className="relative rounded-xl overflow-hidden border border-border bg-black/95 max-h-[320px] flex items-center justify-center shadow-md transition-all hover:border-indigo-500/30">
+                    <img
+                      src={img.downloadUrl || img.storagePath}
+                      alt="Bài làm đã nộp"
+                      className="max-h-[300px] object-contain rounded-lg p-1"
+                    />
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        )}
+
+        {/* Lịch sử so sánh các lần làm trước */}
+        {pastAttempts.length > 0 && (
+          <div className="space-y-3 p-5 bg-slate-50/50 dark:bg-slate-900/40 rounded-2xl border border-border/50 shadow-sm animate-fade-in">
+            <h4 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1.5">
+              ⏳ So sánh với các lần làm trước đó (Tối đa 2 lần gần nhất):
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              {pastAttempts.map((past, idx) => {
+                const dateStr = new Date(past.createdAt).toLocaleDateString('vi-VN', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                });
+
+                const isPastCorrect = past.isCorrect;
+
+                return (
+                  <div
+                    key={past.id}
+                    className={cn(
+                      "p-4 rounded-xl border transition-all duration-150 relative flex flex-col justify-between gap-3 bg-card",
+                      isPastCorrect
+                        ? "border-emerald-500/20 hover:border-emerald-500/35"
+                        : "border-rose-500/20 hover:border-rose-500/35"
+                    )}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-bold text-muted-foreground">
+                          Lần làm {pastAttempts.length - idx}: {dateStr}
+                        </span>
+                        <span className={cn(
+                          "text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1",
+                          isPastCorrect
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                            : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+                        )}>
+                          {isPastCorrect ? (
+                            <>
+                              <CheckCircle size={10} /> Đúng / Đạt
+                            </>
+                          ) : (
+                            <>
+                              <XCircle size={10} /> Sai / Cần sửa
+                            </>
+                          )}
+                        </span>
+                      </div>
+
+                      <div className="text-xs font-semibold text-foreground">
+                        {isMath ? (
+                          <div className="space-y-2">
+                            <span className="text-muted-foreground block text-[11px]">Bài giải tự luận:</span>
+                            {past.proofImages && past.proofImages.length > 0 ? (
+                              <div className="flex gap-1.5 overflow-x-auto py-1">
+                                {past.proofImages.map((img) => (
+                                  <div key={img.id} className="relative rounded-lg overflow-hidden border border-border bg-black w-14 h-14 shrink-0 flex items-center justify-center">
+                                    <img
+                                      src={img.downloadUrl || img.storagePath}
+                                      alt="Minh chứng"
+                                      className="w-full h-full object-cover cursor-pointer"
+                                      onClick={() => window.open(img.downloadUrl || img.storagePath, '_blank')}
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground italic text-[11px]">Không có ảnh bài làm</span>
+                            )}
+                          </div>
+                        ) : (
+                          <div>
+                            <span className="text-muted-foreground text-[11px]">Đáp án đã chọn: </span>
+                            <span className="font-extrabold text-primary">{past.userAnswer}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {past.teacherFeedback && (
+                      <div className={cn(
+                        "text-[10px] font-bold p-2 rounded-lg border",
+                        isPastCorrect
+                          ? "bg-emerald-500/5 border-emerald-500/10 text-emerald-800 dark:text-emerald-300"
+                          : "bg-rose-500/5 border-rose-500/10 text-rose-800 dark:text-rose-300"
+                      )}>
+                        💬 Nhận xét: "{past.teacherFeedback}"
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Tiếp tục / Làm lại / Đổi câu */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <Button
+            disabled={currentIdx === 0}
+            onClick={() => {
+              revokeLocalProofImages(proofImages);
+              setCurrentIdx(currentIdx - 1);
+              resetQuestionState();
+            }}
+            variant="outline"
+            className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-muted-foreground hover:bg-secondary/40 cursor-pointer h-10 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <ArrowLeft size={16} /> Câu trước
+          </Button>
+          {existingAttempt && !retryStatus.canRetry ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-2.5 bg-slate-500/10 border border-slate-500/20 rounded-xl text-[10px] text-muted-foreground font-black text-center leading-relaxed">
+              <span>⏱️Làm lại sau {retryStatus.daysRemaining} ngày để ôn tập</span>
+              <span className="text-[9px] opacity-75 font-semibold">(Mở khóa vào ngày {retryStatus.unlockDateStr})</span>
+            </div>
+          ) : (
+            (!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
+              <Button
+                onClick={handleRetry}
+                variant="outline"
+                className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
+              >
+                🔄 Làm lại bài này
+              </Button>
+            )
+          )}
+          <Button
+            onClick={handleNext}
+            className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer h-10"
+          >
+            {currentIdx === questionsLength - 1 ? 'Hoàn thành' : 'Câu tiếp theo'} <ArrowRight size={16} />
+          </Button>
+        </div>
+      </div>
+
+      {/* Lời giải chi tiết hiện lên ở cột bên phải */}
       {solutionDetail && (
-        <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
+        <div className="lg:col-span-5 space-y-4 bg-card border border-border/40 p-5 rounded-2xl shadow-sm text-left animate-fade-in">
           <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
 
           {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} />}
@@ -525,44 +578,6 @@ export const ResultCard: React.FC<ResultCardProps> = ({
           </div>
         </div>
       )}
-
-      {/* Tiếp tục / Làm lại / Đổi câu */}
-      <div className="flex flex-col sm:flex-row gap-3 pt-4">
-        <Button
-          disabled={currentIdx === 0}
-          onClick={() => {
-            revokeLocalProofImages(proofImages);
-            setCurrentIdx(currentIdx - 1);
-            resetQuestionState();
-          }}
-          variant="outline"
-          className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-muted-foreground hover:bg-secondary/40 cursor-pointer h-10 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft size={16} /> Câu trước
-        </Button>
-        {existingAttempt && !retryStatus.canRetry ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-2.5 bg-slate-500/10 border border-slate-500/20 rounded-xl text-[10px] text-muted-foreground font-black text-center leading-relaxed">
-            <span>⏱️Làm lại sau {retryStatus.daysRemaining} ngày để ôn tập</span>
-            <span className="text-[9px] opacity-75 font-semibold">(Mở khóa vào ngày {retryStatus.unlockDateStr})</span>
-          </div>
-        ) : (
-          (!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
-            <Button
-              onClick={handleRetry}
-              variant="outline"
-              className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
-            >
-              🔄 Làm lại bài này
-            </Button>
-          )
-        )}
-        <Button
-          onClick={handleNext}
-          className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer h-10"
-        >
-          {currentIdx === questionsLength - 1 ? 'Hoàn thành' : 'Câu tiếp theo'} <ArrowRight size={16} />
-        </Button>
-      </div>
     </div>
   );
 };

@@ -462,7 +462,7 @@ export const g10MathSolutions: Solution[] = [
         result: 'm < -1 hoặc 1 <= m <= 7'
       }
     ],
-    finalAnswer: 'm <= -1 hoặc 1 <= m <= 7',
+    finalAnswer: 'm < -1 hoặc 1 <= m <= 7',
     commonMistakes: [
       'Quên không đặt điều kiện tồn tại $m \\le 7$ cho đoạn A, dẫn đến thừa nhận các giá trị $m > 7$.',
       'Lấy sai dấu bằng ở biên của hệ bất phương trình phần bù.'

@@ -216,8 +216,12 @@ export const g10MathQuestions: Question[] = [
     content: 'Cho hai tập hợp $A = [m - 1; \\frac{m + 5}{2}]$ và $B = (-\\infty; -2) \\cup [3; +\\infty)$. Tìm tất cả các giá trị thực của m để $A \\cap B \\neq \\varnothing$.',
     difficulty: 'hard',
     sourceType: 'manual',
-    correctAnswer: 'm <= -1 hoặc 1 <= m <= 7',
+    correctAnswer: 'm < -1 hoặc 1 <= m <= 7',
     acceptedAnswers: [
+      'm < -1 hoặc 1 <= m <= 7',
+      'm < -1 hoac 1 <= m <= 7',
+      '(-\\infty; -1) \\cup [1; 7]',
+      '(-\\infty;-1) \\cup [1;7]',
       'm <= -1 hoặc 1 <= m <= 7',
       'm <= -1 hoac 1 <= m <= 7',
       '(-\\infty; -1] \\cup [1; 7]',
@@ -311,7 +315,7 @@ export const g10MathQuestions: Question[] = [
       '(0;0), (3;0), (2;2), (0;4)',
       'O(0; 0), A(3; 0), B(2; 2), C(0; 4)'
     ],
-    validatorType: 'exact'
+    validatorType: 'coordinates'
   },
   {
     id: 'math10-q25',
@@ -321,13 +325,26 @@ export const g10MathQuestions: Question[] = [
     content: 'Cho miền nghiệm $D$ là tứ giác $OABC$ với các đỉnh $O(0; 0)$, $A(3; 0)$, $B(2; 2)$, $C(0; 4)$. Tìm giá trị lớn nhất và giá trị nhỏ nhất của biểu thức $F(x; y) = 3x + 2y$ trên miền nghiệm $D$.',
     difficulty: 'easy',
     sourceType: 'manual',
-    correctAnswer: 'max F = 10 tại B(2;2), min F = 0 tại O(0;0)',
+    correctAnswer: 'max F = 10, min F = 0',
     acceptedAnswers: [
       'max F = 10 tại B(2;2), min F = 0 tại O(0;0)',
       'GTLN = 10, GTNN = 0',
       'max = 10, min = 0'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { max_f: '10', min_f: '0' },
+    acceptedFinalAnswers: [
+      { max_f: '10', min_f: '0' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'max_f', label: 'Giá trị lớn nhất (GTLN):', valueType: 'number', placeholder: 'Nhập GTLN' },
+        { key: 'min_f', label: 'Giá trị nhỏ nhất (GTNN):', valueType: 'number', placeholder: 'Nhập GTNN' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q26',
@@ -361,14 +378,27 @@ export const g10MathQuestions: Question[] = [
     content: 'Một nông dân có 10 ha đất trồng lúa và ngô. Chi phí trồng 1 ha lúa là 2 triệu đồng, 1 ha ngô là 1 triệu đồng. Nông dân có tổng vốn 16 triệu đồng. Lợi nhuận thu được từ 1 ha lúa là 3 triệu đồng, 1 ha ngô là 2 triệu đồng. Hỏi nông dân cần trồng bao nhiêu ha lúa và bao nhiêu ha ngô để lợi nhuận thu được là lớn nhất?',
     difficulty: 'medium',
     sourceType: 'manual',
-    correctAnswer: '6 ha lúa và 4 ha ngô',
+    correctAnswer: '6 ha lúa, 4 ha ngô',
     acceptedAnswers: [
       '6 ha lúa và 4 ha ngô',
       '(6; 4)',
       '(6;4)',
       'x = 6, y = 4'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { lua: '6', ngo: '4' },
+    acceptedFinalAnswers: [
+      { lua: '6', ngo: '4' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'lua', label: 'Diện tích lúa (ha):', valueType: 'number', placeholder: 'ha lúa' },
+        { key: 'ngo', label: 'Diện tích ngô (ha):', valueType: 'number', placeholder: 'ha ngô' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q29',
@@ -390,14 +420,27 @@ export const g10MathQuestions: Question[] = [
     content: 'Một công ty sản xuất hai loại sản phẩm A và B. Mỗi sản phẩm A cần 2 giờ gia công và 1 giờ lắp ráp. Mỗi sản phẩm B cần 1 giờ gia công và 3 giờ lắp ráp. Thời gian gia công tối đa là 8 giờ/ngày, thời gian lắp ráp tối đa là 9 giờ/ngày. Lợi nhuận từ mỗi sản phẩm A là 5 triệu đồng, mỗi sản phẩm B là 4 triệu đồng. Tìm số sản phẩm mỗi loại cần sản xuất trong một ngày để lợi nhuận lớn nhất.',
     difficulty: 'hard',
     sourceType: 'manual',
-    correctAnswer: '3 sản phẩm A và 2 sản phẩm B',
+    correctAnswer: '3 sp A, 2 sp B',
     acceptedAnswers: [
       '3 sản phẩm A và 2 sản phẩm B',
       '(3; 2)',
       '(3;2)',
       'x = 3, y = 2'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { sp_a: '3', sp_b: '2' },
+    acceptedFinalAnswers: [
+      { sp_a: '3', sp_b: '2' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'sp_a', label: 'Số sản phẩm A:', valueType: 'number', placeholder: 'Nhập số lượng' },
+        { key: 'sp_b', label: 'Số sản phẩm B:', valueType: 'number', placeholder: 'Nhập số lượng' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q31',
@@ -413,7 +456,7 @@ export const g10MathQuestions: Question[] = [
       '(1;0), (3;0), (4;1), (1;4)',
       'A(1; 0), B(3; 0), C(4; 1), D(1; 4)'
     ],
-    validatorType: 'exact'
+    validatorType: 'coordinates'
   },
   {
     id: 'math10-q32',
@@ -435,14 +478,27 @@ export const g10MathQuestions: Question[] = [
     content: 'Một cửa hàng bán hai loại bánh: bánh mì và bánh ngọt. Mỗi ngày cửa hàng sản xuất tối đa 100 chiếc bánh, trong đó số bánh ngọt không vượt quá 60 chiếc và số bánh mì không ít hơn 20 chiếc. Lợi nhuận từ mỗi chiếc bánh mì là 5 nghìn đồng, mỗi chiếc bánh ngọt là 8 nghìn đồng. Hỏi cửa hàng cần sản xuất bao nhiêu chiếc mỗi loại để lợi nhuận lớn nhất?',
     difficulty: 'medium',
     sourceType: 'manual',
-    correctAnswer: '40 bánh mì và 60 bánh ngọt',
+    correctAnswer: '40 bánh mì, 60 bánh ngọt',
     acceptedAnswers: [
       '40 bánh mì và 60 bánh ngọt',
       '(40; 60)',
       '(40;60)',
       'x = 40, y = 60'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { banh_mi: '40', banh_ngot: '60' },
+    acceptedFinalAnswers: [
+      { banh_mi: '40', banh_ngot: '60' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'banh_mi', label: 'Số bánh mì:', valueType: 'number', placeholder: 'Nhập số lượng' },
+        { key: 'banh_ngot', label: 'Số bánh ngọt:', valueType: 'number', placeholder: 'Nhập số lượng' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q34',
@@ -466,7 +522,23 @@ export const g10MathQuestions: Question[] = [
     sourceType: 'manual',
     correctAnswer: 'I(2;1), x = 2',
     acceptedAnswers: ['I(2;1), x = 2', 'I(2; 1), x = 2', 'I(2;1); x=2', 'I(2;1), x=2', '(2;1), x=2'],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { dinh_i: 'I(2;1)', truc_dx: 'x = 2' },
+    acceptedFinalAnswers: [
+      { dinh_i: 'I(2;1)', truc_dx: 'x = 2' },
+      { dinh_i: '(2;1)', truc_dx: 'x = 2' },
+      { dinh_i: 'I(2,1)', truc_dx: 'x = 2' },
+      { dinh_i: '(2,1)', truc_dx: 'x = 2' }
+    ],
+    answerSchema: {
+      type: 'expression',
+      fields: [
+        { key: 'dinh_i', label: 'Tọa độ đỉnh I:', valueType: 'text', placeholder: 'Ví dụ: I(2; 2)' },
+        { key: 'truc_dx', label: 'Trục đối xứng:', valueType: 'text', placeholder: 'Ví dụ: x = 1' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q36',
@@ -500,7 +572,7 @@ export const g10MathQuestions: Question[] = [
     content: 'Tìm giá trị lớn nhất và giá trị nhỏ nhất của hàm số $y = x^2 - 4x + 3$ trên đoạn $[0; 3]$.',
     difficulty: 'medium',
     sourceType: 'manual',
-    correctAnswer: 'GTLN = 3, GTNN = -1',
+    correctAnswer: 'max y = 3, min y = -1',
     acceptedAnswers: [
       'GTLN = 3, GTNN = -1',
       'max = 3, min = -1',
@@ -509,7 +581,20 @@ export const g10MathQuestions: Question[] = [
       '3; -1',
       'max = 3, min = -1'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { max_y: '3', min_y: '-1' },
+    acceptedFinalAnswers: [
+      { max_y: '3', min_y: '-1' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'max_y', label: 'Giá trị lớn nhất (GTLN):', valueType: 'number', placeholder: 'Nhập GTLN' },
+        { key: 'min_y', label: 'Giá trị nhỏ nhất (GTNN):', valueType: 'number', placeholder: 'Nhập GTNN' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q39',
@@ -519,7 +604,7 @@ export const g10MathQuestions: Question[] = [
     content: 'Tìm giá trị lớn nhất và giá trị nhỏ nhất của hàm số $y = -2x^2 + 4x + 1$ trên đoạn $[2; 4]$.',
     difficulty: 'medium',
     sourceType: 'manual',
-    correctAnswer: 'GTLN = 1, GTNN = -15',
+    correctAnswer: 'max y = 1, min y = -15',
     acceptedAnswers: [
       'GTLN = 1, GTNN = -15',
       'max = 1, min = -15',
@@ -527,7 +612,20 @@ export const g10MathQuestions: Question[] = [
       '1 và -15',
       '1; -15'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { max_y: '1', min_y: '-15' },
+    acceptedFinalAnswers: [
+      { max_y: '1', min_y: '-15' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'max_y', label: 'Giá trị lớn nhất (GTLN):', valueType: 'number', placeholder: 'Nhập GTLN' },
+        { key: 'min_y', label: 'Giá trị nhỏ nhất (GTNN):', valueType: 'number', placeholder: 'Nhập GTNN' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q40',
@@ -609,7 +707,21 @@ export const g10MathQuestions: Question[] = [
       '24, 5, 2',
       '24;5;2'
     ],
-    validatorType: 'exact'
+    validatorType: 'exact',
+    correctFinalAnswer: { S: '24', R: '5', r: '2' },
+    acceptedFinalAnswers: [
+      { S: '24', R: '5', r: '2' }
+    ],
+    answerSchema: {
+      type: 'single-number',
+      fields: [
+        { key: 'S', label: 'Diện tích S:', valueType: 'number', placeholder: 'Nhập S' },
+        { key: 'R', label: 'Bán kính ngoại tiếp R:', valueType: 'number', placeholder: 'Nhập R' },
+        { key: 'r', label: 'Bán kính nội tiếp r:', valueType: 'number', placeholder: 'Nhập r' }
+      ],
+      proofImageRequired: false,
+      autoCheckMode: 'exact'
+    }
   },
   {
     id: 'math10-q45',
