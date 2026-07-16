@@ -80,6 +80,11 @@ for (const dir of moduleDirs) {
   solutions.push(...moduleSolutions);
 }
 
+const assessmentExams = readExportedArray(
+  path.join('assessments', 'exams.ts'),
+  'g10EnglishAssessmentExams'
+);
+
 const errors = [];
 const warnings = [];
 const topicById = new Map(topics.map(topic => [topic.id, topic]));
@@ -97,6 +102,7 @@ for (const id of findDuplicates(topics, topic => topic.id)) errors.push(`Topic I
 for (const id of findDuplicates(questionTypes, type => type.id)) errors.push(`Question type ID trùng: ${id}`);
 for (const id of findDuplicates(questions, question => question.id)) errors.push(`Question ID trùng: ${id}`);
 for (const id of findDuplicates(solutions, solution => solution.questionId)) errors.push(`Một câu có nhiều lời giải: ${id}`);
+for (const id of findDuplicates(assessmentExams, exam => exam.id)) errors.push(`Assessment ID trùng: ${id}`);
 
 for (const type of questionTypes) {
   if (!topicById.has(type.topicId)) errors.push(`${type.id}: topicId không tồn tại (${type.topicId}).`);
@@ -154,6 +160,45 @@ for (const solution of solutions) {
   if (!questionById.has(solution.questionId)) errors.push(`${solution.id}: lời giải không có câu hỏi tương ứng.`);
 }
 
+for (const exam of assessmentExams) {
+  if (exam.subjectId !== 'english') errors.push(`${exam.id}: subjectId phải là english.`);
+  if (!['midterm', 'final'].includes(exam.kind)) {
+    errors.push(`${exam.id}: giai đoạn hiện tại chỉ cho phép đề giữa kỳ hoặc cuối kỳ.`);
+  }
+  if (!Array.isArray(exam.questionIds) || exam.questionIds.length < 24) {
+    errors.push(`${exam.id}: cần tối thiểu 24 câu hỏi.`);
+    continue;
+  }
+  const duplicateQuestionIds = findDuplicates(exam.questionIds, id => id);
+  for (const questionId of duplicateQuestionIds) errors.push(`${exam.id}: lặp câu ${questionId}.`);
+
+  const examQuestions = exam.questionIds.map(questionId => questionById.get(questionId));
+  for (let index = 0; index < examQuestions.length; index += 1) {
+    const question = examQuestions[index];
+    const questionId = exam.questionIds[index];
+    if (!question) {
+      errors.push(`${exam.id}: questionId không tồn tại (${questionId}).`);
+      continue;
+    }
+    if (!exam.scopeTopicIds.includes(question.topicId)) {
+      errors.push(`${exam.id}: ${questionId} thuộc ${question.topicId}, ngoài phạm vi đề.`);
+    }
+  }
+
+  for (const topicId of exam.scopeTopicIds) {
+    if (!topicById.has(topicId)) errors.push(`${exam.id}: scopeTopicId không tồn tại (${topicId}).`);
+    if (!examQuestions.some(question => question?.topicId === topicId)) {
+      errors.push(`${exam.id}: không có câu nào thuộc ${topicId}.`);
+    }
+  }
+
+  const validExamQuestions = examQuestions.filter(Boolean);
+  const hardRatio = validExamQuestions.filter(question => question.difficulty === 'hard').length / validExamQuestions.length;
+  if (hardRatio < 0.1 || hardRatio > 0.25) {
+    warnings.push(`${exam.id}: tỷ lệ hard ${(hardRatio * 100).toFixed(1)}% nằm ngoài khoảng khuyến nghị 10–25%.`);
+  }
+}
+
 const questionTypeCounts = new Map(questionTypes.map(type => [
   type.id,
   questions.filter(question => question.questionTypeId === type.id).length
@@ -204,7 +249,7 @@ if (errors.length > 0) {
 
 console.log(
   `English 10 validation passed: ${topics.length} topics, ${questionTypes.length} types, `
-  + `${questions.length} questions, ${solutions.length} solutions.`
+  + `${questions.length} questions, ${solutions.length} solutions, ${assessmentExams.length} assessments.`
 );
 const difficultyCounts = ['easy', 'medium', 'hard']
   .map(level => `${level}=${questions.filter(question => question.difficulty === level).length}`)

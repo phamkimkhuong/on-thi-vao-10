@@ -4,6 +4,7 @@ export const getSubjectFromQuestionTypeId = (questionTypeId?: string): SubjectCo
   if (questionTypeId?.startsWith('math')) return 'math';
   if (questionTypeId?.startsWith('eng')) return 'english';
   if (questionTypeId?.startsWith('chem')) return 'chemistry';
+  if (questionTypeId?.startsWith('bio')) return 'biology';
   return null;
 };
 

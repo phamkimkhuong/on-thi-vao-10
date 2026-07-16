@@ -26,6 +26,7 @@ import { g10EnglishTopics } from './grade10/english/topics';
 import { g10EnglishQuestionTypes } from './grade10/english/questionTypes';
 import { g10EnglishQuestions } from './grade10/english/questions';
 import { g10EnglishSolutions } from './grade10/english/solutions';
+import { g10EnglishAssessmentExams } from './grade10/english/assessments';
 
 import { g10ChemistryTopics } from './grade10/chemistry/topics';
 import { g10ChemistryQuestionTypes } from './grade10/chemistry/questionTypes';
@@ -37,6 +38,11 @@ import {
   g10ChemistryAssessmentQuestions,
   g10ChemistryAssessmentSolutions
 } from './grade10/chemistry/assessments';
+
+import { g10BiologyTopics } from './grade10/biology/topics';
+import { g10BiologyQuestionTypes } from './grade10/biology/questionTypes';
+import { g10BiologyQuestions } from './grade10/biology/questions';
+import { g10BiologySolutions } from './grade10/biology/solutions';
 
 import {
   g10MathAssessmentExams,
@@ -54,7 +60,8 @@ export const allQuestions: Question[] = [
   ...g10EnglishQuestions,
   ...g10ChemistryQuestions,
   ...g10ChemistryAssessmentQuestions,
-  ...g10MathAssessmentQuestions
+  ...g10MathAssessmentQuestions,
+  ...g10BiologyQuestions
 ];
 
 export const allSolutions: Solution[] = [
@@ -65,7 +72,8 @@ export const allSolutions: Solution[] = [
   ...g10EnglishSolutions,
   ...g10ChemistrySolutions,
   ...g10ChemistryAssessmentSolutions,
-  ...g10MathAssessmentSolutions
+  ...g10MathAssessmentSolutions,
+  ...g10BiologySolutions
 ];
 
 // Helper functions to get data dynamically based on grade
@@ -76,6 +84,7 @@ export const getTopics = (grade: 'grade9' | 'grade10', subject: SubjectCode): To
     if (subject === 'math') return g10MathTopics;
     if (subject === 'english') return g10EnglishTopics;
     if (subject === 'chemistry') return g10ChemistryTopics;
+    if (subject === 'biology') return g10BiologyTopics;
     return [];
   }
 };
@@ -87,6 +96,7 @@ export const getQuestionTypes = (grade: 'grade9' | 'grade10', subject: SubjectCo
     if (subject === 'math') return g10MathQuestionTypes;
     if (subject === 'english') return g10EnglishQuestionTypes;
     if (subject === 'chemistry') return g10ChemistryQuestionTypes;
+    if (subject === 'biology') return g10BiologyQuestionTypes;
     return [];
   }
 };
@@ -98,6 +108,7 @@ export const getQuestions = (grade: 'grade9' | 'grade10', subject: SubjectCode):
     if (subject === 'math') return g10MathQuestions;
     if (subject === 'english') return g10EnglishQuestions;
     if (subject === 'chemistry') return g10ChemistryQuestions;
+    if (subject === 'biology') return g10BiologyQuestions;
     return [];
   }
 };
@@ -109,6 +120,7 @@ export const getSolutions = (grade: 'grade9' | 'grade10', subject: SubjectCode):
     if (subject === 'math') return g10MathSolutions;
     if (subject === 'english') return g10EnglishSolutions;
     if (subject === 'chemistry') return g10ChemistrySolutions;
+    if (subject === 'biology') return g10BiologySolutions;
     return [];
   }
 };
@@ -116,7 +128,7 @@ export const getSolutions = (grade: 'grade9' | 'grade10', subject: SubjectCode):
 export const getMockExams = (grade: 'grade9' | 'grade10', subject: SubjectCode): MockExam[] => {
   const exams = grade === 'grade9'
     ? (g9MockExamsList as MockExam[])
-    : [...g10MathAssessmentExams, ...g10ChemistryAssessmentExams];
+    : [...g10MathAssessmentExams, ...g10EnglishAssessmentExams, ...g10ChemistryAssessmentExams];
   return exams.filter(exam => exam.subjectId === subject);
 };
 
@@ -128,4 +140,3 @@ export const getLearningMisconceptions = (grade: 'grade9' | 'grade10', subject: 
 
 import { g10ChemistryVideos } from './grade10/chemistry/videos';
 export { g10ChemistryVideos };
-

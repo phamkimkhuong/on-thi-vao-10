@@ -84,11 +84,25 @@ export const ExamEngine: React.FC = () => {
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
 
   const [selectedExamId, setSelectedExamId] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'all' | 'theory' | 'checkpoint' | 'midterm' | 'final'>('all');
+  type ExamTab = 'all' | 'theory' | 'checkpoint' | 'midterm' | 'final';
+  const [activeTab, setActiveTab] = useState<ExamTab>('all');
 
   const subjectExams = React.useMemo(() => {
     return mockExamsList.filter(exam => exam.subjectId === selectedSubject);
   }, [selectedSubject, mockExamsList]);
+
+  const availableTabs = React.useMemo<ExamTab[]>(() => {
+    const tabs: ExamTab[] = ['all'];
+    if (subjectExams.some(exam => exam.focus === 'theory')) tabs.push('theory');
+    if (subjectExams.some(exam => exam.kind === 'module_checkpoint' && exam.focus !== 'theory')) tabs.push('checkpoint');
+    if (subjectExams.some(exam => exam.kind === 'midterm' && exam.focus !== 'theory')) tabs.push('midterm');
+    if (subjectExams.some(exam => exam.kind === 'final' && exam.focus !== 'theory')) tabs.push('final');
+    return tabs;
+  }, [subjectExams]);
+
+  useEffect(() => {
+    if (!availableTabs.includes(activeTab)) setActiveTab('all');
+  }, [activeTab, availableTabs]);
 
   // Lọc đề thi theo tab đang chọn
   const filteredExams = React.useMemo(() => {
@@ -570,7 +584,7 @@ export const ExamEngine: React.FC = () => {
 
           {/* Lọc đề thi theo Tab */}
           <div className="flex w-full items-center gap-1 overflow-x-auto bg-slate-200/60 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-border/40 self-start md:w-auto relative z-10 shrink-0">
-            {(['all', 'theory', 'checkpoint', 'midterm', 'final'] as const).map(tab => {
+            {availableTabs.map(tab => {
               const tabLabels = {
                 all: 'Tất cả',
                 theory: 'Lý thuyết',
