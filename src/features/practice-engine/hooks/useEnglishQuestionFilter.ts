@@ -14,7 +14,7 @@ export const useEnglishQuestionFilter = (
       return examQuestions;
     }
 
-    if (questionTypeId === 'eng-qt6' && selectedSubTense === 'all' && customQuestions) {
+    if (selectedSubTense === 'all' && customQuestions) {
       return customQuestions;
     }
 

@@ -17,7 +17,9 @@ Nền tảng ôn luyện cá nhân hóa cho học sinh từ **Lớp 9** (ôn thi
 | 📓 **Sổ Lỗi Sai** | Tự động gom nhóm câu sai theo dạng bài, cho phép làm lại đến khi đúng |
 | ⚡ **Local-First** | Phản hồi tức thì, hoạt động offline — đồng bộ lên Cloud khi có mạng |
 | 👩‍🏫 **Dashboard Giáo Viên** | Giáo viên chấm bài, ghi nhận xét, theo dõi tiến độ lớp |
-| 📱 **Responsive** | Tối ưu cho mọi thiết bị: Desktop, Tablet, Mobile |
+| 📱 **Responsive** | Tối ưu cho mọi thiết bị: Desktop, Tablet, Mobile (Gia sư AI tối ưu app-like, Lịch sử dạng Drawer & Hồ sơ dạng Bottom Sheet) |
+| ⌨️ **Bàn Phím Toán Học** | Tự động đổi layout phím chuyên dụng theo từng dạng toán (Parabol, Vectơ, Lượng giác) và hỗ trợ nhập 2 ô đáp án độc lập |
+| 📺 **Video Bài Giảng** | Tích hợp xem bài giảng video 7 chương môn Hóa học 10 (hỗ trợ dán link YouTube bất kỳ, trình phát bảo mật youtube-nocookie) |
 
 ---
 
@@ -152,7 +154,7 @@ Grade (grade9 | grade10)
 |---|---|---|
 | **Toán học** | ✅ Đầy đủ | Tập hợp, mệnh đề, hàm số, phương trình, bất phương trình, ... |
 | **Tiếng Anh** | ✅ Đầy đủ | Ngữ pháp nâng cao, từ vựng, kỹ năng đọc viết |
-| **Hóa học** | 🔨 Đang phát triển | Module 0 (Cầu nối THCS) + Module 1 (Cấu tạo nguyên tử) hoàn thành; Module 2-8 chờ lập ma trận chuẩn đầu ra |
+| **Hóa học** | ✅ Hoàn thành Module 0-7 | Module 0 (Cầu nối THCS) + Module 1 đến 7 đã hoàn thành MVP; Module 8 đang phát triển |
 | **Vật lý** | 🔒 Sắp ra mắt | — |
 | **Sinh học** | 🔒 Sắp ra mắt | — |
 
@@ -166,13 +168,13 @@ Khóa học được thiết kế theo chuẩn đầu ra **Chương trình GDPT 
 |---|---|---|---|
 | 0 | Nhập môn & Cầu nối THCS | 1 | ✅ 4 dạng bài |
 | 1 | Cấu tạo nguyên tử | 1 | ✅ 7 dạng bài |
-| 2 | Bảng tuần hoàn & Định luật tuần hoàn | 1 | ❌ |
-| 3 | Liên kết hóa học | 1 | ❌ |
-| 4 | Phản ứng oxi hóa – khử | 2 | ❌ |
-| 5 | Năng lượng hóa học | 2 | ❌ |
-| 6 | Tốc độ phản ứng | 2 | ❌ |
-| 7 | Halogen (Nhóm VIIA) | 3 | ❌ |
-| 8 | Tổng hợp & Đánh giá | 3 | ❌ |
+| 2 | Bảng tuần hoàn & Định luật tuần hoàn | 1 | ✅ MVP |
+| 3 | Liên kết hóa học | 1 | ✅ MVP |
+| 4 | Phản ứng oxi hóa – khử | 2 | ✅ MVP |
+| 5 | Năng lượng hóa học | 2 | ✅ MVP |
+| 6 | Tốc độ phản ứng | 2 | ✅ MVP |
+| 7 | Halogen (Nhóm VIIA) | 3 | ✅ MVP |
+| 8 | Tổng hợp & Đánh giá | 3 | ❌ Đang phát triển |
 
 **Phân luồng học sinh:**
 - **Nhóm 1** (Mất gốc): Đi qua Module 0 bổ trợ → Module 1 trở đi

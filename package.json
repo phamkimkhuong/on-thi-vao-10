@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "type-check": "tsc -b --noEmit",
+    "validate:english10": "node scripts/validateEnglish10.mjs",
     "preview": "vite preview",
     "deploy": "npm run build && firebase deploy --only hosting --project on-thi-vao-10-7d87c",
     "deploy-rules": "firebase deploy --only firestore:rules,storage --project on-thi-vao-10-7d87c"

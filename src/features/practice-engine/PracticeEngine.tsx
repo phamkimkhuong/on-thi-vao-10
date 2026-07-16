@@ -5,7 +5,7 @@ import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { aiService } from '../../services/aiService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getQuestions, getSolutions } from '../../data';
+import { getQuestionTypes, getQuestions, getSolutions, getTopics } from '../../data';
 import { Button } from '../../components/ui/button';
 import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 
@@ -58,15 +58,6 @@ export const PracticeEngine: React.FC = () => {
   const { selectedSubject, selectedGrade, setSubject, user, progressVersion, refreshProgress, isPremium } = useAppStore();
   void progressVersion;
 
-  if (!user) {
-    return (
-      <MathLoginRequired
-        title="Yêu cầu đăng nhập luyện tập"
-        description="Bạn cần đăng nhập học tập để thực hiện các bài tập giải đề, lưu lịch sử tiến trình học tập và nhận đánh giá phản hồi từ AI."
-      />
-    );
-  }
-
   const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
   const mathQuestions = getQuestions(selectedGrade, 'math');
   const mathSolutions = getSolutions(selectedGrade, 'math');
@@ -80,6 +71,14 @@ export const PracticeEngine: React.FC = () => {
   const chemistrySolutions = getSolutions(selectedGrade, 'chemistry');
 
   const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as SubjectCode;
+  const isGrade10English = routeSubject === 'english' && selectedGrade === 'grade10';
+  const grade10EnglishSelectionOptions = isGrade10English
+    ? getTopics('grade10', 'english').map(topic => ({
+        id: topic.id,
+        name: topic.name.replace(/^Chuyên đề \d+:\s*/, ''),
+        desc: `Trộn toàn bộ dạng bài hiện có thuộc ${topic.name}.`
+      }))
+    : undefined;
 
   useEffect(() => {
     const start = Date.now();
@@ -99,7 +98,7 @@ export const PracticeEngine: React.FC = () => {
 
   const tensesReviewBestScore = useMemo(() => {
     void progressVersion;
-    const userId = user!.uid;
+    const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
     const reviewAttempts = attempts.filter(a => a.selectedSubTense === 'tenses_review');
 
@@ -156,17 +155,20 @@ export const PracticeEngine: React.FC = () => {
     const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
     const correctQIds = new Set<string>();
+    const trackedQuestions = selectedGrade === 'grade10'
+      ? englishQuestions
+      : englishQuestions.filter(q => q.questionTypeId === 'eng-qt6');
+    const trackedQuestionIds = new Set(trackedQuestions.map(question => question.id));
     attempts.forEach(a => {
-      if (a.isCorrect && a.questionTypeId === 'eng-qt6') {
+      if (a.isCorrect && trackedQuestionIds.has(a.questionId)) {
         correctQIds.add(a.questionId);
       }
     });
-    const engQt6Questions = englishQuestions.filter(q => q.questionTypeId === 'eng-qt6');
-    const totalQCount = engQt6Questions.length;
+    const totalQCount = trackedQuestions.length;
     if (totalQCount === 0) return 0;
     const percent = Math.round((correctQIds.size / totalQCount) * 100);
-    return Math.max(1, percent);
-  }, [user, progressVersion, englishQuestions]);
+    return percent === 0 ? 0 : Math.max(1, percent);
+  }, [user, progressVersion, englishQuestions, selectedGrade]);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
@@ -243,6 +245,10 @@ export const PracticeEngine: React.FC = () => {
     isExamMode,
     examQuestions
   );
+  const isGrade10CustomReviewActive = isGrade10English
+    && questionTypeId === undefined
+    && selectedSubTense === 'all'
+    && customQuestions !== null;
 
   // Trong chế độ luyện tập Hóa học, học sinh đi từ nhận biết nền tảng đến
   // vận dụng cao. Giữ nguyên thứ tự đề trong chế độ thi để không làm biến đổi đề.
@@ -572,7 +578,10 @@ export const PracticeEngine: React.FC = () => {
     }
 
     let pool: Question[] = [];
-    examTenses.forEach(tense => {
+    if (isGrade10English) {
+      const selectedTopicIds = new Set(examTenses);
+      pool = qList.filter(question => selectedTopicIds.has(question.topicId));
+    } else examTenses.forEach(tense => {
       let filtered: Question[] = [];
       if (tense === 'present_simple') {
         filtered = qList.filter(q => {
@@ -853,7 +862,12 @@ export const PracticeEngine: React.FC = () => {
     } else {
       const goBack = window.confirm('Chúc mừng bạn đã hoàn thành tất cả câu hỏi ôn tập của dạng bài này! Bạn có muốn quay lại danh sách không?');
       if (goBack) {
-        if (questionTypeId === 'eng-qt6') {
+        if (isGrade10CustomReviewActive) {
+          setCustomQuestions(null);
+          setSelectedSubTense(null);
+          setCurrentIdx(0);
+          resetQuestionState();
+        } else if (questionTypeId === 'eng-qt6') {
           setSelectedSubTense(null);
         } else {
           navigate('/practice');
@@ -871,7 +885,10 @@ export const PracticeEngine: React.FC = () => {
     }
 
     let pool: Question[] = [];
-    selectedTensesForCombo.forEach(tense => {
+    if (isGrade10English) {
+      const selectedTopicIds = new Set(selectedTensesForCombo);
+      pool = qList.filter(question => selectedTopicIds.has(question.topicId));
+    } else selectedTensesForCombo.forEach(tense => {
       let filtered: Question[] = [];
       if (tense === 'present_simple') {
         filtered = qList.filter(q => {
@@ -943,18 +960,29 @@ export const PracticeEngine: React.FC = () => {
     setCustomQuestions(limited);
     setSelectedSubTense('all');
     setIsConfiguringAll(false);
+    setCurrentIdx(0);
+    resetQuestionState();
   };
 
   const triggerNextHint = () => {
     if (solutionDetail) {
-      const maxSteps = solutionDetail.detailedSteps.length + (isChemistry && currentQuestionType ? 1 : 0);
+      const maxSteps = solutionDetail.detailedSteps.length + (currentQuestionType ? 1 : 0);
       setHintLevel(prev => (prev < maxSteps ? prev + 1 : 0));
     }
   };
 
   // Render switches
 
-  if (questionTypeId === 'eng-qt6' && isConfiguringExam) {
+  if (!user) {
+    return (
+      <MathLoginRequired
+        title="Yêu cầu đăng nhập luyện tập"
+        description="Bạn cần đăng nhập học tập để thực hiện các bài tập giải đề, lưu lịch sử tiến trình học tập và nhận đánh giá phản hồi từ AI."
+      />
+    );
+  }
+
+  if ((questionTypeId === 'eng-qt6' || (isGrade10English && questionTypeId === undefined)) && isConfiguringExam) {
     return (
       <ExamConfigView
         grammarSection={grammarSection}
@@ -966,11 +994,12 @@ export const PracticeEngine: React.FC = () => {
         setExamTimeLimit={setExamTimeLimit}
         setIsConfiguringExam={setIsConfiguringExam}
         startExamPractice={startExamPractice}
+        selectionOptions={grade10EnglishSelectionOptions}
       />
     );
   }
 
-  if (questionTypeId === 'eng-qt6' && isConfiguringAll) {
+  if ((questionTypeId === 'eng-qt6' || (isGrade10English && questionTypeId === undefined)) && isConfiguringAll) {
     return (
       <PracticeConfigView
         grammarSection={grammarSection}
@@ -978,6 +1007,7 @@ export const PracticeEngine: React.FC = () => {
         setSelectedTensesForCombo={setSelectedTensesForCombo}
         setIsConfiguringAll={setIsConfiguringAll}
         startCustomReview={startCustomReview}
+        selectionOptions={grade10EnglishSelectionOptions}
       />
     );
   }
@@ -1011,7 +1041,7 @@ export const PracticeEngine: React.FC = () => {
     );
   }
 
-  if (questionTypeId === undefined || (questionTypeId === 'eng-qt6' && selectedSubTense === null)) {
+  if ((questionTypeId === undefined && !isGrade10CustomReviewActive) || (questionTypeId === 'eng-qt6' && selectedSubTense === null)) {
     return (
       <TopicSelectionView
         routeSubject={routeSubject}
@@ -1066,7 +1096,12 @@ export const PracticeEngine: React.FC = () => {
         <div className="flex gap-2">
           <button
             onClick={() => {
-              if (questionTypeId === 'eng-qt6') {
+              if (isGrade10CustomReviewActive) {
+                setCustomQuestions(null);
+                setSelectedSubTense(null);
+                setCurrentIdx(0);
+                resetQuestionState();
+              } else if (questionTypeId === 'eng-qt6') {
                 setSelectedSubTense(null);
               } else {
                 navigate('/practice');
@@ -1126,7 +1161,7 @@ export const PracticeEngine: React.FC = () => {
       {!isSubmitted ? (
         <QuestionCard
           currentQuestion={currentQuestion}
-          currentQuestionType={isChemistry ? currentQuestionType : null}
+          currentQuestionType={isMath ? null : currentQuestionType}
           structuredAnswer={structuredAnswer}
           setStructuredAnswer={setStructuredAnswer}
           questionTypeId={questionTypeId}
@@ -1157,7 +1192,7 @@ export const PracticeEngine: React.FC = () => {
       ) : (
         <ResultCard
           currentQuestion={currentQuestion}
-          currentQuestionType={isChemistry ? currentQuestionType : null}
+          currentQuestionType={isMath ? null : currentQuestionType}
           isCorrect={isCorrect}
           isMath={isMath}
           proofImages={proofImages}

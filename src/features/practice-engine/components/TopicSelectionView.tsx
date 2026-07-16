@@ -178,7 +178,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setSelectedTensesForCombo(['module1', 'module2', 'module3', 'module4', 'module5']);
+              setSelectedTensesForCombo(isG9
+                ? ['module1', 'module2', 'module3', 'module4', 'module5']
+                : topics.map(topic => topic.id));
               setIsConfiguringAll(true);
             }}
           >
@@ -702,7 +704,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setSelectedTensesForCombo(['module1', 'module2', 'module3', 'module4', 'module5']);
+              setSelectedTensesForCombo(isG9
+                ? ['module1', 'module2', 'module3', 'module4', 'module5']
+                : topics.map(topic => topic.id));
               setIsConfiguringAll(true);
             }}
           >
@@ -715,10 +719,12 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 </div>
 
                 <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
-                  📝 Tổng ôn thông minh
+                  {isG9 ? '📝 Tổng ôn thông minh' : `📝 Tổng ôn Unit 1–${topics.length}`}
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.
+                  {isG9
+                    ? 'Tự chọn tổ hợp các dạng thì mong muốn và tạo ngẫu nhiên lượt luyện tập tối đa 40 câu hỏi.'
+                    : 'Chọn một hoặc nhiều Unit, sau đó luyện ngẫu nhiên ngữ pháp, từ vựng và phát âm trong tối đa 40 câu.'}
                 </p>
               </div>
 
@@ -747,7 +753,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setExamTenses(['module1', 'module2', 'module3', 'module4', 'module5']);
+              setExamTenses(isG9
+                ? ['module1', 'module2', 'module3', 'module4', 'module5']
+                : topics.map(topic => topic.id));
               setIsConfiguringExam(true);
             }}
           >
@@ -760,10 +768,12 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 </div>
 
                 <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
-                  🏆 Luyện thi trắc nghiệm
+                  {isG9 ? '🏆 Luyện thi trắc nghiệm' : `🏆 Kiểm tra tổng hợp Unit 1–${topics.length}`}
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.
+                  {isG9
+                    ? 'Luyện thi tính giờ với số lượng câu và thì tự chọn. Không hiện giải thích ngay khi làm, chỉ hiện toàn bộ khi nộp bài hoặc hết giờ.'
+                    : 'Tạo bài kiểm tra tính giờ từ các Unit đã chọn. Lời giải chỉ xuất hiện sau khi nộp bài hoặc hết giờ.'}
                 </p>
               </div>
 

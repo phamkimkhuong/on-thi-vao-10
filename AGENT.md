@@ -526,7 +526,42 @@ npm run deploy     # Build + Firebase deploy hosting
 
 ---
 
-## 12. Checklist Trước Khi Commit
+## 12. Các Tính Năng Cao Cấp và Tối Ưu Hóa Gần Đây
+
+### 12.1 Hệ Thống Bàn Phím Toán Học Tự Chọn (Custom Math Keyboards)
+- **Mục đích:** Cung cấp trải nghiệm nhập liệu chuyên biệt cho từng dạng toán, loại bỏ các ký tự thừa thãi và bổ sung ký tự đặc trưng mà bàn phím hệ thống không gõ được.
+- **Tập hợp phím chuyên dụng:**
+  - *Dạng Parabol & Giá trị lớn nhất/nhỏ nhất:* Có sẵn các phím biến số (`x`, `y`, `a`, `b`, `c`), số mũ bình phương (`²`), dấu bằng (`=`), dấu phẩy (`,`) để nhập hệ số hoặc tọa độ đỉnh.
+  - *Hệ thức lượng & Giải tam giác:* Tích hợp phím độ (`°`), căn bậc hai (`√`), số Pi (`π`), và các ký hiệu góc lượng giác (`sin`, `cos`, `tan`).
+  - *Phân tích vectơ & Chứng minh thẳng hàng:* Bổ sung các phím biểu diễn ký hiệu vectơ (`\vec{}`), ký hiệu ba điểm thẳng hàng, các phép toán vectơ.
+  - *Tích vô hướng của hai vectơ:* Tập trung phím bình phương (`²`), tích vô hướng (`.`), nhân phân phối và dấu góc.
+- **Kiến trúc nhập liệu 2 ô (Multi-input / Two-input Answers):**
+  - Đối với các dạng toán yêu cầu hai đáp án riêng biệt (ví dụ: tọa độ đỉnh Parabol \\(I(x_I; y_I)\\), hoặc khoảng giá trị \\(m\\)), giao diện tự động sinh ra **2 ô nhập dữ liệu độc lập** thay vì bắt học sinh viết chung một chuỗi.
+  - Bộ kiểm tra đáp án (`answerValidator.ts`) tự động ghép nối và đối sánh đúng cấu trúc của cả hai giá trị.
+
+### 12.2 Tính Năng Xem Video Bài Giảng Hóa Học 10
+- **Tập tin dữ liệu nguồn:** [videos.ts](file:///c:/on-thi-vao-10/src/data/grade10/chemistry/videos.ts) — nơi duy nhất dùng để quản lý 7 video tương ứng 7 chương của môn Hóa.
+- **Bộ phân tích URL YouTube:** Tích hợp bộ lọc trích xuất ID YouTube tự động thông minh. Admin chỉ cần copy-paste link YouTube dưới bất kỳ định dạng nào (watch, share link `youtu.be`, embed link, v.v.), trình phát sẽ tự động bóc tách ID và chuyển thành link xem không chứa quảng cáo dạng `youtube-nocookie.com`.
+- **Giao diện điều hướng:** Tab **Video bài giảng (7 Chương)** được đẩy lên đầu tiên trong lộ trình học môn Hóa học 10 để kích hoạt xem đầu tiên.
+
+### 12.3 Thiết Kế Tương Thích Di Động (Mobile Responsive Overhaul) - Gia Sư AI
+- **Chiều cao cố định (Sticky Chat Box):** Khung chat Gia sư AI có chiều cao vừa khít màn hình `h-[calc(100vh-110px)]` với `overflow-hidden` để giữ thanh nhập tin nhắn và đính kèm ảnh luôn dính sát đáy màn hình điện thoại (messenger-like experience).
+- **Lịch sử hội thoại (Drawer Overlay):** Ẩn mặc định trên mobile. Khi mở, trượt ra từ bên trái dưới dạng absolute drawer đè lên khung chat kèm lớp nền mờ (`backdrop bg-black/45`), tự động khép lại khi tạo chat mới hoặc chọn chat cũ.
+- **Hồ sơ năng lực (Bottom Sheet):** Thay vì hiển thị kéo dài dưới chân trang, trên di động nó sẽ được ẩn đi và mở ra dưới dạng một Bottom Sheet trượt từ dưới đáy màn hình lên khi bấm vào nút "Hồ sơ".
+
+### 12.4 Kiến Trúc Thư Mục Module Tự Động Nạp (Modular Subdirectory Architecture)
+- **Mục tiêu:** Thống nhất dữ liệu ngân hàng câu hỏi cho cả **Hóa học 10** và **Tiếng Anh 10**.
+- **Nguyên lý hoạt động:**
+  - Mỗi chương/chuyên đề được đóng gói biệt lập trong một thư mục con tại `modules/module[N]_[tên]/` (Ví dụ: `module1_family/`).
+  - Thư mục con chứa đầy đủ: `topics.ts`, `questionTypes.ts`, `questions.ts`, `solutions.ts` và tệp re-export `index.ts`.
+  - Các tệp nạp gốc của môn học chỉ khai báo shell và tự động quét/gộp dữ liệu bằng API của Vite:
+    `const modules = import.meta.glob('./modules/module*/index.ts', { eager: true });`
+  - **Lợi ích Senior:** Cô lập triệt để rủi ro xung đột git (merge conflict), tối đa hóa tính đóng gói (encapsulation), triệt tiêu hoàn toàn thao tác import thủ công.
+  - **Kiểm soát Didactic tự động:** Tệp kiểm tra chất lượng `validateEnglish10.mjs` quét động toàn bộ các thư mục con trong `modules/`, giải mã AST để kiểm tra tính toàn vẹn khóa ngoại và chỉ tiêu phân phối độ khó.
+
+---
+
+## 13. Checklist Trước Khi Commit
 
 - [ ] `npm run type-check` — Không lỗi TypeScript
 - [ ] `npm run lint` — Không lỗi ESLint

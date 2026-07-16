@@ -9,6 +9,7 @@ interface PracticeConfigViewProps {
   setSelectedTensesForCombo: React.Dispatch<React.SetStateAction<string[]>>;
   setIsConfiguringAll: (val: boolean) => void;
   startCustomReview: () => void;
+  selectionOptions?: Array<{ id: string; name: string; desc: string }>;
 }
 
 export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
@@ -17,9 +18,10 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
   setSelectedTensesForCombo,
   setIsConfiguringAll,
   startCustomReview,
+  selectionOptions,
 }) => {
   const isGlobal = grammarSection === null;
-  const tensesMeta = isGlobal
+  const tensesMeta = selectionOptions ?? (isGlobal
     ? [
         { id: 'module1', name: '📦 Dạng 1: Thì động từ cơ bản', desc: 'Luyện tập toàn bộ câu hỏi liên quan đến 6 thì tiếng Anh cơ bản.' },
         { id: 'module2', name: '📦 Dạng 2: Cấu trúc động từ (to V, V-ing, V0)', desc: 'Luyện các cấu trúc động từ nguyên mẫu và danh động từ.' },
@@ -34,7 +36,8 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
         { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)', desc: 'Diễn tả hành động đang xảy ra tại thời điểm quá khứ với liên từ: while...' },
         { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành (Present Perfect)', desc: 'Tập trung chia has/have + V3/ed với: since, for, just, already, yet, ever, never...' },
         { id: 'future_simple', name: '🔮 Thì Tương lai đơn & câu điều kiện loại 1 (Future Simple)', desc: 'Tập trung chia will + V nguyên mẫu, won\'t và cấu trúc câu điều kiện loại 1...' },
-      ];
+      ]);
+  const usesTopicSelection = Boolean(selectionOptions);
 
   const toggleTense = (id: string) => {
     setSelectedTensesForCombo(prev => {
@@ -46,7 +49,9 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
     });
   };
 
-  const hasEnoughTenses = isGlobal ? selectedTensesForCombo.length >= 1 : selectedTensesForCombo.length >= 2;
+  const hasEnoughTenses = usesTopicSelection || isGlobal
+    ? selectedTensesForCombo.length >= 1
+    : selectedTensesForCombo.length >= 2;
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto pb-12 animate-fade-in">
@@ -66,10 +71,18 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
         <CardContent className="p-6 space-y-6">
           <div className="space-y-1.5">
             <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
-              {isGlobal ? "1. Chọn các dạng bài muốn luyện tập (Ít nhất 1 dạng):" : "1. Chọn các dạng thì muốn luyện tập (Ít nhất 2 dạng):"}
+              {usesTopicSelection
+                ? "1. Chọn các Unit muốn tổng ôn (Ít nhất 1 Unit):"
+                : isGlobal
+                  ? "1. Chọn các dạng bài muốn luyện tập (Ít nhất 1 dạng):"
+                  : "1. Chọn các dạng thì muốn luyện tập (Ít nhất 2 dạng):"}
             </h3>
             <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
-              {isGlobal ? "Hệ thống sẽ tổng hợp câu hỏi từ các dạng bài đã chọn để tạo đề ôn tập tổng hợp." : "Hệ thống sẽ tổng hợp câu hỏi từ các dạng thì đã chọn để rèn luyện phản xạ hỗn hợp."}
+              {usesTopicSelection
+                ? "Hệ thống sẽ trộn câu hỏi ngữ pháp, từ vựng và phát âm thuộc các Unit đã chọn."
+                : isGlobal
+                  ? "Hệ thống sẽ tổng hợp câu hỏi từ các dạng bài đã chọn để tạo đề ôn tập tổng hợp."
+                  : "Hệ thống sẽ tổng hợp câu hỏi từ các dạng thì đã chọn để rèn luyện phản xạ hỗn hợp."}
             </p>
           </div>
 
@@ -114,7 +127,11 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
 
           {!hasEnoughTenses && (
             <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-semibold">
-              {isGlobal ? "⚠️ Bạn cần chọn ít nhất 1 dạng bài để bắt đầu." : "⚠️ Bạn cần chọn ít nhất 2 thì ngữ pháp để có thể trộn đề luyện tập."}
+              {usesTopicSelection
+                ? "⚠️ Bạn cần chọn ít nhất 1 Unit để bắt đầu."
+                : isGlobal
+                  ? "⚠️ Bạn cần chọn ít nhất 1 dạng bài để bắt đầu."
+                  : "⚠️ Bạn cần chọn ít nhất 2 thì ngữ pháp để có thể trộn đề luyện tập."}
             </div>
           )}
 

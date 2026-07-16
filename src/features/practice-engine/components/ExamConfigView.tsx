@@ -13,6 +13,7 @@ interface ExamConfigViewProps {
   setExamTimeLimit: (val: number) => void;
   setIsConfiguringExam: (val: boolean) => void;
   startExamPractice: () => void;
+  selectionOptions?: Array<{ id: string; name: string; desc: string }>;
 }
 
 export const ExamConfigView: React.FC<ExamConfigViewProps> = ({
@@ -25,9 +26,10 @@ export const ExamConfigView: React.FC<ExamConfigViewProps> = ({
   setExamTimeLimit,
   setIsConfiguringExam,
   startExamPractice,
+  selectionOptions,
 }) => {
   const isGlobal = grammarSection === null;
-  const tensesMeta = isGlobal
+  const tensesMeta = selectionOptions ?? (isGlobal
     ? [
         { id: 'module1', name: '📦 Dạng 1: Thì động từ cơ bản', desc: 'Luyện tập toàn bộ câu hỏi liên quan đến 6 thì tiếng Anh cơ bản.' },
         { id: 'module2', name: '📦 Dạng 2: Cấu trúc động từ (to V, V-ing, V0)', desc: 'Luyện các cấu trúc động từ nguyên mẫu và danh động từ.' },
@@ -42,7 +44,8 @@ export const ExamConfigView: React.FC<ExamConfigViewProps> = ({
         { id: 'past_continuous', name: '⏳ Thì Quá khứ tiếp diễn (Past Continuous)', desc: 'Diễn tả hành động đang xảy ra tại thời điểm quá khứ với liên từ: while...' },
         { id: 'present_perfect', name: '✨ Thì Hiện tại hoàn thành (Present Perfect)', desc: 'Tập trung chia has/have + V3/ed với: since, for, just, already, yet, ever, never...' },
         { id: 'future_simple', name: '🔮 Thì Tương lai đơn & câu điều kiện loại 1 (Future Simple)', desc: 'Tập trung chia will + V nguyên mẫu, won\'t và cấu trúc câu điều kiện loại 1...' },
-      ];
+      ]);
+  const usesTopicSelection = Boolean(selectionOptions);
 
   const toggleTense = (id: string) => {
     setExamTenses(prev => {
@@ -73,7 +76,11 @@ export const ExamConfigView: React.FC<ExamConfigViewProps> = ({
           {/* 1. Chọn các dạng bài */}
           <div className="space-y-2">
             <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
-              {isGlobal ? "1. Chọn các dạng bài ôn thi:" : "1. Chọn các dạng thì thi cử:"}
+              {usesTopicSelection
+                ? "1. Chọn các Unit đưa vào đề:"
+                : isGlobal
+                  ? "1. Chọn các dạng bài ôn thi:"
+                  : "1. Chọn các dạng thì thi cử:"}
             </h3>
             <div className={cn("grid gap-3", isGlobal ? "grid-cols-1" : "grid-cols-2")}>
               {tensesMeta.map((tense) => {
@@ -159,7 +166,7 @@ export const ExamConfigView: React.FC<ExamConfigViewProps> = ({
 
           {examTenses.length === 0 && (
             <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-semibold">
-              ⚠️ Bạn cần chọn ít nhất 1 {isGlobal ? 'dạng bài' : 'dạng thì'} để bắt đầu thi.
+              ⚠️ Bạn cần chọn ít nhất 1 {usesTopicSelection ? 'Unit' : isGlobal ? 'dạng bài' : 'dạng thì'} để bắt đầu thi.
             </div>
           )}
 
