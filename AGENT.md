@@ -235,28 +235,29 @@ Chuyển đổi sang sao (getStarsFromScore):
 
 ## 4. Bộ Nạp Dữ Liệu Trung Tâm (src/data/index.ts)
 
-Đây là **điểm duy nhất** mà tất cả components lấy dữ liệu nội dung. Khi thêm môn/lớp mới, **PHẢI** cập nhật file này.
+Đây là **điểm duy nhất** mà tất cả components lấy dữ liệu nội dung. Để tránh làm phình kích thước bundle khởi động (lên đến 5.3+ MB), dữ liệu môn học được nạp không đồng bộ và được lưu cache.
 
 ```typescript
-// Các hàm chính:
+// 1. Hàm nạp động không đồng bộ (nạp file khi người dùng chọn môn):
+loadSubjectData(grade: 'grade9' | 'grade10', subject: SubjectCode): Promise<SubjectDataCache>
+
+// 2. Các hàm getter đồng bộ (chỉ lấy dữ liệu khi cache đã được nạp sẵn):
 getTopics(grade, subject): Topic[]
 getQuestionTypes(grade, subject): QuestionType[]
 getQuestions(grade, subject): Question[]
 getSolutions(grade, subject): Solution[]
 getMockExams(grade, subject): MockExam[]
-
-// Mảng tổng hợp (dùng cho cross-reference):
-allQuestions: Question[]   // Gộp TẤT CẢ câu hỏi mọi lớp/môn
-allSolutions: Solution[]   // Gộp TẤT CẢ lời giải mọi lớp/môn
+getLearningOutcomes(grade, subject): any[]
+getLearningMisconceptions(grade, subject): any[]
 ```
 
 ### Quy trình thêm môn học mới:
 
 1. Tạo thư mục `src/data/grade{X}/{subject}/` với 4 file: `topics.ts`, `questionTypes.ts`, `questions.ts`, `solutions.ts`
 2. Export named arrays (convention: `g{X}{Subject}Topics`, `g{X}{Subject}QuestionTypes`, ...)
-3. Import và thêm vào `src/data/index.ts` — cập nhật cả 5 hàm getter + 2 mảng tổng hợp
-4. Cập nhật `courseGroups` trong `src/components/layout/AppLayout.tsx` để hiển thị trong dropdown chọn môn
-5. Chạy `npm run type-check` và `npm run lint` để xác minh
+3. Khai báo import động trong `loadSubjectData` tại `src/data/index.ts` và đưa dữ liệu nạp được vào cache.
+4. Cập nhật `courseGroups` trong `src/components/layout/AppLayout.tsx` để hiển thị trong dropdown chọn môn.
+5. Chạy `npm run type-check` và `npm run lint` để xác minh.
 
 ---
 
@@ -361,8 +362,9 @@ Luồng dữ liệu:
 ### 7.1 Firestore Collections
 
 ```
-users/{userId}                    # Hồ sơ: isPremium, role, displayName
+users/{userId}                    # Hồ sơ: isPremium, role, displayName, completedCount (phi chuẩn hóa tiến độ)
 teachers/{teacherUid}             # active: boolean, role: "teacher"
+manual_attempts/{attemptId}       # Hàng đợi bài làm tự luận cần chấm (chứa attempt và userId)
 users/{userId}/progress/{doc}     # UserProgress (cloud copy)
 users/{userId}/attempts/{doc}     # UserAttempt (cloud copy)
 users/{userId}/mistakes/{doc}     # UserMistake (cloud copy)
@@ -379,10 +381,11 @@ users/{userId}/examResults/{doc}  # ExamResult (cloud copy)
 
 ### 7.3 Security Rules (firestore.rules)
 
-- **Owner-based**: User chỉ đọc/ghi dữ liệu của chính mình
-- **Teacher role**: Giáo viên có thể đọc bài làm học sinh và ghi feedback
-- **Bootstrap teacher**: Hardcoded UID cho admin ban đầu
-- **Teacher write**: Chỉ được update các field `isCorrect`, `gradingMode`, `teacherFeedback`, `syncedAt`
+- **Owner-based**: User chỉ đọc/ghi dữ liệu của chính mình.
+- **Teacher role**: Giáo viên được quyền đọc bài làm học sinh, tạo/sửa mistakes, và xóa bài trong hàng đợi `/manual_attempts` sau khi chấm xong.
+- **Teacher Write on User**: Giáo viên chỉ được phép update trường `completedCount` trên tài liệu `/users/{userId}` của học sinh khi chấm điểm bài tập tự luận.
+- **Queue Protection**: Học sinh được phép `create` bài làm tự luận của chính mình lên `/manual_attempts`, cấm cập nhật. Giáo viên được quyền `read` và `delete`.
+- **Bootstrap teacher**: Hardcoded UID cho admin ban đầu.
 
 ---
 
@@ -558,6 +561,23 @@ npm run deploy     # Build + Firebase deploy hosting
     `const modules = import.meta.glob('./modules/module*/index.ts', { eager: true });`
   - **Lợi ích Senior:** Cô lập triệt để rủi ro xung đột git (merge conflict), tối đa hóa tính đóng gói (encapsulation), triệt tiêu hoàn toàn thao tác import thủ công.
   - **Kiểm soát Didactic tự động:** Tệp kiểm tra chất lượng `validateEnglish10.mjs` quét động toàn bộ các thư mục con trong `modules/`, giải mã AST để kiểm tra tính toàn vẹn khóa ngoại và chỉ tiêu phân phối độ khó.
+
+### 12.5 Tối Ưu Hóa Hiệu Năng & Dung Lượng Bundle (Dynamic Import & Code Splitting)
+- **Vị trí áp dụng:** [src/data/index.ts](file:///c:/on-thi-vao-10/src/data/index.ts) và [src/App.tsx](file:///c:/on-thi-vao-10/src/App.tsx).
+- **Mục đích:** Khử tĩnh toàn bộ dữ liệu câu hỏi khổng lồ ra khỏi main bundle, giúp giảm dung lượng tải trang.
+- **Kỹ thuật:**
+  - Thay đổi bộ nạp dữ liệu môn học thành không đồng bộ qua `import(...)` của Vite.
+  - Lưu trữ kết quả tải môn học vào `dataCache` để tối ưu RAM.
+  - Bọc tất cả Page Components qua `React.lazy` và thiết lập `React.Suspense` tại [AppLayout.tsx](file:///c:/on-thi-vao-10/src/components/layout/AppLayout.tsx) để hiển thị Spinner khi chuyển trang bất đồng bộ.
+  - **Hiệu năng thực tế:** Giảm kích thước bundle chính từ **5.31 MB** xuống còn **353.71 KB** minified (giảm **93.3%**).
+
+### 12.6 Khử Lỗi N+1 Reads & Phi Chuẩn Hóa Tiến Độ (Teacher Dashboard Optimization)
+- **Vị trí áp dụng:** [progressService.ts](file:///c:/on-thi-vao-10/src/services/progressService.ts) và [firestore.rules](file:///c:/on-thi-vao-10/firestore.rules).
+- **Mục đích:** Loại bỏ độ trễ và chi phí truy vấn $O(N)$ tăng tuyến tính theo số lượng học sinh trong trang quản lý của giáo viên.
+- **Kỹ thuật:**
+  - **Phi chuẩn hóa tiến độ:** Thêm trường `completedCount` trực tiếp vào tài liệu User tại `/users/{userId}`. Tự động đồng bộ số lượng bài học hoàn thành mỗi khi học sinh nộp bài tập, nộp bài thi thử, merge tiến độ, hoặc giáo viên chấm điểm.
+  - **Hàng đợi bài tự luận:** Sử dụng collection root phẳng `/manual_attempts/{attemptId}` làm hàng đợi trung gian cho các bài làm tự luận cần chấm.
+  - **Kết quả:** Giảm tải kết nối mạng từ **$1 + 2N$ reads** xuống cố định chỉ còn **2 connection reads** ($O(1)$ complexity) giúp trang Dashboard tải tức thì.
 
 ---
 

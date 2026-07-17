@@ -58,19 +58,11 @@ export const PracticeEngine: React.FC = () => {
   const { selectedSubject, selectedGrade, setSubject, user, progressVersion, refreshProgress, isPremium } = useAppStore();
   void progressVersion;
 
-  const mathQuestionTypes = getQuestionTypes(selectedGrade, 'math');
-  const mathQuestions = getQuestions(selectedGrade, 'math');
-  const mathSolutions = getSolutions(selectedGrade, 'math');
-
-  const englishQuestionTypes = getQuestionTypes(selectedGrade, 'english');
-  const englishQuestions = getQuestions(selectedGrade, 'english');
-  const englishSolutions = getSolutions(selectedGrade, 'english');
-
-  const chemistryQuestionTypes = getQuestionTypes(selectedGrade, 'chemistry');
-  const chemistryQuestions = getQuestions(selectedGrade, 'chemistry');
-  const chemistrySolutions = getSolutions(selectedGrade, 'chemistry');
-
   const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as SubjectCode;
+
+  const currentQuestionTypes = useMemo(() => getQuestionTypes(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
+  const currentQuestions = useMemo(() => getQuestions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
+  const currentSolutions = useMemo(() => getSolutions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
   const isGrade10English = routeSubject === 'english' && selectedGrade === 'grade10';
   const grade10EnglishSelectionOptions = isGrade10English
     ? getTopics('grade10', 'english').map(topic => ({
@@ -155,9 +147,9 @@ export const PracticeEngine: React.FC = () => {
     const userId = user?.uid || 'guest';
     const attempts = storageService.getAttempts(userId);
     const correctQIds = new Set<string>();
-    const trackedQuestions = selectedGrade === 'grade10'
-      ? englishQuestions
-      : englishQuestions.filter(q => q.questionTypeId === 'eng-qt6');
+    const trackedQuestions = (routeSubject === 'english' && selectedGrade !== 'grade10')
+      ? currentQuestions.filter(q => q.questionTypeId === 'eng-qt6')
+      : currentQuestions;
     const trackedQuestionIds = new Set(trackedQuestions.map(question => question.id));
     attempts.forEach(a => {
       if (a.isCorrect && trackedQuestionIds.has(a.questionId)) {
@@ -168,7 +160,7 @@ export const PracticeEngine: React.FC = () => {
     if (totalQCount === 0) return 0;
     const percent = Math.round((correctQIds.size / totalQCount) * 100);
     return percent === 0 ? 0 : Math.max(1, percent);
-  }, [user, progressVersion, englishQuestions, selectedGrade]);
+  }, [user, progressVersion, currentQuestions, selectedGrade, routeSubject]);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [structuredAnswer, setStructuredAnswer] = useState<StructuredAnswer>({});
@@ -235,7 +227,7 @@ export const PracticeEngine: React.FC = () => {
   // Derived States - Tính toán trực tiếp trong lúc render
   const isMath = routeSubject === 'math';
   const isChemistry = routeSubject === 'chemistry';
-  const qList = isMath ? mathQuestions : isChemistry ? chemistryQuestions : englishQuestions;
+  const qList = currentQuestions;
 
   const filteredQuestions = useEnglishQuestionFilter(
     questionTypeId,
@@ -269,20 +261,12 @@ export const PracticeEngine: React.FC = () => {
 
   const currentQuestionType = useMemo(() => {
     if (!questionAtIdx) return null;
-    const availableTypes = isMath
-      ? mathQuestionTypes
-      : isChemistry
-        ? chemistryQuestionTypes
-        : englishQuestionTypes;
+    const availableTypes = currentQuestionTypes;
     return availableTypes.find(type => type.id === questionAtIdx.questionTypeId) || null;
-  }, [questionAtIdx, isMath, isChemistry, mathQuestionTypes, chemistryQuestionTypes, englishQuestionTypes]);
+  }, [questionAtIdx, currentQuestionTypes]);
 
   const solutionDetail: Solution | null = questionAtIdx
-    ? (isMath
-      ? mathSolutions.find(s => s.questionId === questionAtIdx.id)
-      : isChemistry
-        ? chemistrySolutions.find(s => s.questionId === questionAtIdx.id)
-        : englishSolutions.find(s => s.questionId === questionAtIdx.id)) || null
+    ? currentSolutions.find(s => s.questionId === questionAtIdx.id) || null
     : null;
 
   const completedQuestionIds = useMemo(() => {
@@ -500,7 +484,7 @@ export const PracticeEngine: React.FC = () => {
       storageService.saveAttempt(user?.uid || 'guest', attemptData);
 
       logCustomEvent('request_teacher_grading', {
-        subjectId: selectedSubject,
+        subjectId: routeSubject,
         examId: sessionId.toString(),
         questionTypeId: q.questionTypeId,
         questionId: q.id,
@@ -545,7 +529,7 @@ export const PracticeEngine: React.FC = () => {
     examAnswers,
     selectedSubTense,
     user,
-    selectedSubject,
+    routeSubject,
     refreshProgress,
     setIsExamSubmitted
   ]);
@@ -1045,9 +1029,7 @@ export const PracticeEngine: React.FC = () => {
     return (
       <TopicSelectionView
         routeSubject={routeSubject}
-        mathQuestionTypes={mathQuestionTypes}
-        englishQuestionTypes={englishQuestionTypes}
-        chemistryQuestionTypes={chemistryQuestionTypes}
+        questionTypes={currentQuestionTypes}
         grammarSection={grammarSection}
         setGrammarSection={setGrammarSection}
         setSelectedSubTense={setSelectedSubTense}

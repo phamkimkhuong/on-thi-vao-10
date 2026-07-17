@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { functions } from '../../services/firebase';
 import { httpsCallable } from 'firebase/functions';
+import { authService } from '../../services/authService';
 import { 
   Check, 
   Sparkles, 
@@ -20,7 +21,11 @@ export const PremiumPricing: React.FC = () => {
 
   const handleUpgrade = async () => {
     if (!user) {
-      navigate('/auth');
+      try {
+        await authService.signInWithGoogle();
+      } catch (err: any) {
+        alert(err.message || 'Lỗi đăng nhập bằng Google.');
+      }
       return;
     }
     setLoading(true);

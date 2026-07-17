@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc, orderBy, limit } from 'firebase/firestore';
+import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc, orderBy, limit, deleteDoc } from 'firebase/firestore';
 import { UserAttempt, UserMistake, UserProgress, ExamResult, SimulatedStudent } from '../types';
 import { User } from 'firebase/auth';
 import { storageService } from './storage';
@@ -299,6 +299,15 @@ export const progressService = {
           userId,
           syncedAt
         });
+
+        if (attempt.gradingMode === 'manual') {
+          const manualRef = doc(db, 'manual_attempts', attempt.id);
+          batch.set(manualRef, {
+            ...attempt,
+            userId,
+            syncedAt
+          });
+        }
       });
 
       mergedMistakes.forEach(mistake => {
@@ -329,6 +338,9 @@ export const progressService = {
             syncedAt
           }, { merge: true });
         });
+
+      const userRef = doc(db, 'users', userId);
+      batch.set(userRef, { completedCount: mergedProgress.completedLessons.length }, { merge: true });
 
       await batch.commit();
 
@@ -382,6 +394,15 @@ export const progressService = {
         syncedAt: new Date().toISOString()
       });
 
+      if (attempt.gradingMode === 'manual') {
+        const manualRef = doc(db, 'manual_attempts', attempt.id);
+        await setDoc(manualRef, {
+          ...attempt,
+          userId,
+          syncedAt: new Date().toISOString()
+        });
+      }
+
       // Đồng thời cập nhật progress tương ứng
       const progressRef = doc(db, `users/${userId}/progress`, attempt.questionTypeId);
       // Đọc progress cục bộ để biết level hiện tại (sử dụng storageService thay vì parse localStorage thô)
@@ -394,6 +415,10 @@ export const progressService = {
         isCompleted: completedLessons.includes(attempt.questionTypeId),
         updatedAt: new Date().toISOString()
       }, { merge: true });
+
+      // Phi chuẩn hóa completedCount vào user doc
+      const userRef = doc(db, 'users', userId);
+      await setDoc(userRef, { completedCount: completedLessons.length }, { merge: true });
 
     } catch (e) {
       console.error('Lỗi khi lưu Attempt lên Firestore:', e);
@@ -417,6 +442,15 @@ export const progressService = {
           userId,
           syncedAt
         }, { merge: true });
+
+        if (attempt.gradingMode === 'manual') {
+          const manualRef = doc(db, 'manual_attempts', attempt.id);
+          batch.set(manualRef, {
+            ...attempt,
+            userId,
+            syncedAt
+          }, { merge: true });
+        }
       });
 
       const progress = storageService.getProgress(userId);
@@ -444,6 +478,10 @@ export const progressService = {
         ...result,
         syncedAt
       }, { merge: true });
+
+      // Phi chuẩn hóa completedCount vào user doc
+      const userRef = doc(db, 'users', userId);
+      batch.set(userRef, { completedCount: progress.completedLessons.length }, { merge: true });
 
       await batch.commit();
     } catch (e) {
@@ -529,11 +567,15 @@ export const progressService = {
   // TEACHER REAL DATA INTEGRATION
   async saveUserProfile(user: User, name?: string): Promise<void> {
     try {
+      const progress = storageService.getProgress(user.uid);
+      const completedCount = progress ? (progress.completedLessons || []).length : 0;
+
       await setDoc(doc(db, 'users', user.uid), {
         id: user.uid,
         name: user.displayName || name || 'Học sinh mới',
         avatar: user.photoURL || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.uid}`,
         email: user.email,
+        completedCount,
         lastActiveAt: new Date().toISOString()
       }, { merge: true });
     } catch (e) {
@@ -547,31 +589,19 @@ export const progressService = {
       const students: SimulatedStudent[] = [];
       const excludedIds = new Set(excludedUserIds);
       
-      await Promise.all(querySnapshot.docs.map(async (docRef) => {
+      querySnapshot.forEach(docRef => {
         const data = docRef.data();
         if (!excludedIds.has(docRef.id)) {
-          let completedCount = 0;
-          try {
-            const progSnapshot = await getDocs(collection(db, `users/${docRef.id}/progress`));
-            progSnapshot.forEach(pDoc => {
-              if (pDoc.data().isCompleted) {
-                completedCount++;
-              }
-            });
-          } catch (pe) {
-            console.error("Lỗi khi load completed progress count cho học sinh:", docRef.id, pe);
-          }
-
           students.push({
             id: docRef.id,
             name: data.name || 'Học sinh mới',
             avatar: data.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${docRef.id}`,
             email: data.email || '',
             isPremium: data.isPremium === true || data.role === 'premium',
-            completedCount
+            completedCount: data.completedCount ?? 0
           } as any);
         }
-      }));
+      });
       
       return students;
     } catch (e) {
@@ -582,15 +612,17 @@ export const progressService = {
 
   async getRealPendingManualAttempts(students: SimulatedStudent[]): Promise<Array<{ student: SimulatedStudent; attempt: UserAttempt }>> {
     try {
+      const pendingSnapshot = await getDocs(collection(db, 'manual_attempts'));
       const pending: Array<{ student: SimulatedStudent; attempt: UserAttempt }> = [];
-      await Promise.all(students.map(async (student) => {
-        const attempts = await this.getAttempts(student.id);
-        attempts.forEach(attempt => {
-          if (attempt.gradingMode === 'manual') {
-            pending.push({ student, attempt });
-          }
-        });
-      }));
+      
+      pendingSnapshot.forEach(docRef => {
+        const attempt = docRef.data() as UserAttempt;
+        const student = students.find(s => s.id === attempt.userId);
+        if (student) {
+          pending.push({ student, attempt });
+        }
+      });
+      
       return pending.sort((a, b) => new Date(b.attempt.createdAt).getTime() - new Date(a.attempt.createdAt).getTime());
     } catch (e) {
       console.error('Lỗi khi lấy danh sách bài chờ chấm từ Firestore:', e);
@@ -618,6 +650,13 @@ export const progressService = {
       
       await setDoc(attemptRef, reviewPatch, { merge: true });
 
+      // Xóa khỏi hàng đợi chấm bài thủ công
+      try {
+        await deleteDoc(doc(db, 'manual_attempts', attemptId));
+      } catch (err) {
+        console.error("Lỗi khi xóa bài làm khỏi hàng đợi manual_attempts:", err);
+      }
+
       // Lấy toàn bộ attempts của học sinh này để recalculate progress
       const allAttempts = await this.getAttempts(studentId);
       const index = allAttempts.findIndex(a => a.id === attemptId);
@@ -636,8 +675,22 @@ export const progressService = {
       await setDoc(progressRef, {
         masteryLevel: newScore,
         isCompleted,
-        updatedAt: new Date().toISOString()
+        updatedAt: syncedAt
       }, { merge: true });
+
+      // Tính toán lại completedCount và cập nhật user doc
+      let completedCount = 0;
+      try {
+        const progSnapshot = await getDocs(collection(db, `users/${studentId}/progress`));
+        progSnapshot.forEach(pDoc => {
+          if (pDoc.data().isCompleted) {
+            completedCount++;
+          }
+        });
+        await setDoc(doc(db, 'users', studentId), { completedCount }, { merge: true });
+      } catch (pe) {
+        console.error("Lỗi khi cập nhật completedCount của học sinh sau khi chấm:", pe);
+      }
 
       // Cập nhật Sổ lỗi sai trên Firestore
       const mistakeId = `mistake-${attempt.questionId}`;
@@ -655,7 +708,7 @@ export const progressService = {
           lastAttemptedAt: attempt.createdAt,
           nextReviewAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
           teacherFeedback: feedback,
-          syncedAt: new Date().toISOString()
+          syncedAt
         }, { merge: true });
       } else {
         const existingMistake = await getDoc(mistakeRef);
@@ -663,7 +716,7 @@ export const progressService = {
           await setDoc(mistakeRef, {
             reviewStatus: 'fixed',
             nextReviewAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            syncedAt: new Date().toISOString()
+            syncedAt
           }, { merge: true });
         }
       }

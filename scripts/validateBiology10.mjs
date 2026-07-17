@@ -129,6 +129,27 @@ for (const type of questionTypes) {
   if (typeQuestions.length >= 12 && (difficultyCounts.easy < 3 || difficultyCounts.medium < 5 || difficultyCounts.hard < 3)) {
     warnings.push(`${type.id}: phân tầng chưa đạt gợi ý 3 dễ – 5 trung bình – 3 khó.`);
   }
+
+  if (typeQuestions.length >= 12) {
+    const answerCounts = Object.fromEntries(
+      ['A', 'B', 'C', 'D'].map(label => [
+        label,
+        typeQuestions.filter(question => question.correctAnswer === label).length
+      ])
+    );
+    const [dominantAnswer, dominantCount] = Object.entries(answerCounts)
+      .sort(([, firstCount], [, secondCount]) => secondCount - firstCount)[0];
+    const missingAnswers = Object.entries(answerCounts)
+      .filter(([, count]) => count === 0)
+      .map(([label]) => label);
+
+    if (dominantCount / typeQuestions.length > 0.5) {
+      warnings.push(`${type.id}: đáp án ${dominantAnswer} chiếm ${dominantCount}/${typeQuestions.length} câu; cần đảo vị trí phương án để tránh học sinh đoán mẫu.`);
+    }
+    if (missingAnswers.length > 0) {
+      warnings.push(`${type.id}: chưa có đáp án đúng ở vị trí ${missingAnswers.join(', ')}.`);
+    }
+  }
 }
 
 const validateMedia = (media, ownerId) => {
@@ -157,6 +178,14 @@ for (const question of questions) {
       const optionLabels = question.options.map(option => String(option).match(/^([A-D])\./)?.[1]);
       if (optionLabels.some(label => !label) || new Set(optionLabels).size !== 4) {
         errors.push(`${question.id}: nhãn phương án phải là A, B, C, D và không trùng.`);
+      }
+      const normalizedOptionContents = question.options.map(option => String(option)
+        .replace(/^[A-D]\.\s*/, '')
+        .toLocaleLowerCase('vi')
+        .replace(/\s+/g, ' ')
+        .trim());
+      if (new Set(normalizedOptionContents).size !== normalizedOptionContents.length) {
+        errors.push(`${question.id}: có phương án trùng nội dung.`);
       }
       if (!optionLabels.includes(question.correctAnswer)) {
         errors.push(`${question.id}: correctAnswer không tồn tại trong options.`);

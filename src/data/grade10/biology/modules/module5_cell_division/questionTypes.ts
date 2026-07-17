@@ -1,26 +1,8 @@
 import { QuestionType } from '@/types';
 
 export const g10BiologyModule5QuestionTypes: QuestionType[] = [
-  {
-    id: "bio10-qt6",
-    topicId: "bio10-t5",
-    name: "Quá trình Nguyên phân",
-    slug: "qua-trinh-nguyen-phan",
-    description: "Các kì nguyên phân và ý nghĩa của nguyên phân.",
-    exampleQuestionId: "bio10-q6",
-    recognitionSigns: [
-      "Đề mô tả trạng thái nhiễm sắc thể, vị trí trên thoi phân bào hoặc sự phân li chromatid.",
-      "Đề hỏi số tế bào, số nhiễm sắc thể hoặc ý nghĩa sau một số lần nguyên phân."
-    ],
-    solvingSteps: [
-      "Xác định tế bào đang ở kì nào dựa trên trạng thái và vị trí nhiễm sắc thể.",
-      "Tách rõ số nhiễm sắc thể, số chromatid và lượng DNA; không dùng chúng thay thế lẫn nhau.",
-      "Kiểm tra kết quả cuối: một tế bào mẹ tạo hai tế bào con có bộ nhiễm sắc thể cơ bản giống nhau."
-    ],
-    commonMistakes: [
-      "Cho rằng DNA nhân đôi làm số nhiễm sắc thể tăng gấp đôi hoặc nhầm kì sau với kì giữa."
-    ],
-    difficulty: "easy",
-    examFrequency: "high"
-  }
+  { id: 'bio10-qt6', topicId: 'bio10-t5', name: 'Chu kì tế bào và nguyên phân', slug: 'chu-ki-nguyen-phan', description: 'Luyện chu kì tế bào và nguyên phân.', exampleQuestionId: 'bio10-q6', recognitionSigns: ['Nhận diện pha chu kì hoặc kì nguyên phân từ trạng thái DNA, nhiễm sắc thể và thoi phân bào.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M5-O01, BIO10-M5-O02.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Không đồng nhất lượng DNA, số chromatid và số nhiễm sắc thể tính theo tâm động.'], difficulty: 'easy', examFrequency: 'high' },
+  { id: 'bio10-qt36', topicId: 'bio10-t5', name: 'Mất kiểm soát chu kì và ung thư', slug: 'chu-ki-ung-thu', description: 'Luyện mất kiểm soát chu kì và ung thư.', exampleQuestionId: 'bio10-m5-q012', recognitionSigns: ['Dạng bệnh học chu kì: xác định điểm kiểm soát, gene điều hòa, tăng sinh và bằng chứng nguy cơ.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M5-O03.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Không kết luận một yếu tố đơn lẻ chắc chắn gây ung thư; phân biệt tương quan, nguy cơ và cơ chế.'], difficulty: 'medium', examFrequency: 'high' },
+  { id: 'bio10-qt37', topicId: 'bio10-t5', name: 'Giảm phân và sinh sản hữu tính', slug: 'giam-phan-sinh-san', description: 'Luyện giảm phân và sinh sản hữu tính.', exampleQuestionId: 'bio10-m5-q024', recognitionSigns: ['Theo dõi cặp tương đồng, chromatid, hai lần phân bào và nguồn biến dị tổ hợp.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M5-O04, BIO10-M5-O05, BIO10-M5-O06.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Giảm phân không phải hai nguyên phân: DNA chỉ nhân đôi một lần và cặp tương đồng phân li ở lần I.'], difficulty: 'medium', examFrequency: 'high' },
+  { id: 'bio10-qt38', topicId: 'bio10-t5', name: 'Quan sát phân bào và công nghệ tế bào', slug: 'thuc-hanh-cong-nghe-te-bao', description: 'Luyện quan sát phân bào và công nghệ tế bào.', exampleQuestionId: 'bio10-m5-q036', recognitionSigns: ['Nhận diện kì phân bào từ ảnh hoặc nối tính toàn năng, nuôi cấy mô và chuyển nhân với ứng dụng.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M5-O07, BIO10-M5-O08.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Không gọi mọi tế bào nuôi cấy là bản sao hoàn chỉnh; phải xét nguồn tế bào, môi trường và mục tiêu.'], difficulty: 'medium', examFrequency: 'high' }
 ];

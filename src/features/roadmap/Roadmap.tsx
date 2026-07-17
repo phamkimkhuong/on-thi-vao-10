@@ -228,7 +228,13 @@ export const Roadmap: React.FC = () => {
                 <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để lưu tiến trình học tập, mở khóa toàn bộ lộ trình và bắt đầu thực hành luyện tập.</p>
               </div>
               <button
-                onClick={() => navigate('/auth')}
+                onClick={async () => {
+                  try {
+                    await authService.signInWithGoogle();
+                  } catch (err: any) {
+                    alert(err.message || 'Lỗi đăng nhập bằng Google.');
+                  }
+                }}
                 className="px-6 py-2.5 font-bold text-xs bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0"
               >
                 Đăng nhập ngay

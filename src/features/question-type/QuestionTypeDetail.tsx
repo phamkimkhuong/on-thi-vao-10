@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionTypes, getQuestions, getSolutions, getLearningOutcomes } from '../../data';
 import { useAppStore } from '../../services/store';
 import { Tabs, TabItem } from '../../components/ui/tabs';
+import { authService } from '../../services/authService';
 import { TextbookDrawer } from '../../components/common/TextbookDrawer';
 import { QuestionType, Question, Solution } from '../../types';
 import { Card, CardHeader, CardContent } from '../../components/ui/card';
@@ -657,7 +658,13 @@ export const QuestionTypeDetail: React.FC = () => {
               {/* Nút Bắt đầu Luyện tập chính */}
               {requiresLoginForPractice ? (
                 <Button
-                  onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
+                  onClick={async () => {
+                    try {
+                      await authService.signInWithGoogle();
+                    } catch (err: any) {
+                      alert(err.message || 'Lỗi đăng nhập bằng Google.');
+                    }
+                  }}
                   className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white"
                 >
                   <LockKeyhole size={16} /> Đăng nhập để luyện tập
@@ -713,7 +720,13 @@ export const QuestionTypeDetail: React.FC = () => {
 
         {requiresLoginForPractice ? (
           <Button
-            onClick={() => navigate('/auth', { state: { returnTo: `/practice/${detail.id}` } })}
+            onClick={async () => {
+              try {
+                await authService.signInWithGoogle();
+              } catch (err: any) {
+                alert(err.message || 'Lỗi đăng nhập bằng Google.');
+              }
+            }}
             className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-amber-500 hover:bg-amber-600 text-white"
           >
             Đăng nhập

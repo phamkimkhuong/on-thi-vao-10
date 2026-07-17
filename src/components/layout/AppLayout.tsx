@@ -24,8 +24,9 @@ import { authService } from '../../services/authService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { PolicyModal } from '../common/PolicyModal';
 import { cn } from '../../utils/cn';
-import { getQuestionTypes } from '../../data';
+import { getQuestionTypes, loadSubjectData } from '../../data';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
+import { ROUTES } from '../../constants/routes';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -38,7 +39,9 @@ export const AppLayout: React.FC = () => {
     user,
     logout,
     progressVersion,
-    isPremium
+    isPremium,
+    isLoadingData,
+    setIsLoadingData
   } = useAppStore();
   void progressVersion;
 
@@ -77,10 +80,10 @@ export const AppLayout: React.FC = () => {
     setIsContextDropdownOpen(false);
 
     const path = location.pathname;
-    const stayPaths = ['/dashboard', '/roadmap', '/practice', '/ai-tutor', '/mistakes', '/exam'];
+    const stayPaths: string[] = [ROUTES.DASHBOARD, ROUTES.ROADMAP, ROUTES.PRACTICE, ROUTES.AI_TUTOR, ROUTES.MISTAKES, ROUTES.EXAM];
 
     if (!stayPaths.includes(path)) {
-      navigate('/roadmap');
+      navigate(ROUTES.ROADMAP);
     }
   };
 
@@ -121,6 +124,27 @@ export const AppLayout: React.FC = () => {
     });
   };
 
+  // Tự động nạp động dữ liệu môn học khi người dùng đổi Khối lớp hoặc Môn học
+  useEffect(() => {
+    let active = true;
+    const load = async () => {
+      setIsLoadingData(true);
+      try {
+        await loadSubjectData(selectedGrade, selectedSubject);
+      } catch (err) {
+        console.error("Lỗi khi nạp dữ liệu môn học:", err);
+      } finally {
+        if (active) {
+          setIsLoadingData(false);
+        }
+      }
+    };
+    load();
+    return () => {
+      active = false;
+    };
+  }, [selectedGrade, selectedSubject, setIsLoadingData]);
+
   // Tự động đảm bảo thông tin hồ sơ của học sinh tồn tại trong Firestore collection 'users'
   useEffect(() => {
     if (user) {
@@ -133,28 +157,28 @@ export const AppLayout: React.FC = () => {
     const path = location.pathname;
     const brandName = 'Dạng Bài Thực Chiến';
 
-    if (path.startsWith('/teacher')) {
+    if (path.startsWith(ROUTES.TEACHER)) {
       document.title = `Góc Giáo Viên | ${brandName}`;
       return;
     }
-    if (path.startsWith('/premium')) {
+    if (path.startsWith(ROUTES.PREMIUM)) {
       document.title = `Nâng cấp Premium | ${brandName}`;
       return;
     }
-    if (path.startsWith('/support')) {
+    if (path.startsWith(ROUTES.SUPPORT)) {
       document.title = `Hỗ Trợ & Góp Ý | ${brandName}`;
       return;
     }
-    if (path.startsWith('/mistakes')) {
+    if (path.startsWith(ROUTES.MISTAKES)) {
       document.title = `Sổ Tay Sửa Lỗi Sai | ${brandName}`;
       return;
     }
-    if (path.startsWith('/exam')) {
+    if (path.startsWith(ROUTES.EXAM)) {
       const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : '9 - 12';
       document.title = `Thi Thử & Kiểm Tra ${gradeLabel} | ${brandName}`;
       return;
     }
-    if (path.startsWith('/ai-tutor')) {
+    if (path.startsWith(ROUTES.AI_TUTOR)) {
       document.title = `Gia Sư Socratic | ${brandName}`;
       return;
     }
@@ -223,18 +247,18 @@ export const AppLayout: React.FC = () => {
 
 
   const menuItems = [
-    { path: '/dashboard', label: 'Bảng điều khiển', icon: GraduationCap },
-    { path: '/roadmap', label: 'Lộ trình học', icon: Map },
-    { path: '/practice', label: 'Luyện tập', icon: BookOpen },
-    { path: '/ai-tutor', label: 'Gia sư', icon: Sparkles },
-    { path: '/mistakes', label: 'Sổ lỗi sai', icon: Bookmark },
+    { path: ROUTES.DASHBOARD, label: 'Bảng điều khiển', icon: GraduationCap },
+    { path: ROUTES.ROADMAP, label: 'Lộ trình học', icon: Map },
+    { path: ROUTES.PRACTICE, label: 'Luyện tập', icon: BookOpen },
+    { path: ROUTES.AI_TUTOR, label: 'Gia sư', icon: Sparkles },
+    { path: ROUTES.MISTAKES, label: 'Sổ lỗi sai', icon: Bookmark },
     {
-      path: '/exam',
+      path: ROUTES.EXAM,
       label: selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra',
       icon: Award
     },
     {
-      path: '/support',
+      path: ROUTES.SUPPORT,
       label: 'Hỗ trợ & Góp ý',
       icon: LifeBuoy
     }
@@ -469,7 +493,7 @@ export const AppLayout: React.FC = () => {
                   onClick={() => {
                     if (isSidebarCollapsed && window.confirm("Đăng xuất tài khoản?")) {
                       logout();
-                      navigate('/auth');
+                      navigate('/dashboard');
                     }
                   }}
                 >
@@ -614,7 +638,7 @@ export const AppLayout: React.FC = () => {
             <div className="flex items-center gap-1.5 bg-secondary/40 backdrop-blur-sm px-3.5 py-2 rounded-2xl border border-border/20 shadow-sm">
               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Mastery:</span>
               <span className="text-xs font-black text-primary bg-primary/8 px-2 py-0.5 rounded-lg border border-primary/10">
-                {`${currentCompletedCount}/${currentQuestionTypes.length} dạng`}
+                {isLoadingData ? '... dạng' : `${currentCompletedCount}/${currentQuestionTypes.length} dạng`}
               </span>
             </div>
 
@@ -640,7 +664,7 @@ export const AppLayout: React.FC = () => {
               </button>
             ) : !isPremium ? (
               <button
-                onClick={() => navigate('/premium')}
+                onClick={() => navigate(ROUTES.PREMIUM)}
                 className="px-3.5 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-xs rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer flex items-center gap-1 shrink-0 animate-pulse-glow animate-pulse"
               >
                 👑 Lên Premium
@@ -652,9 +676,28 @@ export const AppLayout: React.FC = () => {
         {/* ⚡ Content Wrapper */}
         <div className={cn(
           "flex-1 animate-fade-in",
-          location.pathname.startsWith('/ai-tutor') ? "p-2 md:p-3" : "p-4 md:p-8"
+          location.pathname.startsWith(ROUTES.AI_TUTOR) ? "p-2 md:p-3" : "p-4 md:p-8"
         )}>
-          <Outlet />
+          {isLoadingData ? (
+            <div className="flex h-[60vh] w-full items-center justify-center">
+              <div className="flex flex-col items-center gap-3 text-center">
+                <Loader size={36} className="animate-spin text-primary" />
+                <h3 className="text-sm font-black text-foreground">Đang tải dữ liệu học tập...</h3>
+                <p className="text-xs font-semibold text-muted-foreground">Vui lòng chờ trong giây lát.</p>
+              </div>
+            </div>
+          ) : (
+            <React.Suspense fallback={
+              <div className="flex h-[60vh] w-full items-center justify-center">
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <Loader size={36} className="animate-spin text-primary" />
+                  <h3 className="text-sm font-black text-foreground">Đang tải trang...</h3>
+                </div>
+              </div>
+            }>
+              <Outlet />
+            </React.Suspense>
+          )}
         </div>
       </main>
 

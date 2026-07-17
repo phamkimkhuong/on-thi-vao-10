@@ -1,26 +1,8 @@
 import { QuestionType } from '@/types';
 
 export const g10BiologyModule7QuestionTypes: QuestionType[] = [
-  {
-    id: "bio10-qt8",
-    topicId: "bio10-t7",
-    name: "Cấu tạo chung của Virus",
-    slug: "cau-tao-chung-virus",
-    description: "Đặc điểm hạt virus (virion) gồm lõi nucleic acid và vỏ capsid.",
-    exampleQuestionId: "bio10-q8",
-    recognitionSigns: [
-      "Đề cho sơ đồ virion hoặc mô tả lõi nucleic acid, capsid, vỏ ngoài và gai glycoprotein.",
-      "Đề yêu cầu phân biệt virus với tế bào nhân sơ hoặc nhận diện thành phần không có ở virus."
-    ],
-    solvingSteps: [
-      "Xác định cấu trúc bắt buộc của virion: vật chất di truyền và capsid.",
-      "Kiểm tra các cấu trúc bổ sung như vỏ ngoài, gai bề mặt theo loại virus được mô tả.",
-      "Loại phương án gán cho virus cấu trúc tế bào hoặc hệ chuyển hóa độc lập."
-    ],
-    commonMistakes: [
-      "Coi virus là một tế bào rất nhỏ hoặc cho rằng mọi virus đều đồng thời chứa cả DNA và RNA."
-    ],
-    difficulty: "easy",
-    examFrequency: "high"
-  }
+  { id: 'bio10-qt8', topicId: 'bio10-t7', name: 'Cấu tạo và đặc điểm virus', slug: 'cau-tao-dac-diem-virus', description: 'Luyện cấu tạo và đặc điểm virus.', exampleQuestionId: 'bio10-q8', recognitionSigns: ['Tìm lõi nucleic acid, capsid, vỏ ngoài/gai và loại các cấu trúc chỉ có ở tế bào.', 'Đề yêu cầu giải thích hoặc vận dụng BIO10-M7-O01.'], solvingSteps: ['Xác định cấu trúc, giai đoạn hoặc mắt xích đang được hỏi.', 'Lần theo quan hệ nhân–quả và giới hạn dữ liệu.', 'Loại phương án tuyệt đối hóa hoặc gán cho virus cấu trúc tế bào.'], commonMistakes: ['Không coi virus là tế bào nhỏ; không khẳng định mọi virus có vỏ lipid hoặc chứa đồng thời DNA và RNA.'], difficulty: 'easy', examFrequency: 'high' },
+  { id: 'bio10-qt42', topicId: 'bio10-t7', name: 'Chu trình nhân lên và cơ chế gây bệnh', slug: 'nhan-len-gay-benh', description: 'Luyện chu trình nhân lên và cơ chế gây bệnh.', exampleQuestionId: 'bio10-m7-q012', recognitionSigns: ['Sắp xếp bám–xâm nhập–tổng hợp–lắp ráp–giải phóng và lần theo chặng gây tổn thương tế bào.', 'Đề yêu cầu giải thích hoặc vận dụng BIO10-M7-O02, BIO10-M7-O03.'], solvingSteps: ['Xác định cấu trúc, giai đoạn hoặc mắt xích đang được hỏi.', 'Lần theo quan hệ nhân–quả và giới hạn dữ liệu.', 'Loại phương án tuyệt đối hóa hoặc gán cho virus cấu trúc tế bào.'], commonMistakes: ['Virus không lớn lên rồi phân đôi; các thành phần được tổng hợp riêng và lắp ráp nhờ tế bào chủ.'], difficulty: 'medium', examFrequency: 'high' },
+  { id: 'bio10-qt43', topicId: 'bio10-t7', name: 'Lây truyền, phòng chống và biến thể', slug: 'lay-truyen-phong-chong', description: 'Luyện lây truyền, phòng chống và biến thể.', exampleQuestionId: 'bio10-m7-q024', recognitionSigns: ['Xác định nguồn–đường truyền–đối tượng cảm nhiễm, rồi chọn biện pháp cắt đúng mắt xích và đọc dữ liệu dịch tễ.', 'Đề yêu cầu giải thích hoặc vận dụng BIO10-M7-O04, BIO10-M7-O05.'], solvingSteps: ['Xác định cấu trúc, giai đoạn hoặc mắt xích đang được hỏi.', 'Lần theo quan hệ nhân–quả và giới hạn dữ liệu.', 'Loại phương án tuyệt đối hóa hoặc gán cho virus cấu trúc tế bào.'], commonMistakes: ['Vaccine giảm nguy cơ hoặc mức độ nặng chứ không bảo đảm tuyệt đối; kháng sinh không điều trị virus.'], difficulty: 'medium', examFrequency: 'high' },
+  { id: 'bio10-qt44', topicId: 'bio10-t7', name: 'Ứng dụng virus và truyền thông khoa học', slug: 'ung-dung-truyen-thong-virus', description: 'Luyện ứng dụng virus và truyền thông khoa học.', exampleQuestionId: 'bio10-m7-q036', recognitionSigns: ['Nối đặc tính đưa gene/đặc hiệu vật chủ với ứng dụng, đồng thời đánh giá nguồn, dữ liệu và thông điệp phòng bệnh.', 'Đề yêu cầu giải thích hoặc vận dụng BIO10-M7-O06, BIO10-M7-O07.'], solvingSteps: ['Xác định cấu trúc, giai đoạn hoặc mắt xích đang được hỏi.', 'Lần theo quan hệ nhân–quả và giới hạn dữ liệu.', 'Loại phương án tuyệt đối hóa hoặc gán cho virus cấu trúc tế bào.'], commonMistakes: ['Không chia sẻ thông tin chỉ vì giật gân; ứng dụng virus cần đánh giá an toàn, đặc hiệu, hiệu quả và đạo đức.'], difficulty: 'medium', examFrequency: 'high' }
 ];

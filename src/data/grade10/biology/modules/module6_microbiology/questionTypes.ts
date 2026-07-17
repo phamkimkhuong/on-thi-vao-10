@@ -1,26 +1,8 @@
 import { QuestionType } from '@/types';
 
 export const g10BiologyModule6QuestionTypes: QuestionType[] = [
-  {
-    id: "bio10-qt7",
-    topicId: "bio10-t6",
-    name: "Các hình thức dinh dưỡng ở vi sinh vật",
-    slug: "cac-hinh-thuc-dinh-duong-vi-sinh-vat",
-    description: "Phân loại vi sinh vật dựa trên nguồn carbon và nguồn năng lượng.",
-    exampleQuestionId: "bio10-q7",
-    recognitionSigns: [
-      "Đề cho nguồn năng lượng là ánh sáng/hóa học và nguồn carbon là CO₂/chất hữu cơ.",
-      "Đề mô tả môi trường sống hoặc quá trình chuyển hóa để yêu cầu suy ra kiểu dinh dưỡng."
-    ],
-    solvingSteps: [
-      "Lập hai trục độc lập: nguồn năng lượng và nguồn carbon.",
-      "Ánh sáng → quang; phản ứng hóa học → hóa; CO₂ → tự dưỡng; chất hữu cơ → dị dưỡng.",
-      "Ghép hai kết quả để gọi đúng kiểu dinh dưỡng và kiểm tra với ví dụ trong đề."
-    ],
-    commonMistakes: [
-      "Cho rằng tự dưỡng nghĩa là tự tạo ra năng lượng hoặc chỉ nhìn nguồn năng lượng mà bỏ qua nguồn carbon."
-    ],
-    difficulty: "easy",
-    examFrequency: "high"
-  }
+  { id: 'bio10-qt7', topicId: 'bio10-t6', name: 'Vi sinh vật và kiểu dinh dưỡng', slug: 'vi-sinh-vat-dinh-duong', description: 'Luyện vi sinh vật và kiểu dinh dưỡng.', exampleQuestionId: 'bio10-q7', recognitionSigns: ['Xác định nhóm vi sinh vật, rồi tách hai trục nguồn năng lượng và nguồn carbon.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M6-O01, BIO10-M6-O02.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Tự dưỡng nói về nguồn carbon CO2, không có nghĩa tự tạo năng lượng.'], difficulty: 'easy', examFrequency: 'high' },
+  { id: 'bio10-qt39', topicId: 'bio10-t6', name: 'Nuôi cấy, phân lập và định lượng', slug: 'nghien-cuu-vi-sinh', description: 'Luyện nuôi cấy, phân lập và định lượng.', exampleQuestionId: 'bio10-m6-q012', recognitionSigns: ['Nhận diện mục tiêu vô trùng, phân lập dòng thuần, đếm khuẩn lạc và thiết kế đối chứng.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M6-O03.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Một khuẩn lạc không luôn bằng đúng một tế bào ban đầu; CFU phụ thuộc cụm và điều kiện nuôi.'], difficulty: 'medium', examFrequency: 'high' },
+  { id: 'bio10-qt40', topicId: 'bio10-t6', name: 'Chuyển hóa, sinh trưởng và kiểm soát', slug: 'sinh-truong-kiem-soat', description: 'Luyện chuyển hóa, sinh trưởng và kiểm soát.', exampleQuestionId: 'bio10-m6-q024', recognitionSigns: ['Đọc pha sinh trưởng, hình thức sinh sản và tác động nhiệt độ, pH, hóa chất hoặc kháng sinh.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M6-O04, BIO10-M6-O05, BIO10-M6-O06, BIO10-M6-O07.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Pha cân bằng vẫn có phân chia và chết; kháng sinh không trị virus và phải dùng đúng chỉ định.'], difficulty: 'medium', examFrequency: 'high' },
+  { id: 'bio10-qt41', topicId: 'bio10-t6', name: 'Ứng dụng và dự án lên men', slug: 'ung-dung-len-men', description: 'Luyện ứng dụng và dự án lên men.', exampleQuestionId: 'bio10-m6-q036', recognitionSigns: ['Nối vi sinh vật–cơ chất–sản phẩm với điều kiện, an toàn, đối chứng và chất lượng quy trình.', 'Đề yêu cầu giải thích, đọc dữ liệu hoặc vận dụng các outcome BIO10-M6-O08, BIO10-M6-O09.'], solvingSteps: ['Xác định đúng khái niệm và đối tượng sinh học đang được hỏi.', 'Tách dữ kiện, biểu diễn trình tự hoặc quan hệ nhân–quả.', 'Đối chiếu từng phương án, chọn kết luận đủ điều kiện và kiểm tra lỗi sai thường gặp.'], commonMistakes: ['Không dùng sản phẩm có dấu hiệu hỏng; lên men hữu ích vẫn cần giống, nhiệt độ, vệ sinh và thời gian phù hợp.'], difficulty: 'medium', examFrequency: 'high' }
 ];

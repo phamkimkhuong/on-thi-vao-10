@@ -2,16 +2,19 @@ import React, { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { useAppStore } from './services/store';
 import AppLayout from './components/layout/AppLayout';
-import Dashboard from './features/dashboard/Dashboard';
-import Roadmap from './features/roadmap/Roadmap';
-import QuestionTypeDetail from './features/question-type/QuestionTypeDetail';
-import PracticeEngine from './features/practice-engine/PracticeEngine';
-import MistakeNotebook from './components/mistakes/MistakeNotebook';
-import ExamEngine from './features/exam-engine/ExamEngine';
-import TeacherDashboard from './features/teacher/TeacherDashboard';
-import { PremiumPricing } from './features/premium/PremiumPricing';
-import { GeneralAiTutor } from './features/ai-tutor/GeneralAiTutor';
-import { SupportPage } from './features/support/SupportPage';
+import { ROUTES } from './constants/routes';
+
+const Dashboard = React.lazy(() => import('./features/dashboard/Dashboard'));
+const Roadmap = React.lazy(() => import('./features/roadmap/Roadmap'));
+const QuestionTypeDetail = React.lazy(() => import('./features/question-type/QuestionTypeDetail'));
+const PracticeEngine = React.lazy(() => import('./features/practice-engine/PracticeEngine'));
+const MistakeNotebook = React.lazy(() => import('./components/mistakes/MistakeNotebook'));
+const ExamEngine = React.lazy(() => import('./features/exam-engine/ExamEngine'));
+const TeacherDashboard = React.lazy(() => import('./features/teacher/TeacherDashboard'));
+const PremiumPricing = React.lazy(() => import('./features/premium/PremiumPricing').then(m => ({ default: m.PremiumPricing })));
+const GeneralAiTutor = React.lazy(() => import('./features/ai-tutor/GeneralAiTutor').then(m => ({ default: m.GeneralAiTutor })));
+const SupportPage = React.lazy(() => import('./features/support/SupportPage').then(m => ({ default: m.SupportPage })));
+
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, setAnalyticsUser, db } from './services/firebase';
@@ -23,23 +26,23 @@ const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
-      { path: 'dashboard', element: <Dashboard /> },
-      { path: 'roadmap', element: <Roadmap /> },
+      { index: true, element: <Navigate to={ROUTES.DASHBOARD} replace /> },
+      { path: ROUTES.DASHBOARD.substring(1), element: <Dashboard /> },
+      { path: ROUTES.ROADMAP.substring(1), element: <Roadmap /> },
       { path: 'question-types/:questionTypeId', element: <QuestionTypeDetail /> },
-      { path: 'practice', element: <PracticeEngine /> },
+      { path: ROUTES.PRACTICE.substring(1), element: <PracticeEngine /> },
       { path: 'practice/:questionTypeId', element: <PracticeEngine /> },
-      { path: 'mistakes', element: <MistakeNotebook /> },
-      { path: 'exam', element: <ExamEngine /> },
-      { path: 'teacher', element: <TeacherDashboard /> },
-      { path: 'premium', element: <PremiumPricing /> },
-      { path: 'ai-tutor', element: <GeneralAiTutor /> },
-      { path: 'support', element: <SupportPage /> },
+      { path: ROUTES.MISTAKES.substring(1), element: <MistakeNotebook /> },
+      { path: ROUTES.EXAM.substring(1), element: <ExamEngine /> },
+      { path: ROUTES.TEACHER.substring(1), element: <TeacherDashboard /> },
+      { path: ROUTES.PREMIUM.substring(1), element: <PremiumPricing /> },
+      { path: ROUTES.AI_TUTOR.substring(1), element: <GeneralAiTutor /> },
+      { path: ROUTES.SUPPORT.substring(1), element: <SupportPage /> },
     ]
   },
   {
     path: '*',
-    element: <Navigate to="/dashboard" replace />
+    element: <Navigate to={ROUTES.DASHBOARD} replace />
   }
 ]);
 

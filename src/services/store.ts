@@ -15,12 +15,16 @@ interface AppState {
   // Reactivity trigger for LocalStorage progress changes
   progressVersion: number;
 
+  // Data Loading State
+  isLoadingData: boolean;
+
   // Actions
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
   setSubject: (subject: SubjectCode) => void;
   setGrade: (grade: 'grade9' | 'grade10') => void;
   refreshProgress: () => void;
+  setIsLoadingData: (loading: boolean) => void;
 
   // Auth actions
   setUser: (user: User | null) => void;
@@ -48,6 +52,7 @@ export const useAppStore = create<AppState>((set) => {
     authLoading: true,
     progressVersion: 0,
     isPremium: false,
+    isLoadingData: true,
 
     toggleDarkMode: () => {
       if (typeof document !== 'undefined') {
@@ -69,6 +74,7 @@ export const useAppStore = create<AppState>((set) => {
       set({ selectedGrade: grade });
     },
     refreshProgress: () => set((state) => ({ progressVersion: state.progressVersion + 1 })),
+    setIsLoadingData: (loading) => set({ isLoadingData: loading }),
 
     setUser: (user) => set({ user }),
     setPremium: (isPremium) => set({ isPremium }),

@@ -11,9 +11,7 @@ import { storageService } from '../../../services/storage';
 
 interface TopicSelectionViewProps {
   routeSubject: SubjectCode;
-  mathQuestionTypes: QuestionType[];
-  englishQuestionTypes: QuestionType[];
-  chemistryQuestionTypes: QuestionType[];
+  questionTypes: QuestionType[];
   grammarSection: 'dang1' | 'dang2' | 'dang3' | 'dang4' | 'dang5' | null;
   setGrammarSection: (val: 'dang1' | 'dang2' | 'dang3' | 'dang4' | 'dang5' | null) => void;
   setSelectedSubTense: (val: any) => void;
@@ -32,9 +30,7 @@ interface TopicSelectionViewProps {
 
 export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   routeSubject,
-  mathQuestionTypes,
-  englishQuestionTypes,
-  chemistryQuestionTypes,
+  questionTypes,
   grammarSection,
   setGrammarSection,
   setSelectedSubTense,
@@ -509,7 +505,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
 
   // Màn hình chọn dạng bài chính
   const topics = getTopics(selectedGrade, routeSubject);
-  const qTypes = isMath ? mathQuestionTypes : isChemistry ? chemistryQuestionTypes : englishQuestionTypes;
+  const qTypes = questionTypes;
 
   const isG9 = selectedGrade === 'grade9';
 
@@ -521,14 +517,18 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
             ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : '📐 Học tốt Toán Lớp 10')
             : isChemistry
               ? '🧪 Luyện tập Hóa học Lớp 10'
-              : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
+              : routeSubject === 'biology'
+                ? '🧬 Luyện tập Sinh học Lớp 10'
+                : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
           {isMath 
             ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : 'Bài tập tự luận lớp 10 bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.')
             : isChemistry
               ? 'Luyện tập các dạng bài Hóa học lớp 10 bám sát chương trình GDPT 2018 mới.'
-              : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
+              : routeSubject === 'biology'
+                ? 'Luyện tập các dạng bài Sinh học lớp 10 bám sát chương trình GDPT 2018 mới.'
+                : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
         </p>
       </div>
 
@@ -544,6 +544,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 "h-4 w-1 rounded-full",
                 routeSubject === 'math' ? 'bg-indigo-500' :
                 routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                routeSubject === 'biology' ? 'bg-green-500' :
                 'bg-purple-500'
               )} />
               <h3 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">

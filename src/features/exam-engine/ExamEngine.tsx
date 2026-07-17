@@ -4,7 +4,7 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getMockExams, getLearningOutcomes, getTopics, allQuestions, allSolutions } from '../../data';
+import { getQuestionTypes, getMockExams, getLearningOutcomes, getTopics, getQuestions, getSolutions } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -213,7 +213,7 @@ export const ExamEngine: React.FC = () => {
   };
 
   const getSolutionForQuestion = (questionId: string) => {
-    return allSolutions.find(s => s.questionId === questionId);
+    return getSolutions(selectedGrade, selectedSubject).find(s => s.questionId === questionId);
   };
 
   useEffect(() => {
@@ -402,7 +402,7 @@ export const ExamEngine: React.FC = () => {
     // Bốc các câu hỏi thuộc đề thi thử được chọn
     if (currentExam) {
       const questionsForExam = currentExam.questionIds
-        .map(id => allQuestions.find(q => q.id === id))
+        .map(id => getQuestions(selectedGrade, selectedSubject).find(q => q.id === id))
         .filter((q): q is Question => q !== undefined);
       setExamQuestions(questionsForExam);
       setTimeLeft(currentExam.duration * 60);
