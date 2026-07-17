@@ -102,15 +102,22 @@ export const AppLayout: React.FC = () => {
       courses: [
         { code: 'math', name: 'Toán học', icon: '📐', isLocked: false },
         { code: 'english', name: 'Tiếng Anh', icon: '🗣️', isLocked: false },
+        { code: 'physics', name: 'Vật lý', icon: '⚛️', isLocked: false },
         { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: false },
         { code: 'biology', name: 'Sinh học', icon: '🧬', isLocked: false },
       ]
     },
     {
-      grade: 'future',
-      gradeTitle: 'Lớp 11 & 12 (Sắp ra mắt)',
+      grade: 'grade11',
+      gradeTitle: 'Lớp 11',
       courses: [
-        { code: 'physics', name: 'Vật lý', icon: '🧪', isLocked: true },
+        { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: false },
+      ]
+    },
+    {
+      grade: 'future',
+      gradeTitle: 'Lớp 12 (Sắp ra mắt)',
+      courses: [
         { code: 'biology', name: 'Sinh học', icon: '🧬', isLocked: true },
       ]
     }
@@ -174,7 +181,7 @@ export const AppLayout: React.FC = () => {
       return;
     }
     if (path.startsWith(ROUTES.EXAM)) {
-      const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : '9 - 12';
+      const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : selectedGrade === 'grade11' ? 'Lớp 11' : '9 - 12';
       document.title = `Thi Thử & Kiểm Tra ${gradeLabel} | ${brandName}`;
       return;
     }
@@ -185,7 +192,7 @@ export const AppLayout: React.FC = () => {
 
     // Theo môn và lớp
     const subjectLabel = selectedSubject === 'math' ? 'Toán Học' : selectedSubject === 'english' ? 'Tiếng Anh' : selectedSubject === 'chemistry' ? 'Hóa Học' : '';
-    const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : '9-12';
+    const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : selectedGrade === 'grade11' ? 'Lớp 11' : '9-12';
 
     if (selectedGrade === 'grade9' && selectedSubject === 'english') {
       document.title = `Luyện Thi Vào 10 Môn Tiếng Anh | ${brandName}`;

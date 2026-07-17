@@ -1,4 +1,4 @@
-import { SubjectCode, Topic, QuestionType, Question, Solution, MockExam } from '@/types';
+import { SubjectCode, Topic, QuestionType, Question, Solution, MockExam, AssessmentBlueprint } from '@/types';
 
 // Interface cho cấu trúc bộ nhớ đệm (Cache) của từng môn học
 export interface SubjectDataCache {
@@ -7,6 +7,7 @@ export interface SubjectDataCache {
   questions: Question[];
   solutions: Solution[];
   mockExams: MockExam[];
+  assessmentBlueprints?: AssessmentBlueprint[];
   learningOutcomes?: any[];
   learningMisconceptions?: any[];
 }
@@ -15,7 +16,7 @@ export interface SubjectDataCache {
 const dataCache: Record<string, SubjectDataCache> = {};
 
 // Hàm nạp động dữ liệu môn học
-export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: SubjectCode): Promise<SubjectDataCache> => {
+export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Promise<SubjectDataCache> => {
   const cacheKey = `${grade}-${subject}`;
   if (dataCache[cacheKey]) {
     return dataCache[cacheKey];
@@ -80,7 +81,8 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: Subj
           questionTypes: qtMod.g10MathQuestionTypes,
           questions: [...qMod.g10MathQuestions, ...assessmentsMod.g10MathAssessmentQuestions],
           solutions: [...sMod.g10MathSolutions, ...assessmentsMod.g10MathAssessmentSolutions],
-          mockExams: assessmentsMod.g10MathAssessmentExams
+          mockExams: assessmentsMod.g10MathAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g10MathAssessmentBlueprints
         };
       } else if (subject === 'english') {
         const [topicsMod, qtMod, qMod, sMod, assessmentsMod] = await Promise.all([
@@ -95,7 +97,8 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: Subj
           questionTypes: qtMod.g10EnglishQuestionTypes,
           questions: qMod.g10EnglishQuestions,
           solutions: sMod.g10EnglishSolutions,
-          mockExams: assessmentsMod.g10EnglishAssessmentExams
+          mockExams: assessmentsMod.g10EnglishAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g10EnglishAssessmentBlueprints
         };
       } else if (subject === 'chemistry') {
         const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
@@ -112,6 +115,7 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: Subj
           questions: [...qMod.g10ChemistryQuestions, ...assessmentsMod.g10ChemistryAssessmentQuestions],
           solutions: [...sMod.g10ChemistrySolutions, ...assessmentsMod.g10ChemistryAssessmentSolutions],
           mockExams: assessmentsMod.g10ChemistryAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g10ChemistryAssessmentBlueprints,
           learningOutcomes: learningPathMod.g10ChemistryOutcomes,
           learningMisconceptions: learningPathMod.g10ChemistryMisconceptions
         };
@@ -130,8 +134,52 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: Subj
           questions: [...qMod.g10BiologyQuestions, ...assessmentsMod.g10BiologyAssessmentQuestions],
           solutions: [...sMod.g10BiologySolutions, ...assessmentsMod.g10BiologyAssessmentSolutions],
           mockExams: assessmentsMod.g10BiologyAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g10BiologyAssessmentBlueprints,
           learningOutcomes: learningPathMod.g10BiologyOutcomes,
           learningMisconceptions: learningPathMod.g10BiologyMisconceptions
+        };
+      } else if (subject === 'physics') {
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
+          import('./grade10/physics/topics'),
+          import('./grade10/physics/questionTypes'),
+          import('./grade10/physics/questions'),
+          import('./grade10/physics/solutions'),
+          import('./grade10/physics/learningPath'),
+          import('./grade10/physics/assessments')
+        ]);
+        data = {
+          topics: topicsMod.g10PhysicsTopics,
+          questionTypes: qtMod.g10PhysicsQuestionTypes,
+          questions: [...qMod.g10PhysicsQuestions, ...assessmentsMod.g10PhysicsAssessmentQuestions],
+          solutions: [...sMod.g10PhysicsSolutions, ...assessmentsMod.g10PhysicsAssessmentSolutions],
+          mockExams: assessmentsMod.g10PhysicsAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g10PhysicsAssessmentBlueprints,
+          learningOutcomes: learningPathMod.g10PhysicsOutcomes,
+          learningMisconceptions: learningPathMod.g10PhysicsMisconceptions
+        };
+      } else {
+        data = { topics: [], questionTypes: [], questions: [], solutions: [], mockExams: [] };
+      }
+      break;
+
+    case 'grade11':
+      if (subject === 'chemistry') {
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
+          import('./grade11/chemistry/topics'),
+          import('./grade11/chemistry/questionTypes'),
+          import('./grade11/chemistry/questions'),
+          import('./grade11/chemistry/solutions'),
+          import('./grade11/chemistry/learningPath'),
+          import('./grade11/chemistry/assessments')
+        ]);
+        data = {
+          topics: topicsMod.g11ChemistryTopics,
+          questionTypes: qtMod.g11ChemistryQuestionTypes,
+          questions: [...qMod.g11ChemistryQuestions, ...assessmentsMod.g11ChemistryAssessmentQuestions],
+          solutions: [...sMod.g11ChemistrySolutions, ...assessmentsMod.g11ChemistryAssessmentSolutions],
+          mockExams: assessmentsMod.g11ChemistryAssessmentExams,
+          learningOutcomes: learningPathMod.g11ChemistryOutcomes,
+          learningMisconceptions: learningPathMod.g11ChemistryMisconceptions
         };
       } else {
         data = { topics: [], questionTypes: [], questions: [], solutions: [], mockExams: [] };
@@ -147,37 +195,42 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: Subj
 };
 
 // Đồng bộ hóa việc truy xuất thông tin từ bộ nhớ cache
-export const getTopics = (grade: 'grade9' | 'grade10', subject: SubjectCode): Topic[] => {
+export const getTopics = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Topic[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.topics || [];
 };
 
-export const getQuestionTypes = (grade: 'grade9' | 'grade10', subject: SubjectCode): QuestionType[] => {
+export const getQuestionTypes = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): QuestionType[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.questionTypes || [];
 };
 
-export const getQuestions = (grade: 'grade9' | 'grade10', subject: SubjectCode): Question[] => {
+export const getQuestions = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Question[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.questions || [];
 };
 
-export const getSolutions = (grade: 'grade9' | 'grade10', subject: SubjectCode): Solution[] => {
+export const getSolutions = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Solution[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.solutions || [];
 };
 
-export const getMockExams = (grade: 'grade9' | 'grade10', subject: SubjectCode): MockExam[] => {
+export const getMockExams = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): MockExam[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.mockExams || [];
 };
 
-export const getLearningOutcomes = (grade: 'grade9' | 'grade10', subject: SubjectCode): any[] => {
+export const getAssessmentBlueprints = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): AssessmentBlueprint[] => {
+  const cacheKey = `${grade}-${subject}`;
+  return dataCache[cacheKey]?.assessmentBlueprints || [];
+};
+
+export const getLearningOutcomes = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): any[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.learningOutcomes || [];
 };
 
-export const getLearningMisconceptions = (grade: 'grade9' | 'grade10', subject: SubjectCode): any[] => {
+export const getLearningMisconceptions = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): any[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.learningMisconceptions || [];
 };

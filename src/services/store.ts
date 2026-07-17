@@ -5,12 +5,14 @@ import { SubjectCode } from '../types';
 interface AppState {
   darkMode: boolean;
   selectedSubject: SubjectCode;
-  selectedGrade: 'grade9' | 'grade10';
+  selectedGrade: 'grade9' | 'grade10' | 'grade11';
 
   // Auth state
   user: User | null;
   authLoading: boolean;
   isPremium: boolean;
+  trialActivated: boolean;
+  premiumUntil: string | null;
 
   // Reactivity trigger for LocalStorage progress changes
   progressVersion: number;
@@ -22,7 +24,7 @@ interface AppState {
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
   setSubject: (subject: SubjectCode) => void;
-  setGrade: (grade: 'grade9' | 'grade10') => void;
+  setGrade: (grade: 'grade9' | 'grade10' | 'grade11') => void;
   refreshProgress: () => void;
   setIsLoadingData: (loading: boolean) => void;
 
@@ -45,13 +47,15 @@ export const useAppStore = create<AppState>((set) => {
   return {
     darkMode: initialDarkMode,
     selectedSubject: 'math',
-    selectedGrade: (typeof localStorage !== 'undefined' && localStorage.getItem('otv10_selected_grade') as 'grade9' | 'grade10') || 'grade9',
+    selectedGrade: (typeof localStorage !== 'undefined' && localStorage.getItem('otv10_selected_grade') as 'grade9' | 'grade10' | 'grade11') || 'grade9',
 
     // Auth initial state
     user: null,
     authLoading: true,
     progressVersion: 0,
     isPremium: false,
+    trialActivated: false,
+    premiumUntil: null,
     isLoadingData: true,
 
     toggleDarkMode: () => {

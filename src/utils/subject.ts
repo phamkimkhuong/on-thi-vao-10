@@ -5,6 +5,7 @@ export const getSubjectFromQuestionTypeId = (questionTypeId?: string): SubjectCo
   if (questionTypeId?.startsWith('eng')) return 'english';
   if (questionTypeId?.startsWith('chem')) return 'chemistry';
   if (questionTypeId?.startsWith('bio')) return 'biology';
+  if (questionTypeId?.startsWith('phy')) return 'physics';
   return null;
 };
 
@@ -24,7 +25,7 @@ export const getSubjectIcon = (subject: SubjectCode): string => {
     case 'math': return '📐';
     case 'english': return '🗣️';
     case 'chemistry': return '⚗️';
-    case 'physics': return '🧪';
+    case 'physics': return '⚛️';
     case 'biology': return '🧬';
     default: return '📚';
   }

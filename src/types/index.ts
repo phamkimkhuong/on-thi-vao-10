@@ -34,6 +34,8 @@ export type AutoCheckMode =
   | 'expression-loose'
   | 'manual';
 
+export type AnswerScoringMode = 'all_or_nothing' | 'per_field';
+
 export type StructuredAnswer = Record<string, string>;
 
 export interface AnswerField {
@@ -51,6 +53,10 @@ export interface AnswerSchema {
   proofImageRequired: boolean;
   orderMatters?: boolean;
   autoCheckMode: AutoCheckMode;
+  /** Mặc định cụm Đúng/Sai được chấm từng ý; các dạng còn lại chấm toàn câu. */
+  scoringMode?: AnswerScoringMode;
+  /** Trọng số tương đối theo key; hệ thống tự chuẩn hóa về tổng điểm câu. */
+  fieldWeights?: Record<string, number>;
 }
 
 export interface ProofImage {
@@ -101,6 +107,9 @@ export type AssessmentFocus = 'mixed' | 'theory';
 export type TheoryAssessmentScope = 'module' | 'comprehensive';
 
 export type AssessmentCompetency =
+  | 'physical_cognition'
+  | 'physical_inquiry'
+  | 'physical_application'
   | 'chemical_cognition'
   | 'chemical_inquiry'
   | 'chemical_application'
@@ -390,6 +399,8 @@ export interface ExamResult {
   score: number;
   earnedPoints?: number;
   maxPoints?: number;
+  /** Tổng điểm tối đa của các câu đã được chấm tự động hoặc thủ công. */
+  gradedMaxPoints?: number;
   /** Tổng điểm chưa được chấm vì cần giáo viên/AI đánh giá theo rubric. */
   pendingPoints?: number;
   gradedCount?: number;
@@ -405,6 +416,11 @@ export interface ExamResult {
     gradingStatus?: 'graded' | 'pending';
     earnedPoints?: number;
     maxPoints?: number;
+    partResults?: Record<string, {
+      isCorrect: boolean;
+      earnedPoints: number;
+      maxPoints: number;
+    }>;
   }>;
 }
 

@@ -62,7 +62,15 @@ export const App: React.FC = () => {
         unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
-            const premiumStatus = data.isPremium === true || data.role === 'premium';
+            let premiumStatus = data.isPremium === true || data.role === 'premium';
+            
+            // Kiểm tra xem hạn dùng thử đã hết chưa
+            if (data.premiumUntil) {
+              const expiry = new Date(data.premiumUntil);
+              if (expiry < new Date()) {
+                premiumStatus = false;
+              }
+            }
             
             // Nếu người dùng vừa được nâng cấp lên Premium thành công, chúc mừng bằng hiệu ứng confetti!
             const prevPremium = useAppStore.getState().isPremium;
@@ -77,8 +85,16 @@ export const App: React.FC = () => {
             }
             
             setPremium(premiumStatus);
+            useAppStore.setState({
+              trialActivated: data.trialActivated === true,
+              premiumUntil: data.premiumUntil || null
+            });
           } else {
             setPremium(false);
+            useAppStore.setState({
+              trialActivated: false,
+              premiumUntil: null
+            });
           }
         }, (err) => {
           console.error("Lỗi khi lắng nghe user profile:", err);

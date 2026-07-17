@@ -4,7 +4,7 @@ import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getMockExams, getLearningOutcomes, getTopics, getQuestions, getSolutions } from '../../data';
+import { getQuestionTypes, getMockExams, getAssessmentBlueprints, getLearningOutcomes, getTopics, getQuestions, getSolutions } from '../../data';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
@@ -15,8 +15,8 @@ import { QuestionStimulusRenderer } from '../../components/common/QuestionStimul
 import { aiService } from '../../services/aiService';
 
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
-import { MockExam, Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
-import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../utils/answerValidator';
+import { AssessmentBlueprint, MockExam, Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
+import { formatAnswerForDisplay, isAnswerComplete, scoreAnswer } from '../../utils/answerValidator';
 import { cn } from '../../utils/cn';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
@@ -36,6 +36,64 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+type ExamQuestionEntry = { question: Question; index: number };
+type ExamSectionView = {
+  id: string;
+  title?: string;
+  expectedItemCount?: number;
+  points?: number;
+  entries: ExamQuestionEntry[];
+};
+
+const questionMatchesBlueprintSection = (
+  question: Question,
+  responseType: AssessmentBlueprint['sections'][number]['responseType']
+) => {
+  if (responseType === 'multiple_choice') {
+    return question.responseType === 'single_choice' || (!question.responseType && Boolean(question.options?.length));
+  }
+  return question.responseType === responseType;
+};
+
+/**
+ * Blueprint quyết định cách trình bày đề, nhưng không được làm thất lạc câu hỏi.
+ * Câu chưa ánh xạ được sẽ được giữ ở một phần dự phòng để lỗi metadata có thể nhìn thấy.
+ */
+const buildExamSections = (questions: Question[], blueprint?: AssessmentBlueprint): ExamSectionView[] => {
+  const entries = questions.map((question, index) => ({ question, index }));
+  if (!blueprint) return [{ id: 'all-questions', entries }];
+
+  const assignedQuestionIds = new Set<string>();
+  const sections: ExamSectionView[] = blueprint.sections.map(section => {
+    const sectionEntries = entries.filter(entry => {
+      if (assignedQuestionIds.has(entry.question.id)) return false;
+      if (!questionMatchesBlueprintSection(entry.question, section.responseType)) return false;
+      assignedQuestionIds.add(entry.question.id);
+      return true;
+    });
+
+    return {
+      id: section.id,
+      title: section.title,
+      expectedItemCount: section.itemCount,
+      points: section.points,
+      entries: sectionEntries
+    };
+  }).filter(section => section.entries.length > 0);
+
+  const unmatchedEntries = entries.filter(entry => !assignedQuestionIds.has(entry.question.id));
+  if (unmatchedEntries.length > 0) {
+    sections.push({
+      id: 'unmapped-questions',
+      title: 'Phần bổ sung',
+      expectedItemCount: unmatchedEntries.length,
+      entries: unmatchedEntries
+    });
+  }
+
+  return sections;
+};
+
 export const ExamEngine: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, user } = useAppStore();
@@ -44,6 +102,7 @@ export const ExamEngine: React.FC = () => {
   const subjectLearningOutcomes = getLearningOutcomes(selectedGrade, selectedSubject);
   const subjectTopics = getTopics(selectedGrade, selectedSubject);
   const mockExamsList = getMockExams(selectedGrade, selectedSubject);
+  const subjectAssessmentBlueprints = getAssessmentBlueprints(selectedGrade, selectedSubject);
 
   const subjectLabels: Record<string, string> = {
     math: 'Toán học',
@@ -258,6 +317,10 @@ export const ExamEngine: React.FC = () => {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
 
   const currentExam = mockExamsList.find(exam => exam.id === selectedExamId) || subjectExams[0];
+  const currentBlueprint = currentExam?.blueprintId
+    ? subjectAssessmentBlueprints.find(blueprint => blueprint.id === currentExam.blueprintId)
+    : undefined;
+  const examSections = buildExamSections(examQuestions, currentBlueprint);
   const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'chemistry' ? 45 : selectedSubject === 'math' ? 120 : 60);
 
   const handleSubmitExam = useCallback(async () => {
@@ -269,6 +332,7 @@ export const ExamEngine: React.FC = () => {
     let correctCount = 0;
     let earnedPoints = 0;
     let pendingPoints = 0;
+    let gradedMaxPoints = 0;
     let gradedCount = 0;
     const totalCount = examQuestions.length;
     const maxPoints = examQuestions.reduce((sum, question) => sum + (question.points ?? 1), 0);
@@ -282,9 +346,12 @@ export const ExamEngine: React.FC = () => {
       const answerInput = q.answerSchema ? (finalAnswers[q.id] ?? {}) : answers[q.id] || '';
       const userAns = formatAnswerForDisplay(q, answerInput);
       const isManual = q.answerSchema?.autoCheckMode === 'manual' || q.validatorType === 'manual';
-      const isCorrect = isManual ? false : validateAnswer(q, answerInput);
       const questionPoints = q.points ?? 1;
-      const awardedPoints = !isManual && isCorrect ? questionPoints : 0;
+      const answerScore = isManual
+        ? null
+        : scoreAnswer(q, answerInput, questionPoints);
+      const isCorrect = answerScore?.isCorrect ?? false;
+      const awardedPoints = answerScore?.earnedPoints ?? 0;
       const attemptId = `attempt-${examId}-${q.id}`;
       const localProofImages = proofImagesByQuestion[q.id] ?? [];
       let uploadedProofImages: UserAttempt['proofImages'] = [];
@@ -305,7 +372,10 @@ export const ExamEngine: React.FC = () => {
       }
 
       if (isManual) pendingPoints += questionPoints;
-      else gradedCount++;
+      else {
+        gradedCount++;
+        gradedMaxPoints += questionPoints;
+      }
       if (!isManual && isCorrect) correctCount++;
       earnedPoints += awardedPoints;
       attemptResults[q.id] = {
@@ -315,7 +385,8 @@ export const ExamEngine: React.FC = () => {
         isCorrect,
         gradingStatus: isManual ? 'pending' : 'graded',
         earnedPoints: awardedPoints,
-        maxPoints: questionPoints
+        maxPoints: questionPoints,
+        ...(answerScore?.partResults ? { partResults: answerScore.partResults } : {})
       };
 
       // Tự động ghi nhận lịch sử làm bài vào LocalStorage để đồng bộ tiến độ
@@ -355,6 +426,7 @@ export const ExamEngine: React.FC = () => {
       score,
       earnedPoints,
       maxPoints,
+      gradedMaxPoints,
       pendingPoints,
       gradedCount,
       correctCount,
@@ -476,7 +548,7 @@ export const ExamEngine: React.FC = () => {
     const typeList = subjectQuestionTypes;
 
     // Group kết quả theo QuestionType
-    const analysis: Record<string, { name: string, total: number, correct: number }> = {};
+    const analysis: Record<string, { name: string, total: number, correct: number, earned: number, maximum: number }> = {};
 
     examQuestions.forEach(q => {
       if (examResult.attempts[q.id]?.gradingStatus === 'pending') return;
@@ -488,11 +560,15 @@ export const ExamEngine: React.FC = () => {
         analysis[typeId] = {
           name: typeName,
           total: 0,
-          correct: 0
+          correct: 0,
+          earned: 0,
+          maximum: 0
         };
       }
 
       analysis[typeId].total += 1;
+      analysis[typeId].earned += examResult.attempts[q.id]?.earnedPoints ?? 0;
+      analysis[typeId].maximum += examResult.attempts[q.id]?.maxPoints ?? q.points ?? 1;
       if (examResult.attempts[q.id]?.isCorrect) {
         analysis[typeId].correct += 1;
       }
@@ -501,7 +577,7 @@ export const ExamEngine: React.FC = () => {
     return Object.entries(analysis).map(([typeId, data]) => ({
       typeId,
       ...data,
-      percent: Math.round((data.correct / data.total) * 100)
+      percent: data.maximum > 0 ? Math.round((data.earned / data.maximum) * 100) : 0
     }));
   };
 
@@ -548,7 +624,7 @@ export const ExamEngine: React.FC = () => {
   const getTopicAnalysis = () => {
     if (!examResult) return [];
 
-    const analysis: Record<string, { title: string; orderIndex: number; total: number; correct: number }> = {};
+    const analysis: Record<string, { title: string; orderIndex: number; total: number; correct: number; earned: number; maximum: number }> = {};
     examQuestions.forEach(question => {
       if (examResult.attempts[question.id]?.gradingStatus === 'pending') return;
       const topic = subjectTopics.find(item => item.id === question.topicId);
@@ -557,10 +633,14 @@ export const ExamEngine: React.FC = () => {
           title: topic?.name ?? question.topicId,
           orderIndex: topic?.orderIndex ?? Number.MAX_SAFE_INTEGER,
           total: 0,
-          correct: 0
+          correct: 0,
+          earned: 0,
+          maximum: 0
         };
       }
       analysis[question.topicId].total += 1;
+      analysis[question.topicId].earned += examResult.attempts[question.id]?.earnedPoints ?? 0;
+      analysis[question.topicId].maximum += examResult.attempts[question.id]?.maxPoints ?? question.points ?? 1;
       if (examResult.attempts[question.id]?.isCorrect) analysis[question.topicId].correct += 1;
     });
 
@@ -568,7 +648,7 @@ export const ExamEngine: React.FC = () => {
       .map(([topicId, data]) => ({
         topicId,
         ...data,
-        percent: Math.round((data.correct / data.total) * 100)
+        percent: data.maximum > 0 ? Math.round((data.earned / data.maximum) * 100) : 0
       }))
       .sort((a, b) => a.orderIndex - b.orderIndex);
   };
@@ -773,6 +853,25 @@ export const ExamEngine: React.FC = () => {
                     )}
                   </div>
 
+                  {currentBlueprint && (
+                    <div className="rounded-2xl border border-primary/15 bg-primary/[0.025] p-4 space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <h4 className="text-[10px] font-black uppercase tracking-wider text-primary">Cấu trúc bài kiểm tra</h4>
+                        <span className="text-[10px] font-extrabold text-muted-foreground">{currentBlueprint.totalPoints} điểm</span>
+                      </div>
+                      <div className="space-y-2">
+                        {currentBlueprint.sections.map(section => (
+                          <div key={section.id} className="flex items-start justify-between gap-3 text-[11px]">
+                            <span className="font-semibold leading-relaxed text-foreground">{section.title}</span>
+                            <span className="shrink-0 font-bold text-muted-foreground">
+                              {section.itemCount} câu · {section.points} điểm
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-3 bg-amber-500/[0.03] border border-amber-500/15 p-4.5 rounded-2xl text-xs font-semibold text-amber-700 dark:text-amber-400">
                     <h4 className="font-black text-xs flex items-center gap-1.5 uppercase tracking-wider">
                       {currentExam.focus === 'theory' ? <BookOpen size={13} /> : <AlertTriangle size={13} className="animate-pulse" />}
@@ -876,32 +975,60 @@ export const ExamEngine: React.FC = () => {
               {unansweredCount > 0 ? `Còn ${unansweredCount} câu chưa trả lời` : 'Đã hoàn thành tất cả câu'}
             </span>
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {examQuestions.map((question, index) => {
-              const answered = answeredQuestionIds.has(question.id);
-              return (
-                <button
-                  key={question.id}
-                  type="button"
-                  aria-label={`Đi tới câu ${index + 1}${answered ? ', đã trả lời' : ', chưa trả lời'}`}
-                  onClick={() => document.getElementById(`exam-question-${index + 1}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
-                  className={cn(
-                    'h-9 min-w-9 rounded-lg border px-2 text-xs font-extrabold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
-                    answered
-                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
-                      : 'border-border bg-secondary/50 text-muted-foreground hover:border-primary/40 hover:text-foreground'
-                  )}
-                >
-                  {index + 1}
-                </button>
-              );
-            })}
+          <div className="space-y-2.5">
+            {examSections.map(section => (
+              <div key={section.id} className="flex items-start gap-3">
+                {section.title && (
+                  <span className="w-28 shrink-0 pt-2 text-[9px] font-extrabold leading-tight text-muted-foreground line-clamp-2">
+                    {section.title.replace(/^Phần\s+[IVX]+\.\s*/i, '')}
+                  </span>
+                )}
+                <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1">
+                  {section.entries.map(({ question, index }) => {
+                    const answered = answeredQuestionIds.has(question.id);
+                    return (
+                      <button
+                        key={question.id}
+                        type="button"
+                        aria-label={`Đi tới câu ${index + 1}${answered ? ', đã trả lời' : ', chưa trả lời'}`}
+                        onClick={() => document.getElementById(`exam-question-${index + 1}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                        className={cn(
+                          'h-9 min-w-9 rounded-lg border px-2 text-xs font-extrabold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                          answered
+                            ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                            : 'border-border bg-secondary/50 text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                        )}
+                      >
+                        {index + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </nav>
 
         {/* Danh sách câu hỏi */}
-        <div className="space-y-6">
-          {examQuestions.map((q, idx) => {
+        <div className="space-y-8">
+          {examSections.map(section => (
+            <section key={section.id} aria-labelledby={section.title ? `exam-section-${section.id}` : undefined} className="space-y-5">
+              {section.title && (
+                <div id={`exam-section-${section.id}`} className="rounded-2xl border border-primary/15 bg-primary/[0.035] px-5 py-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h4 className="text-sm font-black text-foreground">{section.title}</h4>
+                    <span className="text-[10px] font-bold text-muted-foreground">
+                      {section.entries.length} câu
+                      {section.expectedItemCount !== undefined && section.entries.length !== section.expectedItemCount
+                        ? ` · ma trận dự kiến ${section.expectedItemCount}`
+                        : ''}
+                      {section.points !== undefined ? ` · ${section.points} điểm` : ''}
+                    </span>
+                  </div>
+                </div>
+              )}
+              <div className="space-y-6">
+          {section.entries.map(({ question: q, index: idx }) => {
             const isChoice = q.options && q.options.length > 0;
 
             return (
@@ -972,6 +1099,9 @@ export const ExamEngine: React.FC = () => {
               </Card>
             );
           })}
+              </div>
+            </section>
+          ))}
         </div>
 
         {examSubmitError && (
@@ -1022,18 +1152,27 @@ export const ExamEngine: React.FC = () => {
             <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
               {currentExam?.focus === 'theory' ? 'Báo cáo kiến thức lý thuyết' : 'Báo cáo kết quả thi thử'}
             </span>
-            <h2 className="text-4xl md:text-5xl font-black mt-3 tracking-tight leading-none">{examResult.score} <span className="text-sm font-bold opacity-75">/ 10 điểm{(examResult.pendingPoints ?? 0) > 0 ? ' tạm tính' : ''}</span></h2>
+            {(examResult.pendingPoints ?? 0) > 0 ? (
+              <h2 className="text-4xl md:text-5xl font-black mt-3 tracking-tight leading-none">
+                {Math.round((examResult.earnedPoints ?? 0) * 100) / 100}
+                <span className="text-sm font-bold opacity-75"> / {Math.round((examResult.gradedMaxPoints ?? 0) * 100) / 100} điểm đã chấm</span>
+              </h2>
+            ) : (
+              <h2 className="text-4xl md:text-5xl font-black mt-3 tracking-tight leading-none">{examResult.score} <span className="text-sm font-bold opacity-75">/ 10 điểm</span></h2>
+            )}
             <p className="text-xs text-indigo-100 font-semibold mt-2.5">
               Đúng {examResult.correctCount} / {examResult.gradedCount ?? examResult.totalCount} câu đã chấm • Thời gian làm bài: {formatTime(examResult.timeSpent)}
             </p>
             {examResult.earnedPoints !== undefined && examResult.maxPoints !== undefined && (
               <p className="text-[11px] text-indigo-100 font-semibold mt-1">
-                Điểm thô: {examResult.earnedPoints} / {examResult.maxPoints}
+                {(examResult.pendingPoints ?? 0) > 0
+                  ? `Tổng điểm toàn đề: ${examResult.maxPoints}; chưa công bố điểm cuối cùng`
+                  : `Điểm thô: ${examResult.earnedPoints} / ${examResult.maxPoints}`}
               </p>
             )}
             {(examResult.pendingPoints ?? 0) > 0 && (
               <p className="mt-1.5 text-[11px] font-extrabold text-amber-200">
-                Còn {examResult.pendingPoints} điểm tự luận đang chờ chấm theo rubric; kết quả trên chưa phải điểm cuối cùng.
+                Còn {examResult.pendingPoints} điểm tự luận đang chờ chấm theo rubric; không quy đổi phần đã chấm thành điểm toàn bài.
               </p>
             )}
           </CardHeader>
@@ -1067,7 +1206,9 @@ export const ExamEngine: React.FC = () => {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <p className="truncate text-[11px] font-extrabold text-foreground">{item.title}</p>
-                            <p className="mt-1 text-[9px] font-semibold text-muted-foreground">Đúng {item.correct}/{item.total} câu</p>
+                            <p className="mt-1 text-[9px] font-semibold text-muted-foreground">
+                              Đạt {Math.round(item.earned * 100) / 100}/{Math.round(item.maximum * 100) / 100} điểm
+                            </p>
                           </div>
                           <span className={`text-xs font-black ${isWeak ? 'text-rose-500' : 'text-emerald-500'}`}>{item.percent}%</span>
                         </div>
@@ -1135,7 +1276,9 @@ export const ExamEngine: React.FC = () => {
                             <span className="text-[8px] bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 animate-pulse">Yếu</span>
                           )}
                         </div>
-                        <p className="text-[10px] text-muted-foreground font-semibold">Tỷ lệ làm đúng: {item.correct} / {item.total} câu ({item.percent}%)</p>
+                        <p className="text-[10px] text-muted-foreground font-semibold">
+                          Mức điểm đạt được: {Math.round(item.earned * 100) / 100} / {Math.round(item.maximum * 100) / 100} ({item.percent}%)
+                        </p>
                       </div>
 
                       {isWeak ? (
@@ -1168,6 +1311,7 @@ export const ExamEngine: React.FC = () => {
                   const attempt = examResult.attempts[q.id];
                   const isCorrect = attempt?.isCorrect;
                   const isManual = q.answerSchema?.autoCheckMode === 'manual' || q.validatorType === 'manual';
+                  const isPartiallyCorrect = !isManual && !isCorrect && (attempt?.earnedPoints ?? 0) > 0;
                   const solution = getSolutionForQuestion(q.id);
                   const isExpanded = expandedSolutionId[q.id];
                   const hasSubmitted = !!(attempt && (attempt.userAnswer?.trim() !== '' || (attempt.proofImages && attempt.proofImages.length > 0)));
@@ -1187,6 +1331,10 @@ export const ExamEngine: React.FC = () => {
                         ) : isCorrect ? (
                           <span className="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
                             <CheckCircle size={10} /> Đúng
+                          </span>
+                        ) : isPartiallyCorrect ? (
+                          <span className="text-[9px] bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                            <AlertTriangle size={10} /> Đúng một phần · {Math.round((attempt?.earnedPoints ?? 0) * 100) / 100}/{attempt?.maxPoints ?? q.points ?? 1} điểm
                           </span>
                         ) : (
                           <span className="text-[9px] bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
@@ -1233,7 +1381,11 @@ export const ExamEngine: React.FC = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold mt-2">
                           <div className="p-2.5 bg-slate-50/50 dark:bg-slate-900/10 rounded-lg border border-border/10">
                             <span className="text-[10px] text-muted-foreground block mb-0.5">BÀI LÀM CỦA BẠN:</span>
-                            <span className={isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
+                            <span className={isCorrect
+                              ? 'text-emerald-600 dark:text-emerald-400'
+                              : isPartiallyCorrect
+                                ? 'text-amber-600 dark:text-amber-400'
+                                : 'text-rose-600 dark:text-rose-400'}>
                               <LatexRenderer text={studentAnsText} />
                             </span>
                           </div>

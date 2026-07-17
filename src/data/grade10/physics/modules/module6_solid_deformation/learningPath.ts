@@ -1,0 +1,17 @@
+import type { LearningMisconception, LearningOutcome } from '@/types';
+
+export const g10PhysicsModule6Outcomes: LearningOutcome[] = [
+  { id: 'PHY10-M6-O01', topicId: 'phy10-t6', title: 'Biến dạng kéo và nén', description: 'Nhận diện, mô tả biến dạng kéo, nén và phân biệt biến dạng đàn hồi với không đàn hồi.', scope: 'core', orderIndex: 1, questionTypeIds: ['phy10-qt54', 'phy10-qt59'], prerequisiteOutcomeIds: ['PHY10-M2-O01'], misconceptionIds: ['PHY10-M6-M01'], evidenceTypes: ['recognition', 'explanation'], estimatedMinutes: 60 },
+  { id: 'PHY10-M6-O02', topicId: 'phy10-t6', title: 'Độ biến dạng', description: 'Xác định độ biến dạng tuyệt đối, tương đối trong tình huống đơn giản.', scope: 'core', orderIndex: 2, questionTypeIds: ['phy10-qt55'], prerequisiteOutcomeIds: ['PHY10-M6-O01'], misconceptionIds: ['PHY10-M6-M02'], evidenceTypes: ['representation', 'calculation'], estimatedMinutes: 75 },
+  { id: 'PHY10-M6-O03', topicId: 'phy10-t6', title: 'Định luật Hooke', description: 'Vận dụng quan hệ lực–độ biến dạng trong giới hạn đàn hồi.', scope: 'core', orderIndex: 3, questionTypeIds: ['phy10-qt56', 'phy10-qt59'], prerequisiteOutcomeIds: ['PHY10-M2-O07', 'PHY10-M6-O02'], misconceptionIds: ['PHY10-M6-M03'], evidenceTypes: ['calculation', 'application'], estimatedMinutes: 105, isCritical: true },
+  { id: 'PHY10-M6-O04', topicId: 'phy10-t6', title: 'Đồ thị lực–độ biến dạng', description: 'Đọc hệ số góc, xác định độ cứng và nhận diện miền không còn tuân theo Hooke.', scope: 'core', orderIndex: 4, questionTypeIds: ['phy10-qt57'], prerequisiteOutcomeIds: ['PHY10-M6-O03'], misconceptionIds: ['PHY10-M6-M04'], evidenceTypes: ['representation', 'data'], estimatedMinutes: 90, isCritical: true },
+  { id: 'PHY10-M6-O05', topicId: 'phy10-t6', title: 'Thực hành xác định độ cứng', description: 'Thiết kế hoặc phân tích phép đo độ cứng lò xo, đánh giá sai số và an toàn.', scope: 'core', orderIndex: 5, questionTypeIds: ['phy10-qt58', 'phy10-qt59'], prerequisiteOutcomeIds: ['PHY10-M0-O05', 'PHY10-M6-O04'], misconceptionIds: ['PHY10-M6-M05'], evidenceTypes: ['experiment', 'data', 'application'], estimatedMinutes: 105 }
+];
+
+export const g10PhysicsModule6Misconceptions: LearningMisconception[] = [
+  { id: 'PHY10-M6-M01', outcomeId: 'PHY10-M6-O01', statement: 'Vật bị biến dạng sẽ luôn trở lại hình dạng ban đầu khi bỏ lực.', correction: 'Chỉ biến dạng đàn hồi trong giới hạn phù hợp mới hồi phục; biến dạng dẻo để lại thay đổi vĩnh viễn.', severity: 'critical' },
+  { id: 'PHY10-M6-M02', outcomeId: 'PHY10-M6-O02', statement: 'Độ biến dạng tương đối bằng Δl chia chiều dài sau biến dạng.', correction: 'Độ biến dạng tương đối được so với chiều dài ban đầu: ε=Δl/l₀.', severity: 'critical' },
+  { id: 'PHY10-M6-M03', outcomeId: 'PHY10-M6-O03', statement: 'Lực đàn hồi bằng k nhân chiều dài hiện tại của lò xo.', correction: 'Hooke dùng độ biến dạng so với chiều dài tự nhiên: F=k|l−l₀|.', severity: 'critical' },
+  { id: 'PHY10-M6-M04', outcomeId: 'PHY10-M6-O04', statement: 'Đồ thị F–Δl luôn là đường thẳng với mọi tải.', correction: 'Quan hệ tuyến tính chỉ đúng trong miền Hooke; vượt giới hạn, đồ thị lệch và vật có thể không hồi phục.', severity: 'critical' },
+  { id: 'PHY10-M6-M05', outcomeId: 'PHY10-M6-O05', statement: 'Một phép đo duy nhất đủ xác định chính xác độ cứng.', correction: 'Cần nhiều mức tải, lặp đo và hệ số góc miền tuyến tính để giảm sai số và phát hiện ngoại lệ.', severity: 'normal' }
+];

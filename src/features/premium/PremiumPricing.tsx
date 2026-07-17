@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
-import { functions } from '../../services/firebase';
+import { functions, db } from '../../services/firebase';
 import { httpsCallable } from 'firebase/functions';
+import { doc, setDoc } from 'firebase/firestore';
 import { authService } from '../../services/authService';
 import { 
   Check, 
@@ -15,8 +16,9 @@ import {
 
 export const PremiumPricing: React.FC = () => {
   const navigate = useNavigate();
-  const { isPremium, user } = useAppStore();
+  const { isPremium, user, trialActivated, premiumUntil } = useAppStore();
   const [loading, setLoading] = useState(false);
+  const [trialLoading, setTrialLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleUpgrade = async () => {
@@ -58,11 +60,65 @@ export const PremiumPricing: React.FC = () => {
     }
   };
 
-  const freeBenefits = [
-    'Học tập chặng 1 & 2 (Mục tiêu điểm 5 và điểm 7-8)',
-    'Hỏi đáp Gia sư AI giới hạn 20 câu hỏi/ngày',
-    'Tự động ghi nhận sổ lỗi sai dạng bài',
-    'Thi thử vào 10 cơ bản'
+  const handleActivateTrial = async () => {
+    if (!user) {
+      try {
+        await authService.signInWithGoogle();
+      } catch (err: any) {
+        alert(err.message || 'Lỗi đăng nhập bằng Google.');
+      }
+      return;
+    }
+
+    setTrialLoading(true);
+    setError(null);
+
+    try {
+      const trialDurationDays = 30;
+      const premiumUntilDate = new Date(Date.now() + trialDurationDays * 24 * 60 * 60 * 1000);
+      
+      const userRef = doc(db, 'users', user.uid);
+      await setDoc(userRef, {
+        isPremium: true,
+        role: 'premium',
+        trialActivated: true,
+        premiumUntil: premiumUntilDate.toISOString(),
+        trialStartDate: new Date().toISOString()
+      }, { merge: true });
+
+      // Bắn pháo hoa ăn mừng
+      import('canvas-confetti').then((confetti) => {
+        confetti.default({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+      });
+
+      alert('Kích hoạt dùng thử Premium 30 ngày thành công! Chúc bạn học tập bứt phá.');
+    } catch (err: any) {
+      console.error('Lỗi khi kích hoạt dùng thử:', err);
+      setError(err?.message || 'Có lỗi xảy ra khi kích hoạt dùng thử. Vui lòng thử lại sau.');
+    } finally {
+      setTrialLoading(false);
+    }
+  };
+
+  const [remainingDays, setRemainingDays] = useState(0);
+
+  React.useEffect(() => {
+    if (premiumUntil) {
+      const diffTime = new Date(premiumUntil).getTime() - Date.now();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setRemainingDays(diffDays > 0 ? diffDays : 0);
+    }
+  }, [premiumUntil]);
+
+  const trialBenefits = [
+    'Mở khóa hoàn toàn chặng 3 (Mục tiêu điểm 9-10)',
+    'Không giới hạn hỏi đáp Gia sư AI (100 câu/ngày)',
+    'Phân tích lỗi sai & đề xuất lộ trình khắc phục',
+    'Trải nghiệm 100% tính năng Premium trong 30 ngày'
   ];
 
   const premiumBenefits = [
@@ -107,40 +163,67 @@ export const PremiumPricing: React.FC = () => {
       {/* So sánh các gói */}
       <div className="grid md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto">
         
-        {/* Gói miễn phí */}
+        {/* Gói dùng thử 30 ngày */}
         <div className="bg-card rounded-3xl p-8 border border-border shadow-sm flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:shadow-md">
           <div>
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3 className="text-lg font-bold text-foreground">Gói Miễn Phí</h3>
-                <p className="text-xs text-muted-foreground mt-1">Dành cho học sinh ôn tập cơ bản</p>
+                <h3 className="text-lg font-bold text-foreground">Trải Nghiệm Premium</h3>
+                <p className="text-xs text-muted-foreground mt-1">Dành cho học sinh muốn học thử</p>
               </div>
-              <span className="px-2.5 py-1 text-[10px] bg-slate-100 dark:bg-slate-800 text-muted-foreground font-black rounded-lg">CƠ BẢN</span>
+              <span className="px-2.5 py-1 text-[10px] bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black rounded-lg uppercase">30 Ngày Free</span>
             </div>
 
             <div className="mb-6">
-              <span className="text-3xl font-black text-foreground">0đ</span>
-              <span className="text-xs text-muted-foreground ml-1">/ trọn đời</span>
+              <span className="text-3xl font-black bg-gradient-to-r from-indigo-500 to-primary bg-clip-text text-transparent">0đ</span>
+              <span className="text-xs text-muted-foreground ml-1">/ 30 ngày dùng thử</span>
             </div>
 
             <hr className="border-border mb-6" />
 
             <ul className="space-y-3.5 mb-8">
-              {freeBenefits.map((benefit, idx) => (
+              {trialBenefits.map((benefit, idx) => (
                 <li key={idx} className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <Check size={16} className="text-slate-400 shrink-0 mt-0.5" />
-                  <span>{benefit}</span>
+                  <Check size={16} className="text-indigo-500 shrink-0 mt-0.5" />
+                  <span className="font-semibold text-foreground/80">{benefit}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <button
-            disabled={true}
-            className="w-full py-3 bg-secondary text-muted-foreground font-bold text-sm rounded-xl cursor-not-allowed text-center"
-          >
-            {isPremium ? 'Gói hiện tại (Đã nâng cấp)' : 'Gói Mặc Định Của Bạn'}
-          </button>
+          {isPremium && trialActivated ? (
+            <div className="w-full py-3 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black text-sm rounded-xl text-center flex items-center justify-center gap-2 border border-indigo-500/20">
+              <ShieldCheck size={18} /> ĐANG DÙNG THỬ (CÒN {remainingDays} NGÀY)
+            </div>
+          ) : isPremium ? (
+            <button
+              disabled={true}
+              className="w-full py-3 bg-secondary text-muted-foreground font-bold text-sm rounded-xl cursor-not-allowed text-center"
+            >
+              Đã nâng cấp Premium trọn đời
+            </button>
+          ) : trialActivated ? (
+            <button
+              disabled={true}
+              className="w-full py-3 bg-secondary text-muted-foreground font-bold text-sm rounded-xl cursor-not-allowed text-center"
+            >
+              Hạn dùng thử đã kết thúc
+            </button>
+          ) : (
+            <button
+              onClick={handleActivateTrial}
+              disabled={trialLoading}
+              className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+            >
+              {trialLoading ? (
+                <>
+                  <Loader2 className="animate-spin" size={16} /> Đang kích hoạt...
+                </>
+              ) : (
+                'Kích Hoạt Dùng Thử 30 Ngày'
+              )}
+            </button>
+          )}
         </div>
 
         {/* Gói Premium */}
@@ -178,9 +261,9 @@ export const PremiumPricing: React.FC = () => {
             </ul>
           </div>
 
-          {isPremium ? (
+          {isPremium && !trialActivated ? (
             <div className="w-full py-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-sm rounded-xl text-center flex items-center justify-center gap-2 border border-emerald-500/20">
-              <ShieldCheck size={18} /> ĐÃ KÍCH HOẠT PREMIUM
+              <ShieldCheck size={18} /> ĐÃ KÍCH HOẠT TRỌN ĐỜI
             </div>
           ) : (
             <button
@@ -193,7 +276,7 @@ export const PremiumPricing: React.FC = () => {
                   <Loader2 className="animate-spin" size={16} /> Đang khởi tạo ví thanh toán...
                 </>
               ) : (
-                'Nâng Cấp Premium Ngay'
+                isPremium && trialActivated ? 'Nâng Cấp Trọn Đời Chỉ 99.000đ' : 'Nâng Cấp Premium Ngay'
               )}
             </button>
           )}

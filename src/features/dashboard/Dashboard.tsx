@@ -23,8 +23,18 @@ import { authService } from '../../services/authService';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedSubject, selectedGrade, user, progressVersion } = useAppStore();
+  const { selectedSubject, selectedGrade, user, progressVersion, isPremium, trialActivated, premiumUntil } = useAppStore();
   void progressVersion;
+
+  const [remainingDays, setRemainingDays] = useState(0);
+
+  React.useEffect(() => {
+    if (premiumUntil) {
+      const diffTime = new Date(premiumUntil).getTime() - Date.now();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setRemainingDays(diffDays > 0 ? diffDays : 0);
+    }
+  }, [premiumUntil]);
 
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const handleGoogleSignIn = async () => {
@@ -79,6 +89,8 @@ export const Dashboard: React.FC = () => {
     if (selectedSubject === 'math') return e.examId.startsWith('math');
     if (selectedSubject === 'english') return e.examId.startsWith('eng');
     if (selectedSubject === 'chemistry') return e.examId.startsWith('chem');
+    if (selectedSubject === 'biology') return e.examId.startsWith('bio');
+    if (selectedSubject === 'physics') return e.examId.startsWith('phy');
     return true;
   });
   const examScore = subjectExams.length > 0 ? `${subjectExams[subjectExams.length - 1].score}/10` : 'Chưa thi';
@@ -162,7 +174,7 @@ export const Dashboard: React.FC = () => {
         <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-left">
             <h3 className="text-sm font-black text-foreground">Bạn đang học ở chế độ xem thử (Guest Mode)</h3>
-            <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để học lý thuyết đầy đủ, lưu kết quả học tập và bắt đầu làm bài luyện tập/thi thử.</p>
+            <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản Google để nhận ngay 30 ngày dùng thử Premium miễn phí, học lý thuyết đầy đủ và lưu trữ toàn bộ tiến trình học.</p>
           </div>
           <button
             disabled={isAuthLoading}
@@ -172,10 +184,75 @@ export const Dashboard: React.FC = () => {
             {isAuthLoading ? (
               <Loader size={14} className="animate-spin" />
             ) : (
-              <>Đăng nhập ngay</>
+              <>Kích hoạt Premium Free</>
             )}
           </button>
         </div>
+      )}
+
+      {/* 🌟 Premium & Trial Status Banners */}
+      {user && (
+        <>
+          {/* Chưa Premium & Chưa dùng thử */}
+          {!isPremium && !trialActivated && (
+            <div className="bg-gradient-to-r from-indigo-500/10 via-primary/5 to-transparent border border-indigo-500/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="space-y-1 text-left">
+                <h3 className="text-sm font-black text-foreground flex items-center gap-1.5">
+                  🎁 Quà tặng bứt phá: Trải nghiệm Premium 30 ngày hoàn toàn miễn phí!
+                </h3>
+                <p className="text-[11px] text-muted-foreground font-semibold">
+                  Mở khóa ngay Gia sư AI không giới hạn và toàn bộ chặng 3 (Mục tiêu 9-10 điểm) để tăng tốc ôn luyện. Không cần thẻ thanh toán.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/premium')}
+                className="px-6 py-2.5 font-bold text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
+              >
+                Nhận dùng thử ngay
+              </button>
+            </div>
+          )}
+
+          {/* Đang dùng thử */}
+          {isPremium && trialActivated && (
+            <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="space-y-1 text-left">
+                <h3 className="text-sm font-black text-foreground flex items-center gap-1.5">
+                  👑 Bạn đang trong thời gian trải nghiệm Premium miễn phí (Còn lại {remainingDays} ngày)
+                </h3>
+                <p className="text-[11px] text-muted-foreground font-semibold">
+                  Nâng cấp gói trọn đời vĩnh viễn ngay hôm nay chỉ với 99.000đ (tiết kiệm 50%) để duy trì quyền học tập bứt phá và giữ lại toàn bộ tiến độ.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/premium')}
+                className="px-6 py-2.5 font-bold text-xs bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
+              >
+                Nâng cấp trọn đời 99k
+              </button>
+            </div>
+          )}
+
+          {/* Hết hạn dùng thử */}
+          {!isPremium && trialActivated && (
+            <div className="bg-gradient-to-r from-rose-500/10 via-red-500/5 to-transparent border border-rose-500/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="space-y-1 text-left">
+                <h3 className="text-sm font-black text-foreground flex items-center gap-1.5">
+                  ⚠️ Thời gian dùng thử Premium 30 ngày của bạn đã kết thúc
+                </h3>
+                <p className="text-[11px] text-muted-foreground font-semibold">
+                  Các tính năng nâng cao (Gia sư AI không giới hạn, Chặng 3 ôn tập nâng cao) đã bị tạm khóa. Nâng cấp trọn đời ngay để tiếp tục bứt phá điểm số!
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/premium')}
+                className="px-6 py-2.5 font-bold text-xs bg-rose-600 hover:bg-rose-700 text-white rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
+              >
+                Gia hạn Premium trọn đời
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* 📐 Main Workspace Grid: 2 Columns (Left 2/3 - Core Study Actions, Right 1/3 - Stats & Weaknesses) */}
@@ -241,7 +318,9 @@ export const Dashboard: React.FC = () => {
                       "w-fit px-8 font-black py-3 text-xs text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start",
                       selectedSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
                         selectedSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-                          'bg-purple-600 hover:bg-purple-700'
+                          selectedSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700' :
+                            selectedSubject === 'biology' ? 'bg-green-600 hover:bg-green-700' :
+                              'bg-purple-600 hover:bg-purple-700'
                     )}
                   >
                     {activeTheoryStatus === 'inprogress' ? "Tiếp tục học ngay" : "Bắt đầu học ngay"} <ArrowRight size={13} />
@@ -318,7 +397,9 @@ export const Dashboard: React.FC = () => {
                           "h-full rounded-full transition-all duration-500",
                           selectedSubject === 'math' ? 'bg-indigo-600' :
                             selectedSubject === 'chemistry' ? 'bg-emerald-600' :
-                              'bg-purple-600'
+                              selectedSubject === 'physics' ? 'bg-cyan-600' :
+                                selectedSubject === 'biology' ? 'bg-green-600' :
+                                  'bg-purple-600'
                         )}
                         style={{ width: `${activePracticeScore}%` }}
                       />
@@ -331,7 +412,9 @@ export const Dashboard: React.FC = () => {
                       "w-fit px-8 font-black py-3 text-xs text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start",
                       selectedSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
                         selectedSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-                          'bg-purple-600 hover:bg-purple-700'
+                          selectedSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700' :
+                            selectedSubject === 'biology' ? 'bg-green-600 hover:bg-green-700' :
+                              'bg-purple-600 hover:bg-purple-700'
                     )}
                   >
                     {activePracticeStatus === 'inprogress' ? "Tiếp tục luyện tập" : "Bắt đầu luyện tập"} <ArrowRight size={13} />
@@ -394,7 +477,9 @@ export const Dashboard: React.FC = () => {
                       "h-full rounded-full transition-all duration-500",
                       selectedSubject === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
                         selectedSubject === 'chemistry' ? "bg-linear-to-r from-emerald-500 to-teal-500" :
-                          "bg-linear-to-r from-purple-500 to-pink-500"
+                          selectedSubject === 'physics' ? "bg-linear-to-r from-cyan-500 to-sky-500" :
+                            selectedSubject === 'biology' ? "bg-linear-to-r from-green-500 to-emerald-500" :
+                              "bg-linear-to-r from-purple-500 to-pink-500"
                     )}
                     style={{ width: `${roadmapPercent}%` }}
                   />
@@ -413,7 +498,9 @@ export const Dashboard: React.FC = () => {
                       "h-full rounded-full transition-all duration-500",
                       selectedSubject === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
                         selectedSubject === 'chemistry' ? "bg-linear-to-r from-emerald-500 to-teal-500" :
-                          "bg-linear-to-r from-purple-500 to-pink-500"
+                          selectedSubject === 'physics' ? "bg-linear-to-r from-cyan-500 to-sky-500" :
+                            selectedSubject === 'biology' ? "bg-linear-to-r from-green-500 to-emerald-500" :
+                              "bg-linear-to-r from-purple-500 to-pink-500"
                     )}
                     style={{ width: `${practicePercent}%` }}
                   />

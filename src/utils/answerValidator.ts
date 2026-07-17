@@ -42,6 +42,21 @@ const answerCandidates = (question: Question): string[] => [
 
 export type AnswerInput = string | StructuredAnswer;
 
+export interface AnswerPartScore {
+  isCorrect: boolean;
+  earnedPoints: number;
+  maxPoints: number;
+}
+
+export interface AnswerScore {
+  isCorrect: boolean;
+  earnedPoints: number;
+  maxPoints: number;
+  correctParts: number;
+  totalParts: number;
+  partResults?: Record<string, AnswerPartScore>;
+}
+
 export const isStructuredAnswer = (value: AnswerInput): value is StructuredAnswer => {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 };
@@ -397,4 +412,98 @@ export function validateAnswer(question: Question, userAnswer: AnswerInput): boo
     default:
       return matchesNormalizedCandidate(question, userAnswer);
   }
+}
+
+const roundPoints = (value: number): number => Math.round(value * 10000) / 10000;
+
+/**
+ * Chấm điểm một câu hỏi theo số điểm thực tế của câu.
+ * Cụm Đúng/Sai mặc định được chấm từng ý; có thể ép về toàn-câu bằng
+ * `answerSchema.scoringMode = 'all_or_nothing'`.
+ */
+export function scoreAnswer(
+  question: Question,
+  userAnswer: AnswerInput,
+  maxPoints: number = question.points ?? 1
+): AnswerScore {
+  const schema = question.answerSchema;
+  const shouldScoreByField = schema?.type === 'true-false-cluster'
+    && schema.scoringMode !== 'all_or_nothing'
+    && isStructuredAnswer(userAnswer);
+
+  if (!schema || !shouldScoreByField) {
+    const isCorrect = validateAnswer(question, userAnswer);
+    return {
+      isCorrect,
+      earnedPoints: isCorrect ? maxPoints : 0,
+      maxPoints,
+      correctParts: isCorrect ? 1 : 0,
+      totalParts: 1
+    };
+  }
+
+  const fields = schema.fields.filter(field => field.required !== false);
+  const candidates = structuredAnswerCandidates(question, schema);
+  if (fields.length === 0 || candidates.length === 0) {
+    return {
+      isCorrect: false,
+      earnedPoints: 0,
+      maxPoints,
+      correctParts: 0,
+      totalParts: fields.length || 1
+    };
+  }
+
+  const fieldWeights = fields.map(field => {
+    const configuredWeight = schema.fieldWeights?.[field.key];
+    return Number.isFinite(configuredWeight) && (configuredWeight ?? 0) > 0
+      ? configuredWeight as number
+      : 1;
+  });
+  const totalWeight = fieldWeights.reduce((sum, weight) => sum + weight, 0);
+
+  const evaluatedCandidates = candidates.map(candidate => {
+    const partResults: Record<string, AnswerPartScore> = {};
+    let earnedPoints = 0;
+    let correctParts = 0;
+
+    fields.forEach((field, index) => {
+      const userValue = userAnswer[field.key] ?? '';
+      const candidateValue = candidate[field.key] ?? '';
+      const isCorrect = fieldHasValue(userValue)
+        && fieldHasValue(candidateValue)
+        && compareFieldValue(field, userValue, candidateValue, schema.autoCheckMode);
+      const partMaxPoints = roundPoints((maxPoints * fieldWeights[index]) / totalWeight);
+      const partEarnedPoints = isCorrect ? partMaxPoints : 0;
+
+      if (isCorrect) {
+        correctParts += 1;
+        earnedPoints += partEarnedPoints;
+      }
+      partResults[field.key] = {
+        isCorrect,
+        earnedPoints: partEarnedPoints,
+        maxPoints: partMaxPoints
+      };
+    });
+
+    return {
+      earnedPoints: roundPoints(earnedPoints),
+      correctParts,
+      partResults
+    };
+  });
+
+  const best = evaluatedCandidates.reduce((currentBest, candidate) => (
+    candidate.earnedPoints > currentBest.earnedPoints ? candidate : currentBest
+  ));
+
+  return {
+    isCorrect: best.correctParts === fields.length,
+    earnedPoints: best.correctParts === fields.length ? maxPoints : best.earnedPoints,
+    maxPoints,
+    correctParts: best.correctParts,
+    totalParts: fields.length,
+    partResults: best.partResults
+  };
 }

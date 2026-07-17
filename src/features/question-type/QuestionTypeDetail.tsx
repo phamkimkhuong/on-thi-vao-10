@@ -503,7 +503,7 @@ export const QuestionTypeDetail: React.FC = () => {
         <div className="space-y-3 relative z-10">
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn('text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-border/40', theme.badge)}>
-              {subjectIcon} {subjectName} {selectedGrade === 'grade9' ? 'Lớp 9' : 'Lớp 10'}
+              {subjectIcon} {subjectName} {selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : 'Lớp 11'}
             </span>
             <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs bg-secondary/60 text-muted-foreground border border-border/40 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
               <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
@@ -700,7 +700,7 @@ export const QuestionTypeDetail: React.FC = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span>🎒 Khối lớp học tập:</span>
-                <span className="text-foreground font-bold">Lớp {selectedGrade === 'grade9' ? '9' : '10'}</span>
+                <span className="text-foreground font-bold">Lớp {selectedGrade === 'grade9' ? '9' : selectedGrade === 'grade10' ? '10' : '11'}</span>
               </div>
             </CardContent>
           </Card>

@@ -16,11 +16,22 @@ import {
 } from './final1';
 import { biologyMidterm2QuestionsFormA, biologyMidterm2QuestionsFormB, biologyMidterm2SolutionsFormA, biologyMidterm2SolutionsFormB } from './midterm2';
 import { biologyFinal2QuestionsFormA, biologyFinal2QuestionsFormB, biologyFinal2SolutionsFormA, biologyFinal2SolutionsFormB } from './final2';
+import { biologyMidterm1Blueprint } from './blueprints/midterm1';
+import { biologyFinal1Blueprint } from './blueprints/final1';
+import { biologyMidterm2Blueprint } from './blueprints/midterm2';
+import { biologyFinal2Blueprint } from './blueprints/final2';
 
 export { biologyMidterm1Blueprint } from './blueprints/midterm1';
 export { biologyFinal1Blueprint } from './blueprints/final1';
 export { biologyMidterm2Blueprint } from './blueprints/midterm2';
 export { biologyFinal2Blueprint } from './blueprints/final2';
+
+export const g10BiologyAssessmentBlueprints = [
+  biologyMidterm1Blueprint,
+  biologyFinal1Blueprint,
+  biologyMidterm2Blueprint,
+  biologyFinal2Blueprint
+];
 
 export const g10BiologyAssessmentExams = [...biologyMidterm1Exams, ...biologyFinal1Exams, ...biologyMidterm2Exams, ...biologyFinal2Exams];
 export const g10BiologyAssessmentQuestions = [
