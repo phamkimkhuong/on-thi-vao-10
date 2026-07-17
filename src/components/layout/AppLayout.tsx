@@ -303,6 +303,9 @@ export const AppLayout: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            aria-label={isSidebarOpen ? "Đóng menu điều hướng" : "Mở menu điều hướng"}
+            aria-expanded={isSidebarOpen}
+            aria-controls="sidebar-navigation"
             className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
           >
             {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
@@ -317,7 +320,9 @@ export const AppLayout: React.FC = () => {
         />
       )}
 
-      <aside className={`
+      <aside
+        id="sidebar-navigation"
+        className={`
         fixed md:sticky top-0 left-0 bottom-0 z-50 md:z-30
         glass flex flex-col h-screen overflow-y-auto
         transition-all duration-300 md:translate-x-0
@@ -328,7 +333,7 @@ export const AppLayout: React.FC = () => {
           "p-6 border-b border-border/40 hidden md:flex items-center gap-3.5 cursor-pointer group",
           isSidebarCollapsed && "justify-center p-5"
         )} onClick={() => navigate('/dashboard')}>
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-primary/30 shrink-0 group-hover:scale-105 transition-transform duration-300 animate-float">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/10 shrink-0 group-hover:scale-105 transition-transform duration-300">
             10
           </div>
           {!isSidebarCollapsed && (
@@ -347,6 +352,9 @@ export const AppLayout: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setIsContextDropdownOpen(!isContextDropdownOpen)}
+              aria-label="Chọn khối học và môn học"
+              aria-haspopup="true"
+              aria-expanded={isContextDropdownOpen}
               className="w-full px-4 py-2.5 text-xs font-black rounded-2xl bg-secondary/50 border border-border/30 text-foreground transition-all flex items-center justify-between cursor-pointer shadow-sm active:scale-95"
             >
               <span className="truncate">{getActiveContextLabel()}</span>
@@ -369,6 +377,7 @@ export const AppLayout: React.FC = () => {
                             <button
                               key={course.code}
                               disabled={course.isLocked}
+                              aria-label={`Chọn môn ${course.name} - ${group.gradeTitle} ${course.isLocked ? '(Đã khóa)' : ''}`}
                               onClick={() => {
                                 if (course.isLocked) return;
                                 handleContextChange(group.grade, course.code);
@@ -411,12 +420,13 @@ export const AppLayout: React.FC = () => {
                   navigate(item.path);
                   setIsSidebarOpen(false);
                 }}
+                aria-label={item.label}
                 className={cn(
                   "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-extrabold transition-all duration-300 cursor-pointer active:scale-98",
                   isSidebarCollapsed && "justify-center px-2 py-3.5 gap-0",
                   isActive
                     ? 'bg-gradient-to-r from-primary/12 to-primary/3 text-primary border-l-4 border-primary pl-3.5 shadow-sm shadow-primary/5'
-                    : 'text-muted-foreground hover:bg-secondary/40 hover:text-foreground hover:translate-x-1.5'
+                    : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                 )}
                 title={isSidebarCollapsed ? item.label : undefined}
               >
@@ -438,20 +448,21 @@ export const AppLayout: React.FC = () => {
                   navigate('/teacher');
                   setIsSidebarOpen(false);
                 }}
+                aria-label="Góc Giáo viên"
                 className={cn(
                   "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98",
                   isSidebarCollapsed && "justify-center px-2 py-3.5 gap-0",
                   location.pathname === '/teacher'
                     ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/40 dark:text-emerald-400"
-                    : "text-emerald-600 hover:bg-emerald-500/5 hover:text-emerald-700 hover:translate-x-1.5 border-emerald-500/20 dark:text-emerald-400"
+                    : "text-emerald-600 hover:bg-emerald-500/5 hover:text-emerald-700 border-emerald-500/20 dark:text-emerald-400"
                 )}
                 title={isSidebarCollapsed ? "Góc Giáo viên 👩‍🏫" : undefined}
               >
-                <Users size={19} className="text-emerald-500 animate-pulse shrink-0" />
+                <Users size={19} className="text-emerald-500 shrink-0" />
                 {!isSidebarCollapsed && <span>Góc Giáo viên 👩‍🏫</span>}
                 {realPendingCount > 0 && (
                   <span className={cn(
-                    "bg-rose-500 text-white font-black text-[9px] rounded-full flex items-center justify-center animate-bounce shrink-0",
+                    "bg-rose-500 text-white font-black text-[9px] rounded-full flex items-center justify-center shrink-0",
                     isSidebarCollapsed
                       ? "absolute top-1 right-1.5 w-4 h-4 text-[8px]"
                       : "ml-auto w-5 h-5 shadow-md shadow-rose-500/20"
@@ -473,6 +484,7 @@ export const AppLayout: React.FC = () => {
             <p className="text-[9px] text-amber-700/80 dark:text-amber-300/80 font-bold mb-3">Mở khóa Gia sư & Chặng 3</p>
             <button
               onClick={() => { setIsSidebarOpen(false); navigate('/premium'); }}
+              aria-label="Kích hoạt Premium"
               className="w-full py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-[11px] rounded-xl shadow-md hover:shadow-lg hover:shadow-amber-500/10 active:scale-95 transition-all cursor-pointer animate-pulse-glow"
             >
               Kích hoạt ngay
@@ -512,6 +524,7 @@ export const AppLayout: React.FC = () => {
                     <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
                     <button
                       onClick={() => { logout(); setIsSidebarOpen(false); navigate('/dashboard'); }}
+                      aria-label="Đăng xuất tài khoản"
                       className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2.5 self-start cursor-pointer active:scale-95"
                     >
                       Đăng xuất
@@ -520,6 +533,7 @@ export const AppLayout: React.FC = () => {
                 ) : (
                   <button
                     onClick={() => { logout(); navigate('/dashboard'); }}
+                    aria-label="Đăng xuất tài khoản"
                     className="text-[9px] text-rose-500 font-black hover:underline cursor-pointer active:scale-95 mt-1"
                     title="Đăng xuất"
                   >
@@ -531,6 +545,7 @@ export const AppLayout: React.FC = () => {
               <button
                 disabled={isAuthLoading}
                 onClick={handleDirectGoogleSignIn}
+                aria-label="Đăng nhập bằng tài khoản Google"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-extrabold text-[11px] py-2.5 px-3 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:pointer-events-none"
               >
                 {isAuthLoading ? (
@@ -553,6 +568,7 @@ export const AppLayout: React.FC = () => {
               <span>•</span>
               <button
                 onClick={() => setShowPolicyModal(true)}
+                aria-label="Xem điều khoản sử dụng và chính sách bảo mật"
                 className="hover:text-primary hover:underline transition-colors cursor-pointer"
               >
                 Điều khoản & Chính sách
@@ -570,6 +586,8 @@ export const AppLayout: React.FC = () => {
           <div className="flex items-center gap-4.5">
             <button
               onClick={toggleSidebarCollapse}
+              aria-label={isSidebarCollapsed ? "Mở rộng menu bên" : "Thu gọn menu bên"}
+              aria-expanded={!isSidebarCollapsed}
               className="p-2.5 rounded-xl bg-secondary/50 text-muted-foreground hover:text-foreground border border-border/20 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all cursor-pointer hidden md:flex items-center justify-center shrink-0 active:scale-95"
               title={isSidebarCollapsed ? "Mở rộng menu" : "Thu gọn menu"}
             >
@@ -582,6 +600,9 @@ export const AppLayout: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsContextDropdownOpen(!isContextDropdownOpen)}
+                  aria-label="Chọn khối học và môn học"
+                  aria-haspopup="true"
+                  aria-expanded={isContextDropdownOpen}
                   className="px-3.5 py-1.5 text-xs font-black rounded-2xl bg-secondary/50 hover:bg-secondary border border-border/40 hover:border-primary/30 text-foreground transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
                 >
                   <span>{getActiveContextLabel()}</span>
@@ -604,6 +625,7 @@ export const AppLayout: React.FC = () => {
                                 <button
                                   key={course.code}
                                   disabled={course.isLocked}
+                                  aria-label={`Chọn môn ${course.name} - ${group.gradeTitle} ${course.isLocked ? '(Đã khóa)' : ''}`}
                                   onClick={() => {
                                     if (course.isLocked) return;
                                     handleContextChange(group.grade, course.code);
@@ -646,6 +668,7 @@ export const AppLayout: React.FC = () => {
               <button
                 disabled={isAuthLoading}
                 onClick={handleDirectGoogleSignIn}
+                aria-label="Đăng nhập bằng tài khoản Google"
                 className="px-3.5 py-2 bg-primary hover:bg-primary/95 text-primary-foreground font-black text-xs rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer flex items-center gap-2 shrink-0 disabled:opacity-50 disabled:pointer-events-none h-9"
               >
                 {isAuthLoading ? (
@@ -665,7 +688,8 @@ export const AppLayout: React.FC = () => {
             ) : !isPremium ? (
               <button
                 onClick={() => navigate(ROUTES.PREMIUM)}
-                className="px-3.5 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-xs rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer flex items-center gap-1 shrink-0 animate-pulse-glow animate-pulse"
+                aria-label="Nâng cấp tài khoản Premium"
+                className="px-3.5 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-xs rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer flex items-center gap-1 shrink-0"
               >
                 👑 Lên Premium
               </button>

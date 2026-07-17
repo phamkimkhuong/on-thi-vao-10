@@ -1,0 +1,41 @@
+import type { Solution } from '@/types';
+
+const solved = (questionId: string, recognition: string, explanation: string, finalAnswer: string, mistakes: string[], review: string[]): Solution => ({ id: `solution-${questionId}`, questionId, recognition, detailedSteps: [{ order: 1, title: 'Nhận dạng', explanation: recognition }, { order: 2, title: 'Lập luận', explanation, result: finalAnswer }], finalAnswer, commonMistakes: mistakes, reviewSuggestions: review });
+
+export const biologyMidterm2SolutionsFormA: Solution[] = [
+  solved('bio10-assess-mid2-a-q01', 'Đề hỏi vai trò năng lượng của ATP, cần phân biệt chất mang ngắn hạn với chất dự trữ.', 'ATP được tổng hợp và thủy phân liên tục để ghép phản ứng giải phóng năng lượng với công tế bào; không phải kho lâu dài.', 'B', ['Gọi ATP là kho năng lượng lâu dài.', 'Cho ATP thay thế enzyme.'], ['ATP và ghép cặp năng lượng']),
+  solved('bio10-assess-mid2-a-q02', 'Tính đặc hiệu enzyme được nhận diện qua sự phù hợp trung tâm hoạt động–cơ chất.', 'Hình dạng và nhóm hóa học của trung tâm hoạt động chỉ tương tác hiệu quả với cơ chất phù hợp.', 'A', ['Cho enzyme dùng hết sau phản ứng.'], ['Cấu trúc enzyme']),
+  solved('bio10-assess-mid2-a-q03', 'Câu hỏi về cơ chế xúc tác phải tập trung vào năng lượng hoạt hóa.', 'Enzyme tạo con đường phản ứng có năng lượng hoạt hóa thấp hơn, không đổi sản phẩm hay chênh lệch năng lượng tổng thể.', 'B', ['Nói enzyme cung cấp năng lượng.'], ['Năng lượng hoạt hóa']),
+  solved('bio10-assess-mid2-a-q04', 'Đọc bảng trước, xác định giá trị lớn nhất trong phạm vi đã đo.', 'Tốc độ lớn nhất là 100 ở 40°C. Không được suy “tăng nhiệt luôn tăng” vì 60°C chỉ còn 12.', 'B', ['Khái quát ngoài các mức khảo sát.', 'Bỏ qua điểm giảm ở nhiệt độ cao.'], ['Đọc dữ liệu enzyme']),
+  solved('bio10-assess-mid2-a-q05', 'Trong thí nghiệm một biến, pH thay đổi còn các yếu tố khác phải giống nhau.', 'Giữ thời gian, nhiệt độ và lượng enzyme–cơ chất để khác biệt kết quả có thể quy cho pH.', 'B', ['Thay đổi đồng thời nhiều biến.'], ['Thực hành enzyme']),
+  solved('bio10-assess-mid2-a-q06', 'Quang hợp là con đường đồng hóa dùng ánh sáng.', 'Năng lượng ánh sáng được chuyển thành năng lượng hóa học tích lũy trong chất hữu cơ.', 'B', ['Đồng nhất quang hợp với hô hấp.'], ['Tổng hợp chất']),
+  solved('bio10-assess-mid2-a-q07', 'Đề hỏi vị trí tạo phần lớn ATP ở tế bào nhân thực.', 'Chuỗi chuyền electron và ATP synthase nằm ở màng trong ti thể, tạo phần lớn ATP của hô hấp hiếu khí.', 'A', ['Chọn tế bào chất vì đường phân diễn ra tại đó.'], ['Hô hấp tế bào']),
+  solved('bio10-assess-mid2-a-q08', 'Ethanol và CO₂ ở nấm men là dấu hiệu của lên men rượu.', 'Trong thiếu oxygen, nấm men lên men pyruvate tạo ethanol, CO₂ và tái sinh chất nhận electron cho đường phân.', 'B', ['Nhầm lên men với quang hợp.'], ['Lên men']),
+  solved('bio10-assess-mid2-a-q09', 'Chu kì G₁–S–G₂–M; chữ S gắn với synthesis DNA.', 'DNA nhân đôi trong pha S của kì trung gian.', 'B', ['Cho DNA nhân đôi ở pha M.'], ['Chu kì tế bào']),
+  solved('bio10-assess-mid2-a-q10', 'Phải phân biệt lượng DNA/chromatid với số nhiễm sắc thể tính theo tâm động.', 'Sau pha S, lượng DNA gấp đôi và mỗi nhiễm sắc thể có hai chromatid, nhưng số tâm động chưa đổi.', 'B', ['Cứ DNA gấp đôi là kết luận số NST gấp đôi.'], ['Chu kì và nguyên phân']),
+  solved('bio10-assess-mid2-a-q11', 'Kì sau nguyên phân được nhận diện bằng sự tách chromatid chị em.', 'Tâm động phân chia, chromatid chị em trở thành nhiễm sắc thể đơn và đi về hai cực.', 'B', ['Nhầm với phân li tương đồng ở giảm phân I.'], ['Nguyên phân']),
+  solved('bio10-assess-mid2-a-q12', 'Câu hỏi ung thư cần nối điểm kiểm soát với việc ngăn tế bào lỗi tiếp tục chu kì.', 'Mất kiểm soát cho phép tế bào mang tổn thương DNA tiếp tục phân chia, tích lũy biến đổi và tăng sinh.', 'A', ['Kết luận một biến đổi chắc chắn gây ung thư.'], ['Chu kì tế bào và ung thư']),
+  solved('bio10-assess-mid2-a-q13', 'Kì sau I đặc trưng bởi phân li cặp tương đồng, chromatid chị em vẫn gắn nhau.', 'Mỗi nhiễm sắc thể kép của một cặp tương đồng đi về một cực.', 'B', ['Nhầm kì sau I với kì sau II.'], ['Giảm phân I']),
+  solved('bio10-assess-mid2-a-q14', 'Trao đổi chéo xảy ra giữa chromatid không chị em và tạo tái tổ hợp.', 'Các đoạn tương ứng được trao đổi, tạo tổ hợp allele mới trên nhiễm sắc thể.', 'A', ['Cho trao đổi chéo làm tăng số NST.'], ['Biến dị tổ hợp']),
+  solved('bio10-assess-mid2-a-q15', 'So sánh phải xét số lần phân bào, bộ NST và ý nghĩa.', 'Giảm phân gồm hai lần phân bào sau một lần nhân đôi, tạo tế bào đơn bội và góp phần tạo biến dị.', 'B', ['Cho giảm phân không nhân đôi DNA.', 'Cho nguyên phân tạo giao tử.'], ['So sánh phân bào']),
+  solved('bio10-assess-mid2-a-q16', 'Nuôi cấy mô thực vật dựa vào khả năng một tế bào tái tạo cơ thể trong điều kiện phù hợp.', 'Tính toàn năng cho phép tế bào/mô biệt hóa lại và phát triển thành cây khi có môi trường, hormone thích hợp.', 'A', ['Cho mọi tế bào tự thành cây không cần điều kiện.'], ['Công nghệ tế bào']),
+  solved('bio10-assess-mid2-a-q17', 'Đọc cực đại và xu hướng hai phía, sau đó giới hạn kết luận trong enzyme đang xét.', 'a Đúng: 100 ở pH 7. b Sai: sau pH 7 hoạt tính giảm. c Đúng: pH ảnh hưởng ion hóa/cấu trúc. d Sai: không đại diện mọi enzyme.', 'a:Đ|b:S|c:Đ|d:S', ['Khái quát một enzyme cho mọi enzyme.'], ['Dữ liệu enzyme']),
+  solved('bio10-assess-mid2-a-q18', 'Tách ba vấn đề: số lần nhân đôi, cách đếm NST và nguồn biến dị giao tử.', 'a Đúng. b Sai vì số tâm động chưa đổi sau S. c Đúng vì giảm phân giảm bộ NST, thụ tinh khôi phục. d Sai do phân li độc lập và trao đổi chéo.', 'a:Đ|b:S|c:Đ|d:S', ['Nhầm lượng DNA với số NST.', 'Cho giao tử giống nhau.'], ['Giảm phân và thụ tinh']),
+  solved('bio10-assess-mid2-a-q19', 'Đếm các dòng có cột bọt ≥10 mm.', '25°C cho 12 mm và 37°C cho 20 mm; có 2 mức.', '2', ['Đếm cả 10°C hoặc 60°C.'], ['Thực hành catalase']),
+  solved('bio10-assess-mid2-a-q20', 'Mỗi lần nguyên phân đồng loạt làm số tế bào tăng gấp đôi.', 'Sau 4 lần: $2^4=16$ tế bào.', '16', ['Tính 2×4.', 'Không tính từ một tế bào ban đầu.'], ['Bài toán nguyên phân']),
+  {
+    id: 'solution-bio10-assess-mid2-a-q21', questionId: 'bio10-assess-mid2-a-q21', recognition: 'Dạng thiết kế thí nghiệm enzyme một biến: nhiệt độ là biến độc lập, hoạt tính được đại diện bằng oxygen/cột bọt trong cùng thời gian.',
+    detailedSteps: [
+      { order: 1, title: 'Biến và đối chứng', explanation: 'Nhiệt độ là biến độc lập; chiều cao cột bọt/thể tích O₂ trong cùng thời gian là biến phụ thuộc. Giữ lượng catalase, H₂O₂, pH, thể tích và thời gian giống nhau; có ống không enzyme hoặc enzyme đã đun sôi làm đối chứng âm.', points: 0.5 },
+      { order: 2, title: 'Quy trình', explanation: 'Cân bằng riêng enzyme và cơ chất ở từng nhiệt độ, trộn để bắt đầu đồng thời, đo cột bọt sau cùng một khoảng thời gian.', points: 0.5 },
+      { order: 3, title: 'Xử lí và kết luận', explanation: 'Lặp lại, tính trung bình, vẽ hoạt tính theo nhiệt độ; nhiệt độ có tín hiệu lớn nhất trong các mức đo là mức hoạt tính cao nhất, không khái quát ngoài phạm vi.', points: 0.75 },
+      { order: 4, title: 'Độ tin cậy', explanation: 'Dùng bể ổn nhiệt, mẫu lặp, dụng cụ định lượng khí tốt hơn cột bọt và kiểm soát thời điểm trộn.', points: 0.25 }
+    ], finalAnswer: 'Chấm theo rubric', commonMistakes: ['Không cân bằng nhiệt trước phản ứng.', 'Thay đổi lượng enzyme giữa các ống.', 'Không có đối chứng.', 'Gọi nhiệt độ đo cao nhất là tối ưu tuyệt đối.'], reviewSuggestions: ['Thực hành enzyme', 'Thiết kế thí nghiệm'],
+    rubric: [
+      { id: 'variables', description: 'Xác định biến và đối chứng phù hợp.', points: 0.5, evidence: ['Nhiệt độ là biến độc lập', 'O₂/cột bọt là biến phụ thuộc', 'Có điều kiện kiểm soát và đối chứng âm'] },
+      { id: 'procedure', description: 'Quy trình đo công bằng và đúng thời điểm.', points: 0.5, evidence: ['Cân bằng nhiệt', 'Bắt đầu đồng thời', 'Đo cùng thời gian'] },
+      { id: 'analysis', description: 'Lặp, xử lí dữ liệu và kết luận đúng giới hạn.', points: 0.75, evidence: ['Mẫu lặp/trung bình', 'Đồ thị hoặc so sánh', 'Không khái quát ngoài mức đo'] },
+      { id: 'reliability', description: 'Nêu biện pháp tăng độ tin cậy.', points: 0.25, evidence: ['Ổn nhiệt hoặc đo khí định lượng hoặc tăng số lần lặp'] }
+    ]
+  }
+];

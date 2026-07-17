@@ -405,6 +405,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
           <button
             onClick={handleClearHistory}
             title="Xóa lịch sử chat"
+            aria-label="Xóa lịch sử trò chuyện"
             type="button"
             className="p-1.5 rounded-lg text-muted-foreground hover:bg-secondary cursor-pointer"
           >
@@ -413,6 +414,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
 
           <button
             onClick={onClose}
+            aria-label="Đóng bảng gia sư AI"
             type="button"
             className="p-1.5 rounded-lg text-muted-foreground hover:bg-secondary cursor-pointer"
           >
@@ -506,6 +508,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
             <button
               type="button"
               onClick={handleRemoveImage}
+              aria-label="Xóa ảnh đính kèm"
               className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md hover:bg-destructive/90 transition-colors cursor-pointer"
               title="Xóa ảnh"
             >
@@ -529,6 +532,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isLoading || isUploadingImage}
+            aria-label="Đính kèm hình ảnh bài làm"
             className="w-9 h-9 rounded-xl border border-border bg-background hover:bg-secondary disabled:opacity-50 flex items-center justify-center shrink-0 cursor-pointer transition-all shadow-sm text-muted-foreground"
             title="Đính kèm hình ảnh bài làm"
           >
@@ -546,6 +550,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
           <button
             type="submit"
             disabled={(!input.trim() && !selectedFile) || isLoading || isUploadingImage}
+            aria-label="Gửi tin nhắn"
             className="w-9 h-9 rounded-xl bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50 flex items-center justify-center shrink-0 cursor-pointer transition-all shadow-sm"
           >
             <Send size={15} />
@@ -561,6 +566,7 @@ export const AiTutorPanel: React.FC<AiTutorPanelProps> = ({
         >
           <button
             onClick={() => setActiveLightboxUrl(null)}
+            aria-label="Đóng xem ảnh phóng to"
             className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/50 hover:bg-slate-900 text-white cursor-pointer transition-all border border-white/10"
             title="Đóng"
           >

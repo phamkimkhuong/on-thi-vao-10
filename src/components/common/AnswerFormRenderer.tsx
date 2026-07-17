@@ -46,7 +46,7 @@ export const AnswerFormRenderer: React.FC<AnswerFormRendererProps> = ({
         <span className="text-xs font-bold text-muted-foreground block">Đáp án cuối cùng</span>
         {schema.autoCheckMode === 'manual' && (
           <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
-            Tự đối chiếu
+            Chấm theo rubric
           </span>
         )}
       </div>
@@ -55,6 +55,7 @@ export const AnswerFormRenderer: React.FC<AnswerFormRendererProps> = ({
         {schema.fields.map((field) => {
           const fieldValue = value[field.key] ?? '';
           const isLongField = field.valueType === 'expression' || field.valueType === 'text';
+          const useTextarea = question.responseType === 'constructed_response' && field.valueType === 'text';
 
           if (field.valueType === 'choice') {
             return (
@@ -109,17 +110,30 @@ export const AnswerFormRenderer: React.FC<AnswerFormRendererProps> = ({
               <span className="text-[11px] font-bold text-foreground block">
                 <LatexRenderer text={field.label} />
               </span>
-              <input
-                type="text"
-                value={fieldValue}
-                disabled={disabled}
-                inputMode={inputModeForField(field)}
-                autoComplete={autoCompleteForField(field)}
-                onChange={(event) => updateField(field.key, event.target.value)}
-                placeholder={field.placeholder ?? 'Nhập đáp án'}
-                aria-label={field.label}
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold placeholder:text-muted-foreground/50 placeholder:font-normal disabled:opacity-70 disabled:cursor-not-allowed"
-              />
+              {useTextarea ? (
+                <textarea
+                  value={fieldValue}
+                  disabled={disabled}
+                  autoComplete={autoCompleteForField(field)}
+                  onChange={(event) => updateField(field.key, event.target.value)}
+                  placeholder={field.placeholder ?? 'Trình bày câu trả lời theo từng ý...'}
+                  aria-label={field.label}
+                  rows={7}
+                  className="w-full resize-y bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold placeholder:text-muted-foreground/50 placeholder:font-normal disabled:opacity-70 disabled:cursor-not-allowed"
+                />
+              ) : (
+                <input
+                  type="text"
+                  value={fieldValue}
+                  disabled={disabled}
+                  inputMode={inputModeForField(field)}
+                  autoComplete={autoCompleteForField(field)}
+                  onChange={(event) => updateField(field.key, event.target.value)}
+                  placeholder={field.placeholder ?? 'Nhập đáp án'}
+                  aria-label={field.label}
+                  className="w-full bg-slate-50 dark:bg-slate-900 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground font-semibold placeholder:text-muted-foreground/50 placeholder:font-normal disabled:opacity-70 disabled:cursor-not-allowed"
+                />
+              )}
               {field.hint && (
                 <span className="block text-[10px] font-semibold text-muted-foreground leading-relaxed">
                   {field.hint}

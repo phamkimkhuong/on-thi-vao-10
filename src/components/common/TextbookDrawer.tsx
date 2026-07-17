@@ -107,6 +107,7 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
                 onClick={handleZoomOut}
                 disabled={zoomScale <= 0.75}
                 title="Thu nhỏ"
+                aria-label="Thu nhỏ trang sách"
                 className="p-1.5 rounded-lg text-muted-foreground hover:bg-card hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all active:scale-95"
               >
                 <ZoomOut size={14} />
@@ -118,6 +119,7 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
                 onClick={handleZoomIn}
                 disabled={zoomScale >= 2.5}
                 title="Phóng to"
+                aria-label="Phóng to trang sách"
                 className="p-1.5 rounded-lg text-muted-foreground hover:bg-card hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all active:scale-95"
               >
                 <ZoomIn size={14} />
@@ -128,6 +130,7 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
               title={isFullscreen ? "Thu nhỏ trình đọc" : "Đọc toàn màn hình"}
+              aria-label={isFullscreen ? "Thu nhỏ trình đọc sách" : "Đọc sách toàn màn hình"}
               className="p-2 rounded-xl text-muted-foreground hover:bg-secondary cursor-pointer transition-all active:scale-95 border border-border/10"
             >
               {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
@@ -137,6 +140,7 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
             <button
               onClick={onClose}
               title="Đóng trình đọc"
+              aria-label="Đóng trình đối chiếu sách giáo khoa"
               className="p-2 rounded-xl text-muted-foreground hover:bg-secondary hover:text-destructive cursor-pointer transition-all active:scale-95 border border-border/10"
             >
               <X size={15} />

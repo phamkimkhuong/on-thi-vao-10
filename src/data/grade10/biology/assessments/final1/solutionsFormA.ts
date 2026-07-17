@@ -1,0 +1,51 @@
+import type { Solution } from '@/types';
+
+const solved = (questionId: string, recognition: string, explanation: string, finalAnswer: string, commonMistakes: string[], reviewSuggestions: string[]): Solution => ({
+  id: `solution-${questionId}`, questionId, recognition,
+  detailedSteps: [
+    { order: 1, title: 'Dấu hiệu nhận dạng', explanation: recognition },
+    { order: 2, title: 'Lập luận và kết luận', explanation, result: finalAnswer }
+  ],
+  finalAnswer, commonMistakes, reviewSuggestions
+});
+
+export const biologyFinal1SolutionsFormA: Solution[] = [
+  solved('bio10-assess-final1-a-q01', 'Đề hỏi biến kiểm soát trong thí nghiệm, tức yếu tố phải giữ giống nhau để so sánh công bằng.', 'Nồng độ sucrose là biến độc lập; phần trăm đổi khối lượng là biến phụ thuộc. Kích thước và khối lượng ban đầu của lát khoai cần được chuẩn hóa.', 'C', ['Nhầm biến kiểm soát với biến độc lập.', 'Không chuẩn hóa mẫu sinh học.'], ['Thiết kế thí nghiệm']),
+  solved('bio10-assess-final1-a-q02', 'Cụm “tính lưỡng cực phospholipid” phải nối đầu ưa nước–đuôi kị nước với cấu trúc màng.', 'Trong nước, phospholipid tự sắp xếp thành lớp kép, tạo nền ngăn cách và môi trường cho protein màng hoạt động.', 'A', ['Chỉ nêu phospholipid là lipid nhưng không liên hệ màng.'], ['Phospholipid và màng sinh chất']),
+  solved('bio10-assess-final1-a-q03', 'Đề kết nối biến tính protein với chức năng kênh/protein tải.', 'Chức năng protein phụ thuộc cấu trúc không gian; biến tính làm vùng gắn hoặc lối đi của kênh thay đổi nên vận chuyển chọn lọc giảm.', 'B', ['Đồng nhất biến tính với mất DNA.', 'Cho rằng protein màng không phụ thuộc hình dạng.'], ['Protein', 'Màng sinh chất']),
+  solved('bio10-assess-final1-a-q04', 'Cần đối chiếu ba ý cốt lõi của học thuyết tế bào, đặc biệt nguồn gốc tế bào.', 'Một nội dung cốt lõi là mọi tế bào sinh ra từ tế bào có trước. Các phát biểu còn lại là tuyệt đối hóa hoặc sai bản chất.', 'B', ['Cho virus là một tế bào.', 'Liên hệ kích thước cơ thể với kích thước tế bào.'], ['Học thuyết tế bào']),
+  solved('bio10-assess-final1-a-q05', 'Dấu hiệu phân biệt nhân sơ–nhân thực phải dựa vào nhân hoàn chỉnh và bào quan có màng.', 'Nhân sơ có DNA nhưng DNA nằm ở vùng nhân, không được màng nhân bao bọc. Cả hai kiểu tế bào đều có màng, ribosome và tế bào chất.', 'C', ['Cho nhân sơ không có DNA.', 'Chọn đặc điểm chung làm điểm phân biệt.'], ['Tế bào nhân sơ']),
+  solved('bio10-assess-final1-a-q06', 'Từ khóa “khảm động” gồm hai ý: nhiều thành phần xen kẽ và khả năng dịch chuyển tương đối.', 'Màng là lớp kép phospholipid với protein phân bố không đồng nhất; lipid và nhiều protein có thể di chuyển trong mặt phẳng màng.', 'B', ['Coi màng là lớp cứng bất động.', 'Cho màng chỉ gồm lipid.'], ['Mô hình khảm động']),
+  solved('bio10-assess-final1-a-q07', 'Đề hỏi chức năng một thành phần của nhân, cần phân biệt lỗ nhân với chromatin và nucleolus.', 'Lỗ màng nhân kiểm soát sự trao đổi RNA, protein và các phân tử khác giữa nhân với tế bào chất.', 'B', ['Gán chức năng tạo ATP cho nhân.', 'Nhầm lỗ nhân với nucleolus.'], ['Nhân tế bào']),
+  solved('bio10-assess-final1-a-q08', 'Dạng đường đi protein tiết: bắt đầu nơi tổng hợp, qua nơi biến đổi–phân loại rồi túi hòa màng.', 'Protein tiết được tổng hợp trên ribosome của lưới nội chất hạt, chuyển tới Golgi, đóng túi tiết và xuất bào qua màng.', 'A', ['Bỏ qua Golgi.', 'Cho protein tiết bắt đầu ở lysosome.'], ['Hệ thống nội màng']),
+  solved('bio10-assess-final1-a-q09', 'Tế bào chuyên hóa tiết protein cần hệ thống tổng hợp và chế biến protein phát triển.', 'Lưới nội chất hạt tạo protein; Golgi biến đổi, phân loại và đóng gói protein tiết.', 'A', ['Chọn bào quan theo tên quen thuộc thay vì chức năng.', 'Cho mọi tế bào có lượng bào quan như nhau.'], ['Tế bào chuyên hóa']),
+  solved('bio10-assess-final1-a-q10', 'So sánh thực vật–động vật phải chọn cấu trúc đặc trưng, không chọn cấu trúc chung.', 'Không bào trung tâm lớn là đặc trưng phổ biến của tế bào thực vật trưởng thành; ribosome, màng và ti thể có ở cả hai.', 'C', ['Cho ti thể chỉ có ở động vật.', 'Không phân biệt không bào nhỏ với không bào trung tâm lớn.'], ['So sánh các kiểu tế bào']),
+  solved('bio10-assess-final1-a-q11', 'Dạng thao tác kính hiển vi: luôn định vị mẫu và lấy nét từ vật kính nhỏ.', 'Vật kính nhỏ cho trường nhìn rộng và khoảng cách an toàn; sau khi ảnh rõ mới tăng độ phóng đại.', 'B', ['Bắt đầu bằng vật kính lớn.', 'Dùng ốc chỉnh thô khi vật kính lớn.'], ['Sử dụng kính hiển vi']),
+  solved('bio10-assess-final1-a-q12', 'Môi trường ưu trương nghĩa là nước có xu hướng rời tế bào qua màng.', 'Nước đi ra làm khối nguyên sinh giảm thể tích; màng sinh chất có thể tách khỏi thành, tạo hiện tượng co nguyên sinh.', 'B', ['Nói chất tan di chuyển bằng thẩm thấu.', 'Cho thành tế bào co lại.'], ['Thẩm thấu và co nguyên sinh']),
+  solved('bio10-assess-final1-a-q13', 'Cả hai quá trình đều có thể dùng protein, nên phải xét chiều gradient và năng lượng.', 'Khuếch tán hỗ trợ đi theo gradient, không trực tiếp tiêu tốn năng lượng; vận chuyển chủ động có thể đi ngược gradient và cần năng lượng.', 'B', ['Cho mọi protein màng đều dùng ATP.', 'Cho khuếch tán hỗ trợ không có protein.'], ['Vận chuyển qua màng']),
+  solved('bio10-assess-final1-a-q14', 'Đối tượng lớn được màng bao lấy đưa vào tế bào là dấu hiệu của thực bào.', 'Bạch cầu tạo chân giả bao vi khuẩn, hình thành túi nhập bào; đây là một dạng nhập bào cần năng lượng.', 'C', ['Gọi thực bào là thẩm thấu.', 'Chọn khuếch tán cho vật thể lớn.'], ['Nhập bào và xuất bào']),
+  solved('bio10-assess-final1-a-q15', 'Hormone tan trong nước khó qua lõi kị nước, vì vậy thường dùng thụ thể màng.', 'Hormone gắn thụ thể màng, làm thụ thể đổi cấu hình và khởi động chuỗi truyền tin nội bào dẫn tới đáp ứng.', 'A', ['Cho mọi phân tử tín hiệu phải đi vào tế bào.', 'Bỏ qua giai đoạn tiếp nhận.'], ['Truyền tin tế bào']),
+  solved('bio10-assess-final1-a-q16', 'Tình huống rau héo khi nhiều muối là ứng dụng của môi trường ưu trương.', 'Nồng độ chất tan bên ngoài cao làm nước đi ra khỏi tế bào rau, sức trương giảm nên rau héo.', 'A', ['Nhầm chiều nước với chiều muối.', 'Cho thành tế bào hòa tan.'], ['Vận dụng thẩm thấu']),
+  solved('bio10-assess-final1-a-q17', 'Xét từng phát biểu theo ba tiêu chí: cấu trúc chung, vật chất di truyền và sự phối hợp bào quan.', 'a Đúng: cả nhân sơ và nhân thực đều có ribosome. b Sai: nhân sơ có DNA ở vùng nhân. c Đúng: lưới nội chất hạt–Golgi phối hợp trong đường tiết. d Sai: số lượng bào quan thay đổi theo chức năng.', 'a:Đ|b:S|c:Đ|d:S', ['Cho nhân sơ không có DNA.', 'Học bào quan như các đơn vị độc lập.'], ['Tế bào nhân sơ', 'Hệ thống nội màng']),
+  solved('bio10-assess-final1-a-q18', 'Đọc xu hướng khối lượng theo nồng độ rồi phân biệt dữ liệu quan sát với kết luận tuyệt đối.', 'a Đúng: số liệu giảm từ +8 xuống −7. b Đúng: ở 0% mẫu nhận nước. c Sai: điểm 0% thay đổi nằm giữa 5% và 10%, chưa xác định chính xác. d Sai: không thể khái quát cho mọi mô.', 'a:Đ|b:Đ|c:S|d:S', ['Chọn một nồng độ gần 0 rồi gọi là đẳng trương chính xác.', 'Khái quát vượt mẫu.'], ['Đọc dữ liệu thẩm thấu']),
+  solved('bio10-assess-final1-a-q19', 'Độ phóng đại tổng cộng bằng độ phóng đại thị kính nhân vật kính.', '$10\times40=400$ lần.', '400', ['Cộng 10 và 40.', 'Chỉ ghi độ phóng đại vật kính.'], ['Kính hiển vi']),
+  solved('bio10-assess-final1-a-q20', 'Dạng phần trăm thay đổi: lấy chênh lệch chia giá trị ban đầu rồi nhân 100%.', '$\frac{5{,}40-5{,}00}{5{,}00}\times100\%=8\%$.', '8', ['Chia cho khối lượng sau.', 'Quên nhân 100%.'], ['Xử lí dữ liệu thực nghiệm']),
+  {
+    id: 'solution-bio10-assess-final1-a-q21', questionId: 'bio10-assess-final1-a-q21',
+    recognition: 'Dạng thiết kế thí nghiệm thẩm thấu: cần chuẩn hóa mẫu, thay đổi một nồng độ, đo phần trăm đổi khối lượng và tìm nơi giá trị gần 0%.',
+    detailedSteps: [
+      { order: 1, title: 'Xác định biến và bố trí', explanation: 'Biến độc lập là nồng độ sucrose; biến phụ thuộc là phần trăm thay đổi khối lượng. Chuẩn hóa kích thước/khối lượng ban đầu, thể tích dung dịch, thời gian và nhiệt độ. Dung dịch 0% là mốc so sánh không sucrose.', points: 0.5 },
+      { order: 2, title: 'Tiến hành và đo', explanation: 'Cân từng mẫu, ngâm cùng thời gian, lấy ra thấm khô theo cùng cách rồi cân lại. Mỗi nồng độ dùng nhiều mẫu lặp độc lập.', points: 0.5 },
+      { order: 3, title: 'Xử lí và xác định khoảng', explanation: 'Tính % thay đổi = (sau−trước)/trước×100, lấy trung bình và vẽ đồ thị theo nồng độ. Khoảng đổi dấu hoặc giao gần 0% là khoảng gần đẳng trương.', points: 0.75 },
+      { order: 4, title: 'Độ tin cậy và giới hạn', explanation: 'Lặp mẫu, cắt đồng đều, kiểm soát thời gian/nhiệt độ và thấm khô thống nhất; muốn chính xác hơn phải thử thêm nồng độ trong khoảng đổi dấu.', points: 0.25 }
+    ],
+    finalAnswer: 'Chấm theo rubric', commonMistakes: ['Không chuẩn hóa kích thước mẫu.', 'Dùng khối lượng cuối thay mẫu số.', 'Gọi ngay một nồng độ đã thử là đẳng trương chính xác.', 'Không lặp mẫu.'],
+    reviewSuggestions: ['Thiết kế thí nghiệm', 'Thẩm thấu', 'Xử lí dữ liệu'],
+    rubric: [
+      { id: 'variables', description: 'Xác định đúng biến và điều kiện kiểm soát.', points: 0.5, evidence: ['Nồng độ là biến độc lập', '% đổi khối lượng là biến phụ thuộc', 'Chuẩn hóa mẫu/thời gian/thể tích/nhiệt độ'] },
+      { id: 'procedure', description: 'Quy trình cân–ngâm–thấm–cân và lặp mẫu hợp lí.', points: 0.5, evidence: ['Cân trước và sau', 'Thấm khô thống nhất', 'Có mẫu lặp'] },
+      { id: 'analysis', description: 'Tính và diễn giải đúng dữ liệu để tìm khoảng đẳng trương.', points: 0.75, evidence: ['Công thức phần trăm đúng', 'Tìm nơi gần 0% hoặc đổi dấu', 'Dùng trung bình/đồ thị'] },
+      { id: 'reliability', description: 'Nêu biện pháp tăng độ tin cậy hoặc tinh chỉnh nồng độ.', points: 0.25, evidence: ['Lặp mẫu hoặc thử thêm nồng độ trong khoảng đổi dấu'] }
+    ]
+  }
+];

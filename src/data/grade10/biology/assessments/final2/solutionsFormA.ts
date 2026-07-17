@@ -1,0 +1,41 @@
+import type { Solution } from '@/types';
+
+const solved = (questionId: string, recognition: string, explanation: string, finalAnswer: string, mistakes: string[], review: string[]): Solution => ({ id: `solution-${questionId}`, questionId, recognition, detailedSteps: [{ order: 1, title: 'Nhận dạng', explanation: recognition }, { order: 2, title: 'Lập luận', explanation, result: finalAnswer }], finalAnswer, commonMistakes: mistakes, reviewSuggestions: review });
+
+export const biologyFinal2SolutionsFormA: Solution[] = [
+  solved('bio10-assess-final2-a-q01', 'Sữa chua có vị chua và đông tụ là dấu hiệu lên men lactic.', 'Vi khuẩn lactic chuyển hóa đường sữa tạo acid lactic, làm pH giảm và protein sữa đông tụ.', 'A', ['Gán lên men cho virus.'], ['Lên men lactic']),
+  solved('bio10-assess-final2-a-q02', 'Nguồn biến dị giao tử phải tìm trong các sự kiện đặc trưng của giảm phân.', 'Trao đổi chéo tạo nhiễm sắc thể tái tổ hợp; phân li độc lập tạo nhiều tổ hợp nhiễm sắc thể trong giao tử.', 'A', ['Cho mọi giao tử giống nhau.'], ['Giảm phân']),
+  solved('bio10-assess-final2-a-q03', 'Đề kiểm tra khái niệm rộng, không đồng nhất vi sinh vật với vi khuẩn gây bệnh.', 'Vi sinh vật gồm nhiều nhóm với kiểu tế bào và chuyển hóa đa dạng; nhiều loài có ích hoặc trung tính.', 'B', ['Cho mọi vi sinh vật gây bệnh.'], ['Khái niệm vi sinh vật']),
+  solved('bio10-assess-final2-a-q04', 'Phân loại theo hai trục: ánh sáng là nguồn năng lượng, CO₂ là nguồn carbon.', 'Ánh sáng → quang; CO₂ → tự dưỡng, nên là quang tự dưỡng.', 'A', ['Cho tự dưỡng nghĩa là tự tạo năng lượng.'], ['Kiểu dinh dưỡng']),
+  solved('bio10-assess-final2-a-q05', 'Vô trùng nhằm kiểm soát nguồn vi sinh vật tham gia nuôi cấy.', 'Dụng cụ và thao tác vô trùng giảm nhiễm tạp, giúp kết quả phản ánh chủng/mẫu cần nghiên cứu.', 'B', ['Cho vô trùng thay thế dinh dưỡng.'], ['Nuôi cấy vi sinh vật']),
+  solved('bio10-assess-final2-a-q06', 'Từ khóa khuẩn lạc cần diễn giải bằng CFU thay vì khẳng định đúng một tế bào.', 'Một tế bào sống hoặc cụm tế bào có thể phát triển thành một khuẩn lạc trong điều kiện nuôi cụ thể.', 'B', ['Đồng nhất một khuẩn lạc với một tế bào.'], ['Định lượng CFU']),
+  solved('bio10-assess-final2-a-q07', 'Pha lũy thừa có tốc độ phân chia cao và thời gian thế hệ tương đối ổn định.', 'Khi dinh dưỡng và điều kiện thuận lợi, số tế bào tăng theo cấp số nhân trong pha lũy thừa.', 'B', ['Nhầm pha cân bằng với lũy thừa.'], ['Đường cong sinh trưởng']),
+  solved('bio10-assess-final2-a-q08', 'Vi khuẩn nhân sơ không nguyên phân có thoi; hình thức phổ biến là phân đôi.', 'DNA được nhân đôi, tế bào kéo dài và phân chia thành hai tế bào con.', 'A', ['Gọi phân đôi là nguyên phân.'], ['Sinh sản vi khuẩn']),
+  solved('bio10-assess-final2-a-q09', 'Câu hỏi sử dụng kháng sinh phải loại các phương án tự ý và dùng cho virus.', 'Kháng sinh cần đúng chẩn đoán/chỉ định, liều và thời gian để đạt hiệu quả và hạn chế chọn lọc kháng thuốc.', 'C', ['Ngừng khi vừa giảm triệu chứng.', 'Dùng cho virus.'], ['Kháng kháng sinh']),
+  solved('bio10-assess-final2-a-q10', 'Mùi/màu bất thường là dấu hiệu kiểm soát an toàn sản phẩm lên men.', 'Sản phẩm có thể nhiễm tạp hoặc tạo chất không an toàn; không nên nếm để kiểm tra và cần loại bỏ.', 'B', ['Cho lên men hữu ích luôn an toàn.'], ['An toàn lên men']),
+  solved('bio10-assess-final2-a-q11', 'Cấu trúc tối thiểu virus: vật chất di truyền nằm trong vỏ protein.', 'Virus có lõi DNA hoặc RNA và capsid protein; một số có thêm vỏ ngoài nhưng không phải tất cả.', 'A', ['Cho mọi virus có cả DNA và RNA.', 'Gán ribosome cho virus.'], ['Cấu tạo virus']),
+  solved('bio10-assess-final2-a-q12', 'Chu trình phải bắt đầu từ nhận biết/bám và kết thúc giải phóng virion.', 'Bám → xâm nhập → tổng hợp thành phần → lắp ráp → giải phóng là trình tự khái quát.', 'A', ['Cho virus lớn lên rồi phân đôi.'], ['Chu trình virus']),
+  solved('bio10-assess-final2-a-q13', 'Cơ chế gây bệnh cần lần từ nhân lên virus đến tổn thương tế bào/mô.', 'Chiếm dụng bộ máy, làm rối loạn chức năng, gây ly giải hoặc kích hoạt đáp ứng gây tổn thương có thể tạo bệnh.', 'A', ['Cho virus tự hô hấp ngoài tế bào.'], ['Cơ chế gây bệnh']),
+  solved('bio10-assess-final2-a-q14', 'Biện pháp phải cắt đúng đường lây hô hấp.', 'Thông khí, che ho/khẩu trang phù hợp, ở nhà khi bệnh và giảm tiếp xúc gần làm giảm cơ hội truyền qua hô hấp.', 'A', ['Dùng kháng sinh dự phòng virus.'], ['Đường lây và phòng bệnh']),
+  solved('bio10-assess-final2-a-q15', 'Vaccine là biện pháp miễn dịch chủ động, không phải cam kết tuyệt đối hay kháng sinh.', 'Vaccine chuẩn bị đáp ứng miễn dịch, giúp giảm xác suất mắc hoặc giảm bệnh nặng tùy vaccine và bối cảnh.', 'B', ['Nói vaccine bảo vệ 100%.'], ['Vaccine']),
+  solved('bio10-assess-final2-a-q16', 'Ứng dụng vector dựa vào khả năng virus đưa vật chất di truyền vào tế bào.', 'Sau khi loại/giảm yếu tố gây bệnh và thiết kế đích, vector virus có thể vận chuyển gene; vẫn cần đánh giá an toàn.', 'A', ['Cho vector không cần kiểm soát.'], ['Ứng dụng virus']),
+  solved('bio10-assess-final2-a-q17', 'Đọc độ dốc để tìm pha tăng nhanh, đoạn gần ngang cho cân bằng và tránh khái quát tuyệt đối.', 'a Đúng: mật độ 1,2→31. b Đúng: 31→32 gần ổn định. c Sai: sinh và chết vẫn diễn ra. d Sai: thời gian pha phụ thuộc loài/điều kiện.', 'a:Đ|b:Đ|c:S|d:S', ['Cho pha cân bằng là ngừng sống.'], ['Đường cong sinh trưởng']),
+  solved('bio10-assess-final2-a-q18', 'Đánh giá từng phát biểu theo phụ thuộc tế bào chủ, thuốc, phòng phối hợp và độ tin cậy nguồn.', 'a Đúng. b Sai: kháng sinh không đặc hiệu virus. c Đúng: các biện pháp bổ trợ nhau. d Sai: lượt chia sẻ không thay bằng chứng.', 'a:Đ|b:S|c:Đ|d:S', ['Tin phổ biến đồng nghĩa tin đúng.'], ['Virus và truyền thông']),
+  solved('bio10-assess-final2-a-q19', 'Mỗi lần phân đôi trong điều kiện lí tưởng làm số tế bào gấp đôi.', '$2^5=32$ tế bào.', '32', ['Tính 2×5.'], ['Sinh trưởng vi khuẩn']),
+  solved('bio10-assess-final2-a-q20', 'Đếm các ngày có ca mới ≥10.', 'Ngày 3 có 13 và ngày 4 có 11; tổng 2 ngày.', '2', ['Đếm ngày 2 có 7.'], ['Dữ liệu dịch tễ']),
+  {
+    id: 'solution-bio10-assess-final2-a-q21', questionId: 'bio10-assess-final2-a-q21', recognition: 'Dạng dự án lên men một biến: nhiệt độ là biến độc lập; tốc độ acid hóa/đông sữa là tín hiệu; an toàn là tiêu chí bắt buộc.',
+    detailedSteps: [
+      { order: 1, title: 'Biến và bố trí', explanation: 'Nhiệt độ là biến độc lập; thời gian đạt pH/độ chua hoặc độ đông xác định là biến phụ thuộc. Giữ loại và thể tích sữa, lượng men, dụng cụ và thời gian đo giống nhau; có mẫu không men làm đối chứng âm.', points: 0.5 },
+      { order: 2, title: 'Quy trình và đo', explanation: 'Dụng cụ sạch, chia mẫu đồng đều, bổ sung men cùng lúc, ủ ở ba nhiệt độ; đo pH/độ chua hoặc thời gian đông theo lịch cố định.', points: 0.5 },
+      { order: 3, title: 'Lặp và kết luận', explanation: 'Mỗi nhiệt độ có mẫu lặp, tính trung bình và so sánh tốc độ; chỉ kết luận trong nhiệt độ và loại men khảo sát.', points: 0.5 },
+      { order: 4, title: 'An toàn', explanation: 'Không nếm mẫu nghiên cứu; loại bỏ khi bao bì phồng bất thường, mốc, mùi/màu lạ hoặc quy trình vệ sinh không bảo đảm.', points: 0.5 }
+    ], finalAnswer: 'Chấm theo rubric', commonMistakes: ['Không có mẫu lặp.', 'Thay đổi cả lượng men.', 'Đánh giá bằng nếm.', 'Dùng sản phẩm mốc/mùi lạ.'], reviewSuggestions: ['Dự án lên men', 'Thiết kế thí nghiệm'],
+    rubric: [
+      { id: 'variables', description: 'Xác định biến và đối chứng.', points: 0.5, evidence: ['Nhiệt độ độc lập', 'pH/thời gian đông phụ thuộc', 'Giữ giống lượng men/sữa', 'Có mẫu không men'] },
+      { id: 'procedure', description: 'Quy trình sạch và cách đo nhất quán.', points: 0.5, evidence: ['Dụng cụ sạch', 'Chia mẫu đồng đều', 'Đo theo lịch/cùng tiêu chí'] },
+      { id: 'analysis', description: 'Lặp, xử lí và kết luận đúng phạm vi.', points: 0.5, evidence: ['Mẫu lặp', 'Trung bình/so sánh', 'Giới hạn theo nhiệt độ và giống'] },
+      { id: 'safety', description: 'Nêu tiêu chí loại bỏ sản phẩm không an toàn.', points: 0.5, evidence: ['Không nếm mẫu', 'Loại mốc/mùi/màu/phồng bất thường'] }
+    ]
+  }
+];

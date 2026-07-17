@@ -34,6 +34,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onCancel}
+          aria-label="Đóng hộp thoại xác nhận"
           className="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-secondary/80 text-muted-foreground transition-all cursor-pointer active:scale-95"
         >
           <X size={15} />

@@ -116,19 +116,20 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10', subject: Subj
           learningMisconceptions: learningPathMod.g10ChemistryMisconceptions
         };
       } else if (subject === 'biology') {
-        const [topicsMod, qtMod, qMod, sMod, learningPathMod] = await Promise.all([
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
           import('./grade10/biology/topics'),
           import('./grade10/biology/questionTypes'),
           import('./grade10/biology/questions'),
           import('./grade10/biology/solutions'),
-          import('./grade10/biology/learningPath')
+          import('./grade10/biology/learningPath'),
+          import('./grade10/biology/assessments')
         ]);
         data = {
           topics: topicsMod.g10BiologyTopics,
           questionTypes: qtMod.g10BiologyQuestionTypes,
-          questions: qMod.g10BiologyQuestions,
-          solutions: sMod.g10BiologySolutions,
-          mockExams: [],
+          questions: [...qMod.g10BiologyQuestions, ...assessmentsMod.g10BiologyAssessmentQuestions],
+          solutions: [...sMod.g10BiologySolutions, ...assessmentsMod.g10BiologyAssessmentSolutions],
+          mockExams: assessmentsMod.g10BiologyAssessmentExams,
           learningOutcomes: learningPathMod.g10BiologyOutcomes,
           learningMisconceptions: learningPathMod.g10BiologyMisconceptions
         };

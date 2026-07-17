@@ -1,0 +1,41 @@
+import type { Solution } from '@/types';
+
+const solved = (questionId: string, recognition: string, explanation: string, finalAnswer: string, mistakes: string[], review: string[]): Solution => ({ id: `solution-${questionId}`, questionId, recognition, detailedSteps: [{ order: 1, title: 'Nhận dạng', explanation: recognition }, { order: 2, title: 'Lập luận', explanation, result: finalAnswer }], finalAnswer, commonMistakes: mistakes, reviewSuggestions: review });
+
+export const biologyMidterm2SolutionsFormB: Solution[] = [
+  solved('bio10-assess-mid2-b-q01', 'Phản ứng thủy phân ATP được nhận diện qua vai trò ghép năng lượng.', 'Năng lượng tự do từ ATP → ADP + Pi được ghép với vận chuyển, tổng hợp hoặc vận động cần năng lượng.', 'A', ['Cho ATP là enzyme hoặc vật liệu di truyền.'], ['ATP']),
+  solved('bio10-assess-mid2-b-q02', 'Đề hỏi số phận enzyme sau xúc tác.', 'Enzyme không bị tiêu hao theo hệ số phản ứng và có thể tiếp tục chu kì nếu cấu trúc không bị bất hoạt.', 'B', ['Cho enzyme biến thành sản phẩm.'], ['Cơ chế enzyme']),
+  solved('bio10-assess-mid2-b-q03', 'Enzyme đổi động học phản ứng chứ không đổi hiệu năng lượng tổng thể.', 'Enzyme hạ năng lượng hoạt hóa và tăng tốc đạt cân bằng nhưng không đổi chênh lệch năng lượng tự do giữa đầu–cuối.', 'C', ['Cho enzyme làm phản ứng tạo thêm năng lượng.'], ['Năng lượng hoạt hóa']),
+  solved('bio10-assess-mid2-b-q04', 'Tìm giá trị lớn nhất trong bảng, không suy diễn tuyến tính.', 'Tốc độ 100 ở 35°C là lớn nhất trong các mức đo; 55°C giảm còn 18.', 'A', ['Chọn nhiệt độ cao nhất làm tối ưu.'], ['Dữ liệu enzyme']),
+  solved('bio10-assess-mid2-b-q05', 'Biến phụ thuộc là tín hiệu đo phản ánh hoạt tính catalase.', 'Oxygen/cột bọt tạo ra trong một thời gian phản ánh tốc độ phân giải H₂O₂; nhiệt độ là biến độc lập.', 'B', ['Chọn biến kiểm soát làm biến phụ thuộc.'], ['Thực hành catalase']),
+  solved('bio10-assess-mid2-b-q06', 'Tạo phân tử phức tạp và cần năng lượng là dấu hiệu đồng hóa.', 'Đồng hóa sử dụng năng lượng và chất đơn giản để tổng hợp vật chất tế bào.', 'A', ['Nhầm đồng hóa với dị hóa.'], ['Tổng hợp chất']),
+  solved('bio10-assess-mid2-b-q07', 'Đường phân là giai đoạn mở đầu không cần bào quan.', 'Đường phân diễn ra trong tế bào chất, tạo pyruvate và một lượng ATP ròng nhỏ.', 'A', ['Chọn ti thể cho mọi giai đoạn hô hấp.'], ['Hô hấp tế bào']),
+  solved('bio10-assess-mid2-b-q08', 'Lên men cần tái sinh chất nhận electron để đường phân tiếp tục.', 'Chuyển pyruvate thành lactate tái sinh NAD⁺, cho phép đường phân tiếp tục tạo ATP khi thiếu oxygen.', 'A', ['Cho lên men không tạo ATP gián tiếp qua đường phân.'], ['Lên men lactic']),
+  solved('bio10-assess-mid2-b-q09', 'Chuỗi chu kì tế bào là G₁ → S → G₂ → M.', 'G₁ diễn ra trước S và chuẩn bị vật chất, điều kiện cho nhân đôi DNA.', 'A', ['Đặt G₂ trước S.'], ['Chu kì tế bào']),
+  solved('bio10-assess-mid2-b-q10', 'Sau pha S phải đếm NST theo tâm động, không theo số chromatid.', 'Tế bào 2n=8 vẫn có 8 NST kép, dù có 16 chromatid và lượng DNA đã tăng gấp đôi.', 'B', ['Trả lời 16 vì đếm chromatid.'], ['Số NST và lượng DNA']),
+  solved('bio10-assess-mid2-b-q11', 'Kì giữa nguyên phân có NST kép co xoắn cực đại và xếp một hàng ở xích đạo.', 'Thoi phân bào gắn tâm động, chuẩn bị phân li chromatid chị em ở kì sau.', 'A', ['Nhầm tiếp hợp tương đồng của giảm phân I.'], ['Nguyên phân']),
+  solved('bio10-assess-mid2-b-q12', 'Câu hỏi nguy cơ cần tránh quan hệ nhân quả tuyệt đối.', 'Tổn thương gene thúc đẩy/ức chế chu kì có thể góp phần làm tế bào tăng sinh mất kiểm soát; ung thư thường đa yếu tố.', 'B', ['Nói một yếu tố chắc chắn gây bệnh.'], ['Ung thư']),
+  solved('bio10-assess-mid2-b-q13', 'Kì sau II tương tự kì sau nguyên phân ở việc tách chromatid chị em.', 'Tâm động phân chia và chromatid chị em đi về hai cực của mỗi tế bào đơn bội.', 'B', ['Chọn cặp tương đồng của kì sau I.'], ['Giảm phân II']),
+  solved('bio10-assess-mid2-b-q14', 'Phân li độc lập nói về cách mỗi cặp tương đồng định hướng độc lập.', 'Các tổ hợp NST bố/mẹ khác nhau đi vào giao tử, tạo nhiều kiểu giao tử.', 'A', ['Cho phân li độc lập làm tăng số NST.'], ['Biến dị tổ hợp']),
+  solved('bio10-assess-mid2-b-q15', 'Theo dõi số lần phân bào và bộ NST của sản phẩm.', 'Một tế bào lưỡng bội giảm phân bình thường thường tạo bốn tế bào đơn bội sau hai lần phân bào.', 'B', ['Cho sản phẩm vẫn lưỡng bội.'], ['Kết quả giảm phân']),
+  solved('bio10-assess-mid2-b-q16', 'Nuôi cấy mô nhằm nhân nhanh vật liệu thực vật tương đối đồng đều.', 'Từ mẩu mô nhỏ, môi trường vô trùng và điều hòa sinh trưởng phù hợp có thể tạo nhiều cây.', 'A', ['Cho nuôi cấy không cần vô trùng.'], ['Công nghệ tế bào']),
+  solved('bio10-assess-mid2-b-q17', 'Đọc giá trị cực đại và giới hạn độ phân giải pH đã thử.', 'a Đúng: tốc độ 100 ở pH 6. b Sai: sau pH 6 giảm. c Đúng. d Sai: chỉ biết trong các mức khảo sát, không có độ chính xác 6,000.', 'a:Đ|b:S|c:Đ|d:S', ['Tuyên bố tối ưu chính xác từ bước pH thưa.'], ['Dữ liệu enzyme']),
+  solved('bio10-assess-mid2-b-q18', 'Phân biệt chức năng nguyên phân, đặc trưng giảm phân và bộ NST sản phẩm.', 'a Đúng. b Sai vì giảm phân I có tiếp hợp/phân li tương đồng. c Đúng. d Sai vì sản phẩm giảm phân là đơn bội.', 'a:Đ|b:S|c:Đ|d:S', ['Gọi giảm phân là hai nguyên phân.'], ['Nguyên phân và giảm phân']),
+  solved('bio10-assess-mid2-b-q19', 'Đếm số dòng có cột bọt ≥10 mm.', 'pH 5 cho 11 mm và pH 7 cho 18 mm; tổng 2 mức.', '2', ['Đếm cả pH 3 hoặc 9.'], ['Thực hành enzyme']),
+  solved('bio10-assess-mid2-b-q20', 'Sau n lần nguyên phân đồng loạt từ một tế bào có $2^n$ tế bào.', '$2^5=32$ tế bào.', '32', ['Tính 2×5.'], ['Bài toán nguyên phân']),
+  {
+    id: 'solution-bio10-assess-mid2-b-q21', questionId: 'bio10-assess-mid2-b-q21', recognition: 'Dạng thiết kế thí nghiệm enzyme một biến: pH là biến độc lập; lượng tinh bột còn lại sau cùng thời gian phản ánh ngược hoạt tính amylase.',
+    detailedSteps: [
+      { order: 1, title: 'Biến và đối chứng', explanation: 'pH là biến độc lập; màu iodine/thời gian mất màu tinh bột là tín hiệu phụ thuộc. Giữ lượng enzyme, tinh bột, nhiệt độ, thể tích và thời gian giống nhau; dùng ống không enzyme hoặc enzyme đun sôi làm đối chứng âm.', points: 0.5 },
+      { order: 2, title: 'Quy trình', explanation: 'Ủ enzyme với đệm từng pH ở cùng nhiệt độ, thêm cùng lượng tinh bột để bắt đầu; sau cùng thời gian lấy mẫu thử iodine hoặc theo dõi đến khi không còn xanh tím.', points: 0.5 },
+      { order: 3, title: 'Xử lí và kết luận', explanation: 'Lặp lại và lấy trung bình. Màu xanh tím nhạt hơn/biến mất nhanh hơn cho thấy tinh bột bị thủy phân nhiều hơn và hoạt tính cao hơn; kết luận trong các mức pH đã thử.', points: 0.75 },
+      { order: 4, title: 'Độ tin cậy', explanation: 'Dùng dung dịch đệm chuẩn, ổn nhiệt, mẫu lặp và đo quang thay đánh giá màu bằng mắt nếu có.', points: 0.25 }
+    ], finalAnswer: 'Chấm theo rubric', commonMistakes: ['Hiểu màu iodine đậm là hoạt tính cao.', 'Không giữ nhiệt độ giống nhau.', 'Không có đối chứng.', 'Đánh giá màu hoàn toàn chủ quan.'], reviewSuggestions: ['Thực hành amylase', 'Thiết kế thí nghiệm'],
+    rubric: [
+      { id: 'variables', description: 'Xác định biến, chỉ thị và đối chứng.', points: 0.5, evidence: ['pH là biến độc lập', 'Iodine/tinh bột là tín hiệu', 'Có biến kiểm soát và đối chứng âm'] },
+      { id: 'procedure', description: 'Quy trình ủ–phản ứng–thử iodine công bằng.', points: 0.5, evidence: ['Cùng nhiệt độ và thời gian', 'Cùng lượng enzyme/cơ chất', 'Thử iodine đúng cách'] },
+      { id: 'analysis', description: 'Diễn giải tín hiệu và kết luận đúng giới hạn.', points: 0.75, evidence: ['Màu nhạt/mất nhanh là hoạt tính cao', 'Có lặp/trung bình', 'Giới hạn trong pH khảo sát'] },
+      { id: 'reliability', description: 'Nêu biện pháp tăng độ tin cậy.', points: 0.25, evidence: ['Đệm chuẩn hoặc ổn nhiệt hoặc đo quang hoặc tăng lặp'] }
+    ]
+  }
+];

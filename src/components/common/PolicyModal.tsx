@@ -24,6 +24,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose }) => 
           </div>
           <button
             onClick={onClose}
+            aria-label="Đóng bảng điều khoản và chính sách"
             className="p-1.5 rounded-xl hover:bg-secondary text-muted-foreground transition-all cursor-pointer hover:text-foreground active:scale-95 shrink-0"
           >
             <X size={16} />

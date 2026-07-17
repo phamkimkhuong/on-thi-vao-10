@@ -148,7 +148,7 @@ export const Dashboard: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1.5">
           <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground flex items-center gap-2 font-sans">
-            <Sparkles className="text-amber-500 fill-amber-500 shrink-0 animate-float" size={24} />
+            <Sparkles className="text-amber-500 fill-amber-500 shrink-0" size={24} />
             Chào {user?.displayName || 'bạn'}, người chiến thắng!
           </h2>
           <p className="text-xs md:text-sm text-muted-foreground font-bold italic max-w-2xl leading-relaxed">
@@ -185,12 +185,11 @@ export const Dashboard: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
 
           {/* Card 1: LỘ TRÌNH HỌC (LÝ THUYẾT) */}
-          <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden relative group">
-            <div className="absolute top-0 right-0 w-44 h-44 bg-linear-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
+          <Card className="bg-card border-border/40 shadow-md rounded-3xl overflow-hidden relative group">
             <CardHeader className="bg-secondary/25 border-b border-border/20 p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <BookOpen size={18} className={cn("animate-pulse", getSubjectTheme(selectedSubject).iconColor)} />
+                  <BookOpen size={18} className={getSubjectTheme(selectedSubject).iconColor} />
                   <CardTitle className="text-foreground text-sm font-black uppercase tracking-wider font-sans">Lộ trình học (Lý thuyết)</CardTitle>
                 </div>
                 <span className={cn(
@@ -204,7 +203,7 @@ export const Dashboard: React.FC = () => {
             <CardContent className="p-6 space-y-5 flex flex-col">
               {activeTheoryStatus === 'completed' ? (
                 <div className="space-y-3 py-4 text-center flex flex-col items-center">
-                  <CheckCircle className="text-emerald-500 animate-bounce" size={40} />
+                  <CheckCircle className="text-emerald-500" size={40} />
                   <h3 className="text-base font-black text-foreground">Đã học xong lý thuyết!</h3>
                   <p className="text-xs text-muted-foreground font-semibold max-w-sm leading-relaxed">
                     Tuyệt vời! Bạn đã hoàn thành đọc toàn bộ lý thuyết lộ trình môn học này. Hãy chuyển sang phần luyện tập để thực chiến.
@@ -253,8 +252,7 @@ export const Dashboard: React.FC = () => {
           </Card>
 
           {/* Card 2: LUYỆN TẬP (BÀI TẬP) */}
-          <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden relative group">
-            <div className="absolute top-0 right-0 w-44 h-44 bg-linear-to-tr from-primary/10 to-indigo-500/10 rounded-full blur-3xl -mr-8 -mt-8 animate-pulse-glow" />
+          <Card className="bg-card border-border/40 shadow-md rounded-3xl overflow-hidden relative group">
             <CardHeader className="bg-secondary/25 border-b border-border/20 p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -272,7 +270,7 @@ export const Dashboard: React.FC = () => {
             <CardContent className="p-6 space-y-5 flex flex-col">
               {activePracticeStatus === 'completed' ? (
                 <div className="space-y-3 py-4 text-center flex flex-col items-center">
-                  <Award className="text-amber-500 animate-bounce" size={40} />
+                  <Award className="text-amber-500" size={40} />
                   <h3 className="text-base font-black text-foreground">Đã hoàn thành luyện tập!</h3>
                   <p className="text-xs text-muted-foreground font-semibold max-w-sm leading-relaxed">
                     Chúc mừng! Bạn đã đạt mức thành thạo tối thiểu 2 sao cho toàn bộ các dạng bài tập môn học này.

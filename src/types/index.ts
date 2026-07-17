@@ -283,6 +283,17 @@ export interface SolutionStep {
   explanation: string;
   formula?: string; // Ký hiệu toán học LaTeX
   result?: string;
+  /** Số điểm tối đa của ý/bước khi dùng làm hướng dẫn chấm câu tự luận. */
+  points?: number;
+}
+
+export interface AssessmentRubricCriterion {
+  id: string;
+  description: string;
+  points: number;
+  /** Bằng chứng tối thiểu cần xuất hiện trong bài làm để đạt điểm của tiêu chí. */
+  evidence: string[];
+  commonErrors?: string[];
 }
 
 export interface Solution {
@@ -294,6 +305,8 @@ export interface Solution {
   finalAnswer: string;
   commonMistakes: string[];
   reviewSuggestions: string[]; // Khuyên học sinh ôn lại thẻ kiến thức nào
+  /** Rubric tường minh cho câu cần giáo viên/AI chấm theo từng ý. */
+  rubric?: AssessmentRubricCriterion[];
 }
 
 export interface StepEvaluation {
@@ -366,6 +379,9 @@ export interface MockExam {
   formCode?: string;
   instructions?: string[];
   resultReleasePolicy?: 'immediate' | 'after_submit' | 'teacher_release';
+  /** Truy vết đề về đúng ma trận và phiên bản dùng để biên soạn đề. */
+  blueprintId?: string;
+  assessmentVersion?: string;
 }
 
 export interface ExamResult {
@@ -374,6 +390,9 @@ export interface ExamResult {
   score: number;
   earnedPoints?: number;
   maxPoints?: number;
+  /** Tổng điểm chưa được chấm vì cần giáo viên/AI đánh giá theo rubric. */
+  pendingPoints?: number;
+  gradedCount?: number;
   correctCount: number;
   totalCount: number;
   timeSpent: number; // đơn vị: giây
@@ -383,6 +402,7 @@ export interface ExamResult {
     finalAnswer?: StructuredAnswer;
     proofImages?: ProofImage[];
     isCorrect: boolean;
+    gradingStatus?: 'graded' | 'pending';
     earnedPoints?: number;
     maxPoints?: number;
   }>;

@@ -11,6 +11,7 @@ import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 import { authService } from '../../services/authService';
 import { AnswerFormRenderer } from '../../components/common/AnswerFormRenderer';
+import { QuestionStimulusRenderer } from '../../components/common/QuestionStimulusRenderer';
 import { aiService } from '../../services/aiService';
 
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
@@ -267,6 +268,8 @@ export const ExamEngine: React.FC = () => {
 
     let correctCount = 0;
     let earnedPoints = 0;
+    let pendingPoints = 0;
+    let gradedCount = 0;
     const totalCount = examQuestions.length;
     const maxPoints = examQuestions.reduce((sum, question) => sum + (question.points ?? 1), 0);
     const attemptResults: ExamResult['attempts'] = {};
@@ -278,9 +281,10 @@ export const ExamEngine: React.FC = () => {
     for (const q of examQuestions) {
       const answerInput = q.answerSchema ? (finalAnswers[q.id] ?? {}) : answers[q.id] || '';
       const userAns = formatAnswerForDisplay(q, answerInput);
-      const isCorrect = validateAnswer(q, answerInput);
+      const isManual = q.answerSchema?.autoCheckMode === 'manual' || q.validatorType === 'manual';
+      const isCorrect = isManual ? false : validateAnswer(q, answerInput);
       const questionPoints = q.points ?? 1;
-      const awardedPoints = isCorrect ? questionPoints : 0;
+      const awardedPoints = !isManual && isCorrect ? questionPoints : 0;
       const attemptId = `attempt-${examId}-${q.id}`;
       const localProofImages = proofImagesByQuestion[q.id] ?? [];
       let uploadedProofImages: UserAttempt['proofImages'] = [];
@@ -300,13 +304,16 @@ export const ExamEngine: React.FC = () => {
         return;
       }
 
-      if (isCorrect) correctCount++;
+      if (isManual) pendingPoints += questionPoints;
+      else gradedCount++;
+      if (!isManual && isCorrect) correctCount++;
       earnedPoints += awardedPoints;
       attemptResults[q.id] = {
         userAnswer: userAns,
         ...(q.answerSchema ? { finalAnswer: finalAnswers[q.id] ?? {} } : {}),
         ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
         isCorrect,
+        gradingStatus: isManual ? 'pending' : 'graded',
         earnedPoints: awardedPoints,
         maxPoints: questionPoints
       };
@@ -348,6 +355,8 @@ export const ExamEngine: React.FC = () => {
       score,
       earnedPoints,
       maxPoints,
+      pendingPoints,
+      gradedCount,
       correctCount,
       totalCount,
       timeSpent,
@@ -370,7 +379,7 @@ export const ExamEngine: React.FC = () => {
       progressService.saveExamSubmission(user.uid, result, examAttempts, examMistakes);
     }
 
-    if (score >= 8.0) {
+    if (pendingPoints === 0 && score >= 8.0) {
       confetti({
         particleCount: 100,
         spread: 80,
@@ -470,6 +479,7 @@ export const ExamEngine: React.FC = () => {
     const analysis: Record<string, { name: string, total: number, correct: number }> = {};
 
     examQuestions.forEach(q => {
+      if (examResult.attempts[q.id]?.gradingStatus === 'pending') return;
       const type = typeList.find(t => t.id === q.questionTypeId);
       const typeName = type?.name || 'Dạng bài khác';
       const typeId = q.questionTypeId;
@@ -501,6 +511,7 @@ export const ExamEngine: React.FC = () => {
     const analysis: Record<string, { title: string; earned: number; maximum: number; questionTypeId?: string }> = {};
 
     examQuestions.forEach(question => {
+      if (examResult.attempts[question.id]?.gradingStatus === 'pending') return;
       const outcomeIds = question.outcomeIds ?? [];
       if (outcomeIds.length === 0) return;
 
@@ -539,6 +550,7 @@ export const ExamEngine: React.FC = () => {
 
     const analysis: Record<string, { title: string; orderIndex: number; total: number; correct: number }> = {};
     examQuestions.forEach(question => {
+      if (examResult.attempts[question.id]?.gradingStatus === 'pending') return;
       const topic = subjectTopics.find(item => item.id === question.topicId);
       if (!analysis[question.topicId]) {
         analysis[question.topicId] = {
@@ -898,6 +910,7 @@ export const ExamEngine: React.FC = () => {
                   <span className="text-xs font-bold text-muted-foreground">Câu hỏi số {idx + 1}</span>
                 </CardHeader>
                 <CardContent className="p-6 space-y-5">
+                  <QuestionStimulusRenderer question={q} />
                   <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/10 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
                     <LatexRenderer text={q.content} />
                   </div>
@@ -1009,13 +1022,18 @@ export const ExamEngine: React.FC = () => {
             <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
               {currentExam?.focus === 'theory' ? 'Báo cáo kiến thức lý thuyết' : 'Báo cáo kết quả thi thử'}
             </span>
-            <h2 className="text-4xl md:text-5xl font-black mt-3 tracking-tight leading-none">{examResult.score} <span className="text-sm font-bold opacity-75">/ 10 điểm</span></h2>
+            <h2 className="text-4xl md:text-5xl font-black mt-3 tracking-tight leading-none">{examResult.score} <span className="text-sm font-bold opacity-75">/ 10 điểm{(examResult.pendingPoints ?? 0) > 0 ? ' tạm tính' : ''}</span></h2>
             <p className="text-xs text-indigo-100 font-semibold mt-2.5">
-              Đúng {examResult.correctCount} / {examResult.totalCount} câu • Thời gian làm bài: {formatTime(examResult.timeSpent)}
+              Đúng {examResult.correctCount} / {examResult.gradedCount ?? examResult.totalCount} câu đã chấm • Thời gian làm bài: {formatTime(examResult.timeSpent)}
             </p>
             {examResult.earnedPoints !== undefined && examResult.maxPoints !== undefined && (
               <p className="text-[11px] text-indigo-100 font-semibold mt-1">
                 Điểm thô: {examResult.earnedPoints} / {examResult.maxPoints}
+              </p>
+            )}
+            {(examResult.pendingPoints ?? 0) > 0 && (
+              <p className="mt-1.5 text-[11px] font-extrabold text-amber-200">
+                Còn {examResult.pendingPoints} điểm tự luận đang chờ chấm theo rubric; kết quả trên chưa phải điểm cuối cùng.
               </p>
             )}
           </CardHeader>
@@ -1024,7 +1042,9 @@ export const ExamEngine: React.FC = () => {
             {/* Lời khuyên cá nhân hóa */}
             <div className="p-4 bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 rounded-xl space-y-1.5 text-xs font-semibold text-muted-foreground">
               <span className="font-extrabold text-foreground flex items-center gap-1"><Zap size={14} className="text-amber-500" /> Nhận xét năng lực:</span>
-              {examResult.score >= 8.0 ? (
+              {(examResult.pendingPoints ?? 0) > 0 ? (
+                <p className="text-amber-600 dark:text-amber-400">Hệ thống mới chấm các phần khách quan. Phần tự luận/thực nghiệm đang chờ giáo viên hoặc AI đánh giá theo rubric nên chưa kết luận mức độ làm chủ toàn bài.</p>
+              ) : examResult.score >= 8.0 ? (
                 <p className="text-emerald-600 dark:text-emerald-400">Xuất sắc! Năng lực hiện tại của bạn đã rất vững chắc. Hãy tiếp tục giải thêm các đề nâng cao để củng cố tâm lý tốt nhất.</p>
               ) : examResult.score >= 5.0 ? (
                 <p className="text-amber-600 dark:text-amber-400">Khá tốt! Bạn đã đạt mức điểm sàn trung bình ổn định. Tuy nhiên, vẫn còn một số dạng kiến thức bị lỏng lẻo cần khắc phục ngay.</p>
@@ -1178,6 +1198,8 @@ export const ExamEngine: React.FC = () => {
                       <div className="text-xs font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-3 rounded-lg border border-border/10">
                         <LatexRenderer text={q.content} />
                       </div>
+
+                      <QuestionStimulusRenderer question={q} />
 
                       {q.options && q.options.length > 0 && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
