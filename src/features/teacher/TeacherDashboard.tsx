@@ -133,10 +133,6 @@ export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
 
-  if (!user) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
   const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics' | 'support'>('students');
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
   const [premiumEmail, setPremiumEmail] = useState('');
@@ -398,6 +394,10 @@ export const TeacherDashboard: React.FC = () => {
       cancelled = true;
     };
   }, [user, loadData]);
+
+  if (!user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   if (accessStatus === 'checking') {
     return (

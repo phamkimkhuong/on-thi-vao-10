@@ -6,6 +6,7 @@ export const g10BiologyModule3Questions: Question[] = [
     subjectId: "biology",
     topicId: "bio10-t3",
     questionTypeId: "bio10-qt4",
+    responseType: "single_choice",
     content: "Hiện tượng tế bào hồng cầu bị trương và vỡ ra khi đặt vào dung dịch nào sau đây?",
     options: [
   "A. Dung dịch ưu trương",
@@ -16,6 +17,10 @@ export const g10BiologyModule3Questions: Question[] = [
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
-    validatorType: "choice"
+    validatorType: "choice",
+    outcomeIds: ["BIO10-M3-O02"],
+    competency: "biological_application",
+    cognitiveLevel: "application",
+    estimatedSeconds: 75
   }
 ];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../../services/store';
 import { supportService } from '../../services/supportService';
 
@@ -43,7 +43,7 @@ export const SupportPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load tickets history
-  const loadTickets = async () => {
+  const loadTickets = useCallback(async () => {
     if (!user) return;
     setIsLoadingTickets(true);
     try {
@@ -54,11 +54,11 @@ export const SupportPage: React.FC = () => {
     } finally {
       setIsLoadingTickets(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     loadTickets();
-  }, [user]);
+  }, [loadTickets]);
 
   // Clean up preview URL
   useEffect(() => {

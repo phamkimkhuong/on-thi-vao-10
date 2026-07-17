@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
+import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
 import { Question, Solution, SubjectCode } from '../../../types';
 import { validateAnswer } from '../../../utils/answerValidator';
 import { cn } from '../../../utils/cn';
@@ -254,6 +255,8 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
+          <QuestionStimulusRenderer question={currentQuestion} />
+
           {/* Content */}
           <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
             <LatexRenderer text={cleanContent} />

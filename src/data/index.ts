@@ -43,6 +43,7 @@ import { g10BiologyTopics } from './grade10/biology/topics';
 import { g10BiologyQuestionTypes } from './grade10/biology/questionTypes';
 import { g10BiologyQuestions } from './grade10/biology/questions';
 import { g10BiologySolutions } from './grade10/biology/solutions';
+import { g10BiologyMisconceptions, g10BiologyOutcomes } from './grade10/biology/learningPath';
 
 import {
   g10MathAssessmentExams,
@@ -133,10 +134,18 @@ export const getMockExams = (grade: 'grade9' | 'grade10', subject: SubjectCode):
 };
 
 export const getLearningOutcomes = (grade: 'grade9' | 'grade10', subject: SubjectCode) =>
-  grade === 'grade10' && subject === 'chemistry' ? g10ChemistryOutcomes : [];
+  grade === 'grade10' && subject === 'chemistry'
+    ? g10ChemistryOutcomes
+    : grade === 'grade10' && subject === 'biology'
+      ? g10BiologyOutcomes
+      : [];
 
 export const getLearningMisconceptions = (grade: 'grade9' | 'grade10', subject: SubjectCode) =>
-  grade === 'grade10' && subject === 'chemistry' ? g10ChemistryMisconceptions : [];
+  grade === 'grade10' && subject === 'chemistry'
+    ? g10ChemistryMisconceptions
+    : grade === 'grade10' && subject === 'biology'
+      ? g10BiologyMisconceptions
+      : [];
 
 import { g10ChemistryVideos } from './grade10/chemistry/videos';
 export { g10ChemistryVideos };

@@ -8,8 +8,8 @@ export const g10BiologyModule7Solutions: Solution[] = [
     detailedSteps: [
       {
         order: 1,
-        title: "Nhận diện lý thuyết liên quan",
-        explanation: "Hạt virus cơ bản gồm vật chất di truyền và lớp vỏ protein."
+        title: "Dấu hiệu nhận dạng dạng bài",
+        explanation: "Từ khóa 'bắt buộc' yêu cầu chọn cấu trúc chung cho mọi virion, không chọn các thành phần chỉ xuất hiện ở một số nhóm."
       },
       {
         order: 2,
@@ -19,10 +19,10 @@ export const g10BiologyModule7Solutions: Solution[] = [
     ],
     finalAnswer: "A",
     commonMistakes: [
-      "Lựa chọn đáp án dựa trên cảm tính hoặc không đọc kỹ định nghĩa."
+      "Cho rằng mọi virus đều có vỏ lipid hoặc đồng thời chứa cả DNA và RNA; phần lớn virus chỉ mang một loại nucleic acid."
     ],
     reviewSuggestions: [
-      "Học sinh cần nắm chắc các định nghĩa lý thuyết nền tảng trong sách giáo khoa."
+      "Ôn BIO10-M7-O01: thành phần bắt buộc, thành phần tùy chọn và sự khác biệt giữa virus với tế bào."
     ]
   }
 ];

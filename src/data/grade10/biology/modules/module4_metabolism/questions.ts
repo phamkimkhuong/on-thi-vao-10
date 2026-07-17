@@ -6,6 +6,7 @@ export const g10BiologyModule4Questions: Question[] = [
     subjectId: "biology",
     topicId: "bio10-t4",
     questionTypeId: "bio10-qt5",
+    responseType: "single_choice",
     content: "Khi tăng nhiệt độ lên quá cao so với nhiệt độ tối ưu, hoạt tính của enzyme giảm hoặc mất hoàn toàn là do nguyên nhân nào sau đây?",
     options: [
   "A. Cơ chất bị biến tính",
@@ -16,6 +17,10 @@ export const g10BiologyModule4Questions: Question[] = [
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
-    validatorType: "choice"
+    validatorType: "choice",
+    outcomeIds: ["BIO10-M4-O03"],
+    competency: "biological_cognition",
+    cognitiveLevel: "understanding",
+    estimatedSeconds: 60
   }
 ];

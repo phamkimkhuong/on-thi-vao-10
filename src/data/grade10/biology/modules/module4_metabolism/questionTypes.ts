@@ -9,15 +9,16 @@ export const g10BiologyModule4QuestionTypes: QuestionType[] = [
     description: "Cơ chế hoạt động, các yếu tố ảnh hưởng đến hoạt tính enzyme.",
     exampleQuestionId: "bio10-q5",
     recognitionSigns: [
-      "Nhận biết qua các thuật ngữ định nghĩa trong câu hỏi."
+      "Đề mô tả phức hợp enzyme–cơ chất, năng lượng hoạt hóa hoặc tính đặc hiệu.",
+      "Đề cung cấp bảng/đồ thị tốc độ phản ứng theo nhiệt độ, pH hay nồng độ."
     ],
     solvingSteps: [
-      "Bước 1: Đọc kỹ câu hỏi và các phương án.",
-      "Bước 2: Đối chiếu lý thuyết sinh học tương ứng.",
-      "Bước 3: Loại trừ phương án sai và chọn đáp án đúng."
+      "Xác định biến độc lập, biến phụ thuộc và khoảng điều kiện đang khảo sát.",
+      "Đọc xu hướng dữ liệu trước khi gắn với cơ chế tác động lên enzyme.",
+      "Phân biệt tăng va chạm trong giới hạn thích hợp với biến tính làm giảm hoạt tính."
     ],
     commonMistakes: [
-      "Không đọc kĩ các phương án nhiễu dễ gây nhầm lẫn."
+      "Kết luận tăng nhiệt độ luôn làm tăng hoạt tính hoặc cho rằng enzyme cung cấp năng lượng và bị tiêu hao."
     ],
     difficulty: "easy",
     examFrequency: "high"

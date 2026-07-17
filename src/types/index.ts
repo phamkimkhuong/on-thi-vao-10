@@ -103,7 +103,10 @@ export type TheoryAssessmentScope = 'module' | 'comprehensive';
 export type AssessmentCompetency =
   | 'chemical_cognition'
   | 'chemical_inquiry'
-  | 'chemical_application';
+  | 'chemical_application'
+  | 'biological_cognition'
+  | 'biological_inquiry'
+  | 'biological_application';
 
 export type AssessmentCognitiveLevel =
   | 'recognition'
@@ -194,6 +197,56 @@ export interface QuestionType {
   theory?: string[]; // Lý thuyết & Định nghĩa cơ bản của dạng bài
 }
 
+/** Kiểu học liệu trực quan đi kèm câu hỏi, đặc biệt dùng cho Sinh học. */
+export type QuestionMediaType =
+  | 'diagram'
+  | 'microscope'
+  | 'chart'
+  | 'photo'
+  | 'illustration';
+
+export interface QuestionMedia {
+  id: string;
+  type: QuestionMediaType;
+  src: string;
+  /** Mô tả nội dung có ý nghĩa; bắt buộc để học sinh dùng trình đọc màn hình không mất dữ kiện. */
+  alt: string;
+  caption?: string;
+  longDescription?: string;
+  credit?: string;
+  width?: number;
+  height?: number;
+}
+
+export interface QuestionDataTableColumn {
+  key: string;
+  label: string;
+  unit?: string;
+}
+
+export interface QuestionDataTable {
+  caption: string;
+  columns: QuestionDataTableColumn[];
+  rows: Array<Record<string, string | number>>;
+}
+
+/** Ngữ liệu dùng để đặt dữ kiện trước câu hỏi: văn bản, hình ảnh và/hoặc bảng số liệu. */
+export interface QuestionStimulus {
+  id: string;
+  title?: string;
+  content?: string;
+  media?: QuestionMedia[];
+  dataTable?: QuestionDataTable;
+}
+
+export type QuestionResponseType =
+  | 'single_choice'
+  | 'true_false_cluster'
+  | 'short_answer'
+  | 'constructed_response'
+  | 'ordering'
+  | 'labeling';
+
 
 export interface Question {
   id: string;
@@ -201,6 +254,9 @@ export interface Question {
   topicId: string;
   questionTypeId: string;
   content: string; // Hỗ trợ LaTeX
+  responseType?: QuestionResponseType;
+  media?: QuestionMedia[];
+  stimulus?: QuestionStimulus;
   difficulty: 'easy' | 'medium' | 'hard';
   sourceType: 'manual' | 'official_exam' | 'mock_exam';
   province?: string;

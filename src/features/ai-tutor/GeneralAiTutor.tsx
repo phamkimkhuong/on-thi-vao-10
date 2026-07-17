@@ -57,15 +57,6 @@ export const GeneralAiTutor: React.FC = () => {
   const navigate = useNavigate();
   const { user, selectedGrade, selectedSubject: subject, setSubject } = useAppStore();
 
-  if (!user) {
-    return (
-      <MathLoginRequired
-        title="Gia sư Socratic"
-        description="Gia sư Socratic giúp bạn giải thích chi tiết, gợi ý phương pháp giải và đồng hành cùng bạn học tập 24/7. Đăng nhập để bắt đầu trò chuyện cùng AI."
-      />
-    );
-  }
-
   const [showDiagnostics, setShowDiagnostics] = useState(() => {
     return localStorage.getItem('otv10_ai_show_diagnostics') !== 'false';
   });
@@ -623,6 +614,15 @@ Tuyệt đối KHÔNG trả lời hoặc bàn luận bất kỳ câu hỏi nào 
   }
 
   const hasProfileData = strengths.length > 0 || weaknesses.length > 0 || !!learningSummary;
+
+  if (!user) {
+    return (
+      <MathLoginRequired
+        title="Gia sư Socratic"
+        description="Gia sư Socratic giúp bạn giải thích chi tiết, gợi ý phương pháp giải và đồng hành cùng bạn học tập 24/7. Đăng nhập để bắt đầu trò chuyện cùng AI."
+      />
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-110px)] lg:h-[calc(100vh-100px)] overflow-hidden p-0 gap-3 bg-slate-50/50 dark:bg-slate-950/20 relative">

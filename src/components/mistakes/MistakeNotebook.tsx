@@ -55,21 +55,7 @@ export const MistakeNotebook: React.FC = () => {
   const { selectedSubject, selectedGrade, user, progressVersion, refreshProgress } = useAppStore();
   void progressVersion;
 
-  if (!user) {
-    return (
-      <MathLoginRequired
-        title="Sổ tay sửa lỗi sai thông minh"
-        description="Tính năng Sổ tay sửa lỗi sai giúp lưu trữ tự động các câu hỏi làm sai từ các bài luyện tập và thi thử để bạn ôn luyện lại. Đăng nhập để sử dụng tính năng này."
-      />
-    );
-  }
-
-  const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
-  const questions = getQuestions(selectedGrade, selectedSubject);
-  const solutions = getSolutions(selectedGrade, selectedSubject);
-
   const [mistakes, setMistakes] = useState<EnrichedMistake[]>([]);
-
   const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
 
   // Trạng thái cho việc luyện lại câu sai cụ thể
@@ -86,8 +72,13 @@ export const MistakeNotebook: React.FC = () => {
   const [isTutorOpen, setIsTutorOpen] = useState(false);
   const [latestAttempt, setLatestAttempt] = useState<UserAttempt | null>(null);
 
+  const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
+  const questions = getQuestions(selectedGrade, selectedSubject);
+  const solutions = getSolutions(selectedGrade, selectedSubject);
+
   const loadMistakes = useCallback(() => {
-    const currentUserId = user!.uid;
+    if (!user) return;
+    const currentUserId = user.uid;
     const list = storageService.getMistakes(currentUserId);
 
     // Lọc lỗi sai theo môn đang chọn và trạng thái chưa fixed
@@ -263,6 +254,15 @@ export const MistakeNotebook: React.FC = () => {
       </span>
     );
   };
+
+  if (!user) {
+    return (
+      <MathLoginRequired
+        title="Sổ tay sửa lỗi sai thông minh"
+        description="Tính năng Sổ tay sửa lỗi sai giúp lưu trữ tự động các câu hỏi làm sai từ các bài luyện tập và thi thử để bạn ôn luyện lại. Đăng nhập để sử dụng tính năng này."
+      />
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-12">

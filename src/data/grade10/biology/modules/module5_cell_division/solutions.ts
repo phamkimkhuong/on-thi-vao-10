@@ -8,8 +8,8 @@ export const g10BiologyModule5Solutions: Solution[] = [
     detailedSteps: [
       {
         order: 1,
-        title: "Nhận diện lý thuyết liên quan",
-        explanation: "Xếp một hàng trên mặt phẳng xích đạo."
+        title: "Dấu hiệu nhận dạng dạng bài",
+        explanation: "Hai dấu hiệu đồng thời—co xoắn cực đại và xếp một hàng ở mặt phẳng xích đạo—là dấu hiệu đặc trưng của kì giữa nguyên phân."
       },
       {
         order: 2,
@@ -19,10 +19,10 @@ export const g10BiologyModule5Solutions: Solution[] = [
     ],
     finalAnswer: "B",
     commonMistakes: [
-      "Lựa chọn đáp án dựa trên cảm tính hoặc không đọc kỹ định nghĩa."
+      "Nhầm kì giữa với kì sau: ở kì sau, chromatid chị em đã tách và di chuyển về hai cực."
     ],
     reviewSuggestions: [
-      "Học sinh cần nắm chắc các định nghĩa lý thuyết nền tảng trong sách giáo khoa."
+      "Ôn BIO10-M5-O02: trạng thái nhiễm sắc thể, thoi phân bào và dấu hiệu từng kì nguyên phân."
     ]
   }
 ];

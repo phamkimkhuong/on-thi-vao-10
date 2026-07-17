@@ -9,15 +9,16 @@ export const g10BiologyModule7QuestionTypes: QuestionType[] = [
     description: "Đặc điểm hạt virus (virion) gồm lõi nucleic acid và vỏ capsid.",
     exampleQuestionId: "bio10-q8",
     recognitionSigns: [
-      "Nhận biết qua các thuật ngữ định nghĩa trong câu hỏi."
+      "Đề cho sơ đồ virion hoặc mô tả lõi nucleic acid, capsid, vỏ ngoài và gai glycoprotein.",
+      "Đề yêu cầu phân biệt virus với tế bào nhân sơ hoặc nhận diện thành phần không có ở virus."
     ],
     solvingSteps: [
-      "Bước 1: Đọc kỹ câu hỏi và các phương án.",
-      "Bước 2: Đối chiếu lý thuyết sinh học tương ứng.",
-      "Bước 3: Loại trừ phương án sai và chọn đáp án đúng."
+      "Xác định cấu trúc bắt buộc của virion: vật chất di truyền và capsid.",
+      "Kiểm tra các cấu trúc bổ sung như vỏ ngoài, gai bề mặt theo loại virus được mô tả.",
+      "Loại phương án gán cho virus cấu trúc tế bào hoặc hệ chuyển hóa độc lập."
     ],
     commonMistakes: [
-      "Không đọc kĩ các phương án nhiễu dễ gây nhầm lẫn."
+      "Coi virus là một tế bào rất nhỏ hoặc cho rằng mọi virus đều đồng thời chứa cả DNA và RNA."
     ],
     difficulty: "easy",
     examFrequency: "high"

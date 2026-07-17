@@ -9,15 +9,16 @@ export const g10BiologyModule3QuestionTypes: QuestionType[] = [
     description: "Cơ chế vận chuyển thụ động, chủ động, xuất bào và nhập bào.",
     exampleQuestionId: "bio10-q4",
     recognitionSigns: [
-      "Nhận biết qua các thuật ngữ định nghĩa trong câu hỏi."
+      "Đề cho chênh lệch nồng độ, tính thấm của màng, ATP hoặc protein vận chuyển.",
+      "Đề mô tả tế bào trong môi trường ưu trương, nhược trương hoặc đẳng trương."
     ],
     solvingSteps: [
-      "Bước 1: Đọc kỹ câu hỏi và các phương án.",
-      "Bước 2: Đối chiếu lý thuyết sinh học tương ứng.",
-      "Bước 3: Loại trừ phương án sai và chọn đáp án đúng."
+      "Xác định chính xác chất nào đang di chuyển và màng có cho chất đó đi qua hay không.",
+      "So sánh gradient: cùng chiều gradient thường là thụ động; ngược gradient cần vận chuyển chủ động.",
+      "Nếu xét nước, chuyển sang phân tích thẩm thấu và dự đoán thay đổi thể tích tế bào."
     ],
     commonMistakes: [
-      "Không đọc kĩ các phương án nhiễu dễ gây nhầm lẫn."
+      "Nhầm chiều di chuyển của nước với chiều di chuyển của chất tan hoặc cho rằng có protein màng thì luôn tốn ATP."
     ],
     difficulty: "easy",
     examFrequency: "high"

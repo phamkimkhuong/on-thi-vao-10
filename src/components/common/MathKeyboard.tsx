@@ -41,8 +41,7 @@ export const MathKeyboard: React.FC<MathKeyboardProps> = ({
     const start = input.selectionStart ?? 0;
     const end = input.selectionEnd ?? 0;
     const currentValue = input.value;
-
-    let newValue = '';
+    let newValue: string;
     let newCursorPos = 0;
 
     if (start !== end) {

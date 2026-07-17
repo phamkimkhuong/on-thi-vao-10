@@ -8,8 +8,8 @@ export const g10BiologyModule2Solutions: Solution[] = [
     detailedSteps: [
       {
         order: 1,
-        title: "Nhận diện lý thuyết liên quan",
-        explanation: "Nơi sản xuất phần lớn ATP cho tế bào hoạt động."
+        title: "Dấu hiệu nhận dạng dạng bài",
+        explanation: "Cụm 'nhà máy năng lượng' là cách gọi gợi đến bào quan thực hiện hô hấp tế bào và tạo phần lớn ATP."
       },
       {
         order: 2,
@@ -19,10 +19,10 @@ export const g10BiologyModule2Solutions: Solution[] = [
     ],
     finalAnswer: "B",
     commonMistakes: [
-      "Lựa chọn đáp án dựa trên cảm tính hoặc không đọc kỹ định nghĩa."
+      "Chọn lục lạp vì cũng chuyển hóa năng lượng nhưng lục lạp tích lũy năng lượng ánh sáng, còn câu hỏi hỏi bào quan tạo ATP cho hoạt động phổ biến của tế bào nhân thực."
     ],
     reviewSuggestions: [
-      "Học sinh cần nắm chắc các định nghĩa lý thuyết nền tảng trong sách giáo khoa."
+      "Ôn BIO10-M2-O05: dấu hiệu cấu trúc và chức năng của ti thể, lục lạp, lưới nội chất, Golgi."
     ]
   }
 ];

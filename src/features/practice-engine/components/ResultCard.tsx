@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
+import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
 import { Question, QuestionType, Solution, UserAttempt, SubjectCode } from '../../../types';
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
@@ -116,7 +117,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               📖 Đề bài:
             </h4>
           </div>
-          <div className="p-5 text-sm font-bold leading-relaxed text-foreground bg-secondary/10 dark:bg-slate-950/10 font-sans">
+          <div className="space-y-4 p-5 text-sm font-bold leading-relaxed text-foreground bg-secondary/10 dark:bg-slate-950/10 font-sans">
+            <QuestionStimulusRenderer question={currentQuestion} />
             <LatexRenderer text={cleanContent} />
           </div>
           {/* Nếu có options (đối với trắc nghiệm) thì hiển thị các lựa chọn cho học sinh dễ đối chiếu */}

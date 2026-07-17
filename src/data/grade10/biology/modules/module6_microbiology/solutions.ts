@@ -8,8 +8,8 @@ export const g10BiologyModule6Solutions: Solution[] = [
     detailedSteps: [
       {
         order: 1,
-        title: "Nhận diện lý thuyết liên quan",
-        explanation: "Năng lượng ánh sáng + Carbon CO2."
+        title: "Dấu hiệu nhận dạng dạng bài",
+        explanation: "Dạng phân loại dinh dưỡng luôn có hai trục độc lập: nguồn năng lượng và nguồn carbon."
       },
       {
         order: 2,
@@ -19,10 +19,10 @@ export const g10BiologyModule6Solutions: Solution[] = [
     ],
     finalAnswer: "C",
     commonMistakes: [
-      "Lựa chọn đáp án dựa trên cảm tính hoặc không đọc kỹ định nghĩa."
+      "Chỉ nhìn nguồn năng lượng hoặc hiểu 'tự dưỡng' là tự tạo năng lượng; tự/dị dưỡng được xác định theo nguồn carbon."
     ],
     reviewSuggestions: [
-      "Học sinh cần nắm chắc các định nghĩa lý thuyết nền tảng trong sách giáo khoa."
+      "Ôn BIO10-M6-O02: bảng 2×2 nguồn năng lượng × nguồn carbon của bốn kiểu dinh dưỡng."
     ]
   }
 ];

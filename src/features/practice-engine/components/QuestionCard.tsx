@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
+import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
 import { ProofImageUploader } from '../../../components/common/ProofImageUploader';
 import { MathKeyboard } from '../../../components/common/MathKeyboard';
 import { Question, QuestionType, Solution, StructuredAnswer, SubjectCode } from '../../../types';
@@ -109,10 +110,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       <CardHeader className="bg-secondary/20 border-b border-border/20 p-5">
         <CardTitle className="text-foreground text-sm font-black flex items-center gap-2 font-sans">
           <BookOpen size={17} className={cn("animate-float shrink-0", theme.iconColor)} />
-          Luyện tập: {currentQuestion.questionTypeId ? currentQuestion.questionTypeId : 'Câu hỏi'}
+          Luyện tập: {currentQuestionType?.name ?? 'Câu hỏi'}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
+        <QuestionStimulusRenderer question={currentQuestion} />
+
         {/* Đề bài */}
         <div className="text-sm font-bold leading-relaxed text-foreground bg-secondary/30 dark:bg-slate-950/20 p-5 rounded-2xl border border-border/20 shadow-inner font-sans">
           <LatexRenderer text={cleanContent} />

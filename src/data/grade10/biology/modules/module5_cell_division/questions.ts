@@ -6,6 +6,7 @@ export const g10BiologyModule5Questions: Question[] = [
     subjectId: "biology",
     topicId: "bio10-t5",
     questionTypeId: "bio10-qt6",
+    responseType: "single_choice",
     content: "Trong quá trình nguyên phân, các nhiễm sắc thể co xoắn cực đại và xếp thành một hàng trên mặt phẳng xích đạo của thoi phân bào xảy ra ở kì nào?",
     options: [
   "A. Kì đầu",
@@ -16,6 +17,10 @@ export const g10BiologyModule5Questions: Question[] = [
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
-    validatorType: "choice"
+    validatorType: "choice",
+    outcomeIds: ["BIO10-M5-O02"],
+    competency: "biological_cognition",
+    cognitiveLevel: "recognition",
+    estimatedSeconds: 50
   }
 ];

@@ -23,7 +23,7 @@ export const authService = {
       console.error("Lỗi đăng nhập bằng Google:", err);
       // Ném lỗi lên trên để component hiển thị toast hoặc thông báo nếu cần
       if (err.code !== 'auth/popup-closed-by-user') {
-        throw new Error(err.message || 'Lỗi đăng nhập bằng Google. Vui lòng thử lại.');
+        throw new Error(err.message || 'Lỗi đăng nhập bằng Google. Vui lòng thử lại.', { cause: err });
       }
     }
   }

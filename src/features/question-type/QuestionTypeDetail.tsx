@@ -139,6 +139,47 @@ export const QuestionTypeDetail: React.FC = () => {
     }
   }, [detail]);
 
+  const activeTabTextArray = React.useMemo(() => {
+    if (!detail) return [];
+    switch (activeTab) {
+      case 'theory':
+        return detail.theory || [];
+      case 'subtypes':
+        return (detail.subTypes || []).flatMap(s => [
+          s.name,
+          'Ví dụ minh họa: ' + s.example,
+          s.note ? 'Phương pháp giải: ' + s.note : ''
+        ]).filter(Boolean);
+      case 'recognition_mistakes':
+        return [
+          'Dấu hiệu nhận biết trong đề bài:',
+          ...(detail.recognitionSigns || []),
+          ...(detail.commonMistakes && detail.commonMistakes.length > 0
+            ? ['Các lỗi thường gặp và bẫy cần tránh:', ...(detail.commonMistakes || [])]
+            : [])
+        ];
+      case 'method':
+        return (detail.solvingSteps || []).map((s, i) => `Bước ${i + 1}: ${s}`);
+      case 'example':
+        if (!exampleQuestion) return [];
+        return [
+          'Ví dụ mẫu:',
+          exampleQuestion.content,
+          ...(exampleQuestion.options || []),
+          ...(exampleSolution
+            ? [
+              'Phân tích giải mẫu:',
+              'Tư duy nhận diện: ' + exampleSolution.recognition,
+              ...exampleSolution.detailedSteps.map(s => `Bước ${s.order}: ${s.title}. ${s.explanation}`),
+              'Đáp án cuối cùng: ' + exampleSolution.finalAnswer
+            ]
+            : [])
+        ];
+      default:
+        return [];
+    }
+  }, [activeTab, detail, exampleQuestion, exampleSolution]);
+
   if (!detail) {
     return (
       <div className="p-8 text-center text-muted-foreground font-semibold">
@@ -388,48 +429,6 @@ export const QuestionTypeDetail: React.FC = () => {
       )
     }
   );
-
-  const activeTabTextArray = React.useMemo(() => {
-    if (!detail) return [];
-    switch (activeTab) {
-      case 'theory':
-        return detail.theory || [];
-      case 'subtypes':
-        return (detail.subTypes || []).flatMap(s => [
-          s.name,
-          'Ví dụ minh họa: ' + s.example,
-          s.note ? 'Phương pháp giải: ' + s.note : ''
-        ]).filter(Boolean);
-      case 'recognition_mistakes':
-        return [
-          'Dấu hiệu nhận biết trong đề bài:',
-          ...(detail.recognitionSigns || []),
-          ...(detail.commonMistakes && detail.commonMistakes.length > 0
-            ? ['Các lỗi thường gặp và bẫy cần tránh:', ...(detail.commonMistakes || [])]
-            : [])
-        ];
-      case 'method':
-        return (detail.solvingSteps || []).map((s, i) => `Bước ${i + 1}: ${s}`);
-      case 'example':
-        if (!exampleQuestion) return [];
-        return [
-          'Ví dụ mẫu:',
-          exampleQuestion.content,
-          ...(exampleQuestion.options || []),
-          ...(exampleSolution
-            ? [
-              'Phân tích giải mẫu:',
-              'Tư duy nhận diện: ' + exampleSolution.recognition,
-              ...exampleSolution.detailedSteps.map(s => `Bước ${s.order}: ${s.title}. ${s.explanation}`),
-              'Đáp án cuối cùng: ' + exampleSolution.finalAnswer
-            ]
-            : [])
-        ];
-      default:
-        return [];
-    }
-  }, [activeTab, detail, exampleQuestion, exampleSolution]);
-
   const toggleSpeechPlayback = () => {
     if (isPlayingSpeech) {
       window.speechSynthesis.cancel();

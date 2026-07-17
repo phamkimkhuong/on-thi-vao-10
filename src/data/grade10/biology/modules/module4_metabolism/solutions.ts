@@ -8,8 +8,8 @@ export const g10BiologyModule4Solutions: Solution[] = [
     detailedSteps: [
       {
         order: 1,
-        title: "Nhận diện lý thuyết liên quan",
-        explanation: "Nhiệt độ cao làm phá vỡ các liên kết yếu (như liên kết hydro) trong protein."
+        title: "Dấu hiệu nhận dạng dạng bài",
+        explanation: "Cụm 'quá cao so với tối ưu' cho biết không còn xét hiệu ứng tăng va chạm mà xét sự thay đổi cấu trúc protein của enzyme."
       },
       {
         order: 2,
@@ -19,10 +19,10 @@ export const g10BiologyModule4Solutions: Solution[] = [
     ],
     finalAnswer: "B",
     commonMistakes: [
-      "Lựa chọn đáp án dựa trên cảm tính hoặc không đọc kỹ định nghĩa."
+      "Chọn phương án đứt hoàn toàn liên kết peptide; biến tính thường phá vỡ các tương tác duy trì cấu trúc không gian trước khi thủy phân mạch polypeptide."
     ],
     reviewSuggestions: [
-      "Học sinh cần nắm chắc các định nghĩa lý thuyết nền tảng trong sách giáo khoa."
+      "Ôn BIO10-M4-O03 và BIO10-M1-O05: đường cong nhiệt độ–hoạt tính và biến tính protein."
     ]
   }
 ];

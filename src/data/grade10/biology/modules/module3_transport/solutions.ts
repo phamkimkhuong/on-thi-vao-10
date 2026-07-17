@@ -8,8 +8,8 @@ export const g10BiologyModule3Solutions: Solution[] = [
     detailedSteps: [
       {
         order: 1,
-        title: "Nhận diện lý thuyết liên quan",
-        explanation: "Nước đi từ nơi có nồng độ chất tan thấp vào nơi có nồng độ chất tan cao."
+        title: "Dấu hiệu nhận dạng dạng bài",
+        explanation: "Đề cho tế bào động vật thay đổi thể tích trong dung dịch, nên phải xác định chiều thẩm thấu của nước và việc hồng cầu không có thành tế bào."
       },
       {
         order: 2,
@@ -19,10 +19,10 @@ export const g10BiologyModule3Solutions: Solution[] = [
     ],
     finalAnswer: "C",
     commonMistakes: [
-      "Lựa chọn đáp án dựa trên cảm tính hoặc không đọc kỹ định nghĩa."
+      "Nhầm chiều di chuyển của nước với chiều chênh lệch nồng độ chất tan; hoặc cho rằng hồng cầu có thành tế bào nên không vỡ."
     ],
     reviewSuggestions: [
-      "Học sinh cần nắm chắc các định nghĩa lý thuyết nền tảng trong sách giáo khoa."
+      "Ôn BIO10-M3-O02: ưu trương, nhược trương, đẳng trương và đáp ứng của tế bào động vật/thực vật."
     ]
   }
 ];
