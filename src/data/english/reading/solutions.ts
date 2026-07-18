@@ -402,7 +402,7 @@ export const readingSolutions: Solution[] = [
     "id": "eng-s605",
     "questionId": "eng-q605",
     "recognition": "Sắp xếp các câu để hoàn thành một bức thư/email thân mật.",
-    "translation": "a. Vui lòng cho mình biết nếu bạn có thể tham gia cùng chúng mình nhé.\nb. Hoa thân mến,\nc. Chúng mình định đi thăm bảo tàng khoa học vào Chủ nhật tuần này.\nd. Chúc mọi điều tốt đẹp nhất,\nLan\ne. Xe buýt sẽ rời trường vào lúc 7 giờ sáng.",
+    "translation": "a. Vui lòng cho mình biết nếu bạn có thể tham gia cùng chúng mình nhé.\nb. Hoa thân mến,\nc. Chúng mình định đi thăm bảo tàng khoa học vào Chủ nhật tuần này.\nd. Chúc mọi điều tốt đẹp nhất,\nLan\\ne. Xe buýt sẽ rời trường vào lúc 7 giờ sáng.",
     "detailedSteps": [
       {
         "order": 1,
@@ -447,7 +447,7 @@ export const readingSolutions: Solution[] = [
     "id": "eng-s606",
     "questionId": "eng-q606",
     "recognition": "Sắp xếp email/thư hỏi thông tin trang trọng (Formal Letter/Email).",
-    "translation": "a. Cảm ơn sự quan tâm của ông/bà.\nb. Kính gửi Ông hoặc Bà,\nc. Tôi viết thư này để hỏi thông tin về khóa học tiếng Anh của bên ông/bà.\nd. Ông/Bà có thể cho tôi biết học phí khóa học và ngày bắt đầu được không?\ne. Tôi rất mong sớm nhận được phản hồi từ ông/bà.",
+    "translation": "a. Cảm ơn sự quan tâm của ông/bà.\nb. Kính gửi Ông hoặc Bà,\nc. Tôi viết thư này để hỏi thông tin về khóa học tiếng Anh của bên ông/bà.\nd. Ông/Bà có thể cho tôi biết học phí khóa học và ngày bắt đầu được không?\\ne. Tôi rất mong sớm nhận được phản hồi từ ông/bà.",
     "detailedSteps": [
       {
         "order": 1,
@@ -492,7 +492,7 @@ export const readingSolutions: Solution[] = [
     "id": "eng-s607",
     "questionId": "eng-q607",
     "recognition": "Sắp xếp các câu thành một đoạn văn hoàn chỉnh về hoạt động bảo vệ môi trường trường học.",
-    "translation": "a. Kết quả là, trường học đã trở nên sạch hơn và xanh hơn.\nb. Học sinh trường chúng tôi đang cùng nhau làm việc để bảo vệ môi trường.\nc. Đầu tiên, các bạn phân loại rác thải giấy và nhựa.\nd. Tiếp theo, các bạn trồng cây xung quanh sân trường.\ne. Cuối cùng, các bạn nhắc nhở các học sinh khác không vứt rác bừa bãi.",
+    "translation": "a. Kết quả là, trường học đã trở nên sạch hơn và xanh hơn.\nb. Học sinh trường chúng tôi đang cùng nhau làm việc để bảo vệ môi trường.\nc. Đầu tiên, các bạn phân loại rác thải giấy và nhựa.\nd. Tiếp theo, các bạn trồng cây xung quanh sân trường.\\ne. Cuối cùng, các bạn nhắc nhở các học sinh khác không vứt rác bừa bãi.",
     "detailedSteps": [
       {
         "order": 1,
@@ -525,7 +525,7 @@ export const readingSolutions: Solution[] = [
     "id": "eng-s608",
     "questionId": "eng-q608",
     "recognition": "Sắp xếp các câu thành một đoạn văn hoàn chỉnh về thói quen đọc sách tiếng Anh.",
-    "translation": "a. Do đó, việc đọc sách thường xuyên có thể cải thiện cả kỹ năng ngôn ngữ và kiến thức chung.\nb. Đọc sách tiếng Anh là một thói quen hữu ích đối với học sinh.\nc. Nó giúp các bạn học từ mới trong ngữ cảnh.\nd. Thêm vào đó, học sinh có thể hiểu các nền văn hóa khác nhau qua các câu chuyện.\ne. Thói quen này cũng cải thiện khả năng viết rõ ràng của các bạn.",
+    "translation": "a. Do đó, việc đọc sách thường xuyên có thể cải thiện cả kỹ năng ngôn ngữ và kiến thức chung.\nb. Đọc sách tiếng Anh là một thói quen hữu ích đối với học sinh.\nc. Nó giúp các bạn học từ mới trong ngữ cảnh.\nd. Thêm vào đó, học sinh có thể hiểu các nền văn hóa khác nhau qua các câu chuyện.\\ne. Thói quen này cũng cải thiện khả năng viết rõ ràng của các bạn.",
     "detailedSteps": [
       {
         "order": 1,

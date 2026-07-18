@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Sơ đồ xe trượt trên mặt phẳng nghiêng và cổng quang</title>
+  <desc id="desc">Một xe nhỏ ở trên máng nghiêng có góc theta. Cuối máng có cổng quang nối với đồng hồ đo thời gian.</desc>
+  <rect width="720" height="360" fill="#f8fafc"/>
+  <path d="M90 285 L560 285 L210 90 Z" fill="#e2e8f0" stroke="#475569" stroke-width="5"/>
+  <path d="M210 90 L565 285" stroke="#4f46e5" stroke-width="10" stroke-linecap="round"/>
+  <g transform="translate(300 132) rotate(29)">
+    <rect x="0" y="0" width="88" height="42" rx="8" fill="#f59e0b" stroke="#92400e" stroke-width="4"/>
+    <circle cx="20" cy="45" r="10" fill="#334155"/>
+    <circle cx="68" cy="45" r="10" fill="#334155"/>
+  </g>
+  <path d="M500 215 V305 M555 245 V305 M500 215 H555" fill="none" stroke="#0f766e" stroke-width="7"/>
+  <path d="M555 275 C610 275 615 240 640 240" fill="none" stroke="#0f766e" stroke-width="4"/>
+  <rect x="620" y="205" width="72" height="58" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="4"/>
+  <text x="635" y="240" font-family="Arial, sans-serif" font-size="21" fill="#134e4a">t</text>
+  <path d="M125 285 A78 78 0 0 1 192 247" fill="none" stroke="#dc2626" stroke-width="4"/>
+  <text x="154" y="270" font-family="Arial, sans-serif" font-size="24" fill="#991b1b">θ</text>
+  <text x="270" y="75" font-family="Arial, sans-serif" font-size="23" fill="#1e293b">Xe</text>
+  <text x="480" y="335" font-family="Arial, sans-serif" font-size="22" fill="#134e4a">Cổng quang</text>
+</svg>

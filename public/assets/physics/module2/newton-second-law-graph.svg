@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đồ thị gia tốc theo hợp lực</title>
+  <desc id="desc">Đường thẳng qua gốc và các điểm hợp lực 4, 8, 12 niutơn tương ứng gia tốc 2, 4, 6 mét trên giây bình phương.</desc>
+  <rect width="720" height="420" fill="#fff"/>
+  <g stroke="#d7deea" stroke-width="1"><path d="M90 330H660M90 250H660M90 170H660M90 90H660"/><path d="M280 50V330M470 50V330M660 50V330"/></g>
+  <g stroke="#26364d" stroke-width="2" fill="none"><path d="M90 45V330H675"/><path d="M84 55l6-10 6 10M665 324l10 6-10 6"/></g>
+  <path d="M90 330L660 90" stroke="#2774ca" stroke-width="4" fill="none"/>
+  <g fill="#2774ca"><circle cx="280" cy="250" r="6"/><circle cx="470" cy="170" r="6"/><circle cx="660" cy="90" r="6"/></g>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#26364d"><text x="575" y="380">Fₕ (N)</text><text x="22" y="48">a (m/s²)</text><text x="272" y="355">4</text><text x="462" y="355">8</text><text x="648" y="355">12</text><text x="66" y="255">2</text><text x="66" y="175">4</text><text x="66" y="95">6</text></g>
+</svg>

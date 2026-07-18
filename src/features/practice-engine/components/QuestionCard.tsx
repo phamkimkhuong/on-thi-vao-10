@@ -10,7 +10,7 @@ import { AnswerFormRenderer } from '../../../components/common/AnswerFormRendere
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
-import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp } from 'lucide-react';
+import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp, ShieldCheck } from 'lucide-react';
 import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
 interface QuestionCardProps {
@@ -42,6 +42,7 @@ interface QuestionCardProps {
   routeSubject: SubjectCode;
   structuredAnswer: StructuredAnswer;
   setStructuredAnswer: (val: StructuredAnswer) => void;
+  disableHints?: boolean;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -73,6 +74,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   routeSubject,
   structuredAnswer,
   setStructuredAnswer,
+  disableHints = false,
 }) => {
   const theme = getSubjectTheme(routeSubject);
   const mathInputRef = useRef<HTMLInputElement>(null);
@@ -108,9 +110,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   return (
     <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden">
       <CardHeader className="bg-secondary/20 border-b border-border/20 p-5">
-        <CardTitle className="text-foreground text-sm font-black flex items-center gap-2 font-sans">
+        <CardTitle className="text-foreground text-sm font-black flex flex-wrap items-center gap-2 font-sans">
           <BookOpen size={17} className={cn("animate-float shrink-0", theme.iconColor)} />
-          Luyện tập: {currentQuestionType?.name ?? 'Câu hỏi'}
+          <span>Luyện tập: {currentQuestionType?.name ?? 'Câu hỏi'}</span>
+          {disableHints && (
+            <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[9px] font-black text-cyan-700 dark:text-cyan-300">
+              <ShieldCheck size={11} aria-hidden="true" /> Kiểm tra làm chủ
+            </span>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
@@ -421,7 +428,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           )}
 
           {/* Nút gợi ý thông minh */}
-          {solutionDetail && questionTypeId !== 'eng-qt6' && (
+          {solutionDetail && questionTypeId !== 'eng-qt6' && !disableHints && (
             <div className="flex flex-col gap-2 pt-3">
               <button
                 type="button"

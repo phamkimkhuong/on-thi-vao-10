@@ -33,7 +33,7 @@ export const m1ExpansionSolutions: Solution[] = [
   },
   {
     id: 'chem10-m1-qt3-es1', questionId: 'chem10-m1-qt3-e1', recognition: 'Tính trung bình có trọng số từ tỉ lệ đồng vị.',
-    detailedSteps: [{ order: 1, title: 'Đổi tỉ lệ thành trọng số', explanation: '$\overline A=(24\times3+26\times1)/(3+1)=24,5$.' }],
+    detailedSteps: [{ order: 1, title: 'Đổi tỉ lệ thành trọng số', explanation: '$\\overline A=(24\\times3+26\\times1)/(3+1)=24,5$.' }],
     finalAnswer: 'B', commonMistakes: ['Lấy trung bình cộng 24 và 26 mà không xét tỉ lệ.'], reviewSuggestions: ['Ôn trung bình có trọng số.']
   },
   {
@@ -43,7 +43,7 @@ export const m1ExpansionSolutions: Solution[] = [
   },
   {
     id: 'chem10-m1-qt3-es3', questionId: 'chem10-m1-qt3-e3', recognition: 'Đọc phổ ba đồng vị và tính nguyên tử khối trung bình.',
-    detailedSteps: [{ order: 1, title: 'Tính theo cường độ tương đối', explanation: '$\overline A=(24\times79+25\times10+26\times11)/100=24,32$.' }],
+    detailedSteps: [{ order: 1, title: 'Tính theo cường độ tương đối', explanation: '$\\overline A=(24\\times79+25\\times10+26\\times11)/100=24,32$.' }],
     finalAnswer: 'B', commonMistakes: ['Coi cường độ đỉnh là số khối.', 'Bỏ qua đồng vị có đỉnh thấp.'], reviewSuggestions: ['Ôn ý nghĩa hai trục của phổ khối lượng.']
   },
   {

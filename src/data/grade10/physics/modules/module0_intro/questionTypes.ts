@@ -43,7 +43,7 @@ export const g10PhysicsModule0QuestionTypes: QuestionType[] = [
     exampleQuestionId: 'phy10-m0-q017', difficulty: 'medium', examFrequency: 'high',
     theory: ['Sai số thường được giữ một chữ số có nghĩa, hoặc hai chữ số khi chữ số đầu nhỏ; quy ước cụ thể phải được nêu rõ.', 'Giá trị trung bình phải được làm tròn đến cùng hàng thập phân với sai số và luôn kèm đơn vị.'],
     recognitionSigns: ['Đã cho giá trị trung bình và sai số chưa làm tròn.', 'Yêu cầu chọn cách viết kết quả đo đúng quy cách.'],
-    solvingSteps: ['Làm tròn sai số theo quy ước đề bài.', 'Làm tròn giá trị trung bình đến cùng hàng của chữ số cuối trong sai số.', 'Ghi dạng $A = (\bar A \pm \Delta A)$ kèm đúng đơn vị.'],
+    solvingSteps: ['Làm tròn sai số theo quy ước đề bài.', 'Làm tròn giá trị trung bình đến cùng hàng của chữ số cuối trong sai số.', 'Ghi dạng $A = (\\bar A \\pm \\Delta A)$ kèm đúng đơn vị.'],
     commonMistakes: ['Giữ giá trị trung bình nhiều chữ số hơn sai số cho phép.', 'Bỏ đơn vị hoặc đặt đơn vị chỉ cho một vế trong ngoặc.']
   },
   {

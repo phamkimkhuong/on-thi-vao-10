@@ -144,7 +144,7 @@ export const ExamEngine: React.FC = () => {
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
 
   const [selectedExamId, setSelectedExamId] = useState<string>('');
-  type ExamTab = 'all' | 'theory' | 'checkpoint' | 'midterm' | 'final';
+  type ExamTab = 'all' | 'diagnostic' | 'theory' | 'checkpoint' | 'midterm' | 'final';
   const [activeTab, setActiveTab] = useState<ExamTab>('all');
 
   const subjectExams = React.useMemo(() => {
@@ -153,6 +153,7 @@ export const ExamEngine: React.FC = () => {
 
   const availableTabs = React.useMemo<ExamTab[]>(() => {
     const tabs: ExamTab[] = ['all'];
+    if (subjectExams.some(exam => exam.kind === 'diagnostic')) tabs.push('diagnostic');
     if (subjectExams.some(exam => exam.focus === 'theory')) tabs.push('theory');
     if (subjectExams.some(exam => exam.kind === 'module_checkpoint' && exam.focus !== 'theory')) tabs.push('checkpoint');
     if (subjectExams.some(exam => exam.kind === 'midterm' && exam.focus !== 'theory')) tabs.push('midterm');
@@ -168,6 +169,7 @@ export const ExamEngine: React.FC = () => {
   const filteredExams = React.useMemo(() => {
     return subjectExams.filter(exam => {
       if (activeTab === 'all') return true;
+      if (activeTab === 'diagnostic') return exam.kind === 'diagnostic';
       if (activeTab === 'theory') return exam.focus === 'theory';
       if (activeTab === 'checkpoint') return exam.kind === 'module_checkpoint' && exam.focus !== 'theory';
       if (activeTab === 'midterm') return exam.kind === 'midterm' && exam.focus !== 'theory';
@@ -315,6 +317,7 @@ export const ExamEngine: React.FC = () => {
   const [isSubmittingExam, setIsSubmittingExam] = useState(false);
   const [examSubmitError, setExamSubmitError] = useState<string | null>(null);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
 
   const currentExam = mockExamsList.find(exam => exam.id === selectedExamId) || subjectExams[0];
   const currentBlueprint = currentExam?.blueprintId
@@ -322,6 +325,18 @@ export const ExamEngine: React.FC = () => {
     : undefined;
   const examSections = buildExamSections(examQuestions, currentBlueprint);
   const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'chemistry' ? 45 : selectedSubject === 'math' ? 120 : 60);
+
+  useEffect(() => {
+    if (examState !== 'testing') return;
+
+    const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', warnBeforeLeaving);
+    return () => window.removeEventListener('beforeunload', warnBeforeLeaving);
+  }, [examState]);
 
   const handleSubmitExam = useCallback(async () => {
     if (isSubmittingExam) return;
@@ -496,6 +511,7 @@ export const ExamEngine: React.FC = () => {
     setIsSubmittingExam(false);
     setExamSubmitError(null);
     setShowSubmitConfirm(false);
+    setShowExitConfirm(false);
     setTimeSpent(0);
     setExamState('testing');
   };
@@ -675,10 +691,11 @@ export const ExamEngine: React.FC = () => {
           </div>
 
           {/* Lọc đề thi theo Tab */}
-          <div className="flex w-full items-center gap-1 overflow-x-auto bg-slate-200/60 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-border/40 self-start md:w-auto relative z-10 shrink-0">
+          <div role="tablist" aria-label="Lọc loại bài kiểm tra" className="flex w-full items-center gap-1 overflow-x-auto bg-slate-200/60 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-border/40 self-start md:w-auto relative z-10 shrink-0">
             {availableTabs.map(tab => {
               const tabLabels = {
                 all: 'Tất cả',
+                diagnostic: 'Chẩn đoán',
                 theory: 'Lý thuyết',
                 checkpoint: 'Chuyên đề',
                 midterm: 'Giữa kỳ',
@@ -688,8 +705,11 @@ export const ExamEngine: React.FC = () => {
               return (
                 <button
                   key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActiveTab(tab)}
-                  className={`shrink-0 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 cursor-pointer ${
+                  className={`min-h-11 shrink-0 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
                     isActive
                       ? 'bg-card text-foreground shadow-sm scale-102 font-black'
                       : 'text-muted-foreground hover:text-foreground font-bold'
@@ -721,7 +741,18 @@ export const ExamEngine: React.FC = () => {
                   return (
                     <div
                       key={group.baseTitle}
+                      role="button"
+                      tabIndex={0}
+                      aria-pressed={isGroupSelected}
+                      aria-label={`Chọn ${group.baseTitle}${group.exams.length > 1 ? `, có ${group.exams.length} mã đề` : ''}`}
                       onClick={() => setSelectedExamId(selectedExamInGroup.id)}
+                      onKeyDown={(event) => {
+                        if (event.target !== event.currentTarget) return;
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          setSelectedExamId(selectedExamInGroup.id);
+                        }
+                      }}
                       className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-lg hover:-translate-y-0.5 cursor-pointer select-none relative overflow-hidden group ${
                         isGroupSelected
                           ? 'border-primary shadow-md shadow-primary/5 ring-1 ring-primary/25 bg-gradient-to-br from-card to-primary/[0.01]'
@@ -763,11 +794,13 @@ export const ExamEngine: React.FC = () => {
                                   <button
                                     key={exam.id}
                                     type="button"
+                                    aria-pressed={isVariantSelected}
+                                    aria-label={`Chọn mã đề ${exam.formCode}`}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setSelectedExamId(exam.id);
                                     }}
-                                    className={`px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold border transition-all cursor-pointer ${
+                                    className={`min-h-11 min-w-11 px-3 py-2 rounded-lg text-[10px] font-extrabold border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
                                       isVariantSelected
                                         ? 'bg-primary text-primary-foreground border-primary shadow-xs'
                                         : 'bg-secondary text-muted-foreground border-transparent hover:bg-secondary/80'
@@ -893,7 +926,7 @@ export const ExamEngine: React.FC = () => {
 
                   <Button
                     onClick={handleStartExam}
-                    className="w-full font-black py-4.5 text-xs bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 hover:opacity-95 active:scale-[0.98] shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 rounded-2xl border-none cursor-pointer text-white"
+                    className="min-h-12 w-full font-black py-4.5 text-xs bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 hover:opacity-95 active:scale-[0.98] shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 rounded-2xl border-none cursor-pointer text-white"
                   >
                     <Play size={13} className="fill-white" /> {currentExam.focus === 'theory' ? 'Bắt đầu kiểm tra lý thuyết' : 'Bắt đầu tính giờ thi thử'}
                   </Button>
@@ -942,17 +975,22 @@ export const ExamEngine: React.FC = () => {
         .map(question => question.id)
     );
     const unansweredCount = examQuestions.length - answeredQuestionIds.size;
+    const completionPercent = examQuestions.length > 0
+      ? Math.round((answeredQuestionIds.size / examQuestions.length) * 100)
+      : 0;
+    const timerIsUrgent = timeLeft <= 5 * 60;
 
     return (
       <div className="max-w-4xl mx-auto space-y-6 pb-20">
 
         {/* Header phòng thi nổi (Sticky) */}
-        <div className="sticky top-0 bg-background/80 backdrop-blur-md py-4 border-b border-border/50 flex items-center justify-between z-30 px-2">
-          <div className="flex flex-col">
+        <div className="sticky top-0 bg-background/90 backdrop-blur-md py-3 border-b border-border/50 z-30 px-2 space-y-3">
+          <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-col">
             <span className="text-[9px] font-bold text-red-500 animate-pulse uppercase tracking-wider">
               ● {currentExam?.focus === 'theory' ? 'Đang kiểm tra kiến thức lý thuyết' : 'Đang trong giờ thi thử nghiêm túc'}
             </span>
-            <h3 className="text-sm font-extrabold text-foreground">
+            <h3 className="truncate text-sm font-extrabold text-foreground">
               {currentExam?.title ?? `Bài kiểm tra ${subjectLabel}`}
             </h3>
             <span className="mt-1 text-[10px] font-bold text-muted-foreground">
@@ -960,11 +998,36 @@ export const ExamEngine: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-3 bg-card border border-border px-4 py-2 rounded-xl shadow-sm">
-            <Timer className="text-red-500 animate-pulse" size={18} />
-            <span className="font-black text-sm text-foreground tabular-nums">
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowExitConfirm(true)}
+              className="min-h-11 min-w-11 px-3 text-xs font-bold"
+              aria-label="Thoát khỏi bài thi"
+            >
+              <X size={15} /> <span className="hidden sm:inline">Thoát</span>
+            </Button>
+          <div role="timer" aria-label={`Thời gian còn lại ${formatTime(timeLeft)}`} className={cn(
+            'flex min-h-11 items-center gap-2 bg-card border px-3 py-2 rounded-xl shadow-sm',
+            timerIsUrgent ? 'border-red-500/40 text-red-600 dark:text-red-400' : 'border-border text-foreground'
+          )}>
+            <Timer className={cn(timerIsUrgent && 'animate-pulse')} size={18} />
+            <span className="font-black text-sm tabular-nums">
               {formatTime(timeLeft)}
             </span>
+          </div>
+          </div>
+          </div>
+          <div
+            role="progressbar"
+            aria-label="Tiến độ trả lời"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={completionPercent}
+            className="h-1.5 overflow-hidden rounded-full bg-secondary"
+          >
+            <div className="h-full rounded-full bg-emerald-500 transition-[width] duration-200" style={{ width: `${completionPercent}%` }} />
           </div>
         </div>
 
@@ -993,7 +1056,7 @@ export const ExamEngine: React.FC = () => {
                         aria-label={`Đi tới câu ${index + 1}${answered ? ', đã trả lời' : ', chưa trả lời'}`}
                         onClick={() => document.getElementById(`exam-question-${index + 1}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
                         className={cn(
-                          'h-9 min-w-9 rounded-lg border px-2 text-xs font-extrabold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                          'h-11 min-w-11 rounded-lg border px-2 text-xs font-extrabold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                           answered
                             ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
                             : 'border-border bg-secondary/50 text-muted-foreground hover:border-primary/40 hover:text-foreground'
@@ -1032,9 +1095,9 @@ export const ExamEngine: React.FC = () => {
             const isChoice = q.options && q.options.length > 0;
 
             return (
-              <Card id={`exam-question-${idx + 1}`} key={q.id} className="scroll-mt-32 border-border">
-                <CardHeader className="bg-slate-50/30 dark:bg-slate-900/5 py-3 border-b border-border/30">
-                  <span className="text-xs font-bold text-muted-foreground">Câu hỏi số {idx + 1}</span>
+                <Card id={`exam-question-${idx + 1}`} key={q.id} aria-labelledby={`exam-question-title-${idx + 1}`} className="scroll-mt-36 border-border">
+                  <CardHeader className="bg-slate-50/30 dark:bg-slate-900/5 py-3 border-b border-border/30">
+                  <h5 id={`exam-question-title-${idx + 1}`} className="text-xs font-bold text-muted-foreground">Câu hỏi số {idx + 1}</h5>
                 </CardHeader>
                 <CardContent className="p-6 space-y-5">
                   <QuestionStimulusRenderer question={q} />
@@ -1052,8 +1115,10 @@ export const ExamEngine: React.FC = () => {
                         return (
                           <button
                             key={i}
+                            type="button"
+                            aria-pressed={isSelected}
                             onClick={() => handleOptionSelect(q.id, optLetter)}
-                            className={`w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer ${isSelected
+                            className={`min-h-11 w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition-all duration-150 active:scale-[0.99] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${isSelected
                               ? 'bg-primary/10 border-primary text-primary shadow-sm'
                               : 'bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground'
                               }`}
@@ -1073,11 +1138,13 @@ export const ExamEngine: React.FC = () => {
                   ) : (
                     // Nhập tự luận/điền từ ngắn (Dành cho Toán hoặc Tiếng Anh viết/wordform)
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-muted-foreground block">
+                      <label htmlFor={`exam-answer-${q.id}`} className="text-xs font-bold text-muted-foreground block">
                         {selectedSubject === 'math' ? 'Đáp số của bạn:' : 'Đáp án của bạn:'}
                       </label>
                       <input
+                        id={`exam-answer-${q.id}`}
                         type="text"
+                        inputMode={q.responseType === 'short_answer' ? 'decimal' : 'text'}
                         value={answers[q.id] || ''}
                         onChange={(e) => handleInputChange(q.id, e.target.value)}
                         placeholder={selectedSubject === 'math' ? 'Nhập đáp số...' : 'Nhập câu trả lời...'}
@@ -1105,7 +1172,7 @@ export const ExamEngine: React.FC = () => {
         </div>
 
         {examSubmitError && (
-          <p className="text-xs font-bold text-rose-600 dark:text-rose-400">
+          <p role="alert" className="text-xs font-bold text-rose-600 dark:text-rose-400">
             {examSubmitError}
           </p>
         )}
@@ -1114,7 +1181,7 @@ export const ExamEngine: React.FC = () => {
         <Button
           onClick={() => setShowSubmitConfirm(true)}
           disabled={isSubmittingExam}
-          className="w-full font-bold py-4 text-xs bg-red-500 hover:bg-red-600 active:scale-[0.98] shadow-md shadow-red-500/10 flex items-center justify-center gap-1.5"
+          className="min-h-12 w-full font-bold py-4 text-xs bg-red-500 hover:bg-red-600 active:scale-[0.98] shadow-md shadow-red-500/10 flex items-center justify-center gap-1.5"
         >
           <CheckSquare size={16} /> {isSubmittingExam ? 'Đang lưu bài thi...' : 'Nộp bài thi thử & Xem kết quả'}
         </Button>
@@ -1132,6 +1199,22 @@ export const ExamEngine: React.FC = () => {
             void handleSubmitExam();
           }}
           onCancel={() => setShowSubmitConfirm(false)}
+        />
+        <ConfirmationModal
+          isOpen={showExitConfirm}
+          title="Thoát khỏi bài thi?"
+          description="Các câu trả lời của lượt làm hiện tại chưa được nộp và sẽ bị xóa nếu bạn thoát."
+          confirmLabel="Thoát và xóa lượt làm"
+          cancelLabel="Tiếp tục làm bài"
+          variant="danger"
+          onConfirm={() => {
+            setShowExitConfirm(false);
+            clearAllProofImages();
+            setAnswers({});
+            setFinalAnswers({});
+            setExamState('intro');
+          }}
+          onCancel={() => setShowExitConfirm(false)}
         />
       </div>
     );

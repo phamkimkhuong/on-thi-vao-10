@@ -3,6 +3,10 @@ import { physicsMidterm1QuestionsFormA, physicsMidterm1QuestionsFormB, physicsMi
 import { physicsMidterm1Exams } from './exams/midterm1';
 import { physicsFinal1QuestionsFormA, physicsFinal1QuestionsFormB, physicsFinal1SolutionsFormA, physicsFinal1SolutionsFormB } from './final1';
 import { physicsFinal1Exams } from './exams/final1';
+import { physicsMidterm2QuestionsFormA, physicsMidterm2QuestionsFormB, physicsMidterm2SolutionsFormA, physicsMidterm2SolutionsFormB } from './midterm2';
+import { physicsMidterm2Exams } from './exams/midterm2';
+import { physicsFinal2QuestionsFormA, physicsFinal2QuestionsFormB, physicsFinal2SolutionsFormA, physicsFinal2SolutionsFormB } from './final2';
+import { physicsFinal2Exams } from './exams/final2';
 
 export {
   g10PhysicsAssessmentBlueprints,
@@ -46,18 +50,28 @@ export const g10PhysicsAssessmentExams: MockExam[] = [
     createdAt: '2026-07-17T00:00:00.000Z'
   },
   ...physicsMidterm1Exams,
-  ...physicsFinal1Exams
+  ...physicsFinal1Exams,
+  ...physicsMidterm2Exams,
+  ...physicsFinal2Exams
 ];
 
 export const g10PhysicsAssessmentQuestions = [
   ...physicsMidterm1QuestionsFormA,
   ...physicsMidterm1QuestionsFormB,
   ...physicsFinal1QuestionsFormA,
-  ...physicsFinal1QuestionsFormB
+  ...physicsFinal1QuestionsFormB,
+  ...physicsMidterm2QuestionsFormA,
+  ...physicsMidterm2QuestionsFormB,
+  ...physicsFinal2QuestionsFormA,
+  ...physicsFinal2QuestionsFormB
 ];
 export const g10PhysicsAssessmentSolutions = [
   ...physicsMidterm1SolutionsFormA,
   ...physicsMidterm1SolutionsFormB,
   ...physicsFinal1SolutionsFormA,
-  ...physicsFinal1SolutionsFormB
+  ...physicsFinal1SolutionsFormB,
+  ...physicsMidterm2SolutionsFormA,
+  ...physicsMidterm2SolutionsFormB,
+  ...physicsFinal2SolutionsFormA,
+  ...physicsFinal2SolutionsFormB
 ];

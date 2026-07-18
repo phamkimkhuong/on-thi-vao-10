@@ -8,6 +8,8 @@ import { getTopics, getQuestions } from '../../../data';
 import { useAppStore } from '../../../services/store';
 import { getSubjectTheme, getStarsFromScore } from '../../../utils/theme';
 import { storageService } from '../../../services/storage';
+import { LatexRenderer } from '../../../components/common/LatexRenderer';
+import { buildAdaptivePracticeSequence } from '../utils/adaptivePracticeSequence';
 
 interface TopicSelectionViewProps {
   routeSubject: SubjectCode;
@@ -52,6 +54,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const isMath = routeSubject === 'math';
   const isEnglish = routeSubject === 'english';
   const isChemistry = routeSubject === 'chemistry';
+  const isPhysics = routeSubject === 'physics';
 
   const allQuestions = useMemo(() => getQuestions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
   const userId = user?.uid || 'guest';
@@ -147,9 +150,11 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     </div>
 
                     <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
-                      {card.name}
+                      <LatexRenderer text={card.name} />
                     </h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{card.description}</p>
+                    <div className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                      <LatexRenderer text={card.description} />
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
@@ -477,9 +482,11 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     </div>
 
                     <h4 className="font-extrabold text-sm text-foreground flex items-center gap-1">
-                      {card.name}
+                      <LatexRenderer text={card.name} />
                     </h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{card.description}</p>
+                    <div className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                      <LatexRenderer text={card.description} />
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between border-t border-border/20 pt-3 text-[10px] font-bold text-muted-foreground">
@@ -517,18 +524,22 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
             ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : '📐 Học tốt Toán Lớp 10')
             : isChemistry
               ? '🧪 Luyện tập Hóa học Lớp 10'
-              : routeSubject === 'biology'
-                ? '🧬 Luyện tập Sinh học Lớp 10'
-                : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
+              : isPhysics
+                ? '⚛️ Luyện tập Vật lí Lớp 10'
+                : routeSubject === 'biology'
+                  ? '🧬 Luyện tập Sinh học Lớp 10'
+                  : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
           {isMath 
             ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : 'Bài tập tự luận lớp 10 bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.')
             : isChemistry
               ? 'Luyện tập các dạng bài Hóa học lớp 10 bám sát chương trình GDPT 2018 mới.'
-              : routeSubject === 'biology'
-                ? 'Luyện tập các dạng bài Sinh học lớp 10 bám sát chương trình GDPT 2018 mới.'
-                : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
+              : isPhysics
+                ? 'Học tăng dần từ nền tảng đến vận dụng; kiểm tra làm chủ chỉ mở khi em đã sẵn sàng.'
+                : routeSubject === 'biology'
+                  ? 'Luyện tập các dạng bài Sinh học lớp 10 bám sát chương trình GDPT 2018 mới.'
+                  : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
         </p>
       </div>
 
@@ -544,6 +555,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 "h-4 w-1 rounded-full",
                 routeSubject === 'math' ? 'bg-indigo-500' :
                 routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                routeSubject === 'physics' ? 'bg-cyan-500' :
                 routeSubject === 'biology' ? 'bg-green-500' :
                 'bg-purple-500'
               )} />
@@ -560,11 +572,19 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
               {topicQTypes.map((qType) => {
                 const qTypeAttempts = attempts.filter(a => a.questionTypeId === qType.id);
                 const qTypeQuestions = allQuestions.filter(q => q.questionTypeId === qType.id);
-                const totalQuestions = qTypeQuestions.length;
+                const physicsStatus = isPhysics
+                  ? buildAdaptivePracticeSequence(qTypeQuestions, qTypeAttempts)
+                  : null;
+                const totalQuestions = physicsStatus?.learningQuestionCount ?? qTypeQuestions.length;
                 const solvedQuestionIds = new Set(
-                  qTypeAttempts.filter(a => a.isCorrect).map(a => a.questionId)
+                  qTypeAttempts
+                    .filter(a => a.isCorrect)
+                    .filter(a => !qTypeQuestions.find(question => question.id === a.questionId)?.isMasteryHoldout)
+                    .map(a => a.questionId)
                 );
-                const solvedCount = Math.min(solvedQuestionIds.size, totalQuestions);
+                const solvedCount = physicsStatus
+                  ? physicsStatus.readiness.correctLearningCount
+                  : Math.min(solvedQuestionIds.size, totalQuestions);
                 const progressPercent = totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
                 const masteryScore = progress?.masteryLevels[qType.id] ?? 0;
                 const starsCount = getStarsFromScore(masteryScore);
@@ -585,7 +605,32 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                       </span>
                     );
                   }
-                  if (solvedCount === totalQuestions || masteryScore >= 80) {
+                  if (
+                    physicsStatus
+                    && physicsStatus.holdoutQuestionCount > 0
+                    && physicsStatus.correctHoldoutCount === physicsStatus.holdoutQuestionCount
+                  ) {
+                    return (
+                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 inline-flex items-center gap-1">
+                        🛡️ Đã vượt kiểm tra làm chủ
+                      </span>
+                    );
+                  }
+                  if (physicsStatus?.holdoutUnlocked && physicsStatus.holdoutQuestionCount > 0) {
+                    return (
+                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 inline-flex items-center gap-1">
+                        🛡️ Sẵn sàng kiểm tra
+                      </span>
+                    );
+                  }
+                  if (
+                    (!physicsStatus && (solvedCount === totalQuestions || masteryScore >= 80))
+                    || (
+                      physicsStatus
+                      && physicsStatus.holdoutQuestionCount === 0
+                      && (solvedCount === totalQuestions || masteryScore >= 80)
+                    )
+                  ) {
                     return (
                       <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 inline-flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
@@ -606,7 +651,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     key={qType.id}
                     className={cn(
                       "cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md",
-                      routeSubject === 'math' ? 'hover:border-indigo-500/50' : routeSubject === 'chemistry' ? 'hover:border-emerald-500/50' : 'hover:border-purple-500/50'
+                      routeSubject === 'math' ? 'hover:border-indigo-500/50' :
+                        routeSubject === 'chemistry' ? 'hover:border-emerald-500/50' :
+                          routeSubject === 'physics' ? 'hover:border-cyan-500/50' :
+                            'hover:border-purple-500/50'
                     )}
                     onClick={() => {
                       if (topic.tier === 3 && !isPremium) {
@@ -641,13 +689,14 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                           "font-extrabold text-base text-foreground transition-colors", 
                           routeSubject === 'math' ? 'group-hover:text-indigo-600' :
                           routeSubject === 'chemistry' ? 'group-hover:text-emerald-600' :
+                          routeSubject === 'physics' ? 'group-hover:text-cyan-600' :
                           'group-hover:text-purple-600'
                         )}>
-                          {qType.name}
+                          <LatexRenderer text={qType.name} />
                         </h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                          {qType.description}
-                        </p>
+                        <div className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+                          <LatexRenderer text={qType.description} />
+                        </div>
 
                         {/* Progress Bar & Stars */}
                         {qTypeAttempts.length > 0 && totalQuestions > 0 && (
@@ -675,8 +724,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                                 className={cn(
                                   "h-full rounded-full transition-all duration-500",
                                   routeSubject === 'math' ? 'bg-indigo-500' :
-                                  routeSubject === 'chemistry' ? 'bg-emerald-500' :
-                                  'bg-purple-500'
+                                   routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                                   routeSubject === 'physics' ? 'bg-cyan-500' :
+                                   'bg-purple-500'
                                 )}
                                 style={{ width: `${progressPercent}%` }}
                               />

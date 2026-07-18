@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" role="img" aria-labelledby="title desc">
+  <title id="title">Hai khung hình đánh dấu một vòng quay</title>
+  <desc id="desc">Khung hình 12 và khung hình 42 đều cho thấy điểm đánh dấu đỏ ở vị trí cao nhất của đĩa, nghĩa là vật hoàn thành đúng một vòng trong 30 khoảng hình.</desc>
+  <rect width="720" height="300" fill="#fff"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="55" y="45" width="260" height="190" rx="14" fill="#f7f8fc" stroke="#98a6ba" stroke-width="2"/>
+    <circle cx="185" cy="140" r="70" fill="none" stroke="#44566c" stroke-width="4"/><circle cx="185" cy="70" r="9" fill="#e5484d"/><circle cx="185" cy="140" r="5" fill="#44566c"/>
+    <text x="185" y="270" font-size="22" fill="#26364d">Khung 12</text>
+    <path d="M335 140H385" stroke="#6556e8" stroke-width="4"/><path d="M377 132l12 8-12 8" fill="none" stroke="#6556e8" stroke-width="4"/>
+    <rect x="405" y="45" width="260" height="190" rx="14" fill="#f7f8fc" stroke="#98a6ba" stroke-width="2"/>
+    <circle cx="535" cy="140" r="70" fill="none" stroke="#44566c" stroke-width="4"/><circle cx="535" cy="70" r="9" fill="#e5484d"/><circle cx="535" cy="140" r="5" fill="#44566c"/>
+    <text x="535" y="270" font-size="22" fill="#26364d">Khung 42</text>
+  </g>
+</svg>

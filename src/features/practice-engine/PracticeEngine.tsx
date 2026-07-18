@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
@@ -13,7 +13,7 @@ import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, Subjec
 import { AlertTriangle, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '../../utils/answerValidator';
-import { getSubjectFromQuestionTypeId } from '../../utils/subject';
+import { getSubjectFromQuestionTypeId, getSubjectName } from '../../utils/subject';
 
 import confetti from 'canvas-confetti';
 
@@ -27,6 +27,11 @@ import { ResultCard } from './components/ResultCard';
 import { AiTutorPanel } from '../../components/common/AiTutorPanel';
 import { useEnglishQuestionFilter } from './hooks/useEnglishQuestionFilter';
 import { useProofUpload } from './hooks/useProofUpload';
+import { AdaptivePracticeStatus } from './components/AdaptivePracticeStatus';
+import {
+  buildAdaptivePracticeSequence,
+  type AdaptivePracticeSequenceResult,
+} from './utils/adaptivePracticeSequence';
 
 const getNow = () => Date.now();
 
@@ -79,7 +84,7 @@ export const PracticeEngine: React.FC = () => {
       const durationMinutes = Math.round((durationSeconds / 60) * 100) / 100;
       if (durationSeconds > 2) {
         logCustomEvent('study_session_end', {
-          subject: routeSubject === 'math' ? 'Toán' : routeSubject === 'chemistry' ? 'Hóa học' : 'Anh',
+          subject: getSubjectName(routeSubject),
           duration_minutes: durationMinutes,
           duration_seconds: durationSeconds,
           mode: 'practice'
@@ -227,6 +232,7 @@ export const PracticeEngine: React.FC = () => {
   // Derived States - Tính toán trực tiếp trong lúc render
   const isMath = routeSubject === 'math';
   const isChemistry = routeSubject === 'chemistry';
+  const isPhysics = routeSubject === 'physics';
   const qList = currentQuestions;
 
   const filteredQuestions = useEnglishQuestionFilter(
@@ -242,10 +248,28 @@ export const PracticeEngine: React.FC = () => {
     && selectedSubTense === 'all'
     && customQuestions !== null;
 
+  // Giữ snapshot cố định trong cả phiên. Nếu sắp xếp lại ngay sau mỗi lần nộp,
+  // currentIdx có thể trỏ sang câu khác trong khi ResultCard vẫn giữ trạng thái
+  // của câu vừa làm. Snapshot chỉ được tái tạo khi rời và vào lại dạng bài.
+  const [physicsPracticeStatus, setPhysicsPracticeStatus] = useState<AdaptivePracticeSequenceResult | null>(null);
+
+  useLayoutEffect(() => {
+    if (!isPhysics || isExamMode || !questionTypeId) {
+      setPhysicsPracticeStatus(null);
+      return;
+    }
+
+    const attemptsAtSessionStart = storageService.getAttempts(user?.uid || 'guest');
+    setPhysicsPracticeStatus(buildAdaptivePracticeSequence(filteredQuestions, attemptsAtSessionStart));
+  }, [filteredQuestions, isExamMode, isPhysics, questionTypeId, user?.uid]);
+
   // Trong chế độ luyện tập Hóa học, học sinh đi từ nhận biết nền tảng đến
-  // vận dụng cao. Giữ nguyên thứ tự đề trong chế độ thi để không làm biến đổi đề.
+  // vận dụng cao. Vật lí dùng snapshot thích nghi ở trên. Giữ nguyên thứ tự đề
+  // trong chế độ thi để không làm biến đổi đề.
   const questions = useMemo(() => {
-    if (!isChemistry || isExamMode) return filteredQuestions;
+    if (isExamMode) return filteredQuestions;
+    if (isPhysics && physicsPracticeStatus) return physicsPracticeStatus.questions;
+    if (!isChemistry) return filteredQuestions;
 
     return filteredQuestions
       .map((question, sourceIndex) => ({ question, sourceIndex }))
@@ -255,7 +279,7 @@ export const PracticeEngine: React.FC = () => {
         || left.sourceIndex - right.sourceIndex
       ))
       .map(({ question }) => question);
-  }, [filteredQuestions, isChemistry, isExamMode]);
+  }, [filteredQuestions, isChemistry, isPhysics, isExamMode, physicsPracticeStatus]);
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -1073,6 +1097,10 @@ export const PracticeEngine: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 px-4">
+      {physicsPracticeStatus && (
+        <AdaptivePracticeStatus status={physicsPracticeStatus} />
+      )}
+
       {/* Header trạng thái luyện tập */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
         <div className="flex gap-2">
@@ -1125,7 +1153,8 @@ export const PracticeEngine: React.FC = () => {
                   isActive
                     ? (routeSubject === 'math' ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20 scale-105" :
                       routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
-                        "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
+                        routeSubject === 'physics' ? "bg-cyan-600 border-cyan-600 text-white shadow-sm shadow-cyan-600/20 scale-105" :
+                          "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
                     : isCompleted
                       ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
                       : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"
@@ -1170,6 +1199,7 @@ export const PracticeEngine: React.FC = () => {
           setCurrentIdx={setCurrentIdx}
           resetQuestionState={resetQuestionState}
           routeSubject={routeSubject}
+          disableHints={Boolean(currentQuestion.isMasteryHoldout)}
         />
       ) : (
         <ResultCard

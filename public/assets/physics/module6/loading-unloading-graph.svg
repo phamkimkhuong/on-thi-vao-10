@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đồ thị tăng tải và dỡ tải có biến dạng dư</title>
+  <desc id="desc">Đường tăng tải đi từ gốc đến lực 10 niutơn và độ dãn 5 xentimét. Đường dỡ tải trở về lực bằng không tại độ dãn 1 xentimét, cho thấy lò xo không hồi phục hoàn toàn.</desc>
+  <rect width="720" height="420" fill="#fff"/>
+  <g stroke="#d7deea"><path d="M90 330H660M90 250H660M90 170H660M90 90H660"/><path d="M204 50V330M318 50V330M432 50V330M546 50V330M660 50V330"/></g>
+  <g stroke="#26364d" stroke-width="2" fill="none"><path d="M90 45V330H675"/><path d="M84 55l6-10 6 10M665 324l10 6-10 6"/></g>
+  <path d="M90 330L660 90" stroke="#6556e8" stroke-width="4" fill="none"/><path d="M660 90L204 330" stroke="#e5484d" stroke-width="4" fill="none"/>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#26364d"><text x="575" y="382">Δl (cm)</text><text x="30" y="48">F (N)</text><text x="480" y="112" fill="#6556e8">Tăng tải</text><text x="310" y="250" fill="#e5484d">Dỡ tải</text><text x="196" y="355">1</text><text x="652" y="355">5</text><text x="58" y="95">10</text><text x="205" y="305" fill="#e5484d">Biến dạng dư</text></g>
+</svg>

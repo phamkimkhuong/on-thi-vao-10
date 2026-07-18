@@ -2,7 +2,7 @@ import type { Solution } from '@/types';
 const s=(q:string,a:string,e:string,m:string):Solution=>({id:`${q}-solution`,questionId:q,recognition:'Vận dụng dữ liệu tốc độ phản ứng.',detailedSteps:[{order:1,title:'Phân tích',explanation:e}],finalAnswer:a,commonMistakes:[m],reviewSuggestions:['Phân biệt tốc độ, lượng sản phẩm cuối và các biến thí nghiệm.']});
 export const m6ExpansionSolutions:Solution[]=[
  s('chem10-m6-qt26-e1','B','$v=(0,90-0,54)/18=0,02$ M/s.','Quên đổi biến thiên nồng độ thành giá trị dương khi hỏi tốc độ tiêu thụ.'),
- s('chem10-m6-qt26-e2','C','Theo tỉ lượng, $v_B/v_A=3/2$ nên $v_B=0,08\times3/2=0,12$ M/s.','Dùng tỉ lệ nghịch hệ số.'),
+ s('chem10-m6-qt26-e2','C','Theo tỉ lượng, $v_B/v_A=3/2$ nên $v_B=0,08\\times3/2=0,12$ M/s.','Dùng tỉ lệ nghịch hệ số.'),
  s('chem10-m6-qt26-e3','C','$v_{NH_3}=0,24/20=0,012$ M/s; $v_{H_2}=3v_{NH_3}/2=0,018$ M/s.','Không xét hệ số 3 và 2.'),
  s('chem10-m6-qt27-e1','A','0–10 s: $\\Delta[A]=0,30$ M; 10–20 s: 0,15 M trong cùng 10 s, nên khoảng đầu nhanh hơn.','So sánh nồng độ cuối thay vì độ biến thiên theo thời gian.'),
  s('chem10-m6-qt27-e2','A','Độ lớn độ dốc ban đầu lớn hơn biểu thị tốc độ ban đầu lớn hơn; thời điểm nằm ngang không tự chứng minh lượng sản phẩm cuối lớn hơn.','Đồng nhất phản ứng nhanh với tạo nhiều sản phẩm cuối.'),

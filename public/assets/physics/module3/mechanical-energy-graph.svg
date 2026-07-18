@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đồ thị cơ năng giảm theo thời gian</title>
+  <desc id="desc">Cơ năng của hệ giảm gần tuyến tính từ 100 jun tại thời điểm 0 giây xuống 80 jun tại thời điểm 5 giây.</desc>
+  <rect width="720" height="420" fill="#f8fafc"/>
+  <path d="M95 340 H660 M95 340 V55" fill="none" stroke="#334155" stroke-width="4"/>
+  <path d="M120 90 L610 270" stroke="#dc2626" stroke-width="7"/>
+  <circle cx="120" cy="90" r="9" fill="#7f1d1d"/><circle cx="610" cy="270" r="9" fill="#7f1d1d"/>
+  <g font-family="Arial, sans-serif" font-size="21" fill="#1e293b">
+    <text x="25" y="60">W (J)</text><text x="625" y="375">t (s)</text><text x="62" y="98">100</text><text x="67" y="278">80</text>
+    <text x="112" y="370">0</text><text x="603" y="370">5</text><text x="420" y="150" fill="#991b1b">Cơ năng</text>
+  </g>
+</svg>

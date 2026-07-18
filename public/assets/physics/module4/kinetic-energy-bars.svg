@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Biểu đồ động năng trước và sau va chạm</title>
+  <desc id="desc">Cột động năng trước va chạm là 10 jun, cột sau va chạm là 7 jun.</desc>
+  <rect width="720" height="420" fill="#f8fafc"/>
+  <path d="M100 340 H650 M100 340 V50" fill="none" stroke="#334155" stroke-width="4"/>
+  <rect x="190" y="90" width="150" height="250" fill="#4f46e5" rx="8"/>
+  <rect x="430" y="165" width="150" height="175" fill="#f59e0b" rx="8"/>
+  <g font-family="Arial, sans-serif" font-size="23" fill="#1e293b">
+    <text x="35" y="60">K (J)</text><text x="248" y="80">10</text><text x="498" y="155">7</text>
+    <text x="225" y="375">Trước</text><text x="478" y="375">Sau</text>
+  </g>
+</svg>

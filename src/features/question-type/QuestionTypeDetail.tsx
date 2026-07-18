@@ -516,11 +516,11 @@ export const QuestionTypeDetail: React.FC = () => {
           </div>
 
           <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-foreground tracking-tight leading-snug">
-            {detail.name}
+            <LatexRenderer text={detail.name} />
           </h2>
-          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-3xl font-semibold">
-            {detail.description}
-          </p>
+          <div className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-3xl font-semibold">
+            <LatexRenderer text={detail.description} />
+          </div>
         </div>
       </div>
 

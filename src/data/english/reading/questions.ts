@@ -313,7 +313,7 @@ export const readingQuestions: Question[] = [
     "subjectId": "english",
     "topicId": "eng-t3",
     "questionTypeId": "eng-qt12",
-    "content": "Choose the correct arrangement of the sentences to make a complete email:\n\na. Please let me know if you can join us.\nb. Dear Hoa,\nc. We are going to visit the science museum this Sunday.\nd. Best wishes,\nLan\ne. The bus will leave the school at 7 a.m.",
+    "content": "Choose the correct arrangement of the sentences to make a complete email:\n\na. Please let me know if you can join us.\nb. Dear Hoa,\nc. We are going to visit the science museum this Sunday.\nd. Best wishes,\nLan\\ne. The bus will leave the school at 7 a.m.",
     "options": [
       "A. b – a – c – e – d",
       "B. b – c – e – a – d",
@@ -330,7 +330,7 @@ export const readingQuestions: Question[] = [
     "subjectId": "english",
     "topicId": "eng-t3",
     "questionTypeId": "eng-qt12",
-    "content": "Choose the correct arrangement of the sentences to make a formal email/letter asking for information:\n\na. Thank you for your attention.\nb. Dear Sir or Madam,\nc. I am writing to ask for information about your English course.\nd. Could you tell me the course fee and starting date?\ne. I look forward to hearing from you.",
+    "content": "Choose the correct arrangement of the sentences to make a formal email/letter asking for information:\n\na. Thank you for your attention.\nb. Dear Sir or Madam,\nc. I am writing to ask for information about your English course.\nd. Could you tell me the course fee and starting date?\\ne. I look forward to hearing from you.",
     "options": [
       "A. b – d – c – e – a",
       "B. c – b – d – a – e",
@@ -347,7 +347,7 @@ export const readingQuestions: Question[] = [
     "subjectId": "english",
     "topicId": "eng-t3",
     "questionTypeId": "eng-qt12",
-    "content": "Choose the correct arrangement of the sentences to make a complete paragraph:\n\na. As a result, the school has become cleaner and greener.\nb. Students at our school are working together to protect the environment.\nc. First, they separate paper and plastic waste.\nd. Next, they plant trees around the schoolyard.\ne. Finally, they remind other students not to litter.",
+    "content": "Choose the correct arrangement of the sentences to make a complete paragraph:\n\na. As a result, the school has become cleaner and greener.\nb. Students at our school are working together to protect the environment.\nc. First, they separate paper and plastic waste.\nd. Next, they plant trees around the schoolyard.\\ne. Finally, they remind other students not to litter.",
     "options": [
       "A. b – c – d – e – a",
       "B. c – b – d – a – e",
@@ -364,7 +364,7 @@ export const readingQuestions: Question[] = [
     "subjectId": "english",
     "topicId": "eng-t3",
     "questionTypeId": "eng-qt12",
-    "content": "Choose the correct arrangement of the sentences to make a complete paragraph:\n\na. Therefore, regular reading can improve both language skills and general knowledge.\nb. Reading English books is a useful habit for students.\nc. It helps them learn new words in context.\nd. In addition, students can understand different cultures through stories.\ne. This habit also improves their ability to write clearly.",
+    "content": "Choose the correct arrangement of the sentences to make a complete paragraph:\n\na. Therefore, regular reading can improve both language skills and general knowledge.\nb. Reading English books is a useful habit for students.\nc. It helps them learn new words in context.\nd. In addition, students can understand different cultures through stories.\\ne. This habit also improves their ability to write clearly.",
     "options": [
       "A. b – e – c – d – a",
       "B. c – b – e – d – a",

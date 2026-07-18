@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đồ thị bình phương chu kì theo chiều dài con lắc</title>
+  <desc id="desc">Trục ngang là chiều dài l tính bằng mét, trục đứng là T bình phương tính bằng giây bình phương. Bốn điểm đo gần nằm trên đường thẳng đi qua gốc tọa độ.</desc>
+  <rect width="720" height="420" fill="#f8fafc"/>
+  <path d="M95 340 H660 M95 340 V45" fill="none" stroke="#334155" stroke-width="4"/>
+  <path d="M95 340 L625 72" fill="none" stroke="#4f46e5" stroke-width="5"/>
+  <g fill="#ef4444" stroke="#7f1d1d" stroke-width="2">
+    <circle cx="215" cy="280" r="9"/>
+    <circle cx="335" cy="220" r="9"/>
+    <circle cx="455" cy="160" r="9"/>
+    <circle cx="575" cy="98" r="9"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="20" fill="#334155">
+    <text x="636" y="374">l (m)</text>
+    <text x="28" y="58">T² (s²)</text>
+    <text x="78" y="368">0</text>
+    <text x="196" y="368">0,2</text>
+    <text x="316" y="368">0,4</text>
+    <text x="436" y="368">0,6</text>
+    <text x="556" y="368">0,8</text>
+  </g>
+</svg>

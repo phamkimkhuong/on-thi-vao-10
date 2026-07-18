@@ -81,7 +81,14 @@ export const callGeminiProxy = onCall({
         console.log(`[Relevance Filter] Topic: "${topicName}". Strengths: ${originalStrengthsCount} -> ${strengths.length}, Weaknesses: ${originalWeaknessesCount} -> ${weaknesses.length}`);
       }
 
-      const subjectName = cleanSubjectId === "math" ? "Toán" : "Tiếng Anh";
+      const subjectNameMap: Record<string, string> = {
+        math: "Toán học",
+        english: "Tiếng Anh",
+        chemistry: "Hóa học",
+        biology: "Sinh học",
+        physics: "Vật lý",
+      };
+      const subjectName = subjectNameMap[cleanSubjectId] || cleanSubjectId;
 
       if (strengths.length > 0 || weaknesses.length > 0 || summary) {
         profileInstruction = `\n\nHỒ SƠ NĂNG LỰC HỌC SINH MÔN ${subjectName.toUpperCase()} HIỆN TẠI:`;

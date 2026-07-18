@@ -42,7 +42,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose }) => 
             </h4>
             <div className="text-[11px] font-semibold text-muted-foreground leading-relaxed space-y-2">
               <p>
-                Chào mừng bạn đến với <strong>Dạng Bài Thực Chiến</strong>. Bằng việc truy cập và sử dụng dịch vụ học tập trực tuyến trên website này, bạn đồng ý tuân thủ các quy định dưới đây:
+                Chào mừng bạn đến với <strong>ezonthi</strong>. Bằng việc truy cập và sử dụng dịch vụ học tập trực tuyến trên website này, bạn đồng ý tuân thủ các quy định dưới đây:
               </p>
               <ul className="list-disc pl-4 space-y-1">
                 <li><strong>Quyền sở hữu trí tuệ:</strong> Toàn bộ đề thi, lời giải chi tiết, sơ đồ tư duy lý thuyết và nội dung hỗ trợ học tập đều thuộc bản quyền của chúng tôi. Nghiêm cấm sao chép, phân phối hoặc bán lại nội dung này dưới mọi hình thức thương mại.</li>

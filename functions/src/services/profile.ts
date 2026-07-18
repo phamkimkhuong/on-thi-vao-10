@@ -20,14 +20,23 @@ export async function updateStudentProfile(
     if (currentProfile?.learningSummary) oldSummary = currentProfile.learningSummary;
   }
 
-  const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}.
+  const subjectNameMap: Record<string, string> = {
+    math: "Toán",
+    english: "Tiếng Anh",
+    chemistry: "Hóa học",
+    biology: "Sinh học",
+    physics: "Vật lý",
+  };
+  const subjectName = subjectNameMap[subjectId] || subjectId;
+
+  const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectName}.
 Nhiệm vụ của bạn là: Đọc lượt hội thoại cuối cùng dưới đây giữa Học sinh và Gia sư AI, đối chiếu với Hồ sơ cũ của học sinh, và trích xuất thêm các điểm mạnh mới, điểm yếu/lỗi sai mới, cũng như cập nhật lại câu tóm tắt tiến trình học tập của học sinh.
 
 Hội thoại cuối cùng:
 - Học sinh: "${userMessage}"
 - Gia sư AI: "${assistantMessage}"
 
-Hồ sơ cũ của học sinh môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}:
+Hồ sơ cũ của học sinh môn ${subjectName}:
 - Điểm mạnh cũ: ${oldStrengths.length > 0 ? JSON.stringify(oldStrengths) : "(Không có)"}
 - Điểm yếu/Lỗi sai cũ: ${oldWeaknesses.length > 0 ? JSON.stringify(oldWeaknesses) : "(Không có)"}
 - Tóm tắt cũ: "${oldSummary || "(Không có)"}"
@@ -141,13 +150,22 @@ export async function updateStudentProfileFromSession(
       })
       .join("\n");
 
-    const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}.
-Nhiệm vụ của bạn là: Đọc toàn bộ cuộc hội thoại dưới đây giữa Học sinh và Gia sư AI trong một phiên làm bài tập môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}, đối chiếu với Hồ sơ cũ của học sinh, và trích xuất các điểm mạnh mới, điểm yếu/lỗi sai mới thực sự nổi bật và lặp lại, đồng thời cập nhật lại câu tóm tắt tiến trình học tập của học sinh.
+    const subjectNameMap: Record<string, string> = {
+      math: "Toán",
+      english: "Tiếng Anh",
+      chemistry: "Hóa học",
+      biology: "Sinh học",
+      physics: "Vật lý",
+    };
+    const subjectName = subjectNameMap[subjectId] || subjectId;
+
+    const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectName}.
+Nhiệm vụ của bạn là: Đọc toàn bộ cuộc hội thoại dưới đây giữa Học sinh và Gia sư AI trong một phiên làm bài tập môn ${subjectName}, đối chiếu với Hồ sơ cũ của học sinh, và trích xuất các điểm mạnh mới, điểm yếu/lỗi sai mới thực sự nổi bật và lặp lại, đồng thời cập nhật lại câu tóm tắt tiến trình học tập của học sinh.
 
 Cuộc hội thoại trong phiên học:
 ${historyText}
 
-Hồ sơ cũ của học sinh môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}:
+Hồ sơ cũ của học sinh môn ${subjectName}:
 - Điểm mạnh cũ: ${oldStrengths.length > 0 ? JSON.stringify(oldStrengths) : "(Không có)"}
 - Điểm yếu/Lỗi sai cũ: ${oldWeaknesses.length > 0 ? JSON.stringify(oldWeaknesses) : "(Không có)"}
 - Tóm tắt cũ: "${oldSummary || "(Không có)"}"
@@ -316,11 +334,20 @@ export async function consolidateProfile(
 
     console.log(`[Consolidation] uid: ${uid}, mastered topics: ${JSON.stringify(masteredTopics)}`);
 
+    const subjectNameMap: Record<string, string> = {
+      math: "Toán",
+      english: "Tiếng Anh",
+      chemistry: "Hóa học",
+      biology: "Sinh học",
+      physics: "Vật lý",
+    };
+    const subjectName = subjectNameMap[subjectId] || subjectId;
+
     // 5. Gọi Gemini để tối ưu hóa, làm sạch và loại bỏ điểm yếu
-    const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}.
+    const prompt = `Bạn là một chuyên gia tâm lý giáo dục và chẩn đoán năng lực học sinh ôn thi lớp 10 môn ${subjectName}.
 Nhiệm vụ của bạn là: Hãy tinh gọn hồ sơ học sinh và thực hiện dọn dẹp các điểm yếu đã khắc phục.
 
-Thông tin hồ sơ hiện tại môn ${subjectId === "math" ? "Toán" : "Tiếng Anh"}:
+Thông tin hồ sơ hiện tại môn ${subjectName}:
 - Điểm mạnh hiện tại: ${JSON.stringify(strengths)}
 - Điểm yếu/Lỗi sai hiện tại: ${JSON.stringify(weaknesses)}
 - Tóm tắt học lực hiện tại: "${learningSummary}"

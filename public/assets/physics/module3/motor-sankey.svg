@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" role="img" aria-labelledby="title desc">
+  <title id="title">Sơ đồ Sankey của động cơ</title>
+  <desc id="desc">Động cơ nhận 1000 jun. Nhánh cơ năng có ích là 700 jun, nhiệt là 200 jun và âm là 100 jun.</desc>
+  <rect width="760" height="360" fill="#f8fafc"/>
+  <path d="M45 150 H330" stroke="#4f46e5" stroke-width="100"/>
+  <rect x="330" y="100" width="120" height="100" rx="14" fill="#334155"/>
+  <path d="M450 135 H720" stroke="#16a34a" stroke-width="70"/>
+  <path d="M390 200 V285 H650" fill="none" stroke="#f59e0b" stroke-width="20"/>
+  <path d="M420 200 V330 H610" fill="none" stroke="#dc2626" stroke-width="10"/>
+  <g font-family="Arial, sans-serif" font-size="22" fill="#0f172a">
+    <text x="55" y="158" fill="white">1000 J điện</text><text x="347" y="158" fill="white">Động cơ</text>
+    <text x="510" y="142" fill="white">700 J cơ năng</text><text x="500" y="280">200 J nhiệt</text><text x="500" y="334">100 J âm</text>
+  </g>
+</svg>

@@ -15,8 +15,8 @@ export const QuestionTypeGuidance: React.FC<QuestionTypeGuidanceProps> = ({ ques
         <Compass size={18} className="text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
         <div>
           <p className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300">Nhận dạng trước khi giải</p>
-          <h5 className="text-sm font-black text-foreground mt-0.5">Dạng: {questionType.name}</h5>
-          {!compact && <p className="text-xs font-semibold text-muted-foreground mt-1 leading-relaxed">{questionType.description}</p>}
+          <h5 className="text-sm font-black text-foreground mt-0.5">Dạng: <LatexRenderer text={questionType.name} /></h5>
+          {!compact && <div className="text-xs font-semibold text-muted-foreground mt-1 leading-relaxed"><LatexRenderer text={questionType.description} /></div>}
         </div>
       </div>
     </div>

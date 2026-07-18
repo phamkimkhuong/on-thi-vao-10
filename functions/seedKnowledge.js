@@ -3,16 +3,17 @@ import path from "path";
 import { fileURLToPath } from "url";
 import admin from "firebase-admin";
 import crypto from "crypto";
+import ts from "typescript";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const root = path.resolve(__dirname, "..");
 
 function getContentHash(content) {
   if (!content) return "";
   return crypto.createHash("md5").update(content).digest("hex");
 }
 
-// Hàm loại bỏ dấu tiếng Việt (đưa về ký tự không dấu)
 function removeAccents(str) {
   if (!str) return "";
   return str.normalize("NFD")
@@ -21,7 +22,6 @@ function removeAccents(str) {
     .replace(/Đ/g, "d");
 }
 
-// Hàm trích xuất danh sách các từ khóa có nghĩa (hỗ trợ có dấu và không dấu)
 function extractKeywords(text) {
   if (!text) return [];
   const cleanWithAccents = text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'\[\]]/g, " ");
@@ -31,11 +31,9 @@ function extractKeywords(text) {
   const wordsNoAccents = cleanNoAccents.split(/\s+/).filter(w => w.length >= 2);
   
   const combined = [...wordsWithAccents, ...wordsNoAccents];
-  // Loại bỏ các từ trùng lặp và giới hạn tối đa 40 từ
   return [...new Set(combined)].slice(0, 40);
 }
 
-// 1. Đọc file env của functions để lấy API Key
 function loadApiKey() {
   const envPath = path.join(__dirname, ".env");
   if (!fs.existsSync(envPath)) {
@@ -49,7 +47,6 @@ function loadApiKey() {
   return match[1].trim();
 }
 
-// 2. Hàm gọi Gemini Embedding API (có hỗ trợ tự động retry khi gặp lỗi 429 Rate Limit)
 async function getEmbedding(text, apiKey, retries = 5, delayMs = 3000) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${apiKey}`;
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -71,7 +68,7 @@ async function getEmbedding(text, apiKey, retries = 5, delayMs = 3000) {
       if (response.status === 429) {
         console.warn(`  [429 Rate Limit] Đang đợi ${delayMs / 1000}s trước khi thử lại lần ${attempt}/${retries}...`);
         await new Promise(resolve => setTimeout(resolve, delayMs));
-        delayMs *= 2; // Tăng dần thời gian chờ
+        delayMs *= 2;
         continue;
       }
 
@@ -93,112 +90,164 @@ async function getEmbedding(text, apiKey, retries = 5, delayMs = 3000) {
   }
 }
 
-// 3. Hàm phụ trợ loại bỏ cú pháp TypeScript để import dạng JS
-function parseTsFileToJs(tsFilePath, tempJsFileName) {
-  const rawCode = fs.readFileSync(tsFilePath, "utf8");
-  const tsFileDir = path.dirname(tsFilePath);
+const readNodeValue = (node) => {
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+    return node.text;
+  }
+  if (ts.isNumericLiteral(node)) {
+    return Number(node.text);
+  }
+  if (node.kind === ts.SyntaxKind.TrueKeyword) {
+    return true;
+  }
+  if (node.kind === ts.SyntaxKind.FalseKeyword) {
+    return false;
+  }
+  if (ts.isArrayLiteralExpression(node)) {
+    return node.elements.map(readNodeValue);
+  }
+  if (ts.isObjectLiteralExpression(node)) {
+    const result = {};
+    for (const property of node.properties) {
+      if (!ts.isPropertyAssignment(property)) continue;
+      const key = property.name.getText().replace(/["']/g, '');
+      result[key] = readNodeValue(property.initializer);
+    }
+    return result;
+  }
+  if (ts.isPrefixUnaryExpression(node)) {
+    const operand = readNodeValue(node.operand);
+    if (node.operator === ts.SyntaxKind.MinusToken) {
+      return -operand;
+    }
+    return operand;
+  }
+  if (ts.isTemplateExpression(node)) {
+    return node.head.text + node.templateSpans.map(span => span.literal.text).join('');
+  }
+  return node.getText().replace(/["']/g, '');
+};
+
+const readQuestionTypesFromTs = (filePath) => {
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+  const source = ts.createSourceFile(filePath, fileContent, ts.ScriptTarget.Latest, true);
+  let result = null;
   
-  // 1. Tìm các câu lệnh import JSON và thay thế bằng việc đọc file trực tiếp
-  let jsCode = rawCode.replace(/import\s+(\w+)\s+from\s+['"](.*\.json)['"];?/g, (match, varName, jsonPath) => {
-    const absoluteJsonPath = path.resolve(tsFileDir, jsonPath).replace(/\\/g, '/');
-    return `const ${varName} = JSON.parse(fs.readFileSync("${absoluteJsonPath}", "utf8"));`;
+  source.forEachChild(node => {
+    if (!ts.isVariableStatement(node)) return;
+    const isExported = node.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword);
+    if (!isExported) return;
+    
+    for (const declaration of node.declarationList.declarations) {
+      const name = declaration.name.getText();
+      if (name.endsWith('QuestionTypes') && declaration.initializer) {
+        result = readNodeValue(declaration.initializer);
+      }
+    }
   });
-
-  // 2. Loại bỏ các câu lệnh import khác
-  jsCode = jsCode.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, "");
   
-  // 3. Loại bỏ khai báo kiểu TypeScript
-  jsCode = jsCode.replace(/:\s*\w+(\[\])?(?=\s*=)/g, "");
-  
-  // 4. Loại bỏ các từ khóa ép kiểu "as Topic[]" hoặc "as const"
-  jsCode = jsCode.replace(/\s+as\s+[A-Za-z0-9_<>\[\]]+/g, "");
-
-  // 5. Chèn thêm import fs để chạy được việc đọc JSON
-  jsCode = `import fs from 'fs';\nimport path from 'path';\n` + jsCode;
-  
-  const tempPath = path.join(__dirname, tempJsFileName);
-  fs.writeFileSync(tempPath, jsCode, "utf8");
-  return tempPath;
-}
+  return result;
+};
 
 async function run() {
   const apiKey = loadApiKey();
   console.log("Đã đọc thành công Gemini API Key.");
 
-  // 4. Khởi tạo Firebase Admin SDK
   const projectId = "on-thi-vao-10-7d87c";
   const serviceAccountPath = path.join(__dirname, "service-account.json");
 
   if (process.env.FIRESTORE_EMULATOR_HOST) {
     console.log(`[Emulator] Đang kết nối tới Firestore Emulator tại: ${process.env.FIRESTORE_EMULATOR_HOST}`);
-    admin.initializeApp({
-      projectId: projectId
-    });
+    admin.initializeApp({ projectId });
   } else if (fs.existsSync(serviceAccountPath)) {
     console.log("[Production] Đang kết nối tới Firestore Production bằng Service Account...");
     const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
-      projectId: projectId
+      projectId
     });
   } else {
     console.log("[Production] Đang kết nối tới Firestore Production bằng mặc định (ADC)...");
-    admin.initializeApp({
-      projectId: projectId
-    });
+    admin.initializeApp({ projectId });
   }
 
   const db = admin.firestore();
   const collectionRef = db.collection("knowledge_base");
 
-  // 5. Chuyển đổi và Import dữ liệu từ src/data
   console.log("\n--- BẮT ĐẦU ĐỌC DỮ LIỆU TỪ SRC/DATA ---");
   
-  const mathTsPath = path.resolve(__dirname, "../src/data/mathData.ts");
-  const engQTypesTsPath = path.resolve(__dirname, "../src/data/english/questionTypes.ts");
-  const math10QTypesTsPath = path.resolve(__dirname, "../src/data/grade10/math/questionTypes.ts");
-  const eng10QTypesTsPath = path.resolve(__dirname, "../src/data/grade10/english/questionTypes.ts");
-  const chem10QTypesTsPath = path.resolve(__dirname, "../src/data/grade10/chemistry/questionTypes.ts");
+  const allQuestionTypes = [];
 
-  const tempMathJs = parseTsFileToJs(mathTsPath, "temp_math.js");
-  const tempEngQTypesJs = parseTsFileToJs(engQTypesTsPath, "temp_eng_qtypes.js");
-  const tempMath10QTypesJs = parseTsFileToJs(math10QTypesTsPath, "temp_math10_qtypes.js");
-  const tempEng10QTypesJs = parseTsFileToJs(eng10QTypesTsPath, "temp_eng10_qtypes.js");
-  const tempChem10QTypesJs = parseTsFileToJs(chem10QTypesTsPath, "temp_chem10_qtypes.js");
+  // 1. Grade 9
+  const grade9Subjects = ['math', 'english'];
+  for (const sub of grade9Subjects) {
+    const jsonPath = path.resolve(root, `src/data/grade9/${sub}/questionTypes.json`);
+    if (fs.existsSync(jsonPath)) {
+      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+      allQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: 'grade9' })));
+      console.log(`[Loaded] Grade 9 ${sub}: ${data.length} dạng bài`);
+    }
+  }
 
-  // Import động các file JS tạm thời
-  const { mathQuestionTypes } = await import("./temp_math.js");
-  const { englishQuestionTypes } = await import("./temp_eng_qtypes.js");
-  const { g10MathQuestionTypes } = await import("./temp_math10_qtypes.js");
-  const { g10EnglishQuestionTypes } = await import("./temp_eng10_qtypes.js");
-  const { g10ChemistryQuestionTypes } = await import("./temp_chem10_qtypes.js");
+  // 2. Grade 10 & 11
+  const grades = ['grade10', 'grade11'];
+  const subjects = ['math', 'english', 'chemistry', 'biology', 'physics'];
 
-  console.log(`Đã đọc:
-- Lớp 9: ${mathQuestionTypes.length} dạng Toán, ${englishQuestionTypes.length} dạng Anh.
-- Lớp 10: ${g10MathQuestionTypes.length} dạng Toán, ${g10EnglishQuestionTypes.length} dạng Anh, ${g10ChemistryQuestionTypes.length} dạng Hóa.`);
+  for (const grade of grades) {
+    for (const sub of subjects) {
+      const subDir = path.resolve(root, `src/data/${grade}/${sub}`);
+      if (!fs.existsSync(subDir)) continue;
 
-  const allQuestionTypes = [
-    ...mathQuestionTypes.map(q => ({ ...q, subjectId: "math" })),
-    ...englishQuestionTypes.map(q => ({ ...q, subjectId: "english" })),
-    ...g10MathQuestionTypes.map(q => ({ ...q, subjectId: "math" })),
-    ...g10EnglishQuestionTypes.map(q => ({ ...q, subjectId: "english" })),
-    ...g10ChemistryQuestionTypes.map(q => ({ ...q, subjectId: "chemistry" }))
-  ];
+      const modulesDir = path.join(subDir, 'modules');
+      if (fs.existsSync(modulesDir)) {
+        const modules = fs.readdirSync(modulesDir);
+        let count = 0;
+        for (const mod of modules) {
+          const qTypesPath = path.join(modulesDir, mod, 'questionTypes.ts');
+          if (fs.existsSync(qTypesPath)) {
+            const data = readQuestionTypesFromTs(qTypesPath);
+            if (data && Array.isArray(data)) {
+              allQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: grade })));
+              count += data.length;
+            }
+          }
+        }
+        console.log(`[Loaded] ${grade} ${sub} (từ các module): ${count} dạng bài`);
+      } else {
+        const qTypesPath = path.join(subDir, 'questionTypes.ts');
+        if (fs.existsSync(qTypesPath)) {
+          const data = readQuestionTypesFromTs(qTypesPath);
+          if (data && Array.isArray(data)) {
+            allQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: grade })));
+            console.log(`[Loaded] ${grade} ${sub} (tệp đơn): ${data.length} dạng bài`);
+          }
+        }
+      }
+    }
+  }
+
+  const subjectNameMap = {
+    math: "Toán học",
+    english: "Tiếng Anh",
+    chemistry: "Hóa học",
+    biology: "Sinh học",
+    physics: "Vật lý"
+  };
+
+  console.log(`\nTổng số dạng bài tìm thấy: ${allQuestionTypes.length}`);
 
   for (const qType of allQuestionTypes) {
-    const subjectName = qType.subjectId === "math" ? "Toán" : qType.subjectId === "chemistry" ? "Hóa học" : "Tiếng Anh";
-    console.log(`\nĐang xử lý dạng bài: "${qType.name}" (${subjectName})...`);
+    const subjectName = subjectNameMap[qType.subjectId] || qType.subjectId;
+    const gradeLabel = qType.grade === "grade9" ? "Lớp 9" : qType.grade === "grade10" ? "Lớp 10" : "Lớp 11";
+    console.log(`\nĐang xử lý dạng bài: "${qType.name}" (${subjectName} ${gradeLabel})...`);
 
-    // 5.1 Xóa tài liệu lớn cũ (nếu có) để dọn dẹp database
     const oldDocId = `${qType.subjectId}_${qType.id}`;
     await collectionRef.doc(oldDocId).delete().catch(() => {});
 
-    // Helper tạo và lưu từng chunk nhỏ (hỗ trợ kiểm tra trùng lặp và cập nhật tri thức thay đổi)
     const saveChunk = async (chunkId, chunkType, chunkTitle, chunkContent) => {
       try {
         const currentHash = getContentHash(chunkContent);
 
-        // Kiểm tra xem tài liệu này đã tồn tại trên Firestore chưa
         const docSnap = await collectionRef.doc(chunkId).get();
         if (docSnap.exists) {
           const existingData = docSnap.data();
@@ -215,19 +264,19 @@ async function run() {
           return;
         }
 
-        // Trích xuất các từ khóa phục vụ cho Hybrid Search (kết hợp title của chunk và tên dạng bài lớn)
         const cleanTextForKeywords = `${chunkTitle} ${qType.name}`;
         const keywords = extractKeywords(cleanTextForKeywords);
 
         await collectionRef.doc(chunkId).set({
           subjectId: qType.subjectId,
+          grade: qType.grade,
           parentId: qType.id,
           parentTitle: qType.name,
           chunkType: chunkType,
           difficulty: qType.difficulty || "medium",
           title: chunkTitle,
           content: chunkContent,
-          contentHash: currentHash, // Lưu lại mã băm nội dung để so sánh lần sau
+          contentHash: currentHash,
           keywords: keywords,
           embedding: admin.firestore.FieldValue.vector(embedding),
           updatedAt: admin.firestore.FieldValue.serverTimestamp()
@@ -238,8 +287,8 @@ async function run() {
       }
     };
 
-    // 5.2 Sinh chunk Overview (Khái quát & Nhận diện)
-    const overviewContent = `DẠNG BÀI: ${qType.name} (Môn: ${subjectName})
+    // Overview chunk
+    const overviewContent = `DẠNG BÀI: ${qType.name} (Môn: ${subjectName} ${gradeLabel})
 Mô tả chuyên đề: ${qType.description}
 
 Dấu hiệu nhận biết dạng bài này:
@@ -252,9 +301,9 @@ ${qType.recognitionSigns && qType.recognitionSigns.length > 0 ? qType.recognitio
       overviewContent
     );
 
-    // 5.3 Sinh chunk Method (Các bước giải chi tiết)
+    // Method chunk
     if (qType.solvingSteps && qType.solvingSteps.length > 0) {
-      const methodContent = `PHƯƠNG PHÁP GIẢI DẠNG BÀI: ${qType.name} (Môn: ${subjectName})
+      const methodContent = `PHƯƠNG PHÁP GIẢI DẠNG BÀI: ${qType.name} (Môn: ${subjectName} ${gradeLabel})
 Các bước giải chi tiết:
 ${qType.solvingSteps.map((s, idx) => `${idx + 1}. ${s}`).join("\n")}`;
 
@@ -266,9 +315,9 @@ ${qType.solvingSteps.map((s, idx) => `${idx + 1}. ${s}`).join("\n")}`;
       );
     }
 
-    // 5.4 Sinh chunk Mistakes (Các lỗi thường gặp)
+    // Mistakes chunk
     if (qType.commonMistakes && qType.commonMistakes.length > 0) {
-      const mistakesContent = `CẢNH BÁO LỖI THƯỜNG GẶP của dạng bài: ${qType.name} (Môn: ${subjectName})
+      const mistakesContent = `CẢNH BÁO LỖI THƯỜNG GẶP của dạng bài: ${qType.name} (Môn: ${subjectName} ${gradeLabel})
 Các lỗi học sinh dễ mắc sai lầm:
 ${qType.commonMistakes.map(s => `- ${s}`).join("\n")}`;
 
@@ -280,7 +329,7 @@ ${qType.commonMistakes.map(s => `- ${s}`).join("\n")}`;
       );
     }
 
-    // 5.5 Sinh chunk Examples (Từng phân dạng con & Ví dụ mẫu)
+    // Examples chunk
     if (qType.subTypes && qType.subTypes.length > 0) {
       for (let idx = 0; idx < qType.subTypes.length; idx++) {
         const sub = qType.subTypes[idx];
@@ -296,18 +345,6 @@ Hướng dẫn/Lưu ý đặc biệt: ${sub.note || "Không có"}`;
         );
       }
     }
-  }
-
-  // Dọn dẹp các file tạm thời
-  try {
-    fs.unlinkSync(tempMathJs);
-    fs.unlinkSync(tempEngQTypesJs);
-    fs.unlinkSync(tempMath10QTypesJs);
-    fs.unlinkSync(tempEng10QTypesJs);
-    fs.unlinkSync(tempChem10QTypesJs);
-    console.log("\n Đã dọn dẹp các file biên dịch tạm thời.");
-  } catch (err) {
-    console.error("Lỗi khi dọn dẹp file tạm:", err.message);
   }
 
   console.log("\n Hoàn thành đồng bộ toàn bộ tri thức từ src/data lên Firestore!");

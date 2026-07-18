@@ -381,9 +381,9 @@ export const Roadmap: React.FC = () => {
                                         <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5 leading-snug font-sans">
                                           <LatexRenderer text={type.name} />
                                         </h5>
-                                        <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
-                                          {type.description}
-                                        </p>
+                                        <div className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
+                                          <LatexRenderer text={type.description} />
+                                        </div>
                                         {type.subTypes && type.subTypes.length > 0 && (
                                           <div className="pt-1">
                                             {/* Badge dạng bài con tối giản trung tính */}

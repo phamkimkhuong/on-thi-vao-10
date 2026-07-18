@@ -162,7 +162,7 @@ export const AppLayout: React.FC = () => {
   // Cập nhật tiêu đề động (Dynamic Title SEO)
   useEffect(() => {
     const path = location.pathname;
-    const brandName = 'Dạng Bài Thực Chiến';
+    const brandName = 'ezonthi';
 
     if (path.startsWith(ROUTES.TEACHER)) {
       document.title = `Góc Giáo Viên | ${brandName}`;
@@ -201,7 +201,7 @@ export const AppLayout: React.FC = () => {
     } else if (subjectLabel) {
       document.title = `Học Tốt ${subjectLabel} ${gradeLabel} | ${brandName}`;
     } else {
-      document.title = `${brandName} | Web Học Tốt & Luyện Thi Lớp 9 - 12`;
+      document.title = `${brandName} | Nền tảng Học tốt & Luyện thi Lớp 9 - 12`;
     }
   }, [selectedGrade, selectedSubject, location.pathname]);
 
@@ -299,12 +299,7 @@ export const AppLayout: React.FC = () => {
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/dashboard')}>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-lg shadow-sm">
-            10
-          </div>
-          <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-            {selectedGrade === 'grade9' ? 'ÔN THI VÀO 10' : selectedGrade === 'grade10' ? 'HỌC TỐT LỚP 10' : 'HỌC TỐT 9 - 12'}
-          </span>
+          <img src="/logo.png" alt="ezonthi logo" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
         </div>
 
         <div className="flex items-center gap-2">
@@ -337,21 +332,13 @@ export const AppLayout: React.FC = () => {
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className={cn(
-          "p-6 border-b border-border/40 hidden md:flex items-center gap-3.5 cursor-pointer group",
-          isSidebarCollapsed && "justify-center p-5"
+          "border-b border-border/40 hidden md:flex items-center justify-center cursor-pointer group",
+          isSidebarCollapsed ? "p-4 h-20" : "px-4 py-4"
         )} onClick={() => navigate('/dashboard')}>
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/10 shrink-0 group-hover:scale-105 transition-transform duration-300">
-            10
-          </div>
-          {!isSidebarCollapsed && (
-            <div className="flex flex-col animate-fade-in">
-              <span className="font-black text-xs tracking-tight leading-none bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                DẠNG BÀI THỰC CHIẾN
-              </span>
-              <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-1.5">
-                LỘ TRÌNH 9 - 12
-              </span>
-            </div>
+          {isSidebarCollapsed ? (
+            <img src="/logo.png" alt="ezonthi logo" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+          ) : (
+            <img src="/logo.png" alt="ezonthi logo" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           )}
         </div>
 

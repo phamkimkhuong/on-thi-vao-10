@@ -185,9 +185,60 @@ export interface LearningOutcomeStatus {
 }
 
 export interface SubType {
+  /** Mã ổn định để ánh xạ câu hỏi và theo dõi mức làm chủ theo dạng con. */
+  id?: string;
   name: string;
   example: string;
   note?: string;
+  /** Dấu hiệu ngắn giúp người mới nhận ra dạng con trước khi chọn công thức. */
+  recognitionSigns?: string[];
+  /** Số câu khuyến nghị trong toàn ngân hàng, không phải số câu bắt buộc một học sinh phải làm. */
+  targetQuestionCount?: number;
+}
+
+export type PracticeRole =
+  | 'guided'
+  | 'near_transfer'
+  | 'representation_switch'
+  | 'misconception_check'
+  | 'far_transfer'
+  | 'retention'
+  | 'mastery_holdout';
+
+export type QuestionRepresentationType =
+  | 'text'
+  | 'equation'
+  | 'table'
+  | 'graph'
+  | 'diagram'
+  | 'experiment';
+
+export interface QuestionTypePracticeCoverage {
+  /** Quy mô ngân hàng đích; không dùng để ép mọi học sinh làm hết. */
+  targetQuestionCount: number;
+  /** Số câu tối thiểu cần có cho mỗi dạng con trước khi coi là đã phủ. */
+  minimumQuestionsPerSubType: number;
+  requiredPracticeRoles: PracticeRole[];
+  requiredRepresentations: QuestionRepresentationType[];
+  /** Số câu chưa từng hiện trong lượt học đầu, dùng kiểm tra làm chủ/duy trì. */
+  masteryHoldoutCount: number;
+}
+
+/** Blueprint độc lập để kiểm kê ngân hàng mà không trộn dữ liệu thô vào aggregator. */
+export interface QuestionTypePracticeBlueprint {
+  questionTypeId: string;
+  subTypes: SubType[];
+  coverage: QuestionTypePracticeCoverage;
+}
+
+/** Metadata tách khỏi nội dung câu hỏi để migration theo module không làm phình file dữ liệu gốc. */
+export interface QuestionPracticeMetadata {
+  questionId: string;
+  subTypeId: string;
+  practiceRole: PracticeRole;
+  representationType: QuestionRepresentationType;
+  misconceptionId?: string;
+  isMasteryHoldout?: boolean;
 }
 
 export interface QuestionType {
@@ -204,6 +255,7 @@ export interface QuestionType {
   exampleQuestionId?: string; // ID câu hỏi dùng làm ví dụ mẫu trong tab "Ví dụ mẫu"
   subTypes?: SubType[]; // Phân dạng bài tập con chi tiết
   theory?: string[]; // Lý thuyết & Định nghĩa cơ bản của dạng bài
+  practiceCoverage?: QuestionTypePracticeCoverage;
 }
 
 /** Kiểu học liệu trực quan đi kèm câu hỏi, đặc biệt dùng cho Sinh học. */
@@ -284,6 +336,12 @@ export interface Question {
   cognitiveLevel?: AssessmentCognitiveLevel;
   estimatedSeconds?: number;
   variantGroupId?: string;
+  /** Metadata luyện tập thích nghi; để trống với câu thi/kiểm tra hoặc dữ liệu cũ. */
+  subTypeId?: string;
+  practiceRole?: PracticeRole;
+  representationType?: QuestionRepresentationType;
+  misconceptionId?: string;
+  isMasteryHoldout?: boolean;
 }
 
 export interface SolutionStep {

@@ -4,6 +4,7 @@ import { ArrowRight, BookOpenCheck, CheckCircle2, CircleDashed, Clock3, FlaskCon
 import type { LearningOutcomeStatus, Topic } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
+import { LatexRenderer } from '@/components/common/LatexRenderer';
 import { buildLearningOutcomeStatuses, getRecommendedOutcome } from '@/utils/learningPath';
 
 interface ChemistryLearningPathProps {
@@ -45,8 +46,8 @@ export const ChemistryLearningPath: React.FC<ChemistryLearningPathProps> = ({ to
             <div className="flex items-start gap-3 min-w-0">
               <Icon size={20} className={cn('mt-0.5 shrink-0', status.state === 'mastered' ? 'text-emerald-500' : 'text-primary')} aria-hidden="true" />
               <div>
-                <h4 className="text-sm font-extrabold text-foreground leading-snug">{status.outcome.title}</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">{status.outcome.description}</p>
+                <h4 className="text-sm font-extrabold text-foreground leading-snug"><LatexRenderer text={status.outcome.title} /></h4>
+                <div className="text-xs text-muted-foreground leading-relaxed mt-1"><LatexRenderer text={status.outcome.description} /></div>
               </div>
             </div>
             <span className={cn('shrink-0 text-[10px] font-black px-2 py-1 rounded-lg border', meta.classes)}>{meta.label}</span>
@@ -92,7 +93,7 @@ export const ChemistryLearningPath: React.FC<ChemistryLearningPathProps> = ({ to
             <div className="flex items-center gap-2 text-xs font-black text-primary"><BookOpenCheck size={17} /> BÀI NÊN HỌC TIẾP</div>
             {recommended ? (
               <>
-                <div><h2 className="text-xl font-black text-foreground">{recommended.outcome.title}</h2><p className="text-xs text-muted-foreground leading-relaxed mt-1">{recommended.outcome.description}</p></div>
+                <div><h2 className="text-xl font-black text-foreground"><LatexRenderer text={recommended.outcome.title} /></h2><div className="text-xs text-muted-foreground leading-relaxed mt-1"><LatexRenderer text={recommended.outcome.description} /></div></div>
                 {recommended.outcome.questionTypeIds.length > 0 ? (
                   <button type="button" onClick={() => openOutcome(recommended)} className="min-h-11 inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-5 text-xs font-black cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Học tiếp ngay <ArrowRight size={15} /></button>
                 ) : <p className="text-xs font-bold text-amber-700 dark:text-amber-300">Học liệu nhập môn đang được biên soạn; bạn có thể bắt đầu từ phần Cấu tạo nguyên tử bên dưới.</p>}

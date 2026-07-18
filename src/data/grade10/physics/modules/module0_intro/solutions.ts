@@ -34,14 +34,14 @@ export const g10PhysicsModule0Solutions: Solution[] = [
   },
   {
     id: 'phy10-m0-s006', questionId: 'phy10-m0-q006',
-    recognition: 'Dạng đổi km/h sang m/s: dùng $1\,\text{km}=1000\,\text{m}$ và $1\,\text{h}=3600\,\text{s}$.',
-    detailedSteps: [{ order: 1, title: 'Lập hệ số đổi', explanation: '$72\times\frac{1000}{3600}$.' }, { order: 2, title: 'Tính', explanation: '$72/3{,}6=20\,\text{m/s}$.' }],
+    recognition: 'Dạng đổi km/h sang m/s: dùng $1\\,\\text{km}=1000\\,\\text{m}$ và $1\\,\\text{h}=3600\\,\\text{s}$.',
+    detailedSteps: [{ order: 1, title: 'Lập hệ số đổi', explanation: '$72\\times\\frac{1000}{3600}$.' }, { order: 2, title: 'Tính', explanation: '$72/3{,}6=20\\,\\text{m/s}$.' }],
     finalAnswer: '20', commonMistakes: ['Nhân 3,6 thay vì chia khi đổi từ km/h sang m/s.'], reviewSuggestions: ['Ôn đổi đơn vị vận tốc.']
   },
   {
     id: 'phy10-m0-s007', questionId: 'phy10-m0-q007',
     recognition: 'Dạng đổi đơn vị diện tích: hệ số đổi chiều dài phải được bình phương.',
-    detailedSteps: [{ order: 1, title: 'Đổi đơn vị cơ sở', explanation: '$1\,\text{cm}=10^{-2}\,\text{m}$ nên $1\,\text{cm}^2=10^{-4}\,\text{m}^2$.' }, { order: 2, title: 'Nhân hệ số', explanation: '$2{,}5\,\text{cm}^2=2{,}5\times10^{-4}=0{,}00025\,\text{m}^2$.' }],
+    detailedSteps: [{ order: 1, title: 'Đổi đơn vị cơ sở', explanation: '$1\\,\\text{cm}=10^{-2}\\,\\text{m}$ nên $1\\,\\text{cm}^2=10^{-4}\\,\\text{m}^2$.' }, { order: 2, title: 'Nhân hệ số', explanation: '$2{,}5\\,\\text{cm}^2=2{,}5\\times10^{-4}=0{,}00025\\,\\text{m}^2$.' }],
     finalAnswer: '0.00025', commonMistakes: ['Dùng hệ số $10^{-2}$ cho cm².'], reviewSuggestions: ['Ôn đổi đơn vị diện tích và thể tích.']
   },
   {
@@ -54,7 +54,7 @@ export const g10PhysicsModule0Solutions: Solution[] = [
   {
     id: 'phy10-s1', questionId: 'phy10-q1',
     recognition: 'Dạng phép đo lặp yêu cầu giá trị trung bình: cộng toàn bộ số đo hợp lệ rồi chia số lần đo.',
-    detailedSteps: [{ order: 1, title: 'Lập trung bình', explanation: '$\bar L=(15{,}2+15{,}3+15{,}2+15{,}1+15{,}2)/5$.' }, { order: 2, title: 'Tính', explanation: 'Tổng bằng $76{,}0$ cm nên $\bar L=15{,}20$ cm.' }],
+    detailedSteps: [{ order: 1, title: 'Lập trung bình', explanation: '$\\bar L=(15{,}2+15{,}3+15{,}2+15{,}1+15{,}2)/5$.' }, { order: 2, title: 'Tính', explanation: 'Tổng bằng $76{,}0$ cm nên $\\bar L=15{,}20$ cm.' }],
     finalAnswer: 'A', commonMistakes: ['Đếm sai số lần đo hoặc chọn giá trị xuất hiện nhiều nhất.'], reviewSuggestions: ['Ôn giá trị trung bình của phép đo trực tiếp.']
   },
   {
@@ -66,7 +66,7 @@ export const g10PhysicsModule0Solutions: Solution[] = [
   {
     id: 'phy10-m0-s011', questionId: 'phy10-m0-q011',
     recognition: 'Dạng tính trung bình từ bảng số liệu: các giá trị đã cùng đơn vị và đều hợp lệ.',
-    detailedSteps: [{ order: 1, title: 'Cộng số đo', explanation: '$9{,}8+10{,}0+10{,}1+9{,}9+10{,}2=50{,}0$ s.' }, { order: 2, title: 'Chia số lần', explanation: '$\bar t=50{,}0/5=10{,}0$ s.' }],
+    detailedSteps: [{ order: 1, title: 'Cộng số đo', explanation: '$9{,}8+10{,}0+10{,}1+9{,}9+10{,}2=50{,}0$ s.' }, { order: 2, title: 'Chia số lần', explanation: '$\\bar t=50{,}0/5=10{,}0$ s.' }],
     finalAnswer: '10', commonMistakes: ['Chia cho 4 vì nhầm số khoảng với số lần đo.'], reviewSuggestions: ['Ôn trung bình cộng và đơn vị.']
   },
   {
@@ -79,13 +79,13 @@ export const g10PhysicsModule0Solutions: Solution[] = [
   {
     id: 'phy10-m0-s013', questionId: 'phy10-m0-q013',
     recognition: 'Dạng sai số tuyệt đối trung bình: tính trung bình, lấy trị tuyệt đối từng độ lệch rồi lấy trung bình lần nữa.',
-    detailedSteps: [{ order: 1, title: 'Tính giá trị trung bình', explanation: '$\bar L=(10{,}0+10{,}2+9{,}8)/3=10{,}0$ cm.' }, { order: 2, title: 'Tính độ lệch trung bình', explanation: '$(0+0{,}2+0{,}2)/3=0{,}133...$ cm, làm tròn $0{,}13$ cm.' }],
+    detailedSteps: [{ order: 1, title: 'Tính giá trị trung bình', explanation: '$\\bar L=(10{,}0+10{,}2+9{,}8)/3=10{,}0$ cm.' }, { order: 2, title: 'Tính độ lệch trung bình', explanation: '$(0+0{,}2+0{,}2)/3=0{,}133...$ cm, làm tròn $0{,}13$ cm.' }],
     finalAnswer: '0.13', commonMistakes: ['Cộng độ lệch có dấu làm kết quả bằng 0.'], reviewSuggestions: ['Ôn sai số tuyệt đối trung bình.']
   },
   {
     id: 'phy10-m0-s014', questionId: 'phy10-m0-q014',
     recognition: 'Dạng sai số tỉ đối: lấy sai số tuyệt đối chia giá trị trung tâm rồi nhân 100%.',
-    detailedSteps: [{ order: 1, title: 'Lập tỉ số', explanation: '$\delta_L=0{,}5/50{,}0$.' }, { order: 2, title: 'Đổi phần trăm', explanation: '$0{,}01\times100\%=1\%$.' }],
+    detailedSteps: [{ order: 1, title: 'Lập tỉ số', explanation: '$\\delta_L=0{,}5/50{,}0$.' }, { order: 2, title: 'Đổi phần trăm', explanation: '$0{,}01\\times100\\%=1\\%$.' }],
     finalAnswer: '1', commonMistakes: ['Quên nhân 100% hoặc đảo tử và mẫu.'], reviewSuggestions: ['Ôn sai số tỉ đối.']
   },
   {
@@ -97,20 +97,20 @@ export const g10PhysicsModule0Solutions: Solution[] = [
   {
     id: 'phy10-m0-s016', questionId: 'phy10-m0-q016',
     recognition: 'Dạng so sánh phép đo khác thang giá trị: phải dùng sai số tỉ đối, không chỉ nhìn sai số tuyệt đối.',
-    detailedSteps: [{ order: 1, title: 'Tính cho A', explanation: '$0{,}02/2{,}00=1\%$.' }, { order: 2, title: 'Tính cho B và so sánh', explanation: '$0{,}1/20{,}0=0{,}5\%$. B có sai số tỉ đối nhỏ hơn nên chính xác tương đối hơn.' }],
+    detailedSteps: [{ order: 1, title: 'Tính cho A', explanation: '$0{,}02/2{,}00=1\\%$.' }, { order: 2, title: 'Tính cho B và so sánh', explanation: '$0{,}1/20{,}0=0{,}5\\%$. B có sai số tỉ đối nhỏ hơn nên chính xác tương đối hơn.' }],
     finalAnswer: 'C', commonMistakes: ['Chọn A chỉ vì 0,02 nhỏ hơn 0,1.'], reviewSuggestions: ['Ôn ý nghĩa sai số tỉ đối khi so sánh.']
   },
 
   {
     id: 'phy10-m0-s017', questionId: 'phy10-m0-q017',
     recognition: 'Dạng ghi kết quả: làm tròn sai số trước, rồi làm tròn giá trị trung bình đến cùng hàng.',
-    detailedSteps: [{ order: 1, title: 'Làm tròn sai số', explanation: '$0{,}26$ cm thành $0{,}3$ cm theo quy ước một chữ số có nghĩa.' }, { order: 2, title: 'Đồng bộ giá trị', explanation: 'Sai số ở hàng phần mười nên $12{,}347$ thành $12{,}3$ cm; ghi $(12{,}3\pm0{,}3)$ cm.' }],
+    detailedSteps: [{ order: 1, title: 'Làm tròn sai số', explanation: '$0{,}26$ cm thành $0{,}3$ cm theo quy ước một chữ số có nghĩa.' }, { order: 2, title: 'Đồng bộ giá trị', explanation: 'Sai số ở hàng phần mười nên $12{,}347$ thành $12{,}3$ cm; ghi $(12{,}3\\pm0{,}3)$ cm.' }],
     finalAnswer: 'B', commonMistakes: ['Làm tròn giá trị trước khi xác định hàng của sai số.'], reviewSuggestions: ['Ôn quy tắc làm tròn kết quả đo.']
   },
   {
     id: 'phy10-m0-s018', questionId: 'phy10-m0-q018',
     recognition: 'Dạng đồng bộ hàng thập phân: sai số 0,047 làm tròn một chữ số có nghĩa thành 0,05.',
-    detailedSteps: [{ order: 1, title: 'Làm tròn sai số', explanation: '$0{,}047\rightarrow0{,}05$ kg.' }, { order: 2, title: 'Làm tròn giá trị', explanation: 'Sai số kết thúc ở hàng phần trăm nên $2{,}738\rightarrow2{,}74$ kg.' }],
+    detailedSteps: [{ order: 1, title: 'Làm tròn sai số', explanation: '$0{,}047\\rightarrow0{,}05$ kg.' }, { order: 2, title: 'Làm tròn giá trị', explanation: 'Sai số kết thúc ở hàng phần trăm nên $2{,}738\\rightarrow2{,}74$ kg.' }],
     finalAnswer: 'C', commonMistakes: ['Ghi 2,7 làm mất thêm một bậc chính xác.'], reviewSuggestions: ['Ôn chữ số có nghĩa và hàng làm tròn.']
   },
   {
@@ -122,32 +122,32 @@ export const g10PhysicsModule0Solutions: Solution[] = [
   {
     id: 'phy10-m0-s020', questionId: 'phy10-m0-q020',
     recognition: 'Dạng kiểm tra cấu trúc kết quả đo: giá trị và sai số cùng đơn vị, đơn vị đặt sau toàn bộ ngoặc.',
-    detailedSteps: [{ order: 1, title: 'Kiểm tra đại lượng trong ngoặc', explanation: '2,40 và 0,05 là hai giá trị của cùng đại lượng thời gian.' }, { order: 2, title: 'Đặt đơn vị', explanation: 'Viết $t=(2{,}40\pm0{,}05)\,\text{s}$ làm rõ đơn vị áp dụng cho cả hai.' }],
+    detailedSteps: [{ order: 1, title: 'Kiểm tra đại lượng trong ngoặc', explanation: '2,40 và 0,05 là hai giá trị của cùng đại lượng thời gian.' }, { order: 2, title: 'Đặt đơn vị', explanation: 'Viết $t=(2{,}40\\pm0{,}05)\\,\\text{s}$ làm rõ đơn vị áp dụng cho cả hai.' }],
     finalAnswer: 'C', commonMistakes: ['Đặt đơn vị vào giữa ngoặc khiến biểu thức không nhất quán.'], reviewSuggestions: ['Ôn cách ghi kết quả phép đo.']
   },
 
   {
     id: 'phy10-m0-s021', questionId: 'phy10-m0-q021',
     recognition: 'Dạng sai số của tích: cộng sai số tỉ đối của chiều dài và chiều rộng, sau đó đổi về sai số tuyệt đối.',
-    detailedSteps: [{ order: 1, title: 'Tính diện tích và sai số tỉ đối', explanation: '$S=20{,}0\times10{,}0=200$ cm²; $\delta_S=0{,}1/20{,}0+0{,}1/10{,}0=0{,}015$.' }, { order: 2, title: 'Đổi sai số tuyệt đối', explanation: '$\Delta S=200\times0{,}015=3$ cm², nên $S=(200\pm3)$ cm².' }],
+    detailedSteps: [{ order: 1, title: 'Tính diện tích và sai số tỉ đối', explanation: '$S=20{,}0\\times10{,}0=200$ cm²; $\\delta_S=0{,}1/20{,}0+0{,}1/10{,}0=0{,}015$.' }, { order: 2, title: 'Đổi sai số tuyệt đối', explanation: '$\\Delta S=200\\times0{,}015=3$ cm², nên $S=(200\\pm3)$ cm².' }],
     finalAnswer: 'C', commonMistakes: ['Cộng 0,1 + 0,1 rồi dùng trực tiếp làm sai số diện tích.'], reviewSuggestions: ['Ôn lan truyền sai số của tích.']
   },
   {
     id: 'phy10-m0-s022', questionId: 'phy10-m0-q022',
     recognition: 'Dạng sai số của thương: sai số tỉ đối cực đại của kết quả bằng tổng sai số tỉ đối các đại lượng đo.',
-    detailedSteps: [{ order: 1, title: 'Nhận dạng công thức', explanation: '$\rho=m/V$ là một thương.' }, { order: 2, title: 'Cộng sai số tỉ đối', explanation: '$\delta_\rho=1\%+2\%=3\%$.' }],
+    detailedSteps: [{ order: 1, title: 'Nhận dạng công thức', explanation: '$\\rho=m/V$ là một thương.' }, { order: 2, title: 'Cộng sai số tỉ đối', explanation: '$\\delta_\\rho=1\\%+2\\%=3\\%$.' }],
     finalAnswer: '3', commonMistakes: ['Lấy 2% − 1% vì công thức có phép chia.'], reviewSuggestions: ['Ôn lan truyền sai số của tích và thương.']
   },
   {
     id: 'phy10-m0-s023', questionId: 'phy10-m0-q023',
     recognition: 'Dạng lũy thừa: số mũ trở thành hệ số nhân của sai số tỉ đối gần đúng.',
-    detailedSteps: [{ order: 1, title: 'Nhận số mũ', explanation: '$S=\pi r^2$ có r ở lũy thừa 2; hằng số π không tạo sai số đo.' }, { order: 2, title: 'Nhân sai số', explanation: '$\delta_S\approx2\delta_r=2\times0{,}5\%=1\%$.' }],
+    detailedSteps: [{ order: 1, title: 'Nhận số mũ', explanation: '$S=\\pi r^2$ có r ở lũy thừa 2; hằng số π không tạo sai số đo.' }, { order: 2, title: 'Nhân sai số', explanation: '$\\delta_S\\approx2\\delta_r=2\\times0{,}5\\%=1\\%$.' }],
     finalAnswer: '1', commonMistakes: ['Bình phương cả 0,5% hoặc cộng thêm sai số cho π.'], reviewSuggestions: ['Ôn lan truyền sai số của lũy thừa.']
   },
   {
     id: 'phy10-m0-s024', questionId: 'phy10-m0-q024',
     recognition: 'Dạng sai số của hiệu: dù giá trị trung tâm trừ nhau, sai số tuyệt đối cực đại vẫn cộng.',
-    detailedSteps: [{ order: 1, title: 'Nhận dạng phép hiệu', explanation: '$d=x_1-x_2$.' }, { order: 2, title: 'Cộng sai số tuyệt đối', explanation: '$\Delta d=\Delta x_1+\Delta x_2=0{,}2+0{,}1=0{,}3$ cm.' }],
+    detailedSteps: [{ order: 1, title: 'Nhận dạng phép hiệu', explanation: '$d=x_1-x_2$.' }, { order: 2, title: 'Cộng sai số tuyệt đối', explanation: '$\\Delta d=\\Delta x_1+\\Delta x_2=0{,}2+0{,}1=0{,}3$ cm.' }],
     finalAnswer: '0.3', commonMistakes: ['Lấy 0,2 − 0,1 vì đại lượng trung tâm đang trừ.'], reviewSuggestions: ['Ôn lan truyền sai số của tổng và hiệu.']
   },
 

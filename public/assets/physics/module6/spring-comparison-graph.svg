@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">So sánh đồ thị lực và độ dãn của hai lò xo</title>
+  <desc id="desc">Đường A qua điểm độ dãn 4 xentimét và lực 12 niutơn. Đường B qua điểm độ dãn 4 xentimét và lực 8 niutơn. Cả hai là đường thẳng qua gốc.</desc>
+  <rect width="720" height="420" fill="#fff"/>
+  <g stroke="#d7deea"><path d="M90 330H660M90 250H660M90 170H660M90 90H660"/><path d="M232.5 50V330M375 50V330M517.5 50V330M660 50V330"/></g>
+  <g stroke="#26364d" stroke-width="2" fill="none"><path d="M90 45V330H675"/><path d="M84 55l6-10 6 10M665 324l10 6-10 6"/></g>
+  <path d="M90 330L660 90" stroke="#e5484d" stroke-width="4"/><path d="M90 330L660 170" stroke="#2774ca" stroke-width="4"/>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#26364d"><text x="570" y="382">Δl (cm)</text><text x="30" y="48">F (N)</text><text x="640" y="80" fill="#e5484d">A</text><text x="640" y="162" fill="#2774ca">B</text><text x="650" y="355">4</text><text x="62" y="95">12</text><text x="68" y="175">8</text></g>
+</svg>
