@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">So sánh cấu trúc virus có vỏ và virus không vỏ</title>
+  <desc id="desc">Cả hai virus đều có genome và capsid. Virus có vỏ có thêm lớp lipid ngoài capsid và các gai protein, còn virus không vỏ để capsid tiếp xúc môi trường.</desc>
+  <rect width="760" height="420" rx="24" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Cấu trúc virion</text>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="220" y="72" font-size="19" font-weight="700" fill="#1e40af">Virus có vỏ</text>
+    <circle cx="220" cy="215" r="112" fill="#fef3c7" stroke="#d97706" stroke-width="10"/>
+    <g stroke="#dc2626" stroke-width="4"><line x1="220" y1="92" x2="220" y2="72"/><line x1="307" y1="128" x2="322" y2="113"/><line x1="343" y1="215" x2="363" y2="215"/><line x1="307" y1="302" x2="322" y2="317"/><line x1="133" y1="128" x2="118" y2="113"/><line x1="97" y1="215" x2="77" y2="215"/><line x1="133" y1="302" x2="118" y2="317"/></g>
+    <g fill="#dc2626"><circle cx="220" cy="68" r="7"/><circle cx="327" cy="108" r="7"/><circle cx="368" cy="215" r="7"/><circle cx="327" cy="322" r="7"/><circle cx="113" cy="108" r="7"/><circle cx="72" cy="215" r="7"/><circle cx="113" cy="322" r="7"/></g>
+    <circle cx="220" cy="215" r="72" fill="#dbeafe" stroke="#2563eb" stroke-width="5"/><path d="M175 216c18-42 38 42 58 0s40 42 55 0" fill="none" stroke="#7c3aed" stroke-width="6"/>
+    <text x="220" y="352" font-size="14" fill="#92400e">Vỏ lipid + gai</text><text x="220" y="373" font-size="14" fill="#1e40af">Capsid bao genome</text>
+    <text x="555" y="72" font-size="19" font-weight="700" fill="#166534">Virus không vỏ</text>
+    <circle cx="555" cy="215" r="108" fill="#dcfce7" stroke="#16a34a" stroke-width="5"/><path d="M507 216c18-42 38 42 58 0s40 42 58 0" fill="none" stroke="#7c3aed" stroke-width="6"/>
+    <g fill="#15803d"><circle cx="555" cy="107" r="7"/><circle cx="631" cy="139" r="7"/><circle cx="663" cy="215" r="7"/><circle cx="631" cy="291" r="7"/><circle cx="555" cy="323" r="7"/><circle cx="479" cy="291" r="7"/><circle cx="447" cy="215" r="7"/><circle cx="479" cy="139" r="7"/></g>
+    <text x="555" y="352" font-size="14" fill="#166534">Không có lớp lipid ngoài</text><text x="555" y="373" font-size="14" fill="#166534">Capsid tiếp xúc môi trường</text>
+  </g>
+  <rect x="217" y="392" width="326" height="24" rx="12" fill="#ede9fe" stroke="#8b5cf6"/><text x="380" y="409" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#5b21b6">Thành phần chung: genome + capsid protein</text>
+</svg>

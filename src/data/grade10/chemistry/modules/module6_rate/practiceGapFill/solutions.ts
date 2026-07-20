@@ -1,0 +1,83 @@
+import type { Solution } from '@/types';
+
+const guides = {
+  '26-2': ['Chuẩn hóa tốc độ theo hệ số', 'Viết $v=-\frac1a\Delta[A]/\Delta t=\frac1b\Delta[B]/\Delta t$ rồi mới lập tỉ lệ.', 'So trực tiếp độ biến thiên các chất mà bỏ hệ số tỉ lượng.'],
+  '26-3': ['Tốc độ từ thể tích, khối lượng hoặc số mol', 'Tính độ biến thiên đại lượng quan sát chia thời gian; nếu cần tốc độ nồng độ, đổi tiếp qua thể tích bình.', 'So đại lượng cuối thay vì độ biến thiên trên thời gian.'],
+  '26-4': ['Dùng biểu thức tốc độ', 'Giữ k và điều kiện cố định, thay đổi từng nồng độ theo đúng số mũ đã cho.', 'Tự lấy hệ số phương trình làm số mũ khi đề chưa cho biểu thức/dữ liệu.'],
+  '26-5': ['Đơn vị và hằng số tốc độ', 'Dùng đơn vị của v chia cho tích đơn vị nồng độ theo số mũ để suy đơn vị k.', 'Cho k cùng một đơn vị ở mọi bậc phản ứng.'],
+  '27-1': ['Đọc nồng độ tại một thời điểm', 'Đọc tên, đơn vị trục; chọn t trên trục hoành, dóng tới đường rồi đọc C trên trục tung.', 'Đọc nhầm trục hoặc nhầm đơn vị thời gian với nồng độ.'],
+  '27-2': ['Tốc độ từ độ dốc dây cung', 'Chọn hai điểm đầu–cuối khoảng, tính $|\Delta C|/\Delta t$ và giữ đơn vị.', 'Dùng nồng độ cuối chia thời gian hoặc giữ dấu âm khi hỏi độ lớn.'],
+  '27-3': ['So sánh tốc độ giữa các giai đoạn', 'So độ lớn độ dốc, không so riêng nồng độ hay dấu của độ dốc.', 'Cho rằng nồng độ lớn hơn luôn đồng nghĩa tốc độ lớn hơn.'],
+  '27-4': ['Chuyển đổi bảng, đồ thị và mô tả', 'Xác định biến–đơn vị, đặt đúng từng cặp (t,C), rồi kiểm tra xu hướng và độ dốc.', 'Ép đồ thị qua gốc hoặc nối điểm sai thứ tự thời gian.'],
+  '28-1': ['Ảnh hưởng nồng độ và áp suất', 'Xét số tiểu phân trong một thể tích và tần suất va chạm; áp suất chủ yếu quan trọng với khí.', 'Cho rằng áp suất làm khối lượng mol hoặc ΔH thay đổi.'],
+  '28-2': ['Nhiệt độ và hệ số Van’t Hoff', 'Đếm số khoảng 10°C: $v_2/v_1=\gamma^{(T_2-T_1)/10}$.', 'Nhân γ với số độ C hoặc quên lũy thừa số khoảng 10°C.'],
+  '28-3': ['Ảnh hưởng diện tích bề mặt', 'Với chất rắn, so diện tích tiếp xúc khi giữ khối lượng và các điều kiện khác cố định.', 'Cho rằng nghiền nhỏ tạo thêm mol hoặc đổi lượng sản phẩm cuối.'],
+  '28-4': ['Giải thích bằng va chạm hiệu quả', 'Một va chạm cần đủ năng lượng và định hướng phù hợp; xét yếu tố làm tăng tần suất hay tỉ lệ đạt chuẩn.', 'Cho rằng mọi va chạm đều sinh sản phẩm.'],
+  '29-1': ['Cơ chế tác dụng của xúc tác', 'Xúc tác tạo con đường có Ea thấp hơn, được tái sinh và không đổi mức năng lượng đầu–cuối.', 'Cho rằng xúc tác cấp năng lượng hoặc làm đổi ΔH.'],
+  '29-2': ['Sơ đồ năng lượng có và không xúc tác', 'Giữ nguyên mức chất đầu, sản phẩm và ΔH; đường xúc tác có đỉnh thấp hơn.', 'Vẽ xúc tác làm đổi mức sản phẩm.'],
+  '29-3': ['Thiết kế thí nghiệm xúc tác', 'Chỉ thay có/không xúc tác; giữ lượng chất, nồng độ, nhiệt độ, dụng cụ và cách đo giống nhau.', 'Thay đồng thời nhiều biến hoặc không có mẫu đối chứng.'],
+  '29-4': ['Ứng dụng và giới hạn xúc tác', 'Phân biệt tốc độ tại cùng thời điểm với lượng sản phẩm sau khi phản ứng hoàn tất.', 'Kết luận xúc tác luôn làm tăng lượng sản phẩm cuối hoặc không mất hoạt tính.']
+} as const;
+type GuideKey = keyof typeof guides;
+const solution = (questionId: string, finalAnswer: string, guideKey: GuideKey, explanation: string): Solution => {
+  const [recognition, firstMove, mistake] = guides[guideKey];
+  return { id: `${questionId}-solution`, questionId, recognition: `Dạng bài: ${recognition}`, detailedSteps: [
+    { order: 1, title: 'Dấu hiệu nhận biết và cách bắt đầu', explanation: firstMove },
+    { order: 2, title: 'Áp dụng vào câu hỏi', explanation }
+  ], finalAnswer, commonMistakes: [mistake], reviewSuggestions: [`Ôn lại dạng “${recognition}” và kiểm tra biến, hệ số, đơn vị.`] };
+};
+
+export const m6GapFillSolutions: Solution[] = [
+  solution('chem10-m6-gf001','A','26-2','$v_B/v_A=2/3$, nên $v_B=0{,}15\times2/3=0{,}10$ M/s.'),
+  solution('chem10-m6-gf002','B','26-2','Hệ số H2 là 3 nên tốc độ phản ứng bằng $-\frac13\Delta[H_2]/\Delta t$.'),
+  solution('chem10-m6-gf003','4','26-3','$120/30=4$ mL/s.'),
+  solution('chem10-m6-gf004','0.04','26-3','$2{,}4/60=0{,}04$ g/s.'),
+  solution('chem10-m6-gf005','0.02','26-3','Độ tăng là 0,36 mol; $0{,}36/18=0{,}02$ mol/s.'),
+  solution('chem10-m6-gf006','A','26-3','Nồng độ biến thiên là $\Delta n/V$, vì vậy tốc độ là $\Delta n/(V\Delta t)$.'),
+  solution('chem10-m6-gf007','0.01','26-3','$\Delta C=0{,}20/2{,}0=0{,}10$ M; chia 10 s được 0,01 M/s.'),
+  solution('chem10-m6-gf008','C','26-4','[A] tăng 2 lần và có số mũ 2 nên v tăng $2^2=4$ lần.'),
+  solution('chem10-m6-gf009','C','26-4','Hệ số tăng tốc độ là $2\times3^2=18$.'),
+  solution('chem10-m6-gf010','A','26-4','$[A]^0=1$, nên theo biểu thức đã cho v không phụ thuộc [A].'),
+  solution('chem10-m6-gf011','A','26-4','Số mũ tốc độ phản ánh cơ chế/dữ liệu thực nghiệm và không suy trực tiếp từ phương trình tổng quát.'),
+  solution('chem10-m6-gf012','0.10','26-4','$v=0{,}20\times0{,}50=0{,}10$ M/s.'),
+  solution('chem10-m6-gf013','C','26-5','Tốc độ theo nồng độ là biến thiên mol/L trên giây: mol·L⁻¹·s⁻¹.'),
+  solution('chem10-m6-gf014','B','26-5','$[k]=(M/s)/M=s^{-1}$.'),
+  solution('chem10-m6-gf015','C','26-5','$[k]=(M/s)/M^2=M^{-1}s^{-1}$.'),
+  solution('chem10-m6-gf016','B','26-5','k gắn với phản ứng, biểu thức tốc độ và nhiệt độ; đơn vị phụ thuộc tổng bậc.'),
+  solution('chem10-m6-gf017','B','27-1','Dóng từ t=20 s tới đường rồi sang trục tung cho [A]=0,60 M.'),
+  solution('chem10-m6-gf018','A','27-1','Đây là quy trình đọc tọa độ (t,C) đúng từ hai trục.'),
+  solution('chem10-m6-gf019','0.25','27-1','Đọc hàng/cột ứng với 10 s cho [B]=0,25 M.'),
+  solution('chem10-m6-gf020','A','27-1','Đơn vị s thuộc trục thời gian, M thuộc trục nồng độ; phải kiểm tra nhãn trục trước.'),
+  solution('chem10-m6-gf021','A','27-1','X giảm từ 0,80 xuống 0,20 M, nhiều hơn Y chỉ giảm xuống 0,45 M; chưa đủ để kết luận lượng cuối hay tốc độ tức thời.'),
+  solution('chem10-m6-gf022','0.02','27-2','$|0{,}50-0{,}90|/(30-10)=0{,}40/20=0{,}02$ M/s.'),
+  solution('chem10-m6-gf023','A','27-2','Dây cung dùng hai đầu khoảng nên độ dốc của nó chính là tốc độ trung bình trong khoảng.'),
+  solution('chem10-m6-gf024','B','27-2','Độ biến thiên A âm nhưng độ lớn tốc độ tiêu thụ được quy ước dương: 0,020 M/s.'),
+  solution('chem10-m6-gf025','C','27-3','Tỉ số độ lớn độ dốc là $0{,}05/0{,}01=5$.'),
+  solution('chem10-m6-gf026','A','27-4','Mức giảm 0–10 s là 0,30 M, lớn hơn 0,15 M ở 10–20 s, nên đường giảm rồi phẳng dần.'),
+  solution('chem10-m6-gf027','A','27-4','Sản phẩm tăng nên dốc dương; “chậm dần” nghĩa là độ dốc dương giảm về gần 0.'),
+  solution('chem10-m6-gf028','A','27-4','Mỗi dữ kiện là một cặp (t,C); trục và đơn vị đúng là điều kiện để đồ thị có nghĩa.'),
+  solution('chem10-m6-gf029','A','28-1','Nồng độ lớn hơn cho nhiều tiểu phân trong cùng thể tích, làm số va chạm mỗi giây tăng.'),
+  solution('chem10-m6-gf030','A','28-1','Nén khí làm các phân tử gần nhau hơn, tăng mật độ và tần suất va chạm.'),
+  solution('chem10-m6-gf031','A','28-1','Chất rắn hầu như không nén được trong phạm vi thông thường nên mật độ không tăng đáng kể.'),
+  solution('chem10-m6-gf032','B','28-2','Tăng 20°C là hai khoảng 10°C; tốc độ tăng $2^2=4$ lần.'),
+  solution('chem10-m6-gf033','D','28-2','Tăng 30°C là ba khoảng; hệ số tăng $3^3=27$.'),
+  solution('chem10-m6-gf034','0.04','28-2','40°C cao hơn 20°C hai khoảng nên $v_{40}=v_{20}2^2$; $v_{20}=0{,}16/4=0{,}04$ M/s.'),
+  solution('chem10-m6-gf035','A','28-3','Cùng khối lượng nhưng bột có tổng diện tích tiếp xúc với acid lớn hơn.'),
+  solution('chem10-m6-gf036','A','28-3','Nghiền chỉ tăng tốc độ tiếp xúc; khi chất giới hạn và mức hoàn tất như nhau, lượng sản phẩm cuối không đổi.'),
+  solution('chem10-m6-gf037','A','28-4','Va chạm chỉ dẫn tới phản ứng khi vừa đủ năng lượng vượt rào cản vừa có định hướng thích hợp.'),
+  solution('chem10-m6-gf038','A','28-4','Phân bố năng lượng dịch chuyển làm tỉ lệ hạt có $E\ge E_a$ tăng đáng kể.'),
+  solution('chem10-m6-gf039','A','28-4','Cùng số va chạm nhưng khác phần va chạm đạt năng lượng/định hướng sẽ cho tốc độ khác.'),
+  solution('chem10-m6-gf040','A','28-4','Nhiệt độ chỉ tăng tỉ lệ va chạm hiệu quả, không biến mọi va chạm thành phản ứng.'),
+  solution('chem10-m6-gf041','A','29-1','Con đường thay thế có Ea thấp hơn làm nhiều va chạm đủ điều kiện hơn.'),
+  solution('chem10-m6-gf042','A','29-1','Xúc tác có thể tạo chất trung gian nhưng được hoàn nguyên ở chu trình cuối.'),
+  solution('chem10-m6-gf043','A','29-1','ΔH phụ thuộc trạng thái đầu và cuối; xúc tác chỉ thay đường đi và Ea.'),
+  solution('chem10-m6-gf044','A','29-1','Xúc tác không “bơm” năng lượng mà hạ rào cản bằng cơ chế khác.'),
+  solution('chem10-m6-gf045','A','29-2','Cùng mức đầu–cuối nhưng đỉnh thấp hơn chính là đường có xúc tác.'),
+  solution('chem10-m6-gf046','B','29-2','Mức đầu và cuối không đổi nên chênh lệch ΔH giữ nguyên.'),
+  solution('chem10-m6-gf047','A','29-2','Độ giảm rào cản là $120-65=55$ kJ/mol.'),
+  solution('chem10-m6-gf048','A','29-2','Sơ đồ đúng phải giữ hai mức đầu–cuối, đồng thời hạ đỉnh năng lượng.'),
+  solution('chem10-m6-gf049','A','29-3','Chỉ có sự hiện diện MnO2 được thay đổi; các biến còn lại phải là biến kiểm soát.'),
+  solution('chem10-m6-gf050','A','29-4','Bề mặt xúc tác tăng tốc các phản ứng chuyển CO, hydrocarbon và oxide nitrogen thành chất ít hại hơn.'),
+  solution('chem10-m6-gf051','A','29-4','Khác biệt ở 20 s phản ánh tốc độ; cùng thể tích cuối cho thấy lượng sản phẩm cuối không đổi.'),
+  solution('chem10-m6-gf052','A','29-4','Xúc tác thực tế có tuổi thọ, có thể bị đầu độc và vẫn cần điều kiện vận hành an toàn.'),
+];

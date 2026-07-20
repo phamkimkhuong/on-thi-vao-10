@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Thể tích tế bào theo thời gian trong sucrose và urea</title>
+  <desc id="desc">Cả hai giảm ban đầu; sucrose giữ thấp còn urea phục hồi rồi vượt mức ban đầu.</desc>
+  <rect width="760" height="420" rx="20" fill="#f8fafc"/>
+  <line x1="92" y1="342" x2="690" y2="342" stroke="#334155" stroke-width="3"/>
+  <line x1="92" y1="342" x2="92" y2="54" stroke="#334155" stroke-width="3"/>
+  <text x="390" y="395" text-anchor="middle" font-family="Arial" font-size="20" fill="#0f172a">Thời gian</text>
+  <text x="26" y="200" transform="rotate(-90 26 200)" text-anchor="middle" font-family="Arial" font-size="20" fill="#0f172a">Thể tích tế bào (%)</text>
+  <line x1="92" y1="165" x2="690" y2="165" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="8 8"/>
+  <text x="74" y="171" text-anchor="end" font-family="Arial" font-size="16" fill="#475569">100</text>
+  <path d="M92 165 C145 240 190 276 250 278 C390 279 520 277 660 278" fill="none" stroke="#7c3aed" stroke-width="6"/>
+  <path d="M92 165 C145 240 190 276 250 278 C360 270 450 185 530 135 C585 103 625 92 660 86" fill="none" stroke="#0d9488" stroke-width="6"/>
+  <text x="585" y="298" font-family="Arial" font-weight="700" font-size="21" fill="#7c3aed">Sucrose</text>
+  <text x="610" y="78" font-family="Arial" font-weight="700" font-size="21" fill="#0d9488">Urea</text>
+</svg>

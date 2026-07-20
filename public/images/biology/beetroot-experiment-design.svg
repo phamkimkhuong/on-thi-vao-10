@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Thiết kế khảo sát ethanol chưa kiểm soát biến</title>
+  <desc id="desc">Bốn ống nghiệm lần lượt chứa ethanol 0, 10, 20 và 30 phần trăm nhưng khác nhau về số lượng, kích thước đĩa củ dền và thời gian ngâm.</desc>
+  <defs>
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fecdd3"/><stop offset="1" stop-color="#e11d48"/></linearGradient>
+  </defs>
+  <rect width="760" height="420" rx="24" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Bố trí của nhóm học sinh</text>
+  <text x="380" y="62" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Mục tiêu: khảo sát ảnh hưởng nồng độ ethanol đến độ rò sắc tố củ dền</text>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <g transform="translate(70 90)">
+      <path d="M25 0h90v20h-10v190a35 35 0 0 1-70 0V20H25z" fill="#fff" stroke="#475569" stroke-width="3"/>
+      <path d="M38 112h64v94a32 32 0 0 1-64 0z" fill="url(#liquid)" opacity="0.35"/>
+      <circle cx="58" cy="185" r="12" fill="#9f1239"/><circle cx="82" cy="211" r="12" fill="#9f1239"/>
+      <text x="70" y="246" font-size="17" font-weight="700" fill="#0f172a">0% ethanol</text><text x="70" y="270" font-size="14" fill="#475569">2 đĩa nhỏ · 5 phút</text>
+    </g>
+    <g transform="translate(245 90)">
+      <path d="M25 0h90v20h-10v190a35 35 0 0 1-70 0V20H25z" fill="#fff" stroke="#475569" stroke-width="3"/>
+      <path d="M38 112h64v94a32 32 0 0 1-64 0z" fill="url(#liquid)" opacity="0.5"/>
+      <circle cx="55" cy="183" r="12" fill="#9f1239"/><circle cx="84" cy="188" r="12" fill="#9f1239"/><circle cx="70" cy="216" r="12" fill="#9f1239"/>
+      <text x="70" y="246" font-size="17" font-weight="700" fill="#0f172a">10% ethanol</text><text x="70" y="270" font-size="14" fill="#475569">3 đĩa nhỏ · 10 phút</text>
+    </g>
+    <g transform="translate(420 90)">
+      <path d="M25 0h90v20h-10v190a35 35 0 0 1-70 0V20H25z" fill="#fff" stroke="#475569" stroke-width="3"/>
+      <path d="M38 112h64v94a32 32 0 0 1-64 0z" fill="url(#liquid)" opacity="0.7"/>
+      <circle cx="70" cy="178" r="20" fill="#9f1239"/><circle cx="70" cy="218" r="20" fill="#9f1239"/>
+      <text x="70" y="246" font-size="17" font-weight="700" fill="#0f172a">20% ethanol</text><text x="70" y="270" font-size="14" fill="#475569">2 đĩa lớn · 10 phút</text>
+    </g>
+    <g transform="translate(595 90)">
+      <path d="M25 0h90v20h-10v190a35 35 0 0 1-70 0V20H25z" fill="#fff" stroke="#475569" stroke-width="3"/>
+      <path d="M38 112h64v94a32 32 0 0 1-64 0z" fill="url(#liquid)" opacity="0.9"/>
+      <circle cx="54" cy="179" r="11" fill="#9f1239"/><circle cx="84" cy="179" r="11" fill="#9f1239"/><circle cx="54" cy="211" r="11" fill="#9f1239"/><circle cx="84" cy="211" r="11" fill="#9f1239"/>
+      <text x="70" y="246" font-size="17" font-weight="700" fill="#0f172a">30% ethanol</text><text x="70" y="270" font-size="14" fill="#475569">4 đĩa nhỏ · 15 phút</text>
+    </g>
+  </g>
+  <rect x="105" y="377" width="550" height="28" rx="14" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="380" y="397" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#9a3412">Ngoài nồng độ ethanol, còn nhiều yếu tố đang thay đổi đồng thời</text>
+</svg>

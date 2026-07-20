@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Ba mức độ co nguyên sinh</title>
+  <desc id="desc">A trương nước, B bắt đầu tách màng ở góc, C khối nguyên sinh co rõ.</desc>
+  <rect width="760" height="420" rx="20" fill="#f8fafc"/>
+  <g transform="translate(65 88)">
+    <rect width="180" height="220" rx="18" fill="#dcfce7" stroke="#166534" stroke-width="8"/>
+    <rect x="12" y="12" width="156" height="196" rx="12" fill="#86efac" stroke="#16a34a" stroke-width="4"/>
+    <ellipse cx="90" cy="110" rx="64" ry="82" fill="#bfdbfe" opacity=".8"/>
+    <text x="90" y="260" text-anchor="middle" font-family="Arial" font-weight="700" font-size="25" fill="#0f172a">A</text>
+  </g>
+  <g transform="translate(290 88)">
+    <rect width="180" height="220" rx="18" fill="#dcfce7" stroke="#166534" stroke-width="8"/>
+    <path d="M24 18 H156 Q166 18 162 34 L150 190 Q148 204 132 202 H42 Q28 202 26 188 L17 36 Q15 20 24 18Z" fill="#86efac" stroke="#16a34a" stroke-width="4"/>
+    <ellipse cx="90" cy="110" rx="57" ry="72" fill="#bfdbfe" opacity=".8"/>
+    <text x="90" y="260" text-anchor="middle" font-family="Arial" font-weight="700" font-size="25" fill="#0f172a">B</text>
+  </g>
+  <g transform="translate(515 88)">
+    <rect width="180" height="220" rx="18" fill="#dcfce7" stroke="#166534" stroke-width="8"/>
+    <ellipse cx="90" cy="110" rx="54" ry="70" fill="#86efac" stroke="#16a34a" stroke-width="4"/>
+    <ellipse cx="90" cy="110" rx="39" ry="52" fill="#bfdbfe" opacity=".85"/>
+    <text x="90" y="260" text-anchor="middle" font-family="Arial" font-weight="700" font-size="25" fill="#0f172a">C</text>
+  </g>
+</svg>

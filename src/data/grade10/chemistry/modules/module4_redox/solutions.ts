@@ -201,7 +201,7 @@ export const m4Solutions: Solution[] = [
       {
         "order": 1,
         "title": "Lập luận trọng tâm",
-        "explanation": "$2(+1)+x+4(-2)=0$, suy ra $x=+6$."
+        "explanation": "$(+1)+x+4(-2)=0$, suy ra số oxi hóa của chlorine là $x=+7$."
       },
       {
         "order": 2,
@@ -273,7 +273,7 @@ export const m4Solutions: Solution[] = [
       {
         "order": 1,
         "title": "Lập luận trọng tâm",
-        "explanation": "Fe²⁺ nhường một electron, số oxi hóa tăng từ +2 lên +3 nên bị oxi hóa."
+        "explanation": "Cu nhường hai electron, số oxi hóa tăng từ 0 lên +2 nên copper bị oxi hóa."
       },
       {
         "order": 2,

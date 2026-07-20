@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Kết quả khảo sát theo cách chọn mẫu</title>
+  <desc id="desc">Mẫu tự nguyện trực tuyến có 88 phần trăm ủng hộ biện pháp phòng bệnh; mẫu phân tầng theo khối lớp có 64 phần trăm.</desc>
+  <rect width="760" height="420" rx="18" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#172033">Tỉ lệ ủng hộ biện pháp phòng bệnh</text>
+  <g stroke="#d9e2ec" stroke-width="1">
+    <line x1="100" y1="80" x2="700" y2="80"/><line x1="100" y1="130" x2="700" y2="130"/><line x1="100" y1="180" x2="700" y2="180"/><line x1="100" y1="230" x2="700" y2="230"/><line x1="100" y1="280" x2="700" y2="280"/><line x1="100" y1="330" x2="700" y2="330"/>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="100" y1="70" x2="100" y2="330"/><line x1="100" y1="330" x2="700" y2="330"/></g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#475569">
+    <text x="84" y="335" text-anchor="end">0</text><text x="84" y="285" text-anchor="end">20</text><text x="84" y="235" text-anchor="end">40</text><text x="84" y="185" text-anchor="end">60</text><text x="84" y="135" text-anchor="end">80</text><text x="84" y="85" text-anchor="end">100%</text>
+  </g>
+  <rect x="205" y="110" width="150" height="220" rx="8" fill="#7c3aed"/><rect x="475" y="170" width="150" height="160" rx="8" fill="#0f766e"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="280" y="99" font-size="22" font-weight="700" fill="#5b21b6">88%</text><text x="550" y="159" font-size="22" font-weight="700" fill="#115e59">64%</text>
+    <text x="280" y="355" font-size="14" fill="#334155">Tự nguyện trực tuyến</text><text x="550" y="355" font-size="14" fill="#334155">Phân tầng theo khối</text>
+    <text x="280" y="375" font-size="12" fill="#64748b">n = 120</text><text x="550" y="375" font-size="12" fill="#64748b">n = 240</text>
+  </g>
+</svg>

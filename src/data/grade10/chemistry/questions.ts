@@ -1,8 +1,26 @@
-import { Question } from '@/types';
+import type { Question } from '@/types';
+import { g10ChemistryPracticeMetadata } from './practiceMetadata';
+import { normalizeChemistryPracticeChoice } from './practiceChoiceNormalizer';
 
 const modules = import.meta.glob('./modules/module*/index.ts', { eager: true });
 
-export const g10ChemistryQuestions: Question[] = Object.values(modules).flatMap(
+const moduleQuestions: Question[] = Object.values(modules).flatMap(
   (mod: any) => mod.questions || []
 );
 
+const practiceMetadataByQuestionId = new Map(
+  g10ChemistryPracticeMetadata.map(metadata => [metadata.questionId, metadata])
+);
+
+/** Aggregator: chỉ gộp module và gắn metadata theo ID, không chứa dữ liệu thô. */
+const enrichedQuestions: Question[] = moduleQuestions.map(question => {
+  const metadata = practiceMetadataByQuestionId.get(question.id);
+  return metadata ? { ...question, ...metadata, id: question.id } : question;
+});
+
+/** Câu hiển thị: chuẩn hóa options legacy và hoán vị ổn định theo ID để tránh học tủ vị trí đáp án. */
+export const g10ChemistryQuestions: Question[] = enrichedQuestions.map(normalizeChemistryPracticeChoice);
+
+export const g10ChemistryDisplayAnswerByQuestionId = new Map(
+  g10ChemistryQuestions.map(question => [question.id, question.correctAnswer])
+);

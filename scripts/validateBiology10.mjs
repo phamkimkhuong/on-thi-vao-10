@@ -62,6 +62,8 @@ const questions = [];
 const solutions = [];
 const outcomes = [];
 const misconceptions = [];
+const practiceBlueprints = [];
+const practiceMetadata = [];
 
 for (const moduleName of moduleDirs) {
   const modulePath = path.join(modulesDirectory, moduleName);
@@ -71,6 +73,10 @@ for (const moduleName of moduleDirs) {
   solutions.push(...readFirstMatchingArray(path.join(modulePath, 'solutions.ts'), 'Solutions'));
   outcomes.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), 'Outcomes'));
   misconceptions.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), 'Misconceptions'));
+  const blueprintPath = path.join(modulePath, 'practiceBlueprint.ts');
+  const metadataPath = path.join(modulePath, 'practiceMetadata.ts');
+  if (fs.existsSync(blueprintPath)) practiceBlueprints.push(...readFirstMatchingArray(blueprintPath, 'PracticeBlueprints'));
+  if (fs.existsSync(metadataPath)) practiceMetadata.push(...readFirstMatchingArray(metadataPath, 'PracticeMetadata'));
 }
 
 const errors = [];
@@ -81,6 +87,24 @@ const questionById = new Map(questions.map(item => [item.id, item]));
 const solutionByQuestionId = new Map(solutions.map(item => [item.questionId, item]));
 const outcomeById = new Map(outcomes.map(item => [item.id, item]));
 const misconceptionById = new Map(misconceptions.map(item => [item.id, item]));
+const blueprintByTypeId = new Map(practiceBlueprints.map(item => [item.questionTypeId, item]));
+const metadataByQuestionId = new Map(practiceMetadata.map(item => [item.questionId, item]));
+
+const LETTERS = ['A', 'B', 'C', 'D'];
+const stableHash = value => {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
+};
+
+const getDisplayAnswer = question => {
+  if (question.validatorType !== 'choice' || !LETTERS.includes(question.correctAnswer)) return question.correctAnswer;
+  if (!Array.isArray(question.options) || question.options.length !== 4) return question.correctAnswer;
+  return LETTERS[stableHash(`${question.id}:answer`) % LETTERS.length];
+};
 
 const duplicateKeys = (items, keyOf) => {
   const counts = new Map();
@@ -99,7 +123,9 @@ for (const [label, items, keyOf] of [
   ['Question', questions, item => item.id],
   ['Solution', solutions, item => item.questionId],
   ['Outcome', outcomes, item => item.id],
-  ['Misconception', misconceptions, item => item.id]
+  ['Misconception', misconceptions, item => item.id],
+  ['Practice blueprint', practiceBlueprints, item => item.questionTypeId],
+  ['Practice metadata', practiceMetadata, item => item.questionId]
 ]) {
   for (const key of duplicateKeys(items, keyOf)) errors.push(`${label} bị trùng: ${key}.`);
 }
@@ -107,6 +133,8 @@ for (const [label, items, keyOf] of [
 for (const content of duplicateKeys(questions, question => normalizeQuestionContent(question.content))) {
   errors.push(`Nội dung câu hỏi bị trùng: "${content.slice(0, 80)}".`);
 }
+
+let cyclicAnswerTypeCount = 0;
 
 for (const type of questionTypes) {
   if (!topicById.has(type.topicId)) errors.push(`${type.id}: topicId không tồn tại.`);
@@ -149,6 +177,109 @@ for (const type of questionTypes) {
     if (missingAnswers.length > 0) {
       warnings.push(`${type.id}: chưa có đáp án đúng ở vị trí ${missingAnswers.join(', ')}.`);
     }
+
+    const followsAbcdCycle = typeQuestions.every(
+      (question, index) => question.correctAnswer === LETTERS[index % LETTERS.length]
+    );
+    if (followsAbcdCycle) cyclicAnswerTypeCount += 1;
+  }
+}
+
+if (cyclicAnswerTypeCount > 0) {
+  warnings.push(`${cyclicAnswerTypeCount}/${questionTypes.length} dạng có khóa đáp án nguồn theo chu kì ABCD; tầng hiển thị phải tiếp tục hoán vị ổn định.`);
+}
+
+for (const topic of topics) {
+  const topicQuestions = questions.filter(question => question.topicId === topic.id && LETTERS.includes(question.correctAnswer));
+  if (topicQuestions.length === 0) continue;
+  const displayCounts = Object.fromEntries(LETTERS.map(letter => [
+    letter,
+    topicQuestions.filter(question => getDisplayAnswer(question) === letter).length
+  ]));
+  const [dominantAnswer, dominantCount] = Object.entries(displayCounts)
+    .sort(([, firstCount], [, secondCount]) => secondCount - firstCount)[0];
+  if (dominantCount / topicQuestions.length > 0.4) {
+    errors.push(`${topic.id}: đáp án hiển thị ${dominantAnswer} chiếm ${dominantCount}/${topicQuestions.length} câu.`);
+  }
+}
+
+const subtypeById = new Map();
+for (const blueprint of practiceBlueprints) {
+  if (!typeById.has(blueprint.questionTypeId)) errors.push(`${blueprint.questionTypeId}: blueprint trỏ tới dạng không tồn tại.`);
+  if (!Array.isArray(blueprint.subTypes) || blueprint.subTypes.length === 0) {
+    errors.push(`${blueprint.questionTypeId}: blueprint chưa có dạng con.`);
+    continue;
+  }
+  for (const subtype of blueprint.subTypes) {
+    if (!subtype.id) errors.push(`${blueprint.questionTypeId}: dạng con thiếu id.`);
+    if (subtypeById.has(subtype.id)) errors.push(`Dạng con bị trùng: ${subtype.id}.`);
+    subtypeById.set(subtype.id, { ...subtype, questionTypeId: blueprint.questionTypeId });
+  }
+}
+
+for (const metadata of practiceMetadata) {
+  const question = questionById.get(metadata.questionId);
+  const subtype = subtypeById.get(metadata.subTypeId);
+  if (!question) errors.push(`${metadata.questionId}: metadata không có câu hỏi tương ứng.`);
+  if (!subtype) errors.push(`${metadata.questionId}: subTypeId không tồn tại (${metadata.subTypeId}).`);
+  if (question && subtype && question.questionTypeId !== subtype.questionTypeId) {
+    errors.push(`${metadata.questionId}: dạng con ${metadata.subTypeId} không thuộc ${question.questionTypeId}.`);
+  }
+}
+
+for (const blueprint of practiceBlueprints) {
+  const typeQuestions = questions.filter(question => question.questionTypeId === blueprint.questionTypeId);
+  let hasReachedQuestionTarget = true;
+  for (const question of typeQuestions) {
+    if (!metadataByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu practice metadata.`);
+  }
+  for (const subtype of blueprint.subTypes ?? []) {
+    const subtypeMetadata = practiceMetadata.filter(metadata => metadata.subTypeId === subtype.id);
+    const currentCount = subtypeMetadata.length;
+    const targetCount = Number(subtype.targetQuestionCount ?? 12);
+    if (currentCount < targetCount) {
+      hasReachedQuestionTarget = false;
+      warnings.push(`${subtype.id}: hiện có ${currentCount}/${targetCount} câu mục tiêu.`);
+    }
+    if (currentCount >= targetCount && targetCount === 12) {
+      const subtypeQuestions = subtypeMetadata
+        .map(metadata => questionById.get(metadata.questionId))
+        .filter(Boolean);
+      const difficultyCounts = Object.fromEntries(['easy', 'medium', 'hard'].map(difficulty => [
+        difficulty,
+        subtypeQuestions.filter(question => question.difficulty === difficulty).length
+      ]));
+      if (difficultyCounts.easy !== 3 || difficultyCounts.medium !== 5 || difficultyCounts.hard !== 4) {
+        errors.push(
+          `${subtype.id}: phân bố độ khó phải là 3 dễ - 5 vừa - 4 khó; hiện có ` +
+          `${difficultyCounts.easy} - ${difficultyCounts.medium} - ${difficultyCounts.hard}.`
+        );
+      }
+    }
+  }
+
+  const typeMetadata = practiceMetadata.filter(metadata => {
+    const subtype = subtypeById.get(metadata.subTypeId);
+    return subtype?.questionTypeId === blueprint.questionTypeId;
+  });
+  const requiredRoles = blueprint.coverage?.requiredPracticeRoles ?? [];
+  const presentRoles = new Set(typeMetadata.map(metadata => metadata.practiceRole));
+  for (const role of requiredRoles) {
+    if (!presentRoles.has(role)) errors.push(`${blueprint.questionTypeId}: thiếu practice role ${role}.`);
+  }
+  const requiredRepresentations = blueprint.coverage?.requiredRepresentations ?? [];
+  const presentRepresentations = new Set(typeMetadata.map(metadata => metadata.representationType));
+  for (const representation of requiredRepresentations) {
+    if (!presentRepresentations.has(representation)) {
+      const message = `${blueprint.questionTypeId}: thiếu representation ${representation}.`;
+      if (hasReachedQuestionTarget) errors.push(message);
+      else warnings.push(message);
+    }
+  }
+  const masteryHoldoutCount = typeMetadata.filter(metadata => metadata.practiceRole === 'mastery_holdout').length;
+  const requiredHoldoutCount = Number(blueprint.coverage?.masteryHoldoutCount ?? 0);
+  if (masteryHoldoutCount < requiredHoldoutCount) {
+    errors.push(`${blueprint.questionTypeId}: mới có ${masteryHoldoutCount}/${requiredHoldoutCount} câu mastery holdout.`);
   }
 }
 
@@ -217,6 +348,10 @@ for (const solution of solutions) {
   }
   if (!Array.isArray(solution.detailedSteps) || solution.detailedSteps.length < 2) errors.push(`${solution.id}: lời giải quá ngắn.`);
   if (solution.commonMistakes?.some(item => item.includes('dựa trên cảm tính'))) errors.push(`${solution.id}: lỗi sai vẫn còn chung chung.`);
+  const serializedSolution = JSON.stringify(solution);
+  if (/\b(undefined|null|todo|tbd)\b/i.test(serializedSolution)) {
+    errors.push(`${solution.id}: lời giải còn placeholder hoặc dữ liệu sinh lỗi.`);
+  }
 }
 
 for (const outcome of outcomes) {
@@ -234,6 +369,8 @@ for (const outcome of outcomes) {
     if (misconception && misconception.outcomeId !== outcome.id) errors.push(`${outcome.id}: misconception ${misconceptionId} trỏ sai outcome.`);
   }
   if (!Array.isArray(outcome.evidenceTypes) || outcome.evidenceTypes.length === 0) errors.push(`${outcome.id}: thiếu evidenceTypes.`);
+  const directQuestionCount = questions.filter(question => (question.outcomeIds ?? []).includes(outcome.id)).length;
+  if (directQuestionCount < 4) warnings.push(`${outcome.id}: mới có ${directQuestionCount} câu trực tiếp; chưa đủ kiểm tra ổn định.`);
 }
 
 const outcomesWithoutTypes = outcomes.filter(outcome => (outcome.questionTypeIds ?? []).length === 0);
@@ -253,7 +390,7 @@ for (const topic of topics) {
   if (topicQuestions.length < 12) warnings.push(`${topic.id}: hiện mới có ${topicQuestions.length} câu; đây mới là dữ liệu khung.`);
 }
 
-console.log(`Sinh học 10: ${topics.length} module, ${outcomes.length} outcomes, ${misconceptions.length} misconceptions, ${questionTypes.length} micro-type, ${questions.length} câu, ${solutions.length} lời giải.`);
+console.log(`Sinh học 10: ${topics.length} module, ${outcomes.length} outcomes, ${misconceptions.length} misconceptions, ${questionTypes.length} nhóm dạng, ${subtypeById.size} dạng con đã blueprint, ${questions.length} câu, ${solutions.length} lời giải.`);
 for (const warning of warnings) console.warn(`WARN: ${warning}`);
 
 if (errors.length > 0) {

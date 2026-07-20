@@ -86,12 +86,23 @@ export const App: React.FC = () => {
             
             setPremium(premiumStatus);
             useAppStore.setState({
+              userData: data,
               trialActivated: data.trialActivated === true,
               premiumUntil: data.premiumUntil || null
             });
+
+            // Tự động mở Profile Modal nếu học sinh thiếu thông tin cá nhân (chỉ mở một lần duy nhất trong phiên làm việc)
+            if (typeof sessionStorage !== 'undefined') {
+              const hasAutoOpened = sessionStorage.getItem('ezonthi_profile_auto_opened');
+              if (!hasAutoOpened && (!data.birthYear || !data.gender || !data.province)) {
+                sessionStorage.setItem('ezonthi_profile_auto_opened', 'true');
+                useAppStore.setState({ isProfileModalOpen: true });
+              }
+            }
           } else {
             setPremium(false);
             useAppStore.setState({
+              userData: null,
               trialActivated: false,
               premiumUntil: null
             });

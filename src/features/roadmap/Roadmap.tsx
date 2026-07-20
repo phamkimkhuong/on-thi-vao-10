@@ -14,17 +14,21 @@ import { authService } from '../../services/authService';
 import type { QuestionType } from '../../types';
 import { ChemistryVideoDashboard } from './components/ChemistryVideoDashboard';
 import { BiologyVideoDashboard } from './components/BiologyVideoDashboard';
+import { PhysicsVideoDashboard } from './components/PhysicsVideoDashboard';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, progressVersion, isPremium, user } = useAppStore();
   void progressVersion;
 
-  const [activeView, setActiveView] = useState<'roadmap' | 'videos'>((selectedSubject === 'chemistry' || selectedSubject === 'biology') ? 'videos' : 'roadmap');
+  const hasVideos = selectedSubject === 'chemistry' || selectedSubject === 'biology' || (selectedSubject === 'physics' && selectedGrade === 'grade10');
+
+  const [activeView, setActiveView] = useState<'roadmap' | 'videos'>(hasVideos ? 'videos' : 'roadmap');
 
   useEffect(() => {
-    setActiveView((selectedSubject === 'chemistry' || selectedSubject === 'biology') ? 'videos' : 'roadmap');
-  }, [selectedSubject]);
+    const showVideos = selectedSubject === 'chemistry' || selectedSubject === 'biology' || (selectedSubject === 'physics' && selectedGrade === 'grade10');
+    setActiveView(showVideos ? 'videos' : 'roadmap');
+  }, [selectedSubject, selectedGrade]);
 
   const topics = getTopics(selectedGrade, selectedSubject);
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
@@ -185,7 +189,7 @@ export const Roadmap: React.FC = () => {
           Lộ trình tinh gọn giúp bạn nắm chắc kiến thức {selectedGrade === 'grade9' ? 'ôn thi vào 10' : selectedGrade === 'grade10' ? 'chương trình lớp 10' : 'chương trình lớp 11'} toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.
         </p>
 
-        {(selectedSubject === 'chemistry' || selectedSubject === 'biology') && (
+        {hasVideos && (
           <div className="flex justify-center items-center pt-2">
             <div className="inline-flex p-1 bg-slate-200/60 dark:bg-slate-900/60 rounded-2xl border border-border/40">
               <button
@@ -196,11 +200,13 @@ export const Roadmap: React.FC = () => {
                   activeView === 'videos'
                     ? selectedSubject === 'chemistry'
                       ? "bg-card text-emerald-600 dark:text-emerald-400 shadow-sm font-black"
-                      : "bg-card text-green-600 dark:text-green-400 shadow-sm font-black"
+                      : selectedSubject === 'biology'
+                        ? "bg-card text-green-600 dark:text-green-400 shadow-sm font-black"
+                        : "bg-card text-blue-600 dark:text-blue-400 shadow-sm font-black"
                     : "text-muted-foreground hover:text-foreground font-bold"
                 )}
               >
-                📺 Video bài giảng {selectedSubject === 'chemistry' ? '(7 chương)' : '(8 chương)'}
+                📺 Video bài giảng {selectedSubject === 'chemistry' ? '(7 chương)' : selectedSubject === 'biology' ? '(8 chương)' : '(7 chương)'}
               </button>
               <button
                 type="button"
@@ -210,7 +216,9 @@ export const Roadmap: React.FC = () => {
                   activeView === 'roadmap'
                     ? selectedSubject === 'chemistry'
                       ? "bg-card text-emerald-600 dark:text-emerald-400 shadow-sm font-black"
-                      : "bg-card text-green-600 dark:text-green-400 shadow-sm font-black"
+                      : selectedSubject === 'biology'
+                        ? "bg-card text-green-600 dark:text-green-400 shadow-sm font-black"
+                        : "bg-card text-blue-600 dark:text-blue-400 shadow-sm font-black"
                     : "text-muted-foreground hover:text-foreground font-bold"
                 )}
               >
@@ -221,8 +229,14 @@ export const Roadmap: React.FC = () => {
         )}
       </div>
 
-      {activeView === 'videos' && (selectedSubject === 'chemistry' || selectedSubject === 'biology') ? (
-        selectedSubject === 'chemistry' ? <ChemistryVideoDashboard /> : <BiologyVideoDashboard />
+      {activeView === 'videos' && hasVideos ? (
+        selectedSubject === 'chemistry' ? (
+          <ChemistryVideoDashboard />
+        ) : selectedSubject === 'biology' ? (
+          <BiologyVideoDashboard />
+        ) : (
+          <PhysicsVideoDashboard />
+        )
       ) : (
         <>
           {/* 🌟 Guest Mode Banner */}
@@ -369,7 +383,7 @@ export const Roadmap: React.FC = () => {
                                             </span>
                                           ) : isRead ? (
                                             <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
-                                              ✓ Đã đọc lý thuyết
+                                              ✓ Đã đọc
                                             </span>
                                           ) : (
                                             <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-primary/10 border border-primary/20 text-primary animate-pulse">
@@ -384,14 +398,6 @@ export const Roadmap: React.FC = () => {
                                         <div className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
                                           <LatexRenderer text={type.description} />
                                         </div>
-                                        {type.subTypes && type.subTypes.length > 0 && (
-                                          <div className="pt-1">
-                                            {/* Badge dạng bài con tối giản trung tính */}
-                                            <span className="text-[9px] font-extrabold text-muted-foreground bg-secondary/50 px-2.5 py-0.75 rounded-md inline-block select-none border border-border/40">
-                                              🎯 Gồm {type.subTypes.length} dạng bài con
-                                            </span>
-                                          </div>
-                                        )}
                                       </div>
 
                                       <div className="flex items-center justify-end border-t border-border/20 pt-3.5 text-[10px] font-bold text-muted-foreground">

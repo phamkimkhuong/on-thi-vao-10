@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Phân li nhiễm sắc thể tương đồng ở kì sau I</title>
+  <desc id="desc">Hai nhiễm sắc thể kép tương đồng đi về hai cực đối diện, mỗi tâm động vẫn nối hai chromatid chị em.</desc>
+  <rect width="720" height="420" rx="28" fill="#f8fafc"/>
+  <ellipse cx="360" cy="210" rx="300" ry="166" fill="#fff" stroke="#64748b" stroke-width="5"/>
+  <circle cx="105" cy="210" r="14" fill="#7c3aed"/><circle cx="615" cy="210" r="14" fill="#7c3aed"/>
+  <g stroke="#c4b5fd" stroke-width="4"><line x1="105" y1="210" x2="255" y2="150"/><line x1="105" y1="210" x2="255" y2="270"/><line x1="615" y1="210" x2="465" y2="150"/><line x1="615" y1="210" x2="465" y2="270"/></g>
+  <g stroke="#2563eb" stroke-width="15" stroke-linecap="round"><path d="M225 125 L285 185 M285 125 L225 185"/><path d="M225 245 L285 305 M285 245 L225 305"/></g>
+  <g stroke="#f97316" stroke-width="15" stroke-linecap="round"><path d="M435 125 L495 185 M495 125 L435 185"/><path d="M435 245 L495 305 M495 245 L435 305"/></g>
+  <g fill="#f59e0b" stroke="#92400e" stroke-width="2"><circle cx="255" cy="155" r="8"/><circle cx="255" cy="275" r="8"/><circle cx="465" cy="155" r="8"/><circle cx="465" cy="275" r="8"/></g>
+  <line x1="360" y1="70" x2="360" y2="350" stroke="#94a3b8" stroke-width="3" stroke-dasharray="10 10"/>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#334155"><text x="70" y="248">Cực I</text><text x="584" y="248">Cực II</text><text x="286" y="392">Tâm động chưa tách</text></g>
+</svg>

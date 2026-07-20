@@ -4,7 +4,7 @@ export const m3ExpansionSolutions: Solution[] = [
  solution('chem10-m3-qt13-e1','A','Dự đoán ion theo octet.','Al nhường 3 electron hóa trị để đạt cấu hình khí hiếm, tạo $Al^{3+}$.','Ghi điện tích âm khi nguyên tử nhường electron.'),
  solution('chem10-m3-qt13-e2','B','Mô tả sự chuyển electron.','Mg nhường 2e thành $Mg^{2+}$; O nhận đúng 2e thành $O^{2-}$, cả hai đạt cấu hình bền.','Cho rằng cả hai nguyên tử cùng nhường hoặc cùng nhận electron.'),
  solution('chem10-m3-qt13-e3','C','Từ Z suy ion rồi lập công thức.','Z=13 cho $X^{3+}$; Z=8 cho $Y^{2-}$. Trung hòa điện tích cần 2 X và 3 Y, nên $X_2Y_3$.','Hoán đổi chỉ số khi cân bằng điện tích.'),
- solution('chem10-m3-qt14-e1','B','Giải thích tính dẫn điện của chất ion.','Dòng điện cần hạt mang điện chuyển động. Ion bị cố định trong chất rắn nhưng chuyển động được khi nóng chảy.','Cho rằng hợp chất ion dẫn điện nhờ electron tự do như kim loại.'),
+ solution('chem10-m3-qt14-e1','B','Giải thích tính dẫn điện của chất ion.','Trong KBr rắn, $K^+$ và $Br^-$ bị cố định tại nút mạng; khi nóng chảy, các ion chuyển động có hướng dưới điện trường.','Cho rằng hợp chất ion dẫn điện nhờ electron tự do như kim loại.'),
  solution('chem10-m3-qt14-e2','B','Lập công thức từ điện tích ion.','BCNN của 3 và 2 là 6: cần 2 $Al^{3+}$ và 3 $O^{2-}$, tạo $Al_2O_3$.','Không rút hoặc cân bằng tổng điện tích.'),
  solution('chem10-m3-qt14-e3','A','Giải thích tính giòn bằng mạng tinh thể.','Khi lớp mạng trượt, ion cùng dấu nằm kề nhau; lực đẩy tĩnh điện mạnh làm mạng tách và vỡ.','Chỉ ghi nhớ “giòn” mà không liên hệ cách sắp xếp ion.'),
  solution('chem10-m3-qt15-e1','A','Đọc Lewis của nước.','O có 6e hóa trị, tạo hai liên kết O–H và còn hai cặp electron chưa liên kết.','Bỏ quên cặp electron chưa liên kết.'),

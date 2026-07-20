@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Tốc độ vận chuyển của hai chất theo nồng độ</title>
+  <desc id="desc">Đường X tăng gần tuyến tính, đường Y tăng rồi đạt trần khoảng 70 đơn vị.</desc>
+  <rect width="760" height="420" rx="20" fill="#f8fafc"/>
+  <line x1="92" y1="342" x2="690" y2="342" stroke="#334155" stroke-width="3"/>
+  <line x1="92" y1="342" x2="92" y2="54" stroke="#334155" stroke-width="3"/>
+  <text x="390" y="395" text-anchor="middle" font-family="Arial" font-size="20" fill="#0f172a">Nồng độ chất ngoài tế bào</text>
+  <text x="26" y="200" transform="rotate(-90 26 200)" text-anchor="middle" font-family="Arial" font-size="20" fill="#0f172a">Tốc độ qua màng</text>
+  <path d="M92 342 L660 78" fill="none" stroke="#2563eb" stroke-width="6"/>
+  <path d="M92 342 C180 210 275 145 390 125 C500 106 590 106 660 106" fill="none" stroke="#f97316" stroke-width="6"/>
+  <text x="622" y="70" font-family="Arial" font-weight="700" font-size="24" fill="#2563eb">X</text>
+  <text x="625" y="96" font-family="Arial" font-weight="700" font-size="24" fill="#f97316">Y</text>
+  <line x1="82" y1="106" x2="102" y2="106" stroke="#94a3b8" stroke-width="2"/>
+  <text x="72" y="112" text-anchor="end" font-family="Arial" font-size="16" fill="#475569">70</text>
+</svg>

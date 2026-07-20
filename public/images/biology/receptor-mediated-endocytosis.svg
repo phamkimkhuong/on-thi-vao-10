@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Nhập bào qua thụ thể và tái chế thụ thể</title>
+  <desc id="desc">Bốn bước từ ligand gắn thụ thể, màng lõm tạo túi, túi đi vào tế bào, đến phân loại ligand và tái chế thụ thể về màng.</desc>
+  <rect width="760" height="420" rx="18" fill="#f8fafc"/>
+  <text x="380" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#172033">Nhập bào qua thụ thể</text>
+  <path d="M40 150 C130 145 190 155 260 150 C330 145 405 155 480 150 C560 145 635 155 720 150" fill="none" stroke="#475569" stroke-width="12" stroke-linecap="round"/>
+  <path d="M265 150 C290 185 335 205 380 205 C425 205 470 185 495 150" fill="none" stroke="#475569" stroke-width="12" stroke-linecap="round"/>
+  <g fill="#2563eb" stroke="#1e3a8a" stroke-width="2">
+    <path d="M105 150 v-40 m-14 0 h28"/><path d="M310 168 v-42 m-14 0 h28"/><path d="M378 195 v-42 m-14 0 h28"/><path d="M450 168 v-42 m-14 0 h28"/>
+  </g>
+  <g fill="#f59e0b" stroke="#92400e" stroke-width="2">
+    <circle cx="105" cy="88" r="14"/><circle cx="310" cy="105" r="14"/><circle cx="378" cy="132" r="14"/><circle cx="450" cy="105" r="14"/>
+  </g>
+  <path d="M500 178 C530 205 528 245 500 270 C470 298 410 303 374 279 C338 255 340 218 365 202" fill="#dbeafe" stroke="#2563eb" stroke-width="4" stroke-dasharray="8 6"/>
+  <path d="M445 282 C445 330 390 345 330 326 C295 315 278 290 288 262" fill="none" stroke="#0f766e" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M290 260 C245 235 220 205 220 172" fill="none" stroke="#0f766e" stroke-width="4" marker-end="url(#arrow)"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0f766e"/></marker></defs>
+  <g font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">
+    <circle cx="105" cy="55" r="19" fill="#ede9fe"/><text x="105" y="61" fill="#5b21b6">1</text>
+    <circle cx="310" cy="55" r="19" fill="#ede9fe"/><text x="310" y="61" fill="#5b21b6">2</text>
+    <circle cx="535" cy="230" r="19" fill="#ede9fe"/><text x="535" y="236" fill="#5b21b6">3</text>
+    <circle cx="235" cy="310" r="19" fill="#dcfce7"/><text x="235" y="316" fill="#166534">4</text>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#334155" text-anchor="middle">
+    <text x="105" y="385">Ligand gắn thụ thể</text><text x="310" y="385">Gom cụm và lõm màng</text><text x="520" y="385">Tạo túi, phân loại</text><text x="235" y="355">Tái chế thụ thể</text>
+  </g>
+</svg>

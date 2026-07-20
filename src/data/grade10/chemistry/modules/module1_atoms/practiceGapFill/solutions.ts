@@ -1,0 +1,132 @@
+import type { Solution } from '@/types';
+
+const g = {
+  '1a': ['Đặc điểm hạt cơ bản', 'Lập bảng p/n/e theo ba cột: điện tích – khối lượng tương đối – vị trí.', 'ATOM-01: Proton, neutron, electron'],
+  '1b': ['Tính p, n, e và điện tích', 'Viết $p=Z$, $n=A-Z$; cation mất e, anion nhận e.', 'ATOM-02: Số hạt của nguyên tử và ion'],
+  '1c': ['Bài toán tổng số hạt', 'Đặt p=Z, viết e theo điện tích rồi chuyển từng dữ kiện thành phương trình.', 'ATOM-03: Lập hệ tổng số hạt'],
+  '1d': ['Kích thước và độ rỗng nguyên tử', 'So sánh lũy thừa kích thước; tách rõ nơi chứa khối lượng và phần chiếm thể tích.', 'ATOM-04: Kích thước nguyên tử'],
+  '2a': ['Đọc kí hiệu nguyên tử/ion', 'Đọc Z ở dưới, A ở trên; tính $n=A-Z$ và điều chỉnh e theo điện tích.', 'ATOM-05: Đọc kí hiệu hạt nhân'],
+  '2b': ['Viết kí hiệu nguyên tử/ion', 'Từ p suy Z và tên nguyên tố; tính A=p+n, điện tích bằng p−e.', 'ATOM-06: Viết kí hiệu tiểu phân'],
+  '2c': ['Nhận diện nguyên tố và đồng vị', 'So Z trước: cùng Z là cùng nguyên tố; cùng Z khác A là đồng vị.', 'ATOM-07: Nguyên tố và đồng vị'],
+  '2d': ['Tiểu phân đẳng electron', 'Tính riêng số e của từng tiểu phân; chỉ kết luận đẳng electron khi các kết quả bằng nhau.', 'ATOM-08: Đẳng electron'],
+  '3a': ['Khái niệm đồng vị và nguyên tử khối', 'Tách số khối của từng nuclide khỏi giá trị trung bình của cả mẫu tự nhiên.', 'ATOM-09: Đồng vị và giá trị trung bình'],
+  '3b': ['Trung bình đồng vị có trọng số', 'Đổi phần trăm/tỉ lệ thành trọng số rồi tính $\bar A=\sum A_ix_i$.', 'ATOM-10: Trung bình có trọng số'],
+  '3c': ['Bài toán ngược đồng vị', 'Đặt tỉ lệ chưa biết là x, tỉ lệ còn lại là 1−x rồi lập phương trình trung bình.', 'ATOM-11: Tìm độ phổ biến đồng vị'],
+  '3d': ['Đọc phổ khối lượng', 'Đọc m/z trên trục ngang và độ phổ biến tương đối từ chiều cao/cường độ đỉnh.', 'ATOM-12: Phổ khối lượng'],
+  '4a': ['Mô hình Rutherford–Bohr', 'Nhận diện các từ khóa quỹ đạo dừng, lớp và mức năng lượng; luôn ghi nhớ đây là mô hình đơn giản hóa.', 'ATOM-13: Mô hình Bohr'],
+  '4b': ['Mô hình nguyên tử hiện đại', 'Tìm mô tả bằng orbital/phân bố xác suất, không tìm một đường đi xác định.', 'ATOM-14: Mô hình xác suất'],
+  '4c': ['Quỹ đạo và orbital', 'Đối chiếu “đường chuyển động” với “vùng xác suất”; đây là hai khái niệm khác mô hình.', 'ATOM-15: Quỹ đạo không phải AO'],
+  '4d': ['Giá trị và giới hạn mô hình', 'Xác định mục đích giải thích trước, sau đó chọn mô hình phù hợp và nêu giới hạn.', 'ATOM-16: Dùng mô hình khoa học'],
+  '5a': ['Lớp – phân lớp – orbital', 'Dùng cây phân cấp: lớp n → các phân lớp → các AO; đừng coi ba cấp là một.', 'ATOM-17: Phân cấp lớp vỏ'],
+  '5c': ['Sức chứa của lớp electron', 'Với lớp n, số AO tối đa là $n^2$ và số electron tối đa là $2n^2$.', 'ATOM-18: Sức chứa lớp'],
+  '5d': ['Hình dạng và hướng AO', 'AO s có đối xứng cầu; ba AO p cùng dạng hai thùy nhưng khác hướng.', 'ATOM-19: Hình dạng AO s, p'],
+  '6a': ['Cấu hình electron nguyên tử', 'Tổng e=Z; điền theo thứ tự mức năng lượng và kiểm tra tổng số mũ.', 'ATOM-20: Viết cấu hình electron'],
+  '6b': ['Cấu hình electron ion', 'Tính số e của ion trước: cation bớt e, anion thêm e; sau đó mới viết cấu hình.', 'ATOM-21: Cấu hình ion'],
+  '6c': ['Sơ đồ ô orbital', 'Mỗi AO tối đa 2e ngược spin; trong các AO cùng mức, phân bố độc thân trước rồi ghép đôi.', 'ATOM-22: Pauli và Hund'],
+  '6d': ['Electron độc thân', 'Viết sơ đồ AO trạng thái cơ bản rồi đếm các ô có đúng một mũi tên.', 'ATOM-23: Đếm electron độc thân'],
+  '7a': ['Electron lớp ngoài cùng', 'Tìm n lớn nhất trong cấu hình và cộng mọi electron thuộc lớp n đó.', 'ATOM-24: Electron ngoài cùng'],
+  '7b': ['Phân loại từ cấu hình ngoài cùng', 'Đếm electron lớp ngoài cùng rồi dùng quy tắc dự đoán, có kiểm tra khí hiếm và ngoại lệ.', 'ATOM-25: Kim loại, phi kim, khí hiếm'],
+  '7c': ['Xu hướng nhường/nhận electron', 'So số electron cần mất hoặc nhận để đạt lớp ngoài cùng bền gần nhất.', 'ATOM-26: Xu hướng tạo ion'],
+  '7d': ['Ngoại lệ và suy luận có điều kiện', 'Nhận diện phát biểu tuyệt đối; kiểm tra H, He và trường hợp 4e ngoài cùng trước khi kết luận.', 'ATOM-27: Giới hạn quy tắc nhanh']
+} as const;
+
+type K = keyof typeof g;
+const z = (id: string, answer: string, k: K, application: string, mistake: string): Solution => {
+  const [name, start, route] = g[k];
+  return {
+    id: `${id}-solution`, questionId: id, recognition: `Dạng bài: ${name}`,
+    detailedSteps: [
+      { order: 1, title: 'Dấu hiệu nhận biết và cách bắt đầu', explanation: start },
+      { order: 2, title: 'Áp dụng vào câu hỏi', explanation: application }
+    ],
+    finalAnswer: answer, commonMistakes: [mistake], reviewSuggestions: [route]
+  };
+};
+
+export const m1GapFillSolutions: Solution[] = [
+  z('chem10-m1-gf001','A','1a','Proton dương và neutron trung hòa nằm trong hạt nhân; electron âm thuộc lớp vỏ.','Đặt neutron hoặc electron sai vị trí.'),
+  z('chem10-m1-gf002','C','1a','$m_e\approx m_p/1836$, nhỏ hơn rất nhiều khối lượng nucleon.','Coi electron nặng xấp xỉ proton.'),
+  z('chem10-m1-gf003','B','1a','Nguyên tử vẫn chứa điện tích; $p=e$ làm tổng đại số bằng 0.','Hiểu trung hòa là không có hạt mang điện.'),
+  z('chem10-m1-gf004','10','1b','$e=Z-3=13-3=10$.','Cation dương nhưng lại cộng electron.'),
+  z('chem10-m1-gf005','17','1b','Với $X^-$: $e=p+1$, nên $p=18-1=17$.','Cho p=e dù tiểu phân là ion.'),
+  z('chem10-m1-gf006','D','1b','$q=p-e=20-18=+2$, nên ion mang điện 2+.','Lấy e−p làm dấu điện tích ion.'),
+  z('chem10-m1-gf007','11','1c','Nguyên tử trung hòa: $2p+n=34$; thay $n=p+1$ được $3p+1=34$.','Mặc định n=p.'),
+  z('chem10-m1-gf008','35','1c','$2p+n=52$ và $2p-n=16$; suy ra p=17, n=18, nên A=35.','Nhầm “hạt mang điện” là p thay vì p+e.'),
+  z('chem10-m1-gf009','20','1c','Với $X^{2+}$, $e=p-2$; $p+n+e=60$ và $n=p+2$ cho p=20.','Không điều chỉnh e theo điện tích.'),
+  z('chem10-m1-gf010','A','1c','Nguyên tử trung hòa có p=e=Z nên tổng hạt bằng $2Z+n$.','Cho p=n=e trong mọi nguyên tử.'),
+  z('chem10-m1-gf011','C','1d','$10^{-10}/10^{-15}=10^5$.','Trừ số mũ sai chiều.'),
+  z('chem10-m1-gf012','B','1d','Đa số đi thẳng cho thấy phần lớn là rỗng; số ít lệch mạnh cho thấy hạt nhân nhỏ, đặc, dương.','Suy rằng hạt nhân chiếm gần hết thể tích.'),
+  z('chem10-m1-gf013','C','1d','Nucleon tạo gần hết khối lượng, còn vùng electron quyết định phần lớn kích thước nguyên tử.','Đồng nhất nơi chứa khối lượng với nơi chiếm thể tích.'),
+
+  z('chem10-m1-gf014','30','2a','$n=A-Z=56-26=30$.','Đọc 56 là số proton.'),
+  z('chem10-m1-gf015','A','2a','p=15; n=31−15=16; anion 3− có e=15+3=18.','Trừ electron khi gặp anion.'),
+  z('chem10-m1-gf016','B','2a','Điện tích 2+ nghĩa là đã mất 2e, nên e=Z−2.','Cộng 2 electron cho cation.'),
+  z('chem10-m1-gf017','57','2a','p=19, n=20, e=18; tổng bằng 57.','Quên K+ chỉ có 18 electron.'),
+  z('chem10-m1-gf018','A','2b','Z=12, A=24 và p−e=+2, nên $^{24}_{12}Mg^{2+}$.','Đặt số electron làm chỉ số Z.'),
+  z('chem10-m1-gf019','A','2b','Z=8 là O, A=18 và p−e=−2.','Viết dấu điện tích ngược.'),
+  z('chem10-m1-gf020','A','2c','Hai hạt cùng Z=17 nhưng A=35 và 37 nên là đồng vị.','Chọn cặp chỉ cùng số khối.'),
+  z('chem10-m1-gf021','C','2c','Hai hạt cùng A=40 nhưng Z khác nhau nên là hai nguyên tố khác, không phải đồng vị.','Coi cùng số khối là đồng vị.'),
+  z('chem10-m1-gf022','B','2c','Số proton Z là “căn cước” của nguyên tố.','Dùng số neutron hoặc A để định danh nguyên tố.'),
+  z('chem10-m1-gf023','A','2d','Na+ có 10e, Mg2+ có 10e và Ne có 10e.','So điện tích thay vì số electron.'),
+  z('chem10-m1-gf024','C','2d','8+2=10; 9+1=10; Ne=10; 11−1=10.','Kết luận đẳng electron là cùng proton.'),
+  z('chem10-m1-gf025','B','2d','Định nghĩa chỉ yêu cầu cùng số electron; hạt nhân và điện tích có thể khác.','Đồng nhất đẳng electron với đồng vị.'),
+  z('chem10-m1-gf026','13','2d','$X^{3+}$ có e=Z−3=10$, nên Z=13.','Lấy Z=10 vì bỏ qua điện tích.'),
+
+  z('chem10-m1-gf027','A','3a','Cùng Z giữ nguyên danh tính nguyên tố; khác neutron làm A khác.','Cho rằng khác neutron tạo nguyên tố khác.'),
+  z('chem10-m1-gf028','B','3a','35,45 là trung bình có trọng số của các đồng vị trong mẫu tự nhiên.','Gán 35,45 cho số khối của từng nguyên tử.'),
+  z('chem10-m1-gf029','A','3a','Cùng Z nên nguyên tử trung hòa có cùng số e và cấu hình electron tương tự.','Giải thích tính chất hóa học chủ yếu bằng neutron.'),
+  z('chem10-m1-gf030','C','3a','Trung bình có trọng số phải nằm trong miền giá trị của các thành phần.','Cho rằng trung bình luôn là số nguyên hay trùng một đồng vị.'),
+  z('chem10-m1-gf031','10.3','3b','$10\times0{,}70+11\times0{,}30=10{,}3$.','Lấy trung bình cộng 10,5.'),
+  z('chem10-m1-gf032','28.11','3b','$28(0{,}92)+29(0{,}05)+30(0{,}03)=28{,}11$.','Không đổi phần trăm thành phần thập phân.'),
+  z('chem10-m1-gf033','B','3b','Tỉ lệ 3:1 cho trọng số 3/4 và 1/4.','Lấy trung bình cộng dù độ phổ biến khác nhau.'),
+  z('chem10-m1-gf034','80%','3c','Đặt x là phần đồng vị 11: $10(1-x)+11x=10{,}8$, suy ra x=0,8.','Đặt hai phần trăm độc lập, không cho tổng bằng 1.'),
+  z('chem10-m1-gf035','80%','3c','Đặt x là phần 35: $35x+37(1-x)=35{,}4$, suy ra x=0,8.','Trả phần trăm đồng vị nặng thay vì đồng vị được hỏi.'),
+  z('chem10-m1-gf036','24','3c','$0{,}6A+0{,}4(A+2)=24{,}8$, nên A=24.','Quên nhân khoảng cách 2 với tỉ lệ đồng vị nặng.'),
+  z('chem10-m1-gf037','63.54','3c','Đồng vị 65 chiếm 54/200=0,27; trung bình $63(0,73)+65(0,27)=63,54$.','Dùng 54% thay vì 27%.'),
+  z('chem10-m1-gf038','B','3c','Trung bình bị kéo về phía giá trị có trọng số lớn hơn, nên H thường phổ biến hơn.','Cho rằng vị trí trung bình không liên quan độ phổ biến.'),
+  z('chem10-m1-gf039','B','3d','m/z=24 là đỉnh trái nhất và cường độ 79 là lớn nhất.','Coi chiều cao đỉnh là khối lượng hay số proton.'),
+
+  z('chem10-m1-gf040','A','4a','Mô hình Bohr dùng các quỹ đạo dừng gắn với mức năng lượng xác định.','Mô tả Bohr bằng vùng xác suất như mô hình hiện đại.'),
+  z('chem10-m1-gf041','B','4a','Chuyển xuống mức thấp hơn giải phóng chênh lệch năng lượng dưới dạng bức xạ.','Đảo chiều phát và hấp thụ.'),
+  z('chem10-m1-gf042','B','4a','Giá trị của mô hình nằm ở trực quan hóa lớp và mức năng lượng, không phải ảnh chụp.','Cho rằng hữu ích đồng nghĩa hoàn toàn chính xác.'),
+  z('chem10-m1-gf043','B','4a','Các vòng là kí hiệu lớp/mức năng lượng trong mô hình đơn giản.','Coi vòng tròn là đường ray thật của electron.'),
+  z('chem10-m1-gf044','B','4b','Mô hình hiện đại mô tả trạng thái bằng AO và xác suất tìm thấy.','Đòi một quỹ đạo hình học chính xác.'),
+  z('chem10-m1-gf045','B','4c','Quỹ đạo là đường xác định của mô hình Bohr; AO là vùng xác suất.','Dùng hai thuật ngữ thay thế nhau.'),
+  z('chem10-m1-gf046','C','4c','Bề mặt 90% là quy ước biểu diễn, không phải bức tường vật lí.','Cho rằng xác suất ngoài bề mặt bằng tuyệt đối 0.'),
+  z('chem10-m1-gf047','A','4d','Bohr phù hợp mục tiêu hình dung lớp nếu giáo viên nói rõ giới hạn đường quỹ đạo.','Loại bỏ mô hình hữu ích chỉ vì không đầy đủ.'),
+  z('chem10-m1-gf048','B','4d','Mỗi mô hình trả lời tốt một lớp câu hỏi trong phạm vi nhất định.','Coi mô hình là bản sao tuyệt đối của thực tại.'),
+
+  z('chem10-m1-gf049','A','5a','Số 3 chỉ lớp n=3; chữ p chỉ loại phân lớp.','Coi 3 là số electron.'),
+  z('chem10-m1-gf050','B','5a','Lớp 2 chứa 2s và 2p; phân lớp p lại gồm ba AO.','Đồng nhất phân lớp p với một orbital.'),
+  z('chem10-m1-gf051','B','5a','Một lớp gồm các phân lớp, một phân lớp gồm các orbital.','Đảo thứ bậc lớp và phân lớp.'),
+  z('chem10-m1-gf052','32','5c','$2n^2=2\times4^2=32$ electron.','Dùng n² và trả 16 electron.'),
+  z('chem10-m1-gf053','9','5c','Số AO tối đa của lớp n=3 là $n^2=9$.','Trả 18 là số electron tối đa.'),
+  z('chem10-m1-gf054','A','5d','AO s đối xứng cầu; ba AO p có dạng hai thùy theo ba trục.','Coi AO là đường tròn.'),
+  z('chem10-m1-gf055','B','5d','$p_x,p_y,p_z$ cùng dạng và sức chứa nhưng định hướng khác nhau.','Cho rằng chúng chứa số electron tối đa khác nhau.'),
+  z('chem10-m1-gf056','B','5d','Hình hai thùy biểu diễn miền xác suất của AO p.','Vẽ AO như quỹ đạo số 8.'),
+  z('chem10-m1-gf057','B','5d','Các nhãn x/y/z biểu thị hướng tương đối theo hệ trục đã chọn.','Coi mỗi hướng là một phân lớp năng lượng khác.'),
+
+  z('chem10-m1-gf058','A','6a','Điền 12e theo 1s→2s→2p→3s được $1s^22s^22p^63s^2$.','Điền 3p trước khi hoàn tất 3s.'),
+  z('chem10-m1-gf059','15','6a','Cộng số mũ: 2+2+6+2+3=15; nguyên tử trung hòa có Z=15.','Chỉ lấy số mũ cuối.'),
+  z('chem10-m1-gf060','A','6a','Cấu hình K kết thúc $3p^64s^1$ và tổng số mũ bằng 19.','Viết phân lớp p có 7 electron.'),
+  z('chem10-m1-gf061','B','6b','O2− có 8+2=10e, nên cấu hình kết thúc $2p^6$.','Trừ electron vì thấy số 2.'),
+  z('chem10-m1-gf062','B','6b','Ca mất hai electron 4s, còn cấu hình [Ar] với 18e.','Giữ nguyên 4s² của nguyên tử Ca.'),
+  z('chem10-m1-gf063','9','6b','Ion X− có 10e nên nguyên tử X có 9e, Z=9.','Cộng thêm một lần nữa và lấy Z=11.'),
+  z('chem10-m1-gf064','A','6c','Ba electron p đầu tiên chiếm ba AO riêng với spin song song.','Ghép đôi ngay ở AO thứ nhất.'),
+  z('chem10-m1-gf065','B','6c','Hai electron trong một AO phải ngược spin; [↑↑] vi phạm Pauli.','Nhầm Pauli với quy tắc thứ tự mức năng lượng.'),
+  z('chem10-m1-gf066','A','6c','Với p², Hund yêu cầu hai electron độc thân, spin song song ở hai AO.','Ghép đôi trước khi điền AO trống.'),
+  z('chem10-m1-gf067','B','6c','p⁴ đúng phải có ba AO đều được chiếm trước, rồi mới ghép một cặp.','Cho rằng đủ tổng 4e là sơ đồ nào cũng đúng.'),
+  z('chem10-m1-gf068','3','6d','N có $2p^3=[↑][↑][↑]$, nên có 3 electron độc thân.','Đếm số AO thay vì ô có một electron.'),
+  z('chem10-m1-gf069','2','6d','S có $3p^4=[↑↓][↑][↑]$, còn 2 electron độc thân.','Cho p⁴ có 4 electron độc thân.'),
+  z('chem10-m1-gf070','B','6d','Sơ đồ AO cho thấy trực tiếp orbital nào chỉ có một electron; Pauli và Hund bảo đảm sơ đồ trạng thái cơ bản.','Suy số electron độc thân chỉ từ số mũ mà không xét cách phân bố.'),
+
+  z('chem10-m1-gf071','4','7a','Lớp có n lớn nhất là 3; $3s^2+3p^2$ cho 4e ngoài cùng.','Chỉ lấy 2e ở phân lớp viết cuối.'),
+  z('chem10-m1-gf072','A','7a','“Lớp ngoài cùng” là toàn bộ electron có n lớn nhất.','Đồng nhất phân lớp cuối với lớp ngoài cùng.'),
+  z('chem10-m1-gf073','B','7b','Bảy electron ngoài cùng là cấu hình điển hình của phi kim halogen.','Coi nhiều electron ngoài cùng là kim loại.'),
+  z('chem10-m1-gf074','A','7b','3s¹ thường kim loại; 3s²3p⁴ phi kim; 3s²3p⁶ khí hiếm.','Phân loại chỉ theo số lớp electron.'),
+  z('chem10-m1-gf075','B','7c','Mg mất 2e 3s để đạt cấu hình khí hiếm gần nhất, tạo Mg2+.','Cho Mg nhận 6e vì chỉ đếm đến octet.'),
+  z('chem10-m1-gf076','A','7d','Lớp K chỉ chứa tối đa 2e nên 1s² đã bão hòa.','Bắt He phải đủ 8 electron.'),
+  z('chem10-m1-gf077','C','7d','Bốn electron ngoài cùng nằm ở vùng ranh giới; cần thêm vị trí/nguyên tố cụ thể.','Áp quy tắc 1–3/5–7 như định luật tuyệt đối.'),
+  z('chem10-m1-gf078','B','7d','H có cấu trúc chỉ một lớp và tính chất liên kết đặc thù dù cùng dạng ns¹.','Xếp H hoàn toàn giống kim loại kiềm.'),
+  z('chem10-m1-gf079','A','7d','Quy tắc là dự đoán nhanh trong phạm vi; H là phản ví dụ quan trọng.','Biến quy tắc kinh nghiệm thành kết luận không ngoại lệ.')
+];

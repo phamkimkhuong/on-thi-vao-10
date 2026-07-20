@@ -9,10 +9,12 @@ interface AppState {
 
   // Auth state
   user: User | null;
+  userData: any | null;
   authLoading: boolean;
   isPremium: boolean;
   trialActivated: boolean;
   premiumUntil: string | null;
+  isProfileModalOpen: boolean;
 
   // Reactivity trigger for LocalStorage progress changes
   progressVersion: number;
@@ -33,6 +35,7 @@ interface AppState {
   setPremium: (isPremium: boolean) => void;
   setAuthLoading: (loading: boolean) => void;
   logout: () => Promise<void>;
+  setIsProfileModalOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => {
@@ -51,12 +54,14 @@ export const useAppStore = create<AppState>((set) => {
 
     // Auth initial state
     user: null,
+    userData: null,
     authLoading: true,
     progressVersion: 0,
     isPremium: false,
     trialActivated: false,
     premiumUntil: null,
     isLoadingData: true,
+    isProfileModalOpen: false,
 
     toggleDarkMode: () => {
       if (typeof document !== 'undefined') {
@@ -87,8 +92,12 @@ export const useAppStore = create<AppState>((set) => {
       const { signOut } = await import('firebase/auth');
       const { auth } = await import('./firebase');
       await signOut(auth);
-      set({ user: null });
-    }
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('ezonthi_profile_auto_opened');
+      }
+      set({ user: null, userData: null });
+    },
+    setIsProfileModalOpen: (open) => set({ isProfileModalOpen: open })
   };
 });
 export default useAppStore;

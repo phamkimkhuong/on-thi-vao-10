@@ -1,7 +1,7 @@
 import type { Solution } from '@/types';
 const s=(q:string,a:string,e:string,m:string):Solution=>({id:`${q}-solution`,questionId:q,recognition:'Vận dụng quy luật và phản ứng của halogen.',detailedSteps:[{order:1,title:'Phân tích',explanation:e}],finalAnswer:a,commonMistakes:[m],reviewSuggestions:['Liên hệ cấu hình, xu hướng oxi hóa và hiện tượng thực nghiệm.']});
 export const m7ExpansionSolutions:Solution[]=[
- s('chem10-m7-qt30-e1','C','Halogen thiếu 1e để đạt octet nên có cấu hình ngoài cùng $ns^2np^5$.','Nhầm nhóm VIIA với 7 electron chỉ ở phân lớp p.'),
+ s('chem10-m7-qt30-e1','C','Số lượng tử lớp ngoài n=3 cho chu kì 3; $3s^23p^5$ có 7e ngoài cùng nên X thuộc nhóm VIIA, tức halogen.','Chỉ nhìn số mũ p⁵ rồi quên cộng hai electron 3s.'),
  s('chem10-m7-qt30-e2','B','Xuống nhóm, số electron và kích thước đám mây tăng, lực London mạnh hơn nên nhiệt độ sôi tăng.','Dùng tính oxi hóa để giải thích trực tiếp nhiệt độ sôi.'),
  s('chem10-m7-qt30-e3','B','Xuống nhóm: thêm lớp electron làm bán kính tăng; khả năng nhận electron giảm; lực London tăng nên nhiệt độ sôi tăng.','Cho rằng mọi tính chất biến đổi cùng chiều.'),
  s('chem10-m7-qt31-e1','C','$Cl_2$ oxi hóa $I^-$ thành $I_2$: $Cl_2+2I^-\\to2Cl^-+I_2$.','Chọn halogen có tính oxi hóa mạnh hơn làm sản phẩm.'),

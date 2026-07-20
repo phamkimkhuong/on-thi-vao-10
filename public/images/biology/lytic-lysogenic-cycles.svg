@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="440" viewBox="0 0 760 440" role="img" aria-labelledby="title desc">
+  <title id="title">Chu trình tan và chu trình tiềm tan của phage</title>
+  <desc id="desc">Sau khi genome phage vào vi khuẩn, nhánh tiềm tan tích hợp và sao chép cùng tế bào; nhánh tan tổng hợp, lắp ráp và ly giải. Stress có thể cảm ứng từ tiềm tan sang tan.</desc>
+  <rect width="760" height="440" rx="18" fill="#f8fafc"/>
+  <text x="380" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#172033">Hai hướng phát triển của phage</text>
+  <defs><marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker></defs>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="275" y="62" width="210" height="55" rx="14" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/><text x="380" y="85" font-size="15" font-weight="700" fill="#075985">Genome phage vào tế bào</text><text x="380" y="104" font-size="12" fill="#334155">Sau bám và xâm nhập</text>
+    <path d="M335 118 C290 150 230 160 190 185" fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow2)"/>
+    <path d="M425 118 C470 150 530 160 570 185" fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow2)"/>
+    <rect x="60" y="190" width="260" height="175" rx="18" fill="#ecfdf5" stroke="#059669" stroke-width="3"/>
+    <text x="190" y="220" font-size="17" font-weight="700" fill="#065f46">Nhánh I — Tiềm tan</text>
+    <text x="190" y="252" font-size="14" fill="#334155">Genome phage tích hợp/duy trì</text>
+    <text x="190" y="279" font-size="14" fill="#334155">Sao chép cùng tế bào chủ</text>
+    <text x="190" y="306" font-size="14" fill="#334155">Chưa ly giải hàng loạt</text>
+    <rect x="440" y="190" width="260" height="175" rx="18" fill="#fff1f2" stroke="#e11d48" stroke-width="3"/>
+    <text x="570" y="220" font-size="17" font-weight="700" fill="#9f1239">Nhánh II — Chu trình tan</text>
+    <text x="570" y="252" font-size="14" fill="#334155">Sinh tổng hợp thành phần</text>
+    <text x="570" y="279" font-size="14" fill="#334155">Lắp ráp phage mới</text>
+    <text x="570" y="306" font-size="14" fill="#334155">Ly giải và giải phóng</text>
+    <path d="M310 332 C380 398 450 375 470 345" fill="none" stroke="#7c3aed" stroke-width="4" stroke-dasharray="9 6" marker-end="url(#arrow2)"/>
+    <text x="385" y="405" font-size="14" font-weight="700" fill="#6d28d9">Cảm ứng do stress</text>
+  </g>
+</svg>

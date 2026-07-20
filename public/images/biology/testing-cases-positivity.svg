@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430" role="img" aria-labelledby="title desc">
+  <title id="title">Số xét nghiệm và ca dương tính tăng song song</title>
+  <desc id="desc">Qua ba tuần, chỉ số số xét nghiệm và số ca dương tính cùng tăng từ 100 lên 200 rồi 300 so với tuần đầu, trong khi tỷ lệ dương tính luôn là 5 phần trăm.</desc>
+  <rect width="760" height="430" rx="24" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Quy mô xét nghiệm và số ca phát hiện</text>
+  <text x="380" y="61" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Chỉ số chuẩn hóa: tuần 1 = 100</text>
+  <g stroke="#e2e8f0" stroke-width="1"><line x1="95" y1="330" x2="700" y2="330"/><line x1="95" y1="250" x2="700" y2="250"/><line x1="95" y1="170" x2="700" y2="170"/><line x1="95" y1="90" x2="700" y2="90"/></g>
+  <line x1="95" y1="330" x2="708" y2="330" stroke="#334155" stroke-width="3"/><line x1="95" y1="335" x2="95" y2="82" stroke="#334155" stroke-width="3"/>
+  <g font-family="Arial, sans-serif" font-size="14" fill="#475569"><text x="80" y="335" text-anchor="end">0</text><text x="80" y="255" text-anchor="end">100</text><text x="80" y="175" text-anchor="end">200</text><text x="80" y="95" text-anchor="end">300</text></g>
+  <g>
+    <rect x="155" y="250" width="54" height="80" rx="5" fill="#60a5fa"/><rect x="215" y="250" width="54" height="80" rx="5" fill="#fb7185"/>
+    <rect x="335" y="170" width="54" height="160" rx="5" fill="#60a5fa"/><rect x="395" y="170" width="54" height="160" rx="5" fill="#fb7185"/>
+    <rect x="515" y="90" width="54" height="240" rx="5" fill="#60a5fa"/><rect x="575" y="90" width="54" height="240" rx="5" fill="#fb7185"/>
+  </g>
+  <g font-family="Arial, sans-serif" text-anchor="middle" fill="#334155"><text x="212" y="354" font-size="16" font-weight="700">Tuần 1</text><text x="392" y="354" font-size="16" font-weight="700">Tuần 2</text><text x="572" y="354" font-size="16" font-weight="700">Tuần 3</text><text x="212" y="378" font-size="14">1.000 test · 50 ca</text><text x="392" y="378" font-size="14">2.000 test · 100 ca</text><text x="572" y="378" font-size="14">3.000 test · 150 ca</text></g>
+  <rect x="218" y="397" width="324" height="25" rx="12" fill="#dcfce7" stroke="#22c55e"/><text x="380" y="415" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#166534">Tỷ lệ dương tính mỗi tuần: 5%</text>
+  <g font-family="Arial, sans-serif" font-size="14" font-weight="700"><rect x="520" y="18" width="14" height="14" rx="2" fill="#60a5fa"/><text x="540" y="30" fill="#1e40af">Xét nghiệm</text><rect x="620" y="18" width="14" height="14" rx="2" fill="#fb7185"/><text x="640" y="30" fill="#9f1239">Ca dương</text></g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430" role="img" aria-labelledby="title desc">
+  <title id="title">Nhiệt độ và mức rò sắc tố qua màng</title>
+  <desc id="desc">Rò sắc tố thấp từ 20 đến 40 độ C, tăng ở 50 độ C, tăng mạnh ở 60 và 70 độ C. Điểm 70 độ C có thanh sai số lớn nhất.</desc>
+  <rect width="760" height="430" rx="18" fill="#f8fafc"/>
+  <text x="380" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#172033">Tác động nhiệt lên độ thấm màng</text>
+  <g stroke="#d9e2ec" stroke-width="1"><line x1="95" y1="90" x2="700" y2="90"/><line x1="95" y1="150" x2="700" y2="150"/><line x1="95" y1="210" x2="700" y2="210"/><line x1="95" y1="270" x2="700" y2="270"/><line x1="95" y1="330" x2="700" y2="330"/></g>
+  <g stroke="#475569" stroke-width="2"><line x1="95" y1="70" x2="95" y2="330"/><line x1="95" y1="330" x2="700" y2="330"/></g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#475569"><text x="80" y="335" text-anchor="end">0</text><text x="80" y="275" text-anchor="end">25</text><text x="80" y="215" text-anchor="end">50</text><text x="80" y="155" text-anchor="end">75</text><text x="80" y="95" text-anchor="end">100</text><text x="395" y="398" text-anchor="middle" font-size="15">Nhiệt độ (°C)</text><text transform="translate(24 210) rotate(-90)" text-anchor="middle" font-size="15">Rò sắc tố tương đối</text></g>
+  <polyline points="150,311 250,307 350,299 450,258 550,167 650,131" fill="none" stroke="#dc2626" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#7f1d1d" stroke-width="2"><line x1="150" y1="305" x2="150" y2="317"/><line x1="250" y1="300" x2="250" y2="314"/><line x1="350" y1="289" x2="350" y2="309"/><line x1="450" y1="243" x2="450" y2="273"/><line x1="550" y1="145" x2="550" y2="189"/><line x1="650" y1="91" x2="650" y2="171"/></g>
+  <g fill="#ef4444" stroke="#7f1d1d" stroke-width="2"><circle cx="150" cy="311" r="7"/><circle cx="250" cy="307" r="7"/><circle cx="350" cy="299" r="7"/><circle cx="450" cy="258" r="7"/><circle cx="550" cy="167" r="7"/><circle cx="650" cy="131" r="7"/></g>
+  <g font-family="Arial, sans-serif" font-size="12" fill="#475569"><text x="150" y="352" text-anchor="middle">20</text><text x="250" y="352" text-anchor="middle">30</text><text x="350" y="352" text-anchor="middle">40</text><text x="450" y="352" text-anchor="middle">50</text><text x="550" y="352" text-anchor="middle">60</text><text x="650" y="352" text-anchor="middle">70</text></g>
+</svg>

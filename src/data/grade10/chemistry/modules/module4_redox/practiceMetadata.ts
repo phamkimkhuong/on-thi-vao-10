@@ -1,0 +1,52 @@
+import type { QuestionPracticeMetadata } from '@/types';
+
+/** Ánh xạ tường minh câu hiện có; không suy dạng con từ thứ tự ID. */
+export const m4PracticeMetadata: QuestionPracticeMetadata[] = [
+  { questionId: 'chem10-q18a', subTypeId: 'chem10-qt18-st2', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q18b', subTypeId: 'chem10-qt18-st3', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q18c', subTypeId: 'chem10-qt18-st2', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q18d', subTypeId: 'chem10-qt18-st3', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q18e', subTypeId: 'chem10-qt18-st4', practiceRole: 'misconception_check', representationType: 'equation' },
+  { questionId: 'chem10-q18-reinforce-concept', subTypeId: 'chem10-qt18-st1', practiceRole: 'guided', representationType: 'text' },
+  { questionId: 'chem10-q18-reinforce-process', subTypeId: 'chem10-qt18-st2', practiceRole: 'representation_switch', representationType: 'equation' },
+  { questionId: 'chem10-q18-reinforce-misconception', subTypeId: 'chem10-qt18-st4', practiceRole: 'misconception_check', representationType: 'text' },
+  { questionId: 'chem10-m4-qt18-e1', subTypeId: 'chem10-qt18-st2', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt18-e2', subTypeId: 'chem10-qt18-st3', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt18-e3', subTypeId: 'chem10-qt18-st4', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+
+  { questionId: 'chem10-q19a', subTypeId: 'chem10-qt19-st2', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q19b', subTypeId: 'chem10-qt19-st3', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q19c', subTypeId: 'chem10-qt19-st2', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q19d', subTypeId: 'chem10-qt19-st3', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q19e', subTypeId: 'chem10-qt19-st1', practiceRole: 'far_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q19-reinforce-concept', subTypeId: 'chem10-qt19-st1', practiceRole: 'guided', representationType: 'text' },
+  { questionId: 'chem10-q19-reinforce-process', subTypeId: 'chem10-qt19-st1', practiceRole: 'representation_switch', representationType: 'equation' },
+  { questionId: 'chem10-q19-reinforce-misconception', subTypeId: 'chem10-qt19-st1', practiceRole: 'misconception_check', representationType: 'text' },
+  { questionId: 'chem10-m4-qt19-e1', subTypeId: 'chem10-qt19-st3', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt19-e2', subTypeId: 'chem10-qt19-st2', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt19-e3', subTypeId: 'chem10-qt19-st1', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+
+  { questionId: 'chem10-q20a', subTypeId: 'chem10-qt20-st2', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q20b', subTypeId: 'chem10-qt20-st1', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q20c', subTypeId: 'chem10-qt20-st2', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q20d', subTypeId: 'chem10-qt20-st1', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q20e', subTypeId: 'chem10-qt20-st3', practiceRole: 'misconception_check', representationType: 'text' },
+  { questionId: 'chem10-q20-reinforce-concept', subTypeId: 'chem10-qt20-st3', practiceRole: 'guided', representationType: 'text' },
+  { questionId: 'chem10-q20-reinforce-process', subTypeId: 'chem10-qt20-st3', practiceRole: 'representation_switch', representationType: 'table' },
+  { questionId: 'chem10-q20-reinforce-misconception', subTypeId: 'chem10-qt20-st3', practiceRole: 'misconception_check', representationType: 'text' },
+  { questionId: 'chem10-m4-qt20-e1', subTypeId: 'chem10-qt20-st1', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt20-e2', subTypeId: 'chem10-qt20-st3', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt20-e3', subTypeId: 'chem10-qt20-st4', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+
+  { questionId: 'chem10-q21a', subTypeId: 'chem10-qt21-st1', practiceRole: 'guided', representationType: 'equation' },
+  { questionId: 'chem10-q21b', subTypeId: 'chem10-qt21-st1', practiceRole: 'near_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q21c', subTypeId: 'chem10-qt21-st2', practiceRole: 'far_transfer', representationType: 'equation' },
+  { questionId: 'chem10-q21d', subTypeId: 'chem10-qt21-st1', practiceRole: 'retention', representationType: 'equation' },
+  { questionId: 'chem10-q21e', subTypeId: 'chem10-qt21-st4', practiceRole: 'guided', representationType: 'text' },
+  { questionId: 'chem10-q21-reinforce-concept', subTypeId: 'chem10-qt21-st4', practiceRole: 'guided', representationType: 'text' },
+  { questionId: 'chem10-q21-reinforce-process', subTypeId: 'chem10-qt21-st4', practiceRole: 'representation_switch', representationType: 'equation' },
+  { questionId: 'chem10-q21-reinforce-misconception', subTypeId: 'chem10-qt21-st4', practiceRole: 'misconception_check', representationType: 'text' },
+  { questionId: 'chem10-m4-qt21-e1', subTypeId: 'chem10-qt21-st1', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt21-e2', subTypeId: 'chem10-qt21-st2', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true },
+  { questionId: 'chem10-m4-qt21-e3', subTypeId: 'chem10-qt21-st2', practiceRole: 'mastery_holdout', representationType: 'equation', isMasteryHoldout: true }
+];

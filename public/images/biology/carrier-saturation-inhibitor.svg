@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đường cong bão hòa vận chuyển khi có và không có chất ức chế</title>
+  <desc id="desc">Tốc độ vận chuyển tăng theo nồng độ chất S rồi đạt trần. Đối chứng đạt trần gần 100 đơn vị, còn nhóm có chất ức chế đạt trần gần 50 đơn vị.</desc>
+  <rect width="760" height="420" rx="24" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Bão hòa protein vận chuyển</text>
+  <g stroke="#e2e8f0" stroke-width="1">
+    <line x1="100" y1="320" x2="700" y2="320"/><line x1="100" y1="255" x2="700" y2="255"/>
+    <line x1="100" y1="190" x2="700" y2="190"/><line x1="100" y1="125" x2="700" y2="125"/>
+    <line x1="100" y1="60" x2="700" y2="60"/>
+  </g>
+  <line x1="100" y1="320" x2="708" y2="320" stroke="#334155" stroke-width="3"/>
+  <line x1="100" y1="326" x2="100" y2="52" stroke="#334155" stroke-width="3"/>
+  <g font-family="Arial, sans-serif" font-size="14" fill="#475569">
+    <text x="84" y="325" text-anchor="end">0</text><text x="84" y="260" text-anchor="end">25</text>
+    <text x="84" y="195" text-anchor="end">50</text><text x="84" y="130" text-anchor="end">75</text><text x="84" y="65" text-anchor="end">100</text>
+    <text x="100" y="345" text-anchor="middle">0</text><text x="220" y="345" text-anchor="middle">2</text>
+    <text x="340" y="345" text-anchor="middle">4</text><text x="460" y="345" text-anchor="middle">6</text>
+    <text x="580" y="345" text-anchor="middle">8</text><text x="700" y="345" text-anchor="middle">10</text>
+  </g>
+  <text x="400" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#334155">Nồng độ chất S (đơn vị tương đối)</text>
+  <text x="27" y="190" text-anchor="middle" transform="rotate(-90 27 190)" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#334155">Tốc độ vận chuyển</text>
+  <path d="M100 320 C150 255 185 165 255 107 C330 47 475 60 700 60" fill="none" stroke="#2563eb" stroke-width="5"/>
+  <path d="M100 320 C148 284 185 237 250 211 C340 176 490 190 700 190" fill="none" stroke="#e11d48" stroke-width="5"/>
+  <line x1="100" y1="60" x2="700" y2="60" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="7 7" opacity="0.55"/>
+  <line x1="100" y1="190" x2="700" y2="190" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="7 7" opacity="0.55"/>
+  <rect x="500" y="95" width="180" height="68" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+  <line x1="516" y1="118" x2="550" y2="118" stroke="#2563eb" stroke-width="5"/><text x="560" y="124" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#1e40af">Đối chứng</text>
+  <line x1="516" y1="143" x2="550" y2="143" stroke="#e11d48" stroke-width="5"/><text x="560" y="149" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#9f1239">Có ức chế</text>
+</svg>

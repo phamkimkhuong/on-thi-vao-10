@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="400" viewBox="0 0 760 400" role="img" aria-labelledby="title desc">
+  <title id="title">Ba cổng quyết định virus nhiễm tế bào hiệu quả</title>
+  <desc id="desc">Virus lần lượt phải gắn đúng thụ thể, được hoạt hóa hoặc xâm nhập nhờ yếu tố tế bào, rồi sử dụng được môi trường nội bào để sao chép và lắp ráp.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#475569"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.12"/></filter>
+  </defs>
+  <rect width="760" height="400" rx="24" fill="#f8fafc"/>
+  <text x="380" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Ba “cổng” của quá trình nhiễm virus</text>
+  <circle cx="65" cy="205" r="32" fill="#fee2e2" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="51" cy="192" r="5" fill="#dc2626"/><circle cx="77" cy="188" r="5" fill="#dc2626"/><circle cx="82" cy="216" r="5" fill="#dc2626"/><circle cx="53" cy="221" r="5" fill="#dc2626"/>
+  <text x="65" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#991b1b">Virus</text>
+  <line x1="100" y1="205" x2="145" y2="205" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)">
+    <rect x="155" y="105" width="160" height="200" rx="20" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+    <rect x="345" y="105" width="160" height="200" rx="20" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+    <rect x="535" y="105" width="180" height="200" rx="20" fill="#f3e8ff" stroke="#9333ea" stroke-width="3"/>
+  </g>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="235" y="138" font-size="18" font-weight="700" fill="#1e40af">CỔNG 1</text>
+    <text x="235" y="174" font-size="17" font-weight="700" fill="#1e3a8a">Gắn thụ thể</text>
+    <path d="M205 208 q30 -30 60 0 q-30 30 -60 0" fill="none" stroke="#2563eb" stroke-width="5"/>
+    <text x="235" y="257" font-size="14" fill="#334155">Protein virus khớp</text><text x="235" y="277" font-size="14" fill="#334155">thụ thể tế bào</text>
+    <text x="425" y="138" font-size="18" font-weight="700" fill="#166534">CỔNG 2</text>
+    <text x="425" y="174" font-size="17" font-weight="700" fill="#14532d">Hoạt hóa / xâm nhập</text>
+    <path d="M395 220 l25 -25 l20 18 l25 -32" fill="none" stroke="#16a34a" stroke-width="5"/>
+    <text x="425" y="257" font-size="14" fill="#334155">Protease và điều kiện</text><text x="425" y="277" font-size="14" fill="#334155">của tế bào chủ</text>
+    <text x="625" y="138" font-size="18" font-weight="700" fill="#6b21a8">CỔNG 3</text>
+    <text x="625" y="174" font-size="17" font-weight="700" fill="#581c87">Sao chép / lắp ráp</text>
+    <path d="M590 213 C603 183 622 244 638 202 C651 168 668 229 681 198" fill="none" stroke="#9333ea" stroke-width="5"/>
+    <text x="625" y="257" font-size="14" fill="#334155">Yếu tố nội bào</text><text x="625" y="277" font-size="14" fill="#334155">tương thích</text>
+  </g>
+  <line x1="315" y1="205" x2="338" y2="205" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="505" y1="205" x2="528" y2="205" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="380" y="354" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#334155">Có thụ thể là điều kiện cần, nhưng chưa đủ để virus hoàn tất chu trình</text>
+</svg>

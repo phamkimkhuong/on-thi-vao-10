@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Chuyển nhân tế bào soma</title>
+  <desc id="desc">Nhân từ tế bào soma được đưa vào trứng đã bỏ nhân, sau đó tế bào được hoạt hóa và phát triển thành phôi sớm.</desc>
+  <rect width="720" height="420" rx="28" fill="#f8fafc"/>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker></defs>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <circle cx="105" cy="130" r="58" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/><circle cx="105" cy="130" r="20" fill="#2563eb"/>
+    <text x="105" y="218" font-size="19" fill="#1e3a8a">Tế bào soma</text><text x="105" y="244" font-size="16" fill="#475569">lấy nhân</text>
+    <circle cx="285" cy="130" r="65" fill="#fef3c7" stroke="#d97706" stroke-width="4"/><circle cx="285" cy="130" r="21" fill="none" stroke="#d97706" stroke-width="3" stroke-dasharray="5 5"/>
+    <text x="285" y="218" font-size="19" fill="#92400e">Trứng bỏ nhân</text>
+    <circle cx="475" cy="130" r="65" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/><circle cx="475" cy="130" r="20" fill="#2563eb"/>
+    <text x="475" y="218" font-size="19" fill="#166534">Tế bào tái cấu trúc</text><text x="475" y="244" font-size="16" fill="#475569">hoạt hóa</text>
+    <g fill="#ede9fe" stroke="#7c3aed" stroke-width="3"><circle cx="610" cy="100" r="30"/><circle cx="665" cy="100" r="30"/><circle cx="610" cy="155" r="30"/><circle cx="665" cy="155" r="30"/></g>
+    <text x="638" y="218" font-size="19" fill="#5b21b6">Phôi sớm</text><text x="638" y="244" font-size="16" fill="#475569">phân chia</text>
+  </g>
+  <g stroke="#64748b" stroke-width="4" fill="none" marker-end="url(#arrow)"><path d="M165 130 H215"/><path d="M350 130 H400"/><path d="M540 130 H570"/></g>
+  <path d="M638 260 V310 H460" stroke="#64748b" stroke-width="4" fill="none" marker-end="url(#arrow)"/><path d="M638 310 H675 V360 H550" stroke="#64748b" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <g font-family="Arial, sans-serif" font-size="18"><rect x="190" y="305" width="270" height="65" rx="16" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/><text x="325" y="333" text-anchor="middle" fill="#075985">Tạo tế bào gốc/mô</text><text x="325" y="357" text-anchor="middle" fill="#475569">mục tiêu trị liệu, nghiên cứu</text><rect x="550" y="330" width="145" height="58" rx="16" fill="#fae8ff" stroke="#a21caf" stroke-width="3"/><text x="622" y="365" text-anchor="middle" fill="#701a75">Tạo cá thể</text></g>
+</svg>

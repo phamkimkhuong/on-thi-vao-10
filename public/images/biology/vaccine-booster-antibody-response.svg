@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đáp ứng kháng thể sau liều cơ bản và liều nhắc</title>
+  <desc id="desc">Sau liều đầu, kháng thể tăng chậm đến mức vừa rồi giảm. Sau liều nhắc ở tuần 12, kháng thể tăng nhanh hơn và đạt đỉnh cao hơn.</desc>
+  <rect width="760" height="420" rx="18" fill="#f8fafc"/>
+  <text x="380" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#172033">Đáp ứng miễn dịch theo thời gian</text>
+  <g stroke="#d9e2ec" stroke-width="1"><line x1="90" y1="90" x2="700" y2="90"/><line x1="90" y1="150" x2="700" y2="150"/><line x1="90" y1="210" x2="700" y2="210"/><line x1="90" y1="270" x2="700" y2="270"/><line x1="90" y1="330" x2="700" y2="330"/></g>
+  <g stroke="#475569" stroke-width="2"><line x1="90" y1="70" x2="90" y2="330"/><line x1="90" y1="330" x2="700" y2="330"/></g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#475569"><text x="74" y="335" text-anchor="end">0</text><text x="74" y="275" text-anchor="end">25</text><text x="74" y="215" text-anchor="end">50</text><text x="74" y="155" text-anchor="end">75</text><text x="74" y="95" text-anchor="end">100</text><text x="395" y="388" text-anchor="middle" font-size="15">Tuần</text><text transform="translate(23 210) rotate(-90)" text-anchor="middle" font-size="15">Kháng thể tương đối</text></g>
+  <polyline points="105,322 155,300 205,240 255,218 305,245 355,275 405,292 455,165 505,93 555,112 605,145 655,180 700,205" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#dc2626" stroke-width="3"><line x1="105" y1="330" x2="105" y2="275"/><line x1="405" y1="330" x2="405" y2="275"/></g>
+  <g fill="#dc2626"><path d="M105 268 l-8 14 h16 z"/><path d="M405 268 l-8 14 h16 z"/></g>
+  <g font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#991b1b"><text x="120" y="305">Liều cơ bản</text><text x="420" y="305">Liều nhắc</text></g>
+  <g font-family="Arial, sans-serif" font-size="12" fill="#475569"><text x="105" y="352" text-anchor="middle">0</text><text x="205" y="352" text-anchor="middle">4</text><text x="305" y="352" text-anchor="middle">8</text><text x="405" y="352" text-anchor="middle">12</text><text x="505" y="352" text-anchor="middle">16</text><text x="605" y="352" text-anchor="middle">20</text><text x="700" y="352" text-anchor="middle">24</text></g>
+</svg>

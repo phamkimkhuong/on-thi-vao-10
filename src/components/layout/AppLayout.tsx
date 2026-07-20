@@ -23,6 +23,7 @@ import { progressService } from '../../services/progressService';
 import { authService } from '../../services/authService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { PolicyModal } from '../common/PolicyModal';
+import { ProfileModal } from '../common/ProfileModal';
 import { cn } from '../../utils/cn';
 import { getQuestionTypes, loadSubjectData } from '../../data';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
@@ -37,11 +38,12 @@ export const AppLayout: React.FC = () => {
     selectedGrade,
     setGrade,
     user,
-    logout,
     progressVersion,
     isPremium,
     isLoadingData,
-    setIsLoadingData
+    setIsLoadingData,
+    isProfileModalOpen,
+    setIsProfileModalOpen
   } = useAppStore();
   void progressVersion;
 
@@ -491,49 +493,35 @@ export const AppLayout: React.FC = () => {
             {user ? (
               <>
                 <div
-                  className={cn(
-                    "w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center border shrink-0 cursor-pointer transition-transform hover:scale-105 active:scale-95",
-                    isPremium ? "border-amber-400/60 shadow-md shadow-amber-400/10" : "border-primary/20"
-                  )}
-                  title={`${user.displayName || 'Học sinh'} (${user.email})`}
-                  onClick={() => {
-                    if (isSidebarCollapsed && window.confirm("Đăng xuất tài khoản?")) {
-                      logout();
-                      navigate('/dashboard');
-                    }
-                  }}
+                  className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-xl transition-all"
+                  onClick={() => setIsProfileModalOpen(true)}
+                  title="Cài đặt tài khoản"
                 >
-                  <span className={cn("text-xs font-black", isPremium ? "text-amber-500" : "text-primary")}>
-                    {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
-                  </span>
-                </div>
-                {!isSidebarCollapsed ? (
-                  <div className="flex flex-col min-w-0 flex-1 text-left">
-                    <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
-                      {user.displayName || 'Học sinh'}
-                      {isPremium && (
-                        <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PRO</span>
-                      )}
-                    </span>
-                    <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
-                    <button
-                      onClick={() => { logout(); setIsSidebarOpen(false); navigate('/dashboard'); }}
-                      aria-label="Đăng xuất tài khoản"
-                      className="text-[9px] text-rose-500 font-extrabold hover:underline leading-none mt-2.5 self-start cursor-pointer active:scale-95"
-                    >
-                      Đăng xuất
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => { logout(); navigate('/dashboard'); }}
-                    aria-label="Đăng xuất tài khoản"
-                    className="text-[9px] text-rose-500 font-black hover:underline cursor-pointer active:scale-95 mt-1"
-                    title="Đăng xuất"
+                  <div
+                    className={cn(
+                      "w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center border shrink-0 transition-transform hover:scale-105 active:scale-95",
+                      isPremium ? "border-amber-400/60 shadow-md shadow-amber-400/10" : "border-primary/20"
+                    )}
                   >
-                    Thoát
-                  </button>
-                )}
+                    <span className={cn("text-xs font-black", isPremium ? "text-amber-500" : "text-primary")}>
+                      {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+                    </span>
+                  </div>
+                  {!isSidebarCollapsed && (
+                    <div className="flex flex-col min-w-0 flex-1 text-left">
+                      <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
+                        {user.displayName || 'Học sinh'}
+                        {isPremium && (
+                          <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PRO</span>
+                        )}
+                      </span>
+                      <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
+                      <span className="text-[9px] text-primary font-extrabold hover:underline leading-none mt-2.5 self-start active:scale-95">
+                        Cài đặt tài khoản
+                      </span>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <button
@@ -720,6 +708,7 @@ export const AppLayout: React.FC = () => {
       </main>
 
       <PolicyModal isOpen={showPolicyModal} onClose={() => setShowPolicyModal(false)} />
+      <ProfileModal isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
     </div>
   );
 };
