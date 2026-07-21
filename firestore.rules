@@ -95,9 +95,41 @@ service cloud.firestore {
     }
 
     match /transactions/{transactionId} {
-      allow get: if signedIn() && resource.data.userId == request.auth.uid;
-      allow list: if false;
+      allow get, list: if signedIn() && (resource.data.userId == request.auth.uid || resource.data.sellerUid == request.auth.uid || isTeacher());
       allow create, update, delete: if false;
+    }
+
+    match /affiliateCodes/{code} {
+      allow get: if signedIn();
+      allow list: if isTeacher() || (signedIn() && resource.data.sellerUid == request.auth.uid);
+      allow create: if isTeacher() || (
+        signedIn()
+        && request.resource.data.sellerUid == request.auth.uid
+        && request.resource.data.discountPercent >= 0
+        && request.resource.data.discountPercent <= 75
+        && request.resource.data.discountPercent + request.resource.data.commissionPercent == 75
+      );
+      allow update: if isTeacher() || (
+        signedIn()
+        && resource.data.sellerUid == request.auth.uid
+        && request.resource.data.discountPercent >= 0
+        && request.resource.data.discountPercent <= 75
+        && request.resource.data.discountPercent + request.resource.data.commissionPercent == 75
+        && request.resource.data.diff(resource.data).affectedKeys().hasAny(['isActive', 'discountPercent', 'commissionPercent'])
+      );
+      allow delete: if isTeacher();
+    }
+
+    match /affiliateWallets/{sellerUid} {
+      allow get, create, update: if isTeacher() || (signedIn() && request.auth.uid == sellerUid);
+      allow list: if isTeacher();
+      allow delete: if false;
+    }
+
+    match /payoutRequests/{requestId} {
+      allow get, list: if isTeacher() || (signedIn() && resource.data.sellerUid == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.sellerUid == request.auth.uid;
+      allow update, delete: if isTeacher();
     }
 
     match /student_profiles/{userId} {

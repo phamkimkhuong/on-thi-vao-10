@@ -16,6 +16,7 @@ import {
   Users,
   Sparkles,
   LifeBuoy,
+  TrendingUp,
   Loader
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
@@ -266,6 +267,7 @@ export const AppLayout: React.FC = () => {
       label: selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra',
       icon: Award
     },
+    { path: ROUTES.AFFILIATE, label: 'Góc Đối Tác', icon: TrendingUp },
     {
       path: ROUTES.SUPPORT,
       label: 'Hỗ trợ & Góp ý',
@@ -291,6 +293,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';
+    if (path.startsWith('/affiliate')) return 'Góc Đối Tác Affiliate';
     if (path.startsWith('/support')) return 'Hỗ trợ & Góp ý';
     return 'Bảng điều khiển';
   };

@@ -9,5 +9,7 @@ export const ROUTES = {
   SUPPORT: '/support',
   PREMIUM: '/premium',
   TEACHER: '/teacher',
+  AFFILIATE: '/affiliate',
   QUESTION_TYPE_DETAIL: (questionTypeId: string) => `/question-types/${questionTypeId}`
 } as const;
+

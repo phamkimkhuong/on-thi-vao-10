@@ -504,3 +504,39 @@ export interface SupportTicket {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface AffiliateCode {
+  code: string;
+  sellerUid: string;
+  sellerName: string;
+  discountPercent: number;
+  commissionPercent: number;
+  isActive: boolean;
+  usageCount: number;
+  maxUsage?: number | null;
+  expiresAt?: string | null;
+}
+
+export interface AffiliateWallet {
+  sellerUid: string;
+  totalEarned: number;
+  balance: number;
+  pendingBalance: number;
+  bankAccount?: {
+    bankName: string;
+    accountNumber: string;
+    accountHolder: string;
+  };
+}
+
+export interface AffiliateValidationResult {
+  valid: boolean;
+  code?: string;
+  sellerName?: string;
+  discountPercent?: number;
+  originalAmount?: number;
+  discountAmount?: number;
+  finalAmount?: number;
+  message?: string;
+}
+

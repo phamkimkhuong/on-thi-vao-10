@@ -26,11 +26,13 @@ import {
   RefreshCw,
   Timer,
   LifeBuoy,
+  Wallet,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
 import { formatAnswerForDisplay } from '../../utils/answerValidator';
 import { TeacherAiStatistics } from './TeacherAiStatistics';
+import { TeacherAffiliateManager } from './TeacherAffiliateManager';
 import { supportService } from '../../services/supportService';
 
 export interface PendingGroup {
@@ -133,7 +135,7 @@ export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics' | 'support'>('students');
+  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin'>('students');
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
   const [premiumEmail, setPremiumEmail] = useState('');
   const [premiumSubmitting, setPremiumSubmitting] = useState(false);
@@ -686,6 +688,18 @@ export const TeacherDashboard: React.FC = () => {
         >
           <LifeBuoy size={15} />
           Yêu cầu Hỗ trợ
+        </button>
+        <button
+          onClick={() => { setActiveTab('affiliate_admin'); setReviewingItem(null); }}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'affiliate_admin'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Wallet size={15} />
+          Quản lý Affiliate
         </button>
       </div>
 
@@ -1783,7 +1797,7 @@ export const TeacherDashboard: React.FC = () => {
             )}
           </div>
         </div>
-      ) : (
+      ) : activeTab === 'premium' ? (
         /* Cấp Quyền Premium */
         <div className="max-w-xl mx-auto space-y-6">
           <Card className="border-border/50 bg-card shadow-sm">
@@ -1848,7 +1862,9 @@ export const TeacherDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </div>
-      )}
+      ) : activeTab === 'affiliate_admin' ? (
+        <TeacherAffiliateManager />
+      ) : null}
 
     </div>
   );

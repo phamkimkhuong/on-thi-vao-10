@@ -2,18 +2,40 @@ import React, { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { useAppStore } from './services/store';
 import AppLayout from './components/layout/AppLayout';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { ROUTES } from './constants/routes';
 
-const Dashboard = React.lazy(() => import('./features/dashboard/Dashboard'));
-const Roadmap = React.lazy(() => import('./features/roadmap/Roadmap'));
-const QuestionTypeDetail = React.lazy(() => import('./features/question-type/QuestionTypeDetail'));
-const PracticeEngine = React.lazy(() => import('./features/practice-engine/PracticeEngine'));
-const MistakeNotebook = React.lazy(() => import('./components/mistakes/MistakeNotebook'));
-const ExamEngine = React.lazy(() => import('./features/exam-engine/ExamEngine'));
-const TeacherDashboard = React.lazy(() => import('./features/teacher/TeacherDashboard'));
-const PremiumPricing = React.lazy(() => import('./features/premium/PremiumPricing').then(m => ({ default: m.PremiumPricing })));
-const GeneralAiTutor = React.lazy(() => import('./features/ai-tutor/GeneralAiTutor').then(m => ({ default: m.GeneralAiTutor })));
-const SupportPage = React.lazy(() => import('./features/support/SupportPage').then(m => ({ default: m.SupportPage })));
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>
+) {
+  return React.lazy(async () => {
+    const hasReloaded = sessionStorage.getItem('chunk_reload_retry');
+    try {
+      const component = await factory();
+      sessionStorage.removeItem('chunk_reload_retry');
+      return component;
+    } catch (error: any) {
+      console.warn('Lỗi nạp file JS phiên bản cũ, đang tự động tải lại phiên bản mới:', error);
+      if (!hasReloaded) {
+        sessionStorage.setItem('chunk_reload_retry', 'true');
+        window.location.reload();
+      }
+      throw error;
+    }
+  });
+}
+
+const Dashboard = lazyWithRetry(() => import('./features/dashboard/Dashboard'));
+const Roadmap = lazyWithRetry(() => import('./features/roadmap/Roadmap'));
+const QuestionTypeDetail = lazyWithRetry(() => import('./features/question-type/QuestionTypeDetail'));
+const PracticeEngine = lazyWithRetry(() => import('./features/practice-engine/PracticeEngine'));
+const MistakeNotebook = lazyWithRetry(() => import('./components/mistakes/MistakeNotebook'));
+const ExamEngine = lazyWithRetry(() => import('./features/exam-engine/ExamEngine'));
+const TeacherDashboard = lazyWithRetry(() => import('./features/teacher/TeacherDashboard'));
+const PremiumPricing = lazyWithRetry(() => import('./features/premium/PremiumPricing').then(m => ({ default: m.PremiumPricing })));
+const GeneralAiTutor = lazyWithRetry(() => import('./features/ai-tutor/GeneralAiTutor').then(m => ({ default: m.GeneralAiTutor })));
+const SupportPage = lazyWithRetry(() => import('./features/support/SupportPage').then(m => ({ default: m.SupportPage })));
+const AffiliateDashboard = lazyWithRetry(() => import('./features/affiliate/AffiliateDashboard').then(m => ({ default: m.AffiliateDashboard })));
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -24,7 +46,16 @@ import { Loader } from 'lucide-react';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout />,
+    element: (
+      <ErrorBoundary>
+        <AppLayout />
+      </ErrorBoundary>
+    ),
+    errorElement: (
+      <ErrorBoundary>
+        <div />
+      </ErrorBoundary>
+    ),
     children: [
       { index: true, element: <Navigate to={ROUTES.DASHBOARD} replace /> },
       { path: ROUTES.DASHBOARD.substring(1), element: <Dashboard /> },
@@ -38,8 +69,10 @@ const router = createBrowserRouter([
       { path: ROUTES.PREMIUM.substring(1), element: <PremiumPricing /> },
       { path: ROUTES.AI_TUTOR.substring(1), element: <GeneralAiTutor /> },
       { path: ROUTES.SUPPORT.substring(1), element: <SupportPage /> },
+      { path: ROUTES.AFFILIATE.substring(1), element: <AffiliateDashboard /> },
     ]
   },
+
   {
     path: '*',
     element: <Navigate to={ROUTES.DASHBOARD} replace />
