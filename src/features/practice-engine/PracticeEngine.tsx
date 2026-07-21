@@ -581,6 +581,34 @@ export const PracticeEngine: React.FC = () => {
     return () => clearInterval(timer);
   }, [isExamMode, isExamSubmitted, examTimeLimit, handleExamSubmit]);
 
+  // Phím tắt bàn phím điều hướng chuyển câu (Mũi tên Trái ← / Phải →)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement;
+      const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || (activeEl as HTMLElement).isContentEditable);
+      if (isInput) return;
+
+      if (e.key === 'ArrowRight') {
+        if (currentIdx < questions.length - 1) {
+          e.preventDefault();
+          clearUpload();
+          setCurrentIdx(prev => prev + 1);
+          resetQuestionState();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentIdx > 0) {
+          e.preventDefault();
+          clearUpload();
+          setCurrentIdx(prev => prev - 1);
+          resetQuestionState();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIdx, questions.length, clearUpload, resetQuestionState]);
+
   const startExamPractice = () => {
     if (examTenses.length === 0) {
       alert('Vui lòng chọn ít nhất 1 dạng bài để luyện thi!');
