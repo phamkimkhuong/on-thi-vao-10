@@ -4,21 +4,33 @@ import type { AdaptivePracticeSequenceResult } from '../utils/adaptivePracticeSe
 
 interface AdaptivePracticeStatusProps {
   status: AdaptivePracticeSequenceResult;
+  variant?: 'physics' | 'biology';
 }
 
-export const AdaptivePracticeStatus: React.FC<AdaptivePracticeStatusProps> = ({ status }) => {
+export const AdaptivePracticeStatus: React.FC<AdaptivePracticeStatusProps> = ({
+  status,
+  variant = 'physics',
+}) => {
   const { readiness } = status;
   const accuracyPercent = Math.round(readiness.accuracy * 100);
+  const isBiology = variant === 'biology';
+  const subjectName = isBiology ? 'Sinh học' : 'Vật lí';
 
   return (
     <section
-      className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-3 shadow-sm"
-      aria-label="Trạng thái lộ trình luyện tập thích nghi"
+      className={isBiology
+        ? 'rounded-2xl border border-emerald-500/25 bg-emerald-500/5 px-4 py-3 shadow-sm'
+        : 'rounded-2xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-3 shadow-sm'}
+      aria-label={`Trạng thái lộ trình luyện tập thích nghi môn ${subjectName}`}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-2.5">
-          <div className="mt-0.5 rounded-xl bg-cyan-500/10 p-2 text-cyan-600 dark:text-cyan-400">
-            {status.holdoutUnlocked ? <ShieldCheck size={17} /> : <LockKeyhole size={17} />}
+          <div className={isBiology
+            ? 'mt-0.5 rounded-xl bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400'
+            : 'mt-0.5 rounded-xl bg-cyan-500/10 p-2 text-cyan-600 dark:text-cyan-400'}>
+            {status.holdoutUnlocked
+              ? <ShieldCheck size={17} aria-hidden="true" />
+              : <LockKeyhole size={17} aria-hidden="true" />}
           </div>
           <div className="space-y-1">
             <p className="text-xs font-black text-foreground">
@@ -29,7 +41,7 @@ export const AdaptivePracticeStatus: React.FC<AdaptivePracticeStatusProps> = ({ 
             <p className="max-w-2xl text-[11px] font-semibold leading-relaxed text-muted-foreground">
               {status.holdoutUnlocked
                 ? 'Các câu có biểu tượng khiên là câu đánh giá độc lập: gợi ý được khóa cho tới khi em nộp đáp án.'
-                : 'Hoàn thành đủ số câu, đạt ít nhất 70% chính xác và trải qua mọi dạng con. Cụm kiểm tra sẽ mở ở lượt vào tiếp theo để không làm đổi câu giữa phiên.'}
+                : `Hoàn thành đủ số câu, đạt ít nhất 70% chính xác và trải qua mọi dạng con. ${status.holdoutQuestionCount} câu kiểm tra sẽ mở ở lượt vào tiếp theo để không làm đổi câu giữa phiên.`}
             </p>
           </div>
         </div>

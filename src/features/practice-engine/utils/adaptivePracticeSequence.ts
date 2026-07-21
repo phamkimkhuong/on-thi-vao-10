@@ -134,7 +134,7 @@ const orderAttemptedQuestions = (
 });
 
 /**
- * Tạo một snapshot thứ tự câu cho một phiên luyện tập Vật lí.
+ * Tạo một snapshot thứ tự câu cho một phiên luyện tập thích nghi.
  *
  * Quy tắc:
  * - Câu chưa làm đi trước, tăng dần độ khó và xen kẽ dạng con.

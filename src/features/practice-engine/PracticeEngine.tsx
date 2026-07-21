@@ -233,6 +233,8 @@ export const PracticeEngine: React.FC = () => {
   const isMath = routeSubject === 'math';
   const isChemistry = routeSubject === 'chemistry';
   const isPhysics = routeSubject === 'physics';
+  const isBiology = routeSubject === 'biology';
+  const usesAdaptivePractice = isPhysics || isBiology;
   const qList = currentQuestions;
 
   const filteredQuestions = useEnglishQuestionFilter(
@@ -251,24 +253,24 @@ export const PracticeEngine: React.FC = () => {
   // Giữ snapshot cố định trong cả phiên. Nếu sắp xếp lại ngay sau mỗi lần nộp,
   // currentIdx có thể trỏ sang câu khác trong khi ResultCard vẫn giữ trạng thái
   // của câu vừa làm. Snapshot chỉ được tái tạo khi rời và vào lại dạng bài.
-  const [physicsPracticeStatus, setPhysicsPracticeStatus] = useState<AdaptivePracticeSequenceResult | null>(null);
+  const [adaptivePracticeStatus, setAdaptivePracticeStatus] = useState<AdaptivePracticeSequenceResult | null>(null);
 
   useLayoutEffect(() => {
-    if (!isPhysics || isExamMode || !questionTypeId) {
-      setPhysicsPracticeStatus(null);
+    if (!usesAdaptivePractice || isExamMode || !questionTypeId) {
+      setAdaptivePracticeStatus(null);
       return;
     }
 
     const attemptsAtSessionStart = storageService.getAttempts(user?.uid || 'guest');
-    setPhysicsPracticeStatus(buildAdaptivePracticeSequence(filteredQuestions, attemptsAtSessionStart));
-  }, [filteredQuestions, isExamMode, isPhysics, questionTypeId, user?.uid]);
+    setAdaptivePracticeStatus(buildAdaptivePracticeSequence(filteredQuestions, attemptsAtSessionStart));
+  }, [filteredQuestions, isExamMode, questionTypeId, user?.uid, usesAdaptivePractice]);
 
-  // Trong chế độ luyện tập Hóa học, học sinh đi từ nhận biết nền tảng đến
-  // vận dụng cao. Vật lí dùng snapshot thích nghi ở trên. Giữ nguyên thứ tự đề
-  // trong chế độ thi để không làm biến đổi đề.
+  // Sinh học và Vật lí dùng snapshot thích nghi để giữ nguyên câu hiện tại trong
+  // suốt phiên. Hóa học hiện chỉ sắp xếp tăng dần độ khó. Chế độ thi luôn giữ
+  // nguyên thứ tự đề để không làm biến đổi cấu trúc bài kiểm tra.
   const questions = useMemo(() => {
     if (isExamMode) return filteredQuestions;
-    if (isPhysics && physicsPracticeStatus) return physicsPracticeStatus.questions;
+    if (usesAdaptivePractice && adaptivePracticeStatus) return adaptivePracticeStatus.questions;
     if (!isChemistry) return filteredQuestions;
 
     return filteredQuestions
@@ -279,7 +281,7 @@ export const PracticeEngine: React.FC = () => {
         || left.sourceIndex - right.sourceIndex
       ))
       .map(({ question }) => question);
-  }, [filteredQuestions, isChemistry, isPhysics, isExamMode, physicsPracticeStatus]);
+  }, [adaptivePracticeStatus, filteredQuestions, isChemistry, isExamMode, usesAdaptivePractice]);
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -1097,8 +1099,11 @@ export const PracticeEngine: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 px-4">
-      {physicsPracticeStatus && (
-        <AdaptivePracticeStatus status={physicsPracticeStatus} />
+      {adaptivePracticeStatus && adaptivePracticeStatus.holdoutQuestionCount > 0 && (
+        <AdaptivePracticeStatus
+          status={adaptivePracticeStatus}
+          variant={isBiology ? 'biology' : 'physics'}
+        />
       )}
 
       {/* Header trạng thái luyện tập */}
@@ -1154,6 +1159,7 @@ export const PracticeEngine: React.FC = () => {
                     ? (routeSubject === 'math' ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20 scale-105" :
                       routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
                         routeSubject === 'physics' ? "bg-cyan-600 border-cyan-600 text-white shadow-sm shadow-cyan-600/20 scale-105" :
+                          routeSubject === 'biology' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
                           "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
                     : isCompleted
                       ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
