@@ -140,5 +140,27 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q74'
     ],
     createdAt: '2026-07-16T00:00:00.000Z'
+  },
+  {
+    id: 'mock-math10-hk1-review-compact',
+    subjectId: 'math',
+    title: 'Ôn tập tổng hợp học kỳ I – Toán 10 (Đề rút gọn)',
+    duration: 45,
+    kind: 'full_course',
+    focus: 'mixed',
+    scopeTopicIds: ['math10-t1', 'math10-t3', 'math10-t4', 'math10-t5'],
+    totalPoints: 10,
+    formCode: 'R',
+    resultReleasePolicy: 'after_submit',
+    instructions: [
+      'Đề rút gọn gồm 4 câu nhiều lựa chọn, 2 cụm Đúng/Sai và 4 câu trả lời ngắn.',
+      'Mục tiêu là rà nhanh lỗ hổng học kỳ I; thời gian làm bài 45 phút.',
+      'Điểm được tính theo ma trận 10 điểm, không quy đổi theo số câu.'
+    ],
+    questionIds: [
+      'mock-math10-q11', 'mock-math10-q12', 'mock-math10-q13', 'mock-math10-q14', 'mock-math10-q15',
+      'mock-math10-q16', 'mock-math10-q17', 'mock-math10-q18', 'mock-math10-q19', 'mock-math10-q20'
+    ],
+    createdAt: '2026-07-22T00:00:00.000Z'
   }
 ];

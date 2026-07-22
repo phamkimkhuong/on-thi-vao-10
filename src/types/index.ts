@@ -107,6 +107,9 @@ export type AssessmentFocus = 'mixed' | 'theory';
 export type TheoryAssessmentScope = 'module' | 'comprehensive';
 
 export type AssessmentCompetency =
+  | 'mathematical_reasoning'
+  | 'mathematical_modeling'
+  | 'mathematical_problem_solving'
   | 'physical_cognition'
   | 'physical_inquiry'
   | 'physical_application'
@@ -539,4 +542,3 @@ export interface AffiliateValidationResult {
   finalAmount?: number;
   message?: string;
 }
-

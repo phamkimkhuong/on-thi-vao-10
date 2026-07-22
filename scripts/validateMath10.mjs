@@ -11,6 +11,15 @@ const readNodeValue = node => {
   if (ts.isNumericLiteral(node)) return Number(node.text);
   if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
   if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
+  if (ts.isCallExpression(node)) {
+    const callee = node.expression.getText();
+    if (['mcq', 'short', 'tf'].includes(callee) && node.arguments[0]) return readNodeValue(node.arguments[0]);
+    if (callee === 'ids' && node.arguments.length === 2) {
+      const prefix = readNodeValue(node.arguments[0]);
+      const count = readNodeValue(node.arguments[1]);
+      return Array.from({ length: count }, (_, index) => `${prefix}${String(index + 1).padStart(2, '0')}`);
+    }
+  }
   if (ts.isArrayLiteralExpression(node)) return node.elements.filter(item => !ts.isSpreadElement(item)).map(readNodeValue);
   if (ts.isObjectLiteralExpression(node)) {
     const result = {};
@@ -73,6 +82,11 @@ for (const moduleName of moduleDirs) {
 const assessmentQuestions = readExportedArray(path.join(dataDirectory, 'assessments', 'questions.ts'), 'g10MathAssessmentQuestions');
 const assessmentSolutions = readExportedArray(path.join(dataDirectory, 'assessments', 'solutions.ts'), 'g10MathAssessmentSolutions');
 const exams = readExportedArray(path.join(dataDirectory, 'assessments', 'exams.ts'), 'g10MathAssessmentExams');
+const semester2DataFile = path.join(dataDirectory, 'assessments', 'semester2', 'data.ts');
+const semester2Seeds = ['mid2A', 'mid2B', 'final2A', 'final2B'].flatMap(name => readExportedArray(semester2DataFile, name));
+assessmentQuestions.push(...semester2Seeds);
+assessmentSolutions.push(...semester2Seeds.map(item => ({ questionId: item.id })));
+exams.push(...readExportedArray(path.join(dataDirectory, 'assessments', 'semester2', 'exams.ts'), 'g10MathSemester2AssessmentExams'));
 
 const errors = [];
 const warnings = [];
@@ -137,6 +151,15 @@ for (const solution of solutions) {
   if (!solution.recognition?.trim()) errors.push(`${solution.questionId}: thiếu phần nhận dạng.`);
   if (!Array.isArray(solution.detailedSteps) || solution.detailedSteps.length === 0) errors.push(`${solution.questionId}: thiếu các bước giải.`);
   if (!Array.isArray(solution.commonMistakes) || solution.commonMistakes.length === 0) warnings.push(`${solution.questionId}: chưa nêu lỗi thường gặp.`);
+  const question = questionById.get(solution.questionId);
+  if (question?.id.startsWith('math10-m1-') || question?.id.startsWith('math10-m2-') || question?.id.startsWith('math10-m3-') || question?.id.startsWith('math10-m4-') || question?.id.startsWith('math10-m5-') || question?.id.startsWith('math10-m6-') || question?.id.startsWith('math10-m7-') || question?.id.startsWith('math10-m8-')) {
+    if (question.validatorType === 'choice' && !String(solution.finalAnswer).startsWith(`${question.correctAnswer}.`)) {
+      errors.push(`${solution.questionId}: lời giải không khớp khóa đáp án lựa chọn.`);
+    }
+    if (question.validatorType !== 'choice' && String(solution.finalAnswer) !== String(question.correctAnswer)) {
+      errors.push(`${solution.questionId}: finalAnswer không khớp correctAnswer.`);
+    }
+  }
 }
 
 const subtypeById = new Map();
@@ -203,17 +226,24 @@ const assessmentSolutionByQuestionId = new Map(assessmentSolutions.map(item => [
 const referencedAssessmentIds = new Set();
 for (const exam of exams) {
   if (!Array.isArray(exam.questionIds) || exam.questionIds.length === 0) errors.push(`${exam.id}: đề chưa có câu hỏi.`);
+  let calculatedPoints = 0;
   for (const questionId of exam.questionIds ?? []) {
     referencedAssessmentIds.add(questionId);
-    if (!assessmentQuestionById.has(questionId)) errors.push(`${exam.id}: questionId ${questionId} không tồn tại.`);
+    const question = assessmentQuestionById.get(questionId);
+    if (!question) errors.push(`${exam.id}: questionId ${questionId} không tồn tại.`);
+    else {
+      calculatedPoints += question.points ?? 1;
+      if (Array.isArray(exam.scopeTopicIds) && !exam.scopeTopicIds.includes(question.topicId)) errors.push(`${exam.id}: ${questionId} nằm ngoài scopeTopicIds.`);
+    }
   }
+  if (typeof exam.totalPoints === 'number' && Math.abs(calculatedPoints - exam.totalPoints) > 1e-9) errors.push(`${exam.id}: tổng points câu hỏi là ${calculatedPoints}, khác totalPoints=${exam.totalPoints}.`);
 }
 for (const question of assessmentQuestions) {
   if (!assessmentSolutionByQuestionId.has(question.id)) errors.push(`${question.id}: câu kiểm tra thiếu lời giải.`);
   if (!referencedAssessmentIds.has(question.id)) warnings.push(`${question.id}: chưa được đề nào sử dụng.`);
   if (question.points === undefined) warnings.push(`${question.id}: chưa khai báo points, runtime sẽ dùng trọng số mặc định.`);
 }
-if (exams.every(exam => /học kỳ I/.test(exam.title))) warnings.push('Assessment: chưa có đề giữa kỳ II và cuối kỳ II.');
+if (!exams.some(exam => /học kỳ II/.test(exam.title))) warnings.push('Assessment: chưa có đề giữa kỳ II và cuối kỳ II.');
 
 console.log(`Toán 10: ${topics.length} chủ đề, ${outcomes.length} outcomes, ${questionTypes.length} dạng lớn, ${subtypeById.size} dạng nhỏ, ${questions.length} câu luyện tập, ${assessmentQuestions.length} câu kiểm tra.`);
 console.log(`Coverage: ${completedSubtypeCount}/${subtypeById.size} micro-type đạt tối thiểu 12 câu.`);

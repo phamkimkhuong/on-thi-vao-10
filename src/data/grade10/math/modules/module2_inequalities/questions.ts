@@ -223,5 +223,509 @@ export const g10MathModule2Questions: Question[] = [
       correctAnswer: 'Có',
       acceptedAnswers: ['Có', 'co', 'có', 'Có, vì M thỏa mãn hệ'],
       validatorType: 'exact'
-    }
+    },
+  {
+    "id": "math10-m2-q001",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Điểm nào không thuộc miền nghiệm của hệ $\\begin{cases}x+y\\le4\\\\x\\ge0\\\\y\\ge0\\end{cases}$?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $(-1;2)$",
+      "B. $(0;0)$",
+      "C. $(1;2)$",
+      "D. $(3;1)$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q002",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Điểm $M(2;2)$ có thuộc miền nghiệm của bất phương trình $x+2y<6$ không?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. Có, vì M nằm trên đường biên",
+      "B. Không, vì M nằm trên đường biên bị loại",
+      "C. Có, vì 2+2<6",
+      "D. Không, vì M nằm ngoài góc phần tư I"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q003",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trong các điểm sau, điểm nào thuộc miền nghiệm $x\\ge0$, $y\\ge0$, $x+y\\le5$?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $(3;3)$",
+      "B. $(-1;1)$",
+      "C. $(2;2)$",
+      "D. $(4;2)$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q004",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Miền nghiệm của hệ $x\\ge0$, $y\\ge0$, $x+y\\le6$ là tam giác có ba đỉnh nào?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $(0;0),(3;0),(0;3)$",
+      "B. $(6;0),(0;6),(6;6)$",
+      "C. $(0;0),(6;6),(0;6)$",
+      "D. $(0;0),(6;0),(0;6)$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q005",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Miền nghiệm của hệ $x\\ge1$, $y\\ge0$, $x+y\\le5$ có các đỉnh nào?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $(1;0),(5;0),(1;4)$",
+      "B. $(0;0),(5;0),(0;5)$",
+      "C. $(1;0),(4;0),(1;5)$",
+      "D. $(1;1),(5;0),(0;5)$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q006",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Cho hệ $x\\ge0$, $y\\ge0$, $x+y\\le6$, $2x+y\\le8$. Tọa độ các đỉnh miền nghiệm là gì?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $(0;0),(6;0),(2;4),(0;8)$",
+      "B. $(0;0),(4;0),(2;4),(0;6)$",
+      "C. $(0;0),(4;0),(4;2),(0;6)$",
+      "D. $(0;0),(8;0),(2;4),(0;6)$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q007",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Có bao nhiêu điểm nguyên thuộc miền $x\\ge0$, $y\\ge0$, $x+y\\le3$?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $6$",
+      "B. $9$",
+      "C. $10$",
+      "D. $12$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q008",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Miền nghiệm của $x\\ge0$, $y\\ge0$, $y\\ge x$, $x+y\\le6$ là tam giác có các đỉnh nào?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $(0;0),(6;0),(3;3)$",
+      "B. $(0;0),(0;3),(6;0)$",
+      "C. $(0;6),(6;0),(3;3)$",
+      "D. $(0;0),(0;6),(3;3)$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q009",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Nửa mặt phẳng có bờ $2x-y=4$ và chứa gốc tọa độ được biểu diễn bởi bất phương trình nào?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $2x-y\\le4$",
+      "B. $2x-y\\ge4$",
+      "C. $2x-y<0$",
+      "D. $2x-y>4$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q010",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trên tam giác có các đỉnh $(0;0)$, $(4;0)$, $(0;3)$, GTLN của $F=2x+y$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $3$",
+      "B. $8$",
+      "C. $7$",
+      "D. $11$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q011",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trên tam giác có các đỉnh $(-1;0)$, $(2;0)$, $(0;4)$, GTNN của $F=x+2y$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $0$",
+      "B. $2$",
+      "C. $-1$",
+      "D. $8$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q012",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trên miền $x\\ge0$, $y\\ge0$, $x+y\\le5$, GTLN của $F=3x+2y$ là bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $10$",
+      "B. $5$",
+      "C. $25$",
+      "D. $15$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q013",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trên miền $x\\ge0$, $y\\ge0$, $x+y\\le5$, hàm $F=x+y$ đạt GTLN ở đâu?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. Mọi điểm trên đoạn x+y=5 trong góc phần tư I",
+      "B. Chỉ tại (5;0)",
+      "C. Chỉ tại (0;5)",
+      "D. Chỉ tại (0;0)"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q014",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Cho miền $x\\ge0$, $y\\ge0$, $x+2y\\le8$, $3x+y\\le9$. GTLN của $F=4x+5y$ là bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $20$",
+      "B. $23$",
+      "C. $12$",
+      "D. $29$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q015",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trên miền không bị chặn $x\\ge0$, $y\\ge0$, $x+y\\ge4$, GTNN của $F=x+y$ là bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $0$",
+      "B. $Không tồn tại$",
+      "C. $4$",
+      "D. $+\\infty$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q016",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Trên tứ giác có các đỉnh $(0;0)$, $(5;0)$, $(4;3)$, $(0;4)$, tổng GTLN và GTNN của $F=2x+3y$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $12$",
+      "B. $27$",
+      "C. $7$",
+      "D. $17$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q017",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Một mảnh đất tối đa 10 ha dùng trồng ngô x ha và rau y ha. Lợi nhuận mỗi ha lần lượt là 2 và 3 triệu đồng, không có ràng buộc khác. Phương án tối ưu là gì?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $x=0, y=10$",
+      "B. $x=10, y=0$",
+      "C. $x=5, y=5$",
+      "D. $x=2, y=3$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q018",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Một xưởng có 8 giờ máy. Sản phẩm A cần 2 giờ, lãi 5; sản phẩm B cần 1 giờ, lãi 3. Nếu có thể sản xuất số lượng thực không âm, phương án tối ưu là gì?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. 4 sản phẩm A, 0 sản phẩm B",
+      "B. 0 sản phẩm A, 8 sản phẩm B",
+      "C. 2 sản phẩm A, 4 sản phẩm B",
+      "D. 8 sản phẩm A, 0 sản phẩm B"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q019",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Một sự kiện bán tối đa 50 vé gồm vé thường x và vé VIP y; vé VIP không quá 20. Lãi mỗi vé lần lượt 20 và 30 nghìn đồng. Phương án tối ưu là gì?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $x=50, y=0$",
+      "B. $x=25, y=25$",
+      "C. $x=30, y=20$",
+      "D. $x=0, y=20$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q020",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Sản phẩm A dùng 2 đơn vị gỗ và 1 giờ công, lãi 5; B dùng 1 gỗ và 2 giờ, lãi 4. Có tối đa 10 gỗ và 8 giờ. Phương án tối ưu là gì?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $x=5, y=0$",
+      "B. $x=0, y=4$",
+      "C. $x=2, y=3$",
+      "D. $x=4, y=2$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q021",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Thực phẩm A cung cấp 2 đơn vị đạm, 1 vitamin, giá 3; B cung cấp 1 đạm, 2 vitamin, giá 2. Cần ít nhất 6 đơn vị mỗi chất. Phương án chi phí nhỏ nhất là gì?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $x=2, y=2$",
+      "B. $x=3, y=0$",
+      "C. $x=0, y=6$",
+      "D. $x=6, y=0$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q022",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Xe nhỏ chở 2 tấn, giá thuê 3 triệu; xe lớn chở 5 tấn, giá 6 triệu. Cần chở ít nhất 20 tấn. Phương án chi phí nhỏ nhất là gì?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. 10 xe nhỏ, 0 xe lớn",
+      "B. 0 xe nhỏ, 4 xe lớn",
+      "C. 5 xe nhỏ, 2 xe lớn",
+      "D. 0 xe nhỏ, 5 xe lớn"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q023",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Sản phẩm A dùng 3 giờ và 2 kg nguyên liệu, lãi 7; B dùng 2 giờ và 4 kg, lãi 8. Có 18 giờ và 20 kg. Với x,y nguyên không âm, phương án lãi lớn nhất là gì?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $x=6, y=0$",
+      "B. $x=0, y=5$",
+      "C. $x=4, y=3$",
+      "D. $x=3, y=3$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m2-q024",
+    "subjectId": "math",
+    "topicId": "math10-t2",
+    "questionTypeId": "math10-qt3",
+    "content": "Một lò làm bánh mì x và bánh kem y, tối đa 40 bánh; phải làm ít nhất 10 bánh mì và không quá 25 bánh kem. Lãi mỗi chiếc lần lượt 2 và 5. Phương án tối ưu là gì?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $x=40, y=0$",
+      "B. $x=10, y=25$",
+      "C. $x=25, y=15$",
+      "D. $x=15, y=25$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  }
 ];

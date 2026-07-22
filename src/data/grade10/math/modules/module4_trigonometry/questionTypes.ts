@@ -48,5 +48,35 @@ export const g10MathModule4QuestionTypes: QuestionType[] = [
       ],
       difficulty: 'medium',
       examFrequency: 'high'
-    }
+    },
+  {
+    "id": "math10-qt19",
+    "topicId": "math10-t4",
+    "name": "Giá trị lượng giác của góc từ 0° đến 180°",
+    "slug": "gia-tri-luong-giac-goc-0-180",
+    "description": "Tính và suy luận sin, cos, tan của góc; sử dụng góc bù, hệ thức cơ bản và dấu của góc nhọn–tù.",
+    "recognitionSigns": [
+      "Đề cho góc từ 0° đến 180° và hỏi sin, cos, tan hoặc dấu.",
+      "Đề cho một giá trị lượng giác và yêu cầu tìm giá trị còn lại hay xác định góc."
+    ],
+    "solvingSteps": [
+      "Xác định góc đặc biệt hoặc góc chuẩn liên quan.",
+      "Xác định dấu theo vị trí góc trên nửa đường tròn.",
+      "Áp dụng công thức góc bù hoặc hệ thức sin²+cos²=1.",
+      "Kiểm tra miền góc để loại nghiệm sai dấu."
+    ],
+    "commonMistakes": [
+      "Cho cos góc tù dương.",
+      "Đổi dấu sin của hai góc bù.",
+      "Chỉ lấy nghiệm góc nhọn khi phương trình sin có hai nghiệm."
+    ],
+    "difficulty": "medium",
+    "examFrequency": "high",
+    "exampleQuestionId": "math10-m4-q025",
+    "theory": [
+      "$\\sin(180°-\\alpha)=\\sin\\alpha$, $\\cos(180°-\\alpha)=-\\cos\\alpha$, $\\tan(180°-\\alpha)=-\\tan\\alpha$.",
+      "$\\sin^2\\alpha+\\cos^2\\alpha=1$ và $\\tan\\alpha=\\sin\\alpha/\\cos\\alpha$.",
+      "Trong (0°,180°), sin dương; cos dương với góc nhọn và âm với góc tù."
+    ]
+  }
 ];

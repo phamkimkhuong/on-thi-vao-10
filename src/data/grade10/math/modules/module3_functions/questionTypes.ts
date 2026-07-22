@@ -49,5 +49,35 @@ export const g10MathModule3QuestionTypes: QuestionType[] = [
       ],
       difficulty: 'medium',
       examFrequency: 'high'
-    }
+    },
+  {
+    "id": "math10-qt18",
+    "topicId": "math10-t3",
+    "name": "Khái niệm, tập xác định và biểu diễn hàm số",
+    "slug": "khai-niem-tap-xac-dinh-bieu-dien-ham-so",
+    "description": "Tính giá trị, xác định miền xác định, đọc bảng–đồ thị và thiết lập mô hình hàm số cơ bản từ dữ liệu hoặc tình huống.",
+    "recognitionSigns": [
+      "Đề hỏi f(a), tập xác định, tập giá trị hoặc đọc thông tin từ bảng và đồ thị.",
+      "Đề mô tả một đầu ra phụ thuộc duy nhất vào đầu vào và yêu cầu lập công thức."
+    ],
+    "solvingSteps": [
+      "Xác định biến đầu vào, đầu ra và biểu diễn đang được sử dụng.",
+      "Đặt các điều kiện để công thức có nghĩa hoặc đọc đúng trục/bảng.",
+      "Tính giá trị, miền hoặc tham số theo yêu cầu.",
+      "Kiểm tra kết quả với tập nền và ý nghĩa thực tế."
+    ],
+    "commonMistakes": [
+      "Nhầm tập xác định với tập giá trị.",
+      "Quên giao đồng thời điều kiện căn và mẫu.",
+      "Đọc tung độ khi đề hỏi hoành độ hoặc ngược lại."
+    ],
+    "difficulty": "medium",
+    "examFrequency": "high",
+    "exampleQuestionId": "math10-m3-q025",
+    "theory": [
+      "Hàm số gán mỗi phần tử của tập xác định cho đúng một giá trị đầu ra.",
+      "Tập xác định gồm mọi đầu vào làm công thức có nghĩa; đồ thị biểu diễn các điểm (x;f(x)).",
+      "Miền xác định đọc theo hình chiếu lên Ox, tập giá trị đọc theo hình chiếu lên Oy."
+    ]
+  }
 ];

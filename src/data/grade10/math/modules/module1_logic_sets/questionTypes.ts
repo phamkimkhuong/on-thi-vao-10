@@ -102,5 +102,35 @@ export const g10MathModule1QuestionTypes: QuestionType[] = [
       ],
       difficulty: 'hard',
       examFrequency: 'medium'
-    }
+    },
+  {
+    "id": "math10-qt17",
+    "topicId": "math10-t1",
+    "name": "Mệnh đề, phủ định và suy luận logic",
+    "slug": "menh-de-phu-dinh-suy-luan-logic",
+    "description": "Nhận biết mệnh đề, xác định chân trị, phủ định đúng lượng từ và phân tích mệnh đề kéo theo, tương đương, điều kiện cần–đủ.",
+    "recognitionSigns": [
+      "Đề xuất hiện câu khẳng định đúng/sai, lượng từ “mọi”, “tồn tại” hoặc yêu cầu phủ định.",
+      "Đề có cấu trúc “nếu…thì…”, “khi và chỉ khi”, “điều kiện cần/đủ”."
+    ],
+    "solvingSteps": [
+      "Xác định mệnh đề thành phần, tập nền và lượng từ.",
+      "Chuyển câu về cấu trúc logic P, Q trước khi biến đổi.",
+      "Áp dụng đúng quy tắc phủ định, kéo theo hoặc tương đương.",
+      "Kiểm tra bằng phản ví dụ hoặc bảng chân trị khi cần."
+    ],
+    "commonMistakes": [
+      "Phủ định “mọi” nhưng không đổi thành “tồn tại”.",
+      "Nhầm mệnh đề đảo với phản đảo.",
+      "Coi một ví dụ đúng là chứng minh cho mệnh đề toàn thể."
+    ],
+    "difficulty": "medium",
+    "examFrequency": "high",
+    "exampleQuestionId": "math10-m1-q072",
+    "theory": [
+      "Mệnh đề là câu khẳng định có giá trị đúng hoặc sai.",
+      "$\\neg(\\forall x,P(x))\\equiv\\exists x,\\neg P(x)$ và $\\neg(\\exists x,P(x))\\equiv\\forall x,\\neg P(x)$.",
+      "$P\\Rightarrow Q$ tương đương phản đảo $\\neg Q\\Rightarrow\\neg P$; P là điều kiện đủ, Q là điều kiện cần."
+    ]
+  }
 ];

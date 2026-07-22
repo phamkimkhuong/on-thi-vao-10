@@ -26,5 +26,59 @@ export const g10MathModule1PracticeBlueprints: QuestionTypePracticeBlueprint[] =
       { id: 'math10-qt2-st3', name: 'Tham số để hai tập rời nhau', example: 'Tách hai khả năng: A nằm hoàn toàn bên trái hoặc hoàn toàn bên phải B.', recognitionSigns: ['Đề có điều kiện giao bằng rỗng.', 'Kết quả thường là hợp của hai miền tham số.'], targetQuestionCount: 12 }
     ],
     coverage: { ...standardCoverage, targetQuestionCount: 36, requiredRepresentations: ['text', 'equation', 'diagram'] }
+  },
+  {
+    "questionTypeId": "math10-qt17",
+    "subTypes": [
+      {
+        "id": "math10-qt17-st1",
+        "name": "Nhận biết mệnh đề và chân trị",
+        "example": "Phân biệt câu khẳng định với câu hỏi, mệnh lệnh và mệnh đề chứa biến.",
+        "recognitionSigns": [
+          "Cần quyết định câu có giá trị đúng/sai hay không.",
+          "Có thể cần phản ví dụ để bác bỏ phát biểu toàn thể."
+        ],
+        "targetQuestionCount": 12
+      },
+      {
+        "id": "math10-qt17-st2",
+        "name": "Phủ định và lượng từ",
+        "example": "Đổi mọi thành tồn tại, và thành hoặc, đồng thời phủ định quan hệ.",
+        "recognitionSigns": [
+          "Đề yêu cầu viết phủ định.",
+          "Xuất hiện lượng từ hoặc nhiều mệnh đề nối bởi và/or."
+        ],
+        "targetQuestionCount": 12
+      },
+      {
+        "id": "math10-qt17-st3",
+        "name": "Kéo theo, tương đương và điều kiện cần–đủ",
+        "example": "Lập mệnh đề đảo/phản đảo và xác định vai trò điều kiện.",
+        "recognitionSigns": [
+          "Có cấu trúc nếu–thì hoặc khi và chỉ khi.",
+          "Đề hỏi điều kiện cần, đủ, cần và đủ."
+        ],
+        "targetQuestionCount": 12
+      }
+    ],
+    "coverage": {
+      "targetQuestionCount": 36,
+      "minimumQuestionsPerSubType": 12,
+      "requiredPracticeRoles": [
+        "guided",
+        "near_transfer",
+        "representation_switch",
+        "misconception_check",
+        "far_transfer",
+        "retention",
+        "mastery_holdout"
+      ],
+      "requiredRepresentations": [
+        "text",
+        "equation",
+        "table"
+      ],
+      "masteryHoldoutCount": 2
+    }
   }
 ];

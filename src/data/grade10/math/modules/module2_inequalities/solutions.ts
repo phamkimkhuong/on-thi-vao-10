@@ -347,5 +347,605 @@ export const g10MathModule2Solutions: Solution[] = [
       finalAnswer: 'Có',
       commonMistakes: ['Chỉ kiểm tra bất phương trình đầu tiên mà không kiểm tra các điều kiện $x\\ge0$, $y\\ge0$.'],
       reviewSuggestions: ['Từ “hệ” có nghĩa là các điều kiện phải đồng thời đúng.']
-    }
+    },
+  {
+    "id": "math10-m2-s001",
+    "questionId": "math10-m2-q001",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Muốn kiểm tra một điểm, thay đồng thời hai tọa độ vào mọi bất phương trình."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Điểm (−1;2) vi phạm điều kiện $x\\ge0$; ba điểm còn lại đều thỏa hệ.",
+        "result": "(-1;2)"
+      }
+    ],
+    "finalAnswer": "A. $(-1;2)$",
+    "commonMistakes": [
+      "Chỉ kiểm tra bất phương trình $x+y\\le4$ mà bỏ hai điều kiện không âm."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s002",
+    "questionId": "math10-m2-q002",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Thay tọa độ và đặc biệt kiểm tra dấu nghiêm hay không nghiêm."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Tại M, $x+2y=2+4=6$. Dấu “<” không lấy đường biên nên M không thuộc miền nghiệm.",
+        "result": "Không, vì M nằm trên đường biên bị loại"
+      }
+    ],
+    "finalAnswer": "B. Không, vì M nằm trên đường biên bị loại",
+    "commonMistakes": [
+      "Cho rằng mọi điểm trên đường biên đều thuộc miền nghiệm."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s003",
+    "questionId": "math10-m2-q003",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Hệ là giao ba điều kiện: góc phần tư I và phía dưới đường $x+y=5$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "(2;2) có hai tọa độ không âm và tổng bằng 4≤5; các điểm còn lại vi phạm ít nhất một điều kiện.",
+        "result": "(2;2)"
+      }
+    ],
+    "finalAnswer": "C. $(2;2)$",
+    "commonMistakes": [
+      "Hiểu miền nghiệm của hệ là hợp thay vì giao các nửa mặt phẳng."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s004",
+    "questionId": "math10-m2-q004",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Tìm giao từng cặp đường biên $x=0$, $y=0$, $x+y=6$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Ba giao điểm hợp lệ lần lượt là O(0;0), A(6;0), B(0;6).",
+        "result": "(0;0),(6;0),(0;6)"
+      }
+    ],
+    "finalAnswer": "D. $(0;0),(6;0),(0;6)$",
+    "commonMistakes": [
+      "Lấy điểm (6;6) dù điểm này vi phạm $x+y\\le6$."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s005",
+    "questionId": "math10-m2-q005",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Giao các đường biên rồi loại giao điểm vi phạm $x\\ge1$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "$x=1$ cắt $y=0$ tại (1;0), $y=0$ cắt $x+y=5$ tại (5;0), và $x=1$ cắt $x+y=5$ tại (1;4).",
+        "result": "(1;0),(5;0),(1;4)"
+      }
+    ],
+    "finalAnswer": "A. $(1;0),(5;0),(1;4)$",
+    "commonMistakes": [
+      "Tự động dùng gốc O làm đỉnh dù O vi phạm $x\\ge1$."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s006",
+    "questionId": "math10-m2-q006",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Tìm giao các đường biên và kiểm tra từng giao điểm với toàn bộ hệ."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Hai đường xiên cắt tại (2;4); các giao trục hợp lệ là (4;0) và (0;6), cùng với O.",
+        "result": "(0;0),(4;0),(2;4),(0;6)"
+      }
+    ],
+    "finalAnswer": "B. $(0;0),(4;0),(2;4),(0;6)$",
+    "commonMistakes": [
+      "Giữ giao điểm (6;0) của $x+y=6$ với Ox dù nó vi phạm $2x+y\\le8$."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s007",
+    "questionId": "math10-m2-q007",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Liệt kê theo từng giá trị nguyên của x để không bỏ sót hoặc đếm trùng."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Với x=0,1,2,3 có lần lượt 4,3,2,1 giá trị y; tổng là 10.",
+        "result": "10"
+      }
+    ],
+    "finalAnswer": "C. $10$",
+    "commonMistakes": [
+      "Chỉ đếm các điểm nằm trên biên $x+y=3$."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s008",
+    "questionId": "math10-m2-q008",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Xác định phía trên đường $y=x$ trong góc phần tư I, rồi cắt bởi $x+y=6$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "$y=x$ và $x+y=6$ cho (3;3); hai đường còn lại cắt tại O và (0;6).",
+        "result": "(0;0),(0;6),(3;3)"
+      }
+    ],
+    "finalAnswer": "D. $(0;0),(0;6),(3;3)$",
+    "commonMistakes": [
+      "Chọn phía dưới đường $y=x$ khi đọc dấu $y\\ge x$."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s009",
+    "questionId": "math10-m2-q009",
+    "recognition": "Dạng nửa mặt phẳng/miền nghiệm: chọn đúng phía của từng đường biên, rồi lấy phần giao vì các điều kiện phải đồng thời đúng.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Thử điểm O(0;0), vì O không nằm trên đường biên."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Tại O, $2x-y=0\\le4$, nên phía chứa O là $2x-y\\le4$.",
+        "result": "2x-y\\le4"
+      }
+    ],
+    "finalAnswer": "A. $2x-y\\le4$",
+    "commonMistakes": [
+      "Chọn chiều bất phương trình dựa vào hình dung mà không thử một điểm."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s010",
+    "questionId": "math10-m2-q010",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Hàm tuyến tính đạt cực trị tại ít nhất một đỉnh của đa giác."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Giá trị tại ba đỉnh là 0, 8, 3; lớn nhất bằng 8.",
+        "result": "8"
+      }
+    ],
+    "finalAnswer": "B. $8$",
+    "commonMistakes": [
+      "Cộng giá trị tại các đỉnh thay vì so sánh chúng."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s011",
+    "questionId": "math10-m2-q011",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Lập bảng giá trị hàm mục tiêu tại toàn bộ đỉnh."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Các giá trị là −1, 2 và 8; nhỏ nhất là −1 tại (−1;0).",
+        "result": "-1"
+      }
+    ],
+    "finalAnswer": "C. $-1$",
+    "commonMistakes": [
+      "Bỏ qua đỉnh có tọa độ âm."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s012",
+    "questionId": "math10-m2-q012",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Xác định ba đỉnh O(0;0), A(5;0), B(0;5)."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "$F(O)=0$, $F(A)=15$, $F(B)=10$, nên GTLN là 15.",
+        "result": "15"
+      }
+    ],
+    "finalAnswer": "D. $15$",
+    "commonMistakes": [
+      "Cho rằng hệ số của y lớn hơn vì nhìn nhầm 2 thành 3."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s013",
+    "questionId": "math10-m2-q013",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Nhận ra hàm mục tiêu trùng với biểu thức của một đường biên."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Trên toàn bộ cạnh $x+y=5$, ta có F=5; đây là giá trị lớn nhất.",
+        "result": "Mọi điểm trên đoạn x+y=5 trong góc phần tư I"
+      }
+    ],
+    "finalAnswer": "A. Mọi điểm trên đoạn x+y=5 trong góc phần tư I",
+    "commonMistakes": [
+      "Kết luận cực trị tuyến tính luôn chỉ đạt tại đúng một đỉnh."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s014",
+    "questionId": "math10-m2-q014",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Tìm bốn đỉnh, bao gồm giao điểm của hai đường xiên."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Các đỉnh là (0;0), (3;0), (2;3), (0;4); F lần lượt 0,12,23,20.",
+        "result": "23"
+      }
+    ],
+    "finalAnswer": "B. $23$",
+    "commonMistakes": [
+      "Bỏ sót giao điểm (2;3), dẫn đến chọn giá trị 20."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s015",
+    "questionId": "math10-m2-q015",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Miền không bị chặn vẫn có thể có GTNN; xét đường biên gần gốc nhất."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Mọi điểm thỏa $F=x+y\\ge4$, và dấu bằng đạt trên đoạn nối (4;0) với (0;4).",
+        "result": "4"
+      }
+    ],
+    "finalAnswer": "C. $4$",
+    "commonMistakes": [
+      "Cho rằng miền không bị chặn thì mọi cực trị đều không tồn tại."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s016",
+    "questionId": "math10-m2-q016",
+    "recognition": "Dạng cực trị tuyến tính: sau khi có đa giác nghiệm, tính hàm mục tiêu tại các đỉnh và kiểm tra trường hợp cả một cạnh cùng tối ưu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Tính đồng thời giá trị lớn nhất và nhỏ nhất tại bốn đỉnh."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "F nhận 0,10,17,12; GTLN=17, GTNN=0 nên tổng bằng 17.",
+        "result": "17"
+      }
+    ],
+    "finalAnswer": "D. $17$",
+    "commonMistakes": [
+      "Chỉ tìm GTLN mà quên yêu cầu cộng với GTNN."
+    ],
+    "reviewSuggestions": [
+      "Vẽ hoặc kiểm tra lại miền nghiệm trước khi kết luận."
+    ]
+  },
+  {
+    "id": "math10-m2-s017",
+    "questionId": "math10-m2-q017",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Đặt $x,y\\ge0$, ràng buộc $x+y\\le10$, hàm lợi nhuận $F=2x+3y$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Rau có lợi nhuận trên một ha cao hơn, nên dùng toàn bộ 10 ha trồng rau.",
+        "result": "x=0, y=10"
+      }
+    ],
+    "finalAnswer": "A. $x=0, y=10$",
+    "commonMistakes": [
+      "Chia đều diện tích dù hai phương án có lợi nhuận khác nhau."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s018",
+    "questionId": "math10-m2-q018",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "So sánh lợi nhuận trên một giờ máy hoặc xét hai đỉnh của miền $2x+y\\le8$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "A cho 2,5 đơn vị lãi/giờ, B cho 3 đơn vị lãi/giờ; chọn toàn bộ B.",
+        "result": "0 sản phẩm A, 8 sản phẩm B"
+      }
+    ],
+    "finalAnswer": "B. 0 sản phẩm A, 8 sản phẩm B",
+    "commonMistakes": [
+      "Chỉ so sánh lợi nhuận mỗi sản phẩm mà không quy về cùng một nguồn lực."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s019",
+    "questionId": "math10-m2-q019",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Lập $x+y\\le50$, $y\\le20$, $x,y\\ge0$ và tối đa $20x+30y$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Ưu tiên đủ 20 vé VIP rồi dùng 30 chỗ còn lại cho vé thường.",
+        "result": "x=30, y=20"
+      }
+    ],
+    "finalAnswer": "C. $x=30, y=20$",
+    "commonMistakes": [
+      "Chọn 50 vé VIP và bỏ qua ràng buộc $y\\le20$."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s020",
+    "questionId": "math10-m2-q020",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Lập $2x+y\\le10$, $x+2y\\le8$ và $F=5x+4y$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Các đỉnh chính là (5;0), (4;2), (0;4); lợi nhuận tương ứng 25,28,16.",
+        "result": "x=4, y=2"
+      }
+    ],
+    "finalAnswer": "D. $x=4, y=2$",
+    "commonMistakes": [
+      "Chọn đỉnh dùng hết một nguồn lực nhưng không kiểm tra nguồn lực còn lại."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s021",
+    "questionId": "math10-m2-q021",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Lập các ràng buộc “ít nhất”: $2x+y\\ge6$, $x+2y\\ge6$; tối thiểu $3x+2y$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Giao hai đường biên là (2;2), chi phí 10; hai phương án trên trục có chi phí 18 và 12.",
+        "result": "x=2, y=2"
+      }
+    ],
+    "finalAnswer": "A. $x=2, y=2$",
+    "commonMistakes": [
+      "Đổi “ít nhất” thành dấu ≤ và tối ưu trên miền sai."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s022",
+    "questionId": "math10-m2-q022",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "So sánh chi phí trên mỗi tấn và kiểm tra điều kiện tải tối thiểu."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Xe lớn tốn 1,2 triệu/tấn, thấp hơn 1,5 của xe nhỏ; 4 xe lớn chở đúng 20 tấn với chi phí 24.",
+        "result": "0 xe nhỏ, 4 xe lớn"
+      }
+    ],
+    "finalAnswer": "B. 0 xe nhỏ, 4 xe lớn",
+    "commonMistakes": [
+      "Tối thiểu số xe thay vì tối thiểu tổng chi phí."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s023",
+    "questionId": "math10-m2-q023",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Lập $3x+2y\\le18$, $2x+4y\\le20$, rồi xét các đỉnh nguyên khả thi."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "(4;3) dùng đúng 18 giờ và 20 kg, lãi 52; hai đỉnh trục cho lãi 42 và 40.",
+        "result": "x=4, y=3"
+      }
+    ],
+    "finalAnswer": "C. $x=4, y=3$",
+    "commonMistakes": [
+      "Làm tròn tùy ý một nghiệm không nguyên mà không kiểm tra lại ràng buộc."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  },
+  {
+    "id": "math10-m2-s024",
+    "questionId": "math10-m2-q024",
+    "recognition": "Dạng quy hoạch tuyến tính thực tế: nhận biết biến quyết định, chuyển “tối đa/không quá” thành ≤, “ít nhất” thành ≥ và lập hàm mục tiêu.",
+    "detailedSteps": [
+      {
+        "order": 1,
+        "title": "Nhận dạng và thiết lập",
+        "explanation": "Lập $x+y\\le40$, $x\\ge10$, $y\\le25$ và tối đa $2x+5y$."
+      },
+      {
+        "order": 2,
+        "title": "Tính toán và kiểm tra",
+        "explanation": "Ưu tiên 25 bánh kem, sau đó dùng 15 suất còn lại cho bánh mì; lợi nhuận là 155.",
+        "result": "x=15, y=25"
+      }
+    ],
+    "finalAnswer": "D. $x=15, y=25$",
+    "commonMistakes": [
+      "Chọn (10;25) nhưng để thừa năng lực sản xuất có thể sinh thêm lợi nhuận."
+    ],
+    "reviewSuggestions": [
+      "Lập bảng biến–nguồn lực–hàm mục tiêu trước khi tính các đỉnh."
+    ]
+  }
 ];

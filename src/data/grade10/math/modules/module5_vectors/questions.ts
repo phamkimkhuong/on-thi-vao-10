@@ -328,5 +328,1013 @@ export const g10MathModule5Questions: Question[] = [
       correctAnswer: '\\sqrt{19}',
       acceptedAnswers: ['\\sqrt{19}', 'sqrt(19)', '√19'],
       validatorType: 'exact'
-    }
+    },
+  {
+    "id": "math10-m5-q001",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Cho hình bình hành $ABCD$, $M$ là trung điểm của $BC$. Biểu diễn $\\vec{AM}$ theo $\\vec{AB},\\vec{AD}$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\vec{AM}=\\vec{AB}+\\frac12\\vec{AD}$",
+      "B. $\\vec{AM}=\\frac12\\vec{AB}+\\vec{AD}$",
+      "C. $\\vec{AM}=\\vec{AB}+2\\vec{AD}$",
+      "D. $\\vec{AM}=\\frac12(\\vec{AB}+\\vec{AD})$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q002",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $M$ là trung điểm $BC$, $G$ là trọng tâm. Biểu diễn $\\vec{MG}$ theo $\\vec{AB},\\vec{AC}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac16(\\vec{AB}+\\vec{AC})$",
+      "B. $-\\frac16(\\vec{AB}+\\vec{AC})$",
+      "C. $\\frac13(\\vec{AB}+\\vec{AC})$",
+      "D. $-\\frac13(\\vec{AB}+\\vec{AC})$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q003",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $\\vec{AP}=\\frac23\\vec{AB}$ và $\\vec{AQ}=\\frac14\\vec{AC}$. Biểu diễn $\\vec{PQ}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac23\\vec{AB}+\\frac14\\vec{AC}$",
+      "B. $-\\frac23\\vec{AB}+\\frac14\\vec{AC}$",
+      "C. $\\frac23\\vec{AB}-\\frac14\\vec{AC}$",
+      "D. $-\\frac14\\vec{AB}+\\frac23\\vec{AC}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q004",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Cho hình bình hành $ABCD$. Điểm $E$ thuộc $AB$ với $AE:EB=2:1$, điểm $F$ thuộc $AD$ với $AF:FD=1:3$. Biểu diễn $\\vec{EF}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac23\\vec{AB}+\\frac14\\vec{AD}$",
+      "B. $-\\frac23\\vec{AB}+\\frac14\\vec{AD}$",
+      "C. $-\\frac13\\vec{AB}+\\frac34\\vec{AD}$",
+      "D. $\\frac13\\vec{AB}-\\frac14\\vec{AD}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q005",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $M$ là trung điểm $AB$ và $\\vec{AN}=\\frac23\\vec{AC}$. Biểu diễn $6\\vec{MN}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $3\\vec{AB}+4\\vec{AC}$",
+      "B. $-3\\vec{AB}+4\\vec{AC}$",
+      "C. $-4\\vec{AB}+3\\vec{AC}$",
+      "D. $3\\vec{AB}-4\\vec{AC}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q006",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Hai vectơ $\\vec u=(2;4)$ và $\\vec v=(1;2)$ có quan hệ nào?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. Cùng phương, cùng hướng",
+      "B. Cùng phương, ngược hướng",
+      "C. Vuông góc",
+      "D. Không cùng phương"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q007",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Cho $A(1;2)$, $B(3;6)$, $C(4;8)$. Khẳng định nào đúng?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. A, B, C thẳng hàng",
+      "B. AB vuông góc AC",
+      "C. Tam giác ABC cân tại A",
+      "D. A, B, C không thẳng hàng"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q008",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Biết $\\vec{AM}=2\\vec{AB}+4\\vec{AC}$ và $\\vec{AN}=\\vec{AB}+2\\vec{AC}$. Kết luận nào đúng?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. A, M, N thẳng hàng",
+      "B. AM vuông góc AN",
+      "C. M là trung điểm AN",
+      "D. Không đủ dữ kiện"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q009",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Tìm $m$ để $\\vec u=(m;2)$ cùng phương với $\\vec v=(3;6)$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=1$",
+      "B. $m=2$",
+      "C. $m=3$",
+      "D. $m=6$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q010",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Cho $A(1;2)$, $B(3;5)$ và $C(m;8)$. Tìm $m$ để A, B, C thẳng hàng.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=4$",
+      "B. $m=5$",
+      "C. $m=6$",
+      "D. $m=7$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q011",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $\\vec{AM}=(m+1)\\vec{AB}+2\\vec{AC}$ và $\\vec{AN}=3\\vec{AB}+6\\vec{AC}$. Tìm $m$ để A, M, N thẳng hàng.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=-1$",
+      "B. $m=0$",
+      "C. $m=1$",
+      "D. $m=2$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q012",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Tìm $m$ để hai vectơ $\\vec u=(m-1;m+1)$ và $\\vec v=(1;2)$ cùng phương.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=1$",
+      "B. $m=2$",
+      "C. $m=3$",
+      "D. $m=4$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q013",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Tìm tổng các giá trị $m$ để hai cặp hệ số $(m;m+1)$ và $(2m-1;3)$ tỉ lệ.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $-1$",
+      "B. $0$",
+      "C. $1$",
+      "D. $2$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q014",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $M,N$ lần lượt là trung điểm của $AB,AC$. Biểu diễn $\\vec{MN}$ theo $\\vec{BC}$.",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\vec{MN}=\\frac12\\vec{BC}$",
+      "B. $\\vec{MN}=-\\frac12\\vec{BC}$",
+      "C. $\\vec{MN}=2\\vec{BC}$",
+      "D. $\\vec{MN}=\\vec{BC}$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q015",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $AM:MB=1:2$ và N là trung điểm AC. Biểu diễn $\\vec{MN}$.",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac13\\vec{AB}+\\frac12\\vec{AC}$",
+      "B. $-\\frac13\\vec{AB}+\\frac12\\vec{AC}$",
+      "C. $-\\frac12\\vec{AB}+\\frac13\\vec{AC}$",
+      "D. $\\frac12\\vec{AB}-\\frac13\\vec{AC}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q016",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Biết $\\vec{AP}=\\frac14\\vec{AB}$ và $\\vec{AQ}=\\frac34\\vec{AC}$. Hệ số của $\\vec{AB}$ trong $\\vec{PQ}$ là bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $-\\frac14$",
+      "B. $\\frac14$",
+      "C. $-\\frac34$",
+      "D. $\\frac34$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q017",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $BM:MC=1:2$ và $AN:NC=3:1$. Viết $\\vec{MN}=x\\vec{AB}+y\\vec{AC}$. Tính $x+y$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $-\\frac14$",
+      "B. $-\\frac16$",
+      "C. $\\frac1{12}$",
+      "D. $\\frac14$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q018",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $AP:PB=2:3$ và $BQ:QC=1:2$. Viết $\\vec{PQ}=x\\vec{AB}+y\\vec{AC}$. Tính $x+y$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac25$",
+      "B. $\\frac35$",
+      "C. $\\frac23$",
+      "D. $\\frac45$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q019",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Cho hình bình hành $ABCD$. $AE=\\frac13AB$ và điểm F thuộc CD sao cho $CF:FD=1:2$. Biểu diễn $\\vec{EF}$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac13\\vec{AB}+\\vec{AD}$",
+      "B. $\\frac23\\vec{AB}+\\vec{AD}$",
+      "C. $-\\frac13\\vec{AB}+\\vec{AD}$",
+      "D. $\\frac13\\vec{AB}-\\vec{AD}$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q020",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $AM:MB=1:3$, $BN:NC=2:1$ và P là trung điểm MN. Biểu diễn $\\vec{AP}=x\\vec{AB}+y\\vec{AC}$. Tính $x+y$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac12$",
+      "B. $\\frac58$",
+      "C. $\\frac23$",
+      "D. $\\frac34$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q021",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, G là trọng tâm và M là trung điểm AB. Biểu diễn $\\vec{MG}$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac16\\vec{AB}+\\frac13\\vec{AC}$",
+      "B. $-\\frac16\\vec{AB}+\\frac13\\vec{AC}$",
+      "C. $\\frac13\\vec{AB}-\\frac16\\vec{AC}$",
+      "D. $-\\frac13\\vec{AB}+\\frac16\\vec{AC}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q022",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $BM:MC=2:3$ và $CN:NA=1:2$. Viết $\\vec{MN}=x\\vec{AB}+y\\vec{AC}$. Tính $x+y$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $-\\frac13$",
+      "B. $-\\frac15$",
+      "C. $\\frac1{15}$",
+      "D. $\\frac13$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q023",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, $AP:PB=3:2$, $AQ:QC=2:3$ và R là trung điểm PQ. Nếu $\\vec{AR}=x\\vec{AB}+y\\vec{AC}$ thì $x+y$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac25$",
+      "B. $\\frac12$",
+      "C. $\\frac35$",
+      "D. $\\frac7{10}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q024",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt5",
+    "content": "Trong tam giác $ABC$, M là trung điểm BC, G là trọng tâm và điểm N thỏa $\\vec{AN}=2\\vec{AG}$. Biểu diễn $\\vec{MN}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac16(\\vec{AB}+\\vec{AC})$",
+      "B. $-\\frac16(\\vec{AB}+\\vec{AC})$",
+      "C. $\\frac13(\\vec{AB}+\\vec{AC})$",
+      "D. $\\frac23(\\vec{AB}+\\vec{AC})$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q025",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $|\\vec u|=2$, $|\\vec v|=3$ và góc giữa chúng bằng $60^\\circ$. Tính $\\vec u\\cdot\\vec v$.",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $3$",
+      "B. $6$",
+      "C. $3\\sqrt3$",
+      "D. $-3$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q026",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Hai vectơ khác vectơ không vuông góc nhau. Tích vô hướng của chúng bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $-1$",
+      "B. $0$",
+      "C. $1$",
+      "D. Bằng tích độ dài"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q027",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Hai vectơ ngược hướng có độ dài lần lượt 4 và 5. Tích vô hướng bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $20$",
+      "B. $-20$",
+      "C. $9$",
+      "D. $-9$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q028",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Tam giác $ABC$ có $AB=5$, $AC=7$, $\\angle BAC=60^\\circ$. Tính $\\vec{AB}\\cdot\\vec{AC}$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\frac{35}{2}$",
+      "B. $35$",
+      "C. $\\frac{35\\sqrt3}{2}$",
+      "D. $-\\frac{35}{2}$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q029",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Tam giác đều $ABC$ cạnh $a$. Tính $\\vec{AB}\\cdot\\vec{BC}$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $a^2$",
+      "B. $\\frac{a^2}{2}$",
+      "C. $-\\frac{a^2}{2}$",
+      "D. $-a^2$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q030",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Biết $\\vec u\\cdot\\vec v=-12$, $|\\vec u|=3$, $|\\vec v|=8$. Góc giữa hai vectơ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $60^\\circ$",
+      "B. $90^\\circ$",
+      "C. $120^\\circ$",
+      "D. $150^\\circ$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q031",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho hình vuông $ABCD$ cạnh $a$. Tính $\\vec{AC}\\cdot\\vec{BD}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $-a^2$",
+      "B. $0$",
+      "C. $a^2$",
+      "D. $2a^2$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q032",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Tam giác $ABC$ có $AB=4$, $BC=5$, $AC=7$. Tính $\\vec{AB}\\cdot\\vec{BC}$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $-4$",
+      "B. $0$",
+      "C. $4$",
+      "D. $8$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q033",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Biết $|\\vec u|=2$, $|\\vec v|=3$ và $|\\vec u-\\vec v|=\\sqrt7$. Góc giữa $\\vec u,\\vec v$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $30^\\circ$",
+      "B. $60^\\circ$",
+      "C. $90^\\circ$",
+      "D. $120^\\circ$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q034",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $\\vec u=(3;-2)$ và $\\vec v=(4;1)$. Tính $\\vec u\\cdot\\vec v$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $8$",
+      "B. $10$",
+      "C. $12$",
+      "D. $14$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q035",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $A(1;-1)$, $B(4;3)$, $C(-1;2)$. Tính $\\vec{AB}\\cdot\\vec{AC}$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $4$",
+      "B. $6$",
+      "C. $8$",
+      "D. $10$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q036",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Tìm $m$ để $\\vec u=(m;2)$ vuông góc $\\vec v=(3;-6)$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=-4$",
+      "B. $m=-2$",
+      "C. $m=2$",
+      "D. $m=4$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q037",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Góc giữa $\\vec u=(1;2)$ và $\\vec v=(2;-1)$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $0^\\circ$",
+      "B. $45^\\circ$",
+      "C. $90^\\circ$",
+      "D. $180^\\circ$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q038",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $A(m;1)$, $B(2;3)$ và $\\vec v=(1;-2)$. Tìm $m$ để $\\vec{AB}\\perp\\vec v$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=-2$",
+      "B. $m=0$",
+      "C. $m=2$",
+      "D. $m=4$"
+    ],
+    "correctAnswer": "A",
+    "acceptedAnswers": [
+      "A"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q039",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $\\vec u=(1;0)$, $\\vec v=(m;1)$ với $m>0$. Tìm m để góc giữa hai vectơ bằng $45^\\circ$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=\\frac12$",
+      "B. $m=1$",
+      "C. $m=\\sqrt2$",
+      "D. $m=2$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q040",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Nếu $\\vec u\\perp\\vec v$ thì $\\vec u\\cdot\\vec v$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $-1$",
+      "B. $0$",
+      "C. $1$",
+      "D. $|u||v|$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q041",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Biết $|\\vec u|=3$. Giá trị $\\vec u\\cdot\\vec u$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $3$",
+      "B. $6$",
+      "C. $9$",
+      "D. $\\sqrt3$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q042",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Độ dài của vectơ $\\vec u=(3;4)$ bằng bao nhiêu?",
+    "responseType": "single_choice",
+    "difficulty": "easy",
+    "sourceType": "manual",
+    "options": [
+      "A. $4$",
+      "B. $5$",
+      "C. $7$",
+      "D. $25$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q043",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $|\\vec a|=2$, $|\\vec b|=5$, $\\vec a\\cdot\\vec b=3$. Tính $|\\vec a+\\vec b|$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\sqrt{23}$",
+      "B. $\\sqrt{29}$",
+      "C. $\\sqrt{35}$",
+      "D. $7$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q044",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $|\\vec a|=2$, $|\\vec b|=5$, $\\vec a\\cdot\\vec b=3$. Tính $|\\vec a-\\vec b|$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $\\sqrt{19}$",
+      "B. $\\sqrt{23}$",
+      "C. $\\sqrt{29}$",
+      "D. $\\sqrt{35}$"
+    ],
+    "correctAnswer": "B",
+    "acceptedAnswers": [
+      "B"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q045",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Tìm $m$ để $\\vec u=(m;1)$ vuông góc $\\vec v=(2;-4)$.",
+    "responseType": "single_choice",
+    "difficulty": "medium",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=-2$",
+      "B. $m=0$",
+      "C. $m=2$",
+      "D. $m=4$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q046",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $|\\vec a|=3$, $|\\vec b|=4$ và góc giữa chúng bằng $120^\\circ$. Tính $|2\\vec a-\\vec b|$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $2\\sqrt7$",
+      "B. $2\\sqrt{13}$",
+      "C. $2\\sqrt{19}$",
+      "D. $\\sqrt{76}$ và $-\\sqrt{76}$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q047",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Cho $\\vec a=(m;2)$, $\\vec b=(1;-3)$. Biết $|\\vec a+\\vec b|=|\\vec a-\\vec b|$. Tìm m.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $m=-6$",
+      "B. $m=-3$",
+      "C. $m=3$",
+      "D. $m=6$"
+    ],
+    "correctAnswer": "D",
+    "acceptedAnswers": [
+      "D"
+    ],
+    "validatorType": "choice"
+  },
+  {
+    "id": "math10-m5-q048",
+    "subjectId": "math",
+    "topicId": "math10-t5",
+    "questionTypeId": "math10-qt7",
+    "content": "Biết $\\vec u+\\vec v$ vuông góc $\\vec u-\\vec v$, đồng thời $|\\vec u+\\vec v|=10$, $|\\vec u-\\vec v|=6$. Tính $|\\vec u|$.",
+    "responseType": "single_choice",
+    "difficulty": "hard",
+    "sourceType": "manual",
+    "options": [
+      "A. $4$",
+      "B. $\\sqrt{17}$",
+      "C. $\\sqrt{34}$",
+      "D. $8$"
+    ],
+    "correctAnswer": "C",
+    "acceptedAnswers": [
+      "C"
+    ],
+    "validatorType": "choice"
+  }
 ];

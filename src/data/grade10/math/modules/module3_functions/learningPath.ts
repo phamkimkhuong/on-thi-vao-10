@@ -1,7 +1,7 @@
 import type { LearningMisconception, LearningOutcome } from '@/types';
 
 export const g10MathModule3Outcomes: LearningOutcome[] = [
-  { id: 'MATH10-M3-O01', topicId: 'math10-t3', title: 'Khái niệm và biểu diễn hàm số', description: 'Xác định tập xác định, giá trị hàm số và đọc thông tin từ bảng, công thức hoặc đồ thị.', scope: 'core', orderIndex: 1, questionTypeIds: [], prerequisiteOutcomeIds: [], misconceptionIds: ['MATH10-M3-M01'], evidenceTypes: ['recognition', 'representation', 'data'], estimatedMinutes: 90, isCritical: true },
+  { id: 'MATH10-M3-O01', topicId: 'math10-t3', title: 'Khái niệm và biểu diễn hàm số', description: 'Xác định tập xác định, giá trị hàm số và đọc thông tin từ bảng, công thức hoặc đồ thị.', scope: 'core', orderIndex: 1, questionTypeIds: ['math10-qt18'], prerequisiteOutcomeIds: [], misconceptionIds: ['MATH10-M3-M01'], evidenceTypes: ['recognition', 'representation', 'data'], estimatedMinutes: 90, isCritical: true },
   { id: 'MATH10-M3-O02', topicId: 'math10-t3', title: 'Đồ thị hàm số bậc hai', description: 'Xác định chiều mở, đỉnh, trục đối xứng, giao trục và dựng đồ thị parabol.', scope: 'core', orderIndex: 2, questionTypeIds: ['math10-qt4'], prerequisiteOutcomeIds: ['MATH10-M3-O01'], misconceptionIds: ['MATH10-M3-M02'], evidenceTypes: ['representation', 'calculation'], estimatedMinutes: 120, isCritical: true },
   { id: 'MATH10-M3-O03', topicId: 'math10-t3', title: 'Cực trị và mô hình bậc hai', description: 'Tìm cực trị trên miền xác định và giải thích kết quả trong bài toán thực tế.', scope: 'core', orderIndex: 3, questionTypeIds: ['math10-qt4'], prerequisiteOutcomeIds: ['MATH10-M3-O02'], misconceptionIds: ['MATH10-M3-M03'], evidenceTypes: ['calculation', 'application'], estimatedMinutes: 120 }
 ];
