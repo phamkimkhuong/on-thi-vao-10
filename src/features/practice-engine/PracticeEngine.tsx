@@ -234,7 +234,7 @@ export const PracticeEngine: React.FC = () => {
   const isChemistry = routeSubject === 'chemistry';
   const isPhysics = routeSubject === 'physics';
   const isBiology = routeSubject === 'biology';
-  const usesAdaptivePractice = isPhysics || isBiology;
+  const usesAdaptivePractice = isMath || isPhysics || isBiology;
   const qList = currentQuestions;
 
   const filteredQuestions = useEnglishQuestionFilter(
@@ -265,7 +265,7 @@ export const PracticeEngine: React.FC = () => {
     setAdaptivePracticeStatus(buildAdaptivePracticeSequence(filteredQuestions, attemptsAtSessionStart));
   }, [filteredQuestions, isExamMode, questionTypeId, user?.uid, usesAdaptivePractice]);
 
-  // Sinh học và Vật lí dùng snapshot thích nghi để giữ nguyên câu hiện tại trong
+  // Toán học, Sinh học và Vật lí dùng snapshot thích nghi để giữ nguyên câu hiện tại trong
   // suốt phiên. Hóa học hiện chỉ sắp xếp tăng dần độ khó. Chế độ thi luôn giữ
   // nguyên thứ tự đề để không làm biến đổi cấu trúc bài kiểm tra.
   const questions = useMemo(() => {

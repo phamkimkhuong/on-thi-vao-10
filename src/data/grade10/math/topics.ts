@@ -1,12 +1,21 @@
-import { Topic } from '@/types';
+import type { Topic } from '@/types';
+import { g10MathModule1Topics } from './modules/module1_logic_sets/topics';
+import { g10MathModule2Topics } from './modules/module2_inequalities/topics';
+import { g10MathModule3Topics } from './modules/module3_functions/topics';
+import { g10MathModule4Topics } from './modules/module4_trigonometry/topics';
+import { g10MathModule5Topics } from './modules/module5_vectors/topics';
+import { g10MathModule6Topics } from './modules/module6_combinatorics/topics';
+import { g10MathModule7Topics } from './modules/module7_statistics_probability/topics';
+import { g10MathModule8Topics } from './modules/module8_coordinate_geometry/topics';
 
+/** Aggregator: dữ liệu thô được sở hữu bởi từng module. */
 export const g10MathTopics: Topic[] = [
-  { id: 'math10-t1', subjectId: 'math', name: 'Mệnh đề & Tập hợp', slug: 'menh-de-va-tap-hop', orderIndex: 1, tier: 1 },
-  { id: 'math10-t2', subjectId: 'math', name: 'Bất phương trình & Hệ BPT bậc nhất hai ẩn', slug: 'bat-phuong-trinh-he-bpt', orderIndex: 2, tier: 1 },
-  { id: 'math10-t3', subjectId: 'math', name: 'Hàm số & Đồ thị bậc hai', slug: 'ham-so-va-do-thi-bac-hai', orderIndex: 3, tier: 1 },
-  { id: 'math10-t4', subjectId: 'math', name: 'Hệ thức lượng trong tam giác', slug: 'he-thuc-luong-trong-tam-giac', orderIndex: 4, tier: 1 },
-  { id: 'math10-t5', subjectId: 'math', name: 'Vectơ & Các phép toán', slug: 'vecto-va-cac-phep-toan', orderIndex: 5, tier: 2 },
-  { id: 'math10-t6', subjectId: 'math', name: 'Đại số tổ hợp', slug: 'dai-so-to-hop', orderIndex: 6, tier: 2 },
-  { id: 'math10-t7', subjectId: 'math', name: 'Thống kê & Xác suất thực tế', slug: 'thong-ke-xac-suat', orderIndex: 7, tier: 2 },
-  { id: 'math10-t8', subjectId: 'math', name: 'Hình học tọa độ Oxy', slug: 'hinh-hoc-toa-do-oxy', orderIndex: 8, tier: 3 }
+  ...g10MathModule1Topics,
+  ...g10MathModule2Topics,
+  ...g10MathModule3Topics,
+  ...g10MathModule4Topics,
+  ...g10MathModule5Topics,
+  ...g10MathModule6Topics,
+  ...g10MathModule7Topics,
+  ...g10MathModule8Topics
 ];

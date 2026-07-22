@@ -69,11 +69,12 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11', s
 
     case 'grade10':
       if (subject === 'math') {
-        const [topicsMod, qtMod, qMod, sMod, assessmentsMod] = await Promise.all([
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
           import('./grade10/math/topics'),
           import('./grade10/math/questionTypes'),
           import('./grade10/math/questions'),
           import('./grade10/math/solutions'),
+          import('./grade10/math/learningPath'),
           import('./grade10/math/assessments')
         ]);
         data = {
@@ -82,7 +83,9 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11', s
           questions: [...qMod.g10MathQuestions, ...assessmentsMod.g10MathAssessmentQuestions],
           solutions: [...sMod.g10MathSolutions, ...assessmentsMod.g10MathAssessmentSolutions],
           mockExams: assessmentsMod.g10MathAssessmentExams,
-          assessmentBlueprints: assessmentsMod.g10MathAssessmentBlueprints
+          assessmentBlueprints: assessmentsMod.g10MathAssessmentBlueprints,
+          learningOutcomes: learningPathMod.g10MathOutcomes,
+          learningMisconceptions: learningPathMod.g10MathMisconceptions
         };
       } else if (subject === 'english') {
         const [topicsMod, qtMod, qMod, sMod, assessmentsMod] = await Promise.all([
