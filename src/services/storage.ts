@@ -135,6 +135,18 @@ export const storageService = {
     writeToStorage(KEYS.ATTEMPTS, map);
   },
 
+  getTopicAttemptsLocal(userId: string, questionTypeId: string): UserAttempt[] {
+    const attempts = this.getAttempts(userId);
+    return attempts.filter(a => a.questionTypeId === questionTypeId);
+  },
+
+  saveTopicAttemptsLocal(userId: string, questionTypeId: string, topicAttempts: UserAttempt[]): void {
+    const allAttempts = this.getAttempts(userId);
+    const otherAttempts = allAttempts.filter(a => a.questionTypeId !== questionTypeId);
+    const merged = [...otherAttempts, ...topicAttempts];
+    this.saveAttemptsLocal(userId, merged);
+  },
+
   // MISTAKES (Sổ lỗi sai)
   getMistakes(userId: string = 'guest'): UserMistake[] {
     const map = readMistakesMap();

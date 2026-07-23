@@ -41,6 +41,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, setAnalyticsUser, db } from './services/firebase';
 import { progressService } from './services/progressService';
+import { teacherAccessService } from './services/teacherAccessService';
 import { Loader } from 'lucide-react';
 
 const router = createBrowserRouter([
@@ -144,9 +145,12 @@ export const App: React.FC = () => {
           console.error("Lỗi khi lắng nghe user profile:", err);
         });
 
-        // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập.
-        await progressService.mergeGuestDataWithFirestore(user.uid);
-        refreshProgress();
+        // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập (chỉ áp dụng đối với học sinh, bỏ qua giáo viên/admin).
+        const isTeacher = await teacherAccessService.isTeacher(user);
+        if (!isTeacher) {
+          await progressService.syncUserData(user.uid);
+          refreshProgress();
+        }
       } else {
         setAnalyticsUser(null);
         setPremium(false);

@@ -142,6 +142,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /system_stats/{docId} {
+      allow read: if isTeacher();
+      allow write: if false;
+    }
+
     match /users/{userId} {
       allow get: if isOwner(userId) || isTeacher();
       allow list: if isTeacher();
@@ -163,12 +168,22 @@ service cloud.firestore {
         allow create, delete: if false;
       }
 
+      match /topic_attempts/{questionTypeId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
+      }
+
       match /mistakes/{mistakeId} {
         allow read, write: if isOwner(userId);
         allow read: if isTeacher();
         allow create: if isTeacherMistakeCreate(userId);
         allow update: if isTeacherMistakeUpdate(userId);
         allow delete: if false;
+      }
+
+      match /active_mistakes/{docId} {
+        allow read, write: if isOwner(userId);
+        allow read: if isTeacher();
       }
 
       match /exam_results/{examResultId} {

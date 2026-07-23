@@ -390,7 +390,23 @@ export const PracticeEngine: React.FC = () => {
     }
   }, [selectedSubTense, resetQuestionState]);
 
-  // Tự động kiểm tra và tải bài làm cũ của học sinh đối với câu hỏi này để tránh bắt làm lại từ đầu
+  // Khi người dùng mới vào một dạng bài, nếu LocalStorage trống (máy mới), tự động tải 1 Read từ topic_attempts/{questionTypeId}
+  useEffect(() => {
+    if (!user || !questionTypeId || isExamMode) return;
+
+    const localAttempts = storageService.getTopicAttemptsLocal(user.uid, questionTypeId);
+    if (localAttempts.length === 0) {
+      progressService.getTopicAttempts(user.uid, questionTypeId).then(remoteTopicAttempts => {
+        if (remoteTopicAttempts.length > 0) {
+          storageService.saveTopicAttemptsLocal(user.uid, questionTypeId, remoteTopicAttempts);
+          refreshProgress();
+        }
+      });
+    }
+  }, [user, questionTypeId, isExamMode, refreshProgress]);
+
+  // Tự động kiểm tra bài làm cũ của học sinh đối với câu hỏi này để tránh bắt làm lại từ đầu.
+  // Chỉ đọc LocalStorage — dữ liệu đã được cập nhật realtime mỗi khi nộp bài, không cần gọi Firestore.
   useEffect(() => {
     if (isExamMode) return;
     if (questions.length === 0) return;
@@ -401,71 +417,28 @@ export const PracticeEngine: React.FC = () => {
       return;
     }
 
-    let isMounted = true;
     loadedQuestionIdRef.current = currentQ.id;
 
-    const checkAttempt = async () => {
-      const userId = user?.uid || 'guest';
-      const userAttemptsLocal = storageService.getAttempts(userId);
-      const attemptsForQLocal = userAttemptsLocal
-        .filter(a => a.questionId === currentQ.id)
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const userId = user?.uid || 'guest';
+    const userAttemptsLocal = storageService.getAttempts(userId);
+    const attemptsForQ = userAttemptsLocal
+      .filter(a => a.questionId === currentQ.id)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-      const latestAttemptLocal = attemptsForQLocal[0] || null;
+    const latestAttempt = attemptsForQ[0] || null;
 
-      if (latestAttemptLocal) {
-        if (isMounted) {
-          setExistingAttempt(latestAttemptLocal);
-          setIsSubmitted(true);
-          setIsCorrect(latestAttemptLocal.isCorrect);
-          setPastAttempts(attemptsForQLocal.slice(1, 3));
-        }
-      }
-
-      if (user) {
-        try {
-          const remoteAttempts = await progressService.getAttempts(user.uid);
-          storageService.saveAttemptsLocal(user.uid, remoteAttempts);
-
-          const attemptsForQRemote = remoteAttempts
-            .filter(a => a.questionId === currentQ.id)
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-          const latestAttemptRemote = attemptsForQRemote[0] || null;
-
-          if (isMounted) {
-            if (latestAttemptRemote) {
-              setExistingAttempt(latestAttemptRemote);
-              setIsSubmitted(true);
-              setIsCorrect(latestAttemptRemote.isCorrect);
-              setPastAttempts(attemptsForQRemote.slice(1, 3));
-            } else {
-              setExistingAttempt(null);
-              setIsSubmitted(false);
-              setIsCorrect(false);
-              clearUpload();
-              setPastAttempts([]);
-            }
-          }
-        } catch (err) {
-          console.error("Lỗi khi tải bài làm mới nhất từ Firestore:", err);
-        }
-      } else if (!latestAttemptLocal) {
-        if (isMounted) {
-          setExistingAttempt(null);
-          setIsSubmitted(false);
-          setIsCorrect(false);
-          clearUpload();
-          setPastAttempts([]);
-        }
-      }
-    };
-
-    checkAttempt();
-
-    return () => {
-      isMounted = false;
-    };
+    if (latestAttempt) {
+      setExistingAttempt(latestAttempt);
+      setIsSubmitted(true);
+      setIsCorrect(latestAttempt.isCorrect);
+      setPastAttempts(attemptsForQ.slice(1, 3));
+    } else {
+      setExistingAttempt(null);
+      setIsSubmitted(false);
+      setIsCorrect(false);
+      clearUpload();
+      setPastAttempts([]);
+    }
   }, [currentIdx, questionTypeId, questions, user, isExamMode, clearUpload]);
 
   const handleExamSubmit = useCallback(async (isTimeOut = false) => {

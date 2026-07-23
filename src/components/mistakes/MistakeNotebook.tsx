@@ -76,10 +76,18 @@ export const MistakeNotebook: React.FC = () => {
   const questions = getQuestions(selectedGrade, selectedSubject);
   const solutions = getSolutions(selectedGrade, selectedSubject);
 
-  const loadMistakes = useCallback(() => {
+  const loadMistakes = useCallback(async () => {
     if (!user) return;
     const currentUserId = user.uid;
-    const list = storageService.getMistakes(currentUserId);
+    let list = storageService.getMistakes(currentUserId);
+
+    if (list.length === 0) {
+      const remoteMistakes = await progressService.getMistakes(currentUserId);
+      if (remoteMistakes.length > 0) {
+        storageService.saveMistakesLocal(currentUserId, remoteMistakes);
+        list = remoteMistakes;
+      }
+    }
 
     // Lọc lỗi sai theo môn đang chọn và trạng thái chưa fixed
     const filtered = list

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { progressService } from '../../services/progressService';
+import { adminService } from '../../services/adminService';
 import { Loader, Activity, Users, Timer, Award, RefreshCw } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import {
@@ -47,13 +47,20 @@ const getModelInfo = (log: any) => {
 };
 
 export const TeacherAiStatistics: React.FC = () => {
+  const [aiSummary, setAiSummary] = useState<any>(null);
   const [logs, setLogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
-    const data = await progressService.getAiUsageLogs(200);
-    setLogs(data);
+    const summary = await adminService.getAiSummary();
+    if (summary) {
+      setAiSummary(summary);
+      setLogs(summary.recentLogs || []);
+    } else {
+      const data = await adminService.getAiUsageLogs(30);
+      setLogs(data);
+    }
     setIsLoading(false);
   }, []);
 
@@ -63,6 +70,24 @@ export const TeacherAiStatistics: React.FC = () => {
 
   // Calculations
   const metrics = useMemo(() => {
+    if (aiSummary?.totals) {
+      const { totalCalls, totalPromptTokens, totalCandidatesTokens, totalTokens } = aiSummary.totals;
+      const rateInput = 0.075 / 1000000;
+      const rateOutput = 0.30 / 1000000;
+      const usdToVnd = 25400;
+      const costUSD = ((totalPromptTokens || 0) * rateInput) + ((totalCandidatesTokens || 0) * rateOutput);
+      const costVND = Math.round(costUSD * usdToVnd);
+      const avgTokens = totalCalls > 0 ? Math.round(totalTokens / totalCalls) : 0;
+      return {
+        totalCalls: totalCalls || 0,
+        totalPrompt: totalPromptTokens || 0,
+        totalCandidates: totalCandidatesTokens || 0,
+        totalAll: totalTokens || 0,
+        costVND,
+        avgTokens
+      };
+    }
+
     const totalCalls = logs.length;
     let totalPrompt = 0;
     let totalCandidates = 0;
@@ -75,10 +100,6 @@ export const TeacherAiStatistics: React.FC = () => {
     });
 
     const avgTokens = totalCalls > 0 ? Math.round(totalAll / totalCalls) : 0;
-
-    // Cost estimation based on Gemini 3.1 Flash Lite
-    // Prompt: $0.075 / 1M tokens
-    // Completion: $0.30 / 1M tokens
     const rateInput = 0.075 / 1000000;
     const rateOutput = 0.30 / 1000000;
     const usdToVnd = 25400;
@@ -93,13 +114,25 @@ export const TeacherAiStatistics: React.FC = () => {
       costVND,
       avgTokens
     };
-  }, [logs]);
+  }, [aiSummary, logs]);
 
   // 1. Daily usage data (ComposedChart)
   const dailyData = useMemo(() => {
-    const groups: Record<string, { date: string; inputTokens: number; outputTokens: number; calls: number }> = {};
+    if (aiSummary?.daily) {
+      const dates = Object.keys(aiSummary.daily).sort();
+      return dates.map(dateStr => {
+        const item = aiSummary.daily[dateStr];
+        const dateFormatted = dateStr.length >= 10 ? dateStr.substring(5, 10) : dateStr;
+        return {
+          date: dateFormatted,
+          inputTokens: item.promptTokens || 0,
+          outputTokens: item.candidatesTokens || 0,
+          calls: item.calls || 0
+        };
+      });
+    }
 
-    // Sort logs ascending by date first to group them chronologically
+    const groups: Record<string, { date: string; inputTokens: number; outputTokens: number; calls: number }> = {};
     const sortedLogs = [...logs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
     sortedLogs.forEach(log => {
@@ -114,7 +147,7 @@ export const TeacherAiStatistics: React.FC = () => {
     });
 
     return Object.values(groups);
-  }, [logs]);
+  }, [aiSummary, logs]);
 
   // 2. Task Breakdown (PieChart)
   const taskData = useMemo(() => {

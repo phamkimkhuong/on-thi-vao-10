@@ -411,6 +411,12 @@ export interface UserAttempt {
   aiEvaluation?: AiEvaluation;
 }
 
+export interface TopicAttemptsDoc {
+  questionTypeId: string;
+  updatedAt: string;
+  attempts: UserAttempt[];
+}
+
 export interface UserMistake {
   id: string;
   userId: string;
@@ -423,6 +429,11 @@ export interface UserMistake {
   nextReviewAt: string; // ISO String
   lastAttemptedAt: string; // ISO String
   teacherFeedback?: string;
+}
+
+export interface ActiveMistakesDoc {
+  updatedAt: string;
+  mistakes: UserMistake[];
 }
 
 export interface UserProgress {
@@ -491,6 +502,16 @@ export interface SimulatedStudent {
   avatar: string;
   email: string;
   isPremium?: boolean;
+  completedCount?: number;
+  lastActiveAt?: string;
+  masteryLevels?: Record<string, number>;
+  completedLessons?: string[];
+  stats?: {
+    totalStudySeconds: number;
+    totalAttempts: number;
+    correctAttempts: number;
+    dailyActivity: Record<string, number>;
+  };
 }
 
 export interface SupportTicket {

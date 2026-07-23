@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
+import { teacherService } from '../../services/teacherService';
 import { authService } from '../../services/authService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { PolicyModal } from '../common/PolicyModal';
@@ -239,9 +240,8 @@ export const AppLayout: React.FC = () => {
 
     const fetchRealPendingCount = async () => {
       try {
-        const studentsList = await progressService.getRealStudents([user.uid]);
-        const pending = await progressService.getRealPendingManualAttempts(studentsList);
-        setRealPendingCount(pending.length);
+        const count = await teacherService.getRealPendingCount();
+        setRealPendingCount(count);
       } catch (e) {
         console.error("Lỗi khi load real pending count ở sidebar:", e);
       }
