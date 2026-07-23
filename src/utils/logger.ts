@@ -26,7 +26,7 @@ const getCallerInfo = (): string => {
       return `-> ${funcName} (${fileNameWithLine.split(':')[0]}${lineCol})`;
     }
     return `-> ${callerLine.trim()}`;
-  } catch (e) {
+  } catch {
     return '';
   }
 };

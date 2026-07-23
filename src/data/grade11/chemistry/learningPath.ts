@@ -1,10 +1,10 @@
 import type { LearningMisconception, LearningOutcome } from '@/types';
-import { g11ChemistryModule0Outcomes, g11ChemistryModule0Misconceptions } from './modules/module0_intro/learningPath';
 
-export const g11ChemistryOutcomes: LearningOutcome[] = [
-  ...g11ChemistryModule0Outcomes
-];
+const modules = import.meta.glob('./modules/module*/index.ts', { eager: true });
 
-export const g11ChemistryMisconceptions: LearningMisconception[] = [
-  ...g11ChemistryModule0Misconceptions
-];
+export const g11ChemistryOutcomes: LearningOutcome[] = Object.values(modules)
+  .flatMap((mod: any) => (mod.outcomes || []) as LearningOutcome[])
+  .sort((a, b) => a.orderIndex - b.orderIndex);
+
+export const g11ChemistryMisconceptions: LearningMisconception[] = Object.values(modules)
+  .flatMap((mod: any) => (mod.misconceptions || []) as LearningMisconception[]);

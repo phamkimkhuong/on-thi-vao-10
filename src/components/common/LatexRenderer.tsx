@@ -67,10 +67,25 @@ const DELIMITER_REGEX = /(\$\$.*?\$\$|\$.*?\$|\\\(.*?\\\)|\\\[.*?\\\])/gs;
  * Render một đoạn LaTeX vào element, xử lý lỗi graceful.
  */
 const renderKatex = (formula: string, element: HTMLElement, displayMode: boolean) => {
+  const originalWarn = console.warn;
+  console.warn = (...args: any[]) => {
+    if (typeof args[0] === 'string' && (args[0].includes('No character metrics for') || args[0].includes('LaTeX-incompatible input'))) {
+      return;
+    }
+    originalWarn.apply(console, args);
+  };
+
   try {
-    katex.render(formula, element, { displayMode, throwOnError: false });
+    katex.render(formula, element, {
+      displayMode,
+      throwOnError: false,
+      strict: false,
+      trust: true
+    });
   } catch {
     element.textContent = formula;
+  } finally {
+    console.warn = originalWarn;
   }
 };
 

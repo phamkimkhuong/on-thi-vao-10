@@ -16,7 +16,7 @@ export interface SubjectDataCache {
 const dataCache: Record<string, SubjectDataCache> = {};
 
 // Hàm nạp động dữ liệu môn học
-export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Promise<SubjectDataCache> => {
+export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): Promise<SubjectDataCache> => {
   const cacheKey = `${grade}-${subject}`;
   if (dataCache[cacheKey]) {
     return dataCache[cacheKey];
@@ -198,42 +198,42 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11', s
 };
 
 // Đồng bộ hóa việc truy xuất thông tin từ bộ nhớ cache
-export const getTopics = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Topic[] => {
+export const getTopics = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): Topic[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.topics || [];
 };
 
-export const getQuestionTypes = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): QuestionType[] => {
+export const getQuestionTypes = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): QuestionType[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.questionTypes || [];
 };
 
-export const getQuestions = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Question[] => {
+export const getQuestions = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): Question[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.questions || [];
 };
 
-export const getSolutions = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): Solution[] => {
+export const getSolutions = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): Solution[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.solutions || [];
 };
 
-export const getMockExams = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): MockExam[] => {
+export const getMockExams = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): MockExam[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.mockExams || [];
 };
 
-export const getAssessmentBlueprints = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): AssessmentBlueprint[] => {
+export const getAssessmentBlueprints = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): AssessmentBlueprint[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.assessmentBlueprints || [];
 };
 
-export const getLearningOutcomes = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): any[] => {
+export const getLearningOutcomes = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): any[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.learningOutcomes || [];
 };
 
-export const getLearningMisconceptions = (grade: 'grade9' | 'grade10' | 'grade11', subject: SubjectCode): any[] => {
+export const getLearningMisconceptions = (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12', subject: SubjectCode): any[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.learningMisconceptions || [];
 };

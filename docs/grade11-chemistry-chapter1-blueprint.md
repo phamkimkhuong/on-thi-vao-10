@@ -7,7 +7,13 @@
 - Phạm vi: Bài 1, Bài 2 và Bài 3 ôn tập Chương 1.
 - Chuẩn nội dung: Chương trình GDPT 2018 môn Hóa học và yêu cầu cần đạt Hóa học 11.
 - Mục đích: làm nguồn thiết kế cho `LearningOutcome`, `LearningMisconception`, `QuestionType`, ngân hàng câu hỏi và assessment blueprint.
-- Trạng thái: blueprint trước triển khai data; chưa phải nội dung hiển thị trực tiếp cho học sinh.
+- Trạng thái: đang triển khai theo vertical slice.
+- Đã triển khai giai đoạn 1:
+  - `module0_bridge`: cổng chẩn đoán phương trình, nồng độ, dữ liệu tốc độ, enthalpy và logarit.
+  - `module1_equilibrium`: đã triển khai phản ứng thuận nghịch, cân bằng động, dữ liệu cân bằng, \(K_C\), chuyển dịch theo nồng độ, áp suất, nhiệt độ, vai trò xúc tác, đánh đổi công nghiệp và thí nghiệm \(NO_2/N_2O_4\).
+  - Mười bốn dạng `chem11-qt01`–`chem11-qt14`, mỗi dạng 12 câu theo mức 4 dễ – 5 vừa – 3 khó.
+  - Tổng cộng 174 câu và 174 lời giải tính cả cầu nối; Bài 1 có 72 câu, Bài 2 có đủ 96 câu.
+- Bài 2 đã hoàn thành vertical slice cốt lõi. Phần tiếp theo của Chương 1 là Bài 3 — ôn tập tích hợp và chapter checkpoint, không tạo outcome kiến thức mới.
 
 ## 2. Quyết định thiết kế
 
@@ -97,6 +103,7 @@ Khuyến nghị: `chem11-bridge-*` nên là alias/remediation mapping sang outco
 | ID | Outcome quan sát được | Tiền đề | Bằng chứng bắt buộc | Mức độ | Critical |
 |---|---|---|---|---|---:|
 | `chem11-eq-kc-expression` | Viết đúng biểu thức \(K_C\) từ phương trình cân bằng, dùng hệ số làm số mũ và xử lý đúng chất rắn/chất lỏng tinh khiết theo phạm vi SGK | `chem11-eq-reversible`, `chem11-bridge-concentration` | `representation`, `explanation` | Thông hiểu | Có |
+| `chem11-eq-kc-calculation` | Tính \(K_C\) từ nồng độ của các chất tại trạng thái cân bằng trong hệ đơn giản; phân biệt nồng độ cân bằng với nồng độ ban đầu | `chem11-eq-kc-expression`, `chem11-bridge-concentration` | `calculation`, `representation` | Thông hiểu–Vận dụng | Có |
 | `chem11-eq-kc-meaning` | Diễn giải định tính giá trị \(K_C\) lớn/nhỏ như mức độ ưu thế tương đối của sản phẩm/chất đầu ở cân bằng, không đồng nhất với tốc độ phản ứng | `chem11-eq-kc-expression` | `explanation`, `application` | Thông hiểu | Không |
 
 Lưu ý phạm vi: outcome cốt lõi yêu cầu viết và diễn giải biểu thức. Bài toán tính nồng độ cân bằng nhiều ẩn chỉ thuộc `advanced` nếu vượt bài tập chuẩn của SGK.
@@ -189,18 +196,18 @@ Giới hạn: không mở rộng outcome này thành toàn bộ lý thuyết th�
 |---|---|---|---|---|
 | `chem11-qt01` | Phản ứng thuận nghịch và cân bằng động | `chem11-eq-reversible`, `chem11-eq-dynamic` | `single_choice`, `true_false_cluster` | recognition, explanation |
 | `chem11-qt02` | Đồ thị/bảng nồng độ–thời gian | `chem11-eq-data` | `true_false_cluster`, `short_answer` | data, explanation |
-| `chem11-qt03` | Viết và diễn giải KC | `chem11-eq-kc-expression`, `chem11-eq-kc-meaning` | `single_choice`, `constructed_response` | representation, explanation |
+| `chem11-qt03` | Viết, tính và diễn giải KC | `chem11-eq-kc-expression`, `chem11-eq-kc-calculation`, `chem11-eq-kc-meaning` | `single_choice`, `short_answer`, `constructed_response` | representation, calculation, explanation |
 | `chem11-qt04` | Le Chatelier theo nồng độ và áp suất | Các outcome chuyển dịch tương ứng | `single_choice`, `true_false_cluster` | application, explanation |
 | `chem11-qt05` | Nhiệt độ, xúc tác và đánh đổi công nghiệp | `chem11-eq-shift-temperature`, `chem11-eq-rate-vs-position`, `chem11-eq-le-chatelier-context` | `true_false_cluster`, `constructed_response` | application, explanation |
 | `chem11-qt06` | Phân tích thí nghiệm chuyển dịch cân bằng | `chem11-eq-experiment-temperature` | `ordering`, `true_false_cluster`, `constructed_response` | experiment, data |
-| `chem11-qt07` | Điện li và phương trình điện li | `chem11-aq-electrolyte`, `chem11-aq-dissociation`, `chem11-aq-strong-weak` | `single_choice`, `constructed_response` | recognition, representation |
-| `chem11-qt08` | Acid–base Brønsted và cặp liên hợp | Các outcome Brønsted | `single_choice`, `true_false_cluster` | recognition, explanation |
-| `chem11-qt09` | Cân bằng nước và tính pH | `chem11-aq-water-equilibrium`, `chem11-aq-ph-conversion`, `chem11-aq-ph-simple-solution` | `short_answer`, `constructed_response` | calculation, explanation |
-| `chem11-qt10` | Chỉ thị và pH thực tiễn | `chem11-aq-indicator`, `chem11-aq-ph-context` | `true_false_cluster`, `single_choice` | data, application |
-| `chem11-qt11` | Thủy phân ion trong thực tiễn | `chem11-aq-ion-hydrolysis` | `true_false_cluster`, `constructed_response` | representation, application |
-| `chem11-qt12` | Nguyên tắc và thao tác chuẩn độ | `chem11-aq-titration-principle`, `chem11-aq-titration-apparatus` | `ordering`, `true_false_cluster` | experiment, explanation |
-| `chem11-qt13` | Xử lý số liệu chuẩn độ | `chem11-aq-titration-data` | `true_false_cluster`, `short_answer` | data, experiment |
-| `chem11-qt14` | Tính toán chuẩn độ | `chem11-aq-titration-calculation` | `short_answer`, `constructed_response` | calculation, explanation |
+| `chem11-qt07` | Sự điện li và phương trình điện li | `chem11-aq-electrolyte`, `chem11-aq-dissociation`, `chem11-aq-strong-weak` | `single_choice`, `short_answer` | recognition, representation, data |
+| `chem11-qt08` | Acid–base Brønsted–Lowry | `chem11-aq-bronsted-role`, `chem11-aq-conjugate-pair`, `chem11-aq-amphiprotic` | `single_choice`, `constructed_response` | representation, explanation, application |
+| `chem11-qt09` | Cân bằng nước và tính pH | `chem11-aq-water-equilibrium`, `chem11-aq-ph-conversion`, `chem11-aq-ph-simple-solution` | `single_choice` ở kho luyện hiện tại; mở rộng `short_answer` khi có bộ chấm | calculation, explanation |
+| `chem11-qt10` | Chỉ thị và pH thực tiễn | `chem11-aq-indicator`, `chem11-aq-ph-context` | `single_choice` ở kho luyện hiện tại; assessment có thể dùng `true_false_cluster` | experiment, data, application |
+| `chem11-qt11` | Cân bằng ion trong nước và ứng dụng | `chem11-aq-ion-hydrolysis` | `single_choice` ở kho luyện hiện tại; assessment có thể dùng `true_false_cluster`, `constructed_response` | representation, experiment, data, application |
+| `chem11-qt12` | Nguyên tắc và thao tác chuẩn độ | `chem11-aq-titration-principle`, `chem11-aq-titration-apparatus` | `single_choice` ở kho luyện hiện tại; assessment có thể dùng `ordering`, `true_false_cluster` | experiment, data, explanation |
+| `chem11-qt13` | Xử lý số liệu chuẩn độ | `chem11-aq-titration-data` | `single_choice` ở kho luyện hiện tại; assessment có thể dùng `true_false_cluster`, `short_answer` | data, experiment, calculation |
+| `chem11-qt14` | Tính toán chuẩn độ | `chem11-aq-titration-calculation` | `single_choice` ở kho luyện hiện tại; assessment có thể dùng `short_answer`, `constructed_response` | calculation, data, explanation |
 
 Không dùng `difficulty` của `QuestionType` để thay dependency graph. Một dạng bài có thể có câu dễ, vừa và khó; độ khó thật thuộc từng `Question`.
 
@@ -237,9 +244,9 @@ Mục tiêu pilot không phải số lượng lớn mà là phủ đủ outcome 
 
 | Nhóm | Số câu tối thiểu | Ghi chú |
 |---|---:|---|
-| Diagnostic cầu nối | 12 | Không cộng mastery Chương 1 |
-| Bài 1 — core practice | 32 | Ưu tiên đồ thị, giải thích và thí nghiệm |
-| Bài 2 — core practice | 44 | Có pH, thủy phân, chuẩn độ và an toàn |
+| Diagnostic cầu nối | 12 | Hiện có 6 câu; cần mở rộng trước khi phát hành toàn khóa |
+| Bài 1 — core practice | 72 | Đã đủ 6 dạng × 12 câu, ưu tiên đồ thị, giải thích và thí nghiệm |
+| Bài 2 — core practice | 96 | Đã đủ 8 dạng × 12 câu |
 | Bài 3 — luyện tập tích hợp | 18 | Không lặp nguyên văn câu đã luyện |
 | Chapter checkpoint Form A | 24 lệnh hỏi | Form kiểm tra riêng |
 | Chapter checkpoint Form B | 24 lệnh hỏi | Song song về outcome và độ khó |

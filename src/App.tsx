@@ -92,6 +92,14 @@ export const App: React.FC = () => {
         // Định danh người dùng trên Firebase Analytics
         setAnalyticsUser(user.uid);
 
+        // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập (chỉ áp dụng đối với học sinh, bỏ qua giáo viên/admin).
+        const isTeacher = await teacherAccessService.isTeacher(user);
+        if (!isTeacher) {
+          await progressService.syncUserData(user.uid);
+          progressService.flushPendingAttempts(user.uid);
+          refreshProgress();
+        }
+
         // Lắng nghe real-time profile người dùng để cập nhật trạng thái Premium
         unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
           if (docSnap.exists()) {
@@ -141,16 +149,7 @@ export const App: React.FC = () => {
               premiumUntil: null
             });
           }
-        }, (err) => {
-          console.error("Lỗi khi lắng nghe user profile:", err);
         });
-
-        // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập (chỉ áp dụng đối với học sinh, bỏ qua giáo viên/admin).
-        const isTeacher = await teacherAccessService.isTeacher(user);
-        if (!isTeacher) {
-          await progressService.syncUserData(user.uid);
-          refreshProgress();
-        }
       } else {
         setAnalyticsUser(null);
         setPremium(false);

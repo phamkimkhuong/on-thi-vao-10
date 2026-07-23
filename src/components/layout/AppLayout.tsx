@@ -72,7 +72,13 @@ export const AppLayout: React.FC = () => {
   };
 
   const getActiveContextLabel = () => {
-    const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : 'Lớp 10';
+    const gradeLabel = selectedGrade === 'grade9'
+      ? 'Lớp 9'
+      : selectedGrade === 'grade11'
+        ? 'Lớp 11'
+        : selectedGrade === 'grade12'
+          ? 'Lớp 12'
+          : 'Lớp 10';
     const subjectLabel = getSubjectName(selectedSubject);
     const icon = getSubjectIcon(selectedSubject);
     return `${icon} ${subjectLabel} - ${gradeLabel}`;

@@ -60,7 +60,7 @@ export const TeacherAffiliateManager: React.FC = () => {
       await affiliateService.toggleCodeActive(codeItem.code, newStatus);
       setCodes(prev => prev.map(c => c.code === codeItem.code ? { ...c, isActive: newStatus } : c));
       showToast(newStatus ? `Đã kích hoạt lại mã "${codeItem.code}"` : `Đã tạm dừng mã "${codeItem.code}"`, newStatus ? 'success' : 'error');
-    } catch (err: any) {
+    } catch {
       showToast('Không thể đổi trạng thái mã.', 'error');
     } finally {
       setActionLoadingId(null);

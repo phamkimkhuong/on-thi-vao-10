@@ -1,4 +1,5 @@
 export type SubjectCode = 'math' | 'english' | 'physics' | 'chemistry' | 'biology';
+export type GradeCode = 'grade9' | 'grade10' | 'grade11' | 'grade12';
 
 export type ValidatorType =
   | 'exact'
@@ -174,10 +175,13 @@ export interface LearningOutcome {
 
 export interface LearningMisconception {
   id: string;
-  outcomeId: string;
-  statement: string;
-  correction: string;
+  outcomeId?: string;
+  statement?: string;
+  title?: string;
+  description?: string;
+  correction?: string;
   severity: 'normal' | 'critical';
+  remediationOutcomeIds?: string[];
 }
 
 export interface LearningOutcomeStatus {
@@ -409,6 +413,8 @@ export interface UserAttempt {
   teacherFeedback?: string;
   selectedSubTense?: string;
   aiEvaluation?: AiEvaluation;
+  synced?: boolean;
+  syncedAt?: string;
 }
 
 export interface TopicAttemptsDoc {

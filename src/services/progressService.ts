@@ -144,21 +144,74 @@ export const progressService = {
     }
   },
 
-  // Lưu một Attempt lên Firestore (Vào topic_attempts/{questionTypeId})
+  // Gom tất cả các câu làm chưa sync dưới LocalStorage đẩy gộp 1 lần lên Firestore (Tốn đúng 2 Writes cho cả phiên)
+  async flushPendingAttempts(userId: string, targetQuestionTypeId?: string): Promise<void> {
+    try {
+      let pendingAttempts = storageService.getPendingAttemptsLocal(userId);
+      if (targetQuestionTypeId) {
+        pendingAttempts = pendingAttempts.filter(a => a.questionTypeId === targetQuestionTypeId);
+      }
+      if (pendingAttempts.length === 0) return;
+
+      const syncedAt = new Date().toISOString();
+      const byTopic: Record<string, UserAttempt[]> = {};
+
+      pendingAttempts.forEach(att => {
+        const topicId = att.questionTypeId;
+        if (!byTopic[topicId]) byTopic[topicId] = [];
+        const cleanAttempt = { ...att };
+        delete cleanAttempt.synced;
+        byTopic[topicId].push({
+          ...cleanAttempt,
+          userId,
+          syncedAt
+        });
+      });
+
+      // Đẩy từng topic_attempts lên Firestore
+      for (const [topicId, attemptsList] of Object.entries(byTopic)) {
+        const topicRef = doc(db, `users/${userId}/topic_attempts`, topicId);
+        await setDoc(topicRef, {
+          questionTypeId: topicId,
+          updatedAt: syncedAt,
+          attempts: arrayUnion(...attemptsList)
+        }, { merge: true });
+        logger.dbWrite(`Sync gộp phiên dạng ${topicId} (${attemptsList.length} câu làm mới)`, 1);
+      }
+
+      // Cập nhật tiến độ tổng hợp lên doc cha users/{userId}
+      const userProg = storageService.getProgress(userId);
+      const allAttempts = storageService.getAttempts(userId);
+      const stats = calculateStudentStats(allAttempts);
+      const userRef = doc(db, 'users', userId);
+
+      await setDoc(userRef, {
+        masteryLevels: userProg.masteryLevels || {},
+        completedLessons: userProg.completedLessons || [],
+        completedCount: (userProg.completedLessons || []).length,
+        stats,
+        lastActiveAt: syncedAt
+      }, { merge: true });
+      logger.dbWrite('Cập nhật tiến độ tổng hợp lên doc cha users/{userId}', 1);
+
+      // Đổi trạng thái các câu này thành synced: true dưới LocalStorage
+      const syncedIds = pendingAttempts.map(a => a.id);
+      storageService.markAttemptsAsSyncedLocal(userId, syncedIds);
+
+      // Lưu progress mới nhất dưới local
+      userProg.lastUpdatedAt = syncedAt;
+      storageService.saveProgressLocal(userId, userProg);
+
+      console.log(`[Session Sync] Đã sync gộp ${pendingAttempts.length} câu làm phiên vừa rồi của user ${userId} lên Firestore thành công!`);
+    } catch (e) {
+      logger.error('Lỗi khi sync gộp bài làm phiên', e);
+    }
+  },
+
+  // Lưu một Attempt lên Firestore (Dành cho tự luận chờ GV chấm, hoặc gọi lẻ)
   async saveAttempt(userId: string, attempt: UserAttempt): Promise<void> {
     try {
       const syncedAt = new Date().toISOString();
-      const topicRef = doc(db, `users/${userId}/topic_attempts`, attempt.questionTypeId);
-      await setDoc(topicRef, {
-        questionTypeId: attempt.questionTypeId,
-        updatedAt: syncedAt,
-        attempts: arrayUnion({
-          ...attempt,
-          userId,
-          syncedAt
-        })
-      }, { merge: true });
-      logger.dbWrite(`Lưu bài làm dạng ${attempt.questionTypeId} (topic_attempts)`, 1);
 
       if (attempt.gradingMode === 'manual') {
         const manualRef = doc(db, 'manual_attempts', attempt.id);
@@ -174,23 +227,8 @@ export const progressService = {
         logger.dbWrite('Nhúng bài tự luận vào hàng đợi (manual_attempts)', 1);
       }
 
-      // Đồng thời cập nhật progress tương ứng trực tiếp vào document cha users/{userId}
-      const userProg = storageService.getProgress(userId);
-      const allAttempts = storageService.getAttempts(userId);
-      const stats = calculateStudentStats(allAttempts);
-      const userRef = doc(db, 'users', userId);
-      await setDoc(userRef, {
-        [`masteryLevels.${attempt.questionTypeId}`]: userProg.masteryLevels[attempt.questionTypeId] || 0,
-        completedLessons: userProg.completedLessons || [],
-        completedCount: (userProg.completedLessons || []).length,
-        stats,
-        lastActiveAt: syncedAt
-      }, { merge: true });
-      logger.dbWrite('Cập nhật tiến độ & stats gộp (users/{userId})', 1);
-
-      // Cập nhật LocalStorage khớp hoàn toàn với Server
-      userProg.lastUpdatedAt = syncedAt;
-      storageService.saveProgressLocal(userId, userProg);
+      // Các bài làm trắc nghiệm thông thường sẽ được nạp vào LocalStorage và gộp sync khi kết thúc phiên/rời trang
+      storageService.saveAttempt(userId, attempt);
 
     } catch (e) {
       logger.error('Lưu bài làm học sinh', e);

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Đồ thị nồng độ theo thời gian của hệ thuận nghịch</title>
+  <desc id="desc">Nồng độ chất A giảm rồi ổn định ở 0,4 mol trên lít; nồng độ chất B tăng rồi ổn định ở 0,6 mol trên lít, cả hai ổn định từ thời điểm 30 giây.</desc>
+  <rect width="720" height="420" fill="#fff"/>
+  <g stroke="#d7deea" stroke-width="1">
+    <path d="M90 80H660M90 140H660M90 200H660M90 260H660M90 320H660"/>
+    <path d="M190 50V340M290 50V340M390 50V340M490 50V340M590 50V340"/>
+  </g>
+  <g stroke="#334155" stroke-width="2" fill="none">
+    <path d="M90 50V340H670"/>
+  </g>
+  <g fill="#334155" font-family="Arial, sans-serif" font-size="16">
+    <text x="28" y="58">c (M)</text><text x="635" y="375">t (s)</text>
+    <text x="72" y="325">0</text><text x="180" y="365">10</text><text x="280" y="365">20</text>
+    <text x="380" y="365">30</text><text x="480" y="365">40</text><text x="580" y="365">50</text>
+    <text x="54" y="265">0,4</text><text x="54" y="205">0,6</text><text x="54" y="85">1,0</text>
+  </g>
+  <path d="M90 80C170 115 235 185 290 230S350 260 390 260H640" fill="none" stroke="#e11d48" stroke-width="5"/>
+  <path d="M90 320C160 300 235 245 290 215S350 200 390 200H640" fill="none" stroke="#2563eb" stroke-width="5"/>
+  <path d="M390 50V340" stroke="#64748b" stroke-width="2" stroke-dasharray="8 7"/>
+  <g font-family="Arial, sans-serif" font-size="18" font-weight="700">
+    <text x="610" y="248" fill="#e11d48">A</text><text x="610" y="188" fill="#2563eb">B</text>
+    <text x="402" y="75" fill="#475569">30 s</text>
+  </g>
+</svg>

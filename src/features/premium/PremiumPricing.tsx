@@ -80,6 +80,7 @@ export const PremiumPricing: React.FC = () => {
       setCouponInput(cleanCode);
       validateCouponCode(cleanCode, selectedPlanId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Tự động validate lại số tiền giảm khi người dùng đổi giữa Gói 3 Tháng và Gói 12 Tháng
@@ -87,7 +88,7 @@ export const PremiumPricing: React.FC = () => {
     if (couponInput.trim() && appliedDiscount?.valid) {
       validateCouponCode(couponInput, selectedPlanId);
     }
-  }, [selectedPlanId]);
+  }, [selectedPlanId, couponInput, appliedDiscount?.valid]);
 
   const handleApplyCoupon = async () => {
     if (!couponInput.trim()) return;

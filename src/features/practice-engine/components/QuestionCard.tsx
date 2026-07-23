@@ -10,7 +10,7 @@ import { AnswerFormRenderer } from '../../../components/common/AnswerFormRendere
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
-import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp, ShieldCheck } from 'lucide-react';
+import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp, ShieldCheck, Lock } from 'lucide-react';
 import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
 interface QuestionCardProps {
@@ -44,6 +44,17 @@ interface QuestionCardProps {
   setStructuredAnswer: (val: StructuredAnswer) => void;
   disableHints?: boolean;
 }
+
+/**
+ * Tự động lọc bỏ các cụm từ chốt đáp án lộ liễu như "Chọn A", "Do đó chọn B", "Đáp án C", "Nên chọn D" trong nội dung gợi ý trước khi nộp bài.
+ */
+const sanitizeHintText = (text: string): string => {
+  if (!text) return '';
+  return text
+    .replace(/(,?\s*(do đó|vậy|thế nên|nên|suy ra)?\s*(chọn|đáp án|đáp số)\s+[A-D]\b\.?)/gi, '.')
+    .replace(/\s+\./g, '.')
+    .trim();
+};
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   currentQuestion,
@@ -160,7 +171,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                     }}
                   />
                 </div>
-                
+
                 <MathKeyboard
                   inputRef={mathInputRef}
                   value={selectedOption || ''}
@@ -197,19 +208,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                         <span className={cn(
                           "w-6.5 h-6.5 rounded-xl text-white flex items-center justify-center text-xs font-black shadow-md",
                           routeSubject === 'math' ? 'bg-gradient-to-tr from-indigo-500 to-indigo-600 shadow-indigo-500/10' :
-                          routeSubject === 'chemistry' ? 'bg-gradient-to-tr from-emerald-500 to-emerald-600 shadow-emerald-500/10' :
-                          'bg-gradient-to-tr from-purple-500 to-purple-600 shadow-purple-500/10'
+                            routeSubject === 'chemistry' ? 'bg-gradient-to-tr from-emerald-500 to-emerald-600 shadow-emerald-500/10' :
+                              'bg-gradient-to-tr from-purple-500 to-purple-600 shadow-purple-500/10'
                         )}>
                           {idx + 1}
                         </span>
                         <span className="text-xs font-extrabold text-foreground">{field.label}</span>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-1 max-w-xl">
                         {choices.map((choice, cIdx) => {
                           const letter = letters[cIdx];
                           const isSelected = currentValue === letter || currentValue.toLowerCase() === choice.toLowerCase();
-                          
+
                           return (
                             <button
                               key={letter}
@@ -225,8 +236,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                                 "px-3.5 py-2.5 rounded-xl text-xs font-extrabold border transition-all duration-200 active:scale-95 cursor-pointer text-left flex items-center gap-1.5",
                                 isSelected
                                   ? (routeSubject === 'math' ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 dark:text-indigo-400 shadow-sm font-black" :
-                                     routeSubject === 'chemistry' ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm font-black" :
-                                     "bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400 shadow-sm font-black")
+                                    routeSubject === 'chemistry' ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm font-black" :
+                                      "bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400 shadow-sm font-black")
                                   : "bg-card border-border/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground"
                               )}
                             >
@@ -234,8 +245,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                                 "text-[9px] w-4.5 h-4.5 rounded-md flex items-center justify-center font-black shrink-0",
                                 isSelected
                                   ? (routeSubject === 'math' ? "bg-indigo-600 text-white" :
-                                     routeSubject === 'chemistry' ? "bg-emerald-600 text-white" :
-                                     "bg-purple-600 text-white")
+                                    routeSubject === 'chemistry' ? "bg-emerald-600 text-white" :
+                                      "bg-purple-600 text-white")
                                   : "bg-secondary text-muted-foreground"
                               )}>{letter}</span>
                               <span className="truncate">{choice}</span>
@@ -269,13 +280,13 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                           {field.label}
                         </h4>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 gap-2.5">
                         {choices.map((choice, cIdx) => {
                           const letter = letters[cIdx];
                           const isSelected = currentValue === letter || currentValue.toLowerCase() === choice.toLowerCase();
                           const cleanChoice = choice.replace(/^[A-D]\.\s*/i, '');
-                          
+
                           return (
                             <button
                               key={letter}
@@ -327,12 +338,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                           {field.label}
                         </p>
                       </div>
-                      
+
                       <div className="flex gap-2.5 shrink-0 self-end sm:self-center">
                         {choices.map((choice) => {
                           const isSelected = currentValue === choice;
                           const isTrue = choice === 'T';
-                          
+
                           return (
                             <button
                               key={choice}
@@ -412,8 +423,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                       currentQuestion.questionTypeId === 'eng-qt11'
                         ? "Nhập từ sửa lại (ví dụ: tired hoặc tiring -> tired)..."
                         : currentQuestion.questionTypeId === 'eng-qt15'
-                        ? "Nhập phần viết lại (ví dụ: he knew the way)..."
-                        : "Nhập từ cần điền (ví dụ: inventions)..."
+                          ? "Nhập phần viết lại (ví dụ: he knew the way)..."
+                          : "Nhập từ cần điền (ví dụ: inventions)..."
                     }
                     className="w-full p-4.5 rounded-2xl text-xs font-extrabold border border-border/60 bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                     onKeyDown={(e) => {
@@ -428,51 +439,96 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           )}
 
           {/* Nút gợi ý thông minh */}
-          {solutionDetail && questionTypeId !== 'eng-qt6' && !disableHints && (
-            <div className="flex flex-col gap-2 pt-3">
-              <button
-                type="button"
-                onClick={triggerNextHint}
-                className={cn(
-                  "self-start text-[11px] font-black flex items-center gap-1.5 cursor-pointer px-4 py-2 rounded-xl border transition-all duration-300 shadow-sm active:scale-95",
-                  routeSubject === 'math' ? "text-indigo-500 hover:text-indigo-600 hover:bg-indigo-500/5" : "text-violet-500 hover:text-violet-600 hover:bg-violet-500/5",
-                  getSubjectTheme(routeSubject).bg,
-                  getSubjectTheme(routeSubject).border
-                )}
-              >
-                {hintLevel === solutionDetail.detailedSteps.length + (currentQuestionType ? 1 : 0) ? (
-                  <>
-                    <ChevronUp size={14} className="text-amber-500 animate-bounce" />
-                    <span>Thu gọn gợi ý</span>
-                  </>
-                ) : (
-                  <>
-                    <Lightbulb size={14} className="text-amber-500 animate-pulse" />
-                    <span>{hintLevel === 0 ? 'Nhận dạng dạng bài' : `Gợi ý tiếp theo (${hintLevel + 1})`}</span>
-                  </>
-                )}
-              </button>
+          {solutionDetail && questionTypeId !== 'eng-qt6' && !disableHints && (() => {
+            const hasTypeGuidance = Boolean(currentQuestionType);
+            const maxAllowedSteps = Math.max(0, solutionDetail.detailedSteps.length - 1);
+            const maxHintLevelBeforeSubmit = (hasTypeGuidance ? 1 : 0) + maxAllowedSteps;
+            const currentDisplayedSteps = Math.min(maxAllowedSteps, Math.max(0, hintLevel - (hasTypeGuidance ? 1 : 0)));
+            const isMaxHintReached = hintLevel >= maxHintLevelBeforeSubmit && maxHintLevelBeforeSubmit > 0;
 
-              {hintLevel > 0 && (
-                <div className="p-4.5 bg-amber-500/5 border border-amber-500/15 rounded-2xl space-y-3.5 animate-fade-in">
-                  {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} compact />}
-                  {solutionDetail.detailedSteps.slice(0, Math.max(0, hintLevel - (currentQuestionType ? 1 : 0))).map((step: any, sIdx: number) => (
-                    <div key={sIdx} className="text-xs font-semibold text-muted-foreground leading-relaxed flex gap-2">
-                      <span className="text-amber-500 shrink-0 font-black">Step {step.order}:</span>
-                      <div className="flex-1">
-                        <LatexRenderer text={step.explanation} />
-                        {step.formula && (
-                          <div className="mt-1.5 bg-secondary/40 p-2.5 rounded-xl text-foreground overflow-x-auto border border-border/10 font-mono text-[11px]">
-                            <LatexRenderer text={step.formula} block={true} />
+            return (
+              <div className="flex flex-col gap-2 pt-3">
+                <button
+                  type="button"
+                  onClick={triggerNextHint}
+                  className={cn(
+                    "self-start text-[11px] font-black flex items-center gap-1.5 cursor-pointer px-4 py-2 rounded-xl border transition-all duration-300 shadow-sm active:scale-95",
+                    routeSubject === 'math' ? "text-indigo-500 hover:text-indigo-600 hover:bg-indigo-500/5" : "text-violet-500 hover:text-violet-600 hover:bg-violet-500/5",
+                    getSubjectTheme(routeSubject).bg,
+                    getSubjectTheme(routeSubject).border
+                  )}
+                >
+                  {isMaxHintReached ? (
+                    <>
+                      <ChevronUp size={14} className="text-amber-500 animate-bounce" />
+                      <span>Thu gọn gợi ý</span>
+                    </>
+                  ) : (
+                    <>
+                      <Lightbulb size={14} className="text-amber-500 animate-pulse" />
+                      <span>
+                        {hintLevel === 0
+                          ? 'Nhận dạng dạng bài'
+                          : `Gợi ý tiếp theo (Bước ${currentDisplayedSteps + 1})`}
+                      </span>
+                    </>
+                  )}
+                </button>
+
+                {hintLevel > 0 && (
+                  <div className="p-4.5 bg-amber-500/5 border border-amber-500/15 rounded-2xl space-y-3.5 animate-fade-in">
+                    {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} compact />}
+
+                    {/* Hiển thị các bước suy luận trung gian (các bước từ 1 đến N - 1) */}
+                    {solutionDetail.detailedSteps
+                      .slice(0, currentDisplayedSteps)
+                      .map((step: any, sIdx: number) => {
+                        const cleanExplanation = sanitizeHintText(step.explanation);
+                        return (
+                          <div key={sIdx} className="text-xs font-semibold text-muted-foreground leading-relaxed space-y-1">
+                            <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-extrabold text-xs">
+                              <span className="w-4.5 h-4.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px] shrink-0 font-black">
+                                {step.order}
+                              </span>
+                              <span>{step.title ? `Bước ${step.order}: ${step.title}` : `Bước ${step.order}`}</span>
+                            </div>
+                            <div className="pl-6 font-semibold text-muted-foreground">
+                              <LatexRenderer text={cleanExplanation} />
+                              {step.formula && (
+                                <div className="mt-1.5 bg-secondary/40 p-2.5 rounded-xl text-foreground overflow-x-auto border border-border/10 font-mono text-[11px]">
+                                  <LatexRenderer text={step.formula} block={true} />
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+                        );
+                      })}
+
+                    {/* Khi học sinh đã mở hết các bước trung gian, hiển thị Tiêu đề Bước cuối cùng kèm Khung khóa nội dung bên dưới */}
+                    {isMaxHintReached && solutionDetail.detailedSteps.length > 1 && (() => {
+                      const finalStep = solutionDetail.detailedSteps[solutionDetail.detailedSteps.length - 1];
+                      return (
+                        <div className="text-xs font-semibold text-muted-foreground leading-relaxed space-y-1.5 animate-fade-in pt-1">
+                          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-extrabold text-xs">
+                            <span className="w-4.5 h-4.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px] shrink-0 font-black">
+                              {finalStep.order}
+                            </span>
+                            <span>{finalStep.title ? `Bước ${finalStep.order}: ${finalStep.title}` : `Bước ${finalStep.order}`}</span>
+                          </div>
+                          <div className="pl-6">
+                            <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-800 dark:text-amber-300 text-[11px] font-bold font-sans shadow-sm">
+                              <Lock size={15} className="text-amber-500 shrink-0" />
+                              <span>Bạn chưa nộp bài, không thể xem đáp án</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {isMath && !isAutoCheckMath && (
             <ProofImageUploader

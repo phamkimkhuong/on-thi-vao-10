@@ -405,6 +405,31 @@ export const PracticeEngine: React.FC = () => {
     }
   }, [user, questionTypeId, isExamMode, refreshProgress]);
 
+  // Tự động kích hoạt Sync gộp phiên luyện tập khi học sinh rời trang (Route change) hoặc đóng/chuyển tab web (beforeunload / visibilitychange)
+  useEffect(() => {
+    if (!user || !questionTypeId || isExamMode) return;
+
+    const handleSync = () => {
+      progressService.flushPendingAttempts(user.uid, questionTypeId);
+    };
+
+    const handleVisibilityOrUnload = () => {
+      if (document.visibilityState === 'hidden') {
+        handleSync();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleVisibilityOrUnload);
+    document.addEventListener('visibilitychange', handleVisibilityOrUnload);
+
+    return () => {
+      // Khi học sinh chuyển trang (Route Change / Unmount) -> Kích hoạt Sync ngay!
+      handleSync();
+      window.removeEventListener('beforeunload', handleVisibilityOrUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityOrUnload);
+    };
+  }, [user, questionTypeId, isExamMode]);
+
   // Tự động kiểm tra bài làm cũ của học sinh đối với câu hỏi này để tránh bắt làm lại từ đầu.
   // Chỉ đọc LocalStorage — dữ liệu đã được cập nhật realtime mỗi khi nộp bài, không cần gọi Firestore.
   useEffect(() => {

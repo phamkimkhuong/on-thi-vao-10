@@ -114,7 +114,11 @@ export const storageService = {
     if (!map[userId]) {
       map[userId] = [];
     }
-    map[userId].push(attempt);
+    const attemptWithSyncFlag = {
+      ...attempt,
+      synced: attempt.synced !== undefined ? attempt.synced : false
+    };
+    map[userId].push(attemptWithSyncFlag);
     writeToStorage(KEYS.ATTEMPTS, map);
 
     // Tự động cập nhật tiến độ học tập và sổ lỗi sai tương ứng với các bài làm được chấm tự động
@@ -131,7 +135,8 @@ export const storageService = {
 
   saveAttemptsLocal(userId: string, attempts: UserAttempt[]): void {
     const map = readAttemptsMap();
-    map[userId] = attempts;
+    // Đánh dấu các attempt tải từ Firestore về là đã synced
+    map[userId] = attempts.map(a => ({ ...a, synced: true }));
     writeToStorage(KEYS.ATTEMPTS, map);
   },
 
@@ -143,8 +148,21 @@ export const storageService = {
   saveTopicAttemptsLocal(userId: string, questionTypeId: string, topicAttempts: UserAttempt[]): void {
     const allAttempts = this.getAttempts(userId);
     const otherAttempts = allAttempts.filter(a => a.questionTypeId !== questionTypeId);
-    const merged = [...otherAttempts, ...topicAttempts];
+    const merged = [...otherAttempts, ...topicAttempts.map(a => ({ ...a, synced: true }))];
     this.saveAttemptsLocal(userId, merged);
+  },
+
+  getPendingAttemptsLocal(userId: string): UserAttempt[] {
+    const attempts = this.getAttempts(userId);
+    return attempts.filter(a => a.synced === false);
+  },
+
+  markAttemptsAsSyncedLocal(userId: string, attemptIds: string[]): void {
+    const map = readAttemptsMap();
+    if (!map[userId]) return;
+    const idsSet = new Set(attemptIds);
+    map[userId] = map[userId].map(a => idsSet.has(a.id) ? { ...a, synced: true } : a);
+    writeToStorage(KEYS.ATTEMPTS, map);
   },
 
   // MISTAKES (Sổ lỗi sai)

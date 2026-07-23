@@ -1,0 +1,220 @@
+import type { Chemistry11OfficialRequirement } from './types';
+
+export const g11ChemistryOfficialRequirements: Chemistry11OfficialRequirement[] = [
+  {
+    id: 'chem11-official-ch1-reversible-equilibrium',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l01'],
+    title: 'Phản ứng thuận nghịch và trạng thái cân bằng',
+    normalizedRequirement: 'Nêu được khái niệm phản ứng thuận nghịch, trạng thái cân bằng và giải thích được bản chất động của cân bằng hóa học.',
+    actionVerbs: ['nêu', 'giải thích'],
+    evidenceTypes: ['recognition', 'representation', 'explanation', 'data'],
+    sourceLocators: ['Chủ đề Cân bằng hóa học – Mở đầu về cân bằng hóa học'],
+    implementedOutcomeIds: ['chem11-eq-reversible', 'chem11-eq-dynamic', 'chem11-eq-data'],
+    coverageStatus: 'covered',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-kc',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l01'],
+    title: 'Hằng số cân bằng',
+    normalizedRequirement: 'Viết, tính và diễn giải được hằng số cân bằng của phản ứng thuận nghịch trong các trường hợp đơn giản thuộc phạm vi chương trình.',
+    actionVerbs: ['viết', 'tính', 'diễn giải'],
+    evidenceTypes: ['representation', 'calculation', 'explanation'],
+    sourceLocators: ['Chủ đề Cân bằng hóa học – Hằng số cân bằng của phản ứng thuận nghịch'],
+    implementedOutcomeIds: [
+      'chem11-eq-kc-expression',
+      'chem11-eq-kc-calculation',
+      'chem11-eq-kc-meaning'
+    ],
+    coverageStatus: 'covered',
+    coverageNotes: 'Giới hạn ở biểu thức và dữ liệu cân bằng đơn giản; không mở rộng sang hệ nhiều ẩn hoặc nhiệt động học.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-le-chatelier',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l01'],
+    title: 'Các yếu tố ảnh hưởng đến cân bằng hóa học',
+    normalizedRequirement: 'Vận dụng nguyên lí Le Chatelier để giải thích ảnh hưởng của nhiệt độ, nồng độ và áp suất đến cân bằng hóa học.',
+    actionVerbs: ['vận dụng', 'giải thích'],
+    evidenceTypes: ['explanation', 'application', 'data'],
+    sourceLocators: ['Chủ đề Cân bằng hóa học – Nguyên lí Le Chatelier'],
+    implementedOutcomeIds: [
+      'chem11-eq-shift-concentration',
+      'chem11-eq-shift-pressure',
+      'chem11-eq-shift-temperature',
+      'chem11-eq-le-chatelier-context'
+    ],
+    coverageStatus: 'covered',
+    coverageNotes: 'Vai trò xúc tác được tách thành outcome hỗ trợ nhằm phân biệt tốc độ đạt cân bằng với vị trí cân bằng.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-temperature-experiment',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l01'],
+    title: 'Thí nghiệm ảnh hưởng của nhiệt độ',
+    normalizedRequirement: 'Thực hiện hoặc phân tích thí nghiệm ảnh hưởng của nhiệt độ đến cân bằng nitrogen dioxide và dinitrogen tetroxide.',
+    actionVerbs: ['thực hiện', 'quan sát', 'mô tả', 'giải thích'],
+    evidenceTypes: ['experiment', 'data', 'explanation'],
+    sourceLocators: ['Yêu cầu cần đạt – thí nghiệm 2NO₂ ⇌ N₂O₄'],
+    implementedOutcomeIds: ['chem11-eq-experiment-temperature'],
+    coverageStatus: 'covered',
+    coverageNotes: 'Phải bổ sung hồ sơ an toàn thí nghiệm trước khi đưa vào giao diện học sinh.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-electrolyte',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l02'],
+    title: 'Sự điện li trong dung dịch nước',
+    normalizedRequirement: 'Nêu và phân biệt được khái niệm sự điện li, chất điện li và chất không điện li.',
+    actionVerbs: ['nêu', 'phân biệt', 'biểu diễn'],
+    evidenceTypes: ['recognition', 'representation', 'data', 'explanation'],
+    sourceLocators: ['Chủ đề Cân bằng trong dung dịch nước – Sự điện li'],
+    implementedOutcomeIds: ['chem11-aq-electrolyte'],
+    coverageStatus: 'covered',
+    coverageNotes: 'Phương trình điện li và phân biệt mạnh/yếu được tách thành outcome triển khai theo SGK.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-bronsted',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l02'],
+    title: 'Acid và base theo Brønsted–Lowry',
+    normalizedRequirement: 'Nêu và vận dụng được khái niệm acid, base theo thuyết Brønsted–Lowry trong các phản ứng thuộc phạm vi chương trình.',
+    actionVerbs: ['nêu', 'xác định', 'giải thích'],
+    evidenceTypes: ['recognition', 'representation', 'explanation', 'application'],
+    sourceLocators: ['Chủ đề Cân bằng trong dung dịch nước – Thuyết Brønsted–Lowry'],
+    implementedOutcomeIds: ['chem11-aq-bronsted-role'],
+    coverageStatus: 'covered',
+    coverageNotes: 'Cặp liên hợp và chất lưỡng tính được tách thành outcome triển khai theo SGK.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-ph',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l02'],
+    title: 'pH và chất chỉ thị acid–base',
+    normalizedRequirement: 'Nêu được khái niệm, ý nghĩa thực tiễn của pH; tính được pH trong trường hợp đơn giản và sử dụng được chất chỉ thị acid–base.',
+    actionVerbs: ['nêu', 'tính', 'sử dụng', 'giải thích'],
+    evidenceTypes: ['calculation', 'experiment', 'data', 'application'],
+    sourceLocators: ['Chủ đề Cân bằng trong dung dịch nước – pH của dung dịch'],
+    implementedOutcomeIds: [
+      'chem11-aq-ph-conversion',
+      'chem11-aq-ph-simple-solution',
+      'chem11-aq-indicator',
+      'chem11-aq-ph-context'
+    ],
+    coverageStatus: 'covered',
+    coverageNotes: 'Đã phủ chuyển đổi pH, acid/base mạnh đơn giản, chỉ thị và bối cảnh thực tiễn; không bao gồm dung dịch đệm hoặc phép tính acid/base yếu nâng cao.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-titration',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l02'],
+    title: 'Chuẩn độ acid–base',
+    normalizedRequirement: 'Trình bày nguyên tắc và thực hiện hoặc phân tích thí nghiệm xác định nồng độ acid hoặc base mạnh bằng phương pháp chuẩn độ.',
+    actionVerbs: ['trình bày', 'thực hiện', 'phân tích', 'tính'],
+    evidenceTypes: ['experiment', 'data', 'calculation', 'explanation'],
+    sourceLocators: ['Yêu cầu cần đạt – chuẩn độ NaOH bằng dung dịch HCl'],
+    implementedOutcomeIds: [
+      'chem11-aq-titration-principle',
+      'chem11-aq-titration-apparatus',
+      'chem11-aq-titration-data',
+      'chem11-aq-titration-calculation'
+    ],
+    coverageStatus: 'covered',
+    coverageNotes: 'Đã phủ nguyên tắc, dụng cụ, điểm kết thúc, thao tác, xử lí số liệu và tính nồng độ acid/base mạnh. Đường cong chuẩn độ đầy đủ thuộc mở rộng.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch1-ion-equilibria',
+    chapterId: 'chem11-ch1',
+    textbookLessonIds: ['chem11-kntt-l02'],
+    title: 'Ý nghĩa thực tiễn của cân bằng ion trong nước',
+    normalizedRequirement: 'Giải thích được ý nghĩa thực tiễn của cân bằng ion Al³⁺, Fe³⁺ và CO₃²⁻ trong nước.',
+    actionVerbs: ['giải thích', 'vận dụng'],
+    evidenceTypes: ['representation', 'explanation', 'application'],
+    sourceLocators: ['Yêu cầu cần đạt – cân bằng của Al³⁺, Fe³⁺ và CO₃²⁻ trong nước'],
+    implementedOutcomeIds: ['chem11-aq-ion-hydrolysis'],
+    coverageStatus: 'covered',
+    coverageNotes: 'Đã phủ biểu diễn, môi trường và ý nghĩa thực tiễn của Al³⁺, Fe³⁺, CO₃²⁻; không mở rộng thành toàn bộ lý thuyết thủy phân muối hoặc hệ nhiều cân bằng.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch2-nitrogen',
+    chapterId: 'chem11-ch2',
+    textbookLessonIds: ['chem11-kntt-l04'],
+    title: 'Đơn chất nitrogen',
+    normalizedRequirement: 'Nêu trạng thái tự nhiên; giải thích tính trơ của N₂ từ liên kết ba; trình bày phản ứng với H₂, O₂ ở nhiệt độ cao, quá trình tạo nitrate từ nước mưa và ứng dụng của nitrogen khí, lỏng.',
+    actionVerbs: ['nêu', 'giải thích', 'trình bày', 'liên hệ'],
+    evidenceTypes: ['recognition', 'representation', 'explanation', 'application'],
+    sourceLocators: ['Chủ đề Nitrogen và Sulfur – Đơn chất nitrogen'],
+    implementedOutcomeIds: [
+      'chem11-ns-n2-natural',
+      'chem11-ns-n2-bond-inertness',
+      'chem11-ns-n2-high-temperature-reactions',
+      'chem11-ns-n2-nitrate-rain',
+      'chem11-ns-n2-applications'
+    ],
+    coverageStatus: 'covered',
+    coverageNotes: 'Đã phủ Bài 4 bằng 2 dạng và 24 câu. Không đưa phản ứng của N₂ với kim loại vào lõi vì không thuộc yêu cầu cần đạt chính thức.',
+    reviewStatus: 'content_reviewed'
+  },
+  {
+    id: 'chem11-official-ch2-ammonia-ammonium',
+    chapterId: 'chem11-ch2',
+    textbookLessonIds: ['chem11-kntt-l05'],
+    title: 'Ammonia và một số hợp chất ammonium',
+    normalizedRequirement: 'Mô tả cấu tạo, tính chất và sự tổng hợp ammonia; trình bày tính chất, ứng dụng của một số muối ammonium và nhận biết ion ammonium.',
+    actionVerbs: ['mô tả', 'trình bày', 'viết', 'thực hiện', 'nhận biết'],
+    evidenceTypes: ['representation', 'explanation', 'experiment', 'application'],
+    sourceLocators: ['Chủ đề Nitrogen và Sulfur – Ammonia và một số hợp chất ammonium'],
+    implementedOutcomeIds: [],
+    coverageStatus: 'not_started',
+    reviewStatus: 'source_checked'
+  },
+  {
+    id: 'chem11-official-ch2-nitrogen-oxides-nitric-acid',
+    chapterId: 'chem11-ch2',
+    textbookLessonIds: ['chem11-kntt-l06'],
+    title: 'Một số hợp chất của nitrogen với oxygen',
+    normalizedRequirement: 'Nêu nguồn gốc nitrogen oxides và mưa acid; trình bày cấu tạo, tính acid, tính oxi hóa của nitric acid; giải thích nguyên nhân và hệ quả phú dưỡng hóa.',
+    actionVerbs: ['nêu', 'trình bày', 'giải thích', 'vận dụng'],
+    evidenceTypes: ['representation', 'explanation', 'data', 'application'],
+    sourceLocators: ['Chủ đề Nitrogen và Sulfur – Một số hợp chất của nitrogen với oxygen'],
+    implementedOutcomeIds: [],
+    coverageStatus: 'not_started',
+    reviewStatus: 'source_checked'
+  },
+  {
+    id: 'chem11-official-ch2-sulfur-dioxide',
+    chapterId: 'chem11-ch2',
+    textbookLessonIds: ['chem11-kntt-l07'],
+    title: 'Sulfur và sulfur dioxide',
+    normalizedRequirement: 'Nêu trạng thái tự nhiên; trình bày cấu tạo, tính chất và ứng dụng của sulfur; chứng minh sulfur vừa có tính oxi hóa vừa có tính khử; trình bày tính chất, ứng dụng và tác động môi trường của sulfur dioxide.',
+    actionVerbs: ['nêu', 'trình bày', 'thực hiện', 'giải thích'],
+    evidenceTypes: ['recognition', 'representation', 'experiment', 'application'],
+    sourceLocators: ['Chủ đề Nitrogen và Sulfur – Sulfur và sulfur dioxide'],
+    implementedOutcomeIds: [],
+    coverageStatus: 'not_started',
+    reviewStatus: 'source_checked'
+  },
+  {
+    id: 'chem11-official-ch2-sulfuric-acid-sulfate',
+    chapterId: 'chem11-ch2',
+    textbookLessonIds: ['chem11-kntt-l08'],
+    title: 'Sulfuric acid và muối sulfate',
+    normalizedRequirement: 'Trình bày tính chất, ứng dụng, sản xuất và an toàn với sulfuric acid; nhận biết ion sulfate và nêu ứng dụng của một số muối sulfate.',
+    actionVerbs: ['trình bày', 'thực hiện', 'giải thích', 'nhận biết'],
+    evidenceTypes: ['representation', 'experiment', 'explanation', 'application'],
+    sourceLocators: ['Chủ đề Nitrogen và Sulfur – Sulfuric acid và muối sulfate'],
+    implementedOutcomeIds: [],
+    coverageStatus: 'not_started',
+    reviewStatus: 'source_checked'
+  }
+];

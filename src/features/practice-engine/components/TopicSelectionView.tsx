@@ -515,30 +515,34 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const qTypes = questionTypes;
 
   const isG9 = selectedGrade === 'grade9';
+  const isG11 = selectedGrade === 'grade11';
+  const isG12 = selectedGrade === 'grade12';
+  const gradeText = isG9 ? 'tuyển sinh 10' : isG11 ? 'Lớp 11' : isG12 ? 'Lớp 12' : 'Lớp 10';
+  const gradeTextLower = isG9 ? 'ôn thi vào 10' : isG11 ? 'lớp 11' : isG12 ? 'lớp 12' : 'lớp 10';
 
   return (
     <div className="space-y-8 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6 animate-fade-in">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-foreground tracking-tight">
           {isMath 
-            ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : '📐 Học tốt Toán Lớp 10')
+            ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : `📐 Học tốt Toán ${gradeText}`)
             : isChemistry
-              ? '🧪 Luyện tập Hóa học Lớp 10'
+              ? `🧪 Luyện tập Hóa học ${gradeText}`
               : isPhysics
-                ? '⚛️ Luyện tập Vật lí Lớp 10'
+                ? `⚛️ Luyện tập Vật lí ${gradeText}`
                 : routeSubject === 'biology'
-                  ? '🧬 Luyện tập Sinh học Lớp 10'
-                  : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : '🗣️ Học tốt Tiếng Anh Lớp 10')}
+                  ? `🧬 Luyện tập Sinh học ${gradeText}`
+                  : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : `🗣️ Học tốt Tiếng Anh ${gradeText}`)}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
           {isMath 
-            ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : 'Bài tập tự luận lớp 10 bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.')
+            ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : `Bài tập tự luận ${gradeTextLower} bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.`)
             : isChemistry
-              ? 'Luyện tập các dạng bài Hóa học lớp 10 bám sát chương trình GDPT 2018 mới.'
+              ? `Luyện tập các dạng bài Hóa học ${gradeTextLower} bám sát chương trình GDPT 2018 mới.`
               : isPhysics
                 ? 'Học tăng dần từ nền tảng đến vận dụng; kiểm tra làm chủ chỉ mở khi em đã sẵn sàng.'
                 : routeSubject === 'biology'
-                  ? 'Luyện tập các dạng bài Sinh học lớp 10 bám sát chương trình GDPT 2018 mới.'
+                  ? `Luyện tập các dạng bài Sinh học ${gradeTextLower} bám sát chương trình GDPT 2018 mới.`
                   : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
         </p>
       </div>
