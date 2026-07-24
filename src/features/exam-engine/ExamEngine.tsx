@@ -742,7 +742,7 @@ export const ExamEngine: React.FC = () => {
           {/* Cột trái: Danh sách đề thi */}
           <div className="lg:col-span-7 xl:col-span-8 space-y-6">
             <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block mb-1">
-              Danh sách đề thi ({filteredExams.length} đề):
+              Danh sách đề thi ({groupedExams.length} bộ đề · {filteredExams.length} mã đề):
             </label>
             
             {groupedExams.length > 0 ? (

@@ -35,6 +35,12 @@ import {
   m6AssessmentQuestions,
   m6AssessmentSolutions
 } from '../modules/module6_carbonyl_carboxylic_acid/assessments';
+import {
+  g11ChemistrySemesterBlueprints,
+  g11ChemistrySemesterExams,
+  g11ChemistrySemesterQuestions,
+  g11ChemistrySemesterSolutions
+} from './semester';
 import { g11ChemistryTheoryBlueprints, g11ChemistryTheoryExams } from './theory';
 
 // Aggregator chỉ gộp dữ liệu đã được biên soạn ở từng module/nhóm assessment.
@@ -46,7 +52,8 @@ export const g11ChemistryAssessmentExams: MockExam[] = [
   ...m3AssessmentExams,
   ...m4AssessmentExams,
   ...m5AssessmentExams,
-  ...m6AssessmentExams
+  ...m6AssessmentExams,
+  ...g11ChemistrySemesterExams
 ];
 export const g11ChemistryAssessmentQuestions: Question[] = [
   ...m1AssessmentQuestions,
@@ -54,7 +61,8 @@ export const g11ChemistryAssessmentQuestions: Question[] = [
   ...m3AssessmentQuestions,
   ...m4AssessmentQuestions,
   ...m5AssessmentQuestions,
-  ...m6AssessmentQuestions
+  ...m6AssessmentQuestions,
+  ...g11ChemistrySemesterQuestions
 ];
 export const g11ChemistryAssessmentSolutions: Solution[] = [
   ...m1AssessmentSolutions,
@@ -62,7 +70,8 @@ export const g11ChemistryAssessmentSolutions: Solution[] = [
   ...m3AssessmentSolutions,
   ...m4AssessmentSolutions,
   ...m5AssessmentSolutions,
-  ...m6AssessmentSolutions
+  ...m6AssessmentSolutions,
+  ...g11ChemistrySemesterSolutions
 ];
 export const g11ChemistryAssessmentBlueprints: AssessmentBlueprint[] = [
   ...g11ChemistryTheoryBlueprints,
@@ -71,7 +80,14 @@ export const g11ChemistryAssessmentBlueprints: AssessmentBlueprint[] = [
   ...m3AssessmentBlueprints,
   ...m4AssessmentBlueprints,
   ...m5AssessmentBlueprints,
-  ...m6AssessmentBlueprints
+  ...m6AssessmentBlueprints,
+  ...g11ChemistrySemesterBlueprints
 ];
 
+export {
+  g11ChemistrySemesterBlueprints,
+  g11ChemistrySemesterExams,
+  g11ChemistrySemesterQuestions,
+  g11ChemistrySemesterSolutions
+} from './semester';
 export { g11ChemistryTheoryBlueprints, g11ChemistryTheoryExams } from './theory';

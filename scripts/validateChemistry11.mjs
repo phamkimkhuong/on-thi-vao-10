@@ -119,6 +119,22 @@ const assessmentBlueprints = readExportedArray(
   path.join(assessmentsDirectory, 'theory', 'blueprints.ts'),
   'g11ChemistryTheoryBlueprints'
 );
+const semesterExams = readExportedArray(
+  path.join(assessmentsDirectory, 'semester', 'exams.ts'),
+  'g11ChemistrySemesterExams'
+);
+const semesterQuestions = readExportedArray(
+  path.join(assessmentsDirectory, 'semester', 'questions.ts'),
+  'g11ChemistrySemesterQuestions'
+);
+const semesterSolutions = readExportedArray(
+  path.join(assessmentsDirectory, 'semester', 'solutions.ts'),
+  'g11ChemistrySemesterSolutions'
+);
+const semesterBlueprints = readExportedArray(
+  path.join(assessmentsDirectory, 'semester', 'blueprints.ts'),
+  'g11ChemistrySemesterBlueprints'
+);
 const textbookLessons = readExportedArray(
   path.join(curriculumDirectory, 'textbookMap.ts'),
   'g11ChemistryTextbookLessons'
@@ -169,6 +185,9 @@ const assessmentBlueprintById = new Map(assessmentBlueprints.map(item => [item.i
 const checkpointQuestionById = new Map(checkpointQuestions.map(item => [item.id, item]));
 const checkpointSolutionByQuestionId = new Map(checkpointSolutions.map(item => [item.questionId, item]));
 const checkpointBlueprintById = new Map(checkpointBlueprints.map(item => [item.id, item]));
+const semesterQuestionById = new Map(semesterQuestions.map(item => [item.id, item]));
+const semesterSolutionByQuestionId = new Map(semesterSolutions.map(item => [item.questionId, item]));
+const semesterBlueprintById = new Map(semesterBlueprints.map(item => [item.id, item]));
 
 if (textbookLessons.length !== 25) {
   errors.push(`Mục lục Kết nối tri thức phải có 25 bài, hiện có ${textbookLessons.length}.`);
@@ -502,6 +521,312 @@ for (const topicId of checkpointTopicIds) {
   }
 }
 
+for (const [label, items, keyOf] of [
+  ['Semester question', semesterQuestions, item => item.id],
+  ['Semester solution', semesterSolutions, item => item.questionId],
+  ['Semester exam', semesterExams, item => item.id],
+  ['Semester blueprint', semesterBlueprints, item => item.id]
+]) {
+  for (const key of duplicateKeys(items, keyOf)) errors.push(`${label} bị trùng: ${key}.`);
+}
+
+if (
+  semesterQuestions.length !== 128
+  || semesterSolutions.length !== 128
+  || semesterExams.length !== 8
+  || semesterBlueprints.length !== 4
+) {
+  errors.push(
+    `Kiểm tra học kỳ phải có 128 câu/lời giải, 8 mã đề và 4 ma trận, hiện có `
+    + `${semesterQuestions.length}/${semesterSolutions.length}/${semesterExams.length}/${semesterBlueprints.length}.`
+  );
+}
+
+const normalizeQuestionFingerprint = question => JSON.stringify({
+  content: String(question.content ?? '').replace(/\s+/g, ' ').trim().toLowerCase(),
+  options: (question.options ?? []).map(option =>
+    String(option.text ?? option).replace(/\s+/g, ' ').trim().toLowerCase()
+  )
+});
+const nonSemesterFingerprintById = new Map(
+  [...questions, ...assessmentQuestions, ...checkpointQuestions]
+    .map(question => [normalizeQuestionFingerprint(question), question.id])
+);
+const semesterFingerprintCounts = new Map();
+
+for (const question of semesterQuestions) {
+  const fingerprint = normalizeQuestionFingerprint(question);
+  semesterFingerprintCounts.set(fingerprint, (semesterFingerprintCounts.get(fingerprint) ?? 0) + 1);
+  if (questionById.has(question.id) || assessmentQuestionById.has(question.id) || checkpointQuestionById.has(question.id)) {
+    errors.push(`${question.id}: ID câu học kỳ trùng ngân hàng khác.`);
+  }
+  if (Object.hasOwn(question, 'sourceIds')) errors.push(`${question.id}: không dùng sourceIds trong dữ liệu câu hỏi.`);
+  if (!topicById.has(question.topicId) || !/^chem11-t[1-6]$/.test(question.topicId)) {
+    errors.push(`${question.id}: topicId học kỳ không hợp lệ.`);
+  }
+  if (!typeById.has(question.questionTypeId)) {
+    errors.push(`${question.id}: questionTypeId ${question.questionTypeId} không tồn tại.`);
+  }
+  if (!semesterSolutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải học kỳ.`);
+  for (const outcomeId of question.outcomeIds ?? []) {
+    const outcome = outcomeById.get(outcomeId);
+    if (!outcome) {
+      errors.push(`${question.id}: outcome ${outcomeId} không tồn tại.`);
+      continue;
+    }
+    if (outcome.topicId !== question.topicId) {
+      errors.push(`${question.id}: outcome ${outcomeId} không cùng topic với câu hỏi.`);
+    }
+    if (!outcome.questionTypeIds?.includes(question.questionTypeId)) {
+      errors.push(`${question.id}: dạng ${question.questionTypeId} không được khai báo cho outcome ${outcomeId}.`);
+    }
+  }
+  for (const misconceptionId of question.misconceptionIds ?? []) {
+    if (!misconceptionById.has(misconceptionId)) errors.push(`${question.id}: misconception ${misconceptionId} không tồn tại.`);
+  }
+  if (question.responseType === 'single_choice') {
+    if (question.points !== 0.5 || question.options?.length !== 4) {
+      errors.push(`${question.id}: MCQ học kỳ phải có 4 phương án và 0,5 điểm.`);
+    }
+    if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) {
+      errors.push(`${question.id}: đáp án MCQ phải là A/B/C/D.`);
+    }
+  } else if (question.responseType === 'short_answer') {
+    if (question.points !== 1.5 || !['number', 'exact'].includes(question.validatorType)) {
+      errors.push(`${question.id}: trả lời ngắn học kỳ phải có 1,5 điểm và validator number/exact.`);
+    }
+  } else {
+    errors.push(`${question.id}: responseType không thuộc cấu trúc đề học kỳ.`);
+  }
+  const reusedQuestionId = nonSemesterFingerprintById.get(fingerprint);
+  if (reusedQuestionId) {
+    errors.push(`${question.id}: nội dung trùng nguyên văn với ${reusedQuestionId}, không còn là câu độc lập.`);
+  }
+}
+
+for (const [fingerprint, count] of semesterFingerprintCounts) {
+  if (count > 1) {
+    const duplicateIds = semesterQuestions
+      .filter(question => normalizeQuestionFingerprint(question) === fingerprint)
+      .map(question => question.id);
+    errors.push(`Câu học kỳ trùng nội dung nội bộ: ${duplicateIds.join(', ')}.`);
+  }
+}
+
+for (const solution of semesterSolutions) {
+  const question = semesterQuestionById.get(solution.questionId);
+  if (!question) errors.push(`${solution.questionId}: lời giải học kỳ không có câu hỏi.`);
+  if (!solution.recognition?.trim() || solution.detailedSteps?.length < 3) {
+    errors.push(`${solution.questionId}: lời giải học kỳ thiếu nhận dạng/nguyên tắc/các bước.`);
+  }
+  if (question && solution.finalAnswer !== question.correctAnswer) {
+    errors.push(`${solution.questionId}: finalAnswer không khớp correctAnswer.`);
+  }
+}
+
+const expectedSemesterGroups = new Map([
+  ['chem11-midterm1', { kind: 'midterm', semester: 1, topics: ['chem11-t1', 'chem11-t2'] }],
+  ['chem11-final1', { kind: 'final', semester: 1, topics: ['chem11-t1', 'chem11-t2', 'chem11-t3'] }],
+  ['chem11-midterm2', { kind: 'midterm', semester: 2, topics: ['chem11-t4', 'chem11-t5'] }],
+  ['chem11-final2', { kind: 'final', semester: 2, topics: ['chem11-t4', 'chem11-t5', 'chem11-t6'] }]
+]);
+const semesterQuestionUsage = new Map(semesterQuestions.map(question => [question.id, 0]));
+
+for (const blueprint of semesterBlueprints) {
+  if (!['midterm', 'final'].includes(blueprint.kind) || blueprint.focus !== 'mixed') {
+    errors.push(`${blueprint.id}: ma trận học kỳ phải có kind midterm/final và focus=mixed.`);
+  }
+  if (![1, 2].includes(blueprint.semester) || blueprint.difficultyBand !== 'standard') {
+    errors.push(`${blueprint.id}: semester hoặc difficultyBand không hợp lệ.`);
+  }
+  const itemCount = (blueprint.sections ?? []).reduce((sum, section) => sum + section.itemCount, 0);
+  const sectionPoints = (blueprint.sections ?? []).reduce((sum, section) => sum + section.points, 0);
+  const mcqSection = blueprint.sections?.find(section => section.id === 'mcq');
+  const shortSection = blueprint.sections?.find(section => section.id === 'short');
+  if (
+    itemCount !== 16
+    || Math.abs(sectionPoints - 10) > 1e-9
+    || blueprint.totalPoints !== 10
+    || mcqSection?.itemCount !== 14
+    || mcqSection?.points !== 7
+    || shortSection?.itemCount !== 2
+    || shortSection?.points !== 3
+  ) {
+    errors.push(`${blueprint.id}: cấu trúc phải là 14 MCQ (7 điểm) + 2 trả lời ngắn (3 điểm).`);
+  }
+  for (const [weightName, weights] of [
+    ['topicWeights', blueprint.topicWeights],
+    ['difficultyWeights', blueprint.difficultyWeights],
+    ['competencyWeights', blueprint.competencyWeights]
+  ]) {
+    const sum = Object.values(weights ?? {}).reduce((total, weight) => total + weight, 0);
+    if (Math.abs(sum - 1) > 1e-9) errors.push(`${blueprint.id}: tổng ${weightName} phải bằng 1.`);
+  }
+  for (const topicId of blueprint.scopeTopicIds ?? []) {
+    if (!topicById.has(topicId)) errors.push(`${blueprint.id}: scope topic ${topicId} không tồn tại.`);
+  }
+  for (const outcomeId of blueprint.outcomeIds ?? []) {
+    if (!outcomeById.has(outcomeId)) errors.push(`${blueprint.id}: outcome ${outcomeId} không tồn tại.`);
+  }
+}
+
+for (const exam of semesterExams) {
+  const blueprint = semesterBlueprintById.get(exam.blueprintId);
+  const expected = expectedSemesterGroups.get(exam.parallelFormGroup);
+  if (!expected) errors.push(`${exam.id}: parallelFormGroup không thuộc 4 đợt kiểm tra đã khóa.`);
+  if (!blueprint) errors.push(`${exam.id}: blueprintId không tồn tại.`);
+  if (exam.questionIds?.length !== 16 || new Set(exam.questionIds).size !== 16) {
+    errors.push(`${exam.id}: phải có đúng 16 câu không trùng.`);
+  }
+  if (
+    !['midterm', 'final'].includes(exam.kind)
+    || ![1, 2].includes(exam.semester)
+    || exam.totalPoints !== 10
+    || exam.difficultyBand !== 'standard'
+  ) {
+    errors.push(`${exam.id}: metadata kind/semester/điểm/difficultyBand không hợp lệ.`);
+  }
+  if (expected) {
+    if (exam.kind !== expected.kind || exam.semester !== expected.semester) {
+      errors.push(`${exam.id}: kind hoặc học kỳ không khớp đợt kiểm tra.`);
+    }
+    if (JSON.stringify([...(exam.scopeTopicIds ?? [])].sort()) !== JSON.stringify([...expected.topics].sort())) {
+      errors.push(`${exam.id}: phạm vi chương không khớp đợt kiểm tra.`);
+    }
+  }
+  if (blueprint) {
+    if (
+      blueprint.kind !== exam.kind
+      || blueprint.semester !== exam.semester
+      || blueprint.difficultyBand !== exam.difficultyBand
+      || blueprint.duration !== exam.duration
+    ) {
+      errors.push(`${exam.id}: metadata đề không khớp ma trận.`);
+    }
+  }
+
+  const examQuestions = exam.questionIds.map(id => semesterQuestionById.get(id)).filter(Boolean);
+  for (const questionId of exam.questionIds) {
+    if (semesterQuestionUsage.has(questionId)) {
+      semesterQuestionUsage.set(questionId, semesterQuestionUsage.get(questionId) + 1);
+    }
+  }
+  if (examQuestions.length !== exam.questionIds.length) {
+    const missingIds = exam.questionIds.filter(id => !semesterQuestionById.has(id));
+    errors.push(`${exam.id}: questionId không tồn tại: ${missingIds.join(', ')}.`);
+  }
+  const totalPoints = examQuestions.reduce((sum, question) => sum + question.points, 0);
+  const mcqQuestions = examQuestions.filter(question => question.responseType === 'single_choice');
+  const shortQuestions = examQuestions.filter(question => question.responseType === 'short_answer');
+  if (Math.abs(totalPoints - 10) > 1e-9 || mcqQuestions.length !== 14 || shortQuestions.length !== 2) {
+    errors.push(`${exam.id}: cấu trúc thực tế phải là 14 MCQ + 2 trả lời ngắn = 10 điểm.`);
+  }
+  for (const question of examQuestions) {
+    if (!exam.scopeTopicIds?.includes(question.topicId)) {
+      errors.push(`${exam.id}: câu ${question.id} nằm ngoài phạm vi ${question.topicId}.`);
+    }
+  }
+
+  const answerCounts = Object.fromEntries(
+    ['A', 'B', 'C', 'D'].map(answer => [
+      answer,
+      mcqQuestions.filter(question => question.correctAnswer === answer).length
+    ])
+  );
+  const usedAnswerCount = Object.values(answerCounts).filter(count => count > 0).length;
+  const largestAnswerCount = Math.max(...Object.values(answerCounts));
+  if (usedAnswerCount < 3 || largestAnswerCount > 6) {
+    errors.push(`${exam.id}: khóa đáp án MCQ bị lệch ${JSON.stringify(answerCounts)}.`);
+  }
+
+  if (blueprint) {
+    const blueprintOutcomes = new Set(blueprint.outcomeIds ?? []);
+    for (const question of examQuestions) {
+      for (const outcomeId of question.outcomeIds ?? []) {
+        if (!blueprintOutcomes.has(outcomeId)) errors.push(`${exam.id}: outcome ${outcomeId} chưa có trong blueprint.`);
+      }
+    }
+    for (const level of ['easy', 'medium', 'hard']) {
+      const actualWeight = examQuestions.filter(question => question.difficulty === level).length / examQuestions.length;
+      if (Math.abs(actualWeight - (blueprint.difficultyWeights?.[level] ?? 0)) > 1e-9) {
+        errors.push(`${exam.id}: phân bố ${level} không khớp blueprint.`);
+      }
+    }
+    for (const topicId of exam.scopeTopicIds ?? []) {
+      const actualPoints = examQuestions
+        .filter(question => question.topicId === topicId)
+        .reduce((sum, question) => sum + question.points, 0);
+      const actualWeight = actualPoints / totalPoints;
+      if (Math.abs(actualWeight - (blueprint.topicWeights?.[topicId] ?? 0)) > 1e-9) {
+        errors.push(`${exam.id}: tỷ trọng ${topicId} không khớp blueprint.`);
+      }
+    }
+    for (const competency of ['chemical_cognition', 'chemical_inquiry', 'chemical_application']) {
+      const actualPoints = examQuestions
+        .filter(question => question.competency === competency)
+        .reduce((sum, question) => sum + question.points, 0);
+      const actualWeight = actualPoints / totalPoints;
+      if (Math.abs(actualWeight - (blueprint.competencyWeights?.[competency] ?? 0)) > 1e-9) {
+        errors.push(`${exam.id}: tỷ trọng năng lực ${competency} không khớp blueprint.`);
+      }
+    }
+    if (
+      exam.parallelFormGroup === 'chem11-final2'
+      && !examQuestions.some(question => question.outcomeIds?.some(outcomeId => outcomeId.startsWith('chem11-cax-')))
+    ) {
+      errors.push(`${exam.id}: đề cuối kỳ II chưa có nội dung carboxylic acid.`);
+    }
+  }
+}
+
+for (const [questionId, usageCount] of semesterQuestionUsage) {
+  if (usageCount !== 1) errors.push(`${questionId}: phải được dùng đúng một lần trong đề học kỳ, hiện dùng ${usageCount} lần.`);
+}
+
+const semesterParallelGroups = Map.groupBy(semesterExams, exam => exam.parallelFormGroup);
+if (semesterParallelGroups.size !== expectedSemesterGroups.size) {
+  errors.push(`Phải có đúng ${expectedSemesterGroups.size} nhóm đề học kỳ, hiện có ${semesterParallelGroups.size}.`);
+}
+for (const [groupId, expected] of expectedSemesterGroups) {
+  const forms = semesterParallelGroups.get(groupId) ?? [];
+  if (forms.length !== 2 || [...forms.map(form => form.formCode)].sort().join('') !== 'AB') {
+    errors.push(`${groupId}: phải có đúng hai mã A/B.`);
+    continue;
+  }
+  const signatures = forms.map(form => {
+    const formQuestions = form.questionIds.map(id => semesterQuestionById.get(id)).filter(Boolean);
+    const difficulty = Object.fromEntries(
+      ['easy', 'medium', 'hard'].map(level => [
+        level,
+        formQuestions.filter(question => question.difficulty === level).length
+      ])
+    );
+    const response = Object.fromEntries(
+      ['single_choice', 'short_answer'].map(type => [
+        type,
+        formQuestions.filter(question => question.responseType === type).length
+      ])
+    );
+    const topicPoints = Object.fromEntries(
+      expected.topics.map(topicId => [
+        topicId,
+        formQuestions
+          .filter(question => question.topicId === topicId)
+          .reduce((sum, question) => sum + question.points, 0)
+      ])
+    );
+    return JSON.stringify({
+      difficulty,
+      response,
+      topicPoints,
+      totalPoints: formQuestions.reduce((sum, question) => sum + question.points, 0)
+    });
+  });
+  if (new Set(signatures).size !== 1) {
+    errors.push(`${groupId}: mã A/B chưa tương đương về chương, độ khó, dạng trả lời hoặc tổng điểm.`);
+  }
+}
+
 for (const outcome of outcomes) {
   if (!topicById.has(outcome.topicId)) errors.push(`${outcome.id}: topicId không tồn tại.`);
   for (const typeId of outcome.questionTypeIds ?? []) if (!typeById.has(typeId)) errors.push(`${outcome.id}: question type ${typeId} không tồn tại.`);
@@ -519,6 +844,7 @@ console.log(`Curriculum registry: ${textbookChapters.size} chương, ${textbookL
 console.log(`Module 1: ${coreQuestions.length} câu; phân bố đáp án ${JSON.stringify(answerDistribution)}.`);
 console.log(`Assessment lý thuyết: ${assessmentQuestions.length} câu, ${assessmentSolutions.length} lời giải, ${assessmentExams.length} đề, ${assessmentBlueprints.length} ma trận.`);
 console.log(`Checkpoint ${checkpointTopicIds.length} chương: ${checkpointQuestions.length} câu, ${checkpointSolutions.length} lời giải, ${checkpointExams.length} đề, ${checkpointBlueprints.length} ma trận.`);
+console.log(`Kiểm tra học kỳ: ${semesterQuestions.length} câu, ${semesterSolutions.length} lời giải, ${semesterExams.length} mã đề, ${semesterBlueprints.length} ma trận.`);
 
 if (warnings.length) {
   console.log('CẢNH BÁO');

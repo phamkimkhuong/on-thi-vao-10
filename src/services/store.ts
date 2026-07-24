@@ -1,6 +1,33 @@
 import { create } from 'zustand';
 import type { User } from 'firebase/auth';
-import { SubjectCode } from '../types';
+import type { SubjectCode } from '../types';
+
+type GradeCode = 'grade9' | 'grade10' | 'grade11' | 'grade12';
+
+const availableSubjectsByGrade: Record<GradeCode, SubjectCode[]> = {
+  grade9: ['math', 'english'],
+  grade10: ['math', 'english', 'physics', 'chemistry', 'biology'],
+  grade11: ['chemistry'],
+  grade12: []
+};
+
+const getInitialCourseSelection = (): { grade: GradeCode; subject: SubjectCode } => {
+  if (typeof localStorage === 'undefined') return { grade: 'grade9', subject: 'math' };
+
+  const storedGrade = localStorage.getItem('otv10_selected_grade') as GradeCode | null;
+  const grade = storedGrade && storedGrade in availableSubjectsByGrade ? storedGrade : 'grade9';
+  const availableSubjects = availableSubjectsByGrade[grade];
+
+  // Lớp chưa phát hành không được trở thành ngữ cảnh khởi động sau khi tải lại trang.
+  if (availableSubjects.length === 0) return { grade: 'grade9', subject: 'math' };
+
+  const storedSubject = localStorage.getItem('otv10_selected_subject') as SubjectCode | null;
+  const subject = storedSubject && availableSubjects.includes(storedSubject)
+    ? storedSubject
+    : availableSubjects[0];
+
+  return { grade, subject };
+};
 
 interface AppState {
   darkMode: boolean;
@@ -41,6 +68,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => {
   // Lấy cấu hình dark mode ban đầu (luôn mặc định là sáng)
   const initialDarkMode = false;
+  const initialCourseSelection = getInitialCourseSelection();
 
   // Luôn đảm bảo không có class dark trên html
   if (typeof document !== 'undefined') {
@@ -49,8 +77,8 @@ export const useAppStore = create<AppState>((set) => {
 
   return {
     darkMode: initialDarkMode,
-    selectedSubject: 'math',
-    selectedGrade: (typeof localStorage !== 'undefined' && localStorage.getItem('otv10_selected_grade') as 'grade9' | 'grade10' | 'grade11' | 'grade12') || 'grade9',
+    selectedSubject: initialCourseSelection.subject,
+    selectedGrade: initialCourseSelection.grade,
 
     // Auth initial state
     user: null,
@@ -75,7 +103,12 @@ export const useAppStore = create<AppState>((set) => {
       }
     },
 
-    setSubject: (subject) => set({ selectedSubject: subject }),
+    setSubject: (subject) => {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('otv10_selected_subject', subject);
+      }
+      set({ selectedSubject: subject });
+    },
     setGrade: (grade) => {
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('otv10_selected_grade', grade);
