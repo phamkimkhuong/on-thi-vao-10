@@ -5,6 +5,7 @@ import ts from 'typescript';
 const root = process.cwd();
 const modulesDirectory = path.join(root, 'src', 'data', 'grade11', 'chemistry', 'modules');
 const curriculumDirectory = path.join(root, 'src', 'data', 'grade11', 'chemistry', 'curriculum');
+const assessmentsDirectory = path.join(root, 'src', 'data', 'grade11', 'chemistry', 'assessments');
 
 const readNodeValue = (node, constants = new Map()) => {
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
@@ -77,6 +78,12 @@ const questions = [];
 const solutions = [];
 const outcomes = [];
 const misconceptions = [];
+const assessmentQuestions = [];
+const assessmentSolutions = [];
+const checkpointQuestions = [];
+const checkpointSolutions = [];
+const checkpointExams = [];
+const checkpointBlueprints = [];
 
 for (const moduleName of moduleDirs) {
   const modulePath = path.join(modulesDirectory, moduleName);
@@ -86,8 +93,32 @@ for (const moduleName of moduleDirs) {
   solutions.push(...readFirstMatchingArray(path.join(modulePath, 'solutions.ts'), /export const (g11Chemistry\w+Solutions)/));
   outcomes.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g11Chemistry\w+Outcomes)/));
   misconceptions.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g11Chemistry\w+Misconceptions)/));
+  const theoryDirectory = path.join(modulePath, 'assessments', 'theory');
+  if (fs.existsSync(theoryDirectory)) {
+    assessmentQuestions.push(...readFirstMatchingArray(path.join(theoryDirectory, 'questions.ts'), /export const (m\d+TheoryQuestions)/));
+    assessmentSolutions.push(...readFirstMatchingArray(path.join(theoryDirectory, 'solutions.ts'), /export const (m\d+TheorySolutions)/));
+  }
+  const checkpointDirectory = path.join(modulePath, 'assessments', 'checkpoint');
+  if (fs.existsSync(checkpointDirectory)) {
+    for (const tierName of fs.readdirSync(checkpointDirectory)) {
+      const tierDirectory = path.join(checkpointDirectory, tierName);
+      if (!fs.statSync(tierDirectory).isDirectory()) continue;
+      checkpointQuestions.push(...readFirstMatchingArray(path.join(tierDirectory, 'questions.ts'), /export const (m\d+\w+CheckpointQuestions)/));
+      checkpointSolutions.push(...readFirstMatchingArray(path.join(tierDirectory, 'solutions.ts'), /export const (m\d+\w+CheckpointSolutions)/));
+    }
+    checkpointExams.push(...readFirstMatchingArray(path.join(checkpointDirectory, 'exams.ts'), /export const (m\d+CheckpointExams)/));
+    checkpointBlueprints.push(...readFirstMatchingArray(path.join(checkpointDirectory, 'blueprints.ts'), /export const (m\d+CheckpointBlueprints)/));
+  }
 }
 
+const assessmentExams = readExportedArray(
+  path.join(assessmentsDirectory, 'theory', 'exams.ts'),
+  'g11ChemistryTheoryExams'
+);
+const assessmentBlueprints = readExportedArray(
+  path.join(assessmentsDirectory, 'theory', 'blueprints.ts'),
+  'g11ChemistryTheoryBlueprints'
+);
 const textbookLessons = readExportedArray(
   path.join(curriculumDirectory, 'textbookMap.ts'),
   'g11ChemistryTextbookLessons'
@@ -132,6 +163,12 @@ const misconceptionById = new Map(misconceptions.map(item => [item.id, item]));
 const textbookLessonById = new Map(textbookLessons.map(item => [item.id, item]));
 const officialRequirementById = new Map(officialRequirements.map(item => [item.id, item]));
 const outcomeManifestById = new Map(outcomeManifest.map(item => [item.outcomeId, item]));
+const assessmentQuestionById = new Map(assessmentQuestions.map(item => [item.id, item]));
+const assessmentSolutionByQuestionId = new Map(assessmentSolutions.map(item => [item.questionId, item]));
+const assessmentBlueprintById = new Map(assessmentBlueprints.map(item => [item.id, item]));
+const checkpointQuestionById = new Map(checkpointQuestions.map(item => [item.id, item]));
+const checkpointSolutionByQuestionId = new Map(checkpointSolutions.map(item => [item.questionId, item]));
+const checkpointBlueprintById = new Map(checkpointBlueprints.map(item => [item.id, item]));
 
 if (textbookLessons.length !== 25) {
   errors.push(`Mục lục Kết nối tri thức phải có 25 bài, hiện có ${textbookLessons.length}.`);
@@ -261,6 +298,210 @@ for (const solution of solutions) {
   if (question && solution.finalAnswer !== question.correctAnswer) errors.push(`${solution.questionId}: finalAnswer không khớp correctAnswer.`);
 }
 
+for (const [label, items, keyOf] of [
+  ['Assessment question', assessmentQuestions, item => item.id],
+  ['Assessment solution', assessmentSolutions, item => item.questionId],
+  ['Assessment exam', assessmentExams, item => item.id],
+  ['Assessment blueprint', assessmentBlueprints, item => item.id]
+]) {
+  for (const key of duplicateKeys(items, keyOf)) errors.push(`${label} bị trùng: ${key}.`);
+}
+
+for (const question of assessmentQuestions) {
+  if (questionById.has(question.id)) errors.push(`${question.id}: ID câu kiểm tra trùng ngân hàng luyện tập.`);
+  if (!topicById.has(question.topicId)) errors.push(`${question.id}: topicId kiểm tra không tồn tại.`);
+  if (!typeById.has(question.questionTypeId)) errors.push(`${question.id}: questionTypeId kiểm tra không tồn tại.`);
+  if (!assessmentSolutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải kiểm tra.`);
+  if (!Array.isArray(question.options) || question.options.length !== 4) errors.push(`${question.id}: câu lý thuyết phải có đúng 4 phương án.`);
+  if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) errors.push(`${question.id}: đáp án phải là A/B/C/D.`);
+  if (!Array.isArray(question.outcomeIds) || question.outcomeIds.length === 0) errors.push(`${question.id}: thiếu outcomeIds.`);
+  for (const outcomeId of question.outcomeIds ?? []) {
+    if (!outcomeById.has(outcomeId)) errors.push(`${question.id}: outcome ${outcomeId} không tồn tại.`);
+  }
+}
+
+for (const solution of assessmentSolutions) {
+  const question = assessmentQuestionById.get(solution.questionId);
+  if (!question) errors.push(`${solution.questionId}: lời giải kiểm tra không có câu hỏi.`);
+  if (!solution.recognition?.trim()) errors.push(`${solution.questionId}: thiếu phần nhận dạng kiến thức.`);
+  if (!Array.isArray(solution.detailedSteps) || solution.detailedSteps.length < 3) errors.push(`${solution.questionId}: lời giải lý thuyết phải có đủ nhận dạng, nguyên tắc và đối chiếu.`);
+  if (question && solution.finalAnswer !== question.correctAnswer) errors.push(`${solution.questionId}: finalAnswer không khớp correctAnswer.`);
+}
+
+for (const blueprint of assessmentBlueprints) {
+  if (blueprint.focus !== 'theory' || blueprint.theoryScope !== 'module') {
+    errors.push(`${blueprint.id}: ma trận tab Lý thuyết phải có focus=theory và theoryScope=module.`);
+  }
+  const sectionItems = (blueprint.sections ?? []).reduce((sum, section) => sum + section.itemCount, 0);
+  const sectionPoints = (blueprint.sections ?? []).reduce((sum, section) => sum + section.points, 0);
+  if (sectionItems !== 8 || sectionPoints !== blueprint.totalPoints) errors.push(`${blueprint.id}: số câu/điểm section không khớp.`);
+  const difficultySum = Object.values(blueprint.difficultyWeights ?? {}).reduce((sum, weight) => sum + weight, 0);
+  if (Math.abs(difficultySum - 1) > 1e-9) errors.push(`${blueprint.id}: tổng difficultyWeights phải bằng 1.`);
+  for (const outcomeId of blueprint.outcomeIds ?? []) {
+    if (!outcomeById.has(outcomeId)) errors.push(`${blueprint.id}: outcome ${outcomeId} không tồn tại.`);
+  }
+}
+
+for (const exam of assessmentExams) {
+  const blueprint = assessmentBlueprintById.get(exam.blueprintId);
+  if (!blueprint) errors.push(`${exam.id}: blueprintId không tồn tại.`);
+  if (exam.questionIds.length !== 8 || new Set(exam.questionIds).size !== 8) errors.push(`${exam.id}: phải có đúng 8 câu không trùng.`);
+  if (exam.totalPoints !== 8) errors.push(`${exam.id}: tổng điểm tab lý thuyết phải là 8.`);
+  if (exam.difficultyBand !== 'standard') errors.push(`${exam.id}: đề lý thuyết hiện tại phải thuộc band standard.`);
+  for (const questionId of exam.questionIds) {
+    if (!assessmentQuestionById.has(questionId)) errors.push(`${exam.id}: questionId ${questionId} không tồn tại.`);
+  }
+}
+
+const parallelGroups = Map.groupBy(assessmentExams, exam => exam.parallelFormGroup);
+for (const [groupId, forms] of parallelGroups) {
+  if (!groupId || forms.length !== 2) {
+    errors.push(`${groupId ?? 'không có group'}: mỗi nhóm đề song song phải có đúng 2 mã A/B.`);
+    continue;
+  }
+  const formCodes = [...forms.map(form => form.formCode)].sort().join('');
+  if (formCodes !== 'AB') errors.push(`${groupId}: nhóm song song phải gồm mã A và B.`);
+  const signatures = forms.map(form => {
+    const counts = { easy: 0, medium: 0, hard: 0 };
+    for (const questionId of form.questionIds) counts[assessmentQuestionById.get(questionId)?.difficulty] += 1;
+    return JSON.stringify({ topics: [...(form.scopeTopicIds ?? [])].sort(), counts, totalPoints: form.totalPoints });
+  });
+  if (new Set(signatures).size !== 1) errors.push(`${groupId}: mã A/B chưa tương đương phạm vi hoặc độ khó.`);
+}
+
+for (let moduleNumber = 1; moduleNumber <= 6; moduleNumber += 1) {
+  const moduleQuestions = assessmentQuestions.filter(question => question.topicId === `chem11-t${moduleNumber}`);
+  const moduleExams = assessmentExams.filter(exam => exam.scopeTopicIds?.includes(`chem11-t${moduleNumber}`));
+  if (moduleQuestions.length !== 12) errors.push(`Chương ${moduleNumber}: cần 12 câu lý thuyết, hiện có ${moduleQuestions.length}.`);
+  if (moduleExams.length !== 2) errors.push(`Chương ${moduleNumber}: cần 2 mã đề lý thuyết, hiện có ${moduleExams.length}.`);
+}
+
+if (assessmentQuestions.length !== 72 || assessmentSolutions.length !== 72) {
+  errors.push(`Tab Lý thuyết phải có 72 câu/lời giải, hiện có ${assessmentQuestions.length}/${assessmentSolutions.length}.`);
+}
+if (assessmentExams.length !== 12 || assessmentBlueprints.length !== 6) {
+  errors.push(`Tab Lý thuyết phải có 12 đề và 6 ma trận, hiện có ${assessmentExams.length}/${assessmentBlueprints.length}.`);
+}
+
+for (const [label, items, keyOf] of [
+  ['Checkpoint question', checkpointQuestions, item => item.id],
+  ['Checkpoint solution', checkpointSolutions, item => item.questionId],
+  ['Checkpoint exam', checkpointExams, item => item.id],
+  ['Checkpoint blueprint', checkpointBlueprints, item => item.id]
+]) {
+  for (const key of duplicateKeys(items, keyOf)) errors.push(`${label} bị trùng: ${key}.`);
+}
+
+for (const question of checkpointQuestions) {
+  if (questionById.has(question.id) || assessmentQuestionById.has(question.id)) {
+    errors.push(`${question.id}: ID câu chuyên đề trùng ngân hàng khác.`);
+  }
+  if (!topicById.has(question.topicId) || !/^chem11-t[1-6]$/.test(question.topicId)) {
+    errors.push(`${question.id}: topicId checkpoint không hợp lệ.`);
+  }
+  if (!typeById.has(question.questionTypeId)) errors.push(`${question.id}: questionTypeId không tồn tại.`);
+  if (!checkpointSolutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải.`);
+  for (const outcomeId of question.outcomeIds ?? []) {
+    if (!outcomeById.has(outcomeId)) errors.push(`${question.id}: outcome ${outcomeId} không tồn tại.`);
+  }
+  if (question.responseType === 'single_choice') {
+    if (question.points !== 0.5 || question.options?.length !== 4) errors.push(`${question.id}: MCQ phải có 4 phương án và 0,5 điểm.`);
+    if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) errors.push(`${question.id}: đáp án MCQ phải là A/B/C/D.`);
+  } else if (question.responseType === 'short_answer') {
+    if (question.points !== 1.5 || !['number', 'exact'].includes(question.validatorType)) {
+      errors.push(`${question.id}: trả lời ngắn phải có 1,5 điểm và validator number/exact.`);
+    }
+  } else {
+    errors.push(`${question.id}: responseType không đúng blueprint Chương 1.`);
+  }
+}
+
+for (const solution of checkpointSolutions) {
+  const question = checkpointQuestionById.get(solution.questionId);
+  if (!question) errors.push(`${solution.questionId}: lời giải checkpoint không có câu hỏi.`);
+  if (!solution.recognition?.trim() || solution.detailedSteps?.length < 3) errors.push(`${solution.questionId}: lời giải thiếu nhận dạng/nguyên tắc/các bước.`);
+  if (question && solution.finalAnswer !== question.correctAnswer) errors.push(`${solution.questionId}: finalAnswer không khớp.`);
+}
+
+for (const blueprint of checkpointBlueprints) {
+  if (blueprint.kind !== 'module_checkpoint' || blueprint.focus !== 'mixed') errors.push(`${blueprint.id}: sai kind/focus.`);
+  if (blueprint.totalPoints !== 10 || blueprint.sections?.reduce((sum, section) => sum + section.points, 0) !== 10) {
+    errors.push(`${blueprint.id}: tổng điểm phải bằng 10.`);
+  }
+  const itemCount = blueprint.sections?.reduce((sum, section) => sum + section.itemCount, 0);
+  if (itemCount !== 12) errors.push(`${blueprint.id}: phải có 12 câu.`);
+  const difficultySum = Object.values(blueprint.difficultyWeights ?? {}).reduce((sum, weight) => sum + weight, 0);
+  if (Math.abs(difficultySum - 1) > 1e-9) errors.push(`${blueprint.id}: tổng difficultyWeights phải bằng 1.`);
+}
+
+for (const exam of checkpointExams) {
+  const blueprint = checkpointBlueprintById.get(exam.blueprintId);
+  if (!blueprint) errors.push(`${exam.id}: blueprintId không tồn tại.`);
+  if (exam.questionIds?.length !== 12 || new Set(exam.questionIds).size !== 12) errors.push(`${exam.id}: phải có đúng 12 câu không trùng.`);
+  const examQuestions = exam.questionIds.map(id => checkpointQuestionById.get(id)).filter(Boolean);
+  const totalPoints = examQuestions.reduce((sum, question) => sum + question.points, 0);
+  const mcqCount = examQuestions.filter(question => question.responseType === 'single_choice').length;
+  const shortCount = examQuestions.filter(question => question.responseType === 'short_answer').length;
+  if (Math.abs(totalPoints - 10) > 1e-9 || mcqCount !== 8 || shortCount !== 4) {
+    errors.push(`${exam.id}: cấu trúc thực tế phải là 8 MCQ + 4 trả lời ngắn = 10 điểm.`);
+  }
+  if (blueprint && exam.difficultyBand !== blueprint.difficultyBand) errors.push(`${exam.id}: difficultyBand không khớp blueprint.`);
+  const mcqAnswerCounts = Object.fromEntries(
+    ['A', 'B', 'C', 'D'].map(answer => [
+      answer,
+      examQuestions.filter(question => question.responseType === 'single_choice' && question.correctAnswer === answer).length
+    ])
+  );
+  const usedAnswerCount = Object.values(mcqAnswerCounts).filter(count => count > 0).length;
+  const largestAnswerCount = Math.max(...Object.values(mcqAnswerCounts));
+  if (usedAnswerCount < 3 || largestAnswerCount > 4) {
+    errors.push(`${exam.id}: khóa đáp án MCQ bị lệch ${JSON.stringify(mcqAnswerCounts)}.`);
+  }
+  if (blueprint) {
+    for (const level of ['easy', 'medium', 'hard']) {
+      const actualWeight = examQuestions.filter(question => question.difficulty === level).length / examQuestions.length;
+      if (Math.abs(actualWeight - blueprint.difficultyWeights[level]) > 1e-9) {
+        errors.push(`${exam.id}: phân bố ${level} không khớp blueprint.`);
+      }
+    }
+    const blueprintOutcomes = new Set(blueprint.outcomeIds ?? []);
+    for (const question of examQuestions) {
+      for (const outcomeId of question.outcomeIds ?? []) {
+        if (!blueprintOutcomes.has(outcomeId)) errors.push(`${exam.id}: outcome ${outcomeId} chưa có trong blueprint.`);
+      }
+    }
+  }
+}
+
+const checkpointParallelGroups = Map.groupBy(checkpointExams, exam => exam.parallelFormGroup);
+for (const [groupId, forms] of checkpointParallelGroups) {
+  if (!groupId || forms.length !== 2 || [...forms.map(form => form.formCode)].sort().join('') !== 'AB') {
+    errors.push(`${groupId ?? 'không có group'}: checkpoint phải có đúng mã A/B.`);
+    continue;
+  }
+  const signatures = forms.map(form => {
+    const formQuestions = form.questionIds.map(id => checkpointQuestionById.get(id));
+    const difficulty = Object.fromEntries(['easy', 'medium', 'hard'].map(level => [level, formQuestions.filter(item => item?.difficulty === level).length]));
+    const response = Object.fromEntries(['single_choice', 'short_answer'].map(type => [type, formQuestions.filter(item => item?.responseType === type).length]));
+    return JSON.stringify({ difficulty, response, totalPoints: formQuestions.reduce((sum, item) => sum + (item?.points ?? 0), 0) });
+  });
+  if (new Set(signatures).size !== 1) errors.push(`${groupId}: mã A/B chưa tương đương độ khó và cấu trúc.`);
+}
+
+const checkpointTopicIds = [...new Set(checkpointExams.flatMap(exam => exam.scopeTopicIds ?? []))].sort();
+for (const topicId of checkpointTopicIds) {
+  const topicQuestions = checkpointQuestions.filter(question => question.topicId === topicId);
+  const topicSolutions = checkpointSolutions.filter(solution => checkpointQuestionById.get(solution.questionId)?.topicId === topicId);
+  const topicExams = checkpointExams.filter(exam => exam.scopeTopicIds?.includes(topicId));
+  const topicBlueprints = checkpointBlueprints.filter(blueprint => blueprint.scopeTopicIds?.includes(topicId));
+  if (topicQuestions.length !== 72 || topicSolutions.length !== 72) {
+    errors.push(`${topicId}: phải có 72 câu/lời giải checkpoint, hiện có ${topicQuestions.length}/${topicSolutions.length}.`);
+  }
+  if (topicExams.length !== 6 || topicBlueprints.length !== 3) {
+    errors.push(`${topicId}: phải có 6 đề và 3 ma trận checkpoint, hiện có ${topicExams.length}/${topicBlueprints.length}.`);
+  }
+}
+
 for (const outcome of outcomes) {
   if (!topicById.has(outcome.topicId)) errors.push(`${outcome.id}: topicId không tồn tại.`);
   for (const typeId of outcome.questionTypeIds ?? []) if (!typeById.has(typeId)) errors.push(`${outcome.id}: question type ${typeId} không tồn tại.`);
@@ -276,6 +517,8 @@ if (maxAnswers > Math.ceil(coreQuestions.length * 0.4)) warnings.push(`Khóa đ�
 console.log(`Hóa học 11 giai đoạn 1: ${topics.length} topic, ${outcomes.length} outcomes, ${questionTypes.length} dạng, ${questions.length} câu, ${solutions.length} lời giải.`);
 console.log(`Curriculum registry: ${textbookChapters.size} chương, ${textbookLessons.length} bài, ${officialRequirements.length} yêu cầu đã chuẩn hóa, ${outcomeManifest.length} outcome manifest.`);
 console.log(`Module 1: ${coreQuestions.length} câu; phân bố đáp án ${JSON.stringify(answerDistribution)}.`);
+console.log(`Assessment lý thuyết: ${assessmentQuestions.length} câu, ${assessmentSolutions.length} lời giải, ${assessmentExams.length} đề, ${assessmentBlueprints.length} ma trận.`);
+console.log(`Checkpoint ${checkpointTopicIds.length} chương: ${checkpointQuestions.length} câu, ${checkpointSolutions.length} lời giải, ${checkpointExams.length} đề, ${checkpointBlueprints.length} ma trận.`);
 
 if (warnings.length) {
   console.log('CẢNH BÁO');

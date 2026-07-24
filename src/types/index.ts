@@ -106,6 +106,13 @@ export type AssessmentKind =
 /** Trọng tâm đánh giá, tách biệt với phạm vi/thời điểm của bài kiểm tra. */
 export type AssessmentFocus = 'mixed' | 'theory';
 export type TheoryAssessmentScope = 'module' | 'comprehensive';
+export type AssessmentDifficultyBand = 'foundation' | 'score8' | 'score9' | 'standard';
+export type AssessmentSemester = 1 | 2;
+
+export interface AssessmentTargetScoreRange {
+  min: number;
+  max: number;
+}
 
 export type AssessmentCompetency =
   | 'mathematical_reasoning'
@@ -141,6 +148,10 @@ export interface AssessmentBlueprint {
   kind: AssessmentKind;
   focus?: AssessmentFocus;
   theoryScope?: TheoryAssessmentScope;
+  difficultyBand?: AssessmentDifficultyBand;
+  targetScoreRange?: AssessmentTargetScoreRange;
+  semester?: AssessmentSemester;
+  seriesOrder?: number;
   duration: number;
   totalPoints: number;
   scopeTopicIds: string[];
@@ -461,6 +472,13 @@ export interface MockExam {
   kind?: AssessmentKind;
   focus?: AssessmentFocus;
   theoryScope?: TheoryAssessmentScope;
+  /** Mức mục tiêu của series; không dùng formCode để suy ra độ khó. */
+  difficultyBand?: AssessmentDifficultyBand;
+  targetScoreRange?: AssessmentTargetScoreRange;
+  /** Các mã A/B cùng parallelFormGroup phải tương đương phạm vi và độ khó. */
+  parallelFormGroup?: string;
+  seriesOrder?: number;
+  semester?: AssessmentSemester;
   scopeTopicIds?: string[];
   totalPoints?: number;
   formCode?: string;

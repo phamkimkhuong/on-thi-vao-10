@@ -181,6 +181,7 @@ export const loadSubjectData = async (grade: 'grade9' | 'grade10' | 'grade11' | 
           questions: [...qMod.g11ChemistryQuestions, ...assessmentsMod.g11ChemistryAssessmentQuestions],
           solutions: [...sMod.g11ChemistrySolutions, ...assessmentsMod.g11ChemistryAssessmentSolutions],
           mockExams: assessmentsMod.g11ChemistryAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g11ChemistryAssessmentBlueprints,
           learningOutcomes: learningPathMod.g11ChemistryOutcomes,
           learningMisconceptions: learningPathMod.g11ChemistryMisconceptions
         };

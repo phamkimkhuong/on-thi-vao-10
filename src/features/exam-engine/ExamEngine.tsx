@@ -32,7 +32,8 @@ import {
   Zap,
   X,
   Sparkles,
-  BookOpen
+  BookOpen,
+  Target
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -208,6 +209,19 @@ export const ExamEngine: React.FC = () => {
       return exam.theoryScope === 'comprehensive' ? 'Lý thuyết tổng hợp' : 'Lý thuyết chuyên đề';
     }
     return assessmentKindLabels[exam.kind ?? 'module_checkpoint'];
+  };
+
+  const getDifficultyBandLabel = (exam: MockExam) => {
+    if (exam.difficultyBand === 'foundation') return 'Nền tảng';
+    if (exam.difficultyBand === 'score8') return 'Mục tiêu 8+';
+    if (exam.difficultyBand === 'score9') return 'Mục tiêu 9+';
+    return null;
+  };
+
+  const getDifficultyBandClassName = (exam: MockExam) => {
+    if (exam.difficultyBand === 'foundation') return 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
+    if (exam.difficultyBand === 'score8') return 'bg-amber-500/10 text-amber-700 dark:text-amber-300';
+    return 'bg-rose-500/10 text-rose-700 dark:text-rose-300';
   };
 
   const [expandedSolutionId, setExpandedSolutionId] = useState<Record<string, boolean>>({});
@@ -765,11 +779,21 @@ export const ExamEngine: React.FC = () => {
                       )}
 
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-primary flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                            {getExamCategoryLabel(selectedExamInGroup)}
-                          </span>
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-primary flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                              {getExamCategoryLabel(selectedExamInGroup)}
+                            </span>
+                            {getDifficultyBandLabel(selectedExamInGroup) && (
+                              <span className={cn(
+                                'rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-wider',
+                                getDifficultyBandClassName(selectedExamInGroup)
+                              )}>
+                                {getDifficultyBandLabel(selectedExamInGroup)}
+                              </span>
+                            )}
+                          </div>
                           {group.exams.length > 1 && (
                             <span className="text-[9px] text-muted-foreground font-bold bg-secondary/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                               {group.exams.length} mã đề
@@ -882,6 +906,16 @@ export const ExamEngine: React.FC = () => {
                           <Zap size={10} /> MÃ ĐỀ THI
                         </span>
                         <span className="text-xs font-black text-foreground">{currentExam.formCode}</span>
+                      </div>
+                    )}
+                    {currentExam.targetScoreRange && (
+                      <div className="p-4 rounded-2xl border border-amber-500/10 bg-amber-500/[0.02] dark:bg-amber-500/[0.01] flex flex-col gap-1">
+                        <span className="text-[9px] font-black text-amber-600 dark:text-amber-400 block tracking-wider uppercase flex items-center gap-1">
+                          <Target size={10} /> DẢI ĐIỂM MỤC TIÊU
+                        </span>
+                        <span className="text-xs font-black text-foreground">
+                          {currentExam.targetScoreRange.min}–{currentExam.targetScoreRange.max} điểm
+                        </span>
                       </div>
                     )}
                   </div>
@@ -1144,7 +1178,7 @@ export const ExamEngine: React.FC = () => {
                       <input
                         id={`exam-answer-${q.id}`}
                         type="text"
-                        inputMode={q.responseType === 'short_answer' ? 'decimal' : 'text'}
+                        inputMode={q.validatorType === 'number' ? 'decimal' : 'text'}
                         value={answers[q.id] || ''}
                         onChange={(e) => handleInputChange(q.id, e.target.value)}
                         placeholder={selectedSubject === 'math' ? 'Nhập đáp số...' : 'Nhập câu trả lời...'}
