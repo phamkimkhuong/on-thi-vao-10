@@ -72,23 +72,30 @@ export const PremiumPricing: React.FC = () => {
     }
   };
 
-  // Tự động kiểm tra mã giảm giá nếu có trong URL (?code=THAYNAM10)
+  // Tự động kiểm tra mã giảm giá nếu có trong URL (?code=THAYNAM10) và reset loading khi quay lại trang
   useEffect(() => {
+    setLoading(false);
     const codeFromUrl = searchParams.get('code');
     if (codeFromUrl && codeFromUrl.trim()) {
       const cleanCode = codeFromUrl.trim().toUpperCase();
       setCouponInput(cleanCode);
       validateCouponCode(cleanCode, selectedPlanId);
     }
+    const paymentStatus = searchParams.get('payment');
+    if (paymentStatus === 'cancelled') {
+      showToast('Giao dịch thanh toán đã bị hủy.', 'error');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  // Tự động validate lại số tiền giảm khi người dùng đổi giữa Gói 3 Tháng và Gói 12 Tháng
+  // Xử lý BFCache khi người dùng nhấn Back trên trình duyệt
   useEffect(() => {
-    if (couponInput.trim() && appliedDiscount?.valid) {
-      validateCouponCode(couponInput, selectedPlanId);
-    }
-  }, [selectedPlanId, couponInput, appliedDiscount?.valid]);
+    const handlePageShow = () => {
+      setLoading(false);
+    };
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, []);
 
   const handleApplyCoupon = async () => {
     if (!couponInput.trim()) return;

@@ -6,7 +6,7 @@
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions"
+    "deploy": "firebase deploy --only functions --project on-thi-vao-10-7d87c"
   },
   "engines": {
     "node": "22"
