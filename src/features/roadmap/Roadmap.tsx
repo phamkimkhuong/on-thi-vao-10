@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
 import { getTopics, getQuestionTypes } from '../../data';
 import { Card, CardContent } from '../../components/ui/card';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon } from '../../utils/subject';
@@ -15,20 +15,56 @@ import type { QuestionType } from '../../types';
 import { ChemistryVideoDashboard } from './components/ChemistryVideoDashboard';
 import { BiologyVideoDashboard } from './components/BiologyVideoDashboard';
 import { PhysicsVideoDashboard } from './components/PhysicsVideoDashboard';
+import { TopicTextbookMappingModal } from './components/TopicTextbookMappingModal';
+import { TextbookDrawer } from '../../components/common/TextbookDrawer';
+import { g10BiologyOutcomes } from '../../data/grade10/biology/learningPath';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { selectedSubject, selectedGrade, progressVersion, isPremium, user } = useAppStore();
   void progressVersion;
 
   const hasVideos = selectedSubject === 'chemistry' || selectedSubject === 'biology' || (selectedSubject === 'physics' && selectedGrade === 'grade10');
 
-  const [activeView, setActiveView] = useState<'roadmap' | 'videos'>(hasVideos ? 'videos' : 'roadmap');
+  const getInitialView = (): 'roadmap' | 'videos' => {
+    const paramView = searchParams.get('view');
+    if (paramView === 'roadmap' || paramView === 'videos') {
+      return paramView;
+    }
+    const savedView = localStorage.getItem(`otv10_roadmap_view_${selectedSubject}_${selectedGrade}`);
+    if (savedView === 'roadmap' || savedView === 'videos') {
+      return savedView;
+    }
+    return 'roadmap';
+  };
+
+  const [activeView, setActiveView] = useState<'roadmap' | 'videos'>(getInitialView);
+  const [mappingModalTopic, setMappingModalTopic] = useState<{ id: string; name: string } | null>(null);
+  const [drawerConfig, setDrawerConfig] = useState<{ isOpen: boolean; bookName: string; pages: number[] }>({
+    isOpen: false,
+    bookName: '',
+    pages: []
+  });
 
   useEffect(() => {
-    const showVideos = selectedSubject === 'chemistry' || selectedSubject === 'biology' || (selectedSubject === 'physics' && selectedGrade === 'grade10');
-    setActiveView(showVideos ? 'videos' : 'roadmap');
-  }, [selectedSubject, selectedGrade]);
+    const paramView = searchParams.get('view');
+    if (paramView === 'roadmap' || paramView === 'videos') {
+      setActiveView(paramView);
+      localStorage.setItem(`otv10_roadmap_view_${selectedSubject}_${selectedGrade}`, paramView);
+    } else {
+      const savedView = localStorage.getItem(`otv10_roadmap_view_${selectedSubject}_${selectedGrade}`);
+      if (savedView === 'roadmap' || savedView === 'videos') {
+        setActiveView(savedView);
+      }
+    }
+  }, [searchParams, selectedSubject, selectedGrade]);
+
+  const handleViewChange = (newView: 'roadmap' | 'videos') => {
+    setActiveView(newView);
+    setSearchParams({ view: newView });
+    localStorage.setItem(`otv10_roadmap_view_${selectedSubject}_${selectedGrade}`, newView);
+  };
 
   const topics = getTopics(selectedGrade, selectedSubject);
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
@@ -159,22 +195,48 @@ export const Roadmap: React.FC = () => {
         id: 1,
         title: '🎯 HỌC KỲ I (Nền tảng kiến thức mới)',
         description: selectedSubject === 'math'
-          ? 'Làm quen và củng cố kiến thức Mệnh đề, Tập hợp, Hàm số bậc hai, Bất phương trình và Hệ thức lượng.'
-          : 'Ôn tập ngữ pháp & từ vựng nửa đầu năm học lớp 10 (Thì hiện tại tiếp diễn, tương lai, gerunds).'
+          ? (selectedGrade === 'grade11'
+            ? 'Làm quen và củng cố kiến thức Cân bằng hóa học, Hàm số lượng giác, Cấp số cộng và Cấp số nhân.'
+            : 'Làm quen và củng cố kiến thức Mệnh đề, Tập hợp, Hàm số bậc hai, Bất phương trình và Hệ thức lượng.')
+          : selectedSubject === 'chemistry'
+            ? (selectedGrade === 'grade11'
+              ? 'Tập trung ôn tập nền tảng Cân bằng hóa học, Nitrogen – Sulfur và Đại cương hóa học hữu cơ.'
+              : 'Tập trung ôn tập kiến thức Cấu tạo nguyên tử, Bảng tuần hoàn, Liên kết hóa học và Phản ứng oxi hóa - khử.')
+            : selectedSubject === 'biology'
+              ? 'Nắm vững kiến thức sinh học tế bào, phân bào và sinh học vi sinh vật.'
+              : selectedSubject === 'physics'
+                ? 'Nắm chắc kiến thức động học, động lực học và các định luật bảo toàn.'
+                : `Ôn tập ngữ pháp & từ vựng nửa đầu năm học ${selectedGrade === 'grade11' ? 'Lớp 11' : 'Lớp 10'}.`
       },
       {
         id: 2,
         title: '🚀 HỌC KỲ II (Tăng tốc bứt phá)',
         description: selectedSubject === 'math'
-          ? 'Học tốt các chuyên đề về Vectơ, Đại số tổ hợp, Thống kê, Xác suất và Oxy.'
-          : 'Học tốt ngữ pháp & từ vựng nửa sau năm học lớp 10 (Mệnh đề quan hệ, câu gián tiếp, điều kiện).'
+          ? (selectedGrade === 'grade11'
+            ? 'Học tốt các chuyên đề về Giới hạn, Đạo hàm, Vectơ và Đường thẳng trong không gian.'
+            : 'Học tốt các chuyên đề về Vectơ, Đại số tổ hợp, Thống kê, Xác suất và Oxy.')
+          : selectedSubject === 'chemistry'
+            ? (selectedGrade === 'grade11'
+              ? 'Làm chủ các chuyên đề Hóa học hữu cơ: Hydrocarbon, Ancol, Phenol, Carbonyl và Carboxylic acid.'
+              : 'Làm chủ các chuyên đề Năng lượng hóa học, Tốc độ phản ứng và nhóm Halogen.')
+            : selectedSubject === 'biology'
+              ? 'Học tốt di truyền học, biến dị và cơ chế truyền thông tin di truyền.'
+              : selectedSubject === 'physics'
+                ? 'Học tốt các chuyên đề về Năng lượng, Công, Công suất và Động lượng.'
+                : `Học tốt ngữ pháp & từ vựng nửa sau năm học ${selectedGrade === 'grade11' ? 'Lớp 11' : 'Lớp 10'}.`
       },
       {
         id: 3,
         title: '👑 CHUYÊN ĐỀ HỌC TẬP (Mở rộng & Nâng cao)',
         description: selectedSubject === 'math'
-          ? 'Chinh phục các chuyên đề học tập tự chọn nâng cao (Conic nâng cao, Hệ phương trình 3 ẩn).'
-          : 'Rèn luyện các cấu trúc ngữ pháp học thuật, bài đọc hiểu và viết luận nâng cao.'
+          ? 'Chinh phục các chuyên đề học tập tự chọn nâng cao và bài tập vận dụng cao.'
+          : selectedSubject === 'chemistry'
+            ? 'Chinh phục chuyên đề tổng hợp hóa học hữu cơ, vô cơ và bài tập phân hóa 9-10 điểm.'
+            : selectedSubject === 'biology'
+              ? 'Chinh phục chuyên đề sinh học phân tử và bài tập di truyền nâng cao.'
+              : selectedSubject === 'physics'
+                ? 'Chinh phục các chuyên đề vật lý nâng cao và bài tập vận dụng cao.'
+                : 'Rèn luyện các cấu trúc ngữ pháp học thuật, bài đọc hiểu và viết luận nâng cao.'
       }
     ];
 
@@ -194,7 +256,7 @@ export const Roadmap: React.FC = () => {
             <div className="inline-flex p-1 bg-slate-200/60 dark:bg-slate-900/60 rounded-2xl border border-border/40">
               <button
                 type="button"
-                onClick={() => setActiveView('videos')}
+                onClick={() => handleViewChange('videos')}
                 className={cn(
                   "px-5 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer",
                   activeView === 'videos'
@@ -206,11 +268,11 @@ export const Roadmap: React.FC = () => {
                     : "text-muted-foreground hover:text-foreground font-bold"
                 )}
               >
-                📺 Video bài giảng {selectedSubject === 'chemistry' ? '(7 chương)' : selectedSubject === 'biology' ? '(8 chương)' : '(7 chương)'}
+                📺 Video bài giảng {selectedSubject === 'chemistry' ? (selectedGrade === 'grade11' ? '(6 chương)' : '(7 chương)') : selectedSubject === 'biology' ? '(8 chương)' : '(7 chương)'}
               </button>
               <button
                 type="button"
-                onClick={() => setActiveView('roadmap')}
+                onClick={() => handleViewChange('roadmap')}
                 className={cn(
                   "px-5 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer",
                   activeView === 'roadmap'
@@ -323,6 +385,7 @@ export const Roadmap: React.FC = () => {
                             {(() => {
                               const completedCount = filteredTypes.filter(type => readLessonsSet.has(type.id)).length;
                               const percent = filteredTypes.length > 0 ? Math.round((completedCount / filteredTypes.length) * 100) : 0;
+                              const topicOutcomes = g10BiologyOutcomes.filter(o => o.topicId === topic.id && o.textbook && o.textbook.pages.length > 0);
 
                               return (
                                 <div className="flex flex-col gap-1.5 pl-1">
@@ -342,9 +405,20 @@ export const Roadmap: React.FC = () => {
                                       <span className="text-[10px] text-primary font-black">{percent}% hoàn thành</span>
                                     </div>
                                   </div>
-                                  <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-                                    {filteredTypes.length} dạng bài thi cốt lõi
-                                  </span>
+                                  <div className="flex items-center gap-3 flex-wrap">
+                                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+                                      {filteredTypes.length} dạng bài thi cốt lõi
+                                    </span>
+                                    {topicOutcomes.length > 0 && (
+                                      <button
+                                        onClick={() => setMappingModalTopic({ id: topic.id, name: topic.name })}
+                                        className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-0.5 rounded-lg border border-emerald-500/20 transition-all cursor-pointer shadow-2xs active:scale-95"
+                                      >
+                                        <BookOpen size={12} />
+                                        Bảng đối chiếu SGK chuẩn
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
                               );
                             })()}
@@ -437,6 +511,30 @@ export const Roadmap: React.FC = () => {
         variant={modalConfig.variant}
         onConfirm={modalConfig.onConfirm}
         onCancel={modalConfig.onCancel || (() => setModalConfig(prev => ({ ...prev, isOpen: false })))}
+      />
+
+      {mappingModalTopic && (
+        <TopicTextbookMappingModal
+          isOpen={!!mappingModalTopic}
+          onClose={() => setMappingModalTopic(null)}
+          topicName={mappingModalTopic.name}
+          outcomes={g10BiologyOutcomes.filter(o => o.topicId === mappingModalTopic.id)}
+          questionTypes={questionTypes}
+          onOpenTextbookPage={(bookName, pages) => {
+            setDrawerConfig({
+              isOpen: true,
+              bookName,
+              pages
+            });
+          }}
+        />
+      )}
+
+      <TextbookDrawer
+        isOpen={drawerConfig.isOpen}
+        onClose={() => setDrawerConfig(prev => ({ ...prev, isOpen: false }))}
+        bookName={drawerConfig.bookName}
+        pages={drawerConfig.pages}
       />
     </div>
   );

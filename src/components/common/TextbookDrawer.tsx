@@ -44,7 +44,8 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
 
   const currentPageNum = pages[activePageIndex];
   const r2PublicUrl = import.meta.env.VITE_R2_PUBLIC_URL || 'https://pub-2d2aecd54c5d4fbaa53c59d09c29b464.r2.dev';
-  const imageUrl = `${r2PublicUrl}/chemistry/page_${currentPageNum}.png`;
+  const folder = bookName.toLowerCase().includes('sinh') ? 'biology' : 'chemistry';
+  const imageUrl = `${r2PublicUrl}/${folder}/page_${currentPageNum}.png`;
 
   const handlePrevPage = () => {
     if (activePageIndex > 0) {
@@ -71,13 +72,13 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
   return (
     <>
       {/* Backdrop overlay */}
-      <div 
+      <div
         className="fixed inset-0 z-50 bg-black/45 backdrop-blur-xs transition-opacity duration-300 animate-fade-in"
         onClick={onClose}
       />
 
       {/* Sliding Drawer Container */}
-      <div 
+      <div
         className={cn(
           "fixed inset-y-0 right-0 z-50 bg-card border-l border-border shadow-2xl flex flex-col transition-all duration-300 animate-slide-in",
           isFullscreen ? "w-full max-w-full" : "w-full max-w-2xl"
@@ -171,7 +172,7 @@ export const TextbookDrawer: React.FC<TextbookDrawerProps> = ({
 
         {/* Reader Canvas viewport */}
         <div className="flex-1 overflow-auto bg-slate-100 dark:bg-slate-950 p-4 flex items-start justify-center relative">
-          <div 
+          <div
             className="transition-transform duration-200 ease-out origin-top shadow-xl border border-border/50 rounded-lg bg-white overflow-hidden"
             style={{
               transform: `scale(${zoomScale})`,

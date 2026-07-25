@@ -1483,5 +1483,365 @@ export const g10MathModule3Questions: Question[] = [
       "D"
     ],
     "validatorType": "choice"
+  },
+  {
+    id: 'math10-m3-q061', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f(x)=x^2-5x+6$ dương trên tập nào?', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $\\mathbb R$', 'B. $(2;3)$', 'C. $(-\\infty;2)\\cup(3;+\\infty)$', 'D. $[2;3]$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q062', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f(x)=-x^2+4x-3$ dương trên khoảng nào?', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $(-\\infty;1)$', 'B. $(1;3)$', 'C. $(3;+\\infty)$', 'D. $(-\\infty;1)\\cup(3;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q063', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Dấu của $f(x)=2x^2+4x+5$ được mô tả đúng bởi phương án nào?', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $f(x)>0$ với mọi $x$', 'B. $f(x)<0$ với mọi $x$', 'C. $f(x)\\ge0$ và bằng $0$ tại $x=-1$', 'D. $f(x)$ đổi dấu hai lần'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q064', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Dấu của $f(x)=-3x^2+6x-4$ được mô tả đúng bởi phương án nào?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. Luôn dương', 'B. Không âm và có một nghiệm kép', 'C. Đổi dấu tại hai nghiệm', 'D. Luôn âm'], correctAnswer: 'D', acceptedAnswers: ['D'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q065', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Với $f(x)=x^2-6x+9$, kết luận nào đúng?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $f(x)>0$ với mọi $x$', 'B. $f(x)<0$ khi $x<3$', 'C. $f(x)\\ge0$ với mọi $x$ và $f(3)=0$', 'D. $f(x)$ đổi dấu tại $x=3$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q066', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Với $f(x)=-(2x+1)^2$, kết luận nào đúng?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $f(x)<0$ với mọi $x$', 'B. $f(x)\\le0$ với mọi $x$ và $f(-\\tfrac12)=0$', 'C. $f(x)\\ge0$ với mọi $x$', 'D. $f(x)$ đổi dấu tại $x=-\\tfrac12$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q067', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f(x)=(x+2)(x-5)$ âm trên khoảng nào?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(-\\infty;-2)$', 'B. $(-2;5)$', 'C. $(5;+\\infty)$', 'D. $(-\\infty;-2)\\cup(5;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q068', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f(x)=-2(x-1)(x+4)$ dương trên khoảng nào?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(-4;1)$', 'B. $(-\\infty;-4)$', 'C. $(1;+\\infty)$', 'D. $(-\\infty;-4)\\cup(1;+\\infty)$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q069', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f$ có hai nghiệm $x_1<0<x_2$ và $f(0)>0$. Dấu của hệ số bậc hai $a$ là gì?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $a>0$', 'B. $a<0$', 'C. $a=0$', 'D. Không xác định được'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q070', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Một tam thức bậc hai có nghiệm $-2,5$ và âm trên $(-\\infty;-2)\\cup(5;+\\infty)$. Tam thức nào có thể là nó?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $(x+2)(x-5)$', 'B. $-(x+2)(x-5)$', 'C. $(x-2)(x+5)$', 'D. $-(x-2)(x+5)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q071', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Cho $m>1$ và $f(x)=x^2-(m+1)x+m$. Khoảng mà $f(x)<0$ là', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $(m;1)$', 'B. $(1;m)$', 'C. $(-\\infty;1)\\cup(m;+\\infty)$', 'D. $[1;m]$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q072', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Cho $f_m(x)=(m-2)(x+1)^2$. Khi $m<2$, kết luận nào đúng?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $f_m(x)<0$ với mọi $x$', 'B. $f_m(x)\\le0$ với mọi $x$ và bằng $0$ tại $x=-1$', 'C. $f_m(x)\\ge0$ với mọi $x$', 'D. $f_m$ đổi dấu tại $x=-1$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q073', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Dấu của $f(0)$ với $f(x)=x^2-x-6$ là', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Không xác định'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q074', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Dấu của $f(-1)$ với $f(x)=-2x^2+5x+3$ là', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Không xác định'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q075', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức có hệ số đầu dương và hai nghiệm $-3,2$. Tại $x=0$, tam thức mang dấu gì?', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Phụ thuộc hệ số tự do'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q076', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f(x)$ có bảng dấu: dương trên $(-\\infty;-1)$, âm trên $(-1;4)$, dương trên $(4;+\\infty)$. Mệnh đề nào đúng?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $a<0$', 'B. $f(0)>0$', 'C. Hai nghiệm là $-1,4$ và $a>0$', 'D. $f(5)<0$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q077', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Biết $f(x)=a(x-2)(x+1)$ và $f(0)=4$. Dấu của $f(x)$ trên $(2;+\\infty)$ là', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Đổi dấu'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q078', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Có bao nhiêu số nguyên $x$ thuộc $[-3;4]$ để $x^2-x-6<0$?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $3$', 'B. $4$', 'C. $5$', 'D. $6$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q079', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Cho $f(x)$ có nghiệm kép $x=2$ và hệ số đầu âm. Mệnh đề nào đúng?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $f(x)>0$ khi $x<2$', 'B. $f(x)<0$ khi $x\\ne2$', 'C. $f$ đổi dấu tại $2$', 'D. $f(x)\\ge0$ với mọi $x$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q080', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Biết $f(1)=0$, $f(4)=0$ và $f(2)=-6$. Dấu của hệ số bậc hai là', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Không đủ dữ kiện'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q081', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f(x)=2x^2-(2m+2)x+2m$ với $m>1$. Với mọi $x\\in(1;m)$, $f(x)$ mang dấu nào?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Không xác định'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q082', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Một tam thức $f$ thỏa $f(x)>0$ khi $x<-2$ hoặc $x>5$, và $f(x)<0$ khi $-2<x<5$. Tỉ số $\\dfrac{f(0)}{f(6)}$ mang dấu gì?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Không tồn tại'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q083', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Cho $f(x)=ax^2+bx+c$ có $a<0$, $\\Delta>0$ và hai nghiệm đều dương. Mệnh đề nào chắc chắn đúng?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $f(0)>0$', 'B. $f(0)<0$', 'C. $c=0$', 'D. $b=0$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q084', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tam thức $f$ có hai nghiệm phân biệt $x_1<x_2$. Tích $f(x_1-1)f(\\tfrac{x_1+x_2}{2})$ mang dấu gì?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. Dương', 'B. Âm', 'C. Bằng $0$', 'D. Phụ thuộc dấu của $a$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q085', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $x^2-2mx+m+2>0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $-1<m<2$', 'B. $m\\le-1$ hoặc $m\\ge2$', 'C. $-1\\le m\\le2$', 'D. $m>2$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q086', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $x^2-2mx+m+2\\ge0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $-1<m<2$', 'B. $-1\\le m\\le2$', 'C. $m<-1$ hoặc $m>2$', 'D. $m\\in\\mathbb R$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q087', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $-x^2+2mx-m-2<0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $-1<m<2$', 'B. $m\\le-1$ hoặc $m\\ge2$', 'C. $-1\\le m\\le2$', 'D. $m< -1$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q088', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $mx^2-2x+1>0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $m\\ge1$', 'B. $m>1$', 'C. $m<1$', 'D. $m>0$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q089', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $(m-1)x^2+2(m-1)x+m+2\\ge0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $m>1$', 'B. $m\\ge1$', 'C. $m<1$', 'D. $m\\in\\mathbb R$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q090', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Có bao nhiêu giá trị thực $m$ để $x^2+(m-2)x+1\\le0$ với mọi $x\\in\\mathbb R$?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $0$', 'B. $1$', 'C. $2$', 'D. Vô số'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q091', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $mx^2+2x+m\\ge0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $m>0$', 'B. $m\\ge1$', 'C. $|m|\\ge1$', 'D. $m\\le-1$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q092', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $(m+1)x^2-2(m-1)x+m+1<0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $m<-1$', 'B. $m>0$', 'C. $-1<m<0$', 'D. Không tồn tại $m$'], correctAnswer: 'D', acceptedAnswers: ['D'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q093', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $x^2-2(m+1)x+m^2+4m+3\\ge0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $m>-1$', 'B. $m\\ge-1$', 'C. $m\\le-1$', 'D. $m\\in\\mathbb R$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q094', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Với bao nhiêu giá trị thực $m$, tam thức $(m^2+1)x^2-2mx+1$ luôn dương trên $\\mathbb R$?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. Không có', 'B. Chỉ $m=0$', 'C. Mọi $m\\in\\mathbb R$', 'D. Chỉ $m\\ne0$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q095', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Với tham số $m$, khoảng mà $x^2-2mx+m^2-1<0$ là', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $(m-1;m+1)$', 'B. $(-\\infty;m-1)\\cup(m+1;+\\infty)$', 'C. $[m-1;m+1]$', 'D. $\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q096', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
+    content: 'Tìm $m$ để $x^2-2(m-1)x+m^2-4m+5>0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $m<2$', 'B. $m\\le2$', 'C. $m>2$', 'D. $m\\in\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q097', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $x^2-5x+6>0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $(2;3)$', 'B. $[2;3]$', 'C. $(-\\infty;2)\\cup(3;+\\infty)$', 'D. $(-\\infty;2]\\cup[3;+\\infty)$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q098', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $x^2-5x+6\\le0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $(2;3)$', 'B. $[2;3]$', 'C. $(-\\infty;2]\\cup[3;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q099', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $-x^2+4x-3\\ge0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $[1;3]$', 'B. $(1;3)$', 'C. $(-\\infty;1]\\cup[3;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q100', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $2x^2+4x+5<0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $\\mathbb R$', 'B. $\\varnothing$', 'C. $(-\\infty;-1)$', 'D. $(-1;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q101', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $-3x^2+6x-4\\le0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $\\varnothing$', 'B. $\\mathbb R$', 'C. $(-\\infty;1]$', 'D. $[1;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q102', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $(x-2)^2>0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $\\mathbb R$', 'B. $\\{2\\}$', 'C. $\\mathbb R\\setminus\\{2\\}$', 'D. $\\varnothing$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q103', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $(2x+1)^2\\le0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $\\mathbb R$', 'B. $\\{-\\tfrac12\\}$', 'C. $(-\\infty;-\\tfrac12]$', 'D. $\\varnothing$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q104', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $x^2-9<0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(-3;3)$', 'B. $[-3;3]$', 'C. $(-\\infty;-3)\\cup(3;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q105', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $-2x^2+8x-6>0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $(1;3)$', 'B. $[1;3]$', 'C. $(-\\infty;1)\\cup(3;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q106', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $3x^2+x-2\\ge0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $[-1;\\tfrac23]$', 'B. $(-1;\\tfrac23)$', 'C. $(-\\infty;-1]\\cup[\\tfrac23;+\\infty)$', 'D. $(-\\infty;-1)\\cup(\\tfrac23;+\\infty)$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q107', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $4x^2-4x+1\\le0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $\\mathbb R$', 'B. $\\{\\tfrac12\\}$', 'C. $(-\\infty;\\tfrac12]$', 'D. $\\varnothing$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q108', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $x^2+2x-8\\ge0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $[-4;2]$', 'B. $(-4;2)$', 'C. $(-\\infty;-4]\\cup[2;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q109', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $(x-1)(x+3)\\le0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $[-3;1]$', 'B. $(-3;1)$', 'C. $(-\\infty;-3]\\cup[1;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q110', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{(x-2)(x+1)}{x-3}>0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $(-1;2)\\cup(3;+\\infty)$', 'B. $(-\\infty;-1)\\cup(2;3)$', 'C. $[-1;2]\\cup(3;+\\infty)$', 'D. $(-1;3)$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q111', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{x+2}{x-1}\\ge0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $[-2;1)$', 'B. $(-\\infty;-2]\\cup(1;+\\infty)$', 'C. $(-\\infty;-2)\\cup[1;+\\infty)$', 'D. $[-2;1]$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q112', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{x^2-4}{x+1}<0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(-\\infty;-2)\\cup(-1;2)$', 'B. $(-2;-1)\\cup(2;+\\infty)$', 'C. $(-\\infty;-2]\\cup[-1;2]$', 'D. $(-2;2)$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q113', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $(x-1)^2(x+2)>0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(-2;+\\infty)$', 'B. $(-2;1)\\cup(1;+\\infty)$', 'C. $(-\\infty;-2)$', 'D. $[-2;1)\\cup(1;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q114', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{x^2-1}{x^2-4}\\le0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $[-2;-1]\\cup[1;2]$', 'B. $(-2;-1]\\cup[1;2)$', 'C. $(-\\infty;-2)\\cup(-1;1)\\cup(2;+\\infty)$', 'D. $(-2;2)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q115', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac1{x^2-5x+6}>0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(2;3)$', 'B. $(-\\infty;2)\\cup(3;+\\infty)$', 'C. $(-\\infty;2]\\cup[3;+\\infty)$', 'D. $\\mathbb R\\setminus\\{2,3\\}$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q116', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{x^2-4x+3}{x^2-1}\\ge0$.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $(-\\infty;-1)\\cup[3;+\\infty)$', 'B. $(-\\infty;-1]\\cup[3;+\\infty)$', 'C. $(-1;1)\\cup[3;+\\infty)$', 'D. $(-\\infty;-1)\\cup\\{1\\}\\cup[3;+\\infty)$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q117', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{x^2-4}{x-2}<0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $x<-2$', 'B. $x<2$', 'C. $-2<x<2$', 'D. $x>-2,\\ x\\ne2$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q118', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\left(\\dfrac{x-1}{x+2}\\right)^2>0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $\\mathbb R\\setminus\\{-2\\}$', 'B. $\\mathbb R\\setminus\\{1\\}$', 'C. $\\mathbb R\\setminus\\{-2,1\\}$', 'D. $(-2;1)$'], correctAnswer: 'C', acceptedAnswers: ['C'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q119', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $(x^2+x-6)(x-1)\\le0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $[-3;1]\\cup[2;+\\infty)$', 'B. $(-\\infty;-3]\\cup[1;2]$', 'C. $[-3;1]$', 'D. $(-\\infty;-3)\\cup(1;2)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q120', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải bất phương trình $\\dfrac{x+1}{x^2-4x+3}\\le0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $(-\\infty;-1]\\cup(1;3)$', 'B. $(-\\infty;-1)\\cup[1;3]$', 'C. $[-1;1)\\cup(3;+\\infty)$', 'D. $(-1;1)\\cup(3;+\\infty)$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q121', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải theo $x$ bất phương trình $x^2-2mx+m^2-4\\le0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $[m-2;m+2]$', 'B. $(m-2;m+2)$', 'C. $(-\\infty;m-2]\\cup[m+2;+\\infty)$', 'D. $\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q122', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Tìm $m$ để bất phương trình $x^2-2mx+m+2\\ge0$ đúng với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $-1<m<2$', 'B. $-1\\le m\\le2$', 'C. $m\\le-1$ hoặc $m\\ge2$', 'D. $m\\in\\mathbb R$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q123', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Giải theo $x$ bất phương trình $x^2-2(m+1)x+m^2+2m\\le0$.', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
+    options: ['A. $[m;m+2]$', 'B. $(m;m+2)$', 'C. $(-\\infty;m]\\cup[m+2;+\\infty)$', 'D. $[m-2;m]$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q124', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Bất phương trình $x^2-5x+6\\le0$ có bao nhiêu nghiệm nguyên?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $1$', 'B. $2$', 'C. $3$', 'D. Vô số'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q125', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Tìm $m$ để bất phương trình $x^2-4x+m\\le0$ có ít nhất một nghiệm thực.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $m<4$', 'B. $m\\le4$', 'C. $m\\ge4$', 'D. $m>4$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q126', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Tìm $m$ để bất phương trình $x^2-2mx+m+1\\le0$ vô nghiệm.', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $\\dfrac{1-\\sqrt5}{2}<m<\\dfrac{1+\\sqrt5}{2}$', 'B. $m\\le\\dfrac{1-\\sqrt5}{2}$ hoặc $m\\ge\\dfrac{1+\\sqrt5}{2}$', 'C. $m<0$', 'D. $m>1$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q127', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Bất phương trình nào có tập nghiệm đúng bằng $[2;5]$?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $x^2-7x+10\\le0$', 'B. $x^2-7x+10<0$', 'C. $x^2+7x+10\\le0$', 'D. $-x^2+7x-10\\le0$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q128', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Độ dài của tập nghiệm bất phương trình $-x^2+6x-5\\ge0$ là', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
+    options: ['A. $2$', 'B. $4$', 'C. $5$', 'D. $6$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q129', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Lợi nhuận (triệu đồng) của một sản phẩm là $P(x)=-2x^2+40x-150$. Doanh nghiệp có lãi khi', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $5<x<15$', 'B. $x<5$ hoặc $x>15$', 'C. $5\\le x\\le15$', 'D. $x>0$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q130', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Độ cao của vật là $h(t)=-5t^2+20t$ (m). Trong khoảng thời gian nào vật ở độ cao ít nhất $15$ m?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $1\\le t\\le3$', 'B. $1<t<3$', 'C. $t\\le1$ hoặc $t\\ge3$', 'D. $0\\le t\\le4$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q131', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Tìm $m$ để $(m-1)x^2-2(m-1)x+m-2\\le0$ với mọi $x\\in\\mathbb R$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $m<1$', 'B. $m\\le1$', 'C. $m\\ge1$', 'D. $m>1$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+  },
+  {
+    id: 'math10-m3-q132', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt21',
+    content: 'Tìm $m$ để $x=0$ là một nghiệm của bất phương trình $x^2-2mx+m^2-1<0$.', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
+    options: ['A. $-1<m<1$', 'B. $m\\le-1$ hoặc $m\\ge1$', 'C. $-1\\le m\\le1$', 'D. $m\\in\\mathbb R$'], correctAnswer: 'A', acceptedAnswers: ['A'], validatorType: 'choice'
   }
 ];

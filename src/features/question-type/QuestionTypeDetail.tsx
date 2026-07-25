@@ -489,7 +489,7 @@ export const QuestionTypeDetail: React.FC = () => {
 
       {/* Nút Back về lộ trình */}
       <button
-        onClick={() => navigate('/roadmap')}
+        onClick={() => navigate('/roadmap?view=roadmap')}
         className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
       >
         <ChevronLeft size={16} /> Quay lại Lộ trình học

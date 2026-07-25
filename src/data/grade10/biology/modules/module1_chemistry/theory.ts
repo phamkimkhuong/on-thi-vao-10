@@ -1,0 +1,93 @@
+export const bio10Qt14Theory: string[] = [
+  '**1. Các nguyên tố cấu tạo cơ thể sống**\nCơ thể sống chứa nhiều nguyên tố hóa học, trong đó C, H, O, N chiếm tỉ lệ lớn và tham gia phần lớn phân tử hữu cơ. Vai trò của một nguyên tố phụ thuộc cấu trúc và quá trình nó tham gia, không chỉ phụ thuộc tỉ lệ khối lượng.',
+  '**2. Nguyên tố đa lượng và vi lượng**\n- **Đa lượng:** cơ thể cần với lượng tương đối lớn, thường tham gia cấu trúc và nhiều quá trình sống.\n- **Vi lượng:** cần với lượng rất nhỏ nhưng có thể là thành phần enzyme, hormone hoặc chất điều hòa thiết yếu.\nCách phân loại dựa trên nhu cầu tương đối, không phải mức độ quan trọng.',
+  '**3. Thiếu hoặc thừa đều có thể gây hại**\nThiếu iodine có thể ảnh hưởng hormone tuyến giáp; thiếu iron ảnh hưởng hemoglobin. Ngược lại, một số nguyên tố vi lượng ở nồng độ cao có thể gây độc. Vì vậy “cần thiết” không đồng nghĩa “càng nhiều càng tốt”.',
+  '**4. Vì sao carbon tạo khung phân tử đa dạng?**\nCarbon có 4 electron hóa trị nên có thể tạo bốn liên kết cộng hóa trị bền với nhiều nguyên tử, kể cả với carbon. Carbon tạo được mạch thẳng, mạch nhánh, vòng và liên kết đơn, đôi, ba, tạo nền tảng cho sự đa dạng của hợp chất hữu cơ.',
+  '**5. Bộ khung carbon và nhóm chức**\nBộ khung carbon quyết định kích thước, hình dạng cơ bản; các nhóm chức gắn vào khung làm thay đổi tính phân cực, khả năng phản ứng và chức năng sinh học. Hai phân tử có cùng số nguyên tử nhưng cách sắp xếp khác nhau có thể có tính chất khác.',
+  '**6. Cách giải câu hỏi**\n- Nếu hỏi đa lượng/vi lượng: xét lượng cơ thể cần, không suy từ vai trò.\n- Nếu hỏi hậu quả thiếu chất: nối nguyên tố với phân tử hoặc quá trình cụ thể.\n- Nếu hỏi carbon: nêu hóa trị 4 và khả năng tự liên kết thành nhiều dạng khung.\n- Tránh khẳng định tuyệt đối khi dữ kiện chỉ nói một chức năng.',
+  '**7. Lỗi cần tránh**\n- Cho rằng vi lượng không quan trọng.\n- Cho rằng mọi nguyên tố có nhiều trong cơ thể đều chỉ làm cấu trúc.\n- Xem carbon tồn tại chủ yếu dưới dạng ion trong phân tử hữu cơ.\n- Đồng nhất nhu cầu thiết yếu với việc bổ sung không giới hạn.'
+];
+
+export const bio10Qt15Theory: string[] = [
+  '**1. Cấu tạo phân tử nước**\nMột phân tử nước gồm một oxygen liên kết cộng hóa trị với hai hydrogen. Oxygen hút electron mạnh hơn nên phía oxygen mang điện tích âm một phần $\\delta^-$, phía hydrogen mang điện tích dương một phần $\\delta^+$. Phân tử phân cực nhưng tổng điện tích vẫn bằng 0.',
+  '**2. Liên kết hydrogen giữa các phân tử**\nĐiện tích phần dương của H trong một phân tử hút điện tích phần âm của O ở phân tử khác, tạo liên kết hydrogen. Mỗi liên kết tương đối yếu nhưng số lượng lớn tạo ra các tính chất đặc biệt của nước.',
+  '**3. Nước là dung môi sinh học quan trọng**\nTính phân cực giúp nước bao quanh ion và nhiều phân tử phân cực, tạo môi trường cho phản ứng và vận chuyển chất. Các chất không phân cực như dầu không tan tốt trong nước. Vì vậy không được nói nước hòa tan mọi chất.',
+  '**4. Tính liên kết và bám dính**\n- **Liên kết/cohesion:** các phân tử nước hút nhau, góp phần tạo sức căng bề mặt và cột nước liên tục.\n- **Bám dính/adhesion:** nước hút bề mặt phân cực khác, hỗ trợ hiện tượng mao dẫn.\nHai tính chất phối hợp trong vận chuyển nước ở thực vật.',
+  '**5. Nhiệt dung riêng cao**\nCần nhiều năng lượng để phá vỡ một phần mạng liên kết hydrogen trước khi các phân tử chuyển động nhanh hơn. Vì vậy nước hấp thụ hoặc giải phóng nhiều nhiệt mà nhiệt độ thay đổi tương đối chậm, giúp ổn định nhiệt độ tế bào, cơ thể và môi trường.',
+  '**6. Nhiệt hóa hơi cao và làm mát**\nNhững phân tử có năng lượng cao thoát khỏi bề mặt khi nước bay hơi, mang theo nhiệt. Mồ hôi bay hơi làm mát da và thoát hơi nước có thể làm mát lá. Hiệu quả giảm khi không khí quá ẩm vì bay hơi khó hơn.',
+  '**7. Nước tham gia phản ứng và duy trì cấu trúc**\nNước là chất tham gia trong thủy phân, có thể được tạo ra trong phản ứng ngưng tụ và góp phần duy trì thể tích, áp suất tế bào. Vai trò của nước không chỉ là “chất chứa” thụ động.',
+  '**8. Lỗi cần tránh**\n- Cho rằng phân tử nước mang điện tích tổng.\n- Nhầm liên kết O–H trong phân tử với liên kết hydrogen giữa các phân tử.\n- Cho mọi chất đều tan trong nước.\n- Giải thích làm mát bằng việc nước bay hơi giải phóng nhiệt vào da.'
+];
+
+export const bio10Qt16Theory: string[] = [
+  '**1. Khái quát carbohydrate**\nCarbohydrate chứa chủ yếu C, H, O; nhiều chất có tỉ lệ H:O gần 2:1 nhưng đây không phải tiêu chí duy nhất. Chúng có vai trò cung cấp năng lượng, dự trữ, cấu trúc và tham gia nhận diện tế bào.',
+  '**2. Đường đơn**\nMonosaccharide là đơn vị đường nhỏ, ví dụ glucose, fructose, galactose, ribose và deoxyribose. Glucose là nguồn nhiên liệu quan trọng; ribose và deoxyribose tham gia nucleotide. Không phải mọi đường đơn có cùng chức năng.',
+  '**3. Đường đôi**\nDisaccharide được tạo từ hai đường đơn bằng phản ứng ngưng tụ và liên kết glycosidic; thủy phân tách liên kết bằng nước. Ví dụ sucrose, lactose, maltose. Thành phần đường đơn và kiểu liên kết quyết định tính chất.',
+  '**4. Đường đa**\nPolysaccharide gồm nhiều monosaccharide nối nhau. Chúng thường không ngọt và có thể ít tan. Cùng được tạo từ glucose nhưng starch, glycogen và cellulose khác kiểu liên kết, độ phân nhánh và cấu trúc không gian nên khác chức năng.',
+  '**5. Dự trữ năng lượng**\n- **Starch/tinh bột:** dạng dự trữ phổ biến ở thực vật.\n- **Glycogen:** dạng dự trữ ở động vật và nấm, phân nhánh nhiều nên có thể huy động glucose nhanh.\nCác chất dự trữ khác cellulose dù cùng chứa glucose.',
+  '**6. Chức năng cấu trúc**\n- **Cellulose:** thành tế bào thực vật, tạo sợi bền; người không có enzyme phân giải liên kết đặc trưng nên cellulose là chất xơ.\n- **Chitin:** thành tế bào nấm và bộ xương ngoài của nhiều động vật chân khớp.\nChức năng cấu trúc gắn với cách chuỗi sắp xếp và tương tác.',
+  '**7. Tính đặc hiệu của enzyme**\nEnzyme nhận diện cấu trúc và kiểu liên kết cụ thể. Enzyme phân giải starch không nhất thiết phân giải cellulose dù cả hai cùng từ glucose. Vì vậy “cùng đơn phân” không đồng nghĩa “cùng tính chất và khả năng tiêu hóa”.',
+  '**8. Quy trình phân loại**\n- Xác định số đơn vị đường: đơn, đôi hay đa.\n- Nhận diện đơn phân và kiểu tổ chức chuỗi.\n- Hỏi chất dùng ngay, dự trữ hay cấu trúc.\n- Đối chiếu nhóm sinh vật và vị trí chứa chất.',
+  '**9. Lỗi cần tránh**\n- Cho cellulose là chất dự trữ của thực vật.\n- Cho mọi carbohydrate đều ngọt và tan.\n- Nhầm glycogen với starch hoặc chitin.\n- Kết luận hai polymer giống nhau chỉ vì cùng đơn phân glucose.'
+];
+
+export const bio10Qt17Theory: string[] = [
+  '**1. Đặc điểm chung của lipid**\nLipid là nhóm phân tử đa dạng, phần lớn không phân cực hoặc ít phân cực nên kị nước. Lipid không phải một polymer điển hình gồm chuỗi dài đơn phân lặp lại giống protein hay nucleic acid.',
+  '**2. Triglyceride**\nTriglyceride gồm một glycerol liên kết với ba acid béo. Chúng dự trữ năng lượng dài hạn, cách nhiệt và bảo vệ cơ quan. Lipid giàu liên kết C–H và được dự trữ ít kèm nước nên có mật độ năng lượng cao.',
+  '**3. Acid béo no và không no**\n- Acid béo no không có liên kết đôi C=C, chuỗi tương đối thẳng và dễ xếp sít.\n- Acid béo không no có một hoặc nhiều liên kết đôi, thường tạo đoạn gấp làm các chuỗi khó xếp sít.\nVì vậy lipid giàu acid béo không no thường lỏng hơn ở cùng nhiệt độ.',
+  '**4. Phospholipid**\nPhospholipid thường gồm glycerol, hai đuôi acid béo kị nước và đầu chứa phosphate ưa nước. Tính lưỡng cực khiến chúng tự sắp xếp thành lớp kép trong nước: đầu hướng ra môi trường nước, đuôi quay vào nhau.',
+  '**5. Phospholipid khác triglyceride**\nTriglyceride có ba acid béo và thiên về dự trữ năng lượng; phospholipid có hai đuôi và đầu phân cực, thích hợp tạo màng. Thay phospholipid bằng triglyceride sẽ làm giảm khả năng tự hình thành lớp kép ổn định.',
+  '**6. Steroid và cholesterol**\nSteroid có bộ khung nhiều vòng carbon hợp nhất. Một số là hormone. Cholesterol là thành phần màng động vật, giúp điều hòa độ lỏng: hạn chế chuyển động quá mức khi nóng và ngăn phospholipid xếp quá sít khi lạnh.',
+  '**7. Quan hệ cấu trúc–chức năng**\n- Kị nước → dự trữ không kèm nhiều nước, tạo hàng rào màng.\n- Đầu ưa nước–đuôi kị nước → tự lắp ráp lớp kép.\n- Mức độ no và độ dài đuôi → ảnh hưởng độ lỏng.\n- Khung vòng steroid → phù hợp chức năng tín hiệu và điều hòa.',
+  '**8. Lỗi cần tránh**\n- Gọi acid béo là đơn phân lặp lại tạo polymer lipid.\n- Nhầm triglyceride với phospholipid.\n- Cho lipid không có vai trò cấu trúc.\n- Kết luận mọi chất béo no hoặc mọi cholesterol đều “xấu” mà không xét loại, lượng và bối cảnh.'
+];
+
+export const bio10Qt2Theory: string[] = [
+  '**1. Amino acid – đơn phân của protein**\nMỗi amino acid thường có carbon trung tâm gắn nhóm amino $-NH_2$, nhóm carboxyl $-COOH$, hydrogen và nhóm bên R. Nhóm R khác nhau tạo tính chất khác nhau như phân cực, điện tích, kị nước hoặc khả năng tạo cầu disulfide.',
+  '**2. Liên kết peptide và chuỗi polypeptide**\nNhóm carboxyl của amino acid này liên kết với nhóm amino của amino acid kế tiếp qua phản ứng ngưng tụ, tạo liên kết peptide. Chuỗi có đầu amino và đầu carboxyl; thứ tự amino acid mang thông tin cấu trúc.',
+  '**3. Cấu trúc bậc một**\nBậc một là số lượng và trình tự amino acid trong chuỗi polypeptide, được duy trì bởi liên kết peptide. Thay một amino acid có thể không ảnh hưởng, ảnh hưởng nhẹ hoặc làm thay đổi mạnh cách gấp và chức năng tùy vị trí, tính chất thay thế.',
+  '**4. Cấu trúc bậc hai**\nCác đoạn chuỗi tạo xoắn $\\alpha$ hoặc phiến gấp $\\beta$, được ổn định chủ yếu bởi liên kết hydrogen giữa các nhóm trên khung polypeptide. Bậc hai không phải do các amino acid nối với nhau bằng liên kết hydrogen thay cho peptide.',
+  '**5. Cấu trúc bậc ba và bậc bốn**\n- Bậc ba: hình dạng ba chiều của một chuỗi, do tương tác kị nước, liên kết hydrogen, ion, van der Waals và cầu disulfide giữa nhóm R.\n- Bậc bốn: sự phối hợp của nhiều chuỗi polypeptide thành protein chức năng.\nKhông phải protein nào cũng có bậc bốn.',
+  '**6. Cấu trúc quyết định chức năng**\nHình dạng và tính chất hóa học của vị trí gắn quyết định protein tương tác với phân tử nào. Protein có thể làm enzyme, vận chuyển, thụ thể, kháng thể, cấu trúc, vận động hoặc tín hiệu. Thay đổi cấu trúc có thể làm thay đổi chức năng.',
+  '**7. Biến tính protein**\nNhiệt độ cao, pH cực đoan hoặc hóa chất có thể phá vỡ tương tác duy trì cấu trúc bậc cao, làm protein mất hình dạng và chức năng. Biến tính thường không cắt toàn bộ liên kết peptide; một số trường hợp có thể thuận nghịch nếu bậc một còn nguyên.',
+  '**8. Tính đặc hiệu và đột biến**\nMột thay đổi amino acid tại vị trí hoạt động hoặc vùng ổn định quan trọng có thể thay đổi khả năng gắn và hoạt tính. Không được kết luận mọi thay thế đều phá hủy hoàn toàn hoặc luôn có lợi; hậu quả phải xét vị trí và tính chất nhóm R.',
+  '**9. Lỗi cần tránh**\n- Nhầm liên kết peptide của bậc một với liên kết hydrogen của bậc hai.\n- Cho bậc bốn nghĩa là có bốn amino acid.\n- Đồng nhất biến tính với thủy phân hoàn toàn.\n- Cho trình tự amino acid không liên quan hình dạng và chức năng.'
+];
+
+export const bio10Qt18Theory: string[] = [
+  '**1. Cấu tạo nucleotide**\nMột nucleotide gồm ba thành phần:\n- Đường pentose.\n- Nhóm phosphate.\n- Một nitrogenous base.\nNucleoside chỉ gồm đường và base; không có phosphate.',
+  '**2. DNA và RNA khác nhau**\n- DNA chứa deoxyribose và các base A, T, G, C; thường gồm hai mạch.\n- RNA chứa ribose và A, U, G, C; thường một mạch nhưng có thể tự gấp.\nCả hai đều có khung đường–phosphate và mang thông tin hoặc tham gia biểu hiện thông tin.',
+  '**3. Liên kết trong một mạch**\nCác nucleotide nối bằng liên kết phosphodiester giữa phosphate và đường, tạo khung đường–phosphate có chiều $5\\prime\\rightarrow3\\prime$. Các base hướng ra khỏi khung để bắt cặp hoặc tham gia nhận diện.',
+  '**4. Hai mạch DNA bổ sung và ngược chiều**\nHai mạch DNA chạy ngược chiều. A bắt cặp T bằng 2 liên kết hydrogen; G bắt cặp C bằng 3 liên kết hydrogen. Vì vậy nếu một mạch viết $5\\prime\\rightarrow3\\prime$, mạch bổ sung trực tiếp bên dưới phải viết $3\\prime\\rightarrow5\\prime$.',
+  '**5. Viết mạch bổ sung đúng chiều**\nVí dụ mạch:\n$$5\\prime-ATGCC-3\\prime$$\nMạch bổ sung song song là:\n$$3\\prime-TACGG-5\\prime$$\nNếu đề yêu cầu mạch bổ sung theo chiều $5\\prime\\rightarrow3\\prime$, phải đảo lại:\n$$5\\prime-GGCAT-3\\prime$$',
+  '**6. Quy tắc số lượng trong DNA mạch kép**\nTrong toàn phân tử:\n$$A=T,\\qquad G=C,\\qquad A+G=T+C$$\nTổng liên kết hydrogen:\n$$H=2N_{A-T}+3N_{G-C}$$\nTrong đó $N_{A-T}$ và $N_{G-C}$ là số cặp base, không phải tổng base của cả hai mạch.',
+  '**7. Vai trò của DNA**\nDNA lưu giữ thông tin trong trình tự nucleotide, truyền thông tin khi nhân đôi và làm khuôn tổng hợp RNA. Hai mạch bổ sung hỗ trợ sao chép và sửa chữa; deoxyribose làm DNA ổn định hóa học hơn RNA.',
+  '**8. Các loại RNA chính**\n- **mRNA:** mang thông tin từ DNA đến ribosome.\n- **tRNA:** mang amino acid và nhận diện codon.\n- **rRNA:** thành phần cấu trúc, xúc tác của ribosome.\nKhông phải mọi RNA đều là “bản sao mang tin”; nhiều RNA còn có chức năng điều hòa hoặc xúc tác.',
+  '**9. Từ thông tin đến protein**\nTrình tự DNA được phiên mã thành RNA; ribosome đọc codon mRNA để lắp amino acid thành polypeptide. Một thay đổi nucleotide có thể không đổi amino acid, đổi amino acid hoặc tạo tín hiệu kết thúc, nên hậu quả không giống nhau trong mọi trường hợp.',
+  '**10. Lỗi cần tránh**\n- Cho nucleotide chỉ gồm base.\n- Dùng U khi viết DNA hoặc T khi viết RNA mà không xét bối cảnh.\n- Viết hai mạch DNA cùng chiều.\n- Đếm A–T có 3 và G–C có 2 liên kết hydrogen.\n- Gán chức năng mRNA cho mọi RNA.'
+];
+
+export const bio10Qt19Theory: string[] = [
+  '**1. Khẩu phần cần cân bằng chức năng**\nCarbohydrate cung cấp năng lượng nhanh và chất xơ; lipid dự trữ năng lượng, tạo màng và hỗ trợ hấp thu vitamin tan trong lipid; protein cung cấp amino acid và nhiều chức năng; vitamin, khoáng và nước tham gia điều hòa. Không nhóm nào nên bị đánh giá chỉ bằng “tốt” hoặc “xấu”.',
+  '**2. Amino acid thiết yếu**\nAmino acid thiết yếu là loại cơ thể không tổng hợp được hoặc không tổng hợp đủ, nên phải nhận từ khẩu phần. “Thiết yếu” không có nghĩa chỉ tồn tại trong một loại thức ăn hoặc quan trọng hơn mọi amino acid khác.',
+  '**3. Chất béo và sức khỏe**\nCơ thể cần lipid nhưng loại và lượng quan trọng. Acid béo no, không no và trans có tác động khác nhau. Nhãn “không chất béo” không tự bảo đảm thực phẩm lành mạnh nếu sản phẩm nhiều đường, muối hoặc năng lượng.',
+  '**4. Chế biến và biến tính protein**\nNấu chín làm nhiều protein biến tính và kết tụ; thường không phá hủy toàn bộ amino acid hay liên kết peptide. Biến tính có thể làm protein dễ tiếp cận enzyme tiêu hóa hơn, đồng thời nhiệt quá mức có thể làm giảm một số giá trị dinh dưỡng.',
+  '**5. Carbohydrate và chất xơ**\nĐường đơn/đôi thường được hấp thu hoặc sử dụng nhanh hơn polysaccharide phức tạp. Cellulose không được người tiêu hóa thành glucose nhưng góp phần tạo chất xơ, hỗ trợ hoạt động tiêu hóa và hệ vi sinh đường ruột.',
+  '**6. Ứng dụng DNA**\nDNA được dùng trong nhận dạng, xét nghiệm quan hệ, chẩn đoán, nghiên cứu tiến hóa và công nghệ sinh học. Kết luận nhận dạng phải dựa trên nhiều marker, chất lượng mẫu, tần suất allele và xác suất; một marker giống nhau không chứng minh danh tính tuyệt đối.',
+  '**7. Đánh giá tuyên bố dinh dưỡng hoặc công nghệ**\n- Xác định phân tử và cơ chế liên quan.\n- Kiểm tra lượng, đối tượng và điều kiện sử dụng.\n- Phân biệt bằng chứng thực nghiệm với quảng cáo.\n- Xem xét lợi ích, rủi ro và phương án thay thế.\n- Tránh suy từ một thành phần đến toàn bộ chất lượng sản phẩm.',
+  '**8. Lỗi cần tránh**\n- Loại bỏ hoàn toàn một nhóm dinh dưỡng mà không có chỉ định.\n- Cho protein chỉ cung cấp amino acid, không thể cung cấp năng lượng.\n- Đồng nhất biến tính với mất hoàn toàn giá trị dinh dưỡng.\n- Xem một kết quả DNA đơn lẻ là bằng chứng tuyệt đối.'
+];
+
+export const bio10Qt20Theory: string[] = [
+  '**1. Bản chất phép thử định tính**\nPhép thử định tính cho biết mẫu có khả năng chứa một nhóm chất dựa trên phản ứng màu, kết tủa hoặc khả năng phân bố. Kết quả dương tính không tự cho nồng độ chính xác; kết quả âm tính cũng có thể do lượng chất quá thấp hoặc quy trình sai.',
+  '**2. Iodine nhận biết starch**\nDung dịch iodine/Lugol có màu vàng nâu; khi tương tác với cấu trúc xoắn của starch tạo màu xanh tím hoặc xanh đen. Phép thử không phải phép nhận biết chung mọi carbohydrate.',
+  '**3. Benedict nhận biết đường khử**\nMẫu được trộn với thuốc thử Benedict và **đun nóng**. Khi có đường khử, màu có thể chuyển từ xanh qua lục, vàng, cam đến kết tủa đỏ gạch tùy lượng tương đối. Không hiệu chuẩn thì chỉ nên diễn giải bán định lượng.',
+  '**4. Giới hạn của Benedict**\nGlucose và một số đường khác cho kết quả dương; sucrose thường âm trong điều kiện chuẩn nhưng sau thủy phân có thể tạo đường khử và trở nên dương. Vì vậy Benedict không đồng nghĩa riêng với glucose.',
+  '**5. Biuret nhận biết liên kết peptide**\nTrong môi trường kiềm, ion copper tạo phức màu tím với nhiều liên kết peptide. Kết quả dương gợi protein hoặc polypeptide; amino acid tự do không có nhiều liên kết peptide nên không cho cùng phản ứng.',
+  '**6. Sudan nhận biết lipid**\nThuốc nhuộm Sudan tan ưu tiên trong pha lipid và làm phần lipid hiện màu đỏ/cam hoặc tạo lớp màu tùy quy trình. Đây là phép thử dựa vào tính không phân cực, không phải phản ứng đặc hiệu với mọi loại liên kết lipid.',
+  '**7. Đối chứng dương, âm và mẫu trắng**\n- Đối chứng dương chứa chắc chắn chất cần tìm, xác nhận thuốc thử hoạt động.\n- Đối chứng âm không chứa chất đích, phát hiện tín hiệu nền.\n- Mẫu trắng có nền giống mẫu nhưng thiếu thành phần phản ứng, hữu ích khi mẫu vốn có màu.',
+  '**8. Quy trình phân tích bảng kết quả**\n- Nhận diện từng thuốc thử và đích của nó.\n- Kiểm tra điều kiện như đun nóng với Benedict.\n- Đối chiếu hiện tượng dương tính.\n- Kiểm tra đối chứng trước khi kết luận.\n- Kết hợp nhiều phép thử để mô tả mẫu, không suy ra chất chưa được kiểm tra.',
+  '**9. Thiết kế thí nghiệm tin cậy**\nDùng cùng thể tích mẫu và thuốc thử, cùng thời gian/nhiệt độ, dụng cụ sạch, ghi màu theo thang chuẩn và lặp lại. Nếu cần so lượng tương đối, nên có dãy chuẩn hoặc thiết bị đo màu thay vì chỉ nhìn bằng mắt.',
+  '**10. An toàn**\nĐeo bảo hộ, tránh tiếp xúc thuốc thử, dùng kẹp và bể cách thủy khi đun, không nếm mẫu và xử lí chất thải theo hướng dẫn. Mẫu thực phẩm sau khi thêm thuốc thử không còn dùng để ăn.',
+  '**11. Lỗi cần tránh**\n- Nhầm iodine với Biuret hoặc Sudan.\n- Quên đun Benedict.\n- Cho màu Benedict xác định chính xác nồng độ khi không có đường chuẩn.\n- Kết luận âm tính dù đối chứng dương cũng không hoạt động.\n- Cho Biuret nhận biết amino acid tự do thay vì liên kết peptide.'
+];

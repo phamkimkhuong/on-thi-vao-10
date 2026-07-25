@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { g10PhysicsModule5TheoryByQuestionTypeId } from './theory';
 
 export const g10PhysicsModule5QuestionTypes: QuestionType[] = [
   { id: 'phy10-qt47', topicId: 'phy10-t5', name: 'Góc radian và độ dài cung', slug: 'goc-radian-do-dai-cung', description: 'Đổi độ–radian và vận dụng $s=r\\theta$ với góc tính bằng radian.', exampleQuestionId: 'phy10-m5-q001', difficulty: 'easy', examFrequency: 'high', theory: ['$180^\\circ=\\pi$ rad; một vòng bằng $2\\pi$ rad.', 'Độ dài cung $s=r\\theta$ chỉ dùng trực tiếp khi θ ở radian.'], recognitionSigns: ['Đề cho góc quay theo độ/radian hoặc số vòng.', 'Hỏi độ dài cung, quãng đường điểm trên vành hoặc góc quét.'], solvingSteps: ['Đổi góc về radian hoặc số vòng về $2\\pi$ rad.', 'Xác định đúng bán kính quỹ đạo của điểm.', 'Dùng $s=r\\theta$ và kiểm tra đơn vị.'], commonMistakes: ['Thay góc độ trực tiếp vào s=rθ.', 'Dùng đường kính thay bán kính.'] },
@@ -9,3 +10,8 @@ export const g10PhysicsModule5QuestionTypes: QuestionType[] = [
   { id: 'phy10-qt52', topicId: 'phy10-t5', name: 'Ứng dụng động lực học chuyển động tròn', slug: 'ung-dung-chuyen-dong-tron', description: 'Giải bài toán xe vào cua, vòng tròn đứng, đường nghiêng và điều kiện tiếp xúc.', exampleQuestionId: 'phy10-m5-q061', difficulty: 'hard', examFrequency: 'high', theory: ['Điều kiện động lực học phải viết theo từng vị trí vì hướng và vai trò các lực thay đổi.', 'Tại giới hạn mất tiếp xúc, phản lực hoặc lực căng tương ứng bằng 0.'], recognitionSigns: ['Đề hỏi vận tốc tối đa khi vào cua, phản lực ở đỉnh/đáy hoặc điều kiện không rời quỹ đạo.', 'Có ma sát, vòng tròn đứng hoặc mặt đường nghiêng.'], solvingSteps: ['Chọn vị trí, vẽ sơ đồ lực và hướng vào tâm.', 'Viết phương trình bán kính với dấu đúng.', 'Kết hợp điều kiện giới hạn và kiểm tra kết quả vật lí.'], commonMistakes: ['Dùng cùng một phương trình ở đỉnh và đáy vòng.', 'Cho phản lực hoặc lực căng âm.'] },
   { id: 'phy10-qt53', topicId: 'phy10-t5', name: 'Thực hành và dữ liệu chuyển động tròn', slug: 'thuc-hanh-chuyen-dong-tron', description: 'Đo chu kì, xử lí video/bảng dữ liệu và kiểm chứng các hệ thức chuyển động tròn.', exampleQuestionId: 'phy10-m5-q073', difficulty: 'medium', examFrequency: 'medium', theory: ['Đo nhiều vòng rồi chia cho số vòng giúp giảm ảnh hưởng sai số bấm giờ.', 'Cần xác định đúng bán kính quỹ đạo, số khoảng thời gian và đơn vị.'], recognitionSigns: ['Đề cho video, cảm biến, số vòng và thời gian đo.', 'Hỏi cách giảm sai số hoặc suy ra T, f, ω, v, a từ dữ liệu.'], solvingSteps: ['Xác định đại lượng đo trực tiếp và số vòng thực tế.', 'Tính T=t/N, rồi suy f, ω, v hoặc a.', 'Lặp đo, đánh giá sai lệch và nguồn sai số.'], commonMistakes: ['Đếm số ảnh thay số khoảng thời gian.', 'Đo một vòng duy nhất rồi kết luận quá chính xác.'] }
 ];
+
+for (const questionType of g10PhysicsModule5QuestionTypes) {
+  questionType.theory =
+    g10PhysicsModule5TheoryByQuestionTypeId[questionType.id] ?? questionType.theory;
+}

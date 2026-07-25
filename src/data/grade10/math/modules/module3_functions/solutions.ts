@@ -1881,5 +1881,437 @@ export const g10MathModule3Solutions: Solution[] = [
     "reviewSuggestions": [
       "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
     ]
+  },
+  {
+    id: 'math10-m3-s061', questionId: 'math10-m3-q061',
+    recognition: 'Dạng xét dấu từ hai nghiệm: phân tích nhân tử, sắp nghiệm rồi dùng quy tắc cùng dấu hệ số đầu ở ngoài.',
+    detailedSteps: [{ order: 1, title: 'Tìm các mốc đổi dấu', explanation: '$f(x)=(x-2)(x-3)$ có hai nghiệm $2<3$ và hệ số đầu dương.' }, { order: 2, title: 'Chọn miền dương', explanation: 'Tam thức dương ở ngoài hai nghiệm, không lấy nghiệm vì đề dùng dấu $>$.', result: '$(-\\infty;2)\\cup(3;+\\infty)$' }],
+    finalAnswer: 'C. $(-\\infty;2)\\cup(3;+\\infty)$', commonMistakes: ['Chọn khoảng giữa hai nghiệm hoặc lấy cả hai nghiệm.'], reviewSuggestions: ['Ôn quy tắc dấu khi $\\Delta>0$.']
+  },
+  {
+    id: 'math10-m3-s062', questionId: 'math10-m3-q062',
+    recognition: 'Dạng xét dấu với hệ số đầu âm: dấu trong/ngoài đảo so với tam thức có hệ số đầu dương.',
+    detailedSteps: [{ order: 1, title: 'Tìm nghiệm và hệ số đầu', explanation: '$f(x)=-(x-1)(x-3)$ có hai nghiệm $1,3$ và $a=-1<0$.' }, { order: 2, title: 'Chọn miền dương', explanation: 'Tam thức trái dấu $a$ ở giữa hai nghiệm nên dương trên $(1;3)$.', result: '$(1;3)$' }],
+    finalAnswer: 'B. $(1;3)$', commonMistakes: ['Máy móc chọn miền ngoài mà không xét dấu $a$.'], reviewSuggestions: ['Ôn câu nhớ “cùng dấu ngoài, trái dấu trong”.']
+  },
+  {
+    id: 'math10-m3-s063', questionId: 'math10-m3-q063',
+    recognition: 'Dạng tam thức vô nghiệm thực: tính $\\Delta$ rồi kết luận dấu theo hệ số đầu.',
+    detailedSteps: [{ order: 1, title: 'Tính biệt thức', explanation: '$\\Delta=4^2-4\\cdot2\\cdot5=-24<0$.' }, { order: 2, title: 'Kết luận dấu', explanation: 'Không có nghiệm và $a=2>0$, vì vậy $f(x)>0$ với mọi số thực $x$.', result: '$f(x)>0,\\ \\forall x$' }],
+    finalAnswer: 'A. $f(x)>0$ với mọi $x$', commonMistakes: ['Thấy $b^2>0$ rồi kết luận sai rằng có hai nghiệm.'], reviewSuggestions: ['Ôn trường hợp $\\Delta<0$.']
+  },
+  {
+    id: 'math10-m3-s064', questionId: 'math10-m3-q064',
+    recognition: 'Dạng tam thức không có nghiệm và hệ số đầu âm.',
+    detailedSteps: [{ order: 1, title: 'Kiểm tra nghiệm', explanation: '$\\Delta=6^2-4(-3)(-4)=36-48=-12<0$.' }, { order: 2, title: 'Theo dấu hệ số đầu', explanation: 'Vì $a=-3<0$, tam thức luôn âm trên $\\mathbb R$.', result: '$f(x)<0,\\ \\forall x$' }],
+    finalAnswer: 'D. Luôn âm', commonMistakes: ['Bỏ dấu âm trong tích $4ac$.'], reviewSuggestions: ['Ôn cách tính biệt thức khi hệ số âm.']
+  },
+  {
+    id: 'math10-m3-s065', questionId: 'math10-m3-q065',
+    recognition: 'Dạng nghiệm kép: viết thành bình phương để thấy dấu và điểm bằng 0.',
+    detailedSteps: [{ order: 1, title: 'Hoàn thành bình phương', explanation: '$f(x)=(x-3)^2$.' }, { order: 2, title: 'Đọc dấu', explanation: 'Bình phương luôn không âm và chỉ bằng $0$ khi $x=3$; dấu không đổi qua nghiệm kép.', result: '$f(x)\\ge0$, $f(3)=0$' }],
+    finalAnswer: 'C. $f(x)\\ge0$ với mọi $x$ và $f(3)=0$', commonMistakes: ['Đồng nhất “không âm” với “luôn dương”.'], reviewSuggestions: ['Ôn sự khác nhau giữa $>0$ và $\\ge0$.']
+  },
+  {
+    id: 'math10-m3-s066', questionId: 'math10-m3-q066',
+    recognition: 'Dạng một bình phương nhân hệ số âm.',
+    detailedSteps: [{ order: 1, title: 'Xét phần bình phương', explanation: '$(2x+1)^2\\ge0$ và bằng $0$ tại $x=-\\tfrac12$.' }, { order: 2, title: 'Nhân với $-1$', explanation: 'Đổi chiều dấu: $f(x)\\le0$ với mọi $x$, bằng $0$ đúng tại $-\\tfrac12$.', result: '$f(x)\\le0$' }],
+    finalAnswer: 'B. $f(x)\\le0$ với mọi $x$ và $f(-\\tfrac12)=0$', commonMistakes: ['Kết luận luôn âm và bỏ sót điểm bằng 0.'], reviewSuggestions: ['Ôn dấu của bình phương và nghiệm kép.']
+  },
+  {
+    id: 'math10-m3-s067', questionId: 'math10-m3-q067',
+    recognition: 'Dạng tích hai nhân tử bậc nhất có hệ số đầu dương.',
+    detailedSteps: [{ order: 1, title: 'Xác định nghiệm', explanation: 'Hai nghiệm là $-2<5$; hệ số của $x^2$ bằng $1>0$.' }, { order: 2, title: 'Chọn khoảng trái dấu hệ số đầu', explanation: 'Tam thức âm ở giữa hai nghiệm.', result: '$(-2;5)$' }],
+    finalAnswer: 'B. $(-2;5)$', commonMistakes: ['Đọc nghiệm $x+2=0$ thành $x=2$.'], reviewSuggestions: ['Ôn cách tìm nghiệm của nhân tử bậc nhất.']
+  },
+  {
+    id: 'math10-m3-s068', questionId: 'math10-m3-q068',
+    recognition: 'Dạng đã phân tích nhân tử nhưng có hệ số âm đứng ngoài.',
+    detailedSteps: [{ order: 1, title: 'Xếp nghiệm', explanation: 'Hai nghiệm là $-4<1$ và hệ số đầu $-2<0$.' }, { order: 2, title: 'Xét miền dương', explanation: 'Giữa hai nghiệm, tam thức trái dấu $a$, tức mang dấu dương.', result: '$(-4;1)$' }],
+    finalAnswer: 'A. $(-4;1)$', commonMistakes: ['Bỏ hệ số $-2$ khi lập bảng dấu.'], reviewSuggestions: ['Luôn ghi dấu hệ số đầu trước khi chọn khoảng.']
+  },
+  {
+    id: 'math10-m3-s069', questionId: 'math10-m3-q069',
+    recognition: 'Dạng suy ngược hệ số đầu từ vị trí điểm so với hai nghiệm.',
+    detailedSteps: [{ order: 1, title: 'Định vị điểm', explanation: 'Do $x_1<0<x_2$, điểm $0$ nằm giữa hai nghiệm.' }, { order: 2, title: 'Dùng quy tắc dấu', explanation: 'Ở giữa, $f$ trái dấu $a$. Vì $f(0)>0$ nên $a<0$.', result: '$a<0$' }],
+    finalAnswer: 'B. $a<0$', commonMistakes: ['Cho rằng dấu tại mọi điểm luôn cùng dấu $a$.'], reviewSuggestions: ['Ôn dấu trong khoảng giữa hai nghiệm.']
+  },
+  {
+    id: 'math10-m3-s070', questionId: 'math10-m3-q070',
+    recognition: 'Dạng dựng tam thức từ nghiệm và dấu ngoài.',
+    detailedSteps: [{ order: 1, title: 'Dựng dạng nhân tử', explanation: 'Có nghiệm $-2,5$ nên $f(x)=a(x+2)(x-5)$.' }, { order: 2, title: 'Suy dấu hệ số', explanation: 'Ngoài hai nghiệm, dấu của $f$ là dấu $a$. Đề cho âm nên $a<0$; chọn $a=-1$.', result: '$-(x+2)(x-5)$' }],
+    finalAnswer: 'B. $-(x+2)(x-5)$', commonMistakes: ['Viết sai nhân tử ứng với nghiệm âm.'], reviewSuggestions: ['Ôn dạng $a(x-x_1)(x-x_2)$.']
+  },
+  {
+    id: 'math10-m3-s071', questionId: 'math10-m3-q071',
+    recognition: 'Dạng chứa tham số nhưng đã phân tích được thành hai nhân tử có thứ tự nghiệm xác định.',
+    detailedSteps: [{ order: 1, title: 'Phân tích và xếp nghiệm', explanation: '$f(x)=(x-1)(x-m)$. Do $m>1$, hai nghiệm theo thứ tự là $1<m$.' }, { order: 2, title: 'Chọn miền âm', explanation: 'Hệ số đầu dương nên tam thức âm giữa hai nghiệm.', result: '$(1;m)$' }],
+    finalAnswer: 'B. $(1;m)$', commonMistakes: ['Không dùng điều kiện $m>1$ để sắp hai nghiệm.'], reviewSuggestions: ['Trong bài tham số, luôn khóa thứ tự các mốc.']
+  },
+  {
+    id: 'math10-m3-s072', questionId: 'math10-m3-q072',
+    recognition: 'Dạng hệ số nhân bình phương: xét dấu hệ số và nhớ điểm bình phương bằng 0.',
+    detailedSteps: [{ order: 1, title: 'Xét từng thừa số', explanation: '$m<2$ nên $m-2<0$; $(x+1)^2\\ge0$.' }, { order: 2, title: 'Kết hợp dấu', explanation: 'Tích không dương và bằng $0$ khi $x=-1$, không đổi dấu tại điểm này.', result: '$f_m(x)\\le0$' }],
+    finalAnswer: 'B. $f_m(x)\\le0$ với mọi $x$ và bằng $0$ tại $x=-1$', commonMistakes: ['Kết luận $<0$ với mọi $x$ và bỏ nghiệm kép.'], reviewSuggestions: ['Ôn nghiệm bội chẵn.']
+  },
+  {
+    id: 'math10-m3-s073', questionId: 'math10-m3-q073',
+    recognition: 'Dạng hỏi dấu tại một điểm: thay trực tiếp thường nhanh hơn lập cả bảng dấu.',
+    detailedSteps: [{ order: 1, title: 'Thay giá trị', explanation: '$f(0)=0^2-0-6=-6$.' }, { order: 2, title: 'Kết luận dấu', explanation: '$-6<0$ nên $f(0)$ âm.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Tìm nghiệm dài dòng rồi chọn nhầm khoảng.'], reviewSuggestions: ['Ưu tiên thay trực tiếp khi chỉ hỏi một điểm.']
+  },
+  {
+    id: 'math10-m3-s074', questionId: 'math10-m3-q074',
+    recognition: 'Dạng giá trị tại điểm với hệ số âm; cần đặt ngoặc khi thay số âm.',
+    detailedSteps: [{ order: 1, title: 'Thay đúng dấu', explanation: '$f(-1)=-2(-1)^2+5(-1)+3=-2-5+3=-4$.' }, { order: 2, title: 'Kết luận', explanation: '$-4<0$.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Tính $(-1)^2=-1$ hoặc quên $5(-1)=-5$.'], reviewSuggestions: ['Đặt giá trị âm trong ngoặc khi thay.']
+  },
+  {
+    id: 'math10-m3-s075', questionId: 'math10-m3-q075',
+    recognition: 'Dạng đọc dấu từ vị trí tương đối của điểm và hai nghiệm.',
+    detailedSteps: [{ order: 1, title: 'Định vị $0$', explanation: '$-3<0<2$, nên $0$ ở giữa hai nghiệm.' }, { order: 2, title: 'Dùng dấu trong', explanation: 'Giữa hai nghiệm tam thức trái dấu hệ số đầu; $a>0$ nên giá trị âm.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Không đặt $0$ lên trục số.'], reviewSuggestions: ['Vẽ nhanh ba mốc trước khi kết luận.']
+  },
+  {
+    id: 'math10-m3-s076', questionId: 'math10-m3-q076',
+    recognition: 'Dạng đọc bảng dấu ngược để suy nghiệm và dấu hệ số đầu.',
+    detailedSteps: [{ order: 1, title: 'Đọc các mốc', explanation: 'Dấu đổi tại $-1$ và $4$, nên đây là hai nghiệm đơn.' }, { order: 2, title: 'Đọc dấu ngoài', explanation: 'Bên ngoài dương nên hệ số đầu $a>0$; phương án C mô tả đủ cả hai dữ kiện.', result: 'Hai nghiệm $-1,4$, $a>0$' }],
+    finalAnswer: 'C. Hai nghiệm là $-1,4$ và $a>0$', commonMistakes: ['Chỉ nhìn khoảng giữa và suy $a<0$.'], reviewSuggestions: ['Dấu ngoài cùng chính là dấu của $a$.']
+  },
+  {
+    id: 'math10-m3-s077', questionId: 'math10-m3-q077',
+    recognition: 'Dạng cần suy dấu hệ số từ một giá trị rồi mới xét khoảng.',
+    detailedSteps: [{ order: 1, title: 'Tìm dấu $a$', explanation: '$f(0)=a(-2)(1)=-2a=4$, nên $a=-2<0$.' }, { order: 2, title: 'Xét bên phải hai nghiệm', explanation: 'Trên $(2;+\\infty)$ là miền ngoài, $f$ cùng dấu $a$, nên âm.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Cho $a=2$ do bỏ dấu của $-2$.'], reviewSuggestions: ['Tách bước suy hệ số và bước xét dấu.']
+  },
+  {
+    id: 'math10-m3-s078', questionId: 'math10-m3-q078',
+    recognition: 'Dạng đếm nghiệm nguyên sau khi tìm khoảng dấu.',
+    detailedSteps: [{ order: 1, title: 'Giải điều kiện dấu', explanation: '$x^2-x-6=(x+2)(x-3)<0$ nên $-2<x<3$.' }, { order: 2, title: 'Liệt kê số nguyên', explanation: 'Các số nguyên là $-1,0,1,2$, đều thuộc đoạn đã cho.', result: '$4$' }],
+    finalAnswer: 'B. $4$', commonMistakes: ['Lấy cả $-2$ và $3$ dù bất đẳng thức nghiêm ngặt.'], reviewSuggestions: ['Viết khoảng trước, rồi mới đếm số nguyên.']
+  },
+  {
+    id: 'math10-m3-s079', questionId: 'math10-m3-q079',
+    recognition: 'Dạng nghiệm kép và hệ số đầu âm.',
+    detailedSteps: [{ order: 1, title: 'Viết cấu trúc', explanation: '$f(x)=a(x-2)^2$ với $a<0$.' }, { order: 2, title: 'Xét dấu', explanation: 'Khi $x\\ne2$, bình phương dương nên tích âm; tại $2$ bằng $0$.', result: '$f(x)<0$ khi $x\\ne2$' }],
+    finalAnswer: 'B. $f(x)<0$ khi $x\\ne2$', commonMistakes: ['Cho rằng mọi nghiệm đều làm đổi dấu.'], reviewSuggestions: ['Ôn ảnh hưởng của nghiệm bội chẵn.']
+  },
+  {
+    id: 'math10-m3-s080', questionId: 'math10-m3-q080',
+    recognition: 'Dạng suy dấu hệ số từ giá trị nằm giữa hai nghiệm.',
+    detailedSteps: [{ order: 1, title: 'Định vị điểm', explanation: '$1<2<4$, nên $x=2$ nằm giữa hai nghiệm.' }, { order: 2, title: 'Đối chiếu dấu', explanation: 'Giữa hai nghiệm, $f$ trái dấu $a$. Vì $f(2)=-6<0$, suy ra $a>0$.', result: '$a>0$' }],
+    finalAnswer: 'A. Dương', commonMistakes: ['Kết luận $a<0$ vì $f(2)<0$.'], reviewSuggestions: ['Phân biệt dấu của hàm với dấu hệ số ở miền giữa.']
+  },
+  {
+    id: 'math10-m3-s081', questionId: 'math10-m3-q081',
+    recognition: 'Dạng tham số đã có thể phân tích nhân tử và biết thứ tự nghiệm.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$f(x)=2(x-1)(x-m)$. Hai nghiệm là $1<m$.' }, { order: 2, title: 'Xét khoảng cho sẵn', explanation: 'Trên $(1;m)$, hai nhân tử trái dấu; nhân với $2>0$ nên $f(x)<0$.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Không nhận ra $2m$ là tích hai nghiệm nhân hệ số.'], reviewSuggestions: ['Thử phân tích trước khi dùng công thức nghiệm.']
+  },
+  {
+    id: 'math10-m3-s082', questionId: 'math10-m3-q082',
+    recognition: 'Dạng đọc dấu ở hai điểm từ các khoảng đã cho rồi xét dấu thương.',
+    detailedSteps: [{ order: 1, title: 'Đọc dấu từng giá trị', explanation: '$0\\in(-2;5)$ nên $f(0)<0$; $6>5$ nên $f(6)>0$.' }, { order: 2, title: 'Xét thương', explanation: 'Số âm chia số dương là số âm.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Nhìn hai giá trị đều khác 0 rồi kết luận thương dương.'], reviewSuggestions: ['Ghi riêng dấu tử và mẫu trước khi kết hợp.']
+  },
+  {
+    id: 'math10-m3-s083', questionId: 'math10-m3-q083',
+    recognition: 'Dạng suy dấu tại điểm nằm ngoài hai nghiệm dương.',
+    detailedSteps: [{ order: 1, title: 'Định vị $0$', explanation: 'Hai nghiệm đều dương nên $0$ nằm bên trái cả hai, tức ở miền ngoài.' }, { order: 2, title: 'Dùng dấu ngoài', explanation: 'Miền ngoài cùng dấu $a$. Vì $a<0$, $f(0)=c<0$.', result: '$f(0)<0$' }],
+    finalAnswer: 'B. $f(0)<0$', commonMistakes: ['Cho $0$ nằm giữa hai nghiệm chỉ vì $0$ là số đặc biệt.'], reviewSuggestions: ['Luôn đặt các mốc lên trục số.']
+  },
+  {
+    id: 'math10-m3-s084', questionId: 'math10-m3-q084',
+    recognition: 'Dạng so sánh dấu ở một điểm ngoài và một điểm giữa hai nghiệm.',
+    detailedSteps: [{ order: 1, title: 'Xác định hai miền', explanation: '$x_1-1<x_1$ nằm ngoài; $\\tfrac{x_1+x_2}{2}$ nằm giữa hai nghiệm.' }, { order: 2, title: 'Kết hợp dấu', explanation: 'Dấu ngoài là dấu $a$, dấu giữa trái dấu $a$, nên tích luôn âm.', result: 'Âm' }],
+    finalAnswer: 'B. Âm', commonMistakes: ['Cho rằng cần biết dấu cụ thể của $a$.'], reviewSuggestions: ['Có thể suy quan hệ dấu mà không cần biết $a>0$ hay $a<0$.']
+  },
+  {
+    id: 'math10-m3-s085', questionId: 'math10-m3-q085',
+    recognition: 'Dạng tam thức luôn dương với hệ số đầu cố định dương: dùng điều kiện $\\Delta<0$.',
+    detailedSteps: [{ order: 1, title: 'Lập điều kiện biệt thức', explanation: '$a=1>0$; cần $\\Delta=(-2m)^2-4(m+2)<0$.' }, { order: 2, title: 'Giải theo tham số', explanation: '$4(m^2-m-2)<0\\Leftrightarrow(m-2)(m+1)<0$.', result: '$-1<m<2$' }],
+    finalAnswer: 'A. $-1<m<2$', commonMistakes: ['Dùng $\\Delta\\le0$ cho dấu $>0$.'], reviewSuggestions: ['Gắn dấu nghiêm ngặt với $\\Delta<0$.']
+  },
+  {
+    id: 'math10-m3-s086', questionId: 'math10-m3-q086',
+    recognition: 'Dạng tam thức không âm với hệ số đầu dương: cho phép nghiệm kép nên dùng $\\Delta\\le0$.',
+    detailedSteps: [{ order: 1, title: 'Lập điều kiện', explanation: '$a=1>0$ và $\\Delta=4(m-2)(m+1)\\le0$.' }, { order: 2, title: 'Giải bất phương trình tham số', explanation: 'Tích không dương giữa hai nghiệm $-1,2$.', result: '$-1\\le m\\le2$' }],
+    finalAnswer: 'B. $-1\\le m\\le2$', commonMistakes: ['Loại hai đầu mút dù đề dùng $\\ge0$.'], reviewSuggestions: ['Phân biệt luôn dương và không âm.']
+  },
+  {
+    id: 'math10-m3-s087', questionId: 'math10-m3-q087',
+    recognition: 'Dạng tam thức luôn âm: hệ số đầu âm và biệt thức âm.',
+    detailedSteps: [{ order: 1, title: 'Kiểm tra hệ số đầu', explanation: '$a=-1<0$ đã thỏa điều kiện về hướng dấu.' }, { order: 2, title: 'Buộc không có nghiệm', explanation: '$\\Delta=(2m)^2-4(-1)(-m-2)=4(m-2)(m+1)<0$.', result: '$-1<m<2$' }],
+    finalAnswer: 'A. $-1<m<2$', commonMistakes: ['Thấy dấu trừ trước $x^2$ rồi kết luận luôn âm.'], reviewSuggestions: ['Luôn kiểm tra thêm $\\Delta<0$.']
+  },
+  {
+    id: 'math10-m3-s088', questionId: 'math10-m3-q088',
+    recognition: 'Dạng hệ số đầu phụ thuộc tham số: phải đồng thời có $a>0$ và $\\Delta<0$.',
+    detailedSteps: [{ order: 1, title: 'Điều kiện bậc hai và hướng dấu', explanation: 'Cần $m>0$.' }, { order: 2, title: 'Điều kiện biệt thức', explanation: '$\\Delta=4-4m<0\\Leftrightarrow m>1$, điều kiện này đã kéo theo $m>0$.', result: '$m>1$' }],
+    finalAnswer: 'B. $m>1$', commonMistakes: ['Chỉ lấy $m>0$ mà không xét nghiệm của tam thức.'], reviewSuggestions: ['Bài “mọi x” luôn kiểm tra cả dấu $a$ và $\\Delta$.']
+  },
+  {
+    id: 'math10-m3-s089', questionId: 'math10-m3-q089',
+    recognition: 'Dạng tham số có trường hợp suy biến; không được bỏ $m=1$ khi hệ số $x^2$ bằng 0.',
+    detailedSteps: [{ order: 1, title: 'Xét $m=1$', explanation: 'Biểu thức trở thành hằng số $3\\ge0$, nên $m=1$ nhận.' }, { order: 2, title: 'Xét $m\\ne1$', explanation: 'Muốn không âm mọi $x$: $m-1>0$ và $\\Delta=-12(m-1)\\le0$, suy ra $m>1$. Gộp hai trường hợp.', result: '$m\\ge1$' }],
+    finalAnswer: 'B. $m\\ge1$', commonMistakes: ['Áp dụng định lí tam thức rồi loại luôn $m=1$.'], reviewSuggestions: ['Tách $a=0$ trước mọi bài tham số.']
+  },
+  {
+    id: 'math10-m3-s090', questionId: 'math10-m3-q090',
+    recognition: 'Dạng hỏi tam thức hệ số đầu dương luôn không dương—có thể loại ngay bằng hành vi khi $|x|$ lớn.',
+    detailedSteps: [{ order: 1, title: 'Xét hệ số đầu', explanation: 'Hệ số $x^2$ luôn là $1>0$.' }, { order: 2, title: 'Suy hành vi', explanation: 'Khi $|x|$ đủ lớn, $x^2+(m-2)x+1\\to+\\infty$, nên không thể $\\le0$ với mọi $x$.', result: 'Không có giá trị $m$' }],
+    finalAnswer: 'A. $0$', commonMistakes: ['Chỉ ép $\\Delta\\le0$ mà quên dấu $a$ phải âm cho yêu cầu luôn không dương.'], reviewSuggestions: ['Kiểm tra dấu hệ số đầu trước khi tính dài.']
+  },
+  {
+    id: 'math10-m3-s091', questionId: 'math10-m3-q091',
+    recognition: 'Dạng tam thức không âm với cả hệ số đầu và biệt thức phụ thuộc tham số.',
+    detailedSteps: [{ order: 1, title: 'Điều kiện hệ số đầu', explanation: 'Cần $m>0$; $m=0$ cho biểu thức $2x$ không không âm với mọi $x$.' }, { order: 2, title: 'Điều kiện biệt thức', explanation: '$\\Delta=4-4m^2\\le0\\Leftrightarrow |m|\\ge1$. Giao với $m>0$.', result: '$m\\ge1$' }],
+    finalAnswer: 'B. $m\\ge1$', commonMistakes: ['Chọn $|m|\\ge1$ mà không giao điều kiện $a>0$.'], reviewSuggestions: ['Viết các điều kiện rồi lấy giao.']
+  },
+  {
+    id: 'math10-m3-s092', questionId: 'math10-m3-q092',
+    recognition: 'Dạng chứng minh không tồn tại tham số bằng sự mâu thuẫn giữa dấu hệ số đầu và biệt thức.',
+    detailedSteps: [{ order: 1, title: 'Điều kiện hệ số đầu', explanation: 'Muốn luôn âm cần $m+1<0$, tức $m<-1$.' }, { order: 2, title: 'Kiểm tra biệt thức', explanation: '$\\Delta=4(m-1)^2-4(m+1)^2=-16m$. Với $m<-1$, $\\Delta>0$, trái yêu cầu $\\Delta<0$.', result: 'Không tồn tại $m$' }],
+    finalAnswer: 'D. Không tồn tại $m$', commonMistakes: ['Giải riêng $a<0$ rồi dừng.'], reviewSuggestions: ['Điều kiện luôn âm gồm hai điều kiện đồng thời.']
+  },
+  {
+    id: 'math10-m3-s093', questionId: 'math10-m3-q093',
+    recognition: 'Dạng hoàn thành bình phương giúp đọc trực tiếp giá trị nhỏ nhất.',
+    detailedSteps: [{ order: 1, title: 'Đưa về dạng đỉnh', explanation: '$f(x)=[x-(m+1)]^2+2m+2$.' }, { order: 2, title: 'Ép giá trị nhỏ nhất không âm', explanation: 'Bình phương nhỏ nhất bằng $0$, nên cần $2m+2\\ge0$.', result: '$m\\ge-1$' }],
+    finalAnswer: 'B. $m\\ge-1$', commonMistakes: ['Dùng $2m+2>0$ dù đề cho $\\ge0$.'], reviewSuggestions: ['Khai thác dạng bình phương khi biểu thức thuận lợi.']
+  },
+  {
+    id: 'math10-m3-s094', questionId: 'math10-m3-q094',
+    recognition: 'Dạng kiểm tra một tam thức tham số luôn dương với mọi giá trị của tham số.',
+    detailedSteps: [{ order: 1, title: 'Dấu hệ số đầu', explanation: '$m^2+1>0$ với mọi $m$.' }, { order: 2, title: 'Biệt thức', explanation: '$\\Delta=(-2m)^2-4(m^2+1)=-4<0$ với mọi $m$.', result: 'Mọi $m\\in\\mathbb R$' }],
+    finalAnswer: 'C. Mọi $m\\in\\mathbb R$', commonMistakes: ['Cho rằng $m^2+1$ có thể bằng 0.'], reviewSuggestions: ['Nhớ $m^2+1$ luôn dương trên số thực.']
+  },
+  {
+    id: 'math10-m3-s095', questionId: 'math10-m3-q095',
+    recognition: 'Dạng tam thức chứa tham số có thể viết thành hiệu hai bình phương.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$x^2-2mx+m^2-1=(x-m)^2-1=(x-m-1)(x-m+1)$.' }, { order: 2, title: 'Chọn khoảng âm', explanation: 'Hệ số đầu dương, hai nghiệm $m-1<m+1$, nên âm ở giữa.', result: '$(m-1;m+1)$' }],
+    finalAnswer: 'A. $(m-1;m+1)$', commonMistakes: ['Sắp ngược hai nghiệm theo $m$.'], reviewSuggestions: ['Hai mốc $m-1,m+1$ luôn có thứ tự cố định.']
+  },
+  {
+    id: 'math10-m3-s096', questionId: 'math10-m3-q096',
+    recognition: 'Dạng luôn dương giải nhanh bằng hoàn thành bình phương.',
+    detailedSteps: [{ order: 1, title: 'Biến đổi', explanation: '$f(x)=[x-(m-1)]^2+4-2m$.' }, { order: 2, title: 'Ép giá trị nhỏ nhất dương', explanation: 'GTNN là $4-2m$; cần $4-2m>0$.', result: '$m<2$' }],
+    finalAnswer: 'A. $m<2$', commonMistakes: ['Lấy $m\\le2$ và quên tại $m=2$ biểu thức có thể bằng 0.'], reviewSuggestions: ['Với “luôn dương”, GTNN phải lớn hơn 0.']
+  },
+  {
+    id: 'math10-m3-s097', questionId: 'math10-m3-q097',
+    recognition: 'Dạng bất phương trình bậc hai cơ bản, dấu $>0$: tìm nghiệm rồi lấy miền dương không gồm đầu mút.',
+    detailedSteps: [{ order: 1, title: 'Phân tích tam thức', explanation: '$x^2-5x+6=(x-2)(x-3)$, hai nghiệm $2<3$, hệ số đầu dương.' }, { order: 2, title: 'Chọn tập nghiệm', explanation: 'Miền dương nằm ngoài hai nghiệm; dấu nghiêm ngặt nên loại $2,3$.', result: '$(-\\infty;2)\\cup(3;+\\infty)$' }],
+    finalAnswer: 'C. $(-\\infty;2)\\cup(3;+\\infty)$', commonMistakes: ['Lấy cả $2,3$ hoặc chọn miền giữa.'], reviewSuggestions: ['Ôn mẫu nghiệm của $f(x)>0$ khi $a>0$.']
+  },
+  {
+    id: 'math10-m3-s098', questionId: 'math10-m3-q098',
+    recognition: 'Dạng bất phương trình bậc hai $\\le0$ với hệ số đầu dương.',
+    detailedSteps: [{ order: 1, title: 'Tìm nghiệm', explanation: 'Tam thức bằng $(x-2)(x-3)$, có nghiệm $2,3$.' }, { order: 2, title: 'Chọn miền không dương', explanation: 'Hệ số đầu dương nên không dương giữa hai nghiệm và lấy hai nghiệm vì có dấu bằng.', result: '$[2;3]$' }],
+    finalAnswer: 'B. $[2;3]$', commonMistakes: ['Dùng ngoặc tròn dù bất phương trình có dấu bằng.'], reviewSuggestions: ['Kiểm tra ký hiệu $<$ hay $\\le$ trước khi viết đáp án.']
+  },
+  {
+    id: 'math10-m3-s099', questionId: 'math10-m3-q099',
+    recognition: 'Dạng hệ số đầu âm, yêu cầu $\\ge0$: miền nghiệm nằm giữa hai nghiệm.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$-x^2+4x-3=-(x-1)(x-3)$.' }, { order: 2, title: 'Chọn miền', explanation: 'Tam thức không âm trên đoạn giữa hai nghiệm, gồm cả hai đầu mút.', result: '$[1;3]$' }],
+    finalAnswer: 'A. $[1;3]$', commonMistakes: ['Chọn miền ngoài theo thói quen với $a>0$.'], reviewSuggestions: ['Ghi dấu $a$ trước khi chọn trong hay ngoài.']
+  },
+  {
+    id: 'math10-m3-s100', questionId: 'math10-m3-q100',
+    recognition: 'Dạng tam thức luôn dương nhưng bất phương trình yêu cầu âm.',
+    detailedSteps: [{ order: 1, title: 'Xét dấu tam thức', explanation: '$\\Delta=4^2-4\\cdot2\\cdot5=-24<0$ và $a=2>0$, nên biểu thức luôn dương.' }, { order: 2, title: 'Đối chiếu yêu cầu', explanation: 'Không có $x$ nào làm biểu thức nhỏ hơn $0$.', result: '$\\varnothing$' }],
+    finalAnswer: 'B. $\\varnothing$', commonMistakes: ['Cố tìm khoảng quanh $-1$ dù phương trình không có nghiệm.'], reviewSuggestions: ['Khi $\\Delta<0$, có thể kết luận ngay toàn bộ tập nghiệm.']
+  },
+  {
+    id: 'math10-m3-s101', questionId: 'math10-m3-q101',
+    recognition: 'Dạng tam thức luôn âm và bất phương trình yêu cầu không dương.',
+    detailedSteps: [{ order: 1, title: 'Xét biệt thức', explanation: '$\\Delta=36-48=-12<0$ và $a=-3<0$, nên biểu thức luôn âm.' }, { order: 2, title: 'Kết luận tập nghiệm', explanation: 'Mọi số thực đều thỏa dấu $\\le0$.', result: '$\\mathbb R$' }],
+    finalAnswer: 'B. $\\mathbb R$', commonMistakes: ['Cho rằng $\\Delta<0$ luôn dẫn tới vô nghiệm bất phương trình.'], reviewSuggestions: ['$\\Delta<0$ chỉ nói không có nghiệm phương trình; dấu còn phụ thuộc $a$.']
+  },
+  {
+    id: 'math10-m3-s102', questionId: 'math10-m3-q102',
+    recognition: 'Dạng bình phương lớn hơn 0: loại đúng điểm làm bình phương bằng 0.',
+    detailedSteps: [{ order: 1, title: 'Dùng tính không âm', explanation: '$(x-2)^2\\ge0$ với mọi $x$.' }, { order: 2, title: 'Xử lí dấu nghiêm ngặt', explanation: 'Biểu thức bằng $0$ đúng khi $x=2$, nên mọi số thực khác $2$ đều thỏa.', result: '$\\mathbb R\\setminus\\{2\\}$' }],
+    finalAnswer: 'C. $\\mathbb R\\setminus\\{2\\}$', commonMistakes: ['Kết luận $\\mathbb R$ vì bình phương không âm.'], reviewSuggestions: ['Phân biệt “không âm” với “dương”.']
+  },
+  {
+    id: 'math10-m3-s103', questionId: 'math10-m3-q103',
+    recognition: 'Dạng bình phương không dương: chỉ có thể bằng 0.',
+    detailedSteps: [{ order: 1, title: 'Nhận xét dấu', explanation: '$(2x+1)^2\\ge0$, nên điều kiện $\\le0$ tương đương bằng $0$.' }, { order: 2, title: 'Giải phương trình', explanation: '$2x+1=0\\Rightarrow x=-\\tfrac12$.', result: '$\\{-\\tfrac12\\}$' }],
+    finalAnswer: 'B. $\\{-\\tfrac12\\}$', commonMistakes: ['Kết luận vô nghiệm vì tưởng bình phương luôn dương.'], reviewSuggestions: ['Bình phương có thể bằng 0.']
+  },
+  {
+    id: 'math10-m3-s104', questionId: 'math10-m3-q104',
+    recognition: 'Dạng hiệu hai bình phương, hệ số đầu dương và yêu cầu âm.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$x^2-9=(x-3)(x+3)$ có hai nghiệm $-3,3$.' }, { order: 2, title: 'Chọn khoảng âm', explanation: 'Tam thức âm giữa hai nghiệm, dấu $<0$ nên không lấy đầu mút.', result: '$(-3;3)$' }],
+    finalAnswer: 'A. $(-3;3)$', commonMistakes: ['Lấy $[-3;3]$.'], reviewSuggestions: ['Dấu nghiêm ngặt dùng ngoặc tròn.']
+  },
+  {
+    id: 'math10-m3-s105', questionId: 'math10-m3-q105',
+    recognition: 'Dạng bất phương trình hệ số đầu âm; có thể đặt nhân tử âm ra ngoài.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$-2x^2+8x-6=-2(x-1)(x-3)$.' }, { order: 2, title: 'Xét dấu', explanation: 'Hệ số đầu âm nên biểu thức dương giữa hai nghiệm; không lấy đầu mút.', result: '$(1;3)$' }],
+    finalAnswer: 'A. $(1;3)$', commonMistakes: ['Chia cho $-2$ nhưng không đổi chiều bất phương trình.'], reviewSuggestions: ['Xét dấu trực tiếp giúp tránh lỗi đổi chiều.']
+  },
+  {
+    id: 'math10-m3-s106', questionId: 'math10-m3-q106',
+    recognition: 'Dạng nghiệm phân số: tìm chính xác nghiệm rồi chọn miền ngoài vì hệ số đầu dương.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$3x^2+x-2=(3x-2)(x+1)$, nghiệm $-1$ và $\\tfrac23$.' }, { order: 2, title: 'Chọn miền không âm', explanation: 'Lấy hai miền ngoài và gồm hai nghiệm.', result: '$(-\\infty;-1]\\cup[\\tfrac23;+\\infty)$' }],
+    finalAnswer: 'C. $(-\\infty;-1]\\cup[\\tfrac23;+\\infty)$', commonMistakes: ['Giải $3x-2=0$ thành $x=2$.'], reviewSuggestions: ['Kiểm tra nghiệm của từng nhân tử.']
+  },
+  {
+    id: 'math10-m3-s107', questionId: 'math10-m3-q107',
+    recognition: 'Dạng bình phương không dương với nghiệm kép.',
+    detailedSteps: [{ order: 1, title: 'Nhận dạng hằng đẳng thức', explanation: '$4x^2-4x+1=(2x-1)^2$.' }, { order: 2, title: 'Buộc bằng 0', explanation: 'Bình phương $\\le0$ chỉ khi bằng $0$, nên $2x-1=0$.', result: '$\\{\\tfrac12\\}$' }],
+    finalAnswer: 'B. $\\{\\tfrac12\\}$', commonMistakes: ['Cho nghiệm là một khoảng quanh $\\tfrac12$.'], reviewSuggestions: ['Nghiệm kép không tạo khoảng âm.']
+  },
+  {
+    id: 'math10-m3-s108', questionId: 'math10-m3-q108',
+    recognition: 'Dạng tam thức hệ số đầu dương, yêu cầu không âm.',
+    detailedSteps: [{ order: 1, title: 'Tìm hai nghiệm', explanation: '$x^2+2x-8=(x+4)(x-2)$, nghiệm $-4<2$.' }, { order: 2, title: 'Chọn miền ngoài', explanation: 'Không âm ở ngoài và lấy cả hai nghiệm.', result: '$(-\\infty;-4]\\cup[2;+\\infty)$' }],
+    finalAnswer: 'C. $(-\\infty;-4]\\cup[2;+\\infty)$', commonMistakes: ['Chọn đoạn $[-4;2]$.'], reviewSuggestions: ['Với $a>0$, dấu dương nằm ngoài hai nghiệm.']
+  },
+  {
+    id: 'math10-m3-s109', questionId: 'math10-m3-q109',
+    recognition: 'Dạng bất phương trình tích hai nhân tử, yêu cầu không dương.',
+    detailedSteps: [{ order: 1, title: 'Xác định các mốc', explanation: 'Tích bằng $0$ tại $x=-3,1$; hệ số đầu dương.' }, { order: 2, title: 'Chọn miền', explanation: 'Tích không dương giữa hai mốc và lấy cả hai đầu mút.', result: '$[-3;1]$' }],
+    finalAnswer: 'A. $[-3;1]$', commonMistakes: ['Đọc $x+3=0$ thành $x=3$.'], reviewSuggestions: ['Sắp mốc trước khi điền dấu.']
+  },
+  {
+    id: 'math10-m3-s110', questionId: 'math10-m3-q110',
+    recognition: 'Dạng bất phương trình thương có ba mốc: nghiệm tử có thể đổi dấu, nghiệm mẫu luôn bị loại.',
+    detailedSteps: [{ order: 1, title: 'Lập các mốc', explanation: 'Tử bằng $0$ tại $-1,2$; mẫu bằng $0$ tại $3$, nên điều kiện $x\\ne3$.' }, { order: 2, title: 'Lập bảng dấu', explanation: 'Dấu lần lượt trên bốn khoảng là $-,+,-,+$. Chọn dấu $>0$ và không lấy mốc.', result: '$(-1;2)\\cup(3;+\\infty)$' }],
+    finalAnswer: 'A. $(-1;2)\\cup(3;+\\infty)$', commonMistakes: ['Lấy $x=3$ hoặc lấy nghiệm tử khi dấu nghiêm ngặt.'], reviewSuggestions: ['Đánh dấu nghiệm mẫu bằng vạch loại.']
+  },
+  {
+    id: 'math10-m3-s111', questionId: 'math10-m3-q111',
+    recognition: 'Dạng phân thức bậc nhất trên bậc nhất.',
+    detailedSteps: [{ order: 1, title: 'Xác định mốc', explanation: 'Tử bằng $0$ tại $-2$; mẫu bằng $0$ tại $1$ và phải loại.' }, { order: 2, title: 'Xét dấu', explanation: 'Phân thức không âm trên $(-\\infty;-2]$ và $(1;+\\infty)$.', result: '$(-\\infty;-2]\\cup(1;+\\infty)$' }],
+    finalAnswer: 'B. $(-\\infty;-2]\\cup(1;+\\infty)$', commonMistakes: ['Dùng ngoặc vuông tại $x=1$.'], reviewSuggestions: ['Nghiệm mẫu không bao giờ được nhận.']
+  },
+  {
+    id: 'math10-m3-s112', questionId: 'math10-m3-q112',
+    recognition: 'Dạng thương có tử là hiệu hai bình phương; cần lập bảng theo ba mốc.',
+    detailedSteps: [{ order: 1, title: 'Phân tích và điều kiện', explanation: '$\\dfrac{(x-2)(x+2)}{x+1}$, các mốc $-2,-1,2$; loại $-1$.' }, { order: 2, title: 'Chọn khoảng âm', explanation: 'Dấu âm trên $(-\\infty;-2)$ và $(-1;2)$; dấu nghiêm ngặt loại các nghiệm tử.', result: '$(-\\infty;-2)\\cup(-1;2)$' }],
+    finalAnswer: 'A. $(-\\infty;-2)\\cup(-1;2)$', commonMistakes: ['Sắp sai thứ tự $-2,-1,2$.'], reviewSuggestions: ['Viết tất cả mốc lên một trục số.']
+  },
+  {
+    id: 'math10-m3-s113', questionId: 'math10-m3-q113',
+    recognition: 'Dạng tích có nhân tử bình phương: nghiệm bội chẵn không làm đổi dấu.',
+    detailedSteps: [{ order: 1, title: 'Xét cấu trúc dấu', explanation: '$(x-1)^2>0$ khi $x\\ne1$ và bằng $0$ tại $1$; dấu chủ yếu theo $x+2$.' }, { order: 2, title: 'Áp dụng dấu $>0$', explanation: 'Cần $x>-2$, đồng thời loại $x=1$ và $x=-2$.', result: '$(-2;1)\\cup(1;+\\infty)$' }],
+    finalAnswer: 'B. $(-2;1)\\cup(1;+\\infty)$', commonMistakes: ['Cho dấu đổi tại nghiệm kép $x=1$.'], reviewSuggestions: ['Nhân tử mũ chẵn giữ nguyên dấu qua nghiệm.']
+  },
+  {
+    id: 'math10-m3-s114', questionId: 'math10-m3-q114',
+    recognition: 'Dạng thương hai hiệu bình phương, có bốn mốc và hai điểm loại.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$\\dfrac{(x-1)(x+1)}{(x-2)(x+2)}$; loại $x=\\pm2$, nghiệm tử $x=\\pm1$.' }, { order: 2, title: 'Bảng dấu', explanation: 'Phân thức không dương trên $(-2;-1]$ và $[1;2)$; lấy nghiệm tử, loại nghiệm mẫu.', result: '$(-2;-1]\\cup[1;2)$' }],
+    finalAnswer: 'B. $(-2;-1]\\cup[1;2)$', commonMistakes: ['Đóng ngoặc tại $\\pm2$.'], reviewSuggestions: ['Phân biệt mốc tử và mốc mẫu trước khi chọn ngoặc.']
+  },
+  {
+    id: 'math10-m3-s115', questionId: 'math10-m3-q115',
+    recognition: 'Dạng nghịch đảo: vì tử $1>0$, dấu của phân thức chính là dấu mẫu.',
+    detailedSteps: [{ order: 1, title: 'Xét mẫu', explanation: '$x^2-5x+6=(x-2)(x-3)>0$ ở ngoài hai nghiệm.' }, { order: 2, title: 'Giữ điều kiện xác định', explanation: 'Mẫu không được bằng $0$, nên hai mốc đều dùng ngoặc tròn.', result: '$(-\\infty;2)\\cup(3;+\\infty)$' }],
+    finalAnswer: 'B. $(-\\infty;2)\\cup(3;+\\infty)$', commonMistakes: ['Cho phân thức bằng 0 tại nghiệm của mẫu.'], reviewSuggestions: ['Phân thức có tử $1$ không bao giờ bằng 0.']
+  },
+  {
+    id: 'math10-m3-s116', questionId: 'math10-m3-q116',
+    recognition: 'Dạng có nhân tử chung ở tử và mẫu: được rút gọn để xét dấu nhưng phải giữ miền xác định ban đầu.',
+    detailedSteps: [{ order: 1, title: 'Phân tích và rút gọn có điều kiện', explanation: '$\\dfrac{(x-1)(x-3)}{(x-1)(x+1)}=\\dfrac{x-3}{x+1}$ với $x\\ne-1,1$.' }, { order: 2, title: 'Giải phân thức rút gọn', explanation: '$\\dfrac{x-3}{x+1}\\ge0$ trên $(-\\infty;-1)\\cup[3;+\\infty)$. Điểm $1$ không nằm trong tập này.', result: '$(-\\infty;-1)\\cup[3;+\\infty)$' }],
+    finalAnswer: 'A. $(-\\infty;-1)\\cup[3;+\\infty)$', commonMistakes: ['Cho $x=-1$ hoặc quên điều kiện $x=1$ của biểu thức gốc.'], reviewSuggestions: ['Ghi điều kiện trước khi rút gọn.']
+  },
+  {
+    id: 'math10-m3-s117', questionId: 'math10-m3-q117',
+    recognition: 'Dạng rút gọn nhân tử chung với dấu nghiêm ngặt.',
+    detailedSteps: [{ order: 1, title: 'Rút gọn có điều kiện', explanation: '$\\dfrac{(x-2)(x+2)}{x-2}=x+2$ nhưng điều kiện gốc là $x\\ne2$.' }, { order: 2, title: 'Giải bất phương trình', explanation: '$x+2<0\\Leftrightarrow x<-2$; miền này tự động không chứa $2$.', result: '$x<-2$' }],
+    finalAnswer: 'A. $x<-2$', commonMistakes: ['Giải $x+2<0$ thành $x<2$.'], reviewSuggestions: ['Rút gọn xong vẫn đối chiếu điều kiện gốc.']
+  },
+  {
+    id: 'math10-m3-s118', questionId: 'math10-m3-q118',
+    recognition: 'Dạng bình phương của phân thức lớn hơn 0: loại nơi phân thức bằng 0 và nơi không xác định.',
+    detailedSteps: [{ order: 1, title: 'Miền xác định', explanation: '$x+2\\ne0\\Rightarrow x\\ne-2$.' }, { order: 2, title: 'Điều kiện dương', explanation: 'Bình phương dương khi phân thức khác $0$, nên thêm $x\\ne1$.', result: '$\\mathbb R\\setminus\\{-2,1\\}$' }],
+    finalAnswer: 'C. $\\mathbb R\\setminus\\{-2,1\\}$', commonMistakes: ['Chỉ loại nghiệm mẫu mà quên điểm làm bình phương bằng 0.'], reviewSuggestions: ['Với $A^2>0$, cần $A$ xác định và $A\\ne0$.']
+  },
+  {
+    id: 'math10-m3-s119', questionId: 'math10-m3-q119',
+    recognition: 'Dạng tích ba nhân tử bậc nhất sau khi phân tích tam thức.',
+    detailedSteps: [{ order: 1, title: 'Phân tích và xếp mốc', explanation: '$(x^2+x-6)(x-1)=(x+3)(x-2)(x-1)$, các mốc $-3<1<2$.' }, { order: 2, title: 'Bảng dấu tích', explanation: 'Tích không dương trên $(-\\infty;-3]$ và $[1;2]$.', result: '$(-\\infty;-3]\\cup[1;2]$' }],
+    finalAnswer: 'B. $(-\\infty;-3]\\cup[1;2]$', commonMistakes: ['Sắp mốc $1,2$ sai hoặc bỏ một nhân tử.'], reviewSuggestions: ['Phân tích hoàn toàn rồi mới lập bảng dấu chung.']
+  },
+  {
+    id: 'math10-m3-s120', questionId: 'math10-m3-q120',
+    recognition: 'Dạng thương có tử bậc nhất và mẫu bậc hai đã phân tích được.',
+    detailedSteps: [{ order: 1, title: 'Xác định mốc và điểm loại', explanation: 'Tử có nghiệm $-1$; mẫu $(x-1)(x-3)$ nên loại $1,3$.' }, { order: 2, title: 'Lập bảng dấu', explanation: 'Phân thức $\\le0$ trên $(-\\infty;-1]$ và $(1;3)$; chỉ $-1$ được lấy.', result: '$(-\\infty;-1]\\cup(1;3)$' }],
+    finalAnswer: 'A. $(-\\infty;-1]\\cup(1;3)$', commonMistakes: ['Lấy $1$ hoặc $3$ vì có dấu bằng.'], reviewSuggestions: ['Dấu bằng không bao giờ cho phép lấy nghiệm mẫu.']
+  },
+  {
+    id: 'math10-m3-s121', questionId: 'math10-m3-q121',
+    recognition: 'Dạng bất phương trình tham số giải theo $x$, thuận lợi khi hoàn thành bình phương.',
+    detailedSteps: [{ order: 1, title: 'Đưa về khoảng cách', explanation: '$x^2-2mx+m^2-4\\le0\\Leftrightarrow(x-m)^2\\le4$.' }, { order: 2, title: 'Giải trị tuyệt đối', explanation: '$|x-m|\\le2\\Leftrightarrow m-2\\le x\\le m+2$.', result: '$[m-2;m+2]$' }],
+    finalAnswer: 'A. $[m-2;m+2]$', commonMistakes: ['Viết khoảng đối xứng quanh 0 thay vì quanh $m$.'], reviewSuggestions: ['Nhận dạng $(x-m)^2\\le r^2$.']
+  },
+  {
+    id: 'math10-m3-s122', questionId: 'math10-m3-q122',
+    recognition: 'Dạng bất phương trình đúng với mọi $x$: tam thức hệ số đầu dương phải có $\\Delta\\le0$.',
+    detailedSteps: [{ order: 1, title: 'Lập điều kiện', explanation: '$a=1>0$ và $\\Delta=4(m-2)(m+1)\\le0$.' }, { order: 2, title: 'Giải theo $m$', explanation: 'Tích không dương giữa hai nghiệm $-1,2$.', result: '$-1\\le m\\le2$' }],
+    finalAnswer: 'B. $-1\\le m\\le2$', commonMistakes: ['Dùng $\\Delta<0$ và loại trường hợp bất phương trình chạm 0.'], reviewSuggestions: ['Dấu $\\ge0$ cho phép nghiệm kép.']
+  },
+  {
+    id: 'math10-m3-s123', questionId: 'math10-m3-q123',
+    recognition: 'Dạng tham số có hai nghiệm biểu diễn trực tiếp theo $m$.',
+    detailedSteps: [{ order: 1, title: 'Phân tích', explanation: '$x^2-2(m+1)x+m^2+2m=(x-m)(x-m-2)$.' }, { order: 2, title: 'Chọn đoạn không dương', explanation: 'Hệ số đầu dương, hai nghiệm $m<m+2$, nên nghiệm là đoạn đóng giữa chúng.', result: '$[m;m+2]$' }],
+    finalAnswer: 'A. $[m;m+2]$', commonMistakes: ['Cho rằng phải chia trường hợp theo dấu $m$.'], reviewSuggestions: ['$m<m+2$ đúng với mọi $m$, nên không cần chia trường hợp.']
+  },
+  {
+    id: 'math10-m3-s124', questionId: 'math10-m3-q124',
+    recognition: 'Dạng đếm nghiệm nguyên: giải tập nghiệm thực trước, sau đó mới liệt kê số nguyên.',
+    detailedSteps: [{ order: 1, title: 'Giải bất phương trình', explanation: '$(x-2)(x-3)\\le0\\Leftrightarrow2\\le x\\le3$.' }, { order: 2, title: 'Đếm', explanation: 'Hai số nguyên thỏa là $2$ và $3$.', result: '$2$' }],
+    finalAnswer: 'B. $2$', commonMistakes: ['Đếm độ dài đoạn thay vì đếm các số nguyên.'], reviewSuggestions: ['Liệt kê trực tiếp khi khoảng ngắn.']
+  },
+  {
+    id: 'math10-m3-s125', questionId: 'math10-m3-q125',
+    recognition: 'Dạng “bất phương trình $\\le0$ có nghiệm” với parabol mở lên: giá trị nhỏ nhất phải không dương, tương đương $\\Delta\\ge0$.',
+    detailedSteps: [{ order: 1, title: 'Lập điều kiện có giao với trục', explanation: '$\\Delta=(-4)^2-4m=16-4m\\ge0$.' }, { order: 2, title: 'Giải theo tham số', explanation: '$16-4m\\ge0\\Leftrightarrow m\\le4$.', result: '$m\\le4$' }],
+    finalAnswer: 'B. $m\\le4$', commonMistakes: ['Dùng $\\Delta>0$ và loại trường hợp chỉ có một nghiệm kép.'], reviewSuggestions: ['“Có ít nhất một nghiệm” bao gồm trường hợp tiếp xúc.']
+  },
+  {
+    id: 'math10-m3-s126', questionId: 'math10-m3-q126',
+    recognition: 'Dạng $a>0$, bất phương trình $f(x)\\le0$ vô nghiệm: cần tam thức luôn dương, tức $\\Delta<0$.',
+    detailedSteps: [{ order: 1, title: 'Lập điều kiện biệt thức', explanation: '$\\Delta=(-2m)^2-4(m+1)=4(m^2-m-1)<0$.' }, { order: 2, title: 'Giải bất phương trình theo $m$', explanation: 'Hai nghiệm của $m^2-m-1$ là $\\dfrac{1\\pm\\sqrt5}{2}$; biểu thức âm ở giữa.', result: '$\\dfrac{1-\\sqrt5}{2}<m<\\dfrac{1+\\sqrt5}{2}$' }],
+    finalAnswer: 'A. $\\dfrac{1-\\sqrt5}{2}<m<\\dfrac{1+\\sqrt5}{2}$', commonMistakes: ['Dùng $\\Delta\\le0$ dù tại $\\Delta=0$ vẫn có một nghiệm.'], reviewSuggestions: ['Vô nghiệm của $f\\le0$ cần $f>0$ mọi nơi.']
+  },
+  {
+    id: 'math10-m3-s127', questionId: 'math10-m3-q127',
+    recognition: 'Dạng suy ngược bất phương trình từ tập nghiệm là một đoạn đóng.',
+    detailedSteps: [{ order: 1, title: 'Suy nghiệm và dấu hệ số', explanation: 'Tập nghiệm $[2;5]$ của dạng $f\\le0$ cần $a>0$ và hai nghiệm $2,5$.' }, { order: 2, title: 'Dựng tam thức', explanation: 'Chọn $f(x)=(x-2)(x-5)=x^2-7x+10$.', result: '$x^2-7x+10\\le0$' }],
+    finalAnswer: 'A. $x^2-7x+10\\le0$', commonMistakes: ['Chọn dấu $<0$ nên làm mất hai đầu mút.'], reviewSuggestions: ['Đọc kiểu ngoặc của tập nghiệm để chọn dấu bất phương trình.']
+  },
+  {
+    id: 'math10-m3-s128', questionId: 'math10-m3-q128',
+    recognition: 'Dạng tìm độ dài tập nghiệm sau khi giải một bất phương trình bậc hai.',
+    detailedSteps: [{ order: 1, title: 'Tìm tập nghiệm', explanation: '$-x^2+6x-5=-(x-1)(x-5)\\ge0$ khi $1\\le x\\le5$.' }, { order: 2, title: 'Tính độ dài đoạn', explanation: 'Độ dài là $5-1=4$.', result: '$4$' }],
+    finalAnswer: 'B. $4$', commonMistakes: ['Đếm hai đầu mút và trả lời 5.'], reviewSuggestions: ['Độ dài đoạn $[a;b]$ là $b-a$.']
+  },
+  {
+    id: 'math10-m3-s129', questionId: 'math10-m3-q129',
+    recognition: 'Dạng ứng dụng lợi nhuận: “có lãi” nghĩa là $P(x)>0$, sau đó giao miền thực tế nếu cần.',
+    detailedSteps: [{ order: 1, title: 'Lập điều kiện', explanation: '$-2x^2+40x-150>0\\Leftrightarrow-2(x-5)(x-15)>0$.' }, { order: 2, title: 'Chọn khoảng dương', explanation: 'Parabol mở xuống nên lợi nhuận dương giữa hai nghiệm.', result: '$5<x<15$' }],
+    finalAnswer: 'A. $5<x<15$', commonMistakes: ['Dùng $\\ge0$ dù “có lãi” không gồm hòa vốn.'], reviewSuggestions: ['Dịch đúng ngôn ngữ thực tế thành dấu toán học.']
+  },
+  {
+    id: 'math10-m3-s130', questionId: 'math10-m3-q130',
+    recognition: 'Dạng ứng dụng độ cao: “ít nhất” tương ứng dấu $\\ge$.',
+    detailedSteps: [{ order: 1, title: 'Đưa về một vế', explanation: '$-5t^2+20t\\ge15\\Leftrightarrow-5(t-1)(t-3)\\ge0$.' }, { order: 2, title: 'Giải và kiểm tra thời gian', explanation: 'Biểu thức không âm giữa hai nghiệm; khoảng $[1;3]$ nằm trong miền $t\\ge0$.', result: '$1\\le t\\le3$' }],
+    finalAnswer: 'A. $1\\le t\\le3$', commonMistakes: ['Dịch “ít nhất” thành dấu $>$.'], reviewSuggestions: ['Gạch chân các từ “ít nhất”, “lớn hơn”, “không vượt quá”.']
+  },
+  {
+    id: 'math10-m3-s131', questionId: 'math10-m3-q131',
+    recognition: 'Dạng đúng với mọi $x$ có hệ số đầu phụ thuộc tham số; hoàn thành bình phương giúp bao quát cả trường hợp suy biến.',
+    detailedSteps: [{ order: 1, title: 'Biến đổi', explanation: '$(m-1)x^2-2(m-1)x+m-2=(m-1)(x-1)^2-1$.' }, { order: 2, title: 'Xét hệ số của bình phương', explanation: 'Nếu $m\\le1$, $(m-1)(x-1)^2\\le0$ nên cả biểu thức $\\le-1<0$. Nếu $m>1$, biểu thức tăng vô hạn khi $|x|$ lớn.', result: '$m\\le1$' }],
+    finalAnswer: 'B. $m\\le1$', commonMistakes: ['Loại $m=1$ vì hệ số bậc hai bằng 0 dù biểu thức khi đó là $-1$.'], reviewSuggestions: ['Kiểm tra riêng trường hợp suy biến hoặc dùng biến đổi tương đương bao quát.']
+  },
+  {
+    id: 'math10-m3-s132', questionId: 'math10-m3-q132',
+    recognition: 'Dạng yêu cầu một giá trị cụ thể thuộc tập nghiệm: thay trực tiếp giá trị đó vào bất phương trình.',
+    detailedSteps: [{ order: 1, title: 'Thay $x=0$', explanation: 'Điều kiện trở thành $m^2-1<0$.' }, { order: 2, title: 'Giải theo $m$', explanation: '$(m-1)(m+1)<0$ nên $m$ nằm giữa hai nghiệm.', result: '$-1<m<1$' }],
+    finalAnswer: 'A. $-1<m<1$', commonMistakes: ['Giải toàn bộ bất phương trình theo $x$ dù chỉ cần kiểm tra $x=0$.'], reviewSuggestions: ['Nhận dạng yêu cầu “$x_0$ là nghiệm” để thay trực tiếp.']
   }
 ];

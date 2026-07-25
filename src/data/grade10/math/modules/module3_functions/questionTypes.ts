@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { g10MathModule3TheoryByQuestionTypeId } from './theory';
 
 export const g10MathModule3QuestionTypes: QuestionType[] = [
   {
@@ -79,5 +80,62 @@ export const g10MathModule3QuestionTypes: QuestionType[] = [
       "Tập xác định gồm mọi đầu vào làm công thức có nghĩa; đồ thị biểu diễn các điểm (x;f(x)).",
       "Miền xác định đọc theo hình chiếu lên Ox, tập giá trị đọc theo hình chiếu lên Oy."
     ]
+  },
+  {
+    id: 'math10-qt20',
+    topicId: 'math10-t3',
+    name: 'Dấu của tam thức bậc hai',
+    slug: 'dau-cua-tam-thuc-bac-hai',
+    description: 'Xét dấu tam thức từ hệ số, biệt thức và nghiệm; đọc bảng dấu; xử lí điều kiện tham số để biểu thức luôn dương, âm, không âm hoặc không dương.',
+    exampleQuestionId: 'math10-m3-q061',
+    recognitionSigns: [
+      'Đề hỏi biểu thức bậc hai dương, âm trên khoảng nào hoặc yêu cầu lập/đọc bảng xét dấu.',
+      'Đề chứa tham số và các cụm “với mọi x”, “luôn dương”, “không âm”, “không dương”.'
+    ],
+    solvingSteps: [
+      'Kiểm tra hệ số bậc hai có khác 0; nếu phụ thuộc tham số phải tách trường hợp suy biến.',
+      'Tính biệt thức và tìm, sắp thứ tự các nghiệm thực nếu có.',
+      'Dùng quy tắc cùng dấu hệ số a ở ngoài và trái dấu a ở giữa hai nghiệm.',
+      'Chọn đúng điểm hoặc khoảng theo yêu cầu; phân biệt dấu nghiêm ngặt với dấu có bằng.'
+    ],
+    commonMistakes: [
+      'Đảo dấu trong và ngoài hai nghiệm.',
+      'Cho rằng nghiệm kép làm tam thức đổi dấu.',
+      'Dùng điều kiện Δ≤0 cho yêu cầu luôn dương nghiêm ngặt.',
+      'Quên xét trường hợp hệ số bậc hai bằng 0 trong bài tham số.'
+    ],
+    difficulty: 'medium',
+    examFrequency: 'high'
+  },
+  {
+    id: 'math10-qt21',
+    topicId: 'math10-t3',
+    name: 'Bất phương trình bậc hai một ẩn',
+    slug: 'bat-phuong-trinh-bac-hai-mot-an',
+    description: 'Giải bất phương trình bậc hai, tích và thương; xử lí dấu bằng, điều kiện xác định, tham số và mô hình thực tế.',
+    exampleQuestionId: 'math10-m3-q097',
+    recognitionSigns: [
+      'Đề yêu cầu tìm tập nghiệm của bất phương trình chứa tam thức bậc hai.',
+      'Biểu thức có thể phân tích thành tích/thương hoặc yêu cầu tham số để tập nghiệm có tính chất cho trước.'
+    ],
+    solvingSteps: [
+      'Đưa bất phương trình về một vế và xác định điều kiện nếu có mẫu.',
+      'Phân tích nhân tử hoặc tìm nghiệm của các tam thức, sau đó sắp mọi mốc tới hạn.',
+      'Lập bảng xét dấu chung và chọn các khoảng đúng dấu.',
+      'Xử lí đầu mút, loại nghiệm mẫu và giao với miền thực tế hoặc điều kiện tham số.'
+    ],
+    commonMistakes: [
+      'Chọn khoảng nghiệm mà không xét dấu hệ số đầu.',
+      'Lấy điểm làm mẫu bằng 0 khi bất phương trình có dấu bằng.',
+      'Mất điều kiện loại sau khi rút gọn nhân tử chung.',
+      'Chia hai vế cho biểu thức chứa ẩn hoặc tham số chưa biết dấu.'
+    ],
+    difficulty: 'medium',
+    examFrequency: 'high'
   }
 ];
+
+for (const questionType of g10MathModule3QuestionTypes) {
+  questionType.theory =
+    g10MathModule3TheoryByQuestionTypeId[questionType.id] ?? questionType.theory;
+}

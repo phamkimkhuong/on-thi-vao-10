@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { g10MathModule6TheoryByQuestionTypeId } from './theory';
 
 export const g10MathModule6QuestionTypes: QuestionType[] = [
   {
@@ -92,3 +93,8 @@ export const g10MathModule6QuestionTypes: QuestionType[] = [
     ]
   }
 ];
+
+for (const questionType of g10MathModule6QuestionTypes) {
+  questionType.theory =
+    g10MathModule6TheoryByQuestionTypeId[questionType.id] ?? questionType.theory;
+}

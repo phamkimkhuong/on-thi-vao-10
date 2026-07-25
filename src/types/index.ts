@@ -181,6 +181,8 @@ export interface LearningOutcome {
     bookId: string;
     bookName: string;
     pages: number[];
+    lessonName?: string;
+    sections?: string[];
   };
 }
 

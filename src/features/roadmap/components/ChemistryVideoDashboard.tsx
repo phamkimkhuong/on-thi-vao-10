@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { g10ChemistryVideos, ChemistryChapterVideo } from '../../../data/grade10/chemistry/videos';
+import { g11ChemistryVideos } from '../../../data/grade11/chemistry/videos';
+import { useAppStore } from '../../../services/store';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Play, Tv, Sparkles } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
 export const ChemistryVideoDashboard: React.FC = () => {
-  const [activeVideo, setActiveVideo] = useState<ChemistryChapterVideo>(g10ChemistryVideos[0]);
+  const { selectedGrade } = useAppStore();
+  const chemistryVideos = selectedGrade === 'grade11' ? g11ChemistryVideos : g10ChemistryVideos;
+  const gradeLabel = selectedGrade === 'grade11' ? '11' : '10';
+
+  const [activeVideo, setActiveVideo] = useState<ChemistryChapterVideo>(chemistryVideos[0]);
+
+  useEffect(() => {
+    setActiveVideo(chemistryVideos[0]);
+  }, [selectedGrade]);
 
   // Bộ lọc tách ID YouTube từ bất kỳ định dạng link nào (watch?v=, youtu.be, embed, v.v.)
   const getYouTubeId = (url: string): string => {
@@ -25,7 +35,7 @@ export const ChemistryVideoDashboard: React.FC = () => {
         <div className="space-y-1.5 z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">
             <Tv className="w-3.5 h-3.5" />
-            BÀI GIẢNG ĐIỆN TỬ HÓA HỌC 10
+            BÀI GIẢNG ĐIỆN TỬ HÓA HỌC {gradeLabel}
           </div>
           <h3 className="text-xl md:text-2xl font-black text-foreground">
             Học qua Video Trực Quan sinh động
@@ -91,11 +101,11 @@ export const ChemistryVideoDashboard: React.FC = () => {
         {/* Cột phải (5/12): Danh sách Playlist */}
         <div className="lg:col-span-5 xl:col-span-4 space-y-4">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block pl-1">
-            DANH SÁCH BÀI GIẢNG ({g10ChemistryVideos.length} CHƯƠNG):
+            DANH SÁCH BÀI GIẢNG ({chemistryVideos.length} CHƯƠNG):
           </label>
           
           <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1.5 scrollbar-thin">
-            {g10ChemistryVideos.map((video, index) => {
+            {chemistryVideos.map((video, index) => {
               const isPlaying = activeVideo.chapterId === video.chapterId;
               
               return (
