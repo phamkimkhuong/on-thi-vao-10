@@ -36,6 +36,7 @@ const PremiumPricing = lazyWithRetry(() => import('./features/premium/PremiumPri
 const GeneralAiTutor = lazyWithRetry(() => import('./features/ai-tutor/GeneralAiTutor').then(m => ({ default: m.GeneralAiTutor })));
 const SupportPage = lazyWithRetry(() => import('./features/support/SupportPage').then(m => ({ default: m.SupportPage })));
 const AffiliateDashboard = lazyWithRetry(() => import('./features/affiliate/AffiliateDashboard').then(m => ({ default: m.AffiliateDashboard })));
+const AboutPage = lazyWithRetry(() => import('./features/about/AboutPage'));
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
       { path: ROUTES.AI_TUTOR.substring(1), element: <GeneralAiTutor /> },
       { path: ROUTES.SUPPORT.substring(1), element: <SupportPage /> },
       { path: ROUTES.AFFILIATE.substring(1), element: <AffiliateDashboard /> },
+      { path: ROUTES.ABOUT.substring(1), element: <AboutPage /> },
     ]
   },
 

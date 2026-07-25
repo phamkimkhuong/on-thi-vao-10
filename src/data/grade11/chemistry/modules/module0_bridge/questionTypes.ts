@@ -1,4 +1,9 @@
 import type { QuestionType } from '@/types';
+import {
+  chem11BridgeEquationTheory,
+  chem11BridgeLogarithmTheory,
+  chem11BridgeRateEnergyTheory
+} from './theory';
 
 export const g11ChemistryBridgeQuestionTypes: QuestionType[] = [
   {
@@ -7,6 +12,8 @@ export const g11ChemistryBridgeQuestionTypes: QuestionType[] = [
     name: 'Phương trình hóa học và nồng độ mol',
     slug: 'phuong-trinh-hoa-hoc-nong-do-mol',
     description: 'Chẩn đoán khả năng đọc hệ số, trạng thái chất, cân bằng phương trình và tính nồng độ mol trước khi học hằng số cân bằng.',
+    exampleQuestionId: 'chem11-bridge-q01',
+    theory: chem11BridgeEquationTheory,
     recognitionSigns: [
       'Có phương trình hóa học, số mol, thể tích hoặc nồng độ mol.',
       'Cần kiểm tra bảo toàn nguyên tố hoặc tỉ lệ hệ số.'
@@ -45,6 +52,8 @@ export const g11ChemistryBridgeQuestionTypes: QuestionType[] = [
     name: 'Tốc độ phản ứng và dấu enthalpy',
     slug: 'toc-do-phan-ung-dau-enthalpy',
     description: 'Chẩn đoán khả năng phân biệt tốc độ với nồng độ và nhận diện phản ứng tỏa nhiệt, thu nhiệt.',
+    exampleQuestionId: 'chem11-bridge-q04',
+    theory: chem11BridgeRateEnergyTheory,
     recognitionSigns: [
       'Có đồ thị hoặc mô tả nồng độ thay đổi theo thời gian.',
       'Có giá trị $\\Delta H$ hoặc yêu cầu xác định chiều tỏa/thu nhiệt.'
@@ -83,6 +92,8 @@ export const g11ChemistryBridgeQuestionTypes: QuestionType[] = [
     name: 'Lũy thừa 10 và logarit dùng cho pH',
     slug: 'luy-thua-10-logarit-ph',
     description: 'Chẩn đoán kỹ năng đổi giữa $10^{-a}$ và $-\\lg x$, là tiền đề trực tiếp của phần pH.',
+    exampleQuestionId: 'chem11-bridge-q06',
+    theory: chem11BridgeLogarithmTheory,
     recognitionSigns: [
       'Có biểu thức $10^{-a}$, $\\lg x$ hoặc công thức $pH=-\\lg[H^+]$.'
     ],

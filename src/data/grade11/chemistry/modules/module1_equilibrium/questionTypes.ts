@@ -1,4 +1,20 @@
 import type { QuestionType } from '@/types';
+import {
+  chem11Qt01Theory,
+  chem11Qt02Theory,
+  chem11Qt03Theory,
+  chem11Qt04Theory,
+  chem11Qt05Theory,
+  chem11Qt06Theory,
+  chem11Qt07Theory,
+  chem11Qt08Theory,
+  chem11Qt09Theory,
+  chem11Qt10Theory,
+  chem11Qt11Theory,
+  chem11Qt12Theory,
+  chem11Qt13Theory,
+  chem11Qt14Theory
+} from './theory';
 
 export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
   {
@@ -8,11 +24,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'phan-ung-thuan-nghich-can-bang-dong',
     description: 'Nhận diện phản ứng thuận nghịch và giải thích đúng trạng thái cân bằng ở cấp độ vĩ mô, vi mô.',
     exampleQuestionId: 'chem11-eq-q001',
-    theory: [
-      '**Phản ứng thuận nghịch** xảy ra theo hai chiều trái ngược trong cùng điều kiện và được biểu diễn bằng dấu $\\rightleftharpoons$.',
-      '**Cân bằng hóa học là cân bằng động**: tốc độ phản ứng thuận bằng tốc độ phản ứng nghịch; nồng độ các chất ổn định theo thời gian nhưng hai phản ứng vẫn tiếp tục.',
-      'Ở cân bằng, nồng độ chất phản ứng và sản phẩm **không nhất thiết bằng nhau**.'
-    ],
+    theory: chem11Qt01Theory,
     recognitionSigns: [
       'Phương trình có dấu $\\rightleftharpoons$ hoặc đề mô tả hai chiều phản ứng.',
       'Đề hỏi phản ứng có dừng hay không, tốc độ hai chiều hoặc nồng độ ở trạng thái cân bằng.'
@@ -67,11 +79,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'doc-bang-do-thi-can-bang',
     description: 'Xác định thời điểm hệ đạt cân bằng từ dữ liệu nồng độ–thời gian hoặc tốc độ–thời gian và giải thích bằng chứng.',
     exampleQuestionId: 'chem11-eq-q013',
-    theory: [
-      'Trên đồ thị nồng độ–thời gian, hệ đạt cân bằng từ khi nồng độ các chất trở nên không đổi theo thời gian.',
-      'Trên đồ thị tốc độ–thời gian, hệ đạt cân bằng khi đường tốc độ thuận và tốc độ nghịch gặp nhau và tiếp tục bằng nhau.',
-      'Đường nồng độ nằm ngang không có nghĩa nồng độ bằng 0 hoặc phản ứng dừng.'
-    ],
+    theory: chem11Qt02Theory,
     recognitionSigns: [
       'Đề cho bảng hoặc đồ thị theo thời gian.',
       'Yêu cầu xác định thời điểm cân bằng hoặc chọn bằng chứng cho cân bằng động.'
@@ -126,12 +134,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'viet-tinh-dien-giai-hang-so-can-bang-kc',
     description: 'Thiết lập biểu thức $K_C$, tính từ nồng độ cân bằng và diễn giải định tính mức độ ưu thế của chất đầu hoặc sản phẩm.',
     exampleQuestionId: 'chem11-eq-q025',
-    theory: [
-      'Với $aA+bB\\rightleftharpoons cC+dD$, biểu thức là $K_C=\\dfrac{[C]^c[D]^d}{[A]^a[B]^b}$. Hệ số tỉ lượng trở thành số mũ.',
-      'Nồng độ dùng trong biểu thức phải là **nồng độ tại trạng thái cân bằng**. Chất rắn và chất lỏng tinh khiết không xuất hiện trong biểu thức $K_C$.',
-      '$K_C\\gg1$ cho biết sản phẩm chiếm ưu thế tương đối ở cân bằng; $K_C\\ll1$ cho biết chất đầu chiếm ưu thế. $K_C$ không mô tả phản ứng nhanh hay chậm.',
-      'Ở một nhiệt độ xác định, $K_C$ của phản ứng đã viết là không đổi dù nồng độ ban đầu khác nhau.'
-    ],
+    theory: chem11Qt03Theory,
     recognitionSigns: [
       'Đề cho phương trình thuận nghịch và yêu cầu viết biểu thức hoặc tính $K_C$.',
       'Đề cho nồng độ ở cân bằng hoặc bảng thành phần cân bằng.',
@@ -189,12 +192,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'chuyen-dich-can-bang-nong-do-ap-suat',
     description: 'Vận dụng nguyên lí Le Chatelier để dự đoán và giải thích chiều chuyển dịch khi thay đổi nồng độ, áp suất hoặc thể tích.',
     exampleQuestionId: 'chem11-eq-q037',
-    theory: [
-      'Khi tăng nồng độ một chất, hệ chuyển dịch theo chiều tiêu thụ bớt chất đó; khi giảm nồng độ, hệ chuyển dịch theo chiều tạo thêm chất đó.',
-      'Thay đổi áp suất/thể tích chỉ làm chuyển dịch cân bằng khí khi tổng số mol khí hai vế khác nhau. Tăng áp suất (giảm thể tích) ưu tiên phía ít mol khí hơn.',
-      'Tăng lượng chất rắn tinh khiết không làm chuyển dịch cân bằng nếu pha rắn vẫn tồn tại.',
-      'Ở nhiệt độ không đổi, thay đổi nồng độ hoặc áp suất làm hệ thiết lập thành phần cân bằng mới nhưng không làm đổi $K_C$.'
-    ],
+    theory: chem11Qt04Theory,
     recognitionSigns: [
       'Đề có các động từ thêm, bớt, lấy ra hoặc thay đổi nồng độ một chất.',
       'Đề thay đổi áp suất/thể tích của một hệ có chất khí.',
@@ -252,12 +250,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'nhiet-do-xuc-tac-dieu-kien-san-xuat',
     description: 'Dự đoán ảnh hưởng của nhiệt độ, phân biệt vai trò xúc tác và đánh giá sự thỏa hiệp khi chọn điều kiện sản xuất.',
     exampleQuestionId: 'chem11-eq-q049',
-    theory: [
-      'Tăng nhiệt độ làm cân bằng chuyển theo **chiều thu nhiệt**; giảm nhiệt độ làm cân bằng chuyển theo **chiều tỏa nhiệt**.',
-      'Nhiệt độ có thể làm thay đổi $K_C$. Với chiều thuận tỏa nhiệt, tăng nhiệt độ làm $K_C$ của phản ứng thuận giảm.',
-      'Chất xúc tác làm tăng tốc độ cả chiều thuận và nghịch, giúp hệ đạt cân bằng nhanh hơn nhưng không đổi thành phần cân bằng và $K_C$.',
-      'Điều kiện công nghiệp là một sự thỏa hiệp giữa hiệu suất cân bằng, tốc độ, năng lượng, an toàn, chi phí thiết bị và tách sản phẩm.'
-    ],
+    theory: chem11Qt05Theory,
     recognitionSigns: [
       'Đề cho $\\Delta H$, nói phản ứng tỏa nhiệt/thu nhiệt hoặc thay đổi nhiệt độ.',
       'Đề thêm xúc tác và hỏi tốc độ, thời gian đạt cân bằng, hiệu suất hoặc $K_C$.',
@@ -315,12 +308,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'phan-tich-thi-nghiem-can-bang-no2-n2o4',
     description: 'Đọc hiện tượng, thiết kế biến kiểm soát, xử lí dữ liệu và thực hành an toàn với hệ kín $2NO_2\\rightleftharpoons N_2O_4$.',
     exampleQuestionId: 'chem11-eq-q061',
-    theory: [
-      '$NO_2$ có màu nâu còn $N_2O_4$ gần như không màu; chiều $2NO_2\\rightarrow N_2O_4$ là chiều tỏa nhiệt.',
-      'Làm lạnh làm cân bằng chuyển sang phải nên màu nâu nhạt; làm nóng làm cân bằng chuyển sang trái nên màu nâu đậm.',
-      'Muốn kết luận về cân bằng mới phải chờ hệ ổn định ở nhiệt độ khảo sát, không dùng màu tức thời ngay khi vừa chuyển bể.',
-      '$NO_2$ độc và kích ứng mạnh: chỉ quan sát hệ kín do giáo viên chuẩn bị hoặc video/mô phỏng; không mở, không ngửi trực tiếp.'
-    ],
+    theory: chem11Qt06Theory,
     recognitionSigns: [
       'Đề mô tả ống kín chứa khí nâu, bể nước nóng/lạnh hoặc hệ $NO_2/N_2O_4$.',
       'Đề yêu cầu xác định biến độc lập, biến kiểm soát, kết luận hoặc lỗi an toàn.',
@@ -378,12 +366,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'su-dien-li-phuong-trinh-dien-li',
     description: 'Nhận diện chất điện li, viết phương trình điện li và phân biệt điện li mạnh/yếu với đậm đặc/loãng.',
     exampleQuestionId: 'chem11-eq-q073',
-    theory: [
-      'Chất điện li tạo ion tự do khi tan trong nước hoặc ở trạng thái nóng chảy nên môi trường có thể dẫn điện.',
-      'Phương trình điện li phải bảo toàn nguyên tử và điện tích; hệ số trước ion phản ánh tỉ lệ tạo ion.',
-      'Chất điện li mạnh phân li gần như hoàn toàn; chất điện li yếu chỉ phân li một phần và tồn tại cân bằng với phân tử chưa điện li.',
-      'Mạnh/yếu không đồng nghĩa với đậm đặc/loãng; đây là hai tiêu chí khác nhau.'
-    ],
+    theory: chem11Qt07Theory,
     recognitionSigns: [
       'Đề cho thí nghiệm bóng đèn, độ dẫn điện hoặc mô tả ion trong dung dịch.',
       'Đề yêu cầu viết quá trình tạo ion và kiểm tra hệ số/điện tích.',
@@ -441,12 +424,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'acid-base-bronsted-lowry',
     description: 'Xác định chất cho/nhận proton, cặp liên hợp và vai trò lưỡng tính trong phản ứng cụ thể.',
     exampleQuestionId: 'chem11-eq-q085',
-    theory: [
-      'Acid Brønsted là chất cho proton $H^+$; base Brønsted là chất nhận proton.',
-      'Một cặp acid–base liên hợp khác nhau đúng một proton; acid mất proton tạo base liên hợp.',
-      'Vai trò acid/base phụ thuộc phản ứng đang xét, không chỉ phụ thuộc việc công thức có H hay OH.',
-      'Nước và một số ion như $HCO_3^-$ có thể vừa cho vừa nhận proton trong các phản ứng khác nhau.'
-    ],
+    theory: chem11Qt08Theory,
     recognitionSigns: [
       'Phương trình có sự chuyển proton giữa hai chất.',
       'Đề hỏi chất nào cho/nhận $H^+$ hoặc yêu cầu ghép cặp liên hợp.',
@@ -504,12 +482,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'can-bang-nuoc-tinh-ph',
     description: 'Dùng tích số ion của nước, chuyển đổi pH và tính pH của acid/base mạnh trong các tình huống đơn giản.',
     exampleQuestionId: 'chem11-eq-q097',
-    theory: [
-      'Ở 25 °C, $K_w=[H^+][OH^-]=10^{-14}$; trong nước trung tính, $[H^+]=[OH^-]=10^{-7}$ M.',
-      '$pH=-\\lg[H^+]$ và $[H^+]=10^{-pH}$; nồng độ $H^+$ càng lớn thì pH càng nhỏ.',
-      'Với dung dịch base, tính $pOH=-\\lg[OH^-]$ rồi dùng $pH+pOH=14$ ở 25 °C.',
-      'Khi acid/base điện li hoàn toàn, phải xét hệ số tạo ion, sự pha loãng và lượng dư sau phản ứng trước khi lấy logarit.'
-    ],
+    theory: chem11Qt09Theory,
     recognitionSigns: [
       'Đề cho $[H^+]$, $[OH^-]$, $K_w$, pH hoặc pOH.',
       'Đề yêu cầu phân loại môi trường acid, base, trung tính.',
@@ -567,12 +540,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'chat-chi-thi-ph-thuc-tien',
     description: 'Đọc màu chỉ thị theo khoảng chuyển màu và vận dụng dữ liệu pH trong đất, nước, sức khỏe hoặc sinh trưởng sinh vật.',
     exampleQuestionId: 'chem11-eq-q109',
-    theory: [
-      'Chỉ thị acid–base đổi màu trong một khoảng pH đặc trưng; một màu thường không tương ứng duy nhất với một giá trị pH.',
-      'Quỳ tím dùng nhận biết định tính môi trường; chỉ thị vạn năng cho ước lượng pH gần đúng khi so với thang màu.',
-      'Kết hợp nhiều chỉ thị có thể thu hẹp khoảng pH bằng cách lấy giao các khoảng phù hợp với màu quan sát.',
-      'Thang pH là logarit: chênh lệch một đơn vị pH tương ứng nồng độ $H^+$ khác nhau 10 lần.'
-    ],
+    theory: chem11Qt10Theory,
     recognitionSigns: [
       'Đề cho màu của quỳ, phenolphthalein, methyl orange hoặc chỉ thị vạn năng.',
       'Đề kèm bảng khoảng chuyển màu và yêu cầu suy ra khoảng pH.',
@@ -623,12 +591,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'can-bang-ion-trong-nuoc-ung-dung',
     description: 'Biểu diễn cân bằng của Al³⁺, Fe³⁺, CO₃²⁻ với nước, dự đoán môi trường và giải thích dữ liệu hoặc hiện tượng thực tiễn.',
     exampleQuestionId: 'chem11-eq-q121',
-    theory: [
-      'Điện li tạo ion trong dung dịch; sau đó một số ion có thể tương tác thuận nghịch với nước. Hai quá trình không đồng nhất.',
-      'Trong mô hình giản lược, $Al^{3+}$ và $Fe^{3+}$ làm tăng $H^+$ qua cân bằng với nước nên dung dịch có xu hướng acid.',
-      '$CO_3^{2-}$ nhận proton từ nước: $CO_3^{2-}+H_2O\\rightleftharpoons HCO_3^-+OH^-$, làm dung dịch có xu hướng base.',
-      'Sự tạo hydroxide ít tan của aluminium hoặc iron(III) có liên hệ với keo tụ, kết tủa và sự phụ thuộc vào pH; cần diễn giải theo dữ liệu, không suy rộng thành phản ứng hoàn toàn.'
-    ],
+    theory: chem11Qt11Theory,
     recognitionSigns: [
       'Đề có các ion $Al^{3+}$, $Fe^{3+}$ hoặc $CO_3^{2-}$ trong nước.',
       'Đề hỏi môi trường acid/base dù công thức muối không chứa sẵn $H^+$ hoặc $OH^-$.',
@@ -686,12 +649,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'nguyen-tac-thao-tac-chuan-do-acid-base',
     description: 'Nhận diện vai trò dung dịch, phân biệt điểm tương đương–điểm kết thúc và thực hiện đúng thao tác với burette, pipette và chỉ thị.',
     exampleQuestionId: 'chem11-eq-q133',
-    theory: [
-      'Chuẩn độ xác định nồng độ chất phân tích bằng thể tích dung dịch chuẩn đã biết nồng độ cần để phản ứng theo đúng tỉ lượng.',
-      'Điểm tương đương là trạng thái tỉ lượng; điểm kết thúc là tín hiệu quan sát như sự đổi màu bền đầu tiên của chỉ thị.',
-      'Burette cấp thể tích biến đổi của dung dịch chuẩn; pipette bầu lấy một thể tích chính xác của mẫu; bình tam giác chứa mẫu trong khi chuẩn độ.',
-      'Thể tích burette đã dùng bằng số đọc cuối trừ số đọc đầu. Đọc ngang mắt, đúng mặt khum và nhớ thang burette tăng từ trên xuống.'
-    ],
+    theory: chem11Qt12Theory,
     recognitionSigns: [
       'Đề hỏi dung dịch chuẩn, chất phân tích, điểm tương đương hoặc điểm kết thúc.',
       'Có burette, pipette bầu, bình tam giác, chỉ thị và quy trình rửa–tráng–chuẩn độ.',
@@ -749,12 +707,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'xu-ly-so-lieu-chuan-do',
     description: 'Tính titre, chọn các lần đo phù hợp, nhận diện số liệu bất thường và báo cáo kết quả với độ chính xác hợp lí.',
     exampleQuestionId: 'chem11-eq-q145',
-    theory: [
-      'Titre của một lần chuẩn độ bằng số đọc cuối trừ số đọc đầu trên burette.',
-      'Lần chuẩn độ thô dùng để xác định vùng điểm kết thúc và thường không đưa vào trung bình định lượng.',
-      'Chỉ lấy trung bình các lần đo thỏa tiêu chí phù hợp được nêu trong quy trình; phải xem xét và giải thích giá trị bất thường.',
-      'Giá trị báo cáo phải có đơn vị và số chữ số phù hợp dữ liệu burette, không tạo độ chính xác giả.'
-    ],
+    theory: chem11Qt13Theory,
     recognitionSigns: [
       'Có bảng số đọc đầu–cuối, titre hoặc nhiều lần chuẩn độ.',
       'Đề cho tiêu chí chênh lệch tối đa và yêu cầu chọn các lần phù hợp.',
@@ -812,12 +765,7 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     slug: 'tinh-nong-do-tu-chuan-do',
     description: 'Dùng titre đại diện, số mol và tỉ lệ phương trình để tính nồng độ; xử lý hệ số khác 1:1, pha loãng và bảng số liệu.',
     exampleQuestionId: 'chem11-eq-q157',
-    theory: [
-      'Quy trình cốt lõi là: titre đại diện → mol dung dịch chuẩn → tỉ lệ mol phương trình → mol chất phân tích → nồng độ.',
-      'Với phản ứng $aA+bB\\rightarrow...$, tại điểm tương đương có $n_A/a=n_B/b$; không mặc định hai số mol bằng nhau.',
-      'Chỉ trong phản ứng 1:1 mới có thể rút gọn trực tiếp về dạng $C_AV_A=C_BV_B$ khi đơn vị thể tích nhất quán.',
-      'Nếu aliquot lấy từ dung dịch đã pha loãng, phải tính nồng độ dung dịch pha loãng trước rồi nhân hệ số pha loãng để suy mẫu ban đầu.'
-    ],
+    theory: chem11Qt14Theory,
     recognitionSigns: [
       'Đề cho nồng độ dung dịch chuẩn, titre và thể tích mẫu cần tìm nồng độ.',
       'Phương trình có hệ số 1:2 hoặc ion acid/base cho nhiều $H^+$/$OH^-$.',

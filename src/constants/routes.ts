@@ -8,6 +8,7 @@ export const ROUTES = {
   EXAM: '/exam',
   SUPPORT: '/support',
   PREMIUM: '/premium',
+  ABOUT: '/about',
   TEACHER: '/teacher',
   AFFILIATE: '/affiliate',
   QUESTION_TYPE_DETAIL: (questionTypeId: string) => `/question-types/${questionTypeId}`

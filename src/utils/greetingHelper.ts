@@ -133,15 +133,15 @@ export function getPersonalizedGreeting(
     const grade = useAppStore.getState().selectedGrade;
     const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
     if (subject === 'math') {
-      return `Chào ${name}! Thầy là Gia sư AI môn Toán ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+      return `Chào ${name}! Thầy là Gia sư môn Toán ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
     } else if (subject === 'chemistry') {
-      return `Chào ${name}! Thầy là Gia sư AI môn Hóa học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+      return `Chào ${name}! Thầy là Gia sư môn Hóa học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
     } else if (subject === 'physics') {
-      return `Chào ${name}! Thầy là Gia sư AI môn Vật lý ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+      return `Chào ${name}! Thầy là Gia sư môn Vật lý ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
     } else if (subject === 'biology') {
-      return `Chào ${name}! Thầy là Gia sư AI môn Sinh học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
+      return `Chào ${name}! Thầy là Gia sư môn Sinh học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
     } else {
-      return `Hello ${name}! Thầy là Gia sư AI môn Tiếng Anh ${gradeText}. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
+      return `Hello ${name}! Thầy là Gia sư môn Tiếng Anh ${gradeText}. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
     }
   }
 

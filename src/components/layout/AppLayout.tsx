@@ -178,6 +178,10 @@ export const AppLayout: React.FC = () => {
       document.title = `Góc Giáo Viên | ${brandName}`;
       return;
     }
+    if (path.startsWith(ROUTES.ABOUT)) {
+      document.title = `Giới Thiệu Nền Tảng | ${brandName}`;
+      return;
+    }
     if (path.startsWith(ROUTES.PREMIUM)) {
       document.title = `Nâng cấp Premium | ${brandName}`;
       return;
@@ -273,12 +277,8 @@ export const AppLayout: React.FC = () => {
       label: selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra',
       icon: Award
     },
-    { path: ROUTES.AFFILIATE, label: 'Góc Đối Tác', icon: TrendingUp },
-    {
-      path: ROUTES.SUPPORT,
-      label: 'Hỗ trợ & Góp ý',
-      icon: LifeBuoy
-    }
+    { path: ROUTES.ABOUT, label: 'Giới thiệu', icon: Sparkles },
+    { path: ROUTES.AFFILIATE, label: 'Góc Đối Tác', icon: TrendingUp }
   ];
 
   // Tính toán nhanh tiến độ tổng quát
@@ -298,6 +298,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';
+    if (path.startsWith('/about')) return 'Giới thiệu nền tảng';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';
     if (path.startsWith('/affiliate')) return 'Góc Đối Tác Affiliate';
     if (path.startsWith('/support')) return 'Hỗ trợ & Góp ý';
@@ -314,6 +315,20 @@ export const AppLayout: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(ROUTES.SUPPORT)}
+            aria-label="Trợ giúp"
+            className={cn(
+              "p-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 border",
+              location.pathname.startsWith(ROUTES.SUPPORT)
+                ? "bg-primary/10 text-primary border-primary/30"
+                : "bg-secondary/60 text-muted-foreground hover:text-foreground border-border/20"
+            )}
+          >
+            <LifeBuoy size={16} className="text-primary shrink-0" />
+            <span className="hidden sm:inline">Hỗ trợ</span>
+          </button>
+
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             aria-label={isSidebarOpen ? "Đóng menu điều hướng" : "Mở menu điều hướng"}
@@ -647,7 +662,22 @@ export const AppLayout: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4.5">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(ROUTES.SUPPORT)}
+              aria-label="Trợ giúp"
+              className={cn(
+                "px-3 py-1.5 text-xs font-extrabold rounded-2xl border transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95",
+                location.pathname.startsWith(ROUTES.SUPPORT)
+                  ? "bg-primary/12 text-primary border-primary/40 shadow-sm shadow-primary/5"
+                  : "bg-secondary/50 hover:bg-secondary border-border/40 text-muted-foreground hover:text-foreground"
+              )}
+              title="Trợ giúp"
+            >
+              <LifeBuoy size={16} className="text-primary shrink-0" />
+              <span>Trợ giúp</span>
+            </button>
+
             <div className="flex items-center gap-1.5 bg-secondary/40 backdrop-blur-sm px-3.5 py-2 rounded-2xl border border-border/20 shadow-sm">
               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Mastery:</span>
               <span className="text-xs font-black text-primary bg-primary/8 px-2 py-0.5 rounded-lg border border-primary/10">
