@@ -277,7 +277,6 @@ export const AppLayout: React.FC = () => {
       label: selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra',
       icon: Award
     },
-    { path: ROUTES.ABOUT, label: 'Giới thiệu', icon: Sparkles },
     { path: ROUTES.AFFILIATE, label: 'Góc Đối Tác', icon: TrendingUp }
   ];
 
@@ -310,7 +309,7 @@ export const AppLayout: React.FC = () => {
 
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/dashboard')}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.ABOUT)}>
           <img src="/logo.png" alt="ezonthi logo" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
         </div>
 
@@ -360,7 +359,7 @@ export const AppLayout: React.FC = () => {
         <div className={cn(
           "border-b border-border/40 hidden md:flex items-center justify-center cursor-pointer group",
           isSidebarCollapsed ? "p-4 h-20" : "px-4 py-4"
-        )} onClick={() => navigate('/dashboard')}>
+        )} onClick={() => navigate(ROUTES.ABOUT)}>
           {isSidebarCollapsed ? (
             <img src="/logo.png" alt="ezonthi logo" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           ) : (
