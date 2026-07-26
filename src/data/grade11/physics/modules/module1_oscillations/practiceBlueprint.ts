@@ -48,5 +48,61 @@ export const g11PhysicsModule1PracticeBlueprints: QuestionTypePracticeBlueprint[
       requiredRepresentations: ['equation', 'graph'],
       masteryHoldoutCount: 2
     }
+  },
+  {
+    questionTypeId: 'phy11-qt03',
+    subTypes: [
+      { id: 'phy11-qt03-st-state', name: 'Năng lượng tại một trạng thái', example: 'Tìm động năng, thế năng tại li độ x.', targetQuestionCount: 6 },
+      { id: 'phy11-qt03-st-conservation', name: 'Bảo toàn và chuyển hóa năng lượng', example: 'Tìm vận tốc hoặc vị trí từ bảo toàn cơ năng.', targetQuestionCount: 6 }
+    ],
+    coverage: {
+      targetQuestionCount: 12,
+      minimumQuestionsPerSubType: 3,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      requiredRepresentations: ['equation', 'graph'],
+      masteryHoldoutCount: 2
+    }
+  },
+  {
+    questionTypeId: 'phy11-qt04',
+    subTypes: [
+      { id: 'phy11-qt04-st-damped', name: 'Dao động tắt dần', example: 'Đọc đồ thị biên độ giảm và giải thích tổn hao.', targetQuestionCount: 6 },
+      { id: 'phy11-qt04-st-forced', name: 'Dao động cưỡng bức', example: 'Xác định tần số trạng thái ổn định.', targetQuestionCount: 6 }
+    ],
+    coverage: {
+      targetQuestionCount: 12,
+      minimumQuestionsPerSubType: 3,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      requiredRepresentations: ['text', 'graph'],
+      masteryHoldoutCount: 2
+    }
+  },
+  {
+    questionTypeId: 'phy11-qt05',
+    subTypes: [
+      { id: 'phy11-qt05-st-condition', name: 'Điều kiện và đường cong cộng hưởng', example: 'Đọc đồ thị biên độ–tần số.', targetQuestionCount: 6 },
+      { id: 'phy11-qt05-st-application', name: 'Lợi ích và tác hại', example: 'Đề xuất cách hạn chế cộng hưởng có hại.', targetQuestionCount: 6 }
+    ],
+    coverage: {
+      targetQuestionCount: 12,
+      minimumQuestionsPerSubType: 3,
+      requiredPracticeRoles: ['near_transfer', 'misconception_check', 'far_transfer'],
+      requiredRepresentations: ['graph', 'text'],
+      masteryHoldoutCount: 2
+    }
+  },
+  {
+    questionTypeId: 'phy11-qt06',
+    subTypes: [
+      { id: 'phy11-qt06-st-design', name: 'Thiết kế và quy trình đo', example: 'Chọn dụng cụ và các bước đo chu kì.', targetQuestionCount: 6 },
+      { id: 'phy11-qt06-st-data', name: 'Xử lí dữ liệu thực nghiệm', example: 'Tính chu kì trung bình từ bảng số liệu.', targetQuestionCount: 6 }
+    ],
+    coverage: {
+      targetQuestionCount: 12,
+      minimumQuestionsPerSubType: 3,
+      requiredPracticeRoles: ['guided', 'representation_switch', 'far_transfer'],
+      requiredRepresentations: ['experiment', 'table'],
+      masteryHoldoutCount: 2
+    }
   }
 ];

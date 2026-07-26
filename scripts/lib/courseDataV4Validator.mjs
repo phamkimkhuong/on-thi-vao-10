@@ -64,7 +64,11 @@ export const validateCourseDataV4 = async ({
   courseDirectory,
   courseId,
   expectedLessonCount,
-  expectedCurriculumModuleCount
+  expectedCurriculumModuleCount,
+  expectedOfficialRequirementCount,
+  expectedOutcomeCount,
+  expectedQuestionTypeCount,
+  expectedPracticeTargetCount
 }) => {
   const errors = [];
   const warnings = [];
@@ -226,6 +230,14 @@ export const validateCourseDataV4 = async ({
   if (lessons.length !== expectedLessonCount) {
     errors.push(`Mục lục phải có ${expectedLessonCount} bài, hiện có ${lessons.length}.`);
   }
+  if (
+    expectedOfficialRequirementCount !== undefined &&
+    officialRequirements.length !== expectedOfficialRequirementCount
+  ) {
+    errors.push(
+      `Phải có ${expectedOfficialRequirementCount} yêu cầu chính thức, hiện có ${officialRequirements.length}.`
+    );
+  }
   const curriculumModuleIds = new Set(lessons.map(item => item.moduleId));
   if (curriculumModuleIds.size !== expectedCurriculumModuleCount) {
     errors.push(
@@ -254,6 +266,8 @@ export const validateCourseDataV4 = async ({
   const requirementById = new Map(officialRequirements.map(item => [item.id, item]));
   const outcomeManifestById = new Map(outcomeManifest.map(item => [item.outcomeId, item]));
   const blueprintByTypeId = new Map(practiceBlueprints.map(item => [item.questionTypeId, item]));
+  const sameMembers = (left = [], right = []) =>
+    left.length === right.length && left.every(item => right.includes(item));
 
   for (const lesson of lessons) {
     for (const sourceId of lesson.sourceIds) {
@@ -283,20 +297,40 @@ export const validateCourseDataV4 = async ({
 
   for (const requirement of officialRequirements) {
     if (requirement.courseId !== courseId) errors.push(`${requirement.id}: courseId không khớp.`);
+    if (!manifestById.has(requirement.moduleId)) {
+      errors.push(`${requirement.id}: moduleId ${requirement.moduleId} không tồn tại.`);
+    }
     if (!Array.isArray(requirement.sourceLocators) || requirement.sourceLocators.length === 0) {
       errors.push(`${requirement.id}: thiếu sourceLocators.`);
     }
     for (const lessonId of requirement.lessonIds ?? []) {
-      if (!lessonById.has(lessonId)) errors.push(`${requirement.id}: lesson ${lessonId} không tồn tại.`);
+      const mappedLesson = lessonById.get(lessonId);
+      if (!mappedLesson) errors.push(`${requirement.id}: lesson ${lessonId} không tồn tại.`);
+      else if (mappedLesson.moduleId !== requirement.moduleId) {
+        errors.push(`${requirement.id}: lesson ${lessonId} thuộc module khác.`);
+      }
     }
     for (const outcomeId of requirement.implementedOutcomeIds ?? []) {
       if (!outcomeById.has(outcomeId)) errors.push(`${requirement.id}: outcome ${outcomeId} không tồn tại.`);
     }
   }
 
+  for (const lesson of lessons) {
+    if (!officialRequirements.some(requirement => requirement.lessonIds?.includes(lesson.id))) {
+      errors.push(`${lesson.id}: chưa được yêu cầu chính thức nào bao phủ.`);
+    }
+  }
+
+  if (expectedOutcomeCount !== undefined && outcomes.length !== expectedOutcomeCount) {
+    errors.push(`Phải có ${expectedOutcomeCount} outcome, hiện có ${outcomes.length}.`);
+  }
   for (const outcome of outcomes) {
-    if (!topicById.has(outcome.topicId)) errors.push(`${outcome.id}: topicId không tồn tại.`);
+    const mappedTopic = topicById.get(outcome.topicId);
+    if (!mappedTopic) errors.push(`${outcome.id}: topicId không tồn tại.`);
     if (!outcomeManifestById.has(outcome.id)) errors.push(`${outcome.id}: thiếu outcome manifest.`);
+    if (!Array.isArray(outcome.questionTypeIds) || outcome.questionTypeIds.length === 0) {
+      errors.push(`${outcome.id}: chưa được gắn với dạng bài nào.`);
+    }
     for (const prerequisiteId of outcome.prerequisiteOutcomeIds ?? []) {
       if (!outcomeById.has(prerequisiteId)) {
         errors.push(`${outcome.id}: prerequisite ${prerequisiteId} không tồn tại.`);
@@ -307,11 +341,25 @@ export const validateCourseDataV4 = async ({
         errors.push(`${outcome.id}: misconception ${misconceptionId} không tồn tại.`);
       }
     }
+    for (const questionTypeId of outcome.questionTypeIds ?? []) {
+      if (!typeById.has(questionTypeId)) {
+        errors.push(`${outcome.id}: questionType ${questionTypeId} không tồn tại.`);
+      }
+    }
   }
 
   for (const entry of outcomeManifest) {
-    if (!outcomeById.has(entry.outcomeId)) {
+    const runtimeOutcome = outcomeById.get(entry.outcomeId);
+    if (!runtimeOutcome) {
       errors.push(`${entry.outcomeId}: manifest không có outcome runtime.`);
+    } else {
+      const runtimeTopic = topicById.get(runtimeOutcome.topicId);
+      if (runtimeTopic?.moduleId !== entry.moduleId) {
+        errors.push(`${entry.outcomeId}: moduleId trong manifest không khớp learning path.`);
+      }
+      if (runtimeOutcome.scope !== entry.scope) {
+        errors.push(`${entry.outcomeId}: scope trong manifest không khớp learning path.`);
+      }
     }
     for (const requirementId of entry.officialRequirementIds ?? []) {
       const requirement = requirementById.get(requirementId);
@@ -321,31 +369,137 @@ export const validateCourseDataV4 = async ({
       }
     }
     for (const lessonId of entry.lessonIds ?? []) {
-      if (!lessonById.has(lessonId)) errors.push(`${entry.outcomeId}: lesson ${lessonId} không tồn tại.`);
+      const mappedLesson = lessonById.get(lessonId);
+      if (!mappedLesson) errors.push(`${entry.outcomeId}: lesson ${lessonId} không tồn tại.`);
+      else if (mappedLesson.moduleId !== entry.moduleId) {
+        errors.push(`${entry.outcomeId}: lesson ${lessonId} thuộc module khác.`);
+      }
     }
   }
 
+  if (
+    expectedQuestionTypeCount !== undefined &&
+    questionTypes.length !== expectedQuestionTypeCount
+  ) {
+    errors.push(
+      `Phải có ${expectedQuestionTypeCount} dạng bài, hiện có ${questionTypes.length}.`
+    );
+  }
+  const coverageGaps = [];
   for (const type of questionTypes) {
     if (type.courseId !== courseId) errors.push(`${type.id}: courseId không khớp.`);
     if (!manifestById.has(type.moduleId)) errors.push(`${type.id}: moduleId không tồn tại.`);
-    if (!topicById.has(type.topicId)) errors.push(`${type.id}: topicId không tồn tại.`);
+    const mappedTopic = topicById.get(type.topicId);
+    if (!mappedTopic) errors.push(`${type.id}: topicId không tồn tại.`);
+    else if (mappedTopic.moduleId !== type.moduleId) {
+      errors.push(`${type.id}: topic ${type.topicId} thuộc module khác.`);
+    }
     if (!blueprintByTypeId.has(type.id)) errors.push(`${type.id}: thiếu practice blueprint.`);
     if (!Array.isArray(type.solvingSteps) || type.solvingSteps.length < 3) {
       errors.push(`${type.id}: cần ít nhất 3 bước giải.`);
     }
+    if (!Array.isArray(type.outcomeIds) || type.outcomeIds.length === 0) {
+      errors.push(`${type.id}: chưa được gắn với outcome nào.`);
+    }
     for (const lessonId of type.lessonIds ?? []) {
-      if (!lessonById.has(lessonId)) errors.push(`${type.id}: lesson ${lessonId} không tồn tại.`);
+      const mappedLesson = lessonById.get(lessonId);
+      if (!mappedLesson) errors.push(`${type.id}: lesson ${lessonId} không tồn tại.`);
+      else if (mappedLesson.moduleId !== type.moduleId) {
+        errors.push(`${type.id}: lesson ${lessonId} thuộc module khác.`);
+      }
     }
     for (const outcomeId of type.outcomeIds ?? []) {
-      if (!outcomeById.has(outcomeId)) errors.push(`${type.id}: outcome ${outcomeId} không tồn tại.`);
+      const mappedOutcome = outcomeById.get(outcomeId);
+      if (!mappedOutcome) {
+        errors.push(`${type.id}: outcome ${outcomeId} không tồn tại.`);
+      } else {
+        if (!mappedOutcome.questionTypeIds?.includes(type.id)) {
+          errors.push(`${type.id}: mapping hai chiều với ${outcomeId} chưa đồng bộ.`);
+        }
+        if (topicById.get(mappedOutcome.topicId)?.moduleId !== type.moduleId) {
+          errors.push(`${type.id}: outcome ${outcomeId} thuộc module khác.`);
+        }
+      }
     }
     const blueprint = blueprintByTypeId.get(type.id);
     const typeQuestions = questions.filter(question => question.questionTypeId === type.id);
-    if (blueprint && typeQuestions.length < blueprint.coverage.targetQuestionCount) {
-      warnings.push(
-        `${type.id}: ngân hàng mới có ${typeQuestions.length}/${blueprint.coverage.targetQuestionCount} câu.`
+    if (blueprint) {
+      const typeSubTypes = type.subTypes ?? [];
+      const blueprintSubTypes = blueprint.subTypes ?? [];
+      if (!sameMembers(typeSubTypes.map(item => item.id), blueprintSubTypes.map(item => item.id))) {
+        errors.push(`${type.id}: danh sách subtype giữa dạng bài và blueprint không khớp.`);
+      }
+      for (const subType of typeSubTypes) {
+        const blueprintSubType = blueprintSubTypes.find(item => item.id === subType.id);
+        if (
+          blueprintSubType &&
+          (blueprintSubType.name !== subType.name ||
+            blueprintSubType.targetQuestionCount !== subType.targetQuestionCount)
+        ) {
+          errors.push(`${type.id}: subtype ${subType.id} không đồng bộ với blueprint.`);
+        }
+      }
+      const coverage = type.practiceCoverage;
+      if (!coverage) {
+        errors.push(`${type.id}: thiếu practiceCoverage.`);
+      } else if (
+        coverage.targetQuestionCount !== blueprint.coverage.targetQuestionCount ||
+        coverage.minimumQuestionsPerSubType !== blueprint.coverage.minimumQuestionsPerSubType ||
+        coverage.masteryHoldoutCount !== blueprint.coverage.masteryHoldoutCount ||
+        !sameMembers(
+          coverage.requiredPracticeRoles,
+          blueprint.coverage.requiredPracticeRoles
+        ) ||
+        !sameMembers(
+          coverage.requiredRepresentations,
+          blueprint.coverage.requiredRepresentations
+        )
+      ) {
+        errors.push(`${type.id}: practiceCoverage không đồng bộ với blueprint.`);
+      }
+      const subTypeTarget = blueprintSubTypes.reduce(
+        (total, item) => total + (item.targetQuestionCount ?? 0),
+        0
       );
+      if (subTypeTarget !== blueprint.coverage.targetQuestionCount) {
+        errors.push(
+          `${type.id}: tổng chỉ tiêu subtype ${subTypeTarget} không bằng chỉ tiêu dạng bài ${blueprint.coverage.targetQuestionCount}.`
+        );
+      }
+      if (typeQuestions.length < blueprint.coverage.targetQuestionCount) {
+        coverageGaps.push({
+          questionTypeId: type.id,
+          current: typeQuestions.length,
+          target: blueprint.coverage.targetQuestionCount
+        });
+      }
     }
+  }
+
+  for (const blueprint of practiceBlueprints) {
+    if (!typeById.has(blueprint.questionTypeId)) {
+      errors.push(`${blueprint.questionTypeId}: blueprint không có dạng bài tương ứng.`);
+    }
+  }
+
+  const totalPracticeTarget = practiceBlueprints.reduce(
+    (total, blueprint) => total + (blueprint.coverage?.targetQuestionCount ?? 0),
+    0
+  );
+  if (
+    expectedPracticeTargetCount !== undefined &&
+    totalPracticeTarget !== expectedPracticeTargetCount
+  ) {
+    errors.push(
+      `Chỉ tiêu ngân hàng phải là ${expectedPracticeTargetCount} câu, hiện là ${totalPracticeTarget}.`
+    );
+  }
+  if (coverageGaps.length > 0) {
+    const currentQuestionCount = coverageGaps.reduce((total, gap) => total + gap.current, 0);
+    const targetQuestionCount = coverageGaps.reduce((total, gap) => total + gap.target, 0);
+    warnings.push(
+      `Độ phủ practice: ${coverageGaps.length}/${questionTypes.length} dạng chưa đủ, hiện có ${currentQuestionCount}/${targetQuestionCount} câu trong các dạng này.`
+    );
   }
 
   for (const question of questions) {
@@ -406,6 +560,7 @@ export const validateCourseDataV4 = async ({
       officialRequirements: officialRequirements.length,
       outcomes: outcomes.length,
       questionTypes: questionTypes.length,
+      practiceTarget: totalPracticeTarget,
       practiceQuestions: questions.length,
       solutions: solutions.length
     }

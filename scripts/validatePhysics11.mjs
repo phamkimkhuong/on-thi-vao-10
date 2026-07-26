@@ -7,7 +7,11 @@ const result = await validateCourseDataV4({
   courseDirectory: path.join(process.cwd(), 'src', 'data', 'grade11', 'physics'),
   courseId: 'grade11:physics',
   expectedLessonCount: 26,
-  expectedCurriculumModuleCount: 4
+  expectedCurriculumModuleCount: 4,
+  expectedOfficialRequirementCount: 30,
+  expectedOutcomeCount: 31,
+  expectedQuestionTypeCount: 31,
+  expectedPracticeTargetCount: 372
 });
 
 console.log('📊 Thống kê:', result.stats);
