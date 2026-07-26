@@ -1,4 +1,5 @@
-import { db } from './firebase';
+import { db, functions } from './firebase';
+import { httpsCallable } from 'firebase/functions';
 import { 
   collection, 
   doc, 
@@ -6,7 +7,6 @@ import {
   getDocs, 
   setDoc, 
   updateDoc,
-  addDoc, 
   query, 
   where, 
   orderBy
@@ -168,33 +168,34 @@ export const affiliateService = {
   },
 
   /**
-   * Gửi yêu cầu rút tiền hoa hồng về ngân hàng
+   * Gửi yêu cầu rút tiền hoa hồng về ngân hàng (Gửi qua Cloud Function với Atomic Transaction)
    */
-  async requestPayout(sellerUid: string, amount: number, bankAccount: NonNullable<AffiliateWallet['bankAccount']>): Promise<void> {
-    if (amount < 100000) {
-      throw new Error('Số tiền rút tối thiểu là 100.000 VNĐ.');
-    }
+  async requestPayout(_sellerUid: string, amount: number, bankAccount: NonNullable<AffiliateWallet['bankAccount']>): Promise<void> {
+    const requestPayoutFn = httpsCallable<
+      { amount: number; bankAccount: NonNullable<AffiliateWallet['bankAccount']> },
+      { success: boolean; message: string }
+    >(functions, 'requestPayout');
 
-    const wallet = await this.getWallet(sellerUid);
-    if (wallet.balance < amount) {
-      throw new Error('Số dư khả dụng không đủ để thực hiện yêu cầu rút tiền.');
-    }
-
-    // Tạo yêu cầu rút tiền
-    await addDoc(collection(db, 'payoutRequests'), {
-      sellerUid,
+    await requestPayoutFn({
       amount,
-      bankAccount,
-      status: 'pending',
-      createdAt: new Date().toISOString()
+      bankAccount
     });
+  },
 
-    // Trừ số dư khả dụng và tăng số dư chờ quyết toán
-    const walletRef = doc(db, 'affiliateWallets', sellerUid);
-    await setDoc(walletRef, {
-      balance: wallet.balance - amount,
-      pendingBalance: (wallet.pendingBalance || 0) + amount
-    }, { merge: true });
+  /**
+   * [ADMIN/TEACHER] Duyệt hoặc Từ chối đơn rút tiền của Seller qua Cloud Function
+   */
+  async processPayoutRequest(requestId: string, action: 'approve' | 'reject', rejectReason?: string): Promise<void> {
+    const processFn = httpsCallable<
+      { requestId: string; action: 'approve' | 'reject'; rejectReason?: string },
+      { success: boolean; message: string }
+    >(functions, 'processPayoutRequest');
+
+    await processFn({
+      requestId,
+      action,
+      rejectReason
+    });
   },
 
   /**

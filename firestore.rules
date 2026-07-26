@@ -121,15 +121,26 @@ service cloud.firestore {
     }
 
     match /affiliateWallets/{sellerUid} {
-      allow get, create, update: if isTeacher() || (signedIn() && request.auth.uid == sellerUid);
+      allow get: if isTeacher() || (signedIn() && request.auth.uid == sellerUid);
       allow list: if isTeacher();
+      allow create: if isTeacher() || (
+        signedIn()
+        && request.auth.uid == sellerUid
+        && request.resource.data.balance == 0
+        && request.resource.data.totalEarned == 0
+        && request.resource.data.pendingBalance == 0
+      );
+      allow update: if isTeacher() || (
+        signedIn()
+        && request.auth.uid == sellerUid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['bankAccount'])
+      );
       allow delete: if false;
     }
 
     match /payoutRequests/{requestId} {
       allow get, list: if isTeacher() || (signedIn() && resource.data.sellerUid == request.auth.uid);
-      allow create: if signedIn() && request.resource.data.sellerUid == request.auth.uid;
-      allow update, delete: if isTeacher();
+      allow write: if isTeacher();
     }
 
     match /student_profiles/{userId} {

@@ -48,8 +48,8 @@ export const g10PhysicsModule0GapFillQuestions: Question[] = [
   },
   {
     id: 'phy10-m0-q111', subjectId: 'physics', topicId: 'phy10-t0', questionTypeId: 'phy10-qt5',
-    content: 'Một bạn ghi $t=(2{,}347\pm0{,}1)$ s. Nhận xét và cách sửa phù hợp nhất là', responseType: 'single_choice',
-    options: ['A. Đúng vì càng nhiều chữ số càng chính xác.', 'B. Sai vì giá trị trung bình chưa cùng hàng với sai số; nên ghi $(2{,}3\pm0{,}1)$ s.', 'C. Sai vì phải bỏ đơn vị.', 'D. Sai vì phải ghi $(2\pm1)$ s.'],
+    content: 'Một bạn ghi $t=(2{,}347\\pm0{,}1)$ s. Nhận xét và cách sửa phù hợp nhất là', responseType: 'single_choice',
+    options: ['A. Đúng vì càng nhiều chữ số càng chính xác.', 'B. Sai vì giá trị trung bình chưa cùng hàng với sai số; nên ghi $(2{,}3\\pm0{,}1)$ s.', 'C. Sai vì phải bỏ đơn vị.', 'D. Sai vì phải ghi $(2\\pm1)$ s.'],
     correctAnswer: 'B', acceptedAnswers: ['B', 'b'], validatorType: 'choice', difficulty: 'medium', sourceType: 'manual',
     outcomeIds: ['PHY10-M0-O06'], competency: 'physical_cognition', cognitiveLevel: 'application', estimatedSeconds: 55,
     subTypeId: 'phy10-qt5-st4', practiceRole: 'misconception_check', representationType: 'equation'
@@ -58,7 +58,7 @@ export const g10PhysicsModule0GapFillQuestions: Question[] = [
   {
     id: 'phy10-m0-q112', subjectId: 'physics', topicId: 'phy10-t0', questionTypeId: 'phy10-qt6',
     stimulus: { id: 'phy10-m0-st112', title: 'Đo bán kính hình tròn', dataTable: { caption: 'Kết quả đo trực tiếp', columns: [{ key: 'quantity', label: 'Đại lượng' }, { key: 'value', label: 'Giá trị', unit: 'cm' }, { key: 'error', label: 'Sai số', unit: 'cm' }], rows: [{ quantity: 'r', value: 10.0, error: 0.2 }] } },
-    content: 'Với $S=\pi r^2$, sai số tỉ đối gần đúng của diện tích bằng bao nhiêu phần trăm?', responseType: 'short_answer',
+    content: 'Với $S=\\pi r^2$, sai số tỉ đối gần đúng của diện tích bằng bao nhiêu phần trăm?', responseType: 'short_answer',
     correctAnswer: '4', acceptedAnswers: ['4', '4%', '4.0', '4,0'], validatorType: 'exact', difficulty: 'medium', sourceType: 'manual',
     outcomeIds: ['PHY10-M0-O07'], competency: 'physical_cognition', cognitiveLevel: 'application', estimatedSeconds: 70,
     subTypeId: 'phy10-qt6-st3', practiceRole: 'representation_switch', representationType: 'table'

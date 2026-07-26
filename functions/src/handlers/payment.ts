@@ -348,3 +348,182 @@ export const grantPremiumByEmail = onCall({
     studentName: userData.name || "Học sinh",
   };
 });
+
+/**
+ * 💸 Yêu cầu rút tiền hoa hồng (Khóa & trừ balance khả dụng, chuyển sang pendingBalance qua Transaction)
+ */
+export const requestPayout = onCall({
+  cors: true,
+}, async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Bạn cần đăng nhập để thực hiện yêu cầu rút tiền.");
+  }
+
+  const sellerUid = request.auth.uid;
+  const amount = Number(request.data?.amount);
+  const bankAccount = request.data?.bankAccount;
+
+  if (!amount || isNaN(amount) || amount < 100000) {
+    throw new HttpsError("invalid-argument", "Số tiền rút tối thiểu là 100.000 VNĐ.");
+  }
+
+  if (
+    !bankAccount ||
+    typeof bankAccount.bankName !== "string" ||
+    typeof bankAccount.accountNumber !== "string" ||
+    typeof bankAccount.accountHolder !== "string" ||
+    !bankAccount.bankName.trim() ||
+    !bankAccount.accountNumber.trim() ||
+    !bankAccount.accountHolder.trim()
+  ) {
+    throw new HttpsError("invalid-argument", "Vui lòng cung cấp đầy đủ thông tin tài khoản ngân hàng.");
+  }
+
+  const walletRef = db.collection("affiliateWallets").doc(sellerUid);
+  const payoutRef = db.collection("payoutRequests").doc();
+
+  return await db.runTransaction(async (transaction) => {
+    const walletDoc = await transaction.get(walletRef);
+    if (!walletDoc.exists) {
+      throw new HttpsError("not-found", "Ví hoa hồng của bạn chưa được khởi tạo.");
+    }
+
+    const walletData = walletDoc.data() || {};
+    const currentBalance = Number(walletData.balance || 0);
+    const currentPending = Number(walletData.pendingBalance || 0);
+
+    if (currentBalance < amount) {
+      throw new HttpsError("failed-precondition", "Số dư khả dụng không đủ để thực hiện yêu cầu rút tiền.");
+    }
+
+    const newBalance = currentBalance - amount;
+    const newPendingBalance = currentPending + amount;
+
+    // Tạm giữ tiền: trừ balance khả dụng, tăng pendingBalance
+    transaction.update(walletRef, {
+      balance: newBalance,
+      pendingBalance: newPendingBalance,
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+
+    // Tạo đơn yêu cầu rút tiền với trạng thái 'pending'
+    transaction.set(payoutRef, {
+      sellerUid,
+      amount,
+      bankAccount: {
+        bankName: bankAccount.bankName.trim(),
+        accountNumber: bankAccount.accountNumber.trim(),
+        accountHolder: bankAccount.accountHolder.trim(),
+      },
+      status: "pending",
+      createdAt: FieldValue.serverTimestamp(),
+    });
+
+    return {
+      success: true,
+      payoutRequestId: payoutRef.id,
+      newBalance,
+      newPendingBalance,
+      message: "Yêu cầu rút tiền đã được gửi thành công và đang chờ xét duyệt.",
+    };
+  });
+});
+
+/**
+ * 🏦 Xử lý đơn rút tiền (Admin/Giáo viên Duyệt hoặc Từ chối qua Transaction)
+ */
+export const processPayoutRequest = onCall({
+  cors: true,
+}, async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Yêu cầu đăng nhập.");
+  }
+
+  const callerUid = request.auth.uid;
+  const isBootstrap = callerUid === "hzSKwkaroTR1LKcXp09E5wL7F6f1";
+  let isAuthorizedTeacher = isBootstrap;
+
+  if (!isAuthorizedTeacher) {
+    const teacherDoc = await db.collection("teachers").doc(callerUid).get();
+    if (
+      teacherDoc.exists &&
+      teacherDoc.data()?.active === true &&
+      teacherDoc.data()?.role === "teacher"
+    ) {
+      isAuthorizedTeacher = true;
+    }
+  }
+
+  if (!isAuthorizedTeacher) {
+    throw new HttpsError("permission-denied", "Chỉ giáo viên mới có quyền duyệt yêu cầu rút tiền.");
+  }
+
+  const { requestId, action, rejectReason } = request.data || {};
+  if (!requestId || (action !== "approve" && action !== "reject")) {
+    throw new HttpsError("invalid-argument", "Thiếu ID yêu cầu hoặc hành động không hợp lệ.");
+  }
+
+  const payoutRef = db.collection("payoutRequests").doc(requestId);
+
+  return await db.runTransaction(async (transaction) => {
+    const payoutDoc = await transaction.get(payoutRef);
+    if (!payoutDoc.exists) {
+      throw new HttpsError("not-found", "Không tìm thấy yêu cầu rút tiền.");
+    }
+
+    const payoutData = payoutDoc.data() || {};
+    if (payoutData.status !== "pending") {
+      throw new HttpsError("failed-precondition", `Yêu cầu này đã được xử lý trước đó (Trạng thái: ${payoutData.status}).`);
+    }
+
+    const sellerUid = payoutData.sellerUid;
+    const amount = Number(payoutData.amount || 0);
+    const walletRef = db.collection("affiliateWallets").doc(sellerUid);
+    const walletDoc = await transaction.get(walletRef);
+
+    if (!walletDoc.exists) {
+      throw new HttpsError("not-found", "Ví hoa hồng của đối tác không tồn tại.");
+    }
+
+    const walletData = walletDoc.data() || {};
+    const currentPending = Number(walletData.pendingBalance || 0);
+    const currentBalance = Number(walletData.balance || 0);
+
+    const newPendingBalance = Math.max(0, currentPending - amount);
+
+    if (action === "approve") {
+      // Admin đã chuyển khoản thành công -> Trừ pendingBalance
+      transaction.update(walletRef, {
+        pendingBalance: newPendingBalance,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+
+      transaction.update(payoutRef, {
+        status: "approved",
+        processedBy: callerUid,
+        processedAt: FieldValue.serverTimestamp(),
+      });
+
+      return { success: true, message: "Đã duyệt yêu cầu rút tiền thành công." };
+    } else {
+      // Admin từ chối -> Hoàn tiền lại số dư khả dụng (balance) cho User
+      const newBalance = currentBalance + amount;
+
+      transaction.update(walletRef, {
+        balance: newBalance,
+        pendingBalance: newPendingBalance,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+
+      transaction.update(payoutRef, {
+        status: "rejected",
+        rejectReason: rejectReason || "Thông tin rút tiền không hợp lệ.",
+        processedBy: callerUid,
+        processedAt: FieldValue.serverTimestamp(),
+      });
+
+      return { success: true, message: "Đã từ chối và hoàn tiền lại ví đối tác." };
+    }
+  });
+});
+
