@@ -91,6 +91,11 @@ export const QuestionTypeDetail: React.FC = () => {
   const outcomes = getLearningOutcomes(selectedGrade, routeSubject);
   const currentOutcome = outcomes.find(o => o.questionTypeIds.includes(detail?.id || ''));
   const textbookData = currentOutcome?.textbook;
+  const requiresTheoryCompletion =
+    selectedGrade === 'grade11' &&
+    routeSubject === 'physics' &&
+    Boolean(detail?.theory?.length);
+  const isPracticeLockedByTheory = requiresTheoryCompletion && !showLessonCompletedMsg;
 
   useEffect(() => {
     if (!detail) return;
@@ -670,17 +675,29 @@ export const QuestionTypeDetail: React.FC = () => {
                   <LockKeyhole size={16} /> Đăng nhập để luyện tập
                 </Button>
               ) : (
-                <Button
-                  onClick={() => navigate(`/practice/${detail.id}`)}
-                  className={cn(
-                    "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg",
-                    currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
-                      currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
-                        'bg-purple-600 hover:bg-purple-700 text-white'
+                <>
+                  <Button
+                    disabled={isPracticeLockedByTheory}
+                    onClick={() => navigate(`/practice/${detail.id}`)}
+                    className={cn(
+                      "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg",
+                      currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
+                        currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
+                          'bg-purple-600 hover:bg-purple-700 text-white'
+                    )}
+                  >
+                    {isPracticeLockedByTheory ? (
+                      <><LockKeyhole size={16} /> Học xong lý thuyết để mở khóa</>
+                    ) : (
+                      <><PlayCircle size={16} /> Bắt đầu Luyện tập ngay</>
+                    )}
+                  </Button>
+                  {isPracticeLockedByTheory && (
+                    <p className="text-[10px] font-semibold leading-relaxed text-muted-foreground text-center">
+                      Xem đủ các phần lý thuyết, nhận dạng, phương pháp và ví dụ trước khi làm bài.
+                    </p>
                   )}
-                >
-                  <PlayCircle size={16} /> Bắt đầu Luyện tập ngay
-                </Button>
+                </>
               )}
 
               {requiresLoginForPractice && (
@@ -733,6 +750,7 @@ export const QuestionTypeDetail: React.FC = () => {
           </Button>
         ) : (
           <Button
+            disabled={isPracticeLockedByTheory}
             onClick={() => navigate(`/practice/${detail.id}`)}
             className={cn(
               "font-bold text-xs py-2.5 px-4 shrink-0 shadow-md text-white active:scale-95 transition-transform",
@@ -741,7 +759,7 @@ export const QuestionTypeDetail: React.FC = () => {
                   'bg-purple-600 hover:bg-purple-700'
             )}
           >
-            Luyện tập ngay
+            {isPracticeLockedByTheory ? 'Học xong để mở khóa' : 'Luyện tập ngay'}
           </Button>
         )}
       </div>

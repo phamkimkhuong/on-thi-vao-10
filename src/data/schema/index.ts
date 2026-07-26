@@ -26,5 +26,9 @@ export type {
   OfficialRequirement,
   OutcomeManifestEntry,
   SubjectRuntimeData,
-  TheoryBlock
+  TheoryBlock,
+  TheoryCheckpoint,
+  TheoryFormula,
+  TheoryFormulaVariable,
+  TheoryWorkedExample
 } from './types';

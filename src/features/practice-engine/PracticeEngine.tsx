@@ -10,7 +10,7 @@ import { Button } from '../../components/ui/button';
 import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 
 import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '../../types';
-import { AlertTriangle, Sparkles } from 'lucide-react';
+import { AlertTriangle, BookOpenCheck, Sparkles } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId, getSubjectName } from '../../utils/subject';
@@ -1097,6 +1097,40 @@ export const PracticeEngine: React.FC = () => {
         isPremium={isPremium}
         questionTypeId={questionTypeId}
       />
+    );
+  }
+
+  const requestedQuestionType = questionTypeId
+    ? currentQuestionTypes.find(type => type.id === questionTypeId)
+    : undefined;
+  const requiresPhysics11Theory =
+    selectedGrade === 'grade11' &&
+    routeSubject === 'physics' &&
+    Boolean(requestedQuestionType?.theory?.length);
+  const hasCompletedTheory = questionTypeId
+    ? storageService.getReadLessons(user?.uid || 'guest').includes(questionTypeId)
+    : true;
+
+  if (requiresPhysics11Theory && !hasCompletedTheory && questionTypeId) {
+    return (
+      <div className="mx-auto max-w-lg space-y-4 px-4 py-10 text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+          <BookOpenCheck size={28} />
+        </div>
+        <h3 className="text-lg font-black text-foreground">
+          Hoàn thành bài học trước khi luyện tập
+        </h3>
+        <p className="text-xs font-semibold leading-relaxed text-muted-foreground">
+          Bài giảng đã có sẵn trên nền tảng, gồm định nghĩa, công thức, điều kiện áp dụng,
+          ví dụ và câu tự kiểm tra. Bạn không cần mở thêm tài liệu ở trang khác.
+        </p>
+        <Button
+          onClick={() => navigate(`/question-types/${questionTypeId}`)}
+          className="bg-cyan-600 text-xs font-bold text-white hover:bg-cyan-700"
+        >
+          <BookOpenCheck size={16} /> Quay lại học lý thuyết
+        </Button>
+      </div>
     );
   }
 

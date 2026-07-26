@@ -11,7 +11,9 @@ const result = await validateCourseDataV4({
   expectedOfficialRequirementCount: 30,
   expectedOutcomeCount: 31,
   expectedQuestionTypeCount: 31,
-  expectedPracticeTargetCount: 372
+  expectedPracticeTargetCount: 372,
+  expectedTheoryLessonCount: 26,
+  expectedTheoryQuestionTypeCount: 31
 });
 
 console.log('📊 Thống kê:', result.stats);

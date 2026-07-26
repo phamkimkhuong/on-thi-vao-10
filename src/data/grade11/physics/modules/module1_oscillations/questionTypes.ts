@@ -14,9 +14,6 @@ export const g11PhysicsModule1QuestionTypes: CourseQuestionType[] = [
     difficulty: 'easy',
     examFrequency: 'high',
     recognitionSigns: ['Đề cho phương trình x = A cos(omega t + phi) và yêu cầu tìm A, T, f, omega, phi.'],
-    theory: [
-      '**1. Phương trình li độ:**\n$$x = A \\cos(\\omega t + \\varphi)$$\nTrong đó:\n- $x$: Li độ (cm hoặc m).\n- $A$: Biên độ dao động ($A > 0$).\n- $\\omega$: Tần số góc (rad/s), $\\omega = \\frac{2\\pi}{T} = 2\\pi f$.\n- $(\\omega t + \\varphi)$: Pha dao động tại thời điểm $t$ (rad).\n- $\\varphi$: Pha ban đầu tại $t = 0$ (rad).'
-    ],
     solvingSteps: [
       'Đưa phương trình về dạng chuẩn $x = A \\cos(\\omega t + \\varphi)$.',
       'Đọc trực tiếp $A$, $\\omega$, $\\varphi$ từ phương trình.',
@@ -61,9 +58,6 @@ export const g11PhysicsModule1QuestionTypes: CourseQuestionType[] = [
     difficulty: 'medium',
     examFrequency: 'high',
     recognitionSigns: ['Đề yêu cầu tính vận tốc cực đại, gia tốc cực đại hoặc vận tốc tại vị trí bất kỳ.'],
-    theory: [
-      '**1. Phương trình vận tốc:**\n$$v = x\' = -\\omega A \\sin(\\omega t + \\varphi) = \\omega A \\cos\\left(\\omega t + \\varphi + \\frac{\\pi}{2}\\right)$$\n- Vận tốc cực đại: $v_{\\max} = \\omega A$ (khi qua vị trí cân bằng).\n- Vận tốc bằng 0 tại 2 vị trí biên.\n\n**2. Phương trình gia tốc:**\n$$a = v\' = -\\omega^2 A \\cos(\\omega t + \\varphi) = -\\omega^2 x$$\n- Gia tốc cực đại: $a_{\\max} = \\omega^2 A$ (tại vị trí biên âm).\n- Gia tốc luôn hướng về vị trí cân bằng.'
-    ],
     solvingSteps: [
       'Viết phương trình $x(t)$, suy ra phương trình $v(t)$ và $a(t)$.',
       'Chọn hệ thức phù hợp với dữ kiện và thống nhất đơn vị.',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Footprints, ScanSearch, ShieldAlert } from 'lucide-react';
+import { BookOpen, Compass, Footprints, ScanSearch, ShieldAlert } from 'lucide-react';
 import type { QuestionType } from '../../../types';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 
@@ -50,6 +50,31 @@ export const QuestionTypeGuidance: React.FC<QuestionTypeGuidanceProps> = ({ ques
         </ol>
       </div>
     </div>
+
+    {questionType.theory && questionType.theory.length > 0 && (
+      <details className="mx-4 mb-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 group">
+        <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2.5 text-xs font-black text-indigo-700 dark:text-indigo-300">
+          <BookOpen size={15} className="shrink-0" />
+          Ôn nhanh lý thuyết & công thức ngay tại bài tập
+          <span className="ml-auto text-[10px] font-bold text-muted-foreground group-open:hidden">
+            Mở
+          </span>
+          <span className="ml-auto hidden text-[10px] font-bold text-muted-foreground group-open:inline">
+            Thu gọn
+          </span>
+        </summary>
+        <div className="max-h-80 space-y-3 overflow-y-auto border-t border-indigo-500/15 px-3 py-3">
+          {questionType.theory.map((paragraph, index) => (
+            <div
+              key={index}
+              className="text-xs font-semibold leading-relaxed text-muted-foreground"
+            >
+              <LatexRenderer text={paragraph} />
+            </div>
+          ))}
+        </div>
+      </details>
+    )}
 
     {!compact && questionType.commonMistakes.length > 0 && (
       <div className="mx-4 mb-4 px-3 py-2.5 rounded-xl bg-amber-500/5 border border-amber-500/15 flex items-start gap-2">

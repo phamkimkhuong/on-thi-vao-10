@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
-import { getTopics, getQuestionTypes } from '../../data';
+import { getLearningOutcomes, getTopics, getQuestionTypes } from '../../data';
 import { Card, CardContent } from '../../components/ui/card';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -17,7 +17,6 @@ import { BiologyVideoDashboard } from './components/BiologyVideoDashboard';
 import { PhysicsVideoDashboard } from './components/PhysicsVideoDashboard';
 import { TopicTextbookMappingModal } from './components/TopicTextbookMappingModal';
 import { TextbookDrawer } from '../../components/common/TextbookDrawer';
-import { g10BiologyOutcomes } from '../../data/grade10/biology/learningPath';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
@@ -68,6 +67,7 @@ export const Roadmap: React.FC = () => {
 
   const topics = getTopics(selectedGrade, selectedSubject);
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
+  const learningOutcomes = getLearningOutcomes(selectedGrade, selectedSubject);
 
   const [modalConfig, setModalConfig] = useState<{
     isOpen: boolean;
@@ -385,7 +385,7 @@ export const Roadmap: React.FC = () => {
                             {(() => {
                               const completedCount = filteredTypes.filter(type => readLessonsSet.has(type.id)).length;
                               const percent = filteredTypes.length > 0 ? Math.round((completedCount / filteredTypes.length) * 100) : 0;
-                              const topicOutcomes = g10BiologyOutcomes.filter(o => o.topicId === topic.id && o.textbook && o.textbook.pages.length > 0);
+                              const topicOutcomes = learningOutcomes.filter(o => o.topicId === topic.id && o.textbook && o.textbook.pages.length > 0);
 
                               return (
                                 <div className="flex flex-col gap-1.5 pl-1">
@@ -518,7 +518,7 @@ export const Roadmap: React.FC = () => {
           isOpen={!!mappingModalTopic}
           onClose={() => setMappingModalTopic(null)}
           topicName={mappingModalTopic.name}
-          outcomes={g10BiologyOutcomes.filter(o => o.topicId === mappingModalTopic.id)}
+          outcomes={learningOutcomes.filter(o => o.topicId === mappingModalTopic.id)}
           questionTypes={questionTypes}
           onOpenTextbookPage={(bookName, pages) => {
             setDrawerConfig({

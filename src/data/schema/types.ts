@@ -138,13 +138,53 @@ export interface CourseSolution extends Solution {
   moduleId: string;
 }
 
+export interface TheoryFormulaVariable {
+  symbol: string;
+  meaning: string;
+  unit?: string;
+  note?: string;
+}
+
+export interface TheoryFormula {
+  id: string;
+  label: string;
+  expression: string;
+  variables: TheoryFormulaVariable[];
+  conditions: string[];
+  notes?: string[];
+}
+
+export interface TheoryWorkedExample {
+  id: string;
+  title: string;
+  problem: string;
+  steps: string[];
+  answer: string;
+}
+
+export interface TheoryCheckpoint {
+  id: string;
+  question: string;
+  options: [string, string, string, string];
+  correctAnswer: 'A' | 'B' | 'C' | 'D';
+  explanation: string;
+}
+
 export interface TheoryBlock {
   id: string;
   courseId: CourseId;
   moduleId: string;
   lessonIds: string[];
+  outcomeIds: string[];
+  questionTypeIds: string[];
+  sourceIds: string[];
   title: string;
+  objectives: string[];
   content: string;
+  formulas: TheoryFormula[];
+  keyPoints: string[];
+  workedExamples: TheoryWorkedExample[];
+  checkpoints: TheoryCheckpoint[];
   orderIndex: number;
   reviewStatus: CurriculumReviewStatus;
 }

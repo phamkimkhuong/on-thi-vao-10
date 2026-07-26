@@ -68,7 +68,9 @@ export const validateCourseDataV4 = async ({
   expectedOfficialRequirementCount,
   expectedOutcomeCount,
   expectedQuestionTypeCount,
-  expectedPracticeTargetCount
+  expectedPracticeTargetCount,
+  expectedTheoryLessonCount,
+  expectedTheoryQuestionTypeCount
 }) => {
   const errors = [];
   const warnings = [];
@@ -216,6 +218,7 @@ export const validateCourseDataV4 = async ({
     ['Topic', topics, item => item.id],
     ['Dạng bài', questionTypes, item => item.id],
     ['Câu hỏi', questions, item => item.id],
+    ['Nội dung câu hỏi', questions, item => item.content.replace(/\s+/g, ' ').trim()],
     ['Lời giải', solutions, item => item.questionId],
     ['Outcome', outcomes, item => item.id],
     ['Misconception', misconceptions, item => item.id],
@@ -473,6 +476,50 @@ export const validateCourseDataV4 = async ({
           target: blueprint.coverage.targetQuestionCount
         });
       }
+      if (typeQuestions.length > 0) {
+        for (const subType of blueprintSubTypes) {
+          const subTypeQuestionCount = typeQuestions.filter(
+            question => question.subTypeId === subType.id
+          ).length;
+          if (subTypeQuestionCount < blueprint.coverage.minimumQuestionsPerSubType) {
+            errors.push(
+              `${type.id}: subtype ${subType.id} mới có ${subTypeQuestionCount}/${blueprint.coverage.minimumQuestionsPerSubType} câu tối thiểu.`
+            );
+          }
+          if (
+            subType.targetQuestionCount !== undefined &&
+            subTypeQuestionCount !== subType.targetQuestionCount
+          ) {
+            errors.push(
+              `${type.id}: subtype ${subType.id} phải có ${subType.targetQuestionCount} câu, hiện có ${subTypeQuestionCount}.`
+            );
+          }
+        }
+        for (const requiredRole of blueprint.coverage.requiredPracticeRoles) {
+          if (!typeQuestions.some(question => question.practiceRole === requiredRole)) {
+            errors.push(`${type.id}: ngân hàng thiếu practiceRole ${requiredRole}.`);
+          }
+        }
+        for (const requiredRepresentation of blueprint.coverage.requiredRepresentations) {
+          if (
+            !typeQuestions.some(
+              question => question.representationType === requiredRepresentation
+            )
+          ) {
+            errors.push(
+              `${type.id}: ngân hàng thiếu representationType ${requiredRepresentation}.`
+            );
+          }
+        }
+        const holdoutCount = typeQuestions.filter(
+          question => question.isMasteryHoldout === true
+        ).length;
+        if (holdoutCount !== blueprint.coverage.masteryHoldoutCount) {
+          errors.push(
+            `${type.id}: phải có ${blueprint.coverage.masteryHoldoutCount} mastery holdout, hiện có ${holdoutCount}.`
+          );
+        }
+      }
     }
   }
 
@@ -505,19 +552,59 @@ export const validateCourseDataV4 = async ({
   for (const question of questions) {
     if (question.courseId !== courseId) errors.push(`${question.id}: courseId không khớp.`);
     if (!manifestById.has(question.moduleId)) errors.push(`${question.id}: moduleId không tồn tại.`);
-    if (!lessonById.has(question.lessonId)) errors.push(`${question.id}: lessonId không tồn tại.`);
-    if (!topicById.has(question.topicId)) errors.push(`${question.id}: topicId không tồn tại.`);
-    if (!typeById.has(question.questionTypeId)) errors.push(`${question.id}: questionTypeId không tồn tại.`);
+    const mappedLesson = lessonById.get(question.lessonId);
+    if (!mappedLesson) errors.push(`${question.id}: lessonId không tồn tại.`);
+    else if (mappedLesson.moduleId !== question.moduleId) {
+      errors.push(`${question.id}: lessonId thuộc module khác.`);
+    }
+    const mappedTopic = topicById.get(question.topicId);
+    if (!mappedTopic) errors.push(`${question.id}: topicId không tồn tại.`);
+    else if (mappedTopic.moduleId !== question.moduleId) {
+      errors.push(`${question.id}: topicId thuộc module khác.`);
+    }
+    const mappedType = typeById.get(question.questionTypeId);
+    if (!mappedType) {
+      errors.push(`${question.id}: questionTypeId không tồn tại.`);
+    } else {
+      if (mappedType.moduleId !== question.moduleId) {
+        errors.push(`${question.id}: questionTypeId thuộc module khác.`);
+      }
+      if (!mappedType.lessonIds?.includes(question.lessonId)) {
+        errors.push(`${question.id}: lessonId không nằm trong phạm vi của dạng bài.`);
+      }
+      if (mappedType.topicId !== question.topicId) {
+        errors.push(`${question.id}: topicId không khớp dạng bài.`);
+      }
+      if (!(mappedType.subTypes ?? []).some(subType => subType.id === question.subTypeId)) {
+        errors.push(`${question.id}: subTypeId không thuộc dạng bài.`);
+      }
+    }
     if (!solutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải.`);
     if (!Array.isArray(question.outcomeIds) || question.outcomeIds.length === 0) {
       errors.push(`${question.id}: thiếu outcomeIds.`);
     }
     for (const outcomeId of question.outcomeIds ?? []) {
-      if (!outcomeById.has(outcomeId)) errors.push(`${question.id}: outcome ${outcomeId} không tồn tại.`);
+      if (!outcomeById.has(outcomeId)) {
+        errors.push(`${question.id}: outcome ${outcomeId} không tồn tại.`);
+      } else if (mappedType && !mappedType.outcomeIds?.includes(outcomeId)) {
+        errors.push(`${question.id}: outcome ${outcomeId} không thuộc dạng bài.`);
+      }
+    }
+    if (!question.practiceRole) errors.push(`${question.id}: thiếu practiceRole.`);
+    if (!question.representationType) errors.push(`${question.id}: thiếu representationType.`);
+    if (question.misconceptionId && !misconceptionById.has(question.misconceptionId)) {
+      errors.push(`${question.id}: misconceptionId không tồn tại.`);
     }
     if (question.validatorType === 'choice') {
       if (!Array.isArray(question.options) || question.options.length !== 4) {
         errors.push(`${question.id}: câu choice phải có đúng 4 phương án.`);
+      } else {
+        if (question.options.some(option => !isNonEmptyString(option))) {
+          errors.push(`${question.id}: phương án lựa chọn không được rỗng.`);
+        }
+        if (new Set(question.options).size !== question.options.length) {
+          errors.push(`${question.id}: có phương án lựa chọn bị trùng.`);
+        }
       }
       if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) {
         errors.push(`${question.id}: đáp án choice phải chuẩn hóa về A/B/C/D.`);
@@ -534,15 +621,151 @@ export const validateCourseDataV4 = async ({
     }
     if (!Array.isArray(solution.detailedSteps) || solution.detailedSteps.length < 2) {
       errors.push(`${solution.questionId}: lời giải cần ít nhất 2 bước.`);
+    } else if (
+      solution.detailedSteps.some(
+        step => !isNonEmptyString(step.title) || !isNonEmptyString(step.explanation)
+      )
+    ) {
+      errors.push(`${solution.questionId}: bước giải có tiêu đề hoặc nội dung rỗng.`);
+    }
+    if (!isNonEmptyString(solution.recognition)) {
+      errors.push(`${solution.questionId}: thiếu hướng nhận dạng.`);
+    }
+    if (!Array.isArray(solution.commonMistakes) || solution.commonMistakes.length === 0) {
+      errors.push(`${solution.questionId}: thiếu lỗi sai thường gặp.`);
+    }
+    if (!Array.isArray(solution.reviewSuggestions) || solution.reviewSuggestions.length === 0) {
+      errors.push(`${solution.questionId}: thiếu gợi ý ôn tập.`);
+    }
+  }
+
+  for (const [label, items] of [
+    ['Công thức lý thuyết', theory.flatMap(block => block.formulas ?? [])],
+    ['Ví dụ lý thuyết', theory.flatMap(block => block.workedExamples ?? [])],
+    ['Câu tự kiểm tra lý thuyết', theory.flatMap(block => block.checkpoints ?? [])]
+  ]) {
+    for (const duplicate of duplicates(items, item => item.id)) {
+      errors.push(`${label} bị trùng: ${duplicate}.`);
     }
   }
 
   for (const block of theory) {
     if (block.courseId !== courseId) errors.push(`${block.id}: courseId không khớp.`);
+    if (!manifestById.has(block.moduleId)) errors.push(`${block.id}: moduleId không tồn tại.`);
+    if (!isNonEmptyString(block.title)) errors.push(`${block.id}: tiêu đề lý thuyết rỗng.`);
     if (!isNonEmptyString(block.content)) errors.push(`${block.id}: nội dung lý thuyết rỗng.`);
-    for (const lessonId of block.lessonIds ?? []) {
-      if (!lessonById.has(lessonId)) errors.push(`${block.id}: lesson ${lessonId} không tồn tại.`);
+    for (const [field, label] of [
+      ['lessonIds', 'bài học'],
+      ['outcomeIds', 'outcome'],
+      ['questionTypeIds', 'dạng bài'],
+      ['sourceIds', 'nguồn'],
+      ['objectives', 'mục tiêu'],
+      ['keyPoints', 'điểm ghi nhớ'],
+      ['workedExamples', 'ví dụ có lời giải'],
+      ['checkpoints', 'câu tự kiểm tra']
+    ]) {
+      if (!Array.isArray(block[field]) || block[field].length === 0) {
+        errors.push(`${block.id}: thiếu ${label}.`);
+      }
     }
+    for (const lessonId of block.lessonIds ?? []) {
+      const lesson = lessonById.get(lessonId);
+      if (!lesson) errors.push(`${block.id}: lesson ${lessonId} không tồn tại.`);
+      else if (lesson.moduleId !== block.moduleId) {
+        errors.push(`${block.id}: lesson ${lessonId} thuộc module khác.`);
+      }
+    }
+    for (const sourceId of block.sourceIds ?? []) {
+      if (!sourceById.has(sourceId)) errors.push(`${block.id}: source ${sourceId} không tồn tại.`);
+    }
+    for (const outcomeId of block.outcomeIds ?? []) {
+      const outcome = outcomeById.get(outcomeId);
+      if (!outcome) {
+        errors.push(`${block.id}: outcome ${outcomeId} không tồn tại.`);
+      } else if (topicById.get(outcome.topicId)?.moduleId !== block.moduleId) {
+        errors.push(`${block.id}: outcome ${outcomeId} thuộc module khác.`);
+      }
+    }
+    for (const questionTypeId of block.questionTypeIds ?? []) {
+      const questionType = typeById.get(questionTypeId);
+      if (!questionType) {
+        errors.push(`${block.id}: questionType ${questionTypeId} không tồn tại.`);
+      } else {
+        if (questionType.moduleId !== block.moduleId) {
+          errors.push(`${block.id}: questionType ${questionTypeId} thuộc module khác.`);
+        }
+        if (!(block.outcomeIds ?? []).some(outcomeId => questionType.outcomeIds?.includes(outcomeId))) {
+          errors.push(`${block.id}: không có outcome chung với questionType ${questionTypeId}.`);
+        }
+      }
+    }
+    for (const formula of block.formulas ?? []) {
+      if (!isNonEmptyString(formula.label) || !isNonEmptyString(formula.expression)) {
+        errors.push(`${block.id}/${formula.id}: công thức thiếu nhãn hoặc biểu thức.`);
+      }
+      if (!Array.isArray(formula.variables) || formula.variables.length === 0) {
+        errors.push(`${block.id}/${formula.id}: công thức thiếu giải thích biến.`);
+      } else if (
+        formula.variables.some(
+          variable => !isNonEmptyString(variable.symbol) || !isNonEmptyString(variable.meaning)
+        )
+      ) {
+        errors.push(`${block.id}/${formula.id}: biến có kí hiệu hoặc ý nghĩa rỗng.`);
+      }
+      if (!Array.isArray(formula.conditions) || formula.conditions.length === 0) {
+        errors.push(`${block.id}/${formula.id}: công thức thiếu điều kiện áp dụng.`);
+      }
+    }
+    for (const example of block.workedExamples ?? []) {
+      if (
+        !isNonEmptyString(example.title) ||
+        !isNonEmptyString(example.problem) ||
+        !isNonEmptyString(example.answer)
+      ) {
+        errors.push(`${block.id}/${example.id}: ví dụ thiếu tiêu đề, đề bài hoặc đáp án.`);
+      }
+      if (!Array.isArray(example.steps) || example.steps.length < 2) {
+        errors.push(`${block.id}/${example.id}: ví dụ cần ít nhất 2 bước giải.`);
+      }
+    }
+    for (const checkpoint of block.checkpoints ?? []) {
+      if (!isNonEmptyString(checkpoint.question) || !isNonEmptyString(checkpoint.explanation)) {
+        errors.push(`${block.id}/${checkpoint.id}: câu tự kiểm tra thiếu câu hỏi hoặc giải thích.`);
+      }
+      if (!Array.isArray(checkpoint.options) || checkpoint.options.length !== 4) {
+        errors.push(`${block.id}/${checkpoint.id}: câu tự kiểm tra phải có đúng 4 lựa chọn.`);
+      }
+      if (!['A', 'B', 'C', 'D'].includes(checkpoint.correctAnswer)) {
+        errors.push(`${block.id}/${checkpoint.id}: đáp án phải là A/B/C/D.`);
+      }
+    }
+  }
+
+  const theoryLessonIds = new Set(theory.flatMap(block => block.lessonIds ?? []));
+  const theoryQuestionTypeIds = new Set(theory.flatMap(block => block.questionTypeIds ?? []));
+  if (
+    expectedTheoryLessonCount !== undefined &&
+    theoryLessonIds.size !== expectedTheoryLessonCount
+  ) {
+    errors.push(
+      `Lý thuyết phải bao phủ ${expectedTheoryLessonCount} bài, hiện bao phủ ${theoryLessonIds.size}.`
+    );
+  }
+  if (
+    expectedTheoryQuestionTypeCount !== undefined &&
+    theoryQuestionTypeIds.size !== expectedTheoryQuestionTypeCount
+  ) {
+    errors.push(
+      `Lý thuyết phải bao phủ ${expectedTheoryQuestionTypeCount} dạng bài, hiện bao phủ ${theoryQuestionTypeIds.size}.`
+    );
+  }
+  const missingTheoryTypeCount = questionTypes.filter(
+    questionType => !theoryQuestionTypeIds.has(questionType.id)
+  ).length;
+  if (missingTheoryTypeCount > 0) {
+    warnings.push(
+      `Độ phủ lý thuyết: ${missingTheoryTypeCount}/${questionTypes.length} dạng bài chưa có TheoryBlock.`
+    );
   }
 
   const videosPath = path.join(absoluteCourseDirectory, 'videos.ts');
@@ -560,9 +783,20 @@ export const validateCourseDataV4 = async ({
       officialRequirements: officialRequirements.length,
       outcomes: outcomes.length,
       questionTypes: questionTypes.length,
+      coveredQuestionTypes: questionTypes.filter(type => {
+        const blueprint = blueprintByTypeId.get(type.id);
+        if (!blueprint) return false;
+        return (
+          questions.filter(question => question.questionTypeId === type.id).length >=
+          blueprint.coverage.targetQuestionCount
+        );
+      }).length,
       practiceTarget: totalPracticeTarget,
       practiceQuestions: questions.length,
-      solutions: solutions.length
+      solutions: solutions.length,
+      theoryBlocks: theory.length,
+      theoryLessonsCovered: theoryLessonIds.size,
+      theoryQuestionTypesCovered: theoryQuestionTypeIds.size
     }
   };
 };
