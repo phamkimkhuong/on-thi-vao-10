@@ -5,7 +5,9 @@ type CourseBundleLoader = () => Promise<CourseDataBundle>;
 
 const courseBundleLoaders: Partial<Record<CourseId, CourseBundleLoader>> = {
   'grade11:physics': () =>
-    import('./grade11/physics/course').then(module => module.g11PhysicsCourse)
+    import('./grade11/physics/course').then(module => module.g11PhysicsCourse),
+  'grade11:math': () =>
+    import('./grade11/math/course').then(module => module.g11MathCourse)
 };
 
 export const getCourseId = (

@@ -6,7 +6,8 @@ const KEYS = {
   MISTAKES: 'otv10_mistakes',
   PROGRESS: 'otv10_progress',
   EXAM_RESULTS: 'otv10_exam_results',
-  READ_THEORY: 'otv10_read_theory'
+  READ_THEORY: 'otv10_read_theory',
+  THEORY_CHECKPOINTS: 'otv10_theory_checkpoints'
 };
 
 // Helper để đọc từ localStorage và tự động migrate dữ liệu cũ nếu là Array
@@ -88,6 +89,23 @@ const readReadTheoryMap = (): Record<string, string[]> => {
     return parsed;
   } catch (e) {
     console.error('Lỗi khi đọc read theory từ localStorage', e);
+    return {};
+  }
+};
+
+const readTheoryCheckpointMap = (): Record<string, string[]> => {
+  try {
+    const data = localStorage.getItem(KEYS.THEORY_CHECKPOINTS);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    if (Array.isArray(parsed)) {
+      const migrated = { guest: parsed };
+      localStorage.setItem(KEYS.THEORY_CHECKPOINTS, JSON.stringify(migrated));
+      return migrated;
+    }
+    return parsed;
+  } catch (e) {
+    console.error('Lỗi khi đọc theory checkpoints từ localStorage', e);
     return {};
   }
 };
@@ -346,6 +364,10 @@ export const storageService = {
     const readTheoryMap = readReadTheoryMap();
     delete readTheoryMap.guest;
     writeToStorage(KEYS.READ_THEORY, readTheoryMap);
+
+    const checkpointMap = readTheoryCheckpointMap();
+    delete checkpointMap.guest;
+    writeToStorage(KEYS.THEORY_CHECKPOINTS, checkpointMap);
   },
 
   getReadLessons(userId: string): string[] {
@@ -374,6 +396,22 @@ export const storageService = {
     writeToStorage(KEYS.READ_THEORY, map);
   },
 
+  getPassedTheoryCheckpoints(userId: string): string[] {
+    const map = readTheoryCheckpointMap();
+    return map[userId] || [];
+  },
+
+  saveTheoryCheckpointPassed(userId: string, checkpointId: string): void {
+    const map = readTheoryCheckpointMap();
+    if (!map[userId]) {
+      map[userId] = [];
+    }
+    if (!map[userId].includes(checkpointId)) {
+      map[userId].push(checkpointId);
+      writeToStorage(KEYS.THEORY_CHECKPOINTS, map);
+    }
+  },
+
   // RESET ALL DATA
   resetData(): void {
     localStorage.removeItem(KEYS.ATTEMPTS);
@@ -381,5 +419,6 @@ export const storageService = {
     localStorage.removeItem(KEYS.PROGRESS);
     localStorage.removeItem(KEYS.EXAM_RESULTS);
     localStorage.removeItem(KEYS.READ_THEORY);
+    localStorage.removeItem(KEYS.THEORY_CHECKPOINTS);
   }
 };

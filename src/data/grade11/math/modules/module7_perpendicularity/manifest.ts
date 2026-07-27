@@ -1,0 +1,2 @@
+import type {ModuleManifest} from '@/data/schema';
+export const g11MathModule7Manifest:ModuleManifest={id:'math11-m7',courseId:'grade11:math',title:'Chương VII: Quan hệ vuông góc trong không gian',slug:'quan-he-vuong-goc-trong-khong-gian',orderIndex:7,scope:'core',topicIds:['math11-t07'],lessonIds:['math11-kntt-l22','math11-kntt-l23','math11-kntt-l24','math11-kntt-l25','math11-kntt-l26','math11-kntt-l27'],prerequisiteModuleIds:['math11-m4'],reviewStatus:'draft'};

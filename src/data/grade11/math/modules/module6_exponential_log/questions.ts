@@ -1,0 +1,58 @@
+import type {CourseQuestion} from '@/data/schema';import type {PracticeRole,QuestionRepresentationType} from '@/types';import {g11MathModule6ExpansionQuestions} from './questionsExpansion';
+type S={n:number;qt:number;st:string;r:PracticeRole;p:QuestionRepresentationType;c:string;o:[string,string,string,string];a:'A'|'B'|'C'|'D';d:CourseQuestion['difficulty'];h:boolean};
+const q=(n:number,qt:number,st:string,r:PracticeRole,p:QuestionRepresentationType,c:string,o:S['o'],a:S['a'],d:CourseQuestion['difficulty']='medium',h=false):S=>({n,qt,st,r,p,c,o,a,d,h});
+const s:S[]=[
+q(205,18,'math11-qt18-st-rules','guided','equation','$2^3\\cdot2^4$ bằng:',['$2^{12}$','$2^7$','$4^7$','$2$'],'B','easy'),
+q(206,18,'math11-qt18-st-rules','near_transfer','equation','$a^5/a^2$ bằng:',['$a^{10}$','$a^7$','$a^3$','$a^{-3}$'],'C'),
+q(207,18,'math11-qt18-st-rules','misconception_check','equation','$(a^2)^3$ bằng:',['$a^5$','$a^8$','$3a^2$','$a^6$'],'D'),
+q(208,18,'math11-qt18-st-rules','representation_switch','text','$16^{1/2}$ bằng:',['$4$','$8$','$2$','$16$'],'A','easy'),
+q(209,18,'math11-qt18-st-rules','retention','equation','$27^{2/3}$ bằng:',['$3$','$6$','$9$','$18$'],'C'),
+q(210,18,'math11-qt18-st-rules','mastery_holdout','equation','$8^{-2/3}$ bằng:',['$\\frac12$','$\\frac14$','$4$','$\\frac18$'],'B','hard',true),
+q(211,18,'math11-qt18-st-radical','guided','equation','$\\sqrt[3]{x^2}$ với $x>0$ bằng:',['$x^3$','$x^{3/2}$','$x^{1/3}$','$x^{2/3}$'],'D'),
+q(212,18,'math11-qt18-st-radical','near_transfer','equation','$a^{1/2}\\cdot a^{1/2}$ với $a>0$ bằng:',['$a$','$a^{1/4}$','$2a$','$1$'],'A'),
+q(213,18,'math11-qt18-st-radical','representation_switch','text','$\\left(\\frac49\\right)^{-1/2}$ bằng:',['$\\frac23$','$\\frac94$','$\\frac32$','$\\frac49$'],'C'),
+q(214,18,'math11-qt18-st-radical','near_transfer','text','Một đại lượng 100 tăng 10% mỗi chu kì. Sau 2 chu kì bằng:',['$110$','$121$','$120$','$100$'],'B'),
+q(215,18,'math11-qt18-st-radical','misconception_check','text','Một đại lượng 200 còn 80% sau mỗi chu kì. Sau 3 chu kì bằng:',['$128$','$120$','$160$','$102{,}4$'],'D'),
+q(216,18,'math11-qt18-st-radical','mastery_holdout','equation','$16^{3/4}$ bằng:',['$8$','$12$','$6$','$4$'],'A','hard',true),
+
+q(217,19,'math11-qt19-st-definition','guided','equation','$\\log_2 8$ bằng:',['$2$','$4$','$3$','$8$'],'C','easy'),
+q(218,19,'math11-qt19-st-definition','near_transfer','equation','$\\log_{10}0{,}01$ bằng:',['$2$','$-2$','$-1$','$0$'],'B'),
+q(219,19,'math11-qt19-st-definition','retention','equation','$\\log_a1$ bằng:',['$0$','$1$','$a$','Không xác định'],'A','easy'),
+q(220,19,'math11-qt19-st-definition','representation_switch','text','$\\log_a a$ với $a>0,a\\ne1$ bằng:',['$0$','$a$','$-1$','$1$'],'D','easy'),
+q(221,19,'math11-qt19-st-definition','misconception_check','text','Điều kiện xác định $\\log_a x$ là:',['$a\\ne0$','$x\\ne0$','$a>0,a\\ne1,x>0$','$a>1,x\\ge0$'],'C'),
+q(222,19,'math11-qt19-st-definition','mastery_holdout','equation','$\\log_3\\frac1{27}$ bằng:',['$3$','$-3$','$-2$','$\\frac13$'],'B','hard',true),
+q(223,19,'math11-qt19-st-properties','guided','equation','$\\log_2(8\\cdot4)$ bằng:',['$3$','$4$','$5$','$6$'],'C'),
+q(224,19,'math11-qt19-st-properties','near_transfer','equation','$\\log_5\\frac{125}{5}$ bằng:',['$2$','$3$','$4$','$5$'],'A'),
+q(225,19,'math11-qt19-st-properties','misconception_check','equation','$2\\log_2 3$ bằng:',['$\\log_2 6$','$\\log_2 5$','$\\log_2 8$','$\\log_2 9$'],'D'),
+q(226,19,'math11-qt19-st-properties','representation_switch','text','Công thức đổi cơ số đúng là:',['$\\log_28=\\ln2/\\ln8$','$\\log_28=\\ln8/\\ln2$','$\\log_28=\\ln8-\\ln2$','$\\log_28=\\ln16$'],'B'),
+q(227,19,'math11-qt19-st-properties','far_transfer','equation','$\\log_2x+\\log_24=5$ có nghiệm:',['$4$','$6$','$8$','$16$'],'C'),
+q(228,19,'math11-qt19-st-properties','mastery_holdout','equation','$\\log_312-\\log_34$ bằng:',['$1$','$2$','$3$','$\\frac13$'],'A','hard',true),
+
+q(229,20,'math11-qt20-st-properties','guided','graph','Tập xác định của $y=2^x$ là:',['$\\mathbb R$','$(0;+\\infty)$','$[0;+\\infty)$','$\\mathbb R\\setminus\\{0\\}$'],'A','easy'),
+q(230,20,'math11-qt20-st-properties','near_transfer','graph','Tập giá trị của $y=a^x$ là:',['$\\mathbb R$','$[0;+\\infty)$','$(0;+\\infty)$','$(-\\infty;0)$'],'C'),
+q(231,20,'math11-qt20-st-properties','representation_switch','graph','Tập xác định của $y=\\log_2x$ là:',['$\\mathbb R$','$(0;+\\infty)$','$[0;+\\infty)$','$\\mathbb R\\setminus\\{1\\}$'],'B'),
+q(232,20,'math11-qt20-st-properties','retention','text','Với $a>1$, hàm $y=a^x$:',['Giảm','Không đổi','Không đơn điệu','Tăng'],'D'),
+q(233,20,'math11-qt20-st-properties','misconception_check','graph','Với $0<a<1$, hàm $y=\\log_ax$:',['Tăng','Chẵn','Giảm','Tuần hoàn'],'C'),
+q(234,20,'math11-qt20-st-properties','mastery_holdout','graph','Đồ thị $y=a^x$ và $y=\\log_ax$ đối xứng qua:',['Trục $Ox$','$y=x$','Trục $Oy$','$y=-x$'],'B','hard',true),
+q(235,20,'math11-qt20-st-model','guided','text','Gửi 100 triệu với lãi kép 10%/năm. Sau 3 năm có:',['$120$ triệu','$130$ triệu','$133$ triệu','$133{,}1$ triệu'],'D'),
+q(236,20,'math11-qt20-st-model','near_transfer','text','Có 500 vi khuẩn, số lượng gấp đôi mỗi chu kì. Sau 4 chu kì có:',['$2000$','$4000$','$8000$','$16000$'],'C'),
+q(237,20,'math11-qt20-st-model','representation_switch','text','Một lượng 100 còn 80% sau mỗi chu kì. Sau 2 chu kì còn:',['$64$','$80$','$60$','$40$'],'A'),
+q(238,20,'math11-qt20-st-model','retention','text','Công thức lãi kép sau $n$ chu kì là:',['$P(1+nr)$','$P(1+r)^n$','$P+r^n$','$Pn^r$'],'B'),
+q(239,20,'math11-qt20-st-model','far_transfer','text','Nếu $\\mathrm{pH}=-\\log_{10}[H^+]$ và $[H^+]=10^{-3}$ thì pH bằng:',['$-3$','$10$','$3$','$0$'],'C'),
+q(240,20,'math11-qt20-st-model','mastery_holdout','text','Dân số 1000 tăng 5% mỗi năm. Sau 2 năm xấp xỉ:',['$1050$','$1100$','$1150$','$1102{,}5$'],'D','hard',true),
+
+q(241,21,'math11-qt21-st-equation','guided','equation','$2^x=8$ có nghiệm:',['$2$','$3$','$4$','$8$'],'B','easy'),
+q(242,21,'math11-qt21-st-equation','near_transfer','equation','$3^{x-1}=9$ có nghiệm:',['$1$','$2$','$3$','$4$'],'C'),
+q(243,21,'math11-qt21-st-equation','representation_switch','equation','$5^{2x}=125$ có nghiệm:',['$\\frac32$','$2$','$3$','$\\frac52$'],'A'),
+q(244,21,'math11-qt21-st-equation','retention','equation','$\\log_2x=4$ có nghiệm:',['$4$','$8$','$12$','$16$'],'D'),
+q(245,21,'math11-qt21-st-equation','misconception_check','equation','$\\log_3(x-1)=2$ có nghiệm:',['$8$','$9$','$10$','$11$'],'C'),
+q(246,21,'math11-qt21-st-equation','mastery_holdout','equation','$4^x=8$ có nghiệm:',['$\\frac12$','$\\frac32$','$2$','$3$'],'B','hard',true),
+q(247,21,'math11-qt21-st-inequality','guided','graph','$2^x>8$ tương đương:',['$x>3$','$x<3$','$x\\ge3$','$x\\le3$'],'A'),
+q(248,21,'math11-qt21-st-inequality','near_transfer','graph','$\\left(\\frac12\\right)^x>\\left(\\frac12\\right)^2$ tương đương:',['$x>2$','$x\\ge2$','$x\\le2$','$x<2$'],'D'),
+q(249,21,'math11-qt21-st-inequality','representation_switch','equation','$\\log_2x<3$ có tập nghiệm:',['$x<8$','$x>0$','$0<x<8$','$x>8$'],'C'),
+q(250,21,'math11-qt21-st-inequality','misconception_check','graph','$\\log_{1/2}x>1$ có tập nghiệm:',['$x>1/2$','$0<x<1/2$','$x<1/2$','$x>0$'],'B'),
+q(251,21,'math11-qt21-st-inequality','retention','equation','$\\log_3(x+1)=1$ có nghiệm:',['$2$','$3$','$1$','$0$'],'A'),
+q(252,21,'math11-qt21-st-inequality','mastery_holdout','equation','$\\log_2(x-1)\\ge2$ có tập nghiệm:',['$x>1$','$x\\ge4$','$x>5$','$x\\ge5$'],'D','hard',true)
+];
+const baseQuestions:CourseQuestion[]=s.map(x=>({id:`math11-q${x.n}`,courseId:'grade11:math',moduleId:'math11-m6',lessonId:`math11-kntt-l${x.qt}`,subjectId:'math',topicId:'math11-t06',questionTypeId:`math11-qt${x.qt}`,subTypeId:x.st,practiceRole:x.r,representationType:x.p,isMasteryHoldout:x.h,content:x.c,responseType:'single_choice',validatorType:'choice',outcomeIds:[`out-math11-m6-0${x.qt-17}`],options:x.o,correctAnswer:x.a,difficulty:x.d,sourceType:'manual'}));
+export const g11MathModule6Questions=[...baseQuestions,...g11MathModule6ExpansionQuestions];

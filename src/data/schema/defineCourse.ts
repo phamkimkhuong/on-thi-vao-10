@@ -79,17 +79,7 @@ const theoryBlockToParagraphs = (block: TheoryBlock): string[] => {
         ...example.steps.map((step, index) => `**Bước ${index + 1}:** ${step}`),
         `**Kết luận:** ${example.answer}`
       ].join('\n')
-    ),
-    ...block.checkpoints.map(checkpoint => {
-      const optionLabels = ['A', 'B', 'C', 'D'];
-      return [
-        `**Tự kiểm tra: ${checkpoint.question}**`,
-        ...checkpoint.options.map(
-          (option, index) => `${optionLabels[index]}. ${option}`
-        ),
-        `**Đáp án:** ${checkpoint.correctAnswer}. ${checkpoint.explanation}`
-      ].join('\n');
-    })
+    )
   ];
 
   return paragraphs.filter(Boolean);
@@ -113,13 +103,21 @@ export const toSubjectRuntimeData = (
         .filter(block => block.questionTypeIds.includes(questionType.id))
         .sort((left, right) => left.orderIndex - right.orderIndex)
         .flatMap(theoryBlockToParagraphs);
+      const mappedCheckpoints = module.theory
+        .filter(block => block.questionTypeIds.includes(questionType.id))
+        .sort((left, right) => left.orderIndex - right.orderIndex)
+        .flatMap(block => block.checkpoints);
 
       return {
         ...questionType,
         theory:
           mappedTheory.length > 0
             ? mappedTheory
-            : questionType.theory
+            : questionType.theory,
+        theoryCheckpoints:
+          mappedCheckpoints.length > 0
+            ? mappedCheckpoints
+            : questionType.theoryCheckpoints
       };
     })
   );

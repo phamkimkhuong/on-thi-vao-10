@@ -1,0 +1,7 @@
+import type { QuestionTypePracticeBlueprint } from '@/types';
+const b=(id:string,reps:QuestionTypePracticeBlueprint['coverage']['requiredRepresentations'],subs:QuestionTypePracticeBlueprint['subTypes']):QuestionTypePracticeBlueprint=>({questionTypeId:id,subTypes:subs.map(sub=>({...sub,targetQuestionCount:12})),coverage:{targetQuestionCount:24,minimumQuestionsPerSubType:6,requiredPracticeRoles:['guided','near_transfer','misconception_check','far_transfer'],requiredRepresentations:reps,masteryHoldoutCount:4}});
+export const g11MathModule5PracticeBlueprints:QuestionTypePracticeBlueprint[]=[
+  b('math11-qt15',['equation','text'],[{id:'math11-qt15-st-finite',name:'Giới hạn hữu hạn',example:'Tính giới hạn phân thức.',targetQuestionCount:6},{id:'math11-qt15-st-infinite',name:'Giới hạn vô cực và tổng vô hạn',example:'Xét vô cực hoặc tổng nhân lùi.',targetQuestionCount:6}]),
+  b('math11-qt16',['equation','graph'],[{id:'math11-qt16-st-point',name:'Giới hạn tại điểm và một phía',example:'Khử dạng $0/0$.',targetQuestionCount:6},{id:'math11-qt16-st-infinity',name:'Giới hạn tại vô cực',example:'So sánh bậc.',targetQuestionCount:6}]),
+  b('math11-qt17',['equation','graph'],[{id:'math11-qt17-st-point',name:'Liên tục tại một điểm',example:'So sánh giới hạn và giá trị.',targetQuestionCount:6},{id:'math11-qt17-st-domain',name:'Liên tục trên miền và ứng dụng',example:'Tìm miền hoặc tham số.',targetQuestionCount:6}])
+];

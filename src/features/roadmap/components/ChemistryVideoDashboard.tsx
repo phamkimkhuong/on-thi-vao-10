@@ -15,7 +15,7 @@ export const ChemistryVideoDashboard: React.FC = () => {
 
   useEffect(() => {
     setActiveVideo(chemistryVideos[0]);
-  }, [selectedGrade]);
+  }, [chemistryVideos]);
 
   // Bộ lọc tách ID YouTube từ bất kỳ định dạng link nào (watch?v=, youtu.be, embed, v.v.)
   const getYouTubeId = (url: string): string => {

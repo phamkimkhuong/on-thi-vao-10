@@ -1107,8 +1107,17 @@ export const PracticeEngine: React.FC = () => {
     selectedGrade === 'grade11' &&
     routeSubject === 'physics' &&
     Boolean(requestedQuestionType?.theory?.length);
+  const practiceUserId = user?.uid || 'guest';
+  const requiredCheckpointIds = requestedQuestionType?.theoryCheckpoints?.map(item => item.id) ?? [];
+  const passedCheckpointIds = new Set(
+    storageService.getPassedTheoryCheckpoints(practiceUserId)
+  );
+  const hasPassedRequiredCheckpoints =
+    requiredCheckpointIds.length === 0 ||
+    requiredCheckpointIds.every(id => passedCheckpointIds.has(id));
   const hasCompletedTheory = questionTypeId
-    ? storageService.getReadLessons(user?.uid || 'guest').includes(questionTypeId)
+    ? storageService.getReadLessons(practiceUserId).includes(questionTypeId) &&
+      hasPassedRequiredCheckpoints
     : true;
 
   if (requiresPhysics11Theory && !hasCompletedTheory && questionTypeId) {

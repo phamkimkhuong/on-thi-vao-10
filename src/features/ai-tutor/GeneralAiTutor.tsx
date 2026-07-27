@@ -164,7 +164,7 @@ export const GeneralAiTutor: React.FC = () => {
         runDiagnosisRef.current();
       }
     }, 3 * 60 * 1000);
-  }, [subject]);
+  }, []);
 
   useEffect(() => {
     hasNewMessages.current = false;

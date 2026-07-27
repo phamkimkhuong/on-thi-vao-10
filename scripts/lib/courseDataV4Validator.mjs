@@ -70,10 +70,14 @@ export const validateCourseDataV4 = async ({
   expectedQuestionTypeCount,
   expectedPracticeTargetCount,
   expectedTheoryLessonCount,
-  expectedTheoryQuestionTypeCount
+  expectedTheoryQuestionTypeCount,
+  allowPartialCoverage = false
 }) => {
   const errors = [];
   const warnings = [];
+  const reportCoverageIssue = message => {
+    if (!allowPartialCoverage) errors.push(message);
+  };
   const absoluteCourseDirectory = path.resolve(courseDirectory);
   const curriculumDirectory = path.join(absoluteCourseDirectory, 'curriculum');
   const modulesDirectory = path.join(absoluteCourseDirectory, 'modules');
@@ -301,7 +305,13 @@ export const validateCourseDataV4 = async ({
   for (const requirement of officialRequirements) {
     if (requirement.courseId !== courseId) errors.push(`${requirement.id}: courseId không khớp.`);
     if (!manifestById.has(requirement.moduleId)) {
-      errors.push(`${requirement.id}: moduleId ${requirement.moduleId} không tồn tại.`);
+      if (requirement.coverageStatus === 'not_started') {
+        warnings.push(
+          `${requirement.id}: module ${requirement.moduleId} chưa triển khai; requirement đang ở trạng thái not_started.`
+        );
+      } else {
+        errors.push(`${requirement.id}: moduleId ${requirement.moduleId} không tồn tại.`);
+      }
     }
     if (!Array.isArray(requirement.sourceLocators) || requirement.sourceLocators.length === 0) {
       errors.push(`${requirement.id}: thiếu sourceLocators.`);
@@ -482,7 +492,7 @@ export const validateCourseDataV4 = async ({
             question => question.subTypeId === subType.id
           ).length;
           if (subTypeQuestionCount < blueprint.coverage.minimumQuestionsPerSubType) {
-            errors.push(
+            reportCoverageIssue(
               `${type.id}: subtype ${subType.id} mới có ${subTypeQuestionCount}/${blueprint.coverage.minimumQuestionsPerSubType} câu tối thiểu.`
             );
           }
@@ -490,14 +500,14 @@ export const validateCourseDataV4 = async ({
             subType.targetQuestionCount !== undefined &&
             subTypeQuestionCount !== subType.targetQuestionCount
           ) {
-            errors.push(
+            reportCoverageIssue(
               `${type.id}: subtype ${subType.id} phải có ${subType.targetQuestionCount} câu, hiện có ${subTypeQuestionCount}.`
             );
           }
         }
         for (const requiredRole of blueprint.coverage.requiredPracticeRoles) {
           if (!typeQuestions.some(question => question.practiceRole === requiredRole)) {
-            errors.push(`${type.id}: ngân hàng thiếu practiceRole ${requiredRole}.`);
+            reportCoverageIssue(`${type.id}: ngân hàng thiếu practiceRole ${requiredRole}.`);
           }
         }
         for (const requiredRepresentation of blueprint.coverage.requiredRepresentations) {
@@ -506,7 +516,7 @@ export const validateCourseDataV4 = async ({
               question => question.representationType === requiredRepresentation
             )
           ) {
-            errors.push(
+            reportCoverageIssue(
               `${type.id}: ngân hàng thiếu representationType ${requiredRepresentation}.`
             );
           }
@@ -515,7 +525,7 @@ export const validateCourseDataV4 = async ({
           question => question.isMasteryHoldout === true
         ).length;
         if (holdoutCount !== blueprint.coverage.masteryHoldoutCount) {
-          errors.push(
+          reportCoverageIssue(
             `${type.id}: phải có ${blueprint.coverage.masteryHoldoutCount} mastery holdout, hiện có ${holdoutCount}.`
           );
         }

@@ -83,6 +83,8 @@ export const QuestionTypeDetail: React.FC = () => {
     : null;
 
   const [visitedTabIds, setVisitedTabIds] = useState<Set<string>>(new Set());
+  const [checkpointAnswers, setCheckpointAnswers] = useState<Record<string, string>>({});
+  const [passedCheckpointIds, setPassedCheckpointIds] = useState<Set<string>>(new Set());
   const [showLessonCompletedMsg, setShowLessonCompletedMsg] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('theory');
   const [isPlayingSpeech, setIsPlayingSpeech] = useState(false);
@@ -104,12 +106,23 @@ export const QuestionTypeDetail: React.FC = () => {
       : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition_mistakes');
 
     setVisitedTabIds(new Set([defaultTab]));
+    setCheckpointAnswers({});
     setActiveTab(defaultTab);
     setShowLessonCompletedMsg(false);
 
     const userId = user?.uid || 'guest';
     const readLessons = storageService.getReadLessons(userId);
-    if (readLessons.includes(detail.id)) {
+    const requiredCheckpointIds = (detail.theoryCheckpoints ?? []).map(item => item.id);
+    const storedCheckpointIds = new Set(storageService.getPassedTheoryCheckpoints(userId));
+    const restoredPassedIds = new Set(
+      requiredCheckpointIds.filter(id => storedCheckpointIds.has(id))
+    );
+    setPassedCheckpointIds(restoredPassedIds);
+    const hasPassedRequiredCheckpoints =
+      requiredCheckpointIds.length === 0 ||
+      requiredCheckpointIds.every(id => restoredPassedIds.has(id));
+
+    if (readLessons.includes(detail.id) && hasPassedRequiredCheckpoints) {
       setShowLessonCompletedMsg(true);
     } else {
       const availableIds: string[] = [];
@@ -119,7 +132,7 @@ export const QuestionTypeDetail: React.FC = () => {
       availableIds.push('method');
       availableIds.push('example');
 
-      if (availableIds.length === 1) {
+      if (availableIds.length === 1 && requiredCheckpointIds.length === 0) {
         storageService.saveLessonRead(userId, detail.id);
         setShowLessonCompletedMsg(true);
       }
@@ -228,6 +241,78 @@ export const QuestionTypeDetail: React.FC = () => {
                 </div>
               ))}
             </div>
+
+            {detail.theoryCheckpoints && detail.theoryCheckpoints.length > 0 && (
+              <div className="space-y-4 border-t border-border/40 pt-5">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300">
+                    Tự kiểm tra trước khi luyện tập
+                  </p>
+                  <p className="mt-1 text-xs font-semibold text-muted-foreground">
+                    Chọn đúng đáp án để xác nhận bạn đã nắm phần lý thuyết cốt lõi.
+                  </p>
+                </div>
+
+                {detail.theoryCheckpoints.map((checkpoint, checkpointIndex) => {
+                  const selectedAnswer = checkpointAnswers[checkpoint.id];
+                  const hasPassed = passedCheckpointIds.has(checkpoint.id);
+                  const optionLabels = ['A', 'B', 'C', 'D'];
+
+                  return (
+                    <div
+                      key={checkpoint.id}
+                      className="space-y-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4"
+                    >
+                      <p className="text-xs md:text-sm font-extrabold leading-relaxed text-foreground">
+                        Câu {checkpointIndex + 1}: <LatexRenderer text={checkpoint.question} />
+                      </p>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {checkpoint.options.map((option, optionIndex) => {
+                          const answer = optionLabels[optionIndex];
+                          const isSelected = selectedAnswer === answer;
+                          const isCorrectOption = hasPassed && answer === checkpoint.correctAnswer;
+
+                          return (
+                            <button
+                              key={answer}
+                              type="button"
+                              disabled={hasPassed}
+                              onClick={() => handleCheckpointAnswer(checkpoint.id, answer)}
+                              className={cn(
+                                "rounded-xl border px-3 py-2.5 text-left text-xs font-semibold leading-relaxed transition-colors",
+                                isCorrectOption
+                                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                  : isSelected
+                                    ? "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300"
+                                    : "border-border/60 bg-background hover:border-cyan-500/40 hover:bg-cyan-500/5"
+                              )}
+                            >
+                              <span className="mr-1.5 font-black">{answer}.</span>
+                              <LatexRenderer text={option} />
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {selectedAnswer && (
+                        <div
+                          className={cn(
+                            "rounded-xl px-3 py-2.5 text-xs font-semibold leading-relaxed",
+                            hasPassed
+                              ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                              : "bg-rose-500/10 text-rose-700 dark:text-rose-300"
+                          )}
+                        >
+                          {hasPassed
+                            ? <>✓ Chính xác. <LatexRenderer text={checkpoint.explanation} /></>
+                            : 'Chưa đúng. Hãy đọc lại phần lý thuyết phía trên và chọn lại.'}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
       )
@@ -469,22 +554,51 @@ export const QuestionTypeDetail: React.FC = () => {
     }
   };
 
+  const persistCompletionIfReady = (
+    visitedIds: Set<string>,
+    passedIds: Set<string>
+  ) => {
+    if (!detail) return;
+    const availableTabIds = tabItems.map(item => item.id);
+    const requiredCheckpointIds = (detail.theoryCheckpoints ?? []).map(item => item.id);
+    const hasVisitedAllTabs =
+      availableTabIds.length > 0 && availableTabIds.every(id => visitedIds.has(id));
+    const hasPassedAllCheckpoints =
+      requiredCheckpointIds.length === 0 ||
+      requiredCheckpointIds.every(id => passedIds.has(id));
+
+    if (hasVisitedAllTabs && hasPassedAllCheckpoints) {
+      const userId = user?.uid || 'guest';
+      const readLessons = storageService.getReadLessons(userId);
+      if (!readLessons.includes(detail.id)) {
+        storageService.saveLessonRead(userId, detail.id);
+      }
+      setShowLessonCompletedMsg(true);
+    }
+  };
+
+  const handleCheckpointAnswer = (checkpointId: string, answer: string) => {
+    if (!detail) return;
+    setCheckpointAnswers(previous => ({ ...previous, [checkpointId]: answer }));
+    const checkpoint = detail.theoryCheckpoints?.find(item => item.id === checkpointId);
+    if (!checkpoint || answer !== checkpoint.correctAnswer) return;
+
+    storageService.saveTheoryCheckpointPassed(user?.uid || 'guest', checkpointId);
+    setPassedCheckpointIds(previous => {
+      const next = new Set(previous);
+      next.add(checkpointId);
+      persistCompletionIfReady(visitedTabIds, next);
+      return next;
+    });
+  };
+
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     if (!detail) return;
     setVisitedTabIds(prev => {
       const next = new Set(prev);
       next.add(tabId);
-
-      const available = tabItems.map(item => item.id);
-      if (available.length > 0 && available.every(id => next.has(id))) {
-        const userId = user?.uid || 'guest';
-        const readLessons = storageService.getReadLessons(userId);
-        if (!readLessons.includes(detail.id)) {
-          storageService.saveLessonRead(userId, detail.id);
-          setShowLessonCompletedMsg(true);
-        }
-      }
+      persistCompletionIfReady(next, passedCheckpointIds);
       return next;
     });
   };
@@ -554,6 +668,9 @@ export const QuestionTypeDetail: React.FC = () => {
                 ) : (
                   <div className="text-[10px] font-black text-muted-foreground pt-1">
                     Tiến trình lý thuyết: {visitedTabIds.size}/{tabItems.length} phần
+                    {detail.theoryCheckpoints && detail.theoryCheckpoints.length > 0 && (
+                      <> • Tự kiểm tra: {passedCheckpointIds.size}/{detail.theoryCheckpoints.length}</>
+                    )}
                   </div>
                 )}
 

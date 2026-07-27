@@ -261,6 +261,14 @@ export interface QuestionPracticeMetadata {
   isMasteryHoldout?: boolean;
 }
 
+export interface QuestionTypeTheoryCheckpoint {
+  id: string;
+  question: string;
+  options: [string, string, string, string];
+  correctAnswer: 'A' | 'B' | 'C' | 'D';
+  explanation: string;
+}
+
 export interface QuestionType {
   id: string;
   topicId: string;
@@ -275,6 +283,7 @@ export interface QuestionType {
   exampleQuestionId?: string; // ID câu hỏi dùng làm ví dụ mẫu trong tab "Ví dụ mẫu"
   subTypes?: SubType[]; // Phân dạng bài tập con chi tiết
   theory?: string[]; // Lý thuyết & Định nghĩa cơ bản của dạng bài
+  theoryCheckpoints?: QuestionTypeTheoryCheckpoint[]; // Câu tự kiểm tra bắt buộc trước luyện tập
   practiceCoverage?: QuestionTypePracticeCoverage;
 }
 
