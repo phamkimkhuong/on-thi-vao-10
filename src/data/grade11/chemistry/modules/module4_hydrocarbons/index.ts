@@ -7,11 +7,26 @@ import {
   g11ChemistryHydrocarbonsOutcomes
 } from './learningPath';
 import { m4AssessmentQuestions, m4AssessmentSolutions } from './assessments';
+import {
+  g11ChemistryHydrocarbonsExpandedQuestions,
+  g11ChemistryHydrocarbonsExpandedSolutions,
+  g11ChemistryHydrocarbonsExpansionSpecs
+} from './practiceExpansion';
+import { expandChemistryPracticeCoverage } from '../../practiceExpansionBuilder';
 
 export const topics = g11ChemistryHydrocarbonsTopics;
-export const questionTypes = g11ChemistryHydrocarbonsQuestionTypes;
-export const questions = g11ChemistryHydrocarbonsQuestions;
-export const solutions = g11ChemistryHydrocarbonsSolutions;
+export const questionTypes = expandChemistryPracticeCoverage(
+  g11ChemistryHydrocarbonsQuestionTypes,
+  g11ChemistryHydrocarbonsExpansionSpecs
+);
+export const questions = [
+  ...g11ChemistryHydrocarbonsQuestions,
+  ...g11ChemistryHydrocarbonsExpandedQuestions
+];
+export const solutions = [
+  ...g11ChemistryHydrocarbonsSolutions,
+  ...g11ChemistryHydrocarbonsExpandedSolutions
+];
 export const outcomes = g11ChemistryHydrocarbonsOutcomes;
 export const misconceptions = g11ChemistryHydrocarbonsMisconceptions;
 export const assessmentQuestions = m4AssessmentQuestions;

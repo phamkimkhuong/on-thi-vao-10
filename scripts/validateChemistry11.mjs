@@ -86,6 +86,7 @@ const checkpointExams = [];
 const checkpointBlueprints = [];
 const theoryResourceSpecs = [];
 const theoryCheckpointSpecs = [];
+const practiceExpansionSpecs = [];
 
 for (const moduleName of moduleDirs) {
   const modulePath = path.join(modulesDirectory, moduleName);
@@ -93,6 +94,44 @@ for (const moduleName of moduleDirs) {
   questionTypes.push(...readFirstMatchingArray(path.join(modulePath, 'questionTypes.ts'), /export const (g11Chemistry\w+QuestionTypes)/));
   questions.push(...readFirstMatchingArray(path.join(modulePath, 'questions.ts'), /export const (g11Chemistry\w+Questions)/));
   solutions.push(...readFirstMatchingArray(path.join(modulePath, 'solutions.ts'), /export const (g11Chemistry\w+Solutions)/));
+  const practiceExpansionPath = path.join(modulePath, 'practiceExpansion.ts');
+  if (fs.existsSync(practiceExpansionPath)) {
+    const moduleExpansionSpecs = readExportedArray(practiceExpansionPath, 'specs');
+    practiceExpansionSpecs.push(...moduleExpansionSpecs);
+    questions.push(...moduleExpansionSpecs.map(spec => ({
+      id: spec.id,
+      subjectId: 'chemistry',
+      topicId: spec.topicId,
+      questionTypeId: spec.questionTypeId,
+      content: spec.content,
+      responseType: spec.responseType,
+      options: spec.options,
+      correctAnswer: spec.correctAnswer,
+      acceptedAnswers: spec.acceptedAnswers,
+      difficulty: spec.difficulty,
+      sourceType: 'manual',
+      validatorType: spec.validatorType,
+      outcomeIds: spec.outcomeIds,
+      subTypeId: spec.subTypeId,
+      practiceRole: spec.practiceRole,
+      representationType: spec.representationType,
+      isMasteryHoldout: spec.isMasteryHoldout,
+      estimatedSeconds: spec.estimatedSeconds
+    })));
+    solutions.push(...moduleExpansionSpecs.map(spec => ({
+      id: `${spec.id}-solution`,
+      questionId: spec.id,
+      recognition: spec.solution?.recognition,
+      detailedSteps: (spec.solution?.reasoning ?? []).map((explanation, index) => ({
+        order: index + 1,
+        title: `Bước ${index + 1}`,
+        explanation
+      })),
+      finalAnswer: spec.correctAnswer,
+      commonMistakes: [spec.solution?.commonMistake],
+      reviewSuggestions: [spec.solution?.reviewSuggestion]
+    })));
+  }
   outcomes.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g11Chemistry\w+Outcomes)/));
   misconceptions.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g11Chemistry\w+Misconceptions)/));
   const theoryResourcesPath = path.join(modulePath, 'theoryResources.ts');
@@ -208,6 +247,7 @@ const checkpointBlueprintById = new Map(checkpointBlueprints.map(item => [item.i
 const semesterQuestionById = new Map(semesterQuestions.map(item => [item.id, item]));
 const semesterSolutionByQuestionId = new Map(semesterSolutions.map(item => [item.questionId, item]));
 const semesterBlueprintById = new Map(semesterBlueprints.map(item => [item.id, item]));
+const practiceExpansionSpecsByType = groupBy(practiceExpansionSpecs, item => item.questionTypeId);
 
 if (textbookLessons.length !== 25) {
   errors.push(`Mục lục Kết nối tri thức phải có 25 bài, hiện có ${textbookLessons.length}.`);
@@ -288,8 +328,10 @@ for (const type of questionTypes) {
 
   if (type.practiceCoverage) {
     const typeQuestions = questions.filter(item => item.questionTypeId === type.id);
-    if (typeQuestions.length !== type.practiceCoverage.targetQuestionCount) {
-      errors.push(`${type.id}: có ${typeQuestions.length}/${type.practiceCoverage.targetQuestionCount} câu theo blueprint.`);
+    const typeExpansionSpecs = practiceExpansionSpecsByType.get(type.id) ?? [];
+    const effectiveTarget = type.practiceCoverage.targetQuestionCount + typeExpansionSpecs.length;
+    if (typeQuestions.length !== effectiveTarget) {
+      errors.push(`${type.id}: có ${typeQuestions.length}/${effectiveTarget} câu theo blueprint mở rộng.`);
     }
     for (const subtype of type.subTypes ?? []) {
       const count = typeQuestions.filter(item => item.subTypeId === subtype.id).length;
@@ -309,6 +351,45 @@ for (const type of questionTypes) {
     if (difficulty.easy < 3 || difficulty.medium < 4 || difficulty.hard < 3) {
       errors.push(`${type.id}: phân bố độ khó chưa đạt tối thiểu 3 dễ, 4 vừa, 3 khó.`);
     }
+  }
+}
+
+for (const duplicate of duplicateKeys(practiceExpansionSpecs, item => item.id)) {
+  errors.push(`Practice expansion spec bị trùng: ${duplicate}.`);
+}
+for (const [questionTypeId, specs] of practiceExpansionSpecsByType) {
+  const type = typeById.get(questionTypeId);
+  if (!type) {
+    errors.push(`${questionTypeId}: gói mở rộng không có dạng bài tương ứng.`);
+    continue;
+  }
+  if (specs.length !== 6) errors.push(`${questionTypeId}: gói mở rộng phải có 6 câu, hiện có ${specs.length}.`);
+  const subtypeCounts = (type.subTypes ?? []).map(subType =>
+    specs.filter(spec => spec.subTypeId === subType.id).length
+  );
+  if (subtypeCounts.some(count => count !== 2)) {
+    errors.push(`${questionTypeId}: mỗi dạng con phải có đúng 2 câu mở rộng.`);
+  }
+  const responseCounts = Object.fromEntries(
+    ['single_choice', 'short_answer'].map(responseType => [
+      responseType,
+      specs.filter(spec => spec.responseType === responseType).length
+    ])
+  );
+  if (responseCounts.single_choice < 3 || responseCounts.short_answer < 2) {
+    errors.push(`${questionTypeId}: cần ít nhất 3 MCQ và 2 câu trả lời ngắn trong gói mở rộng.`);
+  }
+  const difficultyCounts = Object.fromEntries(
+    ['medium', 'hard'].map(difficulty => [
+      difficulty,
+      specs.filter(spec => spec.difficulty === difficulty).length
+    ])
+  );
+  if (difficultyCounts.medium < 2 || difficultyCounts.hard < 4) {
+    errors.push(`${questionTypeId}: gói mở rộng cần ít nhất 2 câu vừa và 4 câu khó.`);
+  }
+  if (specs.filter(spec => spec.isMasteryHoldout).length < 2) {
+    errors.push(`${questionTypeId}: gói mở rộng cần ít nhất 2 mastery holdout.`);
   }
 }
 
@@ -939,6 +1020,7 @@ console.log(`Curriculum registry: ${textbookChapters.size} chương, ${textbookL
 console.log(`Module 1: ${coreQuestions.length} câu; phân bố đáp án ${JSON.stringify(answerDistribution)}.`);
 console.log(`Assessment lý thuyết: ${assessmentQuestions.length} câu, ${assessmentSolutions.length} lời giải, ${assessmentExams.length} đề, ${assessmentBlueprints.length} ma trận.`);
 console.log(`Học liệu lý thuyết Chương 1–6: ${theoryCheckpointSpecs.length} dạng dùng lý thuyết chuyên sâu, ${theoryResourceSpecs.length} dạng có học liệu mở rộng, ${[...theoryCheckpointSpecs, ...theoryResourceSpecs].reduce((sum, item) => sum + (item.checks?.length ?? 0), 0)} checkpoint.`);
+console.log(`Luyện tập mở rộng: ${practiceExpansionSpecsByType.size} dạng trọng tâm, ${practiceExpansionSpecs.length} câu mới (${practiceExpansionSpecs.filter(item => item.responseType === 'short_answer').length} trả lời ngắn).`);
 console.log(`Checkpoint ${checkpointTopicIds.length} chương: ${checkpointQuestions.length} câu, ${checkpointSolutions.length} lời giải, ${checkpointExams.length} đề, ${checkpointBlueprints.length} ma trận.`);
 console.log(`Kiểm tra học kỳ: ${semesterQuestions.length} câu, ${semesterSolutions.length} lời giải, ${semesterExams.length} mã đề, ${semesterBlueprints.length} ma trận.`);
 

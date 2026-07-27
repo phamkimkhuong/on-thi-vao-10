@@ -7,11 +7,26 @@ import {
   g11ChemistryHalogenAlcoholPhenolOutcomes
 } from './learningPath';
 import { m5AssessmentQuestions, m5AssessmentSolutions } from './assessments';
+import {
+  g11ChemistryHalogenAlcoholPhenolExpandedQuestions,
+  g11ChemistryHalogenAlcoholPhenolExpandedSolutions,
+  g11ChemistryHalogenAlcoholPhenolExpansionSpecs
+} from './practiceExpansion';
+import { expandChemistryPracticeCoverage } from '../../practiceExpansionBuilder';
 
 export const topics = g11ChemistryHalogenAlcoholPhenolTopics;
-export const questionTypes = g11ChemistryHalogenAlcoholPhenolQuestionTypes;
-export const questions = g11ChemistryHalogenAlcoholPhenolQuestions;
-export const solutions = g11ChemistryHalogenAlcoholPhenolSolutions;
+export const questionTypes = expandChemistryPracticeCoverage(
+  g11ChemistryHalogenAlcoholPhenolQuestionTypes,
+  g11ChemistryHalogenAlcoholPhenolExpansionSpecs
+);
+export const questions = [
+  ...g11ChemistryHalogenAlcoholPhenolQuestions,
+  ...g11ChemistryHalogenAlcoholPhenolExpandedQuestions
+];
+export const solutions = [
+  ...g11ChemistryHalogenAlcoholPhenolSolutions,
+  ...g11ChemistryHalogenAlcoholPhenolExpandedSolutions
+];
 export const outcomes = g11ChemistryHalogenAlcoholPhenolOutcomes;
 export const misconceptions = g11ChemistryHalogenAlcoholPhenolMisconceptions;
 export const assessmentQuestions = m5AssessmentQuestions;
