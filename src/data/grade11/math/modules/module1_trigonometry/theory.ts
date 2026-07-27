@@ -300,3 +300,47 @@ export const math11Module1Theory: TheoryBlock[] = [
     reviewStatus: 'source_checked'
   }
 ];
+
+math11Module1Theory[0].content += '\n\nKhi xử lí góc, nên đưa số đo về một khoảng chuẩn bằng cách cộng hoặc trừ bội của $2\\pi$, rồi mới xác định góc phần tư và dấu. Khi biết một giá trị lượng giác, dùng hệ thức cơ bản để tìm độ lớn và dùng vị trí tia cuối để chọn dấu.';
+math11Module1Theory[0].workedExamples.push(
+  {id:'ex-math11-m1-01-coterminal',title:'Tìm góc cùng tia cuối',problem:'Tìm góc trong $[0;2\\pi)$ cùng tia cuối với $-17\\pi/6$.',steps:['Cộng một bội thích hợp của $2\\pi$.','$-17\\pi/6+4\\pi=7\\pi/6$.'],answer:'Góc cần tìm là $7\\pi/6$.'},
+  {id:'ex-math11-m1-01-values',title:'Tính giá trị theo góc phần tư',problem:'Biết $\\sin\\alpha=3/5$ và $\\alpha$ ở góc phần tư II. Tính $\\cos\\alpha$.',steps:['Từ $\\sin^2\\alpha+\\cos^2\\alpha=1$, suy ra $|\\cos\\alpha|=4/5$.','Cos âm ở góc phần tư II.'],answer:'$\\cos\\alpha=-4/5$.'}
+);
+math11Module1Theory[0].checkpoints.push(
+  {id:'cp-math11-m1-01-radian',question:'$180^\\circ$ bằng:',options:['$\\pi/2$ rad','$\\pi$ rad','$2\\pi$ rad','$180\\pi$ rad'],correctAnswer:'B',explanation:'Quy đổi cơ bản $180^\\circ=\\pi$ rad.'},
+  {id:'cp-math11-m1-01-ray',question:'Hai góc cùng tia cuối hơn kém nhau:',options:['$k\\pi$','$2k\\pi$','$\\pi/2$','$2\\pi+1$'],correctAnswer:'B',explanation:'Hiệu hai số đo phải là bội nguyên của một vòng đầy.'},
+  {id:'cp-math11-m1-01-sign',question:'Ở góc phần tư III, dấu của sin và cos là:',options:['Đều dương','Sin dương, cos âm','Đều âm','Sin âm, cos dương'],correctAnswer:'C',explanation:'Cả tung độ và hoành độ của điểm trên đường tròn đều âm.'}
+);
+
+math11Module1Theory[1].content += '\n\nCó thể kiểm tra nhanh công thức bằng các góc đặc biệt như 0 hoặc $\\pi/2$. Với biểu thức phức tạp, xác định mục tiêu trước: tạo góc đặc biệt, hạ bậc, chuyển tổng thành tích để tìm nghiệm hoặc chuyển tích thành tổng để thu gọn.';
+math11Module1Theory[1].workedExamples.push(
+  {id:'ex-math11-m1-02-double',title:'Khai thác góc nhân đôi',problem:'Biết $\\sin x=3/5$, $\\cos x=4/5$. Tính $\\sin2x$ và $\\cos2x$.',steps:['$\\sin2x=2\\sin x\\cos x=24/25$.','$\\cos2x=\\cos^2x-\\sin^2x=7/25$.'],answer:'$\\sin2x=24/25$, $\\cos2x=7/25$.'},
+  {id:'ex-math11-m1-02-sum-product',title:'Rút gọn tổng thành tích',problem:'Rút gọn $\\cos5x+\\cos3x$.',steps:['Nửa tổng hai góc là $4x$.','Nửa hiệu hai góc là $x$.','Áp dụng công thức tổng hai cos.'],answer:'$2\\cos4x\\cos x$.'}
+);
+math11Module1Theory[1].checkpoints.push(
+  {id:'cp-math11-m1-02-sine',question:'$\\sin(a+b)$ bằng:',options:['$\\sin a\\cos b+\\cos a\\sin b$','$\\sin a\\sin b+\\cos a\\cos b$','$\\sin a\\cos b-\\cos a\\sin b$','$\\cos a\\cos b-\\sin a\\sin b$'],correctAnswer:'A',explanation:'Sin của tổng giữ dấu cộng.'},
+  {id:'cp-math11-m1-02-double',question:'$\\sin2x$ bằng:',options:['$\\sin x\\cos x$','$2\\sin x\\cos x$','$2\\sin x$','$\\sin^2x$'],correctAnswer:'B',explanation:'Công thức góc nhân đôi có hệ số 2.'},
+  {id:'cp-math11-m1-02-product',question:'$\\cos a+\\cos b$ được đổi thành:',options:['$2\\cos\\frac{a+b}2\\cos\\frac{a-b}2$','$2\\sin\\frac{a+b}2\\sin\\frac{a-b}2$','$\\cos(a+b)$','$\\cos(a-b)$'],correctAnswer:'A',explanation:'Đây là công thức tổng thành tích của hai cos.'}
+);
+
+math11Module1Theory[2].content += '\n\nVới hàm dạng $y=A\\sin(ax+b)+d$ hoặc $A\\cos(ax+b)+d$, biên độ là $|A|$, chu kì là $2\\pi/|a|$ và đường trung bình là $y=d$. Việc kết hợp ba đặc điểm này giúp nhận dạng đồ thị chắc chắn hơn.';
+math11Module1Theory[2].workedExamples.push(
+  {id:'ex-math11-m1-03-transform',title:'Đọc tham số đồ thị',problem:'Xác định biên độ, chu kì và tập giá trị của $y=3\\sin(2x)-1$.',steps:['Biên độ là $|3|=3$.','Chu kì là $2\\pi/2=\\pi$.','Dịch tập $[-3;3]$ xuống 1 đơn vị.'],answer:'Biên độ 3, chu kì $\\pi$, tập giá trị $[-4;2]$.'},
+  {id:'ex-math11-m1-03-tangent-domain',title:'Miền xác định hàm tan',problem:'Tìm tập xác định của $y=\\tan(3x-\\pi/2)$.',steps:['Cần $3x-\\pi/2\\ne\\pi/2+k\\pi$.','Suy ra $3x\\ne\\pi+k\\pi$.'],answer:'$x\\ne(k+1)\\pi/3$, $k\\in\\mathbb Z$.'}
+);
+math11Module1Theory[2].checkpoints.push(
+  {id:'cp-math11-m1-03-period-sin',question:'Chu kì của $y=\\sin(4x)$ là:',options:['$2\\pi$','$\\pi$','$\\pi/2$','$\\pi/4$'],correctAnswer:'C',explanation:'$T=2\\pi/4=\\pi/2$.'},
+  {id:'cp-math11-m1-03-range',question:'Tập giá trị của $y=2\\cos x+1$ là:',options:['$[-1;3]$','$[-2;2]$','$[0;3]$','$\\mathbb R$'],correctAnswer:'A',explanation:'Nhân $[-1;1]$ với 2 rồi cộng 1.'},
+  {id:'cp-math11-m1-03-parity',question:'Hàm nào sau đây là hàm chẵn?',options:['$\\sin x$','$\\cos x$','$\\tan x$','$\\cot x$'],correctAnswer:'B',explanation:'$\\cos(-x)=\\cos x$.'}
+);
+
+math11Module1Theory[3].content += '\n\nKhi tìm nghiệm trên một miền, hãy viết nghiệm tổng quát trước, giải bất đẳng thức theo tham số nguyên $k$, rồi kiểm tra riêng các đầu mút. Với phương trình bậc hai theo một giá trị lượng giác, đặt ẩn phụ nhưng phải giữ điều kiện $[-1;1]$ cho sin hoặc cos.';
+math11Module1Theory[3].workedExamples.push(
+  {id:'ex-math11-m1-04-interval',title:'Lọc nghiệm trên đoạn',problem:'Giải $\\sin x=1/2$ trên $[0;2\\pi]$.',steps:['Nghiệm tổng quát: $x=\\pi/6+2k\\pi$ hoặc $x=5\\pi/6+2k\\pi$.','Lọc các giá trị nằm trong đoạn.'],answer:'$x=\\pi/6$ hoặc $x=5\\pi/6$.'},
+  {id:'ex-math11-m1-04-quadratic',title:'Phương trình bậc hai theo cos',problem:'Giải $2\\cos^2x-3\\cos x+1=0$.',steps:['Đặt $t=\\cos x\\in[-1;1]$.','$(2t-1)(t-1)=0$, nên $t=1/2$ hoặc $t=1$.','Giải hai phương trình cos cơ bản.'],answer:'$x=\\pm\\pi/3+2k\\pi$ hoặc $x=2k\\pi$, $k\\in\\mathbb Z$.'}
+);
+math11Module1Theory[3].checkpoints.push(
+  {id:'cp-math11-m1-04-cos',question:'$\\cos x=1$ có nghiệm:',options:['$x=k\\pi$','$x=2k\\pi$','$x=\\pi/2+k\\pi$','$x=\\pi+2k\\pi$'],correctAnswer:'B',explanation:'Cos bằng 1 tại các góc trọn vòng.'},
+  {id:'cp-math11-m1-04-existence',question:'Phương trình $\\sin x=3/2$:',options:['Có một nghiệm','Có hai nghiệm','Có vô số nghiệm','Vô nghiệm'],correctAnswer:'D',explanation:'Sin chỉ nhận giá trị trong $[-1;1]$.'},
+  {id:'cp-math11-m1-04-count',question:'$\\cos x=0$ có bao nhiêu nghiệm trên $[0;2\\pi]$?',options:['$1$','$2$','$3$','$4$'],correctAnswer:'B',explanation:'Hai nghiệm là $\\pi/2$ và $3\\pi/2$.'}
+);

@@ -15,6 +15,7 @@ import {
   chem11Qt13Theory,
   chem11Qt14Theory
 } from './theory';
+import { chem11EquilibriumTheoryCheckpoints } from './theoryCheckpoints';
 
 export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
   {
@@ -817,3 +818,9 @@ export const g11ChemistryEquilibriumQuestionTypes: QuestionType[] = [
     }
   }
 ];
+
+for (const questionType of g11ChemistryEquilibriumQuestionTypes) {
+  const checkpoints = chem11EquilibriumTheoryCheckpoints[questionType.id];
+  if (!checkpoints) continue;
+  questionType.theoryCheckpoints = checkpoints;
+}

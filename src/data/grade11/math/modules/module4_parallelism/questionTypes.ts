@@ -21,6 +21,6 @@ export const g11MathModule4QuestionTypes: CourseQuestionType[] = specs.map(spec 
   lessonIds: [`math11-kntt-l${spec.lesson}`], outcomeIds: [`out-math11-m4-0${spec.number - 9}`],
   name: spec.name, slug: spec.slug, description: spec.description, difficulty: 'medium', examFrequency: 'high',
   recognitionSigns: spec.signs, solvingSteps: spec.steps, commonMistakes: spec.mistakes,
-  subTypes: spec.subTypes.map(sub => ({ ...sub, targetQuestionCount: 6 })),
-  practiceCoverage: { targetQuestionCount: 12, minimumQuestionsPerSubType: 3, requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'], requiredRepresentations: spec.representations, masteryHoldoutCount: 2 }
+  subTypes: spec.subTypes.map(sub => ({ ...sub, targetQuestionCount: 12 })),
+  practiceCoverage: { targetQuestionCount: 24, minimumQuestionsPerSubType: 6, requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'], requiredRepresentations: spec.representations, masteryHoldoutCount: 4 }
 }));

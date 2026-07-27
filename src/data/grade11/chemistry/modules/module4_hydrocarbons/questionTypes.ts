@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { chem11HydrocarbonsTheoryResources } from './theoryResources';
 
 export const g11ChemistryHydrocarbonsQuestionTypes: QuestionType[] = [
   {
@@ -190,3 +191,10 @@ export const g11ChemistryHydrocarbonsQuestionTypes: QuestionType[] = [
     practiceCoverage:{targetQuestionCount:12,minimumQuestionsPerSubType:4,requiredPracticeRoles:['guided','near_transfer','misconception_check','far_transfer'],requiredRepresentations:['experiment','equation','table'],masteryHoldoutCount:3}
   }
 ];
+
+for (const questionType of g11ChemistryHydrocarbonsQuestionTypes) {
+  const resource = chem11HydrocarbonsTheoryResources[questionType.id];
+  if (!resource) continue;
+  questionType.theory = [...(questionType.theory ?? []), ...resource.theorySupplement];
+  questionType.theoryCheckpoints = resource.checkpoints;
+}

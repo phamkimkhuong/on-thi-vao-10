@@ -14,20 +14,20 @@ export const g11MathModule9PracticeBlueprints: QuestionTypePracticeBlueprint[] =
         id: `math11-qt${blueprint[0]}-st-${blueprint[1]}`,
         name: blueprint[2],
         example: blueprint[3],
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       },
       {
         id: `math11-qt${blueprint[0]}-st-${blueprint[4]}`,
         name: blueprint[5],
         example: blueprint[6],
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       }
     ],
     coverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: [blueprint[7], blueprint[8]],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   }));

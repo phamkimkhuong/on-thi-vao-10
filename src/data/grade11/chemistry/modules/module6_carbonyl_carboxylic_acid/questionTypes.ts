@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { chem11CarbonylCarboxylicAcidTheoryResources } from './theoryResources';
 
 export const g11ChemistryCarbonylCarboxylicAcidQuestionTypes: QuestionType[] = [
   {
@@ -182,3 +183,10 @@ export const g11ChemistryCarbonylCarboxylicAcidQuestionTypes: QuestionType[] = [
     practiceCoverage:{targetQuestionCount:12,minimumQuestionsPerSubType:4,requiredPracticeRoles:['guided','near_transfer','misconception_check','far_transfer'],requiredRepresentations:['table','equation','text'],masteryHoldoutCount:3}
   }
 ];
+
+for (const questionType of g11ChemistryCarbonylCarboxylicAcidQuestionTypes) {
+  const resource = chem11CarbonylCarboxylicAcidTheoryResources[questionType.id];
+  if (!resource) continue;
+  questionType.theory = [...(questionType.theory ?? []), ...resource.theorySupplement];
+  questionType.theoryCheckpoints = resource.checkpoints;
+}

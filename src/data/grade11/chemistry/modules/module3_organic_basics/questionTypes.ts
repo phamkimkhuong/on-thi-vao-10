@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { chem11OrganicBasicsTheoryResources } from './theoryResources';
 
 export const g11ChemistryOrganicBasicsQuestionTypes: QuestionType[] = [
   {
@@ -608,3 +609,10 @@ export const g11ChemistryOrganicBasicsQuestionTypes: QuestionType[] = [
     practiceCoverage: { targetQuestionCount: 12, minimumQuestionsPerSubType: 4, requiredPracticeRoles: ['guided','near_transfer','misconception_check','far_transfer'], requiredRepresentations: ['text','diagram','equation'], masteryHoldoutCount: 3 }
   }
 ];
+
+for (const questionType of g11ChemistryOrganicBasicsQuestionTypes) {
+  const resource = chem11OrganicBasicsTheoryResources[questionType.id];
+  if (!resource) continue;
+  questionType.theory = [...(questionType.theory ?? []), ...resource.theorySupplement];
+  questionType.theoryCheckpoints = resource.checkpoints;
+}

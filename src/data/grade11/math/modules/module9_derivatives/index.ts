@@ -7,6 +7,10 @@ import {
 import { g11MathModule9Manifest } from './manifest';
 import { g11MathModule9PracticeBlueprints } from './practiceBlueprint';
 import { g11MathModule9Questions } from './questions';
+import {
+  g11MathModule9ExpansionQuestions,
+  g11MathModule9ExpansionSolutions
+} from './questionsExpansion';
 import { g11MathModule9QuestionTypes } from './questionTypes';
 import { g11MathModule9Solutions } from './solutions';
 import { math11Module9Theory } from './theory';
@@ -20,7 +24,7 @@ export const g11MathModule9 = defineCourseModule({
   outcomes: g11MathModule9Outcomes,
   misconceptions: g11MathModule9Misconceptions,
   questionTypes: g11MathModule9QuestionTypes,
-  practiceQuestions: g11MathModule9Questions,
-  practiceSolutions: g11MathModule9Solutions,
+  practiceQuestions: [...g11MathModule9Questions, ...g11MathModule9ExpansionQuestions],
+  practiceSolutions: [...g11MathModule9Solutions, ...g11MathModule9ExpansionSolutions],
   practiceBlueprints: g11MathModule9PracticeBlueprints
 });

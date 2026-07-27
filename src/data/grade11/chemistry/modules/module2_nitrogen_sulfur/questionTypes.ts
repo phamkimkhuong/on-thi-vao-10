@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { chem11NitrogenSulfurTheoryResources } from './theoryResources';
 
 export const g11ChemistryNitrogenSulfurQuestionTypes: QuestionType[] = [
   {
@@ -1081,3 +1082,10 @@ export const g11ChemistryNitrogenSulfurQuestionTypes: QuestionType[] = [
     }
   }
 ];
+
+for (const questionType of g11ChemistryNitrogenSulfurQuestionTypes) {
+  const resource = chem11NitrogenSulfurTheoryResources[questionType.id];
+  if (!resource) continue;
+  questionType.theory = [...(questionType.theory ?? []), ...resource.theorySupplement];
+  questionType.theoryCheckpoints = resource.checkpoints;
+}

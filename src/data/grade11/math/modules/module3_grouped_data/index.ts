@@ -5,6 +5,10 @@ import { g11MathModule3Topics } from './topics';
 import { g11MathModule3QuestionTypes } from './questionTypes';
 import { g11MathModule3Questions } from './questions';
 import { g11MathModule3Solutions } from './solutions';
+import {
+  g11MathModule3ExpansionQuestions,
+  g11MathModule3ExpansionSolutions
+} from './questionsExpansion';
 import { g11MathModule3Outcomes, g11MathModule3Misconceptions } from './learningPath';
 import { math11Module3Theory } from './theory';
 import { g11MathModule3PracticeBlueprints } from './practiceBlueprint';
@@ -17,7 +21,7 @@ export const g11MathModule3 = defineCourseModule({
   outcomes: g11MathModule3Outcomes,
   misconceptions: g11MathModule3Misconceptions,
   questionTypes: g11MathModule3QuestionTypes,
-  practiceQuestions: g11MathModule3Questions,
-  practiceSolutions: g11MathModule3Solutions,
+  practiceQuestions: [...g11MathModule3Questions, ...g11MathModule3ExpansionQuestions],
+  practiceSolutions: [...g11MathModule3Solutions, ...g11MathModule3ExpansionSolutions],
   practiceBlueprints: g11MathModule3PracticeBlueprints
 });

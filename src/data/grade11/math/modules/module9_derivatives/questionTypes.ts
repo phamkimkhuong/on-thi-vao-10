@@ -66,14 +66,14 @@ export const g11MathModule9QuestionTypes: CourseQuestionType[] = specifications.
       id: `math11-qt${specification.number}-st-${subType[0]}`,
       name: subType[1],
       example: subType[2],
-      targetQuestionCount: 6
+      targetQuestionCount: 12
     })),
     practiceCoverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: [...specification.representations],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   })
 );

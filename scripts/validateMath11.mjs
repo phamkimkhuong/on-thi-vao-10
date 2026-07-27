@@ -11,9 +11,11 @@ const result = await validateCourseDataV4({
   expectedOfficialRequirementCount: 33,
   expectedOutcomeCount: 33,
   expectedQuestionTypeCount: 33,
-  expectedPracticeTargetCount: 480,
+  expectedPracticeTargetCount: 792,
   expectedTheoryLessonCount: 33,
   expectedTheoryQuestionTypeCount: 33,
+  expectedAssessmentExamCount: 13,
+  expectedAssessmentBlueprintCount: 13,
   allowPartialCoverage: true
 });
 

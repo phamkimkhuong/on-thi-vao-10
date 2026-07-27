@@ -71,6 +71,8 @@ export const validateCourseDataV4 = async ({
   expectedPracticeTargetCount,
   expectedTheoryLessonCount,
   expectedTheoryQuestionTypeCount,
+  expectedAssessmentExamCount,
+  expectedAssessmentBlueprintCount,
   allowPartialCoverage = false
 }) => {
   const errors = [];
@@ -135,6 +137,10 @@ export const validateCourseDataV4 = async ({
   const misconceptions = [];
   const theory = [];
   const practiceBlueprints = [];
+  const assessmentExams = [];
+  const assessmentQuestions = [];
+  const assessmentSolutions = [];
+  const assessmentBlueprints = [];
 
   for (const moduleDirectory of moduleDirectories) {
     const requiredModuleFiles = [
@@ -219,6 +225,43 @@ export const validateCourseDataV4 = async ({
     );
   }
 
+  const assessmentsPath = path.join(absoluteCourseDirectory, 'assessments.ts');
+  if (fs.existsSync(assessmentsPath)) {
+    const assessmentsModule = await loadTypeScriptModule(assessmentsPath);
+    assessmentExams.push(
+      ...arrayExport(assessmentsModule, 'AssessmentExams', assessmentsPath)
+    );
+    assessmentQuestions.push(
+      ...arrayExport(assessmentsModule, 'AssessmentQuestions', assessmentsPath)
+    );
+    assessmentSolutions.push(
+      ...arrayExport(assessmentsModule, 'AssessmentSolutions', assessmentsPath)
+    );
+    assessmentBlueprints.push(
+      ...arrayExport(assessmentsModule, 'AssessmentBlueprints', assessmentsPath)
+    );
+  }
+
+  const allQuestions = [...questions, ...assessmentQuestions];
+  const allSolutions = [...solutions, ...assessmentSolutions];
+
+  if (
+    expectedAssessmentExamCount !== undefined &&
+    assessmentExams.length !== expectedAssessmentExamCount
+  ) {
+    errors.push(
+      `Phải có ${expectedAssessmentExamCount} đề kiểm tra, hiện có ${assessmentExams.length}.`
+    );
+  }
+  if (
+    expectedAssessmentBlueprintCount !== undefined &&
+    assessmentBlueprints.length !== expectedAssessmentBlueprintCount
+  ) {
+    errors.push(
+      `Phải có ${expectedAssessmentBlueprintCount} ma trận kiểm tra, hiện có ${assessmentBlueprints.length}.`
+    );
+  }
+
   for (const [label, items, keyOf] of [
     ['Nguồn', sources, item => item.id],
     ['Bài học', lessons, item => item.id],
@@ -227,13 +270,15 @@ export const validateCourseDataV4 = async ({
     ['Module', manifests, item => item.id],
     ['Topic', topics, item => item.id],
     ['Dạng bài', questionTypes, item => item.id],
-    ['Câu hỏi', questions, item => item.id],
-    ['Nội dung câu hỏi', questions, item => item.content.replace(/\s+/g, ' ').trim()],
-    ['Lời giải', solutions, item => item.questionId],
+    ['Câu hỏi', allQuestions, item => item.id],
+    ['Nội dung câu hỏi', allQuestions, item => item.content.replace(/\s+/g, ' ').trim()],
+    ['Lời giải', allSolutions, item => item.questionId],
     ['Outcome', outcomes, item => item.id],
     ['Misconception', misconceptions, item => item.id],
     ['Theory block', theory, item => item.id],
-    ['Practice blueprint', practiceBlueprints, item => item.questionTypeId]
+    ['Practice blueprint', practiceBlueprints, item => item.questionTypeId],
+    ['Đề kiểm tra', assessmentExams, item => item.id],
+    ['Ma trận kiểm tra', assessmentBlueprints, item => item.id]
   ]) {
     for (const duplicate of duplicates(items, keyOf)) {
       errors.push(`${label} bị trùng: ${duplicate}.`);
@@ -272,13 +317,16 @@ export const validateCourseDataV4 = async ({
   const manifestById = new Map(manifests.map(item => [item.id, item]));
   const topicById = new Map(topics.map(item => [item.id, item]));
   const typeById = new Map(questionTypes.map(item => [item.id, item]));
-  const questionById = new Map(questions.map(item => [item.id, item]));
-  const solutionByQuestionId = new Map(solutions.map(item => [item.questionId, item]));
+  const questionById = new Map(allQuestions.map(item => [item.id, item]));
+  const solutionByQuestionId = new Map(allSolutions.map(item => [item.questionId, item]));
   const outcomeById = new Map(outcomes.map(item => [item.id, item]));
   const misconceptionById = new Map(misconceptions.map(item => [item.id, item]));
   const requirementById = new Map(officialRequirements.map(item => [item.id, item]));
   const outcomeManifestById = new Map(outcomeManifest.map(item => [item.outcomeId, item]));
   const blueprintByTypeId = new Map(practiceBlueprints.map(item => [item.questionTypeId, item]));
+  const assessmentBlueprintById = new Map(
+    assessmentBlueprints.map(item => [item.id, item])
+  );
   const sameMembers = (left = [], right = []) =>
     left.length === right.length && left.every(item => right.includes(item));
 
@@ -628,7 +676,7 @@ export const validateCourseDataV4 = async ({
     }
   }
 
-  for (const solution of solutions) {
+  for (const solution of allSolutions) {
     const question = questionById.get(solution.questionId);
     if (!question) errors.push(`${solution.questionId}: lời giải không có câu hỏi.`);
     if (solution.courseId !== courseId) errors.push(`${solution.questionId}: courseId không khớp.`);
@@ -652,6 +700,204 @@ export const validateCourseDataV4 = async ({
     }
     if (!Array.isArray(solution.reviewSuggestions) || solution.reviewSuggestions.length === 0) {
       errors.push(`${solution.questionId}: thiếu gợi ý ôn tập.`);
+    }
+  }
+
+  const nearlyEqual = (left, right) => Math.abs(left - right) < 1e-9;
+  const weightTotal = weights =>
+    Object.values(weights ?? {}).reduce((total, value) => total + value, 0);
+  const assessmentResponseType = responseType =>
+    responseType === 'single_choice' ? 'multiple_choice' : responseType;
+
+  for (const blueprint of assessmentBlueprints) {
+    if (blueprint.subjectId !== courseId.split(':')[1]) {
+      errors.push(`${blueprint.id}: subjectId không khớp.`);
+    }
+    if (!Number.isFinite(blueprint.duration) || blueprint.duration <= 0) {
+      errors.push(`${blueprint.id}: thời lượng phải lớn hơn 0.`);
+    }
+    if (!Number.isFinite(blueprint.totalPoints) || blueprint.totalPoints <= 0) {
+      errors.push(`${blueprint.id}: tổng điểm phải lớn hơn 0.`);
+    }
+    if (!Array.isArray(blueprint.scopeTopicIds) || blueprint.scopeTopicIds.length === 0) {
+      errors.push(`${blueprint.id}: thiếu phạm vi topic.`);
+    }
+    for (const topicId of blueprint.scopeTopicIds ?? []) {
+      if (!topicById.has(topicId)) errors.push(`${blueprint.id}: topic ${topicId} không tồn tại.`);
+    }
+    if (
+      blueprint.topicWeights &&
+      !nearlyEqual(weightTotal(blueprint.topicWeights), 1)
+    ) {
+      errors.push(`${blueprint.id}: tổng topicWeights phải bằng 1.`);
+    }
+    for (const topicId of Object.keys(blueprint.topicWeights ?? {})) {
+      if (!blueprint.scopeTopicIds?.includes(topicId)) {
+        errors.push(`${blueprint.id}: topicWeights chứa topic ngoài phạm vi ${topicId}.`);
+      }
+    }
+    if (!Array.isArray(blueprint.outcomeIds) || blueprint.outcomeIds.length === 0) {
+      errors.push(`${blueprint.id}: thiếu outcomeIds.`);
+    }
+    for (const outcomeId of blueprint.outcomeIds ?? []) {
+      const outcome = outcomeById.get(outcomeId);
+      if (!outcome) {
+        errors.push(`${blueprint.id}: outcome ${outcomeId} không tồn tại.`);
+      } else if (!blueprint.scopeTopicIds?.includes(outcome.topicId)) {
+        errors.push(`${blueprint.id}: outcome ${outcomeId} nằm ngoài phạm vi topic.`);
+      }
+    }
+    if (!nearlyEqual(weightTotal(blueprint.competencyWeights), 1)) {
+      errors.push(`${blueprint.id}: tổng competencyWeights phải bằng 1.`);
+    }
+    if (!nearlyEqual(weightTotal(blueprint.difficultyWeights), 1)) {
+      errors.push(`${blueprint.id}: tổng difficultyWeights phải bằng 1.`);
+    }
+    if (!Array.isArray(blueprint.sections) || blueprint.sections.length === 0) {
+      errors.push(`${blueprint.id}: thiếu cấu trúc phần thi.`);
+    } else {
+      const sectionItemCount = blueprint.sections.reduce(
+        (total, section) => total + section.itemCount,
+        0
+      );
+      const sectionPoints = blueprint.sections.reduce(
+        (total, section) => total + section.points,
+        0
+      );
+      if (!Number.isInteger(sectionItemCount) || sectionItemCount <= 0) {
+        errors.push(`${blueprint.id}: tổng số câu trong sections không hợp lệ.`);
+      }
+      if (!nearlyEqual(sectionPoints, blueprint.totalPoints)) {
+        errors.push(`${blueprint.id}: tổng điểm sections không bằng totalPoints.`);
+      }
+      for (const section of blueprint.sections) {
+        if (!isNonEmptyString(section.id) || !isNonEmptyString(section.title)) {
+          errors.push(`${blueprint.id}: section thiếu id hoặc tiêu đề.`);
+        }
+        if (!Number.isInteger(section.itemCount) || section.itemCount <= 0) {
+          errors.push(`${blueprint.id}/${section.id}: itemCount phải là số nguyên dương.`);
+        }
+        if (!Number.isFinite(section.points) || section.points <= 0) {
+          errors.push(`${blueprint.id}/${section.id}: points phải lớn hơn 0.`);
+        }
+      }
+    }
+  }
+
+  for (const exam of assessmentExams) {
+    const blueprint = assessmentBlueprintById.get(exam.blueprintId);
+    if (!blueprint) {
+      errors.push(`${exam.id}: blueprintId ${exam.blueprintId ?? '(trống)'} không tồn tại.`);
+      continue;
+    }
+    if (exam.subjectId !== blueprint.subjectId) {
+      errors.push(`${exam.id}: subjectId không khớp ma trận.`);
+    }
+    if (
+      exam.kind !== blueprint.kind ||
+      exam.duration !== blueprint.duration ||
+      exam.semester !== blueprint.semester
+    ) {
+      errors.push(`${exam.id}: kind, duration hoặc semester không khớp ma trận.`);
+    }
+    if (!sameMembers(exam.scopeTopicIds ?? [], blueprint.scopeTopicIds ?? [])) {
+      errors.push(`${exam.id}: scopeTopicIds không khớp ma trận.`);
+    }
+    if (!Array.isArray(exam.questionIds) || exam.questionIds.length === 0) {
+      errors.push(`${exam.id}: đề chưa có câu hỏi.`);
+      continue;
+    }
+    for (const duplicate of duplicates(exam.questionIds, item => item)) {
+      errors.push(`${exam.id}: câu hỏi bị lặp ${duplicate}.`);
+    }
+    const examQuestions = exam.questionIds
+      .map(questionId => {
+        const question = questionById.get(questionId);
+        if (!question) errors.push(`${exam.id}: câu hỏi ${questionId} không tồn tại.`);
+        return question;
+      })
+      .filter(Boolean);
+    if (examQuestions.length !== exam.questionIds.length) continue;
+
+    const expectedItemCount = blueprint.sections.reduce(
+      (total, section) => total + section.itemCount,
+      0
+    );
+    if (examQuestions.length !== expectedItemCount) {
+      errors.push(
+        `${exam.id}: có ${examQuestions.length} câu, ma trận yêu cầu ${expectedItemCount}.`
+      );
+    }
+    const examPoints = examQuestions.reduce(
+      (total, question) => total + (question.points ?? 1),
+      0
+    );
+    if (
+      !nearlyEqual(examPoints, blueprint.totalPoints) ||
+      !nearlyEqual(exam.totalPoints ?? examPoints, blueprint.totalPoints)
+    ) {
+      errors.push(`${exam.id}: tổng điểm câu hỏi hoặc totalPoints không khớp ma trận.`);
+    }
+
+    const actualResponseCounts = examQuestions.reduce((counts, question) => {
+      const responseType = assessmentResponseType(question.responseType ?? 'single_choice');
+      counts[responseType] = (counts[responseType] ?? 0) + 1;
+      return counts;
+    }, {});
+    const expectedResponseCounts = blueprint.sections.reduce((counts, section) => {
+      counts[section.responseType] =
+        (counts[section.responseType] ?? 0) + section.itemCount;
+      return counts;
+    }, {});
+    for (const responseType of new Set([
+      ...Object.keys(actualResponseCounts),
+      ...Object.keys(expectedResponseCounts)
+    ])) {
+      if ((actualResponseCounts[responseType] ?? 0) !== (expectedResponseCounts[responseType] ?? 0)) {
+        errors.push(
+          `${exam.id}: số câu ${responseType} không khớp ma trận ` +
+            `(${actualResponseCounts[responseType] ?? 0}/${expectedResponseCounts[responseType] ?? 0}).`
+        );
+      }
+    }
+
+    const actualDifficultyCounts = examQuestions.reduce((counts, question) => {
+      counts[question.difficulty] = (counts[question.difficulty] ?? 0) + 1;
+      return counts;
+    }, {});
+    for (const difficulty of ['easy', 'medium', 'hard']) {
+      const actualWeight =
+        (actualDifficultyCounts[difficulty] ?? 0) / examQuestions.length;
+      if (!nearlyEqual(actualWeight, blueprint.difficultyWeights[difficulty])) {
+        errors.push(
+          `${exam.id}: tỉ lệ ${difficulty} là ${actualWeight}, ` +
+            `ma trận yêu cầu ${blueprint.difficultyWeights[difficulty]}.`
+        );
+      }
+    }
+
+    const topicPoints = examQuestions.reduce((counts, question) => {
+      counts[question.topicId] =
+        (counts[question.topicId] ?? 0) + (question.points ?? 1);
+      return counts;
+    }, {});
+    for (const question of examQuestions) {
+      if (!blueprint.scopeTopicIds.includes(question.topicId)) {
+        errors.push(`${exam.id}: câu ${question.id} nằm ngoài phạm vi topic.`);
+      }
+      for (const outcomeId of question.outcomeIds ?? []) {
+        if (!blueprint.outcomeIds.includes(outcomeId)) {
+          errors.push(`${exam.id}: câu ${question.id} có outcome ngoài ma trận ${outcomeId}.`);
+        }
+      }
+    }
+    for (const [topicId, expectedWeight] of Object.entries(blueprint.topicWeights ?? {})) {
+      const actualWeight = (topicPoints[topicId] ?? 0) / examPoints;
+      if (!nearlyEqual(actualWeight, expectedWeight)) {
+        errors.push(
+          `${exam.id}: trọng số ${topicId} là ${actualWeight}, ma trận yêu cầu ${expectedWeight}.`
+        );
+      }
     }
   }
 
@@ -810,7 +1056,31 @@ export const validateCourseDataV4 = async ({
       practiceTarget: totalPracticeTarget,
       practiceQuestions: questions.length,
       solutions: solutions.length,
+      practiceQuestionTypesAt24: questionTypes.filter(
+        type => questions.filter(question => question.questionTypeId === type.id).length >= 24
+      ).length,
+      practiceDifficulty: questions.reduce((counts, question) => {
+        const key = question.difficulty ?? 'unspecified';
+        counts[key] = (counts[key] ?? 0) + 1;
+        return counts;
+      }, {}),
+      practiceResponseTypes: questions.reduce((counts, question) => {
+        const key = question.responseType ?? 'unspecified';
+        counts[key] = (counts[key] ?? 0) + 1;
+        return counts;
+      }, {}),
+      assessmentExams: assessmentExams.length,
+      assessmentBlueprints: assessmentBlueprints.length,
+      assessmentQuestions: assessmentQuestions.length,
       theoryBlocks: theory.length,
+      theoryWorkedExamples: theory.flatMap(block => block.workedExamples ?? []).length,
+      theoryCheckpoints: theory.flatMap(block => block.checkpoints ?? []).length,
+      theoryBlocksWith3Examples: theory.filter(
+        block => (block.workedExamples?.length ?? 0) >= 3
+      ).length,
+      theoryBlocksWith4Checkpoints: theory.filter(
+        block => (block.checkpoints?.length ?? 0) >= 4
+      ).length,
       theoryLessonsCovered: theoryLessonIds.size,
       theoryQuestionTypesCovered: theoryQuestionTypeIds.size
     }

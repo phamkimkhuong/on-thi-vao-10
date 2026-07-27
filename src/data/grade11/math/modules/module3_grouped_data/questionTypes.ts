@@ -17,15 +17,15 @@ export const g11MathModule3QuestionTypes: CourseQuestionType[] = [
     solvingSteps: ['Xác định quy ước đầu mút và độ dài mỗi nhóm.', 'Đếm tần số hoặc cộng tổng tần số.', 'Dùng trung điểm nhóm làm giá trị đại diện khi cần.'],
     commonMistakes: ['Đếm giá trị ở đầu mút phải vào sai nhóm.', 'Nhầm tần số với tần số tương đối.'],
     subTypes: [
-      { id: 'math11-qt08-st-read', name: 'Đọc bảng ghép nhóm', example: 'Tìm cỡ mẫu, nhóm có tần số lớn nhất hoặc tần số tương đối.', targetQuestionCount: 6 },
-      { id: 'math11-qt08-st-group', name: 'Ghép nhóm và giá trị đại diện', example: 'Xếp dữ liệu vào nhóm và tính trung điểm nhóm.', targetQuestionCount: 6 }
+      { id: 'math11-qt08-st-read', name: 'Đọc bảng ghép nhóm', example: 'Tìm cỡ mẫu, nhóm có tần số lớn nhất hoặc tần số tương đối.', targetQuestionCount: 12 },
+      { id: 'math11-qt08-st-group', name: 'Ghép nhóm và giá trị đại diện', example: 'Xếp dữ liệu vào nhóm và tính trung điểm nhóm.', targetQuestionCount: 12 }
     ],
     practiceCoverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: ['table', 'text'],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   },
   {
@@ -44,15 +44,15 @@ export const g11MathModule3QuestionTypes: CourseQuestionType[] = [
     solvingSteps: ['Tính cỡ mẫu, giá trị đại diện và tần số tích lũy.', 'Xác định đúng nhóm chứa đại lượng cần tìm.', 'Thay vào công thức nội suy và giải thích kết quả là xấp xỉ.'],
     commonMistakes: ['Dùng cận trên thay cho giá trị đại diện khi tính trung bình.', 'Dùng tần số riêng thay cho tần số tích lũy để tìm nhóm trung vị.'],
     subTypes: [
-      { id: 'math11-qt09-st-mean-mode', name: 'Số trung bình và mốt', example: 'Ước lượng $\\bar x$ hoặc $M_o$ từ bảng nhóm.', targetQuestionCount: 6 },
-      { id: 'math11-qt09-st-median-quartile', name: 'Trung vị và tứ phân vị', example: 'Tìm nhóm chứa và nội suy $M_e,Q_1,Q_3$.', targetQuestionCount: 6 }
+      { id: 'math11-qt09-st-mean-mode', name: 'Số trung bình và mốt', example: 'Ước lượng $\\bar x$ hoặc $M_o$ từ bảng nhóm.', targetQuestionCount: 12 },
+      { id: 'math11-qt09-st-median-quartile', name: 'Trung vị và tứ phân vị', example: 'Tìm nhóm chứa và nội suy $M_e,Q_1,Q_3$.', targetQuestionCount: 12 }
     ],
     practiceCoverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: ['table', 'equation'],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   }
 ];

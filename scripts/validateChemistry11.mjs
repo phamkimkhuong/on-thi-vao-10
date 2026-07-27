@@ -84,6 +84,8 @@ const checkpointQuestions = [];
 const checkpointSolutions = [];
 const checkpointExams = [];
 const checkpointBlueprints = [];
+const theoryResourceSpecs = [];
+const theoryCheckpointSpecs = [];
 
 for (const moduleName of moduleDirs) {
   const modulePath = path.join(modulesDirectory, moduleName);
@@ -93,6 +95,14 @@ for (const moduleName of moduleDirs) {
   solutions.push(...readFirstMatchingArray(path.join(modulePath, 'solutions.ts'), /export const (g11Chemistry\w+Solutions)/));
   outcomes.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g11Chemistry\w+Outcomes)/));
   misconceptions.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g11Chemistry\w+Misconceptions)/));
+  const theoryResourcesPath = path.join(modulePath, 'theoryResources.ts');
+  if (fs.existsSync(theoryResourcesPath)) {
+    theoryResourceSpecs.push(...readExportedArray(theoryResourcesPath, 'specs'));
+  }
+  const theoryCheckpointsPath = path.join(modulePath, 'theoryCheckpoints.ts');
+  if (fs.existsSync(theoryCheckpointsPath)) {
+    theoryCheckpointSpecs.push(...readExportedArray(theoryCheckpointsPath, 'specs'));
+  }
   const theoryDirectory = path.join(modulePath, 'assessments', 'theory');
   if (fs.existsSync(theoryDirectory)) {
     assessmentQuestions.push(...readFirstMatchingArray(path.join(theoryDirectory, 'questions.ts'), /export const (m\d+TheoryQuestions)/));
@@ -154,6 +164,16 @@ const duplicateKeys = (items, keyOf) => {
   const counts = new Map();
   for (const item of items) counts.set(keyOf(item), (counts.get(keyOf(item)) ?? 0) + 1);
   return [...counts.entries()].filter(([, count]) => count > 1).map(([key]) => key);
+};
+const groupBy = (items, keyOf) => {
+  const groups = new Map();
+  for (const item of items) {
+    const key = keyOf(item);
+    const group = groups.get(key);
+    if (group) group.push(item);
+    else groups.set(key, [item]);
+  }
+  return groups;
 };
 
 for (const [label, items, keyOf] of [
@@ -292,6 +312,81 @@ for (const type of questionTypes) {
   }
 }
 
+const validateTheoryChecks = (spec, sourceLabel) => {
+  if (!Array.isArray(spec.checks) || spec.checks.length !== 2) {
+    errors.push(`${spec.id}: phải có đúng 2 checkpoint lí thuyết trong ${sourceLabel}.`);
+  }
+  for (const [index, check] of (spec.checks ?? []).entries()) {
+    if (!check.question?.trim() || !check.explanation?.trim()) {
+      errors.push(`${spec.id}/checkpoint-${index + 1}: thiếu câu hỏi hoặc giải thích.`);
+    }
+    if (!Array.isArray(check.options) || check.options.length !== 4) {
+      errors.push(`${spec.id}/checkpoint-${index + 1}: phải có đúng 4 phương án.`);
+    }
+    if (!['A', 'B', 'C', 'D'].includes(check.correctAnswer)) {
+      errors.push(`${spec.id}/checkpoint-${index + 1}: đáp án phải là A/B/C/D.`);
+    }
+  }
+};
+
+for (const duplicate of duplicateKeys(theoryResourceSpecs, item => item.id)) {
+  errors.push(`Theory resource spec bị trùng: ${duplicate}.`);
+}
+for (const duplicate of duplicateKeys(theoryCheckpointSpecs, item => item.id)) {
+  errors.push(`Theory checkpoint spec bị trùng: ${duplicate}.`);
+}
+for (const spec of theoryResourceSpecs) {
+  if (!typeById.has(spec.id)) errors.push(`${spec.id}: gói lý thuyết không có dạng bài tương ứng.`);
+  if (!spec.principle?.trim()) errors.push(`${spec.id}: thiếu phần mở rộng kiến thức.`);
+  if (!Array.isArray(spec.method) || spec.method.length < 3) {
+    errors.push(`${spec.id}: quy trình lí thuyết cần ít nhất 3 bước.`);
+  }
+  if (
+    !spec.example?.problem?.trim() ||
+    !Array.isArray(spec.example?.steps) ||
+    spec.example.steps.length < 2 ||
+    !spec.example?.answer?.trim()
+  ) {
+    errors.push(`${spec.id}: tình huống mẫu phải có đề, ít nhất 2 bước và kết luận.`);
+  }
+  validateTheoryChecks(spec, 'gói học liệu mở rộng');
+}
+for (const spec of theoryCheckpointSpecs) {
+  if (!typeById.has(spec.id)) errors.push(`${spec.id}: gói checkpoint không có dạng bài tương ứng.`);
+  validateTheoryChecks(spec, 'gói checkpoint');
+}
+const enrichedTheoryTypeIds = new Set(theoryResourceSpecs.map(item => item.id));
+if (theoryResourceSpecs.length !== 72) {
+  errors.push(`Chương 2–6 phải có 72 gói lý thuyết mở rộng, hiện có ${theoryResourceSpecs.length}.`);
+}
+for (const type of questionTypes.filter(item =>
+  ['chem11-t2', 'chem11-t3', 'chem11-t4', 'chem11-t5', 'chem11-t6'].includes(item.topicId)
+)) {
+  if (!enrichedTheoryTypeIds.has(type.id)) {
+    errors.push(`${type.id}: Chương 2–6 thiếu gói lý thuyết mở rộng.`);
+  }
+}
+const existingTheoryCheckpointTypeIds = new Set(theoryCheckpointSpecs.map(item => item.id));
+if (theoryCheckpointSpecs.length !== 14) {
+  errors.push(`Chương 1 phải có 14 gói checkpoint, hiện có ${theoryCheckpointSpecs.length}.`);
+}
+for (const type of questionTypes.filter(item => item.topicId === 'chem11-t1')) {
+  if (!existingTheoryCheckpointTypeIds.has(type.id)) {
+    errors.push(`${type.id}: Chương 1 thiếu gói checkpoint lý thuyết.`);
+  }
+}
+const allTheoryCheckpointTypeIds = new Set([
+  ...enrichedTheoryTypeIds,
+  ...existingTheoryCheckpointTypeIds
+]);
+for (const type of questionTypes.filter(item =>
+  ['chem11-t1', 'chem11-t2', 'chem11-t3', 'chem11-t4', 'chem11-t5', 'chem11-t6'].includes(item.topicId)
+)) {
+  if (!allTheoryCheckpointTypeIds.has(type.id)) {
+    errors.push(`${type.id}: thiếu checkpoint lý thuyết trong phạm vi Chương 1–6.`);
+  }
+}
+
 for (const question of questions) {
   if (!topicById.has(question.topicId)) errors.push(`${question.id}: topicId không tồn tại.`);
   if (!typeById.has(question.questionTypeId)) errors.push(`${question.id}: questionTypeId không tồn tại.`);
@@ -372,7 +467,7 @@ for (const exam of assessmentExams) {
   }
 }
 
-const parallelGroups = Map.groupBy(assessmentExams, exam => exam.parallelFormGroup);
+const parallelGroups = groupBy(assessmentExams, exam => exam.parallelFormGroup);
 for (const [groupId, forms] of parallelGroups) {
   if (!groupId || forms.length !== 2) {
     errors.push(`${groupId ?? 'không có group'}: mỗi nhóm đề song song phải có đúng 2 mã A/B.`);
@@ -492,7 +587,7 @@ for (const exam of checkpointExams) {
   }
 }
 
-const checkpointParallelGroups = Map.groupBy(checkpointExams, exam => exam.parallelFormGroup);
+const checkpointParallelGroups = groupBy(checkpointExams, exam => exam.parallelFormGroup);
 for (const [groupId, forms] of checkpointParallelGroups) {
   if (!groupId || forms.length !== 2 || [...forms.map(form => form.formCode)].sort().join('') !== 'AB') {
     errors.push(`${groupId ?? 'không có group'}: checkpoint phải có đúng mã A/B.`);
@@ -783,7 +878,7 @@ for (const [questionId, usageCount] of semesterQuestionUsage) {
   if (usageCount !== 1) errors.push(`${questionId}: phải được dùng đúng một lần trong đề học kỳ, hiện dùng ${usageCount} lần.`);
 }
 
-const semesterParallelGroups = Map.groupBy(semesterExams, exam => exam.parallelFormGroup);
+const semesterParallelGroups = groupBy(semesterExams, exam => exam.parallelFormGroup);
 if (semesterParallelGroups.size !== expectedSemesterGroups.size) {
   errors.push(`Phải có đúng ${expectedSemesterGroups.size} nhóm đề học kỳ, hiện có ${semesterParallelGroups.size}.`);
 }
@@ -843,6 +938,7 @@ console.log(`Hóa học 11 giai đoạn 1: ${topics.length} topic, ${outcomes.le
 console.log(`Curriculum registry: ${textbookChapters.size} chương, ${textbookLessons.length} bài, ${officialRequirements.length} yêu cầu đã chuẩn hóa, ${outcomeManifest.length} outcome manifest.`);
 console.log(`Module 1: ${coreQuestions.length} câu; phân bố đáp án ${JSON.stringify(answerDistribution)}.`);
 console.log(`Assessment lý thuyết: ${assessmentQuestions.length} câu, ${assessmentSolutions.length} lời giải, ${assessmentExams.length} đề, ${assessmentBlueprints.length} ma trận.`);
+console.log(`Học liệu lý thuyết Chương 1–6: ${theoryCheckpointSpecs.length} dạng dùng lý thuyết chuyên sâu, ${theoryResourceSpecs.length} dạng có học liệu mở rộng, ${[...theoryCheckpointSpecs, ...theoryResourceSpecs].reduce((sum, item) => sum + (item.checks?.length ?? 0), 0)} checkpoint.`);
 console.log(`Checkpoint ${checkpointTopicIds.length} chương: ${checkpointQuestions.length} câu, ${checkpointSolutions.length} lời giải, ${checkpointExams.length} đề, ${checkpointBlueprints.length} ma trận.`);
 console.log(`Kiểm tra học kỳ: ${semesterQuestions.length} câu, ${semesterSolutions.length} lời giải, ${semesterExams.length} mã đề, ${semesterBlueprints.length} ma trận.`);
 

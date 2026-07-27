@@ -211,3 +211,36 @@ export const math11Module2Theory: TheoryBlock[] = [
     reviewStatus: 'source_checked'
   }
 ];
+
+math11Module2Theory[0].content += '\n\nVới dãy cho bởi công thức, tìm chỉ số là giải phương trình theo số nguyên dương $n$. Với dãy truy hồi, nên lập bảng vài số hạng để hiểu quy luật nhưng mọi kết luận đơn điệu hoặc bị chặn vẫn cần chứng minh cho mọi chỉ số.';
+math11Module2Theory[0].workedExamples.push(
+  {id:'ex-math11-m2-01-index',title:'Tìm chỉ số của số hạng',problem:'Cho $u_n=4n-7$. Số 45 là số hạng thứ mấy?',steps:['Giải $4n-7=45$.','$4n=52$, suy ra $n=13$ và đây là số nguyên dương.'],answer:'45 là số hạng thứ 13.'},
+  {id:'ex-math11-m2-01-recursive',title:'Tính dãy truy hồi',problem:'Cho $u_1=1$, $u_{n+1}=2u_n+1$. Tính $u_4$.',steps:['$u_2=3$, $u_3=7$.','$u_4=2\\cdot7+1=15$.'],answer:'$u_4=15$.'}
+);
+math11Module2Theory[0].checkpoints.push(
+  {id:'cp-math11-m2-01-index',question:'Cho $u_n=3n+1$. Số 16 là số hạng thứ:',options:['$4$','$5$','$6$','$7$'],correctAnswer:'B',explanation:'Giải $3n+1=16$ được $n=5$.'},
+  {id:'cp-math11-m2-01-monotone',question:'Muốn chứng minh dãy tăng, thường xét:',options:['$u_1$','$u_{n+1}-u_n$','$u_n^2$','Chỉ ba số hạng đầu'],correctAnswer:'B',explanation:'Cần chứng minh hiệu dương với mọi chỉ số hợp lệ.'},
+  {id:'cp-math11-m2-01-start',question:'Dãy truy hồi cần thêm dữ kiện nào để xác định?',options:['Số hạng đầu thích hợp','Một cận trên','Tổng vô hạn','Đạo hàm'],correctAnswer:'A',explanation:'Quy tắc truy hồi cần điểm khởi đầu.'}
+);
+
+math11Module2Theory[1].content += '\n\nTrong bài toán ngược, có thể lập hệ từ hai số hạng để tìm $u_1,d$. Với các số hạng có chỉ số đối xứng, $u_p+u_q=2u_{(p+q)/2}$ khi chỉ số giữa là số nguyên; tính chất này giúp rút gọn nhiều bài khó.';
+math11Module2Theory[1].workedExamples.push(
+  {id:'ex-math11-m2-02-reverse',title:'Tìm cấp số cộng từ hai số hạng',problem:'Cho $u_3=7$, $u_9=25$. Tìm $u_1$ và $d$.',steps:['Lấy hiệu: $u_9-u_3=6d=18$, nên $d=3$.','$u_1=u_3-2d=1$.'],answer:'$u_1=1$, $d=3$.'},
+  {id:'ex-math11-m2-02-model',title:'Mô hình số ghế',problem:'Hàng đầu có 18 ghế, mỗi hàng sau thêm 2 ghế. Tính tổng số ghế của 10 hàng.',steps:['$u_{10}=18+9\\cdot2=36$.','$S_{10}=10(18+36)/2$.'],answer:'Có 270 ghế.'}
+);
+math11Module2Theory[1].checkpoints.push(
+  {id:'cp-math11-m2-02-difference',question:'Cấp số cộng có $u_2=5$, $u_6=17$. Công sai bằng:',options:['$2$','$3$','$4$','$6$'],correctAnswer:'B',explanation:'$u_6-u_2=4d=12$.'},
+  {id:'cp-math11-m2-02-middle',question:'Ba số $4,x,12$ lập thành cấp số cộng. $x$ bằng:',options:['$6$','$8$','$10$','$16$'],correctAnswer:'B',explanation:'Số giữa là trung bình cộng của hai số ngoài.'},
+  {id:'cp-math11-m2-02-sum',question:'$1+2+\\cdots+10$ bằng:',options:['$45$','$50$','$55$','$60$'],correctAnswer:'C',explanation:'$10(1+10)/2=55$.'}
+);
+
+math11Module2Theory[2].content += '\n\nTrong bài toán ngược, tỉ số hai số hạng cho một lũy thừa của $q$; cần xét thêm dấu hoặc điều kiện thực tế để chọn công bội. Với tăng trưởng theo phần trăm, số mũ là số chu kì đã trôi qua, nên phải tránh lệch một chu kì.';
+math11Module2Theory[2].workedExamples.push(
+  {id:'ex-math11-m2-03-reverse',title:'Tìm công bội từ hai số hạng',problem:'Cấp số nhân có $u_2=6$, $u_5=162$ và $q>0$. Tìm $q,u_1$.',steps:['$u_5/u_2=q^3=27$, nên $q=3$.','$u_1=u_2/q=2$.'],answer:'$q=3$, $u_1=2$.'},
+  {id:'ex-math11-m2-03-growth',title:'Mô hình tăng trưởng',problem:'Một quần thể ban đầu 1000 cá thể, tăng 20% mỗi năm. Tính số lượng sau 3 năm.',steps:['Công bội tăng trưởng là $1+20/100=1{,}2$.','Sau 3 chu kì: $1000\\cdot1{,}2^3$.'],answer:'Có 1728 cá thể.'}
+);
+math11Module2Theory[2].checkpoints.push(
+  {id:'cp-math11-m2-03-ratio',question:'Cấp số nhân có $u_1=2$, $u_3=18$, $q>0$. Công bội bằng:',options:['$2$','$3$','$6$','$9$'],correctAnswer:'B',explanation:'$2q^2=18$, nên $q=3$.'},
+  {id:'cp-math11-m2-03-middle',question:'Ba số dương $2,x,8$ lập thành cấp số nhân. $x$ bằng:',options:['$3$','$4$','$5$','$6$'],correctAnswer:'B',explanation:'$x^2=2\\cdot8=16$.'},
+  {id:'cp-math11-m2-03-percent',question:'Đại lượng tăng 15% mỗi chu kì có công bội:',options:['$0{,}15$','$0{,}85$','$1{,}15$','$15$'],correctAnswer:'C',explanation:'Giá trị mới bằng 115% giá trị cũ.'}
+);

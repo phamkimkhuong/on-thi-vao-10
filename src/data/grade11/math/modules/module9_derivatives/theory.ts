@@ -325,3 +325,57 @@ export const math11Module9Theory: TheoryBlock[] = [
     reviewStatus: 'source_checked'
   }
 ];
+
+math11Module9Theory[0].content += '\n\nQuy trình an toàn khi dùng định nghĩa: tính $f(x_0)$; lập tỉ số số gia; biến đổi với $h\\ne0$; lấy giới hạn; nếu hàm từng đoạn thì phải so sánh hai đạo hàm một phía. Với tiếp tuyến, luôn xác định đủ tiếp điểm và hệ số góc trước khi viết phương trình.';
+math11Module9Theory[0].workedExamples.push({
+  id:'ex-math11-m9-01-one-sided',
+  title:'Kiểm tra đạo hàm một phía',
+  problem:'Xét sự tồn tại đạo hàm của $f(x)=|x|$ tại $x=0$.',
+  steps:[
+    'Với $h>0$, $[f(h)-f(0)]/h=h/h=1$.',
+    'Với $h<0$, $[f(h)-f(0)]/h=(-h)/h=-1$.',
+    'Hai giới hạn một phía không bằng nhau.'
+  ],
+  answer:'Hàm không có đạo hàm tại 0.'
+});
+math11Module9Theory[0].checkpoints.push(
+  {id:'cp-math11-m9-01-continuity',question:'Nếu hàm có đạo hàm tại $x_0$ thì hàm:',options:['Chắc chắn liên tục tại $x_0$','Chắc chắn gián đoạn','Có giá trị bằng 0','Có tiếp tuyến đứng'],correctAnswer:'A',explanation:'Khả vi tại một điểm kéo theo liên tục tại điểm đó.'},
+  {id:'cp-math11-m9-01-tangent',question:'Nếu $f^{\\prime}(x_0)=0$ thì tiếp tuyến tại điểm đó:',options:['Song song $Oy$','Song song $Ox$','Luôn đi qua gốc tọa độ','Không tồn tại'],correctAnswer:'B',explanation:'Hệ số góc tiếp tuyến bằng 0.'},
+  {id:'cp-math11-m9-01-velocity',question:'Nếu $s(t)$ là tọa độ thì vận tốc tức thời là:',options:['$s(t)^2$','$s^{\\prime}(t)$','$s^{\\prime\\prime}(t)$','$1/s(t)$'],correctAnswer:'B',explanation:'Vận tốc là tốc độ biến thiên tức thời của tọa độ theo thời gian.'}
+);
+
+math11Module9Theory[1].content += '\n\nKhi biểu thức có nhiều lớp, nên đánh dấu hàm ngoài và hàm trong trước khi đạo hàm. Sau cùng, kiểm tra lại ba lỗi phổ biến: thiếu một hạng của quy tắc tích, đảo sai thứ tự tử của quy tắc thương và quên nhân đạo hàm hàm trong.';
+math11Module9Theory[1].workedExamples.push({
+  id:'ex-math11-m9-02-mixed',
+  title:'Kết hợp quy tắc thương và hàm hợp',
+  problem:'Tính đạo hàm của $y=\\dfrac{\\ln(1+x^2)}{x}$ với $x\\ne0$.',
+  steps:[
+    'Đặt $u=\\ln(1+x^2)$, $v=x$.',
+    '$u^{\\prime}=2x/(1+x^2)$ và $v^{\\prime}=1$.',
+    'Dùng quy tắc thương $(u/v)^{\\prime}=(u^{\\prime}v-uv^{\\prime})/v^2$.'
+  ],
+  answer:'$y^{\\prime}=\\dfrac{2x^2/(1+x^2)-\\ln(1+x^2)}{x^2}$.'
+});
+math11Module9Theory[1].checkpoints.push(
+  {id:'cp-math11-m9-02-product',question:'$(uv)^{\\prime}$ bằng:',options:['$u^{\\prime}v^{\\prime}$','$u^{\\prime}v+uv^{\\prime}$','$u^{\\prime}+v^{\\prime}$','$uv$'],correctAnswer:'B',explanation:'Đây là quy tắc đạo hàm của tích.'},
+  {id:'cp-math11-m9-02-chain',question:'Đạo hàm của $(2x+1)^3$ là:',options:['$3(2x+1)^2$','$6(2x+1)^2$','$6x^2$','$(2x+1)^2$'],correctAnswer:'B',explanation:'Đạo hàm hàm ngoài rồi nhân đạo hàm hàm trong bằng 2.'},
+  {id:'cp-math11-m9-02-log',question:'Đạo hàm của $\\ln(1+x^2)$ là:',options:['$1/(1+x^2)$','$2x/(1+x^2)$','$2x\\ln x$','$\\ln(2x)$'],correctAnswer:'B',explanation:'Dùng quy tắc hàm hợp với hàm trong $1+x^2$.'}
+);
+
+math11Module9Theory[2].content += '\n\nĐạo hàm cấp hai có thể tiếp tục chứa tích, thương hoặc hàm hợp, vì vậy mỗi lần đạo hàm đều phải áp dụng lại các quy tắc đầy đủ. Trong bài chuyển động, dấu của vận tốc mô tả chiều chuyển động còn dấu của gia tốc mô tả chiều biến thiên của vận tốc; không nên đồng nhất hai dấu này.';
+math11Module9Theory[2].workedExamples.push({
+  id:'ex-math11-m9-03-product',
+  title:'Đạo hàm cấp hai của một tích',
+  problem:'Tính $f^{\\prime\\prime}(x)$ với $f(x)=xe^x$.',
+  steps:[
+    '$f^{\\prime}(x)=e^x+xe^x=e^x(1+x)$.',
+    'Lấy đạo hàm lần nữa và tiếp tục dùng quy tắc tích.',
+    '$f^{\\prime\\prime}(x)=e^x(1+x)+e^x$.'
+  ],
+  answer:'$f^{\\prime\\prime}(x)=e^x(x+2)$.'
+});
+math11Module9Theory[2].checkpoints.push(
+  {id:'cp-math11-m9-03-not-square',question:'Đạo hàm cấp hai $f^{\\prime\\prime}$ là:',options:['$(f^{\\prime})^2$','Đạo hàm của $f^{\\prime}$','$2f^{\\prime}$','$f^2$'],correctAnswer:'B',explanation:'Đó là phép lấy đạo hàm liên tiếp hai lần.'},
+  {id:'cp-math11-m9-03-velocity',question:'Nếu đề cho trực tiếp $v(t)$, gia tốc được tính bằng:',options:['$v(t)^2$','$v^{\\prime}(t)$','$v^{\\prime\\prime}(t)$','$1/v(t)$'],correctAnswer:'B',explanation:'Gia tốc là đạo hàm của vận tốc.'},
+  {id:'cp-math11-m9-03-unit',question:'Nếu quãng đường đo bằng m và thời gian bằng s, đơn vị gia tốc là:',options:['m','$\\mathrm{m/s}$','$\\mathrm{m/s^2}$','$\\mathrm{s/m}$'],correctAnswer:'C',explanation:'Gia tốc là đạo hàm bậc hai của vị trí theo thời gian.'}
+);

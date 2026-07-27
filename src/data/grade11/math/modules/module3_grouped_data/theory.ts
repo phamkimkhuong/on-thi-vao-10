@@ -78,3 +78,25 @@ export const math11Module3Theory: TheoryBlock[] = [
     reviewStatus: 'source_checked'
   }
 ];
+
+math11Module3Theory[0].content += '\n\nQuy trình lập bảng: chọn các khoảng liên tiếp không chồng lấn; xếp từng quan sát theo đúng quy ước đầu mút; kiểm tra tổng tần số bằng cỡ mẫu; sau đó mới tính tần số tương đối và giá trị đại diện.';
+math11Module3Theory[0].workedExamples.push(
+  {id:'ex-math11-m3-01-group',title:'Ghép dữ liệu thô',problem:'Ghép các giá trị $5,8,10,14,19$ vào $[0;10)$ và $[10;20)$.',steps:['5 và 8 thuộc nhóm đầu.','10, 14 và 19 thuộc nhóm thứ hai vì nhóm nhận đầu mút trái.'],answer:'Hai tần số lần lượt là 2 và 3.'},
+  {id:'ex-math11-m3-01-relative',title:'Tần số tương đối',problem:'Một nhóm có tần số 12 trong mẫu 40 quan sát. Tính tần số tương đối.',steps:['Dùng $f_i=n_i/n$.','$f_i=12/40=0{,}3$.'],answer:'Tần số tương đối là $0{,}3=30\\%$. '}
+);
+math11Module3Theory[0].checkpoints.push(
+  {id:'cp-math11-m3-01-size',question:'Các tần số là 3, 7, 10. Cỡ mẫu bằng:',options:['$10$','$17$','$20$','$30$'],correctAnswer:'C',explanation:'Cộng tất cả tần số.'},
+  {id:'cp-math11-m3-01-midpoint',question:'Giá trị đại diện của $[10;20)$ là:',options:['$10$','$15$','$20$','$30$'],correctAnswer:'B',explanation:'Lấy trung điểm của hai đầu mút.'},
+  {id:'cp-math11-m3-01-relative',question:'Tổng tần số tương đối của một bảng đầy đủ bằng:',options:['$0$','$1$','$n$','$100$'],correctAnswer:'B',explanation:'Các nhóm chia toàn bộ mẫu.'}
+);
+
+math11Module3Theory[1].content += '\n\nTrước khi tính các số đặc trưng, nên bổ sung ba cột: giá trị đại diện, tích $n_ix_i$ và tần số tích lũy. Trung bình dùng hai cột đầu; trung vị và tứ phân vị dùng cột tích lũy; mốt dùng tần số nhóm lớn nhất và hai nhóm kề.';
+math11Module3Theory[1].workedExamples.push(
+  {id:'ex-math11-m3-02-median',title:'Nội suy trung vị',problem:'Các nhóm $[0;10)$, $[10;20)$, $[20;30)$ có tần số 4, 8, 8. Ước lượng trung vị.',steps:['Cỡ mẫu 20, vị trí trung vị là 10.','Nhóm chứa trung vị là $[10;20)$, với $L=10,F=4,f=8,h=10$.','Thay vào công thức nội suy.'],answer:'$M_e\\approx17{,}5$.'},
+  {id:'ex-math11-m3-02-mode',title:'Nội suy mốt',problem:'Nhóm $[10;20)$ có tần số 8; hai nhóm kề có tần số 5 và 3. Ước lượng mốt.',steps:['Nhóm mốt có $L=10,h=10,f_m=8$.','Thay $f_{m-1}=5,f_{m+1}=3$ vào công thức.'],answer:'$M_o\\approx13{,}75$.'}
+);
+math11Module3Theory[1].checkpoints.push(
+  {id:'cp-math11-m3-02-mean',question:'Khi tính trung bình ghép nhóm, dùng:',options:['Cận trên nhóm','Giá trị đại diện nhóm','Chỉ tần số lớn nhất','Tần số tích lũy duy nhất'],correctAnswer:'B',explanation:'Trung bình là trung bình có trọng số của các trung điểm nhóm.'},
+  {id:'cp-math11-m3-02-median',question:'Nhóm trung vị được xác định bằng:',options:['Tần số tích lũy','Độ dài nhóm lớn nhất','Cận dưới nhỏ nhất','Giá trị đại diện lớn nhất'],correctAnswer:'A',explanation:'Cần xác định vị trí $n/2$ rơi vào nhóm nào.'},
+  {id:'cp-math11-m3-02-quartile',question:'Khoảng tứ phân vị bằng:',options:['$Q_1+Q_3$','$Q_3-Q_1$','$Q_2-Q_1$','$Q_3/Q_1$'],correctAnswer:'B',explanation:'Đây là định nghĩa khoảng tứ phân vị.'}
+);

@@ -1,4 +1,5 @@
 import type { QuestionType } from '@/types';
+import { chem11HalogenAlcoholPhenolTheoryResources } from './theoryResources';
 
 export const g11ChemistryHalogenAlcoholPhenolQuestionTypes: QuestionType[] = [
   {
@@ -242,3 +243,10 @@ export const g11ChemistryHalogenAlcoholPhenolQuestionTypes: QuestionType[] = [
     practiceCoverage:{targetQuestionCount:12,minimumQuestionsPerSubType:4,requiredPracticeRoles:['guided','near_transfer','misconception_check','far_transfer'],requiredRepresentations:['diagram','table','text'],masteryHoldoutCount:3}
   }
 ];
+
+for (const questionType of g11ChemistryHalogenAlcoholPhenolQuestionTypes) {
+  const resource = chem11HalogenAlcoholPhenolTheoryResources[questionType.id];
+  if (!resource) continue;
+  questionType.theory = [...(questionType.theory ?? []), ...resource.theorySupplement];
+  questionType.theoryCheckpoints = resource.checkpoints;
+}

@@ -86,3 +86,58 @@ export const math11Module4Theory: TheoryBlock[] = [
     checkpoint: { question: 'Phép chiếu song song luôn bảo toàn tính chất nào?', options: ['Độ dài', 'Số đo góc', 'Tính thẳng hàng', 'Hình tròn'], answer: 'C', explanation: 'Ba điểm thẳng hàng được chiếu thành ba điểm thẳng hàng.' }
   })
 ];
+
+math11Module4Theory[0].content += '\n\nKhi tìm giao tuyến, hãy lập danh sách các đối tượng thuộc từng mặt phẳng và ưu tiên các giao điểm đã có sẵn. Nếu mới có một điểm chung, dựng thêm điểm thứ hai bằng cách cho một đường trong mặt phẳng này cắt một đường trong mặt phẳng kia.';
+math11Module4Theory[0].workedExamples.push(
+  {id:'ex-math11-m4-01-faces',title:'Giao tuyến qua cạnh chung',problem:'Xác định giao tuyến của $(ABC)$ và $(ABD)$ trong tứ diện $ABCD$.',steps:['Hai điểm $A,B$ cùng thuộc cả hai mặt phẳng.','$A\\ne B$ nên chúng xác định đường thẳng chung.'],answer:'Giao tuyến là $AB$.'},
+  {id:'ex-math11-m4-01-section',title:'Giao tuyến trong tứ diện',problem:'$M\\in AC$, $N\\in AD$. Tìm giao tuyến của $(BMN)$ và $(ACD)$.',steps:['$M,N$ thuộc $(BMN)$.','$M,N$ cũng thuộc $(ACD)$.'],answer:'Giao tuyến là $MN$.'}
+);
+math11Module4Theory[0].checkpoints.push(
+  {id:'cp-math11-m4-01-line-plane',question:'Hai điểm phân biệt thuộc một mặt phẳng thì đường qua chúng:',options:['Thuộc mặt phẳng','Song song mặt phẳng','Vuông góc mặt phẳng','Chỉ có đoạn nối thuộc mặt phẳng'],correctAnswer:'A',explanation:'Mặt phẳng chứa trọn đường thẳng qua hai điểm.'},
+  {id:'cp-math11-m4-01-intersection',question:'Hai mặt phẳng phân biệt có hai điểm chung phân biệt thì giao tuyến là:',options:['Đường qua hai điểm','Một điểm','Một mặt phẳng','Không tồn tại'],correctAnswer:'A',explanation:'Hai điểm xác định đường thẳng chung.'},
+  {id:'cp-math11-m4-01-tetra',question:'Tứ diện có số mặt tam giác là:',options:['$3$','$4$','$5$','$6$'],correctAnswer:'B',explanation:'Mỗi cách bỏ một trong bốn đỉnh tạo một mặt.'}
+);
+
+math11Module4Theory[1].content += '\n\nQuy trình phân loại hai đường: kiểm tra có đồng phẳng không; nếu đồng phẳng thì xét có điểm chung hay không; nếu không đồng phẳng thì kết luận chéo nhau. “Không cắt” một mình chưa đủ để kết luận song song.';
+math11Module4Theory[1].workedExamples.push(
+  {id:'ex-math11-m4-02-skew',title:'Nhận biết hai đường chéo nhau',problem:'Trong tứ diện $ABCD$, xác định vị trí của $AB$ và $CD$.',steps:['Hai cạnh không có điểm chung.','Nếu cùng thuộc một mặt phẳng thì cả bốn đỉnh đồng phẳng, trái với tứ diện.'],answer:'$AB$ và $CD$ chéo nhau.'},
+  {id:'ex-math11-m4-02-midline',title:'Chứng minh song song bằng Thalès',problem:'Trong tam giác $SAB$, $SM/SA=SN/SB$. Chứng minh $MN\\parallel AB$.',steps:['$M,N$ nằm lần lượt trên $SA,SB$.','Hai tỉ số tính từ đỉnh $S$ bằng nhau.'],answer:'Theo Thalès đảo, $MN\\parallel AB$.'}
+);
+math11Module4Theory[1].checkpoints.push(
+  {id:'cp-math11-m4-02-parallel',question:'Hai đường song song phải:',options:['Không đồng phẳng','Đồng phẳng và không cắt','Cắt nhau','Vuông góc'],correctAnswer:'B',explanation:'Đây là định nghĩa trong không gian.'},
+  {id:'cp-math11-m4-02-skew',question:'Hai đường chéo nhau là hai đường:',options:['Không đồng phẳng','Đồng phẳng','Song song','Trùng nhau'],correctAnswer:'A',explanation:'Không đồng phẳng là dấu hiệu quyết định.'},
+  {id:'cp-math11-m4-02-transitive',question:'Nếu $a\\parallel c$, $b\\parallel c$ và $a\\ne b$ thì:',options:['$a\\parallel b$','$a\\perp b$','$a,b$ chéo nhau','$a$ cắt $b$'],correctAnswer:'A',explanation:'Dùng tính chất bắc cầu.'}
+);
+
+math11Module4Theory[2].content += '\n\nNgoài điều kiện nhận biết, cần phân biệt rõ $d\\parallel(P)$ với $d\\subset(P)$. Trong bài giao tuyến, mặt phẳng phụ chứa $d$ phải thực sự cắt $(P)$; khi đó giao tuyến có cùng phương với $d$.';
+math11Module4Theory[2].workedExamples.push(
+  {id:'ex-math11-m4-03-tetra',title:'Đường trung bình song song mặt phẳng',problem:'Trong tứ diện $SABC$, $M,N$ là trung điểm $SA,SB$. Chứng minh $MN\\parallel(ABC)$.',steps:['$MN\\parallel AB$ trong tam giác $SAB$.','$AB\\subset(ABC)$ và $MN$ không nằm trong đáy.'],answer:'$MN\\parallel(ABC)$.'},
+  {id:'ex-math11-m4-03-intersection',title:'Phương của giao tuyến',problem:'$d\\parallel(P)$; $(Q)$ chứa $d$ và cắt $(P)$ theo $a$. Tìm quan hệ giữa $a,d$.',steps:['Nếu $a$ cắt $d$ thì $d$ có điểm chung với $(P)$, mâu thuẫn.','$a,d$ cùng thuộc $(Q)$.'],answer:'$a\\parallel d$.'}
+);
+math11Module4Theory[2].checkpoints.push(
+  {id:'cp-math11-m4-03-outside',question:'Điều kiện $d\\parallel a$, $a\\subset(P)$ cần bổ sung:',options:['$d\\not\\subset(P)$','$d\\perp a$','$d=a$','$a\\perp(P)$'],correctAnswer:'A',explanation:'Phải loại trường hợp đường nằm trong mặt phẳng.'},
+  {id:'cp-math11-m4-03-common',question:'Nếu $d\\parallel(P)$ thì số điểm chung là:',options:['$0$','$1$','$2$','Vô số'],correctAnswer:'A',explanation:'Theo định nghĩa đường song song mặt phẳng.'},
+  {id:'cp-math11-m4-03-auxiliary',question:'Mặt phẳng phụ chứa $d\\parallel(P)$ cắt $(P)$ theo $a$ thì:',options:['$a\\parallel d$','$a\\perp d$','$a=d$','$a$ chéo $d$'],correctAnswer:'A',explanation:'Tính chất giao tuyến của mặt phẳng phụ.'}
+);
+
+math11Module4Theory[3].content += '\n\nĐể chứng minh hai mặt phẳng song song, nên chọn hai đường cắt nhau dễ nhận thấy trong một mặt phẳng và tìm hai phương tương ứng trong mặt phẳng kia. Khi dùng Thalès không gian, hãy ghi thứ tự các mặt phẳng song song để ghép đúng các đoạn chắn.';
+math11Module4Theory[3].workedExamples.push(
+  {id:'ex-math11-m4-04-cube',title:'Hai mặt phẳng đối diện',problem:'Chứng minh hai mặt đáy của hình hộp song song.',steps:['Trong đáy thứ nhất chọn hai cạnh cắt nhau.','Hai cạnh tương ứng ở đáy thứ hai lần lượt song song với chúng.'],answer:'Hai mặt phẳng đáy song song.'},
+  {id:'ex-math11-m4-04-ratio',title:'Thalès trên hai cát tuyến',problem:'Ba mặt phẳng song song chắn các đoạn tương ứng 4,6 và 10,$x$. Tìm $x$.',steps:['Lập tỉ lệ $4/6=10/x$.','Nhân chéo được $4x=60$.'],answer:'$x=15$.'}
+);
+math11Module4Theory[3].checkpoints.push(
+  {id:'cp-math11-m4-04-two-directions',question:'Chứng minh hai mặt phẳng song song thường cần:',options:['Một cặp đường song song','Hai cặp đường cắt nhau tương ứng song song','Một điểm chung','Một góc vuông'],correctAnswer:'B',explanation:'Cần xác định hai phương độc lập của mặt phẳng.'},
+  {id:'cp-math11-m4-04-section',question:'Hai mặt phẳng song song cắt mặt phẳng thứ ba theo hai giao tuyến:',options:['Song song','Vuông góc','Cắt nhau','Trùng nhau luôn'],correctAnswer:'A',explanation:'Tính chất của hai mặt phẳng song song.'},
+  {id:'cp-math11-m4-04-prism',question:'Các cạnh bên của lăng trụ:',options:['Song song và bằng nhau','Vuông góc nhau','Cắt nhau','Không bằng nhau'],correctAnswer:'A',explanation:'Đây là tính chất cơ bản của lăng trụ.'}
+);
+
+math11Module4Theory[4].content += '\n\nKhi đọc hình biểu diễn, chỉ dùng các quan hệ được phép bảo toàn hoặc được kí hiệu rõ. Độ dài và góc nhìn thấy trên hình có thể bị biến dạng; vì vậy không được suy ra vuông góc hay bằng nhau chỉ bằng quan sát.';
+math11Module4Theory[4].workedExamples.push(
+  {id:'ex-math11-m4-05-ratio',title:'Bảo toàn tỉ số',problem:'$A,B,C$ thẳng hàng, $AB=3BC$. So sánh tỉ số các đoạn ảnh.',steps:['Phép chiếu song song bảo toàn tỉ số trên một đường nếu ảnh không suy biến.','$A_1B_1/B_1C_1=AB/BC$.'],answer:'$A_1B_1/B_1C_1=3$.'},
+  {id:'ex-math11-m4-05-parallelogram',title:'Ảnh của hình bình hành',problem:'Giải thích vì sao ảnh không suy biến của hình bình hành vẫn là hình bình hành.',steps:['Hai cặp cạnh đối ban đầu song song.','Phép chiếu song song bảo toàn tính song song.'],answer:'Ảnh có hai cặp cạnh đối song song nên là hình bình hành.'}
+);
+math11Module4Theory[4].checkpoints.push(
+  {id:'cp-math11-m4-05-angle',question:'Phép chiếu song song có bảo toàn góc không?',options:['Luôn có','Không nói chung','Chỉ góc vuông','Chỉ góc nhọn'],correctAnswer:'B',explanation:'Góc có thể bị biến dạng bởi phương chiếu.'},
+  {id:'cp-math11-m4-05-circle',question:'Đường tròn thường được biểu diễn thành:',options:['Elip','Tam giác','Đoạn thẳng luôn','Hình vuông'],correctAnswer:'A',explanation:'Hình chiếu song song không suy biến của đường tròn thường là elip.'},
+  {id:'cp-math11-m4-05-hidden',question:'Cạnh khuất thường được vẽ bằng:',options:['Nét đứt','Nét đỏ','Không vẽ','Nét kép'],correctAnswer:'A',explanation:'Đây là quy ước hình biểu diễn.'}
+);

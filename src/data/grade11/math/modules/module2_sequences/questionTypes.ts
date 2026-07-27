@@ -31,21 +31,21 @@ export const g11MathModule2QuestionTypes: CourseQuestionType[] = [
         id: 'math11-qt05-st-explicit',
         name: 'Dãy cho bởi liệt kê hoặc công thức tổng quát',
         example: 'Với $u_n=2n-1$, tính $u_5$ hoặc tìm chỉ số của một số hạng.',
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       },
       {
         id: 'math11-qt05-st-recursive',
         name: 'Dãy truy hồi và tính chất',
         example: 'Tính các số hạng đầu từ hệ thức truy hồi hoặc xét dấu $u_{n+1}-u_n$.',
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       }
     ],
     practiceCoverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: ['table', 'equation'],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   },
   {
@@ -78,21 +78,21 @@ export const g11MathModule2QuestionTypes: CourseQuestionType[] = [
         id: 'math11-qt06-st-term',
         name: 'Công sai và số hạng tổng quát',
         example: 'Tìm $u_n$, $d$ hoặc vị trí của một số hạng.',
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       },
       {
         id: 'math11-qt06-st-sum',
         name: 'Tổng hữu hạn và bài toán thực tế',
         example: 'Tính $S_n$ hoặc mô hình số ghế tăng đều theo hàng.',
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       }
     ],
     practiceCoverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: ['equation', 'text'],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   },
   {
@@ -125,21 +125,21 @@ export const g11MathModule2QuestionTypes: CourseQuestionType[] = [
         id: 'math11-qt07-st-term',
         name: 'Công bội và số hạng tổng quát',
         example: 'Tìm $u_n$, $q$ hoặc vị trí của một số hạng.',
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       },
       {
         id: 'math11-qt07-st-sum',
         name: 'Tổng hữu hạn và mô hình tăng trưởng',
         example: 'Tính $S_n$ hoặc mô hình số lượng tăng theo cùng tỉ lệ.',
-        targetQuestionCount: 6
+        targetQuestionCount: 12
       }
     ],
     practiceCoverage: {
-      targetQuestionCount: 12,
-      minimumQuestionsPerSubType: 3,
-      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+      targetQuestionCount: 24,
+      minimumQuestionsPerSubType: 6,
+      requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check', 'far_transfer'],
       requiredRepresentations: ['equation', 'text'],
-      masteryHoldoutCount: 2
+      masteryHoldoutCount: 4
     }
   }
 ];
