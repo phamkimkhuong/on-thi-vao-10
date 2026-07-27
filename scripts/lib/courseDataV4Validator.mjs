@@ -204,6 +204,12 @@ export const validateCourseDataV4 = async ({
     solutions.push(
       ...arrayExport(solutionsModule, 'Solutions', path.join(moduleDirectory, 'solutions.ts'))
     );
+    const expansionPath = path.join(moduleDirectory, 'questionsExpansion.ts');
+    if (fs.existsSync(expansionPath)) {
+      const expansionModule = await loadTypeScriptModule(expansionPath);
+      questions.push(...arrayExport(expansionModule, 'ExpansionQuestions', expansionPath));
+      solutions.push(...arrayExport(expansionModule, 'ExpansionSolutions', expansionPath));
+    }
     practiceBlueprints.push(
       ...arrayExport(
         practiceBlueprintModule,

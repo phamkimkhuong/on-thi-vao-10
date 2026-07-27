@@ -1,6 +1,5 @@
 import type { CourseQuestion } from '@/data/schema';
 import type { PracticeRole, QuestionRepresentationType } from '@/types';
-import { g11MathModule5ExpansionQuestions } from './questionsExpansion';
 type S={n:number;qt:number;st:string;role:PracticeRole;rep:QuestionRepresentationType;c:string;o:[string,string,string,string];a:'A'|'B'|'C'|'D';d:CourseQuestion['difficulty'];h:boolean};
 const q=(n:number,qt:number,st:string,role:PracticeRole,rep:QuestionRepresentationType,c:string,o:S['o'],a:S['a'],d:CourseQuestion['difficulty']='medium',h=false):S=>({n,qt,st,role,rep,c,o,a,d,h});
 const specs:S[]=[
@@ -43,5 +42,4 @@ q(202,17,'math11-qt17-st-domain','far_transfer','graph','Nếu $f$ liên tục t
 q(203,17,'math11-qt17-st-domain','misconception_check','equation','Cho $f(x)=x^2$ khi $x\\le1$, $f(x)=ax$ khi $x>1$. Liên tục tại 1 khi:',['$a=0$','$a=2$','$a=1$','$a=-1$'],'C'),
 q(204,17,'math11-qt17-st-domain','mastery_holdout','equation','Cho $f(x)=\\frac{\\sin x}{x}$ khi $x\\ne0$, $f(0)=a$. Liên tục tại 0 khi:',['$a=0$','$a=-1$','$a=2$','$a=1$'],'D','hard',true)
 ];
-const baseQuestions:CourseQuestion[]=specs.map(s=>({id:`math11-q${s.n}`,courseId:'grade11:math',moduleId:'math11-m5',lessonId:`math11-kntt-l${s.qt}`,subjectId:'math',topicId:'math11-t05',questionTypeId:`math11-qt${s.qt}`,subTypeId:s.st,practiceRole:s.role,representationType:s.rep,isMasteryHoldout:s.h,content:s.c,responseType:'single_choice',validatorType:'choice',outcomeIds:[`out-math11-m5-0${s.qt-14}`],options:s.o,correctAnswer:s.a,difficulty:s.d,sourceType:'manual'}));
-export const g11MathModule5Questions=[...baseQuestions,...g11MathModule5ExpansionQuestions];
+export const g11MathModule5Questions:CourseQuestion[]=specs.map(s=>({id:`math11-q${s.n}`,courseId:'grade11:math',moduleId:'math11-m5',lessonId:`math11-kntt-l${s.qt}`,subjectId:'math',topicId:'math11-t05',questionTypeId:`math11-qt${s.qt}`,subTypeId:s.st,practiceRole:s.role,representationType:s.rep,isMasteryHoldout:s.h,content:s.c,responseType:'single_choice',validatorType:'choice',outcomeIds:[`out-math11-m5-0${s.qt-14}`],options:s.o,correctAnswer:s.a,difficulty:s.d,sourceType:'manual'}));

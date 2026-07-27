@@ -1,4 +1,4 @@
-import type { CourseQuestion } from '@/data/schema';
+import type { CourseQuestion, CourseSolution } from '@/data/schema';
 import type {
   AssessmentCognitiveLevel,
   PracticeRole,
@@ -300,3 +300,4 @@ export const g11MathModule5ExpansionQuestions: CourseQuestion[] = [
     ['-1','-1.0','-1,0'],
     'Tử phải bằng 0 tại cả $1$ và $-1$: $1+a+b=0$, $1-a+b=0$. Suy ra $a=0$, $b=-1$, nên $a+b=-1$.')
 ];
+export const g11MathModule5ExpansionSolutions:CourseSolution[]=g11MathModule5ExpansionSolutionData.map(data=>({id:`math11-s${data.number}`,courseId:'grade11:math',moduleId:'math11-m5',questionId:`math11-q${data.number}`,recognition:'Nhận dạng loại giới hạn hoặc điều kiện liên tục trước khi biến đổi.',detailedSteps:[{order:1,title:'Phân tích và tính toán',explanation:data.reasoning},{order:2,title:'Kết luận',explanation:`Kết quả cần chọn hoặc nhập là ${data.result}.`}],finalAnswer:data.answer,commonMistakes:['Không kiểm tra điều kiện, dạng vô định hoặc giới hạn một phía.'],reviewSuggestions:['Làm lại phép biến đổi và nêu rõ điều kiện áp dụng.']}));

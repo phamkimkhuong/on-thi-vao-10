@@ -1,4 +1,4 @@
-import type { CourseQuestion } from '@/data/schema';
+import type { CourseQuestion, CourseSolution } from '@/data/schema';
 import type {
   AssessmentCognitiveLevel,
   PracticeRole,
@@ -80,7 +80,7 @@ export const g11MathModule6ExpansionQuestions:CourseQuestion[]=[
     'Biểu thức $x^{\\sqrt2}$ theo định nghĩa lũy thừa số mũ thực yêu cầu:',
     ['$x\\ne0$','$x\\ge0$','$x>0$','$x>1$'],'C',
     'Cơ số của lũy thừa với số mũ vô tỉ phải dương.','$x>0$'),
-  tf(442,18,'radical','misconception_check','medium','Chọn Đúng hoặc Sai.',
+  tf(442,18,'radical','misconception_check','medium','Chọn Đúng hoặc Sai về căn và số mũ hữu tỉ.',
     ['$16^{1/2}=4$.','$(-8)^{1/3}=-2$.','$a^{1/n}=\\sqrt[n]{a}$ với mọi $a\\in\\mathbb R$, mọi $n$.','$a^{m/n}=\\sqrt[n]{a^m}$ khi các biểu thức xác định.'],
     ['Đ','Đ','S','Đ'],
     'Căn bậc chẵn không xác định trên số âm trong tập số thực; các phát biểu còn lại đúng trong điều kiện đã nêu.'),
@@ -189,7 +189,7 @@ export const g11MathModule6ExpansionQuestions:CourseQuestion[]=[
     'Nghiệm của $\\log_3(x-1)=2$ là:',
     ['$8$','$9$','$10$','$11$'],'C',
     '$x-1=3^2=9$, nên $x=10$ và thỏa điều kiện.','$10$'),
-  tf(472,21,'equation','misconception_check','medium','Chọn Đúng hoặc Sai.',
+  tf(472,21,'equation','misconception_check','medium','Chọn Đúng hoặc Sai về nghiệm phương trình mũ–lôgarit.',
     ['$2^x=8$ có nghiệm $x=3$.','$\\log_2x=-1$ có nghiệm $x=-2$.','$3^{2x}=9$ có nghiệm $x=1$.','$\\ln(x-1)=0$ có nghiệm $x=2$.'],
     ['Đ','S','Đ','Đ'],
     '$\\log_2x=-1$ cho $x=2^{-1}=1/2$, không phải số âm; các nghiệm còn lại đúng.'),
@@ -211,7 +211,7 @@ export const g11MathModule6ExpansionQuestions:CourseQuestion[]=[
     '$\\left(\\dfrac12\\right)^{x+1}>\\left(\\dfrac12\\right)^{3}$ tương đương:',
     ['$x>2$','$x<2$','$x>3$','$x<3$'],'B',
     'Cơ số nhỏ hơn 1 làm đổi chiều: $x+1<3$, nên $x<2$.','$x<2$'),
-  tf(478,21,'inequality','misconception_check','medium','Chọn Đúng hoặc Sai.',
+  tf(478,21,'inequality','misconception_check','medium','Chọn Đúng hoặc Sai về bất phương trình mũ–lôgarit.',
     ['$2^x>4\\Leftrightarrow x>2$.','$(1/2)^x>(1/2)^2\\Leftrightarrow x>2$.','$\\log_3x\\le1\\Leftrightarrow0<x\\le3$.','$\\log_{1/2}x>0\\Leftrightarrow0<x<1$.'],
     ['Đ','S','Đ','Đ'],
     'Với cơ số $1/2$, hàm nghịch biến nên bất phương trình thứ hai phải cho $x<2$; các phát biểu khác đúng.'),
@@ -224,3 +224,4 @@ export const g11MathModule6ExpansionQuestions:CourseQuestion[]=[
     ['$(-\\infty;2-\\sqrt7]\\cup[2+\\sqrt7;+\\infty)$','$[2-\\sqrt7;2+\\sqrt7]$','$[-1;3]$','$[1;3]$'],'B',
     'Viết $1/27=(1/3)^3$; cơ số nhỏ hơn 1 nên $x^2-4x\\le3$. Giải bất phương trình bậc hai được đoạn giữa hai nghiệm $2\\pm\\sqrt7$.','$[2-\\sqrt7;2+\\sqrt7]$')
 ];
+export const g11MathModule6ExpansionSolutions:CourseSolution[]=g11MathModule6ExpansionSolutionData.map(data=>({id:`math11-s${data.number}`,courseId:'grade11:math',moduleId:'math11-m6',questionId:`math11-q${data.number}`,recognition:'Kiểm tra điều kiện rồi nhận dạng quy tắc lũy thừa, lôgarit hoặc tính đơn điệu.',detailedSteps:[{order:1,title:'Phân tích và tính toán',explanation:data.reasoning},{order:2,title:'Kết luận',explanation:`Kết quả cần chọn hoặc nhập là ${data.result}.`}],finalAnswer:data.answer,commonMistakes:['Bỏ điều kiện xác định hoặc dùng sai chiều đơn điệu của cơ số.'],reviewSuggestions:['Đối chiếu công thức và kiểm tra nghiệm trong miền xác định.']}));

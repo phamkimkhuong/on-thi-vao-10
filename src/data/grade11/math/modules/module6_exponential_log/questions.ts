@@ -1,4 +1,4 @@
-import type {CourseQuestion} from '@/data/schema';import type {PracticeRole,QuestionRepresentationType} from '@/types';import {g11MathModule6ExpansionQuestions} from './questionsExpansion';
+import type {CourseQuestion} from '@/data/schema';import type {PracticeRole,QuestionRepresentationType} from '@/types';
 type S={n:number;qt:number;st:string;r:PracticeRole;p:QuestionRepresentationType;c:string;o:[string,string,string,string];a:'A'|'B'|'C'|'D';d:CourseQuestion['difficulty'];h:boolean};
 const q=(n:number,qt:number,st:string,r:PracticeRole,p:QuestionRepresentationType,c:string,o:S['o'],a:S['a'],d:CourseQuestion['difficulty']='medium',h=false):S=>({n,qt,st,r,p,c,o,a,d,h});
 const s:S[]=[
@@ -54,5 +54,4 @@ q(250,21,'math11-qt21-st-inequality','misconception_check','graph','$\\log_{1/2}
 q(251,21,'math11-qt21-st-inequality','retention','equation','$\\log_3(x+1)=1$ có nghiệm:',['$2$','$3$','$1$','$0$'],'A'),
 q(252,21,'math11-qt21-st-inequality','mastery_holdout','equation','$\\log_2(x-1)\\ge2$ có tập nghiệm:',['$x>1$','$x\\ge4$','$x>5$','$x\\ge5$'],'D','hard',true)
 ];
-const baseQuestions:CourseQuestion[]=s.map(x=>({id:`math11-q${x.n}`,courseId:'grade11:math',moduleId:'math11-m6',lessonId:`math11-kntt-l${x.qt}`,subjectId:'math',topicId:'math11-t06',questionTypeId:`math11-qt${x.qt}`,subTypeId:x.st,practiceRole:x.r,representationType:x.p,isMasteryHoldout:x.h,content:x.c,responseType:'single_choice',validatorType:'choice',outcomeIds:[`out-math11-m6-0${x.qt-17}`],options:x.o,correctAnswer:x.a,difficulty:x.d,sourceType:'manual'}));
-export const g11MathModule6Questions=[...baseQuestions,...g11MathModule6ExpansionQuestions];
+export const g11MathModule6Questions:CourseQuestion[]=s.map(x=>({id:`math11-q${x.n}`,courseId:'grade11:math',moduleId:'math11-m6',lessonId:`math11-kntt-l${x.qt}`,subjectId:'math',topicId:'math11-t06',questionTypeId:`math11-qt${x.qt}`,subTypeId:x.st,practiceRole:x.r,representationType:x.p,isMasteryHoldout:x.h,content:x.c,responseType:'single_choice',validatorType:'choice',outcomeIds:[`out-math11-m6-0${x.qt-17}`],options:x.o,correctAnswer:x.a,difficulty:x.d,sourceType:'manual'}));
