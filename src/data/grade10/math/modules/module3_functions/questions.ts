@@ -234,14 +234,14 @@ export const g10MathModule3Questions: Question[] = [
     "difficulty": "easy",
     "sourceType": "manual",
     "options": [
-      "A. $y=x^2-2x-1$",
+      "A. $y=(x-1)^2+2$",
       "B. $y=x^2+2x-1$",
       "C. $y=-x^2+2x-1$",
-      "D. $y=(x-1)^2+2$"
+      "D. $y=x^2-2x-1$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -256,13 +256,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $y=x^2+4x+3$",
-      "B. $y=x^2-4x+3$",
-      "C. $y=3x^2-4x+1$",
+      "B. $y=3x^2-4x+1$",
+      "C. $y=x^2-4x+3$",
       "D. $y=-x^2+4x-3$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -318,14 +318,14 @@ export const g10MathModule3Questions: Question[] = [
     "difficulty": "medium",
     "sourceType": "manual",
     "options": [
-      "A. $y=-2(x+2)^2+3$",
+      "A. $y=-2(x+2)^2-3$",
       "B. $y=2(x+2)^2+3$",
       "C. $y=-2(x-2)^2+3$",
-      "D. $y=-2(x+2)^2-3$"
+      "D. $y=-2(x+2)^2+3$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -340,13 +340,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $y=2x^2-6x-8$",
-      "B. $y=-2x^2+6x+8$",
-      "C. $y=-2x^2-6x+8$",
+      "B. $y=-2x^2-6x+8$",
+      "C. $y=-2x^2+6x+8$",
       "D. $y=x^2-3x-4$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -402,14 +402,14 @@ export const g10MathModule3Questions: Question[] = [
     "difficulty": "hard",
     "sourceType": "manual",
     "options": [
-      "A. $y=2(x-2)^2+1$",
+      "A. $y=(x-2)^2+1$",
       "B. $y=2(x+2)^2+1$",
       "C. $y=-2(x-2)^2+1$",
-      "D. $y=(x-2)^2+1$"
+      "D. $y=2(x-2)^2+1$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -424,13 +424,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $(3;-4)$",
-      "B. $(-3;-4)$",
-      "C. $(-3;4)$",
+      "B. $(-3;4)$",
+      "C. $(-3;-4)$",
       "D. $(3;4)$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -486,14 +486,14 @@ export const g10MathModule3Questions: Question[] = [
     "difficulty": "medium",
     "sourceType": "manual",
     "options": [
-      "A. $(1;-3)$",
+      "A. $(5;-3)$",
       "B. $(-3;1)$",
       "C. $(1;1)$",
-      "D. $(5;-3)$"
+      "D. $(1;-3)$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -508,13 +508,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $(3;-3)$",
-      "B. $(5;-3)$",
-      "C. $(5;3)$",
+      "B. $(5;3)$",
+      "C. $(5;-3)$",
       "D. $(-3;5)$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -570,14 +570,14 @@ export const g10MathModule3Questions: Question[] = [
     "difficulty": "easy",
     "sourceType": "manual",
     "options": [
-      "A. $20$",
+      "A. $25$",
       "B. $2$",
       "C. $15$",
-      "D. $25$"
+      "D. $20$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -592,13 +592,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $20$",
-      "B. $25$",
-      "C. $50$",
+      "B. $50$",
+      "C. $25$",
       "D. $100$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -654,14 +654,14 @@ export const g10MathModule3Questions: Question[] = [
     "difficulty": "medium",
     "sourceType": "manual",
     "options": [
-      "A. $13.25$",
+      "A. $15.25$",
       "B. $1.5$",
       "C. $11.25$",
-      "D. $15.25$"
+      "D. $13.25$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -676,13 +676,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $225$",
-      "B. $450$",
-      "C. $600$",
+      "B. $600$",
+      "C. $450$",
       "D. $900$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -760,13 +760,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $-3$",
-      "B. $5$",
-      "C. $3$",
+      "B. $3$",
+      "C. $5$",
       "D. $-5$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -844,13 +844,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $[5;+\\infty)$",
-      "B. $(-\\infty;5]$",
-      "C. $(-\\infty;5)$",
+      "B. $(-\\infty;5)$",
+      "C. $(-\\infty;5]$",
       "D. $(-5;+\\infty)$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -901,16 +901,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Cho $f(x)=x^2-2x$. Biểu thức $f(a+1)$ bằng gì?",
+    "content": "Tìm tập xác định của hàm số $f(x)=\\sqrt{\\dfrac{x-1}{x+2}}+\\dfrac1{\\sqrt{5-x}}$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $a^2-1$",
-      "B. $a^2+1$",
-      "C. $a^2-2a-1$",
-      "D. $a^2+2a$"
-    ],
+    "options": ["A. $(-\\infty;-2)\\cup[1;5)$","B. $(-\\infty;-2]\\cup[1;5)$","C. $(-2;1]\\cup(5;+\\infty)$","D. $[1;5)$"],
     "correctAnswer": "A",
     "acceptedAnswers": [
       "A"
@@ -922,19 +917,14 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Cho $f(x)=\\begin{cases}x+2&x<0\\\\x^2&x\\ge0\\end{cases}$. Tính $f(-3)+f(2)$.",
+    "content": "Cho $f(x)=\\begin{cases}2x+1&x<0\\\\x^2-1&x\\ge0\\end{cases}$. Tính $f(f(-2))+f(f(2))$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $-1$",
-      "B. $3$",
-      "C. $5$",
-      "D. $9$"
-    ],
-    "correctAnswer": "B",
+    "options": ["A. $1$","B. $2$","C. $3$","D. $5$"],
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -964,16 +954,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Tập xác định của $f(x)=\\dfrac{1}{\\sqrt{4-x^2}}$ là gì?",
+    "content": "Tìm tập xác định của $f(x)=\\dfrac1{\\sqrt{(x-1)(4-x)}}+\\sqrt{x+2}$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $[-2;2]$",
-      "B. $(-\\infty;-2)\\cup(2;+\\infty)$",
-      "C. $[-2;2)$",
-      "D. $(-2;2)$"
-    ],
+    "options": ["A. $[1;4]$","B. $[-2;1)\\cup(4;+\\infty)$","C. $(1;4]$","D. $(1;4)$"],
     "correctAnswer": "D",
     "acceptedAnswers": [
       "D"
@@ -1012,13 +997,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $x=-2$",
-      "B. $x=0$",
+      "B. $x=2$",
       "C. $x=1$",
-      "D. $x=2$"
+      "D. $x=0$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -1096,13 +1081,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $x\\in(1;4)$",
-      "B. $x\\in(-2;1)\\cup(4;6)$",
+      "B. $x\\in(-\\infty;-2)$",
       "C. $x\\in[-2;1]\\cup[4;6]$",
-      "D. $x\\in(-\\infty;-2)$"
+      "D. $x\\in(-2;1)\\cup(4;6)$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -1153,16 +1138,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Đồ thị đối xứng qua trục Oy và đi qua $(3;5)$. Điểm nào chắc chắn cũng thuộc đồ thị?",
+    "content": "Đồ thị $y=f(x)$ đối xứng qua trục $Oy$, biết $f(2)=3$ và $f(-1)=-4$. Tính $f(-2)+f(1)$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $(-3;5)$",
-      "B. $(3;-5)$",
-      "C. $(-5;3)$",
-      "D. $(5;-3)$"
-    ],
+    "options": ["A. $-1$","B. $1$","C. $7$","D. $-7$"],
     "correctAnswer": "A",
     "acceptedAnswers": [
       "A"
@@ -1174,19 +1154,14 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Một đường ngang $y=2$ cắt đồ thị tại ba điểm phân biệt. Phương trình $f(x)=2$ có bao nhiêu nghiệm?",
+    "content": "Đường thẳng $y=2$ cắt đồ thị $y=f(x)$ tại 3 điểm, còn $y=-1$ cắt đồ thị tại 2 điểm. Phương trình $(f(x)-2)(f(x)+1)=0$ có bao nhiêu nghiệm phân biệt?",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $1$",
-      "B. $3$",
-      "C. $2$",
-      "D. $Không có$"
-    ],
-    "correctAnswer": "B",
+    "options": ["A. $2$","B. $3$","C. $4$","D. $5$"],
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -1195,16 +1170,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Đồ thị gồm đoạn từ điểm trống $(0;1)$ đến điểm kín $(4;5)$. Tập xác định là gì?",
+    "content": "Đồ thị là đoạn thẳng từ điểm trống $(-2;3)$ đến điểm kín $(4;-1)$. Giao của tập xác định và tập giá trị là",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $[0;4]$",
-      "B. $(1;5]$",
-      "C. $(0;4]$",
-      "D. $[1;5)$"
-    ],
+    "options": ["A. $(-2;4]$","B. $[-1;3]$","C. $[-1;3)$","D. $(-2;3)$"],
     "correctAnswer": "C",
     "acceptedAnswers": [
       "C"
@@ -1216,16 +1186,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Đồ thị $y=f(x)$ có GTLN 7 tại x=−2 và GTNN −3 tại x=4. Hiệu GTLN−GTNN bằng bao nhiêu?",
+    "content": "Hàm $f$ có tập giá trị $[-3;7]$. Với $g(x)=2f(x)-5$, tổng GTLN và GTNN của $g$ bằng",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $4$",
-      "B. $5$",
-      "C. $-10$",
-      "D. $10$"
-    ],
+    "options": ["A. $20$","B. $6$","C. $-4$","D. $-2$"],
     "correctAnswer": "D",
     "acceptedAnswers": [
       "D"
@@ -1264,13 +1229,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $f(x)=2x+2$",
-      "B. $f(x)=2x-2$",
+      "B. $f(x)=x+4$",
       "C. $f(x)=3x-2$",
-      "D. $f(x)=x+4$"
+      "D. $f(x)=2x-2$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -1348,13 +1313,13 @@ export const g10MathModule3Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $u_n=5n+3$",
-      "B. $u_n=3n+2$",
+      "B. $u_n=5n-2$",
       "C. $u_n=3n+5$",
-      "D. $u_n=5n-2$"
+      "D. $u_n=3n+2$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -1405,16 +1370,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Một máy có giá 500 triệu và giảm đều 40 triệu mỗi năm. Giá trị V sau t năm là gì?",
+    "content": "Một máy giá 500 triệu đồng, giảm 40 triệu đồng mỗi năm trong 5 năm đầu; từ sau năm thứ 5 giảm 20 triệu đồng mỗi năm. Công thức giá trị $V(t)$ (triệu đồng) là",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $V(t)=500-40t$",
-      "B. $V(t)=500+40t$",
-      "C. $V(t)=40-500t$",
-      "D. $V(t)=500(40t)$"
-    ],
+    "options": ["A. $V(t)=\\begin{cases}500-40t&0\\le t\\le5\\\\400-20t&t>5\\end{cases}$","B. $V(t)=\\begin{cases}500-40t&0\\le t<5\\\\500-20t&t\\ge5\\end{cases}$","C. $V(t)=500-60t$","D. $V(t)=\\begin{cases}500-20t&0\\le t\\le5\\\\300-40(t-5)&t>5\\end{cases}$"],
     "correctAnswer": "A",
     "acceptedAnswers": [
       "A"
@@ -1426,19 +1386,14 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Bể có sẵn 120 lít và được bơm thêm 15 lít/phút. Sau bao lâu bể có 300 lít?",
+    "content": "Bể có 120 lít. Trong 6 phút đầu bơm với tốc độ 15 lít/phút; sau đó tốc độ còn 10 lít/phút. Sau bao lâu bể có 300 lít?",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $20\\text{ phút}$",
-      "B. $12\\text{ phút}$",
-      "C. $8\\text{ phút}$",
-      "D. $28\\text{ phút}$"
-    ],
-    "correctAnswer": "B",
+    "options": ["A. $12$ phút","B. $13$ phút","C. $14$ phút","D. $15$ phút"],
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -1447,16 +1402,11 @@ export const g10MathModule3Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t3",
     "questionTypeId": "math10-qt18",
-    "content": "Cước dữ liệu là 50 nghìn cho 2 GB đầu và 20 nghìn cho mỗi GB vượt mức. Dùng 5 GB phải trả bao nhiêu?",
+    "content": "Gói dữ liệu thu 50 nghìn đồng cho 2 GB đầu, 20 nghìn đồng/GB cho 3 GB tiếp theo và 30 nghìn đồng/GB vượt quá 5 GB. Dùng 8 GB phải trả",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $100\\text{ nghìn đồng}$",
-      "B. $150\\text{ nghìn đồng}$",
-      "C. $110\\text{ nghìn đồng}$",
-      "D. $60\\text{ nghìn đồng}$"
-    ],
+    "options": ["A. $160$ nghìn","B. $180$ nghìn","C. $200$ nghìn","D. $240$ nghìn"],
     "correctAnswer": "C",
     "acceptedAnswers": [
       "C"
@@ -1492,7 +1442,7 @@ export const g10MathModule3Questions: Question[] = [
   {
     id: 'math10-m3-q062', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
     content: 'Tam thức $f(x)=-x^2+4x-3$ dương trên khoảng nào?', responseType: 'single_choice', difficulty: 'easy', sourceType: 'manual',
-    options: ['A. $(-\\infty;1)$', 'B. $(1;3)$', 'C. $(3;+\\infty)$', 'D. $(-\\infty;1)\\cup(3;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+    options: ['A. $(-\\infty;1)$', 'B. $(-\\infty;1)\\cup(3;+\\infty)$', 'C. $(3;+\\infty)$', 'D. $(1;3)$'], correctAnswer: 'D', acceptedAnswers: ['D'], validatorType: 'choice'
   },
   {
     id: 'math10-m3-q063', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
@@ -1512,12 +1462,12 @@ export const g10MathModule3Questions: Question[] = [
   {
     id: 'math10-m3-q066', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
     content: 'Với $f(x)=-(2x+1)^2$, kết luận nào đúng?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
-    options: ['A. $f(x)<0$ với mọi $x$', 'B. $f(x)\\le0$ với mọi $x$ và $f(-\\tfrac12)=0$', 'C. $f(x)\\ge0$ với mọi $x$', 'D. $f(x)$ đổi dấu tại $x=-\\tfrac12$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+    options: ['A. $f(x)<0$ với mọi $x$', 'B. $f(x)$ đổi dấu tại $x=-\\tfrac12$', 'C. $f(x)\\ge0$ với mọi $x$', 'D. $f(x)\\le0$ với mọi $x$ và $f(-\\tfrac12)=0$'], correctAnswer: 'D', acceptedAnswers: ['D'], validatorType: 'choice'
   },
   {
     id: 'math10-m3-q067', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
     content: 'Tam thức $f(x)=(x+2)(x-5)$ âm trên khoảng nào?', responseType: 'single_choice', difficulty: 'medium', sourceType: 'manual',
-    options: ['A. $(-\\infty;-2)$', 'B. $(-2;5)$', 'C. $(5;+\\infty)$', 'D. $(-\\infty;-2)\\cup(5;+\\infty)$'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+    options: ['A. $(-\\infty;-2)$', 'B. $(-\\infty;-2)\\cup(5;+\\infty)$', 'C. $(5;+\\infty)$', 'D. $(-2;5)$'], correctAnswer: 'D', acceptedAnswers: ['D'], validatorType: 'choice'
   },
   {
     id: 'math10-m3-q068', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
@@ -1527,7 +1477,7 @@ export const g10MathModule3Questions: Question[] = [
   {
     id: 'math10-m3-q069', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',
     content: 'Tam thức $f$ có hai nghiệm $x_1<0<x_2$ và $f(0)>0$. Dấu của hệ số bậc hai $a$ là gì?', responseType: 'single_choice', difficulty: 'hard', sourceType: 'manual',
-    options: ['A. $a>0$', 'B. $a<0$', 'C. $a=0$', 'D. Không xác định được'], correctAnswer: 'B', acceptedAnswers: ['B'], validatorType: 'choice'
+    options: ['A. $a>0$', 'B. Không xác định được', 'C. $a=0$', 'D. $a<0$'], correctAnswer: 'D', acceptedAnswers: ['D'], validatorType: 'choice'
   },
   {
     id: 'math10-m3-q070', subjectId: 'math', topicId: 'math10-t3', questionTypeId: 'math10-qt20',

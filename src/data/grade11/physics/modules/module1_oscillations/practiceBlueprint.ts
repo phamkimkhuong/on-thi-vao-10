@@ -1,6 +1,6 @@
 import type { QuestionTypePracticeBlueprint } from '@/types';
 
-export const g11PhysicsModule1PracticeBlueprints: QuestionTypePracticeBlueprint[] = [
+const g11PhysicsModule1BasePracticeBlueprints: QuestionTypePracticeBlueprint[] = [
   {
     questionTypeId: 'phy11-qt01',
     subTypes: [
@@ -106,3 +106,32 @@ export const g11PhysicsModule1PracticeBlueprints: QuestionTypePracticeBlueprint[
     }
   }
 ];
+
+const expandedTargetByTypeId: Record<string, number> = {
+  'phy11-qt01': 18,
+  'phy11-qt02': 18,
+  'phy11-qt03': 18,
+  'phy11-qt05': 18
+};
+
+export const g11PhysicsModule1PracticeBlueprints: QuestionTypePracticeBlueprint[] =
+  g11PhysicsModule1BasePracticeBlueprints.map(blueprint => {
+    const targetQuestionCount = expandedTargetByTypeId[blueprint.questionTypeId] ?? 12;
+    if (targetQuestionCount === 12) return blueprint;
+    return {
+      ...blueprint,
+      subTypes: blueprint.subTypes.map(subType => ({
+        ...subType,
+        targetQuestionCount: targetQuestionCount / 2
+      })),
+      coverage: {
+        ...blueprint.coverage,
+        targetQuestionCount,
+        minimumQuestionsPerSubType: 6,
+        requiredPracticeRoles: [
+          ...new Set([...blueprint.coverage.requiredPracticeRoles, 'far_transfer' as const])
+        ],
+        masteryHoldoutCount: 4
+      }
+    };
+  });

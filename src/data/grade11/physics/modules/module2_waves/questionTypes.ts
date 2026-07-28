@@ -22,6 +22,14 @@ interface TypeConfig {
 }
 
 const createType = (config: TypeConfig): CourseQuestionType => ({
+  ...(() => {
+    const targetQuestionCount =
+      config.id === 'phy11-qt12' || config.id === 'phy11-qt13'
+        ? 24
+        : config.id === 'phy11-qt07' || config.id === 'phy11-qt08'
+          ? 18
+          : 12;
+    return {
   id: config.id,
   topicId: 'phy11-t02',
   courseId: 'grade11:physics',
@@ -36,14 +44,24 @@ const createType = (config: TypeConfig): CourseQuestionType => ({
   recognitionSigns: config.recognitionSigns,
   solvingSteps: config.solvingSteps,
   commonMistakes: config.commonMistakes,
-  subTypes: config.subTypes.map(item => ({ ...item, targetQuestionCount: 6 })),
+  subTypes: config.subTypes.map(item => ({
+    ...item,
+    targetQuestionCount: targetQuestionCount / 2
+  })),
   practiceCoverage: {
-    targetQuestionCount: 12,
-    minimumQuestionsPerSubType: 3,
-    requiredPracticeRoles: config.roles ?? ['guided', 'near_transfer', 'misconception_check'],
+    targetQuestionCount,
+    minimumQuestionsPerSubType: targetQuestionCount === 12 ? 3 : 6,
+    requiredPracticeRoles: [
+      ...new Set([
+        ...(config.roles ?? ['guided', 'near_transfer', 'misconception_check']),
+        ...(targetQuestionCount > 12 ? ['far_transfer' as const] : [])
+      ])
+    ],
     requiredRepresentations: config.representations,
-    masteryHoldoutCount: 2
+    masteryHoldoutCount: targetQuestionCount === 24 ? 6 : targetQuestionCount === 18 ? 4 : 2
   }
+    };
+  })()
 });
 
 export const g11PhysicsModule2QuestionTypes: CourseQuestionType[] = [

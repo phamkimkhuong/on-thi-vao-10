@@ -4,6 +4,7 @@ import { g11PhysicsModule3Outcomes, g11PhysicsModule3Misconceptions } from './le
 import { g11PhysicsModule3Manifest } from './manifest';
 import { g11PhysicsModule3PracticeBlueprints } from './practiceBlueprint';
 import { g11PhysicsModule3Questions } from './questions';
+import { g11PhysicsModule3ExpansionQuestions, g11PhysicsModule3ExpansionSolutions } from './questionsExpansion';
 import { g11PhysicsModule3QuestionTypes } from './questionTypes';
 import { g11PhysicsModule3Solutions } from './solutions';
 import { phy11Module3Theory } from './theory';
@@ -17,7 +18,7 @@ export const g11PhysicsModule3 = defineCourseModule({
   outcomes: g11PhysicsModule3Outcomes,
   misconceptions: g11PhysicsModule3Misconceptions,
   questionTypes: g11PhysicsModule3QuestionTypes,
-  practiceQuestions: g11PhysicsModule3Questions,
-  practiceSolutions: g11PhysicsModule3Solutions,
+  practiceQuestions: [...g11PhysicsModule3Questions, ...g11PhysicsModule3ExpansionQuestions],
+  practiceSolutions: [...g11PhysicsModule3Solutions, ...g11PhysicsModule3ExpansionSolutions],
   practiceBlueprints: g11PhysicsModule3PracticeBlueprints
 });

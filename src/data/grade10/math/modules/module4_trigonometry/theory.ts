@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt6Theory: string[] = [
   '**1. Quy ước trong tam giác**\nTrong tam giác $ABC$, các cạnh $a=BC$, $b=CA$, $c=AB$ lần lượt đối diện các góc $A,B,C$. Trước khi dùng công thức phải ghép đúng cạnh với góc đối diện.',
   '**2. Định lý cosin**\n$$a^2=b^2+c^2-2bc\\cos A$$\nCác công thức còn lại thu được bằng hoán vị. Bài toán ngược:\n$$\\cos A=\\frac{b^2+c^2-a^2}{2bc}$$\nDùng tốt cho ba cạnh hoặc hai cạnh và góc xen giữa.',
@@ -27,4 +29,56 @@ export const math10Qt19Theory: string[] = [
 export const g10MathModule4TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt6': math10Qt6Theory,
   'math10-qt19': math10Qt19Theory
+};
+
+export const g10MathModule4TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt6': [
+    {
+      id: 'math10-check-qt6-1',
+      question: 'Biết hai cạnh và góc xen giữa của một tam giác, nên dùng định lí nào trước?',
+      options: ['Định lí cosin', 'Định lí sin', 'Định lí Thales', 'Công thức trung vị'],
+      correctAnswer: 'A',
+      explanation: 'Bộ dữ kiện SAS cho phép dùng định lí cosin để tính trực tiếp cạnh còn lại.'
+    },
+    {
+      id: 'math10-check-qt6-2',
+      question: 'Trường hợp biết hai cạnh và một góc không xen giữa có thể cho',
+      options: ['Luôn đúng một tam giác', 'Chỉ hai tam giác', '0, 1 hoặc 2 tam giác', 'Vô số tam giác'],
+      correctAnswer: 'C',
+      explanation: 'Đây là trường hợp mơ hồ của định lí sin; nghiệm góc bù có thể tạo thêm một tam giác hoặc bị loại.'
+    },
+    {
+      id: 'math10-check-qt6-3',
+      question: 'Công thức diện tích liên hệ với bán kính ngoại tiếp $R$ là',
+      options: ['$S=abcR$', '$S=\\dfrac{abc}{2R}$', '$S=\\dfrac{abc}{4R}$', '$S=4abcR$'],
+      correctAnswer: 'C',
+      explanation: 'Công thức chuẩn là $S=\\dfrac{abc}{4R}$.'
+    }
+  ],
+  'math10-qt19': [
+    {
+      id: 'math10-check-qt19-1',
+      question: 'Giá trị $\\cos120^\\circ$ bằng',
+      options: ['$\\dfrac12$', '$-\\dfrac12$', '$\\dfrac{\\sqrt3}{2}$', '$-\\dfrac{\\sqrt3}{2}$'],
+      correctAnswer: 'B',
+      explanation: '$120^\\circ=180^\\circ-60^\\circ$ nên $\\cos120^\\circ=-\\cos60^\\circ=-\\dfrac12$.'
+    },
+    {
+      id: 'math10-check-qt19-2',
+      question: 'Giá trị nào không xác định?',
+      options: ['$\\sin90^\\circ$', '$\\cos90^\\circ$', '$\\tan90^\\circ$', '$\\sin180^\\circ$'],
+      correctAnswer: 'C',
+      explanation: '$\\tan\\alpha=\\sin\\alpha/\\cos\\alpha$ và $\\cos90^\\circ=0$.'
+    },
+    {
+      id: 'math10-check-qt19-3',
+      question: 'Trên đoạn $[0^\\circ;180^\\circ]$, phương trình $\\sin x=\\dfrac12$ có nghiệm',
+      options: ['Chỉ $30^\\circ$', 'Chỉ $150^\\circ$', '$30^\\circ$ và $150^\\circ$', '$60^\\circ$ và $120^\\circ$'],
+      correctAnswer: 'C',
+      explanation: 'Hai góc bù $30^\\circ$ và $150^\\circ$ có cùng sin bằng $\\dfrac12$.'
+    }
+  ]
 };

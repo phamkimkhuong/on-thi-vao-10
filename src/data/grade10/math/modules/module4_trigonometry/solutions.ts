@@ -1182,102 +1182,38 @@ export const g10MathModule4Solutions: Solution[] = [
   {
     "id": "math10-m4-s033",
     "questionId": "math10-m4-q033",
-    "recognition": "Dạng giá trị góc: nhận diện góc đặc biệt và vị trí trên nửa đường tròn để chọn đúng độ lớn lẫn dấu.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Đọc hoành độ điểm cuối nửa đường tròn đơn vị."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "Tại 180°, điểm là (−1;0), nên cos=−1.",
-        "result": "-1"
-      }
-    ],
-    "finalAnswer": "A. $-1$",
-    "commonMistakes": [
-      "Cho cos180° bằng 1 do bỏ dấu."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Góc tù nên $\\cos\\alpha=-\\sqrt{1-\\frac9{25}}=-\\frac45$ và $\\tan\\alpha=-\\frac34$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Do đó $2\\cos\\alpha+\\tan\\alpha=-\\frac85-\\frac34=-\\frac{47}{20}$.","result":"$-\\dfrac{47}{20}$"}],
+    "finalAnswer": "A. $-\\dfrac{47}{20}$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s034",
     "questionId": "math10-m4-q034",
-    "recognition": "Dạng giá trị góc: nhận diện góc đặc biệt và vị trí trên nửa đường tròn để chọn đúng độ lớn lẫn dấu.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Thay từng giá trị góc đặc biệt rồi cộng."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "$1/2+1/2=1$.",
-        "result": "1"
-      }
-    ],
-    "finalAnswer": "B. $1$",
-    "commonMistakes": [
-      "Nhầm một trong hai giá trị thành √3/2."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Trong góc tù, sin dương nên $\\sin\\alpha=\\sqrt{1-\\frac{25}{169}}=\\frac{12}{13}$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Suy ra $\\dfrac{\\sin\\alpha}{1-\\cos\\alpha}=\\dfrac{12/13}{1+5/13}=\\dfrac23$.","result":"$\\dfrac23$"}],
+    "finalAnswer": "B. $\\dfrac23$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s035",
     "questionId": "math10-m4-q035",
-    "recognition": "Dạng giá trị góc: nhận diện góc đặc biệt và vị trí trên nửa đường tròn để chọn đúng độ lớn lẫn dấu.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Dùng hệ thức cơ bản $\\sin^2x+\\cos^2x=1$."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "Hệ thức đúng với mọi góc mà hai hàm được xác định.",
-        "result": "1"
-      }
-    ],
-    "finalAnswer": "C. $1$",
-    "commonMistakes": [
-      "Bình phương tổng thay vì cộng hai bình phương."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Góc tham chiếu là $60^\\circ$; trong góc phần tư II suy ra $\\alpha=120^\\circ$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Vậy $\\sin\\alpha+\\cos\\alpha=\\frac{\\sqrt3}{2}-\\frac12=\\frac{\\sqrt3-1}{2}$.","result":"$\\dfrac{\\sqrt3-1}{2}$"}],
+    "finalAnswer": "C. $\\dfrac{\\sqrt3-1}{2}$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s036",
     "questionId": "math10-m4-q036",
-    "recognition": "Dạng giá trị góc: nhận diện góc đặc biệt và vị trí trên nửa đường tròn để chọn đúng độ lớn lẫn dấu.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "120°=180°−60° và sin giữ nguyên."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "$\\sin120°=\\sin60°=\\sqrt3/2$.",
-        "result": "\\frac{\\sqrt3}{2}"
-      }
-    ],
-    "finalAnswer": "D. $\\frac{\\sqrt3}{2}$",
-    "commonMistakes": [
-      "Cho sin góc tù mang dấu âm."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"$\\cos30^\\circ=\\frac{\\sqrt3}{2}=\\sin60^\\circ$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Trên $[0^\\circ;180^\\circ]$, hai góc có sin này là $60^\\circ$ và $120^\\circ$; điều kiện góc tù chọn $120^\\circ$.","result":"$120^\\circ$"}],
+    "finalAnswer": "D. $120^\\circ$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s037",
@@ -1482,27 +1418,11 @@ export const g10MathModule4Solutions: Solution[] = [
   {
     "id": "math10-m4-s045",
     "questionId": "math10-m4-q045",
-    "recognition": "Dạng hệ thức lượng giác: dùng góc bù, sin²+cos²=1 và dấu của góc để chọn nghiệm đúng.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Dùng hệ thức cơ bản cho hai số hạng đầu."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "Hai bình phương có tổng 1 và tan45°=1, nên kết quả 2.",
-        "result": "2"
-      }
-    ],
-    "finalAnswer": "A. $2$",
-    "commonMistakes": [
-      "Cộng sin30°+cos30° thay vì bình phương."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Bình phương giả thiết: $\\frac19=1+2\\sin x\\cos x$, nên $2\\sin x\\cos x=-\\frac89$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"$(\\sin x-\\cos x)^2=1-2\\sin x\\cos x=1+\\frac89=\\frac{17}{9}$.","result":"$\\dfrac{17}{9}$"}],
+    "finalAnswer": "A. $\\dfrac{17}{9}$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s046",
@@ -1532,27 +1452,11 @@ export const g10MathModule4Solutions: Solution[] = [
   {
     "id": "math10-m4-s047",
     "questionId": "math10-m4-q047",
-    "recognition": "Dạng hệ thức lượng giác: dùng góc bù, sin²+cos²=1 và dấu của góc để chọn nghiệm đúng.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Thay $1-\\sin^2x=\\cos^2x$."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "Tử và mẫu bằng nhau, mẫu khác 0, nên thương bằng 1.",
-        "result": "1"
-      }
-    ],
-    "finalAnswer": "C. $1$",
-    "commonMistakes": [
-      "Rút gọn mà không nhận dạng hệ thức cơ bản."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Góc tù có sin dương nên $\\sin\\alpha=\\sqrt{1-\\frac{144}{169}}=\\frac5{13}$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"$\\dfrac{1+\\sin\\alpha}{\\cos\\alpha}=\\dfrac{18/13}{-12/13}=-\\dfrac32$.","result":"$-\\dfrac32$"}],
+    "finalAnswer": "C. $-\\dfrac32$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s048",
@@ -1782,27 +1686,11 @@ export const g10MathModule4Solutions: Solution[] = [
   {
     "id": "math10-m4-s057",
     "questionId": "math10-m4-q057",
-    "recognition": "Dạng suy luận từ giá trị lượng giác: xác định góc chuẩn và dấu, hoặc khôi phục các tỉ số còn lại từ một tỉ số đã biết.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Đưa về cos x=1/2 và xét dấu."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "Cos dương chỉ ở [0°,90°), nên nhận x=60°.",
-        "result": "x=60^\\circ"
-      }
-    ],
-    "finalAnswer": "A. $x=60^\\circ$",
-    "commonMistakes": [
-      "Dùng tính đối xứng của sin và lấy thêm 120°."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Phương trình sin cho hai ứng viên $60^\\circ$ và $120^\\circ$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Điều kiện $\\cos x<0$ chọn góc tù, nên $x=120^\\circ$.","result":"$120^\\circ$"}],
+    "finalAnswer": "A. $120^\\circ$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s058",
@@ -1832,27 +1720,11 @@ export const g10MathModule4Solutions: Solution[] = [
   {
     "id": "math10-m4-s059",
     "questionId": "math10-m4-q059",
-    "recognition": "Dạng suy luận từ giá trị lượng giác: xác định góc chuẩn và dấu, hoặc khôi phục các tỉ số còn lại từ một tỉ số đã biết.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng dữ kiện",
-        "explanation": "Dùng $1-\\cos^2x=\\sin^2x$."
-      },
-      {
-        "order": 2,
-        "title": "Áp dụng và kiểm tra",
-        "explanation": "Tử bằng mẫu khác 0 nên P=1.",
-        "result": "1"
-      }
-    ],
-    "finalAnswer": "C. $1$",
-    "commonMistakes": [
-      "Đổi nhầm thành cos²/sin²."
-    ],
-    "reviewSuggestions": [
-      "Đặt góc trên nửa đường tròn để kiểm tra dấu trước khi biến đổi."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Góc tù nên $\\cos\\alpha=-\\sqrt{1-\\frac{16}{25}}=-\\frac35$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"$\\dfrac{1+\\cos\\alpha}{\\sin\\alpha}=\\dfrac{2/5}{4/5}=\\frac12$.","result":"$\\dfrac12$"}],
+    "finalAnswer": "C. $\\dfrac12$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m4-s060",

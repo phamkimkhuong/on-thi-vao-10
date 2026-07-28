@@ -23,7 +23,7 @@ const block = (
   ...value
 });
 
-export const phy11Module2Theory: TheoryBlock[] = [
+const phy11Module2BaseTheory: TheoryBlock[] = [
   block({
     id: 'phy11-theory-m2-description',
     lessonIds: ['phy11-kntt-l8'],
@@ -446,3 +446,243 @@ export const phy11Module2Theory: TheoryBlock[] = [
     orderIndex: 8
   })
 ];
+
+const theoryEnrichment: Record<
+  string,
+  Pick<TheoryBlock, 'workedExamples' | 'checkpoints'>
+> = {
+  'phy11-theory-m2-description': {
+    workedExamples: [{
+      id: 'phy11-example-m2-description-2',
+      title: 'Phân biệt đồ thị không gian và thời gian',
+      problem: 'Một đồ thị $u-x$ có hai đỉnh liên tiếp cách 1,8 m. Một đồ thị $u-t$ tại M có hai đỉnh cách 0,30 s. Xác định $\\lambda$ và T.',
+      steps: [
+        'Khoảng lặp trên đồ thị $u-x$ là bước sóng: $\\lambda=1,8$ m.',
+        'Khoảng lặp trên đồ thị $u-t$ là chu kì: $T=0,30$ s.'
+      ],
+      answer: '$\\lambda=1,8$ m và $T=0,30$ s.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-description-2',
+        question: 'Khoảng giữa hai đỉnh liên tiếp trên đồ thị $u-x$ biểu diễn',
+        options: ['Chu kì', 'Bước sóng', 'Tần số', 'Tốc độ phần tử'],
+        correctAnswer: 'B',
+        explanation: 'Trục ngang là vị trí nên khoảng lặp là bước sóng.'
+      },
+      {
+        id: 'phy11-check-m2-description-3',
+        question: 'Khoảng từ một đỉnh tới đáy gần nhất trên ảnh sóng bằng',
+        options: ['$\\lambda/4$', '$\\lambda/2$', '$\\lambda$', '$2\\lambda$'],
+        correctAnswer: 'B',
+        explanation: 'Đỉnh và đáy gần nhất lệch nhau nửa chu kì không gian.'
+      }
+    ]
+  },
+  'phy11-theory-m2-speed-energy': {
+    workedExamples: [{
+      id: 'phy11-example-m2-speed-energy-2',
+      title: 'Đếm số khoảng thời gian',
+      problem: 'Từ đỉnh sóng thứ nhất đến đỉnh thứ 11 qua M mất 2,0 s. Tốc độ sóng 5 m/s. Tính bước sóng.',
+      steps: [
+        'Mười một đỉnh tạo mười chu kì: $T=2,0/10=0,20$ s.',
+        'Tính $\\lambda=vT=5\\times0,20=1,0$ m.'
+      ],
+      answer: '$\\lambda=1,0$ m.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-speed-energy-2',
+        question: 'Khi sóng truyền, phần tử môi trường',
+        options: ['Đi theo sóng tới vô hạn', 'Dao động quanh vị trí cân bằng', 'Luôn đứng yên', 'Biến thành năng lượng'],
+        correctAnswer: 'B',
+        explanation: 'Sóng truyền trạng thái dao động và năng lượng, không tải vật chất theo cùng tốc độ.'
+      },
+      {
+        id: 'phy11-check-m2-speed-energy-3',
+        question: 'Nguồn giữ nguyên f, tốc độ truyền giảm thì bước sóng',
+        options: ['Tăng', 'Giảm', 'Không đổi', 'Bằng 0'],
+        correctAnswer: 'B',
+        explanation: 'Theo $\\lambda=v/f$, với f không đổi thì λ biến thiên cùng chiều với v.'
+      }
+    ]
+  },
+  'phy11-theory-m2-wave-types': {
+    workedExamples: [{
+      id: 'phy11-example-m2-wave-types-2',
+      title: 'Phân loại từ phương dao động',
+      problem: 'Các vòng lò xo dao động dọc theo trục trong khi vùng nén truyền dọc trục. Đây là sóng gì?',
+      steps: [
+        'Phương dao động của vòng lò xo song song phương truyền.',
+        'Theo định nghĩa, đó là sóng dọc.'
+      ],
+      answer: 'Sóng dọc.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-wave-types-2',
+        question: 'Sóng trên dây căng thường là sóng ngang vì',
+        options: ['Phần tử dao động vuông góc phương truyền', 'Dây nằm ngang', 'Sóng có hình sin', 'Tốc độ không đổi'],
+        correctAnswer: 'A',
+        explanation: 'Phân loại dựa trên quan hệ giữa hai phương, không dựa vào hình vẽ.'
+      },
+      {
+        id: 'phy11-check-m2-wave-types-3',
+        question: 'Sóng cơ không truyền được trong',
+        options: ['Chất rắn', 'Chất lỏng', 'Chất khí', 'Chân không'],
+        correctAnswer: 'D',
+        explanation: 'Sóng cơ cần môi trường vật chất để truyền biến dạng.'
+      }
+    ]
+  },
+  'phy11-theory-m2-sound-frequency': {
+    workedExamples: [{
+      id: 'phy11-example-m2-sound-frequency-2',
+      title: 'Đo nhiều chu kì trên tín hiệu',
+      problem: 'Trên màn hình, khoảng từ đỉnh thứ nhất đến đỉnh thứ chín là 16 ms. Tính tần số.',
+      steps: [
+        'Chín đỉnh tạo tám chu kì: $T=16/8=2$ ms.',
+        'Đổi $T=0,002$ s và tính $f=1/T=500$ Hz.'
+      ],
+      answer: '$f=500$ Hz.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-sound-frequency-2',
+        question: 'Đo tám chu kì thay vì một chu kì chủ yếu giúp',
+        options: ['Tăng tần số thật', 'Giảm sai số tương đối khi đọc thời gian', 'Đổi loại âm', 'Loại mọi sai số hệ thống'],
+        correctAnswer: 'B',
+        explanation: 'Khoảng đo dài hơn làm sai số đọc chiếm tỉ lệ nhỏ hơn.'
+      },
+      {
+        id: 'phy11-check-m2-sound-frequency-3',
+        question: '$2$ ms bằng',
+        options: ['$2$ s', '$0,2$ s', '$0,02$ s', '$0,002$ s'],
+        correctAnswer: 'D',
+        explanation: 'Một mili giây bằng $10^{-3}$ giây.'
+      }
+    ]
+  },
+  'phy11-theory-m2-electromagnetic': {
+    workedExamples: [{
+      id: 'phy11-example-m2-electromagnetic-2',
+      title: 'So sánh tần số từ bước sóng',
+      problem: 'Hai bức xạ có bước sóng $600$ nm và $300$ nm trong chân không. So sánh tần số.',
+      steps: [
+        'Trong chân không, cả hai truyền với cùng tốc độ c.',
+        'Vì $f=c/\\lambda$, bước sóng giảm một nửa làm tần số tăng gấp đôi.'
+      ],
+      answer: 'Bức xạ 300 nm có tần số gấp đôi bức xạ 600 nm.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-electromagnetic-2',
+        question: 'Sóng điện từ có truyền được trong chân không không?',
+        options: ['Có', 'Không', 'Chỉ tia sáng', 'Chỉ sóng vô tuyến'],
+        correctAnswer: 'A',
+        explanation: 'Sóng điện từ không cần môi trường vật chất.'
+      },
+      {
+        id: 'phy11-check-m2-electromagnetic-3',
+        question: 'Trong chân không, bức xạ có bước sóng ngắn hơn thì',
+        options: ['Tần số nhỏ hơn', 'Tần số lớn hơn', 'Tốc độ lớn hơn c', 'Không có năng lượng'],
+        correctAnswer: 'B',
+        explanation: 'Do $c=\\lambda f$ không đổi, λ và f biến thiên ngược chiều.'
+      }
+    ]
+  },
+  'phy11-theory-m2-interference': {
+    workedExamples: [{
+      id: 'phy11-example-m2-interference-2',
+      title: 'Nguồn ngược pha',
+      problem: 'Hai nguồn ngược pha. Tại M có $|d_2-d_1|=2,5\\lambda$. M là cực đại hay cực tiểu?',
+      steps: [
+        'Nguồn ngược pha cho cực đại khi hiệu đường đi bằng nửa nguyên lần bước sóng.',
+        '$2,5\\lambda=(2+1/2)\\lambda$ nên thỏa điều kiện cực đại.'
+      ],
+      answer: 'M là điểm cực đại.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-interference-2',
+        question: 'Hai nguồn cùng pha, trên trung trực của đoạn nối nguồn có',
+        options: ['Hiệu đường đi bằng 0 và cực đại', 'Hiệu đường đi bằng λ/2', 'Luôn cực tiểu', 'Không giao thoa'],
+        correctAnswer: 'A',
+        explanation: 'Mọi điểm trên trung trực cách đều hai nguồn nên hai sóng tới cùng pha.'
+      },
+      {
+        id: 'phy11-check-m2-interference-3',
+        question: 'Trên đoạn nối hai nguồn cùng pha, hai cực đại liên tiếp cách',
+        options: ['$\\lambda/4$', '$\\lambda/2$', '$\\lambda$', '$2\\lambda$'],
+        correctAnswer: 'B',
+        explanation: 'Hiệu đường đi thay đổi hai lần nhanh hơn tọa độ trên đoạn nối nguồn.'
+      }
+    ]
+  },
+  'phy11-theory-m2-standing-wave': {
+    workedExamples: [{
+      id: 'phy11-example-m2-standing-wave-2',
+      title: 'Tần số cơ bản của dây biên hỗn hợp',
+      problem: 'Dây dài 0,60 m, một đầu cố định một đầu tự do, tốc độ sóng 48 m/s. Tính tần số cơ bản.',
+      steps: [
+        'Mode cơ bản có $L=\\lambda/4$, nên $\\lambda=4L=2,4$ m.',
+        'Tính $f_1=v/\\lambda=48/2,4=20$ Hz.'
+      ],
+      answer: '$f_1=20$ Hz.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-standing-wave-2',
+        question: 'Dây hai đầu cố định có 4 bó sóng thì có bao nhiêu nút kể cả hai đầu?',
+        options: ['3', '4', '5', '8'],
+        correctAnswer: 'C',
+        explanation: 'Số nút bằng số bó cộng một.'
+      },
+      {
+        id: 'phy11-check-m2-standing-wave-3',
+        question: 'Biên hỗn hợp chỉ cho phép các họa âm',
+        options: ['Mọi số nguyên', 'Số lẻ', 'Số chẵn', 'Số nguyên tố'],
+        correctAnswer: 'B',
+        explanation: 'Điều kiện $L=(2n+1)\\lambda/4$ tạo các tần số lẻ của tần số cơ bản.'
+      }
+    ]
+  },
+  'phy11-theory-m2-sound-speed': {
+    workedExamples: [{
+      id: 'phy11-example-m2-sound-speed-2',
+      title: 'Lấy trung bình nhiều lần đo',
+      problem: 'Bốn lần đo tốc độ âm cho 338, 342, 341 và 339 m/s. Tính giá trị trung bình.',
+      steps: [
+        'Cộng bốn kết quả được 1360 m/s.',
+        'Chia cho 4: $\\bar v=340$ m/s.'
+      ],
+      answer: '$\\bar v=340$ m/s.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m2-sound-speed-2',
+        question: 'Trong phương pháp hai micro, tốc độ âm được tính bằng',
+        options: ['$v=\\Delta t/s$', '$v=s/\\Delta t$', '$v=s\\Delta t$', '$v=1/(s\\Delta t)$'],
+        correctAnswer: 'B',
+        explanation: 'Tốc độ bằng quãng đường truyền chia độ trễ thời gian.'
+      },
+      {
+        id: 'phy11-check-m2-sound-speed-3',
+        question: 'Tăng khoảng cách hai micro, vẫn đo chính xác độ trễ, thường giúp',
+        options: ['Giảm sai số tương đối thời gian', 'Tốc độ thật tăng', 'Âm đổi tần số', 'Không cần đổi ms sang s'],
+        correctAnswer: 'A',
+        explanation: 'Độ trễ lớn hơn làm cùng sai số tuyệt đối thời gian chiếm tỉ lệ nhỏ hơn.'
+      }
+    ]
+  }
+};
+
+export const phy11Module2Theory: TheoryBlock[] = phy11Module2BaseTheory.map(block => {
+  const enrichment = theoryEnrichment[block.id];
+  if (!enrichment) return block;
+  return {
+    ...block,
+    workedExamples: [...(block.workedExamples ?? []), ...(enrichment.workedExamples ?? [])],
+    checkpoints: [...(block.checkpoints ?? []), ...(enrichment.checkpoints ?? [])]
+  };
+});

@@ -73,6 +73,9 @@ export const validateCourseDataV4 = async ({
   expectedTheoryQuestionTypeCount,
   expectedAssessmentExamCount,
   expectedAssessmentBlueprintCount,
+  expectedAssessmentQuestionCount,
+  expectedAssessmentSolutionCount,
+  expectedAssessmentQuestionTypeCount,
   allowPartialCoverage = false
 }) => {
   const errors = [];
@@ -259,6 +262,33 @@ export const validateCourseDataV4 = async ({
   ) {
     errors.push(
       `Phải có ${expectedAssessmentBlueprintCount} ma trận kiểm tra, hiện có ${assessmentBlueprints.length}.`
+    );
+  }
+  if (
+    expectedAssessmentQuestionCount !== undefined &&
+    assessmentQuestions.length !== expectedAssessmentQuestionCount
+  ) {
+    errors.push(
+      `Phải có ${expectedAssessmentQuestionCount} câu đánh giá, hiện có ${assessmentQuestions.length}.`
+    );
+  }
+  if (
+    expectedAssessmentSolutionCount !== undefined &&
+    assessmentSolutions.length !== expectedAssessmentSolutionCount
+  ) {
+    errors.push(
+      `Phải có ${expectedAssessmentSolutionCount} lời giải đánh giá, hiện có ${assessmentSolutions.length}.`
+    );
+  }
+  const assessmentQuestionTypeCount = new Set(
+    assessmentQuestions.map(question => question.questionTypeId)
+  ).size;
+  if (
+    expectedAssessmentQuestionTypeCount !== undefined &&
+    assessmentQuestionTypeCount !== expectedAssessmentQuestionTypeCount
+  ) {
+    errors.push(
+      `Câu đánh giá phải phủ ${expectedAssessmentQuestionTypeCount} dạng bài, hiện phủ ${assessmentQuestionTypeCount}.`
     );
   }
 
@@ -901,6 +931,46 @@ export const validateCourseDataV4 = async ({
     }
   }
 
+  const parallelFormGroups = new Map();
+  for (const exam of assessmentExams) {
+    if (!exam.parallelFormGroup) continue;
+    const group = parallelFormGroups.get(exam.parallelFormGroup) ?? [];
+    group.push(exam);
+    parallelFormGroups.set(exam.parallelFormGroup, group);
+  }
+  for (const [groupId, exams] of parallelFormGroups) {
+    if (exams.length < 2) {
+      errors.push(`${groupId}: nhóm form song song phải có ít nhất hai đề.`);
+    }
+    if (new Set(exams.map(exam => exam.blueprintId)).size !== 1) {
+      errors.push(`${groupId}: các form song song không dùng chung một blueprint.`);
+    }
+    const formCodes = new Set();
+    for (const exam of exams) {
+      if (!isNonEmptyString(exam.formCode)) {
+        errors.push(`${exam.id}: thuộc nhóm form song song ${groupId} nhưng thiếu formCode.`);
+      } else if (formCodes.has(exam.formCode)) {
+        errors.push(`${groupId}: formCode ${exam.formCode} bị lặp.`);
+      }
+      formCodes.add(exam.formCode);
+    }
+    for (let firstIndex = 0; firstIndex < exams.length; firstIndex += 1) {
+      for (let secondIndex = firstIndex + 1; secondIndex < exams.length; secondIndex += 1) {
+        const first = exams[firstIndex];
+        const second = exams[secondIndex];
+        const secondQuestionIds = new Set(second.questionIds ?? []);
+        const overlap = (first.questionIds ?? []).filter(questionId =>
+          secondQuestionIds.has(questionId)
+        );
+        if (overlap.length > 0) {
+          errors.push(
+            `${groupId}: ${first.formCode}/${second.formCode} dùng chung ${overlap.length} câu hỏi.`
+          );
+        }
+      }
+    }
+  }
+
   for (const [label, items] of [
     ['Công thức lý thuyết', theory.flatMap(block => block.formulas ?? [])],
     ['Ví dụ lý thuyết', theory.flatMap(block => block.workedExamples ?? [])],
@@ -1072,6 +1142,24 @@ export const validateCourseDataV4 = async ({
       assessmentExams: assessmentExams.length,
       assessmentBlueprints: assessmentBlueprints.length,
       assessmentQuestions: assessmentQuestions.length,
+      assessmentSolutions: assessmentSolutions.length,
+      assessmentQuestionTypesCovered: assessmentQuestionTypeCount,
+      assessmentDifficulty: assessmentQuestions.reduce((counts, question) => {
+        const key = question.difficulty ?? 'unspecified';
+        counts[key] = (counts[key] ?? 0) + 1;
+        return counts;
+      }, {}),
+      assessmentResponseTypes: assessmentQuestions.reduce((counts, question) => {
+        const key = question.responseType ?? 'unspecified';
+        counts[key] = (counts[key] ?? 0) + 1;
+        return counts;
+      }, {}),
+      assessmentChoiceAnswers: assessmentQuestions.reduce((counts, question) => {
+        if (question.responseType !== 'single_choice') return counts;
+        counts[question.correctAnswer] = (counts[question.correctAnswer] ?? 0) + 1;
+        return counts;
+      }, {}),
+      assessmentParallelFormGroups: parallelFormGroups.size,
       theoryBlocks: theory.length,
       theoryWorkedExamples: theory.flatMap(block => block.workedExamples ?? []).length,
       theoryCheckpoints: theory.flatMap(block => block.checkpoints ?? []).length,

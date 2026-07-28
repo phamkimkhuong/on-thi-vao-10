@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt1Theory: string[] = [
   '**1. Tập hợp và kí hiệu thuộc**\n$x\\in A$ nghĩa $x$ thuộc $A$; $x\\notin A$ nghĩa không thuộc. Hai tập bằng nhau khi có đúng cùng phần tử. $A\\subset B$ nghĩa mọi phần tử của $A$ đều thuộc $B$.',
   '**2. Khoảng, đoạn và nửa khoảng**\n$$(a;b)=\\{x\\mid a<x<b\\},\\qquad[a;b]=\\{x\\mid a\\le x\\le b\\}$$\n$$[a;b)=\\{x\\mid a\\le x<b\\},\\qquad(a;b]=\\{x\\mid a<x\\le b\\}$$\nNgoặc vuông lấy đầu mút; ngoặc tròn không lấy. Với $\\pm\\infty$ luôn dùng ngoặc tròn vì vô cực không phải số thực.',
@@ -38,4 +40,94 @@ export const g10MathModule1TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt1': math10Qt1Theory,
   'math10-qt2': math10Qt2Theory,
   'math10-qt17': math10Qt17Theory
+};
+
+export const g10MathModule1TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt1': [
+    {
+      id: 'math10-check-qt1-1',
+      question: 'Kí hiệu nào biểu diễn đúng tập hợp $\\{x\\in\\mathbb R\\mid x\\ge 2\\}$?',
+      options: ['$(2;+\\infty)$', '$[2;+\\infty)$', '$[2;+\\infty]$', '$(-\\infty;2]$'],
+      correctAnswer: 'B',
+      explanation: 'Điểm 2 được lấy nên dùng ngoặc vuông; với $+\\infty$ luôn dùng ngoặc tròn.'
+    },
+    {
+      id: 'math10-check-qt1-2',
+      question: 'Cho $A=[-1;2)$ và $B=(2;4]$. Khi đó $A\\cap B$ bằng',
+      options: ['$\\{2\\}$', '$(-1;4]$', '$\\varnothing$', '$[2;4]$'],
+      correctAnswer: 'C',
+      explanation: 'Hai khoảng chỉ chạm tại 2 nhưng cả hai đều không chứa điểm 2, nên giao rỗng.'
+    },
+    {
+      id: 'math10-check-qt1-3',
+      question: 'Lớp có 25 bạn thích Toán, 18 bạn thích Vật lí và 7 bạn thích cả hai. Có bao nhiêu bạn thích ít nhất một môn?',
+      options: ['36', '43', '50', '32'],
+      correctAnswer: 'A',
+      explanation: 'Áp dụng bao hàm–loại trừ: $25+18-7=36$.'
+    }
+  ],
+  'math10-qt2': [
+    {
+      id: 'math10-check-qt2-1',
+      question: 'Khẳng định nào đúng về đoạn $[a;a]$?',
+      options: ['Luôn rỗng', 'Bằng tập $\\{a\\}$', 'Chỉ khác rỗng khi $a>0$', 'Không xác định'],
+      correctAnswer: 'B',
+      explanation: 'Đoạn đóng lấy cả hai đầu mút nên $[a;a]=\\{a\\}$.'
+    },
+    {
+      id: 'math10-check-qt2-2',
+      question: 'Khi hai khoảng chỉ chạm tại cùng một đầu mút, giao của chúng khác rỗng khi nào?',
+      options: [
+        'Luôn khác rỗng',
+        'Luôn rỗng',
+        'Điểm chạm được cả hai khoảng lấy',
+        'Chỉ cần một khoảng lấy điểm chạm'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Một điểm thuộc giao khi và chỉ khi nó đồng thời thuộc cả hai tập.'
+    },
+    {
+      id: 'math10-check-qt2-3',
+      question: 'Quan hệ nào sau đây đúng?',
+      options: ['$[1;2]\\subset(1;3]$', '$(1;2]\\subset(1;3]$', '$[1;3]\\subset(1;3]$', '$(0;2]\\subset(1;3]$'],
+      correctAnswer: 'B',
+      explanation: 'Mọi điểm của $(1;2]$ đều thuộc $(1;3]$; các lựa chọn khác chứa điểm nằm ngoài tập mẹ.'
+    }
+  ],
+  'math10-qt17': [
+    {
+      id: 'math10-check-qt17-1',
+      question: 'Câu nào sau đây là một mệnh đề?',
+      options: ['Bạn học bài đi!', '$x+1>3$', 'Số 11 là số nguyên tố.', 'Hôm nay đẹp quá!'],
+      correctAnswer: 'C',
+      explanation: 'Đây là câu khẳng định có giá trị đúng xác định. Câu chứa biến chưa gán chưa phải mệnh đề.'
+    },
+    {
+      id: 'math10-check-qt17-2',
+      question: 'Phủ định của “$\\forall x\\in\\mathbb R,\\ x^2\\ge0$” là',
+      options: [
+        '$\\forall x\\in\\mathbb R,\\ x^2<0$',
+        '$\\exists x\\in\\mathbb R:\\ x^2<0$',
+        '$\\exists x\\in\\mathbb R:\\ x^2\\ge0$',
+        '$\\forall x\\in\\mathbb R,\\ x^2\\le0$'
+      ],
+      correctAnswer: 'B',
+      explanation: 'Phủ định “mọi” thành “tồn tại” và phủ định $x^2\\ge0$ thành $x^2<0$.'
+    },
+    {
+      id: 'math10-check-qt17-3',
+      question: 'Trong mệnh đề $P\\Rightarrow Q$, phát biểu đúng là',
+      options: [
+        'P là điều kiện cần của Q',
+        'Q là điều kiện đủ của P',
+        'P là điều kiện đủ của Q',
+        'P và Q luôn tương đương'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Với $P\\Rightarrow Q$, P là điều kiện đủ của Q và Q là điều kiện cần của P.'
+    }
+  ]
 };

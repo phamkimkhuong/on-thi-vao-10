@@ -9,17 +9,20 @@ const blueprint = (
   subTypes: QuestionTypePracticeBlueprint['subTypes'],
   requiredRepresentations: QuestionRepresentationType[],
   requiredPracticeRoles: PracticeRole[] = ['guided', 'near_transfer', 'misconception_check']
-): QuestionTypePracticeBlueprint => ({
+): QuestionTypePracticeBlueprint => {
+  const targetQuestionCount = ['phy11-qt24', 'phy11-qt29', 'phy11-qt31'].includes(questionTypeId) ? 24 : 18;
+  return {
   questionTypeId,
-  subTypes,
+  subTypes: subTypes.map(item => ({ ...item, targetQuestionCount: targetQuestionCount / 2 })),
   coverage: {
-    targetQuestionCount: 12,
-    minimumQuestionsPerSubType: 3,
-    requiredPracticeRoles,
+    targetQuestionCount,
+    minimumQuestionsPerSubType: 6,
+    requiredPracticeRoles: [...new Set([...requiredPracticeRoles, 'far_transfer' as const])],
     requiredRepresentations,
-    masteryHoldoutCount: 2
+    masteryHoldoutCount: targetQuestionCount === 24 ? 6 : 4
   }
-});
+  };
+};
 
 export const g11PhysicsModule4PracticeBlueprints: QuestionTypePracticeBlueprint[] = [
   blueprint('phy11-qt24', [

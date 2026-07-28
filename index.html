@@ -31,13 +31,17 @@
     <meta name="twitter:description" content="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT mới." />
     <meta name="twitter:image" content="https://ezonthi.com/logo.png" />
 
-    <!-- Google Fonts: Outfit & Inter -->
+    <!-- Google Fonts, Firebase & jsDelivr Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firebase.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- KaTeX CSS for beautiful math rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+    <!-- KaTeX CSS for math rendering (Non render-blocking) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" media="print" onload="this.media='all'" crossorigin="anonymous">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"></noscript>
     
     <!-- Structured Data (JSON-LD) for Google Search Rich Snippets -->
     <script type="application/ld+json">

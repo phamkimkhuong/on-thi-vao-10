@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Ảnh dạng sóng theo không gian</title>
+  <desc id="desc">Sóng hình sin biên độ 3 centimét có hai đỉnh liên tiếp tại vị trí 0,5 mét và 2,5 mét.</desc>
+  <rect width="720" height="360" fill="#fff"/>
+  <g stroke="#dbeafe" stroke-width="1">
+    <path d="M80 70H680M80 180H680M80 290H680"/>
+    <path d="M155 40V310M305 40V310M455 40V310M605 40V310"/>
+  </g>
+  <g stroke="#0f172a" stroke-width="2">
+    <path d="M70 180H690"/>
+    <path d="M80 320V30"/>
+    <path d="m690 180-10-6v12z" fill="#0f172a"/>
+    <path d="m80 30-6 10h12z" fill="#0f172a"/>
+  </g>
+  <path d="M80 180C117.5 105 130 70 155 70S230 180 305 180 380 70 455 70 530 180 605 180 655 112 680 92" fill="none" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="155" cy="70" r="7" fill="#7c3aed"/>
+  <circle cx="455" cy="70" r="7" fill="#7c3aed"/>
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="18">
+    <text x="692" y="205">x (m)</text>
+    <text x="30" y="36">u (cm)</text>
+    <text x="58" y="76">3</text>
+    <text x="46" y="296">−3</text>
+    <text x="142" y="205">0,5</text>
+    <text x="292" y="205">1,5</text>
+    <text x="442" y="205">2,5</text>
+    <text x="592" y="205">3,5</text>
+    <path d="M155 48H455" stroke="#f59e0b" stroke-width="2"/>
+    <text x="284" y="40">λ = 2,0 m</text>
+  </g>
+</svg>

@@ -858,16 +858,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Giá trị $\\cos180^\\circ$ bằng bao nhiêu?",
+    "content": "Cho $\\sin\\alpha=\\dfrac35$ và $90^\\circ<\\alpha<180^\\circ$. Tính $2\\cos\\alpha+\\tan\\alpha$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $-1$",
-      "B. $1$",
-      "C. $0$",
-      "D. $\\frac12$"
-    ],
+    "options": ["A. $-\\dfrac{47}{20}$","B. $-\\dfrac{17}{20}$","C. $\\dfrac{47}{20}$","D. $-\\dfrac{11}{5}$"],
     "correctAnswer": "A",
     "acceptedAnswers": [
       "A"
@@ -879,16 +874,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Tính $\\sin30^\\circ+\\cos60^\\circ$.",
+    "content": "Cho $\\cos\\alpha=-\\dfrac5{13}$ và $90^\\circ<\\alpha<180^\\circ$. Tính $\\dfrac{\\sin\\alpha}{1-\\cos\\alpha}$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $0$",
-      "B. $1$",
-      "C. $\\frac12$",
-      "D. $\\sqrt3$"
-    ],
+    "options": ["A. $\\dfrac32$","B. $\\dfrac23$","C. $-\\dfrac23$","D. $\\dfrac{12}{13}$"],
     "correctAnswer": "B",
     "acceptedAnswers": [
       "B"
@@ -900,16 +890,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Tính $\\sin^260^\\circ+\\cos^260^\\circ$.",
+    "content": "Biết $90^\\circ<\\alpha<180^\\circ$ và $\\tan\\alpha=-\\sqrt3$. Giá trị $\\sin\\alpha+\\cos\\alpha$ bằng",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $\\frac12$",
-      "B. $\\frac34$",
-      "C. $1$",
-      "D. $2$"
-    ],
+    "options": ["A. $\\dfrac{\\sqrt3+1}{2}$","B. $-\\dfrac{\\sqrt3+1}{2}$","C. $\\dfrac{\\sqrt3-1}{2}$","D. $\\dfrac{1-\\sqrt3}{2}$"],
     "correctAnswer": "C",
     "acceptedAnswers": [
       "C"
@@ -921,16 +906,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Giá trị $\\sin120^\\circ$ bằng bao nhiêu?",
+    "content": "Cho $\\sin\\alpha=\\cos30^\\circ$ và $\\alpha$ là góc tù. Giá trị của $\\alpha$ là",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $-\\frac{\\sqrt3}{2}$",
-      "B. $\\frac12$",
-      "C. $-\\frac12$",
-      "D. $\\frac{\\sqrt3}{2}$"
-    ],
+    "options": ["A. $30^\\circ$","B. $60^\\circ$","C. $150^\\circ$","D. $120^\\circ$"],
     "correctAnswer": "D",
     "acceptedAnswers": [
       "D"
@@ -1110,16 +1090,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Tính $\\sin^230^\\circ+\\cos^230^\\circ+\\tan45^\\circ$.",
+    "content": "Biết $\\sin x+\\cos x=\\dfrac13$. Tính $(\\sin x-\\cos x)^2$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $2$",
-      "B. $1$",
-      "C. $\\frac32$",
-      "D. $3$"
-    ],
+    "options": ["A. $\\dfrac{17}{9}$","B. $\\dfrac89$","C. $\\dfrac19$","D. $\\dfrac{10}{9}$"],
     "correctAnswer": "A",
     "acceptedAnswers": [
       "A"
@@ -1152,16 +1127,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Rút gọn $\\dfrac{\\cos^2x}{1-\\sin^2x}$ khi biểu thức xác định.",
+    "content": "Cho $\\cos\\alpha=-\\dfrac{12}{13}$ và $\\alpha$ là góc tù. Tính $\\dfrac{1+\\sin\\alpha}{\\cos\\alpha}$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $\\cos^2x$",
-      "B. $\\sin^2x$",
-      "C. $1$",
-      "D. $-1$"
-    ],
+    "options": ["A. $\\dfrac32$","B. $-\\dfrac23$","C. $-\\dfrac32$","D. $\\dfrac23$"],
     "correctAnswer": "C",
     "acceptedAnswers": [
       "C"
@@ -1362,16 +1332,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Trong $[0^\\circ;180^\\circ]$, phương trình $2\\cos x=1$ có nghiệm nào?",
+    "content": "Trong $[0^\\circ;180^\\circ]$, biết $\\sin x=\\dfrac{\\sqrt3}{2}$ và $\\cos x<0$. Khi đó $x$ bằng",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $x=60^\\circ$",
-      "B. $x=120^\\circ$",
-      "C. $x=30^\\circ$",
-      "D. $x=60^\\circ\\text{ hoặc }120^\\circ$"
-    ],
+    "options": ["A. $120^\\circ$","B. $60^\\circ$","C. $30^\\circ$","D. $150^\\circ$"],
     "correctAnswer": "A",
     "acceptedAnswers": [
       "A"
@@ -1404,16 +1369,11 @@ export const g10MathModule4Questions: Question[] = [
     "subjectId": "math",
     "topicId": "math10-t4",
     "questionTypeId": "math10-qt19",
-    "content": "Rút gọn $P=\\dfrac{1-\\cos^2x}{\\sin^2x}$ khi xác định.",
+    "content": "Cho $\\sin\\alpha=\\dfrac45$ và $\\alpha$ là góc tù. Tính $\\dfrac{1+\\cos\\alpha}{\\sin\\alpha}$.",
     "responseType": "single_choice",
     "difficulty": "hard",
     "sourceType": "manual",
-    "options": [
-      "A. $0$",
-      "B. $-1$",
-      "C. $1$",
-      "D. $\\tan^2x$"
-    ],
+    "options": ["A. $2$","B. $\\dfrac34$","C. $\\dfrac12$","D. $-\\dfrac12$"],
     "correctAnswer": "C",
     "acceptedAnswers": [
       "C"

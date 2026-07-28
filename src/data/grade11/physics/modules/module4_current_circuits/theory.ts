@@ -20,7 +20,7 @@ const block = (
   ...value
 });
 
-export const phy11Module4Theory: TheoryBlock[] = [
+const phy11Module4BaseTheory: TheoryBlock[] = [
   block({
     id: 'phy11-theory-m4-microscopic-current',
     lessonIds: ['phy11-kntt-l22'],
@@ -528,3 +528,48 @@ export const phy11Module4Theory: TheoryBlock[] = [
     orderIndex: 8
   })
 ];
+
+export const phy11Module4Theory: TheoryBlock[] = phy11Module4BaseTheory.map(block => ({
+  ...block,
+  workedExamples: [
+    ...(block.workedExamples ?? []),
+    {
+      id: `${block.id}-example-2`,
+      title: `Kiểm tra mô hình: ${block.title}`,
+      problem: `Khi giải một bài thuộc “${block.title}”, cần kiểm tra những yếu tố nào để tránh dùng công thức máy móc?`,
+      steps: [
+        block.keyPoints?.[0] ?? 'Xác định đoạn mạch và đại lượng đang xét.',
+        block.keyPoints?.[1] ?? 'Chọn công thức theo đúng trạng thái mạch.',
+        'Đổi đơn vị, tính toán rồi đối chiếu giới hạn an toàn và độ lớn kết quả.'
+      ],
+      answer: block.keyPoints?.[2] ?? 'Kết quả phải phù hợp sơ đồ mạch và điều kiện vận hành.'
+    }
+  ],
+  checkpoints: [
+    ...(block.checkpoints ?? []),
+    {
+      id: `${block.id}-check-2`,
+      question: `Nhận định cần ghi nhớ trong “${block.title}” là`,
+      options: [
+        block.keyPoints?.[0] ?? 'Cần xác định đúng đoạn mạch.',
+        'Mọi linh kiện luôn có điện trở không đổi.',
+        'Không cần quan tâm công suất định mức.',
+        'Có thể bỏ qua mọi điện trở trong.'
+      ],
+      correctAnswer: 'A',
+      explanation: block.keyPoints?.[0] ?? 'Cần xác định đúng mô hình trước khi thay số.'
+    },
+    {
+      id: `${block.id}-check-3`,
+      question: `Sau khi tính trong chủ đề “${block.title}”, bước kiểm tra phù hợp là`,
+      options: [
+        'Chỉ nhìn số chữ số.',
+        'Luôn coi mạch bị ngắn.',
+        'Kiểm tra đơn vị, trạng thái mạch và giới hạn an toàn.',
+        'Bỏ qua chiều dòng điện.'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Kiểm tra trạng thái mạch và giới hạn định mức giúp phát hiện kết quả vô lí hoặc không an toàn.'
+    }
+  ]
+}));

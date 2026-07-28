@@ -7,7 +7,7 @@ const variable = (
   note?: string
 ): TheoryFormulaVariable => ({ symbol, meaning, unit, note });
 
-export const phy11Module1Theory: TheoryBlock[] = [
+const phy11Module1BaseTheory: TheoryBlock[] = [
   {
     id: 'phy11-theory-m1-characteristics',
     courseId: 'grade11:physics',
@@ -377,3 +377,188 @@ export const phy11Module1Theory: TheoryBlock[] = [
     reviewStatus: 'source_checked'
   }
 ];
+
+const theoryEnrichment: Record<
+  string,
+  Pick<TheoryBlock, 'workedExamples' | 'checkpoints'>
+> = {
+  'phy11-theory-m1-characteristics': {
+    workedExamples: [{
+      id: 'phy11-example-m1-characteristics-2',
+      title: 'Lập phương trình từ trạng thái ban đầu',
+      problem: 'Vật có $A=5$ cm, $T=1$ s; tại $t=0$ vật qua vị trí cân bằng theo chiều âm. Lập phương trình dạng cos.',
+      steps: [
+        'Tính $\\omega=2\\pi/T=2\\pi$ rad/s.',
+        'Điều kiện $x(0)=0$ cho $\\cos\\varphi=0$.',
+        'Vì $v(0)=-\\omega A\\sin\\varphi<0$, chọn $\\varphi=\\pi/2$.'
+      ],
+      answer: '$x=5\\cos(2\\pi t+\\pi/2)$ cm.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m1-characteristics-2',
+        question: 'Hai trạng thái cùng li độ nhưng ngược chiều chuyển động có chắc chắn cùng pha không?',
+        options: ['Có', 'Không', 'Chỉ khi ở biên', 'Chỉ khi ở cân bằng'],
+        correctAnswer: 'B',
+        explanation: 'Cùng pha đòi hỏi đồng thời cùng li độ và cùng chiều chuyển động.'
+      },
+      {
+        id: 'phy11-check-m1-characteristics-3',
+        question: 'Trong dạng chuẩn, nếu hệ số trước cos âm thì thao tác đúng là',
+        options: ['Nhận biên độ âm', 'Bỏ dấu âm', 'Chuyển dấu âm vào pha thêm $\\pi$', 'Đổi tần số góc'],
+        correctAnswer: 'C',
+        explanation: 'Biên độ luôn dương; $-\\cos\\alpha=\\cos(\\alpha+\\pi)$.'
+      }
+    ]
+  },
+  'phy11-theory-m1-motion': {
+    workedExamples: [{
+      id: 'phy11-example-m1-motion-2',
+      title: 'Xác định dấu vận tốc và gia tốc',
+      problem: 'Vật ở $x=-A/2$ và đang đi về vị trí cân bằng. Xác định dấu của v và a.',
+      steps: [
+        'Vật ở phía âm và đi về cân bằng nên chuyển động theo chiều dương: $v>0$.',
+        'Dùng $a=-\\omega^2x$; vì $x<0$ nên $a>0$.'
+      ],
+      answer: '$v>0$ và $a>0$.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m1-motion-2',
+        question: 'Tại vị trí cân bằng, đại lượng nào có độ lớn cực đại?',
+        options: ['Li độ', 'Vận tốc', 'Gia tốc', 'Thế năng'],
+        correctAnswer: 'B',
+        explanation: 'Tại $x=0$, tốc độ đạt $\\omega A$ còn gia tốc bằng 0.'
+      },
+      {
+        id: 'phy11-check-m1-motion-3',
+        question: 'Khi vật ở biên âm, gia tốc hướng',
+        options: ['Theo chiều âm', 'Theo chiều dương', 'Bằng 0', 'Theo chiều vận tốc'],
+        correctAnswer: 'B',
+        explanation: 'Gia tốc luôn hướng về vị trí cân bằng.'
+      }
+    ]
+  },
+  'phy11-theory-m1-energy': {
+    workedExamples: [{
+      id: 'phy11-example-m1-energy-2',
+      title: 'Tìm li độ từ tỉ lệ năng lượng',
+      problem: 'Tại vị trí nào động năng bằng ba lần thế năng?',
+      steps: [
+        '$W=W_đ+W_t=4W_t$ nên $W_t/W=1/4$.',
+        'Mà $W_t/W=x^2/A^2$, suy ra $|x|=A/2$.'
+      ],
+      answer: '$x=\\pm A/2$.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m1-energy-2',
+        question: 'Nếu biên độ tăng gấp đôi thì cơ năng tăng',
+        options: ['2 lần', '4 lần', '8 lần', 'Không đổi'],
+        correctAnswer: 'B',
+        explanation: 'Cơ năng tỉ lệ với bình phương biên độ.'
+      },
+      {
+        id: 'phy11-check-m1-energy-3',
+        question: 'Tại vị trí cân bằng của dao động lí tưởng',
+        options: ['Thế năng cực đại', 'Động năng bằng 0', 'Động năng cực đại', 'Cơ năng bằng 0'],
+        correctAnswer: 'C',
+        explanation: 'Li độ bằng 0 làm thế năng nhỏ nhất và động năng cực đại.'
+      }
+    ]
+  },
+  'phy11-theory-m1-damped-forced': {
+    workedExamples: [{
+      id: 'phy11-example-m1-damped-forced-2',
+      title: 'Tần số của dao động cưỡng bức',
+      problem: 'Hệ có tần số riêng 3 Hz, chịu ngoại lực tuần hoàn 4 Hz. Khi ổn định, hệ dao động với tần số nào?',
+      steps: [
+        'Ở trạng thái cưỡng bức ổn định, tần số hệ bằng tần số ngoại lực.',
+        'Tần số riêng chỉ chi phối mức biên độ đáp ứng.'
+      ],
+      answer: 'Hệ dao động với tần số 4 Hz.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m1-damped-forced-2',
+        question: 'Trong dao động tắt dần, cơ năng chuyển chủ yếu thành',
+        options: ['Nhiệt năng và dạng năng lượng khác', 'Điện năng vô hạn', 'Khối lượng', 'Tần số'],
+        correctAnswer: 'A',
+        explanation: 'Lực cản thực hiện công âm và làm tiêu hao cơ năng.'
+      },
+      {
+        id: 'phy11-check-m1-damped-forced-3',
+        question: 'Tần số của dao động cưỡng bức ổn định bằng',
+        options: ['Tần số riêng trong mọi trường hợp', 'Tần số ngoại lực', 'Hiệu hai tần số', 'Không xác định'],
+        correctAnswer: 'B',
+        explanation: 'Ngoại lực tuần hoàn quyết định tần số dao động cưỡng bức ổn định.'
+      }
+    ]
+  },
+  'phy11-theory-m1-resonance': {
+    workedExamples: [{
+      id: 'phy11-example-m1-resonance-2',
+      title: 'Đổi tốc độ quay sang tần số kích thích',
+      problem: 'Máy quay 900 vòng/phút, kết cấu có tần số riêng 15 Hz. Đánh giá nguy cơ cộng hưởng.',
+      steps: [
+        'Đổi $900$ vòng/phút thành $900/60=15$ vòng/s.',
+        'Tần số kích thích 15 Hz trùng tần số riêng.'
+      ],
+      answer: 'Có nguy cơ cộng hưởng rõ rệt.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m1-resonance-2',
+        question: 'Tăng lực cản thường làm đỉnh cộng hưởng',
+        options: ['Cao hơn và hẹp hơn', 'Thấp hơn', 'Dịch tới tần số vô hạn', 'Không đổi'],
+        correctAnswer: 'B',
+        explanation: 'Lực cản lớn làm năng lượng mất nhiều hơn nên biên độ cực đại giảm.'
+      },
+      {
+        id: 'phy11-check-m1-resonance-3',
+        question: 'Muốn hạn chế cộng hưởng có hại, có thể',
+        options: ['Luôn giảm lực cản', 'Đưa tần số riêng gần tần số kích thích', 'Tăng giảm chấn hoặc dịch tần số riêng', 'Tăng biên độ ngoại lực'],
+        correctAnswer: 'C',
+        explanation: 'Hai hướng chính là hạ đỉnh đáp ứng và tránh vùng trùng tần số.'
+      }
+    ]
+  },
+  'phy11-theory-m1-experiment': {
+    workedExamples: [{
+      id: 'phy11-example-m1-experiment-2',
+      title: 'Đếm đúng số khoảng chu kì',
+      problem: 'Từ đỉnh thứ nhất đến đỉnh thứ sáu của đồ thị cách nhau 2,5 s. Tính chu kì.',
+      steps: [
+        'Sáu đỉnh tạo năm khoảng thời gian bằng chu kì.',
+        'Tính $T=2,5/5=0,50$ s.'
+      ],
+      answer: '$T=0,50$ s.'
+    }],
+    checkpoints: [
+      {
+        id: 'phy11-check-m1-experiment-2',
+        question: 'Sáu đỉnh liên tiếp tạo ra bao nhiêu khoảng chu kì?',
+        options: ['5', '6', '7', '12'],
+        correctAnswer: 'A',
+        explanation: 'Số khoảng giữa N mốc liên tiếp là N−1.'
+      },
+      {
+        id: 'phy11-check-m1-experiment-3',
+        question: 'Một giá trị lệch xa các lần đo còn lại nên được xử lí đầu tiên bằng cách',
+        options: ['Xóa ngay không kiểm tra', 'Kiểm tra thao tác và điều kiện đo', 'Luôn lấy làm kết quả', 'Nhân đôi giá trị'],
+        correctAnswer: 'B',
+        explanation: 'Cần xác định nguyên nhân ngoại lai trước khi quyết định giữ hay loại dữ liệu.'
+      }
+    ]
+  }
+};
+
+export const phy11Module1Theory: TheoryBlock[] = phy11Module1BaseTheory.map(block => {
+  const enrichment = theoryEnrichment[block.id];
+  if (!enrichment) return block;
+  return {
+    ...block,
+    workedExamples: [...(block.workedExamples ?? []), ...(enrichment.workedExamples ?? [])],
+    checkpoints: [...(block.checkpoints ?? []), ...(enrichment.checkpoints ?? [])]
+  };
+});

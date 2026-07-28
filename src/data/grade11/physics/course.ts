@@ -21,7 +21,7 @@ export const g11PhysicsCourse = defineCourse({
     academicYear: '2026-2027',
     curriculumName: 'Chương trình giáo dục phổ thông 2018',
     textbookSeries: 'Kết nối tri thức với cuộc sống',
-    contentVersion: '0.2.0',
+    contentVersion: '0.7.0',
     reviewStatus: 'draft'
   },
   curriculum: g11PhysicsCurriculum,

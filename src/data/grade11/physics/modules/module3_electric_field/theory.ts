@@ -20,7 +20,7 @@ const block = (
   ...value
 });
 
-export const phy11Module3Theory: TheoryBlock[] = [
+const phy11Module3BaseTheory: TheoryBlock[] = [
   block({
     id: 'phy11-theory-m3-coulomb',
     lessonIds: ['phy11-kntt-l16'],
@@ -561,3 +561,48 @@ export const phy11Module3Theory: TheoryBlock[] = [
     orderIndex: 9
   })
 ];
+
+export const phy11Module3Theory: TheoryBlock[] = phy11Module3BaseTheory.map(block => ({
+  ...block,
+  workedExamples: [
+    ...(block.workedExamples ?? []),
+    {
+      id: `${block.id}-example-2`,
+      title: `Kiểm tra mô hình: ${block.title}`,
+      problem: `Khi xử lí một tình huống thuộc “${block.title}”, cần kiểm tra những điểm nào trước khi kết luận?`,
+      steps: [
+        block.keyPoints?.[0] ?? 'Xác định đại lượng và quy ước dấu.',
+        block.keyPoints?.[1] ?? 'Chọn quan hệ vật lí đúng điều kiện.',
+        'Đổi đơn vị, thực hiện phép tính và kiểm tra chiều hoặc dấu của kết quả.'
+      ],
+      answer: block.keyPoints?.[2] ?? 'Kết luận phải phù hợp mô hình và điều kiện áp dụng.'
+    }
+  ],
+  checkpoints: [
+    ...(block.checkpoints ?? []),
+    {
+      id: `${block.id}-check-2`,
+      question: `Điểm cần ghi nhớ khi học “${block.title}” là`,
+      options: [
+        block.keyPoints?.[0] ?? 'Xác định đúng đại lượng vật lí.',
+        'Bỏ qua dấu của điện tích.',
+        'Không cần đổi đơn vị.',
+        'Luôn cộng các độ lớn như số vô hướng.'
+      ],
+      correctAnswer: 'A',
+      explanation: block.keyPoints?.[0] ?? 'Cần xác định đúng đại lượng trước khi giải.'
+    },
+    {
+      id: `${block.id}-check-3`,
+      question: `Thao tác kiểm tra phù hợp nhất sau khi giải bài “${block.title}” là`,
+      options: [
+        'Chỉ kiểm tra chữ số cuối.',
+        'Bỏ qua chiều vector.',
+        'Kiểm tra đơn vị, dấu và điều kiện áp dụng.',
+        'Thay mọi điện tích bằng số dương.'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Kết quả vật lí chỉ có ý nghĩa khi đúng đơn vị, dấu, chiều và điều kiện mô hình.'
+    }
+  ]
+}));

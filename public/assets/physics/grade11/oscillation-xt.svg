@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Đồ thị li độ theo thời gian</title>
+  <desc id="desc">Dao động hình sin biên độ 4 centimét, chu kì 2 giây, bắt đầu từ vị trí cân bằng theo chiều dương.</desc>
+  <rect width="720" height="360" fill="#fff"/>
+  <g stroke="#dbeafe" stroke-width="1">
+    <path d="M80 60H680M80 120H680M80 180H680M80 240H680M80 300H680"/>
+    <path d="M80 40V310M230 40V310M380 40V310M530 40V310M680 40V310"/>
+  </g>
+  <g stroke="#0f172a" stroke-width="2">
+    <path d="M70 180H690"/>
+    <path d="M80 320V30"/>
+    <path d="m690 180-10-6v12z" fill="#0f172a"/>
+    <path d="m80 30-6 10h12z" fill="#0f172a"/>
+  </g>
+  <path d="M80 180C117.5 100 155 60 230 60S342.5 180 380 180 455 300 530 300 642.5 180 680 180" fill="none" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="18">
+    <text x="690" y="205">t (s)</text>
+    <text x="28" y="36">x (cm)</text>
+    <text x="58" y="66">4</text>
+    <text x="50" y="306">−4</text>
+    <text x="220" y="205">0,5</text>
+    <text x="373" y="205">1</text>
+    <text x="520" y="205">1,5</text>
+    <text x="674" y="205">2</text>
+  </g>
+</svg>

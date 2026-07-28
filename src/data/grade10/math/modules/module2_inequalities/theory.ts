@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt3Theory: string[] = [
   '**1. Bất phương trình bậc nhất hai ẩn**\nCó dạng $ax+by\\le c$ hoặc với $<,>,\\ge$, trong đó $a^2+b^2>0$. Mỗi nghiệm là một cặp $(x;y)$, nên tập nghiệm được biểu diễn bằng một nửa mặt phẳng.',
   '**2. Đường biên và dấu bằng**\nĐường $ax+by=c$ chia mặt phẳng thành hai nửa. Với $\\le,\\ge$, đường biên thuộc miền nghiệm và vẽ nét liền; với $<,>$, đường biên bị loại và vẽ nét đứt.',
@@ -13,4 +15,43 @@ export const math10Qt3Theory: string[] = [
 
 export const g10MathModule2TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt3': math10Qt3Theory
+};
+
+export const g10MathModule2TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt3': [
+    {
+      id: 'math10-check-qt3-1',
+      question: 'Đường biên của bất phương trình $2x-y<3$ phải được biểu diễn như thế nào?',
+      options: ['Nét liền và thuộc miền nghiệm', 'Nét đứt và không thuộc miền nghiệm', 'Nét liền và không thuộc miền nghiệm', 'Không cần vẽ'],
+      correctAnswer: 'B',
+      explanation: 'Bất phương trình nghiêm dùng nét đứt vì các điểm trên đường biên không thỏa dấu “<”.'
+    },
+    {
+      id: 'math10-check-qt3-2',
+      question: 'Phát biểu nào đúng về miền nghiệm không bị chặn?',
+      options: [
+        'Luôn không có GTLN và GTNN',
+        'Luôn có cả GTLN và GTNN',
+        'Vẫn có thể có một cực trị hữu hạn tùy hàm mục tiêu',
+        'Không thể là miền nghiệm của hệ tuyến tính'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Phải xét hướng tăng của hàm mục tiêu; miền không bị chặn vẫn có thể có GTLN hoặc GTNN hữu hạn.'
+    },
+    {
+      id: 'math10-check-qt3-3',
+      question: 'Nếu số sản phẩm phải là số nguyên nhưng đỉnh tối ưu liên tục có tọa độ không nguyên, cần làm gì?',
+      options: [
+        'Làm tròn từng tọa độ ngay',
+        'Bỏ điều kiện nguyên',
+        'Kiểm tra các điểm nguyên khả thi gần vùng tối ưu',
+        'Kết luận bài toán vô nghiệm'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Làm tròn có thể vi phạm ràng buộc hoặc mất tối ưu; cần so sánh các điểm nguyên còn thỏa hệ.'
+    }
+  ]
 };

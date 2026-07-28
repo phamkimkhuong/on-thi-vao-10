@@ -143,6 +143,18 @@ for (const question of questions) {
     if (!Array.isArray(question.options) || question.options.length !== 4) errors.push(`${question.id}: câu lựa chọn phải có đúng 4 phương án.`);
     if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) errors.push(`${question.id}: đáp án lựa chọn phải là A, B, C hoặc D.`);
     if (new Set(question.options ?? []).size !== (question.options ?? []).length) errors.push(`${question.id}: phương án lựa chọn bị trùng.`);
+    if (Array.isArray(question.acceptedAnswers) && !question.acceptedAnswers.includes(question.correctAnswer)) {
+      errors.push(`${question.id}: acceptedAnswers không chứa khóa ${question.correctAnswer}.`);
+    }
+    const labeledOptions = (question.options ?? []).every(option => /^[A-D]\.\s/.test(String(option)));
+    if (labeledOptions) {
+      for (const [index, option] of question.options.entries()) {
+        const expectedLabel = String.fromCharCode(65 + index);
+        if (!String(option).startsWith(`${expectedLabel}. `)) {
+          errors.push(`${question.id}: nhãn phương án ở vị trí ${index + 1} phải là ${expectedLabel}.`);
+        }
+      }
+    }
   }
 }
 

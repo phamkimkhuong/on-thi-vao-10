@@ -399,7 +399,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "y=x^2-2x-1"
       }
     ],
-    "finalAnswer": "A. $y=x^2-2x-1$",
+    "finalAnswer": "D. $y=x^2-2x-1$",
     "commonMistakes": [
       "Đọc sai dấu tọa độ đỉnh trong biểu thức $(x-p)^2$."
     ],
@@ -424,7 +424,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "y=x^2-4x+3"
       }
     ],
-    "finalAnswer": "B. $y=x^2-4x+3$",
+    "finalAnswer": "C. $y=x^2-4x+3$",
     "commonMistakes": [
       "Mặc định a=1 mà không dùng điểm thứ ba để kiểm tra."
     ],
@@ -499,7 +499,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "y=-2(x+2)^2+3"
       }
     ],
-    "finalAnswer": "A. $y=-2(x+2)^2+3$",
+    "finalAnswer": "D. $y=-2(x+2)^2+3$",
     "commonMistakes": [
       "Nhầm đỉnh (−2;3) thành biểu thức $(x-2)^2$."
     ],
@@ -524,7 +524,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "y=-2x^2+6x+8"
       }
     ],
-    "finalAnswer": "B. $y=-2x^2+6x+8$",
+    "finalAnswer": "C. $y=-2x^2+6x+8$",
     "commonMistakes": [
       "Khai triển sai tích $(x+1)(x-4)$."
     ],
@@ -599,7 +599,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "y=2(x-2)^2+1"
       }
     ],
-    "finalAnswer": "A. $y=2(x-2)^2+1$",
+    "finalAnswer": "D. $y=2(x-2)^2+1$",
     "commonMistakes": [
       "Dùng tung độ giao Oy làm hệ số tự do ngay trong dạng đỉnh."
     ],
@@ -624,7 +624,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "(-3;-4)"
       }
     ],
-    "finalAnswer": "B. $(-3;-4)$",
+    "finalAnswer": "C. $(-3;-4)$",
     "commonMistakes": [
       "Quên dấu trừ trong công thức hoành độ đỉnh."
     ],
@@ -699,7 +699,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "(1;-3)"
       }
     ],
-    "finalAnswer": "A. $(1;-3)$",
+    "finalAnswer": "D. $(1;-3)$",
     "commonMistakes": [
       "Chỉ xét đỉnh mà không tính hai đầu mút của đoạn."
     ],
@@ -724,7 +724,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "(5;-3)"
       }
     ],
-    "finalAnswer": "B. $(5;-3)$",
+    "finalAnswer": "C. $(5;-3)$",
     "commonMistakes": [
       "Bỏ đầu mút −1 vì parabol quay xuống."
     ],
@@ -799,7 +799,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "20"
       }
     ],
-    "finalAnswer": "A. $20$",
+    "finalAnswer": "D. $20$",
     "commonMistakes": [
       "Trả lời thời điểm 2 giây thay cho chiều cao."
     ],
@@ -824,7 +824,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "25"
       }
     ],
-    "finalAnswer": "B. $25$",
+    "finalAnswer": "C. $25$",
     "commonMistakes": [
       "Dùng 20−x cho cạnh còn lại dù nửa chu vi mới bằng 10."
     ],
@@ -899,7 +899,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "13.25"
       }
     ],
-    "finalAnswer": "A. $13.25$",
+    "finalAnswer": "D. $13.25$",
     "commonMistakes": [
       "Quên cộng độ cao ban đầu 2 m."
     ],
@@ -924,7 +924,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "450"
       }
     ],
-    "finalAnswer": "B. $450$",
+    "finalAnswer": "C. $450$",
     "commonMistakes": [
       "Lập chu vi bốn cạnh thay vì ba cạnh cần rào."
     ],
@@ -1024,7 +1024,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "5"
       }
     ],
-    "finalAnswer": "B. $5$",
+    "finalAnswer": "C. $5$",
     "commonMistakes": [
       "Viết $(-2)^2=-4$."
     ],
@@ -1124,7 +1124,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "(-\\infty;5]"
       }
     ],
-    "finalAnswer": "B. $(-\\infty;5]$",
+    "finalAnswer": "C. $(-\\infty;5]$",
     "commonMistakes": [
       "Không đổi chiều khi nhân bất phương trình với −1."
     ],
@@ -1185,52 +1185,20 @@ export const g10MathModule3Solutions: Solution[] = [
   {
     "id": "math10-m3-s033",
     "questionId": "math10-m3-q033",
-    "recognition": "Dạng giá trị và tập xác định: thay đầu vào đúng vị trí; với tập xác định, tìm mọi điều kiện khiến công thức có nghĩa rồi lấy giao.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Thay toàn bộ x bằng (a+1), giữ ngoặc khi khai triển."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "$(a+1)^2-2(a+1)=a^2-1$.",
-        "result": "a^2-1"
-      }
-    ],
-    "finalAnswer": "A. $a^2-1$",
-    "commonMistakes": [
-      "Chỉ thay x ở một vị trí."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Điều kiện căn thứ nhất cho $\\dfrac{x-1}{x+2}\\ge0$, suy ra $x\\in(-\\infty;-2)\\cup[1;+\\infty)$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Căn ở mẫu yêu cầu $5-x>0$, tức $x<5$. Giao hai điều kiện là $(-\\infty;-2)\\cup[1;5)$.","result":"$(-\\infty;-2)\\cup[1;5)$"}],
+    "finalAnswer": "A. $(-\\infty;-2)\\cup[1;5)$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s034",
     "questionId": "math10-m3-q034",
-    "recognition": "Dạng giá trị và tập xác định: thay đầu vào đúng vị trí; với tập xác định, tìm mọi điều kiện khiến công thức có nghĩa rồi lấy giao.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Chọn đúng nhánh riêng cho từng đầu vào."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "$f(-3)=-1$, $f(2)=4$, tổng bằng 3.",
-        "result": "3"
-      }
-    ],
-    "finalAnswer": "B. $3$",
-    "commonMistakes": [
-      "Dùng cùng một công thức cho cả hai giá trị."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"$f(-2)=-3$ nên $f(f(-2))=f(-3)=-5$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"$f(2)=3$ nên $f(f(2))=f(3)=8$. Tổng bằng $-5+8=3$.","result":"$3$"}],
+    "finalAnswer": "C. $3$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s035",
@@ -1260,27 +1228,11 @@ export const g10MathModule3Solutions: Solution[] = [
   {
     "id": "math10-m3-s036",
     "questionId": "math10-m3-q036",
-    "recognition": "Dạng giá trị và tập xác định: thay đầu vào đúng vị trí; với tập xác định, tìm mọi điều kiện khiến công thức có nghĩa rồi lấy giao.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Căn ở mẫu phải dương nghiêm ngặt."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "$4-x^2>0$ tương đương $-2<x<2$.",
-        "result": "(-2;2)"
-      }
-    ],
-    "finalAnswer": "D. $(-2;2)$",
-    "commonMistakes": [
-      "Dùng ≥0 và giữ hai đầu mút làm mẫu bằng 0."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Căn ở mẫu yêu cầu $(x-1)(4-x)>0$, suy ra $1<x<4$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Điều kiện $\\sqrt{x+2}$ là $x\\ge-2$. Giao hai miền vẫn là $(1;4)$.","result":"$(1;4)$"}],
+    "finalAnswer": "D. $(1;4)$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s037",
@@ -1324,7 +1276,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "x=0"
       }
     ],
-    "finalAnswer": "B. $x=0$",
+    "finalAnswer": "D. $x=0$",
     "commonMistakes": [
       "Tìm f(0) thay vì tìm đầu vào tạo ra đầu ra 0."
     ],
@@ -1424,7 +1376,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "x\\in(-2;1)\\cup(4;6)"
       }
     ],
-    "finalAnswer": "B. $x\\in(-2;1)\\cup(4;6)$",
+    "finalAnswer": "D. $x\\in(-2;1)\\cup(4;6)$",
     "commonMistakes": [
       "Lấy cả các giao điểm nơi f(x)=0 vào nghiệm dấu >."
     ],
@@ -1485,102 +1437,38 @@ export const g10MathModule3Solutions: Solution[] = [
   {
     "id": "math10-m3-s045",
     "questionId": "math10-m3-q045",
-    "recognition": "Dạng đọc bảng/đồ thị: xác định câu hỏi đang yêu cầu đầu vào, đầu ra, giao trục, dấu hay chiều biến thiên rồi đọc đúng trục.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Đối xứng qua Oy đổi dấu hoành độ, giữ nguyên tung độ."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "(3;5) biến thành (−3;5).",
-        "result": "(-3;5)"
-      }
-    ],
-    "finalAnswer": "A. $(-3;5)$",
-    "commonMistakes": [
-      "Đổi dấu cả hai tọa độ như đối xứng qua gốc."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Đối xứng qua $Oy$ nghĩa là $f$ chẵn: $f(-x)=f(x)$. Do đó $f(-2)=f(2)=3$ và $f(1)=f(-1)=-4$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Suy ra $f(-2)+f(1)=3-4=-1$.","result":"$-1$"}],
+    "finalAnswer": "A. $-1$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s046",
     "questionId": "math10-m3-q046",
-    "recognition": "Dạng đọc bảng/đồ thị: xác định câu hỏi đang yêu cầu đầu vào, đầu ra, giao trục, dấu hay chiều biến thiên rồi đọc đúng trục.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Mỗi giao điểm với đường y=k tương ứng một nghiệm f(x)=k."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "Có ba giao điểm phân biệt nên có ba hoành độ nghiệm.",
-        "result": "3"
-      }
-    ],
-    "finalAnswer": "B. $3$",
-    "commonMistakes": [
-      "Đếm giao với trục Ox thay vì đường y=2."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Tích bằng 0 khi $f(x)=2$ hoặc $f(x)=-1$. Hai phương trình lần lượt có 3 và 2 nghiệm."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Hai mức tung độ khác nhau không thể có chung nghiệm, nên tổng cộng có $3+2=5$ nghiệm phân biệt.","result":"$5$"}],
+    "finalAnswer": "D. $5$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s047",
     "questionId": "math10-m3-q047",
-    "recognition": "Dạng đọc bảng/đồ thị: xác định câu hỏi đang yêu cầu đầu vào, đầu ra, giao trục, dấu hay chiều biến thiên rồi đọc đúng trục.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Đọc hoành độ và trạng thái điểm trống/kín."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "0 bị loại, 4 được lấy nên miền là (0;4].",
-        "result": "(0;4]"
-      }
-    ],
-    "finalAnswer": "C. $(0;4]$",
-    "commonMistakes": [
-      "Dùng tung độ 1 và 5 làm hai đầu tập xác định."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Tập xác định là $(-2;4]$; tập giá trị là $[-1;3)$ do đầu có tung độ 3 bị loại, đầu có tung độ -1 được lấy."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Giao hai tập là $[-1;3)$.","result":"$[-1;3)$"}],
+    "finalAnswer": "C. $[-1;3)$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s048",
     "questionId": "math10-m3-q048",
-    "recognition": "Dạng đọc bảng/đồ thị: xác định câu hỏi đang yêu cầu đầu vào, đầu ra, giao trục, dấu hay chiều biến thiên rồi đọc đúng trục.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Phân biệt vị trí đạt cực trị với chính giá trị cực trị."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "$7-(-3)=10$.",
-        "result": "10"
-      }
-    ],
-    "finalAnswer": "D. $10$",
-    "commonMistakes": [
-      "Lấy hiệu hai hoành độ −2−4."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Vì hệ số 2 dương, $g_{\\min}=2(-3)-5=-11$ và $g_{\\max}=2\\cdot7-5=9$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Tổng hai cực trị là $-11+9=-2$.","result":"$-2$"}],
+    "finalAnswer": "D. $-2$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s049",
@@ -1624,7 +1512,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "f(x)=2x-2"
       }
     ],
-    "finalAnswer": "B. $f(x)=2x-2$",
+    "finalAnswer": "D. $f(x)=2x-2$",
     "commonMistakes": [
       "Đổi nhầm f(0) thành hệ số a."
     ],
@@ -1724,7 +1612,7 @@ export const g10MathModule3Solutions: Solution[] = [
         "result": "u_n=3n+2"
       }
     ],
-    "finalAnswer": "B. $u_n=3n+2$",
+    "finalAnswer": "D. $u_n=3n+2$",
     "commonMistakes": [
       "Dùng 5+3n và làm số hạng đầu thành 8."
     ],
@@ -1785,77 +1673,29 @@ export const g10MathModule3Solutions: Solution[] = [
   {
     "id": "math10-m3-s057",
     "questionId": "math10-m3-q057",
-    "recognition": "Dạng biểu diễn và mô hình hàm: xác định biến vào–ra, nhận dạng quan hệ tuyến tính hoặc từng đoạn rồi kiểm tra đơn vị và miền thực tế.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Giá ban đầu là hệ số tự do; giảm đều tạo hệ số góc âm."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "Tại t=0 giá 500; mỗi năm trừ 40t.",
-        "result": "V(t)=500-40t"
-      }
-    ],
-    "finalAnswer": "A. $V(t)=500-40t$",
-    "commonMistakes": [
-      "Dùng dấu cộng cho một đại lượng đang giảm."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Trong 5 năm đầu, $V(t)=500-40t$ và $V(5)=300$."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Sau đó $V(t)=300-20(t-5)=400-20t$, bảo đảm hai nhánh khớp tại $t=5$.","result":"$V(t)=\\begin{cases}500-40t&0\\le t\\le5\\\\400-20t&t>5\\end{cases}$"}],
+    "finalAnswer": "A. $V(t)=\\begin{cases}500-40t&0\\le t\\le5\\\\400-20t&t>5\\end{cases}$",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s058",
     "questionId": "math10-m3-q058",
-    "recognition": "Dạng biểu diễn và mô hình hàm: xác định biến vào–ra, nhận dạng quan hệ tuyến tính hoặc từng đoạn rồi kiểm tra đơn vị và miền thực tế.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Lập $V(t)=120+15t$ rồi giải V=300."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "$120+15t=300$ nên t=12 phút.",
-        "result": "12\\text{ phút}"
-      }
-    ],
-    "finalAnswer": "B. $12\\text{ phút}$",
-    "commonMistakes": [
-      "Lấy 300/15 và bỏ lượng nước ban đầu."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Sau 6 phút bể có $120+6\\cdot15=210$ lít."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Cần thêm 90 lít ở tốc độ 10 lít/phút, mất 9 phút. Tổng thời gian là 15 phút.","result":"$15$ phút"}],
+    "finalAnswer": "D. $15$ phút",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s059",
     "questionId": "math10-m3-q059",
-    "recognition": "Dạng biểu diễn và mô hình hàm: xác định biến vào–ra, nhận dạng quan hệ tuyến tính hoặc từng đoạn rồi kiểm tra đơn vị và miền thực tế.",
-    "detailedSteps": [
-      {
-        "order": 1,
-        "title": "Nhận dạng và chọn biểu diễn",
-        "explanation": "Đây là mô hình từng đoạn: 3 GB vượt mức mới bị tính thêm."
-      },
-      {
-        "order": 2,
-        "title": "Tính toán và kiểm tra",
-        "explanation": "$50+20(5-2)=110$ nghìn đồng.",
-        "result": "110\\text{ nghìn đồng}"
-      }
-    ],
-    "finalAnswer": "C. $110\\text{ nghìn đồng}$",
-    "commonMistakes": [
-      "Tính 20 cho cả 5 GB rồi cộng phí gói."
-    ],
-    "reviewSuggestions": [
-      "Xác định rõ đầu vào, đầu ra và miền giá trị được phép trước khi tính."
-    ]
+    "recognition": "Câu khó nhiều bước: phải kết hợp điều kiện miền, công thức và kiểm tra dấu hoặc đầu mút trước khi chọn đáp án.",
+    "detailedSteps": [{"order":1,"title":"Thiết lập điều kiện và suy luận","explanation":"Chi phí 5 GB đầu là $50+3\\cdot20=110$ nghìn đồng."},{"order":2,"title":"Tính toán, giao điều kiện và kết luận","explanation":"Ba GB vượt mức 5 GB tốn $3\\cdot30=90$ nghìn đồng, tổng cộng 200 nghìn đồng.","result":"$200$ nghìn"}],
+    "finalAnswer": "C. $200$ nghìn",
+    "commonMistakes": ["Chỉ thực hiện một phép tính trực tiếp mà bỏ điều kiện miền, dấu, nhánh hàm hoặc bước giao kết quả."],
+    "reviewSuggestions": ["Tách bài thành từng điều kiện, giữ kết quả trung gian chính xác rồi mới giao hoặc tổng hợp ở bước cuối."]
   },
   {
     "id": "math10-m3-s060",
@@ -1892,7 +1732,7 @@ export const g10MathModule3Solutions: Solution[] = [
     id: 'math10-m3-s062', questionId: 'math10-m3-q062',
     recognition: 'Dạng xét dấu với hệ số đầu âm: dấu trong/ngoài đảo so với tam thức có hệ số đầu dương.',
     detailedSteps: [{ order: 1, title: 'Tìm nghiệm và hệ số đầu', explanation: '$f(x)=-(x-1)(x-3)$ có hai nghiệm $1,3$ và $a=-1<0$.' }, { order: 2, title: 'Chọn miền dương', explanation: 'Tam thức trái dấu $a$ ở giữa hai nghiệm nên dương trên $(1;3)$.', result: '$(1;3)$' }],
-    finalAnswer: 'B. $(1;3)$', commonMistakes: ['Máy móc chọn miền ngoài mà không xét dấu $a$.'], reviewSuggestions: ['Ôn câu nhớ “cùng dấu ngoài, trái dấu trong”.']
+    finalAnswer: 'D. $(1;3)$', commonMistakes: ['Máy móc chọn miền ngoài mà không xét dấu $a$.'], reviewSuggestions: ['Ôn câu nhớ “cùng dấu ngoài, trái dấu trong”.']
   },
   {
     id: 'math10-m3-s063', questionId: 'math10-m3-q063',
@@ -1916,13 +1756,13 @@ export const g10MathModule3Solutions: Solution[] = [
     id: 'math10-m3-s066', questionId: 'math10-m3-q066',
     recognition: 'Dạng một bình phương nhân hệ số âm.',
     detailedSteps: [{ order: 1, title: 'Xét phần bình phương', explanation: '$(2x+1)^2\\ge0$ và bằng $0$ tại $x=-\\tfrac12$.' }, { order: 2, title: 'Nhân với $-1$', explanation: 'Đổi chiều dấu: $f(x)\\le0$ với mọi $x$, bằng $0$ đúng tại $-\\tfrac12$.', result: '$f(x)\\le0$' }],
-    finalAnswer: 'B. $f(x)\\le0$ với mọi $x$ và $f(-\\tfrac12)=0$', commonMistakes: ['Kết luận luôn âm và bỏ sót điểm bằng 0.'], reviewSuggestions: ['Ôn dấu của bình phương và nghiệm kép.']
+    finalAnswer: 'D. $f(x)\\le0$ với mọi $x$ và $f(-\\tfrac12)=0$', commonMistakes: ['Kết luận luôn âm và bỏ sót điểm bằng 0.'], reviewSuggestions: ['Ôn dấu của bình phương và nghiệm kép.']
   },
   {
     id: 'math10-m3-s067', questionId: 'math10-m3-q067',
     recognition: 'Dạng tích hai nhân tử bậc nhất có hệ số đầu dương.',
     detailedSteps: [{ order: 1, title: 'Xác định nghiệm', explanation: 'Hai nghiệm là $-2<5$; hệ số của $x^2$ bằng $1>0$.' }, { order: 2, title: 'Chọn khoảng trái dấu hệ số đầu', explanation: 'Tam thức âm ở giữa hai nghiệm.', result: '$(-2;5)$' }],
-    finalAnswer: 'B. $(-2;5)$', commonMistakes: ['Đọc nghiệm $x+2=0$ thành $x=2$.'], reviewSuggestions: ['Ôn cách tìm nghiệm của nhân tử bậc nhất.']
+    finalAnswer: 'D. $(-2;5)$', commonMistakes: ['Đọc nghiệm $x+2=0$ thành $x=2$.'], reviewSuggestions: ['Ôn cách tìm nghiệm của nhân tử bậc nhất.']
   },
   {
     id: 'math10-m3-s068', questionId: 'math10-m3-q068',
@@ -1934,7 +1774,7 @@ export const g10MathModule3Solutions: Solution[] = [
     id: 'math10-m3-s069', questionId: 'math10-m3-q069',
     recognition: 'Dạng suy ngược hệ số đầu từ vị trí điểm so với hai nghiệm.',
     detailedSteps: [{ order: 1, title: 'Định vị điểm', explanation: 'Do $x_1<0<x_2$, điểm $0$ nằm giữa hai nghiệm.' }, { order: 2, title: 'Dùng quy tắc dấu', explanation: 'Ở giữa, $f$ trái dấu $a$. Vì $f(0)>0$ nên $a<0$.', result: '$a<0$' }],
-    finalAnswer: 'B. $a<0$', commonMistakes: ['Cho rằng dấu tại mọi điểm luôn cùng dấu $a$.'], reviewSuggestions: ['Ôn dấu trong khoảng giữa hai nghiệm.']
+    finalAnswer: 'D. $a<0$', commonMistakes: ['Cho rằng dấu tại mọi điểm luôn cùng dấu $a$.'], reviewSuggestions: ['Ôn dấu trong khoảng giữa hai nghiệm.']
   },
   {
     id: 'math10-m3-s070', questionId: 'math10-m3-q070',

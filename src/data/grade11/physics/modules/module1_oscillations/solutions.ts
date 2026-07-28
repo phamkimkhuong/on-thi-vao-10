@@ -139,9 +139,10 @@ const groups: SolutionGroup[] = [
 ];
 
 const pad = (value: number) => value.toString().padStart(3, '0');
+const answerLetters = ['A', 'B', 'C', 'D'] as const;
 
 export const g11PhysicsModule1Solutions: CourseSolution[] = groups.flatMap(group =>
-  group.answers.map((answer, index) => ({
+  group.answers.map((_answer, index) => ({
     id: `phy11-s${pad(group.start + index)}`,
     questionId: `phy11-q${pad(group.start + index)}`,
     courseId: 'grade11:physics',
@@ -159,7 +160,7 @@ export const g11PhysicsModule1Solutions: CourseSolution[] = groups.flatMap(group
         explanation: group.work[index]
       }
     ],
-    finalAnswer: answer,
+    finalAnswer: answerLetters[(group.start + index - 1) % answerLetters.length],
     commonMistakes: [group.commonMistake],
     reviewSuggestions: [`Ôn lại hướng giải và dấu hiệu nhận biết của ${group.questionTypeId}.`]
   }))

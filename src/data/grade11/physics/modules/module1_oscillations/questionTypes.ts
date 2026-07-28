@@ -1,6 +1,6 @@
 import type { CourseQuestionType } from '@/data/schema';
 
-export const g11PhysicsModule1QuestionTypes: CourseQuestionType[] = [
+const g11PhysicsModule1BaseQuestionTypes: CourseQuestionType[] = [
   {
     id: 'phy11-qt01',
     topicId: 'phy11-t01',
@@ -198,3 +198,35 @@ export const g11PhysicsModule1QuestionTypes: CourseQuestionType[] = [
     }
   }
 ];
+
+const expandedTargetByTypeId: Record<string, number> = {
+  'phy11-qt01': 18,
+  'phy11-qt02': 18,
+  'phy11-qt03': 18,
+  'phy11-qt05': 18
+};
+
+export const g11PhysicsModule1QuestionTypes: CourseQuestionType[] =
+  g11PhysicsModule1BaseQuestionTypes.map(questionType => {
+    const targetQuestionCount = expandedTargetByTypeId[questionType.id] ?? 12;
+    if (targetQuestionCount === 12) return questionType;
+    return {
+      ...questionType,
+      subTypes: questionType.subTypes?.map(subType => ({
+        ...subType,
+        targetQuestionCount: targetQuestionCount / 2
+      })),
+      practiceCoverage: {
+        ...questionType.practiceCoverage!,
+        targetQuestionCount,
+        minimumQuestionsPerSubType: 6,
+        requiredPracticeRoles: [
+          ...new Set([
+            ...(questionType.practiceCoverage?.requiredPracticeRoles ?? []),
+            'far_transfer' as const
+          ])
+        ],
+        masteryHoldoutCount: 4
+      }
+    };
+  });

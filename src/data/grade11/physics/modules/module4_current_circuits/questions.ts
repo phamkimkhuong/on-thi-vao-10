@@ -216,14 +216,23 @@ const groups: QuestionGroup[] = [
 ];
 
 const pad = (value: number) => value.toString().padStart(3, '0');
+const answerLetters = ['A', 'B', 'C', 'D'] as const;
 
 export const g11PhysicsModule4Questions: CourseQuestion[] = groups.flatMap(group =>
   group.items.map((item, index) => {
+    const questionNumber = group.start + index;
     const isSecondSubType = index >= 6;
-    const difficulty = index < 4 ? 'easy' : index < 9 ? 'medium' : 'hard';
+    const difficulty = index < 4 ? 'easy' : index < 10 ? 'medium' : 'hard';
     const practiceRole = group.roles[index % group.roles.length];
+    const originalAnswerIndex = answerLetters.indexOf(item.answer);
+    const balancedAnswerIndex = (questionNumber - 1) % answerLetters.length;
+    const balancedOptions = [...item.options] as [string, string, string, string];
+    [balancedOptions[originalAnswerIndex], balancedOptions[balancedAnswerIndex]] = [
+      balancedOptions[balancedAnswerIndex],
+      balancedOptions[originalAnswerIndex]
+    ];
     return {
-      id: `phy11-q${pad(group.start + index)}`,
+      id: `phy11-q${pad(questionNumber)}`,
       subjectId: 'physics',
       courseId: 'grade11:physics',
       moduleId: 'phy11-m4',
@@ -231,8 +240,8 @@ export const g11PhysicsModule4Questions: CourseQuestion[] = groups.flatMap(group
       topicId: 'phy11-t04',
       questionTypeId: group.questionTypeId,
       content: item.content,
-      options: item.options,
-      correctAnswer: item.answer,
+      options: balancedOptions,
+      correctAnswer: answerLetters[balancedAnswerIndex],
       responseType: 'single_choice',
       validatorType: 'choice',
       outcomeIds: [group.outcomeId],

@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt4Theory: string[] = [
   '**1. Hàm số bậc hai**\n$$f(x)=ax^2+bx+c\\qquad(a\\ne0)$$\nTập xác định là $\\mathbb R$ và đồ thị là parabol. $a>0$ parabol mở lên; $a<0$ mở xuống.',
   '**2. Đỉnh và trục đối xứng**\nĐặt $\\Delta=b^2-4ac$:\n$$x_I=-\\frac b{2a},\\qquad y_I=f(x_I)=-\\frac{\\Delta}{4a}$$\nĐỉnh $I(x_I;y_I)$ và trục đối xứng $x=x_I$. Dạng đỉnh:\n$$f(x)=a(x-x_I)^2+y_I$$',
@@ -57,4 +59,117 @@ export const g10MathModule3TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt18': math10Qt18Theory,
   'math10-qt20': math10Qt20Theory,
   'math10-qt21': math10Qt21Theory
+};
+
+export const g10MathModule3TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt4': [
+    {
+      id: 'math10-check-qt4-1',
+      question: 'Parabol $y=2x^2-4x+1$ có tính chất nào?',
+      options: ['Mở xuống và có GTLN', 'Mở lên và có GTNN', 'Mở lên và có GTLN', 'Không có cực trị'],
+      correctAnswer: 'B',
+      explanation: 'Hệ số $a=2>0$ nên parabol mở lên và đạt GTNN tại đỉnh.'
+    },
+    {
+      id: 'math10-check-qt4-2',
+      question: 'Khi tìm GTLN, GTNN của hàm bậc hai trên đoạn $[m;n]$, cần so sánh',
+      options: [
+        'Chỉ giá trị tại đỉnh',
+        'Chỉ hai đầu mút',
+        'Hai đầu mút và đỉnh nếu đỉnh thuộc đoạn',
+        'Mọi nghiệm của phương trình $f(x)=0$'
+      ],
+      correctAnswer: 'C',
+      explanation: 'Trên đoạn đóng, hai đầu mút luôn là ứng viên; đỉnh chỉ được xét nếu hoành độ đỉnh nằm trong đoạn.'
+    },
+    {
+      id: 'math10-check-qt4-3',
+      question: 'Biết parabol có đỉnh $I(p;q)$ và đi qua một điểm khác, dạng nào thuận lợi nhất?',
+      options: ['$y=a(x-p)^2+q$', '$y=ax+b$', '$y=a(x-q)^2+p$', '$y=a(x-p)(x-q)$'],
+      correctAnswer: 'A',
+      explanation: 'Dạng đỉnh dùng trực tiếp tọa độ $I(p;q)$ và chỉ còn hệ số $a$ cần xác định.'
+    }
+  ],
+  'math10-qt18': [
+    {
+      id: 'math10-check-qt18-1',
+      question: 'Điều kiện xác định của biểu thức $\\dfrac1{\\sqrt{x-2}}$ là',
+      options: ['$x\\ge2$', '$x>2$', '$x\\ne2$', '$x<2$'],
+      correctAnswer: 'B',
+      explanation: 'Biểu thức dưới căn phải không âm, đồng thời mẫu phải khác 0, nên $x-2>0$.'
+    },
+    {
+      id: 'math10-check-qt18-2',
+      question: 'Một đường cong là đồ thị của hàm số $y=f(x)$ nếu',
+      options: [
+        'Mọi đường ngang cắt nó không quá một điểm',
+        'Mọi đường thẳng đứng cắt nó không quá một điểm',
+        'Nó đi qua gốc tọa độ',
+        'Nó chỉ nằm phía trên trục hoành'
+      ],
+      correctAnswer: 'B',
+      explanation: 'Mỗi đầu vào x chỉ được ứng với nhiều nhất một đầu ra y, chính là phép thử đường thẳng đứng.'
+    },
+    {
+      id: 'math10-check-qt18-3',
+      question: 'Tập xác định của hàm số được đọc trên đồ thị bằng hình chiếu lên',
+      options: ['Trục $Oy$', 'Đường $y=x$', 'Trục $Ox$', 'Gốc tọa độ'],
+      correctAnswer: 'C',
+      explanation: 'Tập xác định gồm các hoành độ xuất hiện trên đồ thị nên được đọc theo hình chiếu lên $Ox$.'
+    }
+  ],
+  'math10-qt20': [
+    {
+      id: 'math10-check-qt20-1',
+      question: 'Nếu tam thức $f(x)=ax^2+bx+c$ có $\\Delta<0$ thì',
+      options: ['Luôn cùng dấu với $a$', 'Luôn dương', 'Luôn âm', 'Đổi dấu tại $-b/(2a)$'],
+      correctAnswer: 'A',
+      explanation: 'Khi không có nghiệm thực, tam thức không đổi dấu và mang dấu của hệ số bậc hai.'
+    },
+    {
+      id: 'math10-check-qt20-2',
+      question: 'Khi đi qua nghiệm kép, dấu của tam thức bậc hai',
+      options: ['Luôn đổi từ dương sang âm', 'Luôn đổi từ âm sang dương', 'Không đổi', 'Không xác định'],
+      correctAnswer: 'C',
+      explanation: 'Tại nghiệm kép, đồ thị tiếp xúc trục hoành nên tam thức bằng 0 nhưng không đổi dấu.'
+    },
+    {
+      id: 'math10-check-qt20-3',
+      question: 'Điều kiện để tam thức bậc hai dương với mọi $x\\in\\mathbb R$ là',
+      options: ['$a>0,\\Delta\\le0$', '$a>0,\\Delta<0$', '$a<0,\\Delta<0$', '$a>0,\\Delta>0$'],
+      correctAnswer: 'B',
+      explanation: 'Dấu dương nghiêm ngặt không cho phép nghiệm kép, nên cần $a>0$ và $\\Delta<0$.'
+    }
+  ],
+  'math10-qt21': [
+    {
+      id: 'math10-check-qt21-1',
+      question: 'Với bất phương trình $f(x)\\le0$, nghiệm của phương trình $f(x)=0$',
+      options: ['Luôn bị loại', 'Được lấy nếu thuộc miền xác định', 'Chỉ lấy khi là nghiệm kép', 'Chỉ lấy khi dương'],
+      correctAnswer: 'B',
+      explanation: 'Dấu “≤” nhận cả những điểm làm biểu thức bằng 0, miễn điểm đó thuộc miền xác định.'
+    },
+    {
+      id: 'math10-check-qt21-2',
+      question: 'Trong bất phương trình phân thức, điểm làm mẫu số bằng 0',
+      options: ['Được lấy khi có dấu ≥', 'Luôn bị loại', 'Được lấy nếu tử cũng bằng 0', 'Chỉ loại với dấu nghiêm ngặt'],
+      correctAnswer: 'B',
+      explanation: 'Phân thức không xác định tại nghiệm của mẫu nên các điểm này luôn bị loại.'
+    },
+    {
+      id: 'math10-check-qt21-3',
+      question: 'Vì sao không được tùy ý chia hai vế bất phương trình cho biểu thức chứa ẩn?',
+      options: [
+        'Vì biểu thức luôn bằng 0',
+        'Vì có thể chưa biết dấu để quyết định có đổi chiều hay không',
+        'Vì phép chia không dùng cho số thực',
+        'Vì sẽ luôn làm mất nghiệm'
+      ],
+      correctAnswer: 'B',
+      explanation: 'Chia cho số âm phải đổi chiều, còn chia cho 0 không hợp lệ; do đó cần biết dấu trước.'
+    }
+  ]
 };

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Đường cong cộng hưởng</title>
+  <desc id="desc">Biên độ cưỡng bức tăng tới cực đại ở tần số 4 héc rồi giảm.</desc>
+  <rect width="720" height="360" fill="#fff"/>
+  <g stroke="#e2e8f0" stroke-width="1">
+    <path d="M80 80H680M80 140H680M80 200H680M80 260H680"/>
+    <path d="M180 40V300M280 40V300M380 40V300M480 40V300M580 40V300"/>
+  </g>
+  <g stroke="#0f172a" stroke-width="2">
+    <path d="M70 300H690"/>
+    <path d="M80 310V30"/>
+    <path d="m690 300-10-6v12z" fill="#0f172a"/>
+    <path d="m80 30-6 10h12z" fill="#0f172a"/>
+  </g>
+  <path d="M80 282C160 278 240 268 300 235 345 210 360 75 380 60 400 75 415 210 460 235 520 268 600 278 680 282" fill="none" stroke="#e11d48" stroke-width="5" stroke-linecap="round"/>
+  <path d="M380 60V300" stroke="#f59e0b" stroke-width="2" stroke-dasharray="8 7"/>
+  <circle cx="380" cy="60" r="7" fill="#e11d48"/>
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="18">
+    <text x="692" y="322">f (Hz)</text>
+    <text x="34" y="35">A</text>
+    <text x="176" y="325">2</text>
+    <text x="276" y="325">3</text>
+    <text x="376" y="325">4</text>
+    <text x="476" y="325">5</text>
+    <text x="576" y="325">6</text>
+    <text x="394" y="58">đỉnh cộng hưởng</text>
+  </g>
+</svg>
