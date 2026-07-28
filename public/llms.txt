@@ -1,0 +1,15 @@
+# ezonthi - Nền tảng Học tốt & Luyện thi Lớp 9 - 12
+
+> ezonthi là nền tảng tự học trực tuyến hàng đầu dành cho học học sinh Lớp 9, 10, 11, 12 tại Việt Nam.
+
+## Tính năng chính
+- Lộ trình học lý thuyết chuẩn bám sát chương trình GDPT 2018.
+- Ngân hàng câu hỏi trắc nghiệm thực chiến phân loại theo dạng bài và độ khó.
+- Trợ lý học tập AI Tutor giải đáp bài tập 24/7.
+- Đề thi thử và chấm điểm tự động.
+
+## Các môn học hỗ trợ
+- Toán học (Lớp 9, 10, 11)
+- Tiếng Anh (Lớp 9, 10)
+- Hóa học (Lớp 9, 10, 11)
+- Vật lý (Lớp 9, 10, 11)

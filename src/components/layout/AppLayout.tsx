@@ -312,7 +312,7 @@ export const AppLayout: React.FC = () => {
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.ABOUT)}>
-          <img src="/logo.png" alt="ezonthi logo" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
+          <img src="/logo.png" alt="ezonthi logo" width="150" height="40" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
         </div>
 
         <div className="flex items-center gap-2">
@@ -363,9 +363,9 @@ export const AppLayout: React.FC = () => {
           isSidebarCollapsed ? "p-4 h-20" : "px-4 py-4"
         )} onClick={() => navigate(ROUTES.ABOUT)}>
           {isSidebarCollapsed ? (
-            <img src="/logo.png" alt="ezonthi logo" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            <img src="/logo.png" alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           ) : (
-            <img src="/logo.png" alt="ezonthi logo" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            <img src="/logo.png" alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           )}
         </div>
 
