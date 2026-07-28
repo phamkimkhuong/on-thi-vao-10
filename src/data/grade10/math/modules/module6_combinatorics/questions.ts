@@ -1,4 +1,5 @@
 import type { Question } from '@/types';
+import { g10MathModule6QuestionExpansion } from './practiceExpansion';
 
 export const g10MathModule6Questions: Question[] = [
   {
@@ -1694,3 +1695,5 @@ export const g10MathModule6Questions: Question[] = [
     "validatorType": "number"
   }
 ];
+
+g10MathModule6Questions.push(...g10MathModule6QuestionExpansion);

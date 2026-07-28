@@ -5,6 +5,7 @@ import ts from 'typescript';
 const root = process.cwd();
 const dataDirectory = path.join(root, 'src', 'data', 'grade10', 'math');
 const modulesDirectory = path.join(dataDirectory, 'modules');
+const publicDirectory = path.join(root, 'public');
 
 const readNodeValue = node => {
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
@@ -77,6 +78,47 @@ for (const moduleName of moduleDirs) {
   misconceptions.push(...readFirstMatchingArray(path.join(modulePath, 'learningPath.ts'), /export const (g10MathModule\d+Misconceptions)/));
   blueprints.push(...readFirstMatchingArray(path.join(modulePath, 'practiceBlueprint.ts'), /export const (g10MathModule\d+PracticeBlueprints)/));
   metadata.push(...readFirstMatchingArray(path.join(modulePath, 'practiceMetadata.ts'), /export const (g10MathModule\d+PracticeMetadata)/));
+
+  const practiceExpansionFile = path.join(modulePath, 'practiceExpansion.ts');
+  if (fs.existsSync(practiceExpansionFile)) {
+    const expansionSeeds = readExportedArray(practiceExpansionFile, 'g10MathPracticeExpansionSeeds');
+    for (const seed of expansionSeeds) {
+      const questionTypeId = seed.subTypeId.replace(/-st\d+$/, '');
+      const topicId = questionTypes.find(item => item.id === questionTypeId)?.topicId;
+      questions.push({
+        id: seed.id,
+        subjectId: 'math',
+        topicId,
+        questionTypeId,
+        content: seed.content,
+        responseType: 'short_answer',
+        difficulty: seed.difficulty,
+        sourceType: 'manual',
+        correctAnswer: seed.correctAnswer,
+        acceptedAnswers: [seed.correctAnswer],
+        validatorType: 'number',
+        ...(Array.isArray(seed.media) ? { media: seed.media } : {})
+      });
+      solutions.push({
+        id: seed.id.replace('-q', '-s'),
+        questionId: seed.id,
+        recognition: `Dạng mở rộng ${seed.subTypeId}.`,
+        detailedSteps: seed.reasoning.map((explanation, index) => ({
+          order: index + 1,
+          explanation
+        })),
+        finalAnswer: seed.correctAnswer,
+        commonMistakes: ['Cần kiểm tra mô hình đếm.']
+      });
+      metadata.push({
+        questionId: seed.id,
+        subTypeId: seed.subTypeId,
+        practiceRole: seed.practiceRole,
+        representationType: seed.representationType,
+        ...(seed.practiceRole === 'mastery_holdout' ? { isMasteryHoldout: true } : {})
+      });
+    }
+  }
 }
 
 const assessmentQuestions = readExportedArray(path.join(dataDirectory, 'assessments', 'questions.ts'), 'g10MathAssessmentQuestions');
@@ -90,6 +132,7 @@ exams.push(...readExportedArray(path.join(dataDirectory, 'assessments', 'semeste
 
 const errors = [];
 const warnings = [];
+const mediaIds = new Set();
 const duplicateKeys = (items, keyOf) => {
   const counts = new Map();
   for (const item of items) counts.set(keyOf(item), (counts.get(keyOf(item)) ?? 0) + 1);
@@ -139,6 +182,25 @@ for (const question of questions) {
   if (!typeById.has(question.questionTypeId)) errors.push(`${question.id}: questionTypeId không tồn tại.`);
   if (!solutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải.`);
   if (!metadataByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu practice metadata.`);
+  const mediaItems = [
+    ...(Array.isArray(question.stimulus?.media) ? question.stimulus.media : []),
+    ...(Array.isArray(question.media) ? question.media : [])
+  ];
+  for (const media of mediaItems) {
+    if (!media?.id?.trim()) errors.push(`${question.id}: media thiếu id.`);
+    else if (mediaIds.has(media.id)) errors.push(`${question.id}: media id bị trùng ${media.id}.`);
+    else mediaIds.add(media.id);
+    if (!media?.alt?.trim()) errors.push(`${question.id}: media ${media?.id ?? '(không id)'} thiếu alt.`);
+    if (!media?.src?.trim()) {
+      errors.push(`${question.id}: media ${media?.id ?? '(không id)'} thiếu src.`);
+    } else if (media.src.startsWith('/')) {
+      const assetPath = path.resolve(publicDirectory, media.src.slice(1));
+      if (!assetPath.startsWith(`${publicDirectory}${path.sep}`)) errors.push(`${question.id}: đường dẫn media nằm ngoài public.`);
+      else if (!fs.existsSync(assetPath)) errors.push(`${question.id}: không tìm thấy media ${media.src}.`);
+    }
+    if (media.width !== undefined && (!Number.isFinite(media.width) || media.width <= 0)) errors.push(`${question.id}: media width không hợp lệ.`);
+    if (media.height !== undefined && (!Number.isFinite(media.height) || media.height <= 0)) errors.push(`${question.id}: media height không hợp lệ.`);
+  }
   if (question.validatorType === 'choice') {
     if (!Array.isArray(question.options) || question.options.length !== 4) errors.push(`${question.id}: câu lựa chọn phải có đúng 4 phương án.`);
     if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) errors.push(`${question.id}: đáp án lựa chọn phải là A, B, C hoặc D.`);
@@ -258,7 +320,15 @@ for (const question of assessmentQuestions) {
 if (!exams.some(exam => /học kỳ II/.test(exam.title))) warnings.push('Assessment: chưa có đề giữa kỳ II và cuối kỳ II.');
 
 console.log(`Toán 10: ${topics.length} chủ đề, ${outcomes.length} outcomes, ${questionTypes.length} dạng lớn, ${subtypeById.size} dạng nhỏ, ${questions.length} câu luyện tập, ${assessmentQuestions.length} câu kiểm tra.`);
-console.log(`Coverage: ${completedSubtypeCount}/${subtypeById.size} micro-type đạt tối thiểu 12 câu.`);
+const expandedSubtypeCount = [...subtypeById.values()]
+  .filter(subtype => (subtype.targetQuestionCount ?? 12) > 12)
+  .length;
+console.log(`Coverage: ${completedSubtypeCount}/${subtypeById.size} micro-type đạt target khai báo; ${expandedSubtypeCount} dạng có target trên 12 câu.`);
+const mediaQuestionCount = questions.filter(question =>
+  (Array.isArray(question.media) && question.media.length > 0)
+  || (Array.isArray(question.stimulus?.media) && question.stimulus.media.length > 0)
+).length;
+console.log(`Học liệu trực quan: ${mediaQuestionCount} câu có media, ${mediaIds.size} media đã kiểm tra đường dẫn và mô tả thay thế.`);
 if (warnings.length > 0) {
   console.log(`\nCẢNH BÁO (${warnings.length}):`);
   for (const warning of warnings) console.log(`- ${warning}`);

@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt14Theory: string[] = [
   '**1. Vectơ chỉ phương và pháp tuyến**\nĐường thẳng $d$ có vectơ chỉ phương $\\vec u=(u_1;u_2)\\ne\\vec0$. Một vectơ pháp tuyến vuông góc với $d$ là:\n$$\\vec n=(a;b)\\ne\\vec0$$\nNếu $\\vec n=(a;b)$ thì có thể chọn $\\vec u=(-b;a)$ hoặc $(b;-a)$.',
   '**2. Phương trình tổng quát**\nĐường thẳng qua $M_0(x_0;y_0)$ và có pháp tuyến $(a;b)$:\n$$a(x-x_0)+b(y-y_0)=0$$\nDạng tổng quát $ax+by+c=0$ có pháp tuyến $(a;b)$, với $a^2+b^2>0$. Kiểm tra điểm thuộc đường bằng cách thay tọa độ vào phương trình.',
@@ -38,4 +40,79 @@ export const g10MathModule8TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt14': math10Qt14Theory,
   'math10-qt15': math10Qt15Theory,
   'math10-qt16': math10Qt16Theory
+};
+
+export const g10MathModule8TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt14': [
+    {
+      id: 'math10-check-qt14-1',
+      question: 'Đường thẳng $ax+by+c=0$ có một vectơ pháp tuyến là',
+      options: ['$(a;b)$', '$(-b;a)$', '$(c;a)$', '$(b;a)$'],
+      correctAnswer: 'A',
+      explanation: 'Hai hệ số của x và y tạo thành một vectơ pháp tuyến của đường thẳng.'
+    },
+    {
+      id: 'math10-check-qt14-2',
+      question: 'Trong công thức khoảng cách từ điểm đến đường thẳng, tử số phải có',
+      options: ['Bình phương', 'Giá trị tuyệt đối', 'Căn bậc hai', 'Đạo hàm'],
+      correctAnswer: 'B',
+      explanation: 'Khoảng cách không âm nên tử là $|ax_0+by_0+c|$.'
+    },
+    {
+      id: 'math10-check-qt14-3',
+      question: 'Hai đường có cặp hệ số $(a;b)$ tỉ lệ nhưng bộ ba $(a;b;c)$ không tỉ lệ thì',
+      options: ['Trùng nhau', 'Song song phân biệt', 'Vuông góc', 'Cắt nhau'],
+      correctAnswer: 'B',
+      explanation: 'Pháp tuyến cùng phương nhưng phương trình không cùng một đường.'
+    }
+  ],
+  'math10-qt15': [
+    {
+      id: 'math10-check-qt15-1',
+      question: 'Đường tròn $(x+2)^2+(y-3)^2=16$ có tâm',
+      options: ['$(2;-3)$', '$(-2;3)$', '$(-2;-3)$', '$(2;3)$'],
+      correctAnswer: 'B',
+      explanation: 'Tọa độ tâm mang dấu ngược với dấu trong hai ngoặc.'
+    },
+    {
+      id: 'math10-check-qt15-2',
+      question: 'Tiếp tuyến tại M của đường tròn tâm I nhận vectơ nào làm pháp tuyến?',
+      options: ['$\\vec{IM}$', 'Một vectơ cùng hướng tiếp tuyến', '$\\vec{OM}$ trong mọi trường hợp', '$\\vec0$'],
+      correctAnswer: 'A',
+      explanation: 'Bán kính IM vuông góc với tiếp tuyến tại M.'
+    },
+    {
+      id: 'math10-check-qt15-3',
+      question: 'Đường thẳng d tiếp xúc đường tròn tâm I, bán kính R khi',
+      options: ['$d(I,d)>R$', '$d(I,d)<R$', '$d(I,d)=R$', '$I\\in d$'],
+      correctAnswer: 'C',
+      explanation: 'Khoảng cách từ tâm đến tiếp tuyến đúng bằng bán kính.'
+    }
+  ],
+  'math10-qt16': [
+    {
+      id: 'math10-check-qt16-1',
+      question: 'Với elip, quan hệ đúng là',
+      options: ['$c^2=a^2+b^2$', '$c^2=a^2-b^2$', '$c=a+b$', '$c^2=b^2-a^2$'],
+      correctAnswer: 'B',
+      explanation: 'Elip có $a>b>0$ và $c^2=a^2-b^2$.'
+    },
+    {
+      id: 'math10-check-qt16-2',
+      question: 'Với hypebol chính tắc, quan hệ đúng là',
+      options: ['$c^2=a^2-b^2$', '$c^2=a^2+b^2$', '$c=a-b$', '$c^2=4a$'],
+      correctAnswer: 'B',
+      explanation: 'Khoảng cách tiêu điểm của hypebol dùng $c^2=a^2+b^2$.'
+    },
+    {
+      id: 'math10-check-qt16-3',
+      question: 'Parabol $y^2=12x$ có tiêu điểm',
+      options: ['$(12;0)$', '$(6;0)$', '$(3;0)$', '$(0;3)$'],
+      correctAnswer: 'C',
+      explanation: 'So sánh $12=4p$ được $p=3$, nên tiêu điểm là $(3;0)$.'
+    }
+  ]
 };

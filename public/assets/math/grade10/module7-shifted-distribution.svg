@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 410" role="img" aria-labelledby="title desc">
+  <title id="title">Hai phân bố chỉ khác nhau bởi phép tịnh tiến</title>
+  <desc id="desc">Hai đường cong cùng hình dạng và độ rộng; mẫu B là mẫu A dịch sang phải một trăm đơn vị nên phương sai không đổi.</desc>
+  <rect width="760" height="410" rx="24" fill="#f8fafc"/>
+  <text x="380" y="38" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#0f172a">Cộng 100: tâm đổi, độ phân tán không đổi</text>
+  <g transform="translate(75 340)" font-family="Arial,sans-serif">
+    <path d="M0 0H625M0 0V-250" stroke="#475569" stroke-width="3"/>
+    <path d="M625 0l-13-7v14zM0-250l-7 13h14z" fill="#475569"/>
+    <path d="M30 0C65-5 90-26 120-105C150-188 185-210 220-105C250-26 275-5 310 0" fill="#dbeafe" fill-opacity=".6" stroke="#2563eb" stroke-width="5"/>
+    <path d="M315 0C350-5 375-26 405-105C435-188 470-210 505-105C535-26 560-5 595 0" fill="#ffedd5" fill-opacity=".65" stroke="#f97316" stroke-width="5"/>
+    <line x1="170" y1="-200" x2="170" y2="0" stroke="#2563eb" stroke-width="2" stroke-dasharray="7 6"/>
+    <line x1="455" y1="-200" x2="455" y2="0" stroke="#f97316" stroke-width="2" stroke-dasharray="7 6"/>
+    <path d="M205-230H420" stroke="#64748b" stroke-width="3" marker-end="url(#shift-arrow)"/>
+    <defs><marker id="shift-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#64748b"/></marker></defs>
+    <g font-size="17" font-weight="700">
+      <text x="170" y="28" text-anchor="middle" fill="#1d4ed8">Mẫu A</text>
+      <text x="455" y="28" text-anchor="middle" fill="#c2410c">Mẫu B = A + 100</text>
+      <text x="312" y="-242" text-anchor="middle" fill="#334155">dịch 100 đơn vị</text>
+      <text x="635" y="17" fill="#334155">giá trị</text>
+    </g>
+  </g>
+</svg>

@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt11Theory: string[] = [
   '**1. Số đúng, số gần đúng và sai số tuyệt đối**\nNếu $a$ là giá trị đúng và $\\bar a$ là giá trị gần đúng thì sai số tuyệt đối:\n$$\\Delta_a=|a-\\bar a|$$\nKhi không biết $a$ nhưng biết $\\Delta_a\\le d$, viết $a=\\bar a\\pm d$ hoặc $a\\in[\\bar a-d;\\bar a+d]$.',
   '**2. Sai số tương đối**\nSai số tương đối đánh giá sai số so với quy mô đại lượng:\n$$\\delta_a=\\frac{\\Delta_a}{|a|}$$\nKhi giá trị đúng chưa biết, thường ước lượng bằng $\\delta_a\\approx\\Delta_a/|\\bar a|$; dạng phần trăm là $\\delta_a\\times100\\%$. Không dùng khi mẫu số bằng hoặc quá gần 0.',
@@ -38,4 +40,79 @@ export const g10MathModule7TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt11': math10Qt11Theory,
   'math10-qt12': math10Qt12Theory,
   'math10-qt13': math10Qt13Theory
+};
+
+export const g10MathModule7TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt11': [
+    {
+      id: 'math10-check-qt11-1',
+      question: 'Làm tròn đến đơn vị $0{,}1$ tạo sai số tuyệt đối tối đa bằng',
+      options: ['$0{,}1$', '$0{,}05$', '$0{,}01$', '$0{,}5$'],
+      correctAnswer: 'B',
+      explanation: 'Sai số làm tròn tối đa bằng một nửa đơn vị làm tròn.'
+    },
+    {
+      id: 'math10-check-qt11-2',
+      question: 'Khi tính trung bình từ bảng tần số, mẫu số là',
+      options: ['Số giá trị khác nhau', 'Tổng các giá trị', 'Tổng tần số', 'Tần số lớn nhất'],
+      correctAnswer: 'C',
+      explanation: 'Tổng tần số chính là tổng số quan sát của mẫu.'
+    },
+    {
+      id: 'math10-check-qt11-3',
+      question: 'Muốn tìm trung vị, thao tác bắt buộc trước tiên là',
+      options: ['Bình phương số liệu', 'Sắp xếp số liệu', 'Loại mọi ngoại lệ', 'Tính phương sai'],
+      correctAnswer: 'B',
+      explanation: 'Trung vị và tứ phân vị phụ thuộc vị trí trong mẫu đã sắp.'
+    }
+  ],
+  'math10-qt12': [
+    {
+      id: 'math10-check-qt12-1',
+      question: 'Giá trị đúng bằng hàng rào trên $Q_3+1{,}5IQR$',
+      options: ['Luôn là ngoại lệ', 'Không bị xem là ngoại lệ theo quy tắc IQR', 'Phải xóa khỏi mẫu', 'Là trung vị'],
+      correctAnswer: 'B',
+      explanation: 'Chỉ các giá trị lớn hơn hàng rào trên hoặc nhỏ hơn hàng rào dưới mới là ngoại lệ.'
+    },
+    {
+      id: 'math10-check-qt12-2',
+      question: 'Nếu mọi số liệu đều tăng thêm 7 thì độ lệch chuẩn',
+      options: ['Tăng 7', 'Giảm 7', 'Không đổi', 'Nhân 49'],
+      correctAnswer: 'C',
+      explanation: 'Tịnh tiến toàn bộ mẫu không làm thay đổi các độ lệch so với trung bình.'
+    },
+    {
+      id: 'math10-check-qt12-3',
+      question: 'Hai mẫu cùng đại lượng và đơn vị; mẫu có độ lệch chuẩn nhỏ hơn thường',
+      options: ['Có trung bình lớn hơn', 'Ổn định hơn', 'Có nhiều quan sát hơn', 'Luôn có ngoại lệ'],
+      correctAnswer: 'B',
+      explanation: 'Độ lệch chuẩn nhỏ biểu thị dữ liệu tập trung hơn quanh trung bình.'
+    }
+  ],
+  'math10-qt13': [
+    {
+      id: 'math10-check-qt13-1',
+      question: 'Gieo hai xúc xắc phân biệt, $(1;2)$ và $(2;1)$',
+      options: ['Là cùng một kết quả', 'Là hai kết quả khác nhau', 'Không đồng khả năng', 'Đều không thuộc không gian mẫu'],
+      correctAnswer: 'B',
+      explanation: 'Hai vị trí ứng với hai xúc xắc phân biệt nên thứ tự tạo kết quả khác nhau.'
+    },
+    {
+      id: 'math10-check-qt13-2',
+      question: 'Công thức $P(A)=n(A)/n(\\Omega)$ dùng trực tiếp khi',
+      options: ['Không gian mẫu vô hạn', 'Các kết quả sơ cấp đồng khả năng', 'A chắc chắn xảy ra', 'A và B độc lập'],
+      correctAnswer: 'B',
+      explanation: 'Đây là điều kiện cốt lõi của mô hình xác suất cổ điển.'
+    },
+    {
+      id: 'math10-check-qt13-3',
+      question: 'Xác suất có ít nhất một lần thành công trong n phép thử độc lập, xác suất thất bại mỗi lần là q, bằng',
+      options: ['$q^n$', '$1-q^n$', '$(1-q)^n$', '$nq$'],
+      correctAnswer: 'B',
+      explanation: 'Dùng biến cố đối: 1 trừ xác suất thất bại trong cả n lần.'
+    }
+  ]
 };

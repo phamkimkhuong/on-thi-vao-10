@@ -1,4 +1,5 @@
 import type { QuestionPracticeMetadata } from '@/types';
+import { g10MathModule8PracticeMetadataExpansion } from './practiceExpansion';
 
 export const g10MathModule8PracticeMetadata: QuestionPracticeMetadata[] = [
   {
@@ -677,3 +678,5 @@ export const g10MathModule8PracticeMetadata: QuestionPracticeMetadata[] = [
     "representationType": "equation"
   }
 ];
+
+g10MathModule8PracticeMetadata.push(...g10MathModule8PracticeMetadataExpansion);

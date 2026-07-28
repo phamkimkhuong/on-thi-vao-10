@@ -12,7 +12,7 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề cho điểm thuộc đường và một vectơ.",
           "Cần xác định vectơ đó là chỉ phương hay pháp tuyến."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt14-st2",
@@ -32,11 +32,11 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề cho M(x0,y0) và ax+by+c=0.",
           "Công thức có giá trị tuyệt đối ở tử và độ dài pháp tuyến ở mẫu."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 48,
       "minimumQuestionsPerSubType": 12,
       "requiredPracticeRoles": [
         "guided",
@@ -76,7 +76,7 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề cho tâm trực tiếp hoặc đủ dữ kiện tìm tâm.",
           "Vế phải của dạng chuẩn là R²."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt15-st3",
@@ -86,11 +86,11 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Có tâm và tiếp điểm.",
           "Bán kính tại tiếp điểm vuông góc tiếp tuyến."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 48,
       "minimumQuestionsPerSubType": 12,
       "requiredPracticeRoles": [
         "guided",
@@ -120,7 +120,7 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Hai bình phương cùng dấu cộng.",
           "Mẫu lớn ứng với bán trục lớn."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt16-st2",
@@ -130,7 +130,7 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Hai bình phương trái dấu.",
           "Số hạng dương xác định hướng trục thực."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt16-st3",
@@ -140,11 +140,11 @@ export const g10MathModule8PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Chỉ một biến được bình phương.",
           "So sánh hệ số với 4a trước khi kết luận."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 54,
       "minimumQuestionsPerSubType": 12,
       "requiredPracticeRoles": [
         "guided",

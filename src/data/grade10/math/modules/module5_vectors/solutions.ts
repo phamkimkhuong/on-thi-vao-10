@@ -638,7 +638,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$\\vec{AB}+\\frac12\\vec{AD}$"
       }
     ],
-    "finalAnswer": "A. $\\vec{AM}=\\vec{AB}+\\frac12\\vec{AD}$",
+    "finalAnswer": "D. $\\vec{AM}=\\vec{AB}+\\frac12\\vec{AD}$",
     "commonMistakes": [
       "Nhầm M là trung điểm của đường chéo AC."
     ],
@@ -663,7 +663,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$-\\frac16(\\vec{AB}+\\vec{AC})$"
       }
     ],
-    "finalAnswer": "B. $-\\frac16(\\vec{AB}+\\vec{AC})$",
+    "finalAnswer": "C. $-\\frac16(\\vec{AB}+\\vec{AC})$",
     "commonMistakes": [
       "Lấy AM−AG nên đảo chiều vectơ MG."
     ],
@@ -688,7 +688,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$-\\frac23\\vec{AB}+\\frac14\\vec{AC}$"
       }
     ],
-    "finalAnswer": "B. $-\\frac23\\vec{AB}+\\frac14\\vec{AC}$",
+    "finalAnswer": "D. $-\\frac23\\vec{AB}+\\frac14\\vec{AC}$",
     "commonMistakes": [
       "Cộng AP và AQ thay vì lấy AQ−AP."
     ],
@@ -713,7 +713,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$-\\frac23\\vec{AB}+\\frac14\\vec{AD}$"
       }
     ],
-    "finalAnswer": "B. $-\\frac23\\vec{AB}+\\frac14\\vec{AD}$",
+    "finalAnswer": "D. $-\\frac23\\vec{AB}+\\frac14\\vec{AD}$",
     "commonMistakes": [
       "Đọc sai tỉ số AE:EB thành AE=2AB."
     ],
@@ -738,7 +738,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$-3\\vec{AB}+4\\vec{AC}$"
       }
     ],
-    "finalAnswer": "B. $-3\\vec{AB}+4\\vec{AC}$",
+    "finalAnswer": "D. $-3\\vec{AB}+4\\vec{AC}$",
     "commonMistakes": [
       "Nhầm chiều MN thành NM."
     ],
@@ -763,7 +763,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "Cùng phương, cùng hướng"
       }
     ],
-    "finalAnswer": "A. Cùng phương, cùng hướng",
+    "finalAnswer": "D. Cùng phương, cùng hướng",
     "commonMistakes": [
       "Chỉ so sánh độ dài mà không so sánh hai tọa độ."
     ],
@@ -863,7 +863,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$m=5$"
       }
     ],
-    "finalAnswer": "B. $m=5$",
+    "finalAnswer": "D. $m=5$",
     "commonMistakes": [
       "Dùng tọa độ điểm thay cho tọa độ vectơ."
     ],
@@ -888,7 +888,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$m=0$"
       }
     ],
-    "finalAnswer": "B. $m=0$",
+    "finalAnswer": "D. $m=0$",
     "commonMistakes": [
       "So sánh chéo sai cặp hệ số AB và AC."
     ],
@@ -988,7 +988,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$-\\frac13\\vec{AB}+\\frac12\\vec{AC}$"
       }
     ],
-    "finalAnswer": "B. $-\\frac13\\vec{AB}+\\frac12\\vec{AC}$",
+    "finalAnswer": "D. $-\\frac13\\vec{AB}+\\frac12\\vec{AC}$",
     "commonMistakes": [
       "Đổi tỉ số 1:2 thành AM=1/2 AB."
     ],
@@ -1063,7 +1063,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$\\frac35$"
       }
     ],
-    "finalAnswer": "B. $\\frac35$",
+    "finalAnswer": "D. $\\frac35$",
     "commonMistakes": [
       "Cho AQ=1/3 AC dù Q nằm trên BC."
     ],
@@ -1113,7 +1113,7 @@ export const g10MathModule5Solutions: Solution[] = [
         "result": "$\\frac58$"
       }
     ],
-    "finalAnswer": "B. $\\frac58$",
+    "finalAnswer": "D. $\\frac58$",
     "commonMistakes": [
       "Lấy AP=AM+AN thay vì một nửa tổng."
     ],

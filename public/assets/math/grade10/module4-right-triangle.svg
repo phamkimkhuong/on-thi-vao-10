@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 410" role="img" aria-labelledby="title desc">
+  <title id="title">Tam giác vuông có ba cạnh sáu, tám và mười</title>
+  <desc id="desc">Tam giác ABC vuông tại C, cạnh BC dài sáu, CA dài tám và AB dài mười.</desc>
+  <rect width="760" height="410" rx="24" fill="#f8fafc"/>
+  <text x="380" y="38" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#0f172a">Tam giác 6–8–10</text>
+  <g font-family="Arial,sans-serif">
+    <path d="M160 330L600 330L160 82Z" fill="#dbeafe" stroke="#2563eb" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M160 300H190V330" fill="none" stroke="#f97316" stroke-width="4"/>
+    <circle cx="160" cy="82" r="6" fill="#0f172a"/><circle cx="600" cy="330" r="6" fill="#0f172a"/><circle cx="160" cy="330" r="6" fill="#0f172a"/>
+    <g fill="#0f172a" font-size="20" font-weight="700">
+      <text x="132" y="74">A</text><text x="612" y="345">B</text><text x="130" y="357">C</text>
+      <text x="365" y="362" fill="#1d4ed8">a = BC = 6</text>
+      <text x="52" y="210" fill="#1d4ed8">b = CA = 8</text>
+      <text x="408" y="184" transform="rotate(29 408 184)" fill="#1d4ed8">c = AB = 10</text>
+      <text x="202" y="304" fill="#c2410c">90°</text>
+    </g>
+  </g>
+</svg>

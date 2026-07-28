@@ -1,5 +1,9 @@
 import type { QuestionType } from '@/types';
-import { g10MathModule8TheoryByQuestionTypeId } from './theory';
+import {
+  g10MathModule8TheoryByQuestionTypeId,
+  g10MathModule8TheoryCheckpointsByQuestionTypeId
+} from './theory';
+import { g10MathModule8PracticeBlueprints } from './practiceBlueprint';
 
 export const g10MathModule8QuestionTypes: QuestionType[] = [
   {
@@ -97,4 +101,15 @@ export const g10MathModule8QuestionTypes: QuestionType[] = [
 for (const questionType of g10MathModule8QuestionTypes) {
   questionType.theory =
     g10MathModule8TheoryByQuestionTypeId[questionType.id] ?? questionType.theory;
+  questionType.theoryCheckpoints =
+    g10MathModule8TheoryCheckpointsByQuestionTypeId[questionType.id] ??
+    questionType.theoryCheckpoints;
+
+  const practiceBlueprint = g10MathModule8PracticeBlueprints.find(
+    blueprint => blueprint.questionTypeId === questionType.id
+  );
+  if (practiceBlueprint) {
+    questionType.subTypes = practiceBlueprint.subTypes;
+    questionType.practiceCoverage = practiceBlueprint.coverage;
+  }
 }

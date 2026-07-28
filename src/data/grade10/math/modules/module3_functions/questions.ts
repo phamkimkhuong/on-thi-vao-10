@@ -11,7 +11,17 @@ export const g10MathModule3Questions: Question[] = [
       sourceType: 'manual',
       correctAnswer: 'y = -3/8x^2 + 3x',
       acceptedAnswers: ['y = -3/8x^2 + 3x', 'y = -0.375x^2 + 3x', 'y=-3/8x^2+3x'],
-      validatorType: 'exact'
+      validatorType: 'exact',
+      media: [{
+        id: 'math10-q4-media-parabolic-gate',
+        type: 'diagram',
+        src: '/assets/math/grade10/module3-parabolic-gate.svg',
+        alt: 'Cổng parabol có chân A tại gốc tọa độ, chân B tại tám không và đỉnh I tại bốn sáu.',
+        caption: 'Mô hình tọa độ của cổng chào rộng 8 m, cao 6 m',
+        longDescription: 'Parabol quay xuống, cắt trục hoành tại A bằng O không không và B tám không; trục đối xứng đi qua đỉnh I bốn sáu.',
+        width: 760,
+        height: 420
+      }]
     },
   {
       id: 'math10-q34',

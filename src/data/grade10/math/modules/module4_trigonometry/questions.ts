@@ -31,7 +31,17 @@ export const g10MathModule4Questions: Question[] = [
         ],
         proofImageRequired: false,
         autoCheckMode: 'exact'
-      }
+      },
+      media: [{
+        id: 'math10-q44-media-triangle',
+        type: 'diagram',
+        src: '/assets/math/grade10/module4-right-triangle.svg',
+        alt: 'Tam giác ABC vuông tại C với các cạnh BC bằng sáu, CA bằng tám và AB bằng mười.',
+        caption: 'Tam giác 6–8–10 theo quy ước a = BC, b = CA, c = AB',
+        longDescription: 'Cạnh dài mười đối diện góc vuông nên là cạnh huyền. Hai cạnh góc vuông dài sáu và tám.',
+        width: 760,
+        height: 410
+      }]
     },
   {
       id: 'math10-q45',

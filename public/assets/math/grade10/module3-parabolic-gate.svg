@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Cổng chào hình parabol</title>
+  <desc id="desc">Cổng có hai chân A tại không không và B tại tám không, đỉnh I tại bốn sáu.</desc>
+  <rect width="760" height="420" rx="24" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#0f172a">Cổng chào hình parabol</text>
+  <g transform="translate(90 350)" font-family="Arial,sans-serif">
+    <path d="M0 0H600M0 0V-290" stroke="#475569" stroke-width="3"/>
+    <path d="M600 0l-13-7v14zM0-290l-7 13h14z" fill="#475569"/>
+    <path d="M0 0 Q290-500 580 0" fill="#bfdbfe" fill-opacity=".35" stroke="#2563eb" stroke-width="8"/>
+    <line x1="290" y1="-250" x2="290" y2="0" stroke="#f97316" stroke-width="3" stroke-dasharray="8 6"/>
+    <line x1="0" y1="25" x2="580" y2="25" stroke="#0f172a" stroke-width="2"/>
+    <path d="M0 18v14M580 18v14" stroke="#0f172a" stroke-width="2"/>
+    <g fill="#0f172a" font-size="17" font-weight="700">
+      <circle cx="0" cy="0" r="6"/><text x="-12" y="27">A = O(0;0)</text>
+      <circle cx="580" cy="0" r="6"/><text x="535" y="-13">B(8;0)</text>
+      <circle cx="290" cy="-250" r="6"/><text x="303" y="-257">I(4;6)</text>
+      <text x="290" y="52" text-anchor="middle">AB = 8 m</text>
+      <text x="306" y="-120" fill="#c2410c">6 m</text>
+      <text x="605" y="18">x</text><text x="-24" y="-292">y</text>
+    </g>
+  </g>
+</svg>

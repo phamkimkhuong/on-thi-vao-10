@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt5Theory: string[] = [
   '**1. Các quy tắc vectơ nền tảng**\nVới ba điểm bất kỳ:\n$$\\vec{AB}+\\vec{BC}=\\vec{AC},\\qquad \\vec{AB}=\\vec{OB}-\\vec{OA}$$\nNgoài ra $\\vec{AB}=-\\vec{BA}$. Khi chèn điểm, phải giữ đúng điểm cuối của vectơ trước trùng điểm đầu của vectơ sau.',
   '**2. Nhân vectơ với một số**\n$k\\vec u$ cùng phương với $\\vec u$; cùng hướng nếu $k>0$, ngược hướng nếu $k<0$, và bằng $\\vec 0$ nếu $k=0$ hoặc $\\vec u=\\vec 0$. Độ dài:\n$$|k\\vec u|=|k|\\,|\\vec u|$$',
@@ -25,4 +27,66 @@ export const math10Qt7Theory: string[] = [
 export const g10MathModule5TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt5': math10Qt5Theory,
   'math10-qt7': math10Qt7Theory
+};
+
+export const g10MathModule5TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt5': [
+    {
+      id: 'math10-check-qt5-1',
+      question: 'Nếu $M$ là trung điểm của $BC$ thì',
+      options: [
+        '$\\vec{AM}=\\vec{AB}+\\vec{AC}$',
+        '$\\vec{AM}=\\dfrac12(\\vec{AB}+\\vec{AC})$',
+        '$\\vec{AM}=\\dfrac12(\\vec{AB}-\\vec{AC})$',
+        '$\\vec{AM}=\\vec{BC}$'
+      ],
+      correctAnswer: 'B',
+      explanation: 'Vectơ từ A tới trung điểm của BC bằng trung bình cộng hai vectơ $\\vec{AB},\\vec{AC}$.'
+    },
+    {
+      id: 'math10-check-qt5-2',
+      question: 'Điều kiện an toàn để kiểm tra hai vectơ tọa độ $\\vec u=(x_1;y_1)$, $\\vec v=(x_2;y_2)$ cùng phương là',
+      options: ['$x_1/x_2=y_1/y_2$', '$x_1x_2+y_1y_2=0$', '$x_1y_2-y_1x_2=0$', '$x_1+y_1=x_2+y_2$'],
+      correctAnswer: 'C',
+      explanation: 'Định thức bằng 0 không phát sinh phép chia cho thành phần có thể bằng 0.'
+    },
+    {
+      id: 'math10-check-qt5-3',
+      question: 'Công thức đúng là',
+      options: ['$\\vec{MN}=\\vec{AM}-\\vec{AN}$', '$\\vec{MN}=\\vec{AN}-\\vec{AM}$', '$\\vec{MN}=\\vec{MA}+\\vec{NA}$', '$\\vec{MN}=\\vec{AM}+\\vec{AN}$'],
+      correctAnswer: 'B',
+      explanation: 'Vectơ nối hai điểm bằng vectơ vị trí điểm cuối trừ vectơ vị trí điểm đầu.'
+    }
+  ],
+  'math10-qt7': [
+    {
+      id: 'math10-check-qt7-1',
+      question: 'Nếu góc giữa hai vectơ khác vectơ không là góc tù thì tích vô hướng của chúng',
+      options: ['Dương', 'Âm', 'Bằng 0', 'Không xác định'],
+      correctAnswer: 'B',
+      explanation: 'Cosin của góc tù âm nên tích $|\\vec u||\\vec v|\\cos\\alpha$ âm.'
+    },
+    {
+      id: 'math10-check-qt7-2',
+      question: 'Với $\\vec u=(2;-1)$ và $\\vec v=(3;6)$, ta có',
+      options: ['$\\vec u\\cdot\\vec v=12$', '$\\vec u\\cdot\\vec v=0$', '$\\vec u\\cdot\\vec v=-12$', '$\\vec u\\cdot\\vec v=5$'],
+      correctAnswer: 'B',
+      explanation: '$2\\cdot3+(-1)\\cdot6=0$, nên hai vectơ vuông góc.'
+    },
+    {
+      id: 'math10-check-qt7-3',
+      question: 'Công thức nào đúng?',
+      options: [
+        '$|\\vec u+\\vec v|^2=|\\vec u|^2+|\\vec v|^2$',
+        '$|\\vec u+\\vec v|^2=|\\vec u|^2+|\\vec v|^2+2\\vec u\\cdot\\vec v$',
+        '$|\\vec u+\\vec v|=|\\vec u|+|\\vec v|$ trong mọi trường hợp',
+        '$\\vec u\\cdot\\vec u=|\\vec u|$'
+      ],
+      correctAnswer: 'B',
+      explanation: 'Khai triển bình phương vô hướng cho thêm hạng $2\\vec u\\cdot\\vec v$.'
+    }
+  ]
 };

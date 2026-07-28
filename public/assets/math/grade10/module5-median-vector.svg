@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">Vectơ trung tuyến trong tam giác</title>
+  <desc id="desc">Tam giác ABC có M là trung điểm BC; các mũi tên biểu diễn vectơ AB, AC và AM.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="context-stroke"/></marker></defs>
+  <rect width="760" height="420" rx="24" fill="#f8fafc"/>
+  <text x="380" y="38" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#0f172a">M là trung điểm của BC</text>
+  <g font-family="Arial,sans-serif">
+    <path d="M375 80L120 340L640 340Z" fill="#eff6ff" stroke="#94a3b8" stroke-width="3"/>
+    <path d="M375 80L120 340" stroke="#2563eb" stroke-width="6" marker-end="url(#arrow)"/>
+    <path d="M375 80L640 340" stroke="#16a34a" stroke-width="6" marker-end="url(#arrow)"/>
+    <path d="M375 80L380 340" stroke="#f97316" stroke-width="6" marker-end="url(#arrow)"/>
+    <path d="M350 328v24M410 328v24" stroke="#7c3aed" stroke-width="4"/>
+    <g fill="#0f172a" font-size="20" font-weight="700">
+      <text x="365" y="67">A</text><text x="91" y="365">B</text><text x="650" y="365">C</text><text x="370" y="370">M</text>
+      <text x="205" y="190" fill="#1d4ed8">AB</text><text x="525" y="190" fill="#15803d">AC</text><text x="398" y="215" fill="#c2410c">AM</text>
+      <text x="380" y="400" text-anchor="middle" font-size="17" fill="#6d28d9">BM = MC</text>
+    </g>
+  </g>
+</svg>

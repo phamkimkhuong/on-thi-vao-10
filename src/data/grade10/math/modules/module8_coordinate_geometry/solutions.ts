@@ -1,4 +1,5 @@
 import type { Solution } from '@/types';
+import { g10MathModule8SolutionExpansion } from './practiceExpansion';
 
 export const g10MathModule8Solutions: Solution[] = [
   {
@@ -2822,3 +2823,5 @@ export const g10MathModule8Solutions: Solution[] = [
     ]
   }
 ];
+
+g10MathModule8Solutions.push(...g10MathModule8SolutionExpansion);

@@ -87,11 +87,11 @@ export const g10MathModule7PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề có từ hai mẫu trở lên.",
           "Mẫu có chỉ số phân tán nhỏ hơn thường ổn định hơn."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 42,
       "minimumQuestionsPerSubType": 12,
       "requiredPracticeRoles": [
         "guided",

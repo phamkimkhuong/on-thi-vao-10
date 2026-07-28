@@ -143,7 +143,17 @@ export const g10MathModule5Questions: Question[] = [
       sourceType: 'manual',
       correctAnswer: 'AM = 1/2AB + 1/2AC',
       acceptedAnswers: ['AM = 1/2AB + 1/2AC', 'AM=1/2AB+1/2AC', '1/2(AB+AC)'],
-      validatorType: 'exact'
+      validatorType: 'exact',
+      media: [{
+        id: 'math10-q71-media-median-vector',
+        type: 'diagram',
+        src: '/assets/math/grade10/module5-median-vector.svg',
+        alt: 'Tam giác ABC có M là trung điểm BC, với ba vectơ xuất phát từ A đến B, C và M.',
+        caption: 'Vectơ trung tuyến AM trong tam giác ABC',
+        longDescription: 'M chia BC thành hai đoạn bằng nhau. Vectơ AM hướng từ A đến trung điểm của hai điểm cuối B và C.',
+        width: 760,
+        height: 420
+      }]
     },
   {
       id: 'math10-q72',
@@ -339,14 +349,14 @@ export const g10MathModule5Questions: Question[] = [
     "difficulty": "medium",
     "sourceType": "manual",
     "options": [
-      "A. $\\vec{AM}=\\vec{AB}+\\frac12\\vec{AD}$",
+      "A. $\\vec{AM}=\\frac12(\\vec{AB}+\\vec{AD})$",
       "B. $\\vec{AM}=\\frac12\\vec{AB}+\\vec{AD}$",
       "C. $\\vec{AM}=\\vec{AB}+2\\vec{AD}$",
-      "D. $\\vec{AM}=\\frac12(\\vec{AB}+\\vec{AD})$"
+      "D. $\\vec{AM}=\\vec{AB}+\\frac12\\vec{AD}$"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -361,13 +371,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $\\frac16(\\vec{AB}+\\vec{AC})$",
-      "B. $-\\frac16(\\vec{AB}+\\vec{AC})$",
-      "C. $\\frac13(\\vec{AB}+\\vec{AC})$",
+      "B. $\\frac13(\\vec{AB}+\\vec{AC})$",
+      "C. $-\\frac16(\\vec{AB}+\\vec{AC})$",
       "D. $-\\frac13(\\vec{AB}+\\vec{AC})$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "C",
     "acceptedAnswers": [
-      "B"
+      "C"
     ],
     "validatorType": "choice"
   },
@@ -382,13 +392,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $\\frac23\\vec{AB}+\\frac14\\vec{AC}$",
-      "B. $-\\frac23\\vec{AB}+\\frac14\\vec{AC}$",
+      "B. $-\\frac14\\vec{AB}+\\frac23\\vec{AC}$",
       "C. $\\frac23\\vec{AB}-\\frac14\\vec{AC}$",
-      "D. $-\\frac14\\vec{AB}+\\frac23\\vec{AC}$"
+      "D. $-\\frac23\\vec{AB}+\\frac14\\vec{AC}$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -403,13 +413,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $\\frac23\\vec{AB}+\\frac14\\vec{AD}$",
-      "B. $-\\frac23\\vec{AB}+\\frac14\\vec{AD}$",
+      "B. $\\frac13\\vec{AB}-\\frac14\\vec{AD}$",
       "C. $-\\frac13\\vec{AB}+\\frac34\\vec{AD}$",
-      "D. $\\frac13\\vec{AB}-\\frac14\\vec{AD}$"
+      "D. $-\\frac23\\vec{AB}+\\frac14\\vec{AD}$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -424,13 +434,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $3\\vec{AB}+4\\vec{AC}$",
-      "B. $-3\\vec{AB}+4\\vec{AC}$",
+      "B. $3\\vec{AB}-4\\vec{AC}$",
       "C. $-4\\vec{AB}+3\\vec{AC}$",
-      "D. $3\\vec{AB}-4\\vec{AC}$"
+      "D. $-3\\vec{AB}+4\\vec{AC}$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -444,14 +454,14 @@ export const g10MathModule5Questions: Question[] = [
     "difficulty": "easy",
     "sourceType": "manual",
     "options": [
-      "A. Cùng phương, cùng hướng",
+      "A. Không cùng phương",
       "B. Cùng phương, ngược hướng",
       "C. Vuông góc",
-      "D. Không cùng phương"
+      "D. Cùng phương, cùng hướng"
     ],
-    "correctAnswer": "A",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "A"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -529,13 +539,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $m=4$",
-      "B. $m=5$",
+      "B. $m=7$",
       "C. $m=6$",
-      "D. $m=7$"
+      "D. $m=5$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -550,13 +560,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $m=-1$",
-      "B. $m=0$",
+      "B. $m=2$",
       "C. $m=1$",
-      "D. $m=2$"
+      "D. $m=0$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -634,13 +644,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $\\frac13\\vec{AB}+\\frac12\\vec{AC}$",
-      "B. $-\\frac13\\vec{AB}+\\frac12\\vec{AC}$",
+      "B. $\\frac12\\vec{AB}-\\frac13\\vec{AC}$",
       "C. $-\\frac12\\vec{AB}+\\frac13\\vec{AC}$",
-      "D. $\\frac12\\vec{AB}-\\frac13\\vec{AC}$"
+      "D. $-\\frac13\\vec{AB}+\\frac12\\vec{AC}$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -697,13 +707,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $\\frac25$",
-      "B. $\\frac35$",
+      "B. $\\frac45$",
       "C. $\\frac23$",
-      "D. $\\frac45$"
+      "D. $\\frac35$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },
@@ -739,13 +749,13 @@ export const g10MathModule5Questions: Question[] = [
     "sourceType": "manual",
     "options": [
       "A. $\\frac12$",
-      "B. $\\frac58$",
+      "B. $\\frac34$",
       "C. $\\frac23$",
-      "D. $\\frac34$"
+      "D. $\\frac58$"
     ],
-    "correctAnswer": "B",
+    "correctAnswer": "D",
     "acceptedAnswers": [
-      "B"
+      "D"
     ],
     "validatorType": "choice"
   },

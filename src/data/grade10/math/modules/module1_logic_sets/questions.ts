@@ -247,7 +247,17 @@ export const g10MathModule1Questions: Question[] = [
       sourceType: 'manual',
       correctAnswer: 'm < -2 hoặc m > 3',
       acceptedAnswers: ['m < -2 hoặc m > 3', 'm < -2 hoac m > 3', 'm < -2 hoặc m > 3', 'm < -2 hoac m > 3'],
-      validatorType: 'exact'
+      validatorType: 'exact',
+      media: [{
+        id: 'math10-q22-media-intervals',
+        type: 'diagram',
+        src: '/assets/math/grade10/module1-disjoint-intervals.svg',
+        alt: 'Hai trường hợp để khoảng A không giao khoảng B từ âm một đến năm: A nằm hoàn toàn bên trái hoặc hoàn toàn bên phải B.',
+        caption: 'Sơ đồ định hướng điều kiện hai khoảng không giao nhau',
+        longDescription: 'Hàng trên minh họa đầu phải của A phải nhỏ hơn đầu trái âm một của B. Hàng dưới minh họa đầu trái của A phải lớn hơn đầu phải năm của B.',
+        width: 760,
+        height: 360
+      }]
     },
   {
       id: 'math10-q23',

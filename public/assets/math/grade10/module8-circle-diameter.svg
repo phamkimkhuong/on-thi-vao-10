@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" role="img" aria-labelledby="title desc">
+  <title id="title">Đường tròn có đường kính AB</title>
+  <desc id="desc">Trong hệ trục tọa độ, A âm hai một và B bốn năm là hai đầu đường kính; tâm I là trung điểm một ba.</desc>
+  <rect width="760" height="440" rx="24" fill="#f8fafc"/>
+  <text x="380" y="36" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#0f172a">Đường tròn đường kính AB</text>
+  <g transform="translate(265 350)" font-family="Arial,sans-serif">
+    <g stroke="#e2e8f0"><path d="M-180-70H360M-180-140H360M-180-210H360M-180-280H360"/><path d="M-90 40V-320M0 40V-320M90 40V-320M180 40V-320M270 40V-320"/></g>
+    <path d="M-200 0H390M0 55V-335" stroke="#475569" stroke-width="3"/>
+    <path d="M390 0l-13-7v14zM0-335l-7 13h14z" fill="#475569"/>
+    <circle cx="45" cy="-210" r="162.25" fill="#dbeafe" fill-opacity=".4" stroke="#2563eb" stroke-width="5"/>
+    <line x1="-90" y1="-70" x2="180" y2="-350" stroke="#f97316" stroke-width="5"/>
+    <circle cx="-90" cy="-70" r="7" fill="#0f172a"/><circle cx="180" cy="-350" r="7" fill="#0f172a"/><circle cx="45" cy="-210" r="7" fill="#dc2626"/>
+    <g fill="#0f172a" font-size="17" font-weight="700">
+      <text x="-165" y="-78">A(−2;1)</text><text x="190" y="-350">B(4;5)</text><text x="58" y="-215" fill="#b91c1c">I(1;3)</text>
+      <text x="395" y="20">x</text><text x="-22" y="-338">y</text>
+      <text x="210" y="-135" fill="#1d4ed8">I là trung điểm AB</text>
+    </g>
+  </g>
+</svg>

@@ -32,7 +32,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Hai nhóm có phần tử chung nên có nguy cơ đếm trùng.",
           "Đề hỏi “ít nhất một”, “không thuộc nhóm nào” hoặc “đúng một nhóm”."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
@@ -47,7 +47,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
         "mastery_holdout"
       ],
       "masteryHoldoutCount": 2,
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 42,
       "requiredRepresentations": [
         "text",
         "equation",
@@ -66,7 +66,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Dùng toàn bộ n phần tử khác nhau.",
           "Thứ tự xếp tạo kết quả mới."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt9-st2",
@@ -76,7 +76,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Chỉ dùng k<n phần tử.",
           "Các chức vụ hoặc vị trí có vai trò khác nhau."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt9-st3",
@@ -86,7 +86,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề hỏi chọn tổ, đội, nhóm hoặc tập con.",
           "Đổi thứ tự liệt kê không tạo phương án mới."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
@@ -101,7 +101,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
         "mastery_holdout"
       ],
       "masteryHoldoutCount": 2,
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 54,
       "requiredRepresentations": [
         "text",
         "equation",
@@ -120,7 +120,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề yêu cầu khai triển hoặc rút gọn toàn bộ.",
           "Phải tính mọi số hạng từ k=0 đến n."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt10-st2",
@@ -130,7 +130,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Đề chỉ hỏi hệ số của x^m.",
           "Không cần khai triển toàn bộ biểu thức."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       },
       {
         "id": "math10-qt10-st3",
@@ -140,7 +140,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
           "Biểu thức thường chứa cả x và 1/x.",
           "Cần kiểm tra chỉ số k tìm được là số nguyên trong [0,n]."
         ],
-        "targetQuestionCount": 12
+        "targetQuestionCount": 18
       }
     ],
     "coverage": {
@@ -155,7 +155,7 @@ export const g10MathModule6PracticeBlueprints: QuestionTypePracticeBlueprint[] =
         "mastery_holdout"
       ],
       "masteryHoldoutCount": 2,
-      "targetQuestionCount": 36,
+      "targetQuestionCount": 54,
       "requiredRepresentations": [
         "text",
         "equation",

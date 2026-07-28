@@ -1,3 +1,5 @@
+import type { QuestionTypeTheoryCheckpoint } from '@/types';
+
 export const math10Qt8Theory: string[] = [
   '**1. Nguyên tắc đếm đúng đối tượng**\nTrước khi tính, phải mô tả rõ “một kết quả” gồm những gì. Hai cách chỉ khác cách thực hiện nhưng tạo cùng kết quả cuối thì không được đếm hai lần, trừ khi đề coi thứ tự/quy trình là khác nhau.',
   '**2. Quy tắc cộng**\nNếu công việc được hoàn thành theo **một trong** các trường hợp đôi một không giao nhau, có lần lượt $n_1,n_2,\\ldots,n_k$ cách thì tổng số cách là:\n$$n_1+n_2+\\cdots+n_k$$\nDấu hiệu: chọn đúng một phương án thuộc một trong nhiều nhóm rời nhau.',
@@ -39,4 +41,79 @@ export const g10MathModule6TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt8': math10Qt8Theory,
   'math10-qt9': math10Qt9Theory,
   'math10-qt10': math10Qt10Theory
+};
+
+export const g10MathModule6TheoryCheckpointsByQuestionTypeId: Record<
+  string,
+  QuestionTypeTheoryCheckpoint[]
+> = {
+  'math10-qt8': [
+    {
+      id: 'math10-check-qt8-1',
+      question: 'Một công việc gồm 3 cách thực hiện loại A hoặc 5 cách loại B, hai loại không giao nhau. Có bao nhiêu cách?',
+      options: ['8', '15', '5', '2'],
+      correctAnswer: 'A',
+      explanation: 'Các trường hợp loại trừ nhau và chỉ chọn một trường hợp nên dùng quy tắc cộng: $3+5=8$.'
+    },
+    {
+      id: 'math10-check-qt8-2',
+      question: 'Có 4 áo và 3 quần. Chọn một áo và một quần có',
+      options: ['7 cách', '12 cách', '4 cách', '3 cách'],
+      correctAnswer: 'B',
+      explanation: 'Hai công đoạn liên tiếp nên dùng quy tắc nhân: $4\\cdot3=12$.'
+    },
+    {
+      id: 'math10-check-qt8-3',
+      question: 'Nếu $|A|=20$, $|B|=15$, $|A\\cap B|=6$ thì $|A\\cup B|$ bằng',
+      options: ['35', '29', '41', '9'],
+      correctAnswer: 'B',
+      explanation: '$|A\\cup B|=20+15-6=29$.'
+    }
+  ],
+  'math10-qt9': [
+    {
+      id: 'math10-check-qt9-1',
+      question: 'Chọn 3 học sinh từ 8 học sinh để lập một nhóm không phân chức vụ dùng',
+      options: ['$P_8$', '$A_8^3$', '$C_8^3$', '$3^8$'],
+      correctAnswer: 'C',
+      explanation: 'Đổi thứ tự ba người không tạo nhóm mới nên dùng tổ hợp.'
+    },
+    {
+      id: 'math10-check-qt9-2',
+      question: 'Chọn lớp trưởng và lớp phó từ 10 bạn dùng',
+      options: ['$C_{10}^2$', '$A_{10}^2$', '$P_{10}$', '$10^2$'],
+      correctAnswer: 'B',
+      explanation: 'Hai chức vụ khác nhau nên có xét thứ tự, dùng chỉnh hợp.'
+    },
+    {
+      id: 'math10-check-qt9-3',
+      question: 'Xếp hai bạn A, B cạnh nhau trong hàng gồm 6 bạn khác nhau có',
+      options: ['$2\\cdot5!$', '$2\\cdot6!$', '$5!$', '$6!-2$'],
+      correctAnswer: 'A',
+      explanation: 'Gộp A, B thành một khối: xếp 5 đơn vị rồi đổi chỗ trong khối theo 2 cách.'
+    }
+  ],
+  'math10-qt10': [
+    {
+      id: 'math10-check-qt10-1',
+      question: 'Khai triển $(u+v)^n$ có bao nhiêu số hạng trước khi gộp đồng dạng?',
+      options: ['$n$', '$n+1$', '$2n$', '$2^n$'],
+      correctAnswer: 'B',
+      explanation: 'Chỉ số $k$ chạy từ 0 đến n nên có $n+1$ số hạng.'
+    },
+    {
+      id: 'math10-check-qt10-2',
+      question: 'Số hạng thứ $r$ trong khai triển ứng với chỉ số',
+      options: ['$k=r$', '$k=r+1$', '$k=r-1$', '$k=n-r$'],
+      correctAnswer: 'C',
+      explanation: '$T_{k+1}$ là số hạng ứng với k, nên số hạng thứ r có $k=r-1$.'
+    },
+    {
+      id: 'math10-check-qt10-3',
+      question: 'Muốn tìm số hạng không chứa x, ta phải',
+      options: ['Đặt hệ số bằng 0', 'Đặt số mũ của x bằng 0', 'Cho x bằng 0 ngay', 'Chọn k=n'],
+      correctAnswer: 'B',
+      explanation: 'Số hạng độc lập có lũy thừa $x^0$; sau đó phải kiểm tra k nguyên và thuộc $[0;n]$.'
+    }
+  ]
 };

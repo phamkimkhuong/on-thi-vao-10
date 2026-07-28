@@ -27,7 +27,17 @@ export const g10MathModule2Questions: Question[] = [
         '(0;0), (3;0), (2;2), (0;4)',
         'O(0; 0), A(3; 0), B(2; 2), C(0; 4)'
       ],
-      validatorType: 'coordinates'
+      validatorType: 'coordinates',
+      media: [{
+        id: 'math10-q24-media-feasible-region',
+        type: 'chart',
+        src: '/assets/math/grade10/module2-feasible-region.svg',
+        alt: 'Miền nghiệm tô xanh là tứ giác có các đỉnh O không không, A ba không, B hai hai và C không bốn.',
+        caption: 'Miền giao của bốn nửa mặt phẳng trong hệ bất phương trình',
+        longDescription: 'Miền nghiệm nằm trong góc phần tư thứ nhất, phía dưới hai đường x cộng y bằng bốn và hai x cộng y bằng sáu.',
+        width: 760,
+        height: 440
+      }]
     },
   {
       id: 'math10-q25',
