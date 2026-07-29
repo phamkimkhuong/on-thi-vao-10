@@ -1,7 +1,7 @@
 import type { AssessmentBlueprint } from '@/types';
 
 export const mathMidterm2Blueprint: AssessmentBlueprint = {
-  id: 'math10-blueprint-midterm2-v1',
+  id: 'math10-blueprint-midterm2-auto-v2',
   subjectId: 'math',
   title: 'Ma trận Giữa học kỳ II – Toán 10',
   kind: 'midterm',
@@ -14,9 +14,9 @@ export const mathMidterm2Blueprint: AssessmentBlueprint = {
   competencyWeights: { mathematical_reasoning: 0.4, mathematical_modeling: 0.2, mathematical_problem_solving: 0.4 },
   difficultyWeights: { easy: 0.3, medium: 0.5, hard: 0.2 },
   sections: [
-    { id: 'mcq', title: 'Phần I. Trắc nghiệm nhiều lựa chọn', itemCount: 4, points: 2, responseType: 'multiple_choice' },
-    { id: 'tf', title: 'Phần II. Trắc nghiệm Đúng/Sai', itemCount: 2, points: 4, responseType: 'true_false_cluster' },
-    { id: 'short', title: 'Phần III. Trả lời ngắn', itemCount: 4, points: 4, responseType: 'short_answer' }
+    { id: 'mcq', title: 'Phần I. Trắc nghiệm nhiều lựa chọn', itemCount: 12, points: 3, responseType: 'multiple_choice' },
+    { id: 'tf', title: 'Phần II. Trắc nghiệm Đúng/Sai', itemCount: 4, points: 4, responseType: 'true_false_cluster' },
+    { id: 'short', title: 'Phần III. Trả lời ngắn', itemCount: 6, points: 3, responseType: 'short_answer' }
   ]
 };
 

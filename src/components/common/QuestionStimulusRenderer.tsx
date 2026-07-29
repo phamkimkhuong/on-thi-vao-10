@@ -1,5 +1,5 @@
 import React from 'react';
-import { Maximize2, X } from 'lucide-react';
+import { Maximize2, Pause, Play, RotateCcw, X } from 'lucide-react';
 import type { Question, QuestionMedia } from '../../types';
 import { cn } from '../../utils/cn';
 import { LatexRenderer } from './LatexRenderer';
@@ -52,6 +52,8 @@ const MediaFigure: React.FC<{
 
 export const QuestionStimulusRenderer: React.FC<QuestionStimulusRendererProps> = ({ question, className }) => {
   const [activeMedia, setActiveMedia] = React.useState<QuestionMedia | null>(null);
+  const [isAudioPlaying, setIsAudioPlaying] = React.useState(false);
+  const [audioPlayCount, setAudioPlayCount] = React.useState(0);
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);
   const stimulus = question.stimulus;
   const mediaItems = [...(stimulus?.media ?? []), ...(question.media ?? [])];
@@ -74,6 +76,32 @@ export const QuestionStimulusRenderer: React.FC<QuestionStimulusRendererProps> =
     };
   }, [activeMedia]);
 
+  React.useEffect(() => () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, [question.id]);
+
+  const playAudio = () => {
+    if (!stimulus?.audioText || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(stimulus.audioText);
+    utterance.lang = stimulus.audioLanguage ?? 'en-US';
+    utterance.rate = stimulus.audioPlaybackRate ?? 0.92;
+    utterance.onend = () => setIsAudioPlaying(false);
+    utterance.onerror = () => setIsAudioPlaying(false);
+    setIsAudioPlaying(true);
+    setAudioPlayCount(count => count + 1);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const stopAudio = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsAudioPlaying(false);
+  };
+
   if (!stimulus && mediaItems.length === 0) return null;
 
   return (
@@ -90,6 +118,28 @@ export const QuestionStimulusRenderer: React.FC<QuestionStimulusRendererProps> =
                 <LatexRenderer text={stimulus.content} />
               </div>
             )}
+          </div>
+        )}
+
+        {stimulus?.audioText && (
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-3">
+            <button
+              type="button"
+              onClick={isAudioPlaying ? stopAudio : playAudio}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-black text-white shadow-sm transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
+            >
+              {isAudioPlaying ? <Pause size={17} aria-hidden="true" /> : <Play size={17} aria-hidden="true" />}
+              {isAudioPlaying ? 'Tạm dừng' : audioPlayCount > 0 ? 'Nghe lại' : 'Phát bài nghe'}
+            </button>
+            {audioPlayCount > 0 && !isAudioPlaying && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+                <RotateCcw size={14} aria-hidden="true" />
+                Đã phát {audioPlayCount} lần
+              </span>
+            )}
+            <span className="text-[11px] font-semibold text-muted-foreground">
+              Nghe trọn đoạn trước khi chọn đáp án. Transcript chỉ xuất hiện trong lời giải.
+            </span>
           </div>
         )}
 

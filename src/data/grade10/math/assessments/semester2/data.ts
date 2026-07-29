@@ -155,13 +155,42 @@ const toQuestion = (seed: Seed): Question => {
 
 const toSolution = (seed: Seed): Solution => {
   const finalAnswer = seed.kind === 'true_false' ? answerText(seed.correct) : seed.correctAnswer;
+  const methodByQuestionType: Record<string, string> = {
+    'math10-qt8': 'Xác định bài toán dùng quy tắc cộng hay quy tắc nhân, đồng thời kiểm tra các ràng buộc của từng vị trí.',
+    'math10-qt9': 'Xác định thứ tự có ý nghĩa hay không để chọn đúng hoán vị, chỉnh hợp hoặc tổ hợp.',
+    'math10-qt10': 'Viết số hạng tổng quát của nhị thức Newton và ghép đúng số mũ cần tìm.',
+    'math10-qt11': 'Sắp xếp hoặc tổng hợp mẫu số liệu rồi dùng đúng công thức của đại lượng trung tâm.',
+    'math10-qt12': 'Tính lần lượt đại lượng trung tâm, độ lệch và chỉ số phân tán; không đồng nhất phương sai với độ lệch chuẩn.',
+    'math10-qt13': 'Mô tả không gian mẫu và biến cố bằng các kết quả đồng khả năng trước khi lập tỉ số xác suất.',
+    'math10-qt14': 'Đọc vectơ pháp tuyến, vectơ chỉ phương hoặc áp dụng công thức khoảng cách theo đúng dữ kiện.',
+    'math10-qt15': 'Đưa phương trình đường tròn về dạng chuẩn để nhận tâm, bán kính và quan hệ hình học.',
+    'math10-qt16': 'Đối chiếu phương trình với dạng chuẩn của đường conic rồi xác định đúng các tham số.'
+  };
   return {
     id: seed.id.replace('-q', '-s'),
     questionId: seed.id,
-    recognition: `Dấu hiệu nhận biết: ${seed.content}`,
+    recognition: methodByQuestionType[seed.questionTypeId] ?? 'Nhận dạng dữ kiện, đại lượng cần tìm và công thức phù hợp trước khi tính.',
     detailedSteps: [
-      { order: 1, title: 'Chọn mô hình', explanation: seed.explanation },
-      { order: 2, title: 'Kết luận', explanation: `Đối chiếu điều kiện và dữ kiện để nhận được đáp án ${finalAnswer}.`, result: finalAnswer }
+      {
+        order: 1,
+        title: 'Nhận dạng và chọn công cụ',
+        explanation: methodByQuestionType[seed.questionTypeId] ?? 'Xác định dữ kiện đã cho, điều kiện đi kèm và đại lượng đề yêu cầu.'
+      },
+      {
+        order: 2,
+        title: 'Thực hiện phép tính',
+        explanation: seed.explanation
+      },
+      {
+        order: 3,
+        title: 'Kiểm tra và kết luận',
+        explanation: seed.kind === 'mcq'
+          ? `Đối chiếu kết quả với bốn phương án và chọn ${seed.correctAnswer}.`
+          : seed.kind === 'true_false'
+            ? `Kết luận lần lượt bốn phát biểu: ${finalAnswer}.`
+            : `Kết quả đã được rút gọn về định dạng có thể nhập trực tiếp: ${seed.correctAnswer}.`,
+        result: finalAnswer
+      }
     ],
     finalAnswer,
     commonMistakes: [seed.mistake],

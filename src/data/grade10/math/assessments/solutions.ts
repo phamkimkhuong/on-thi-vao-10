@@ -1653,7 +1653,7 @@ export const g10MathAssessmentSolutions: Solution[] = [
     ],
     finalAnswer: 'x^2-4x+3',
     commonMistakes: ['Thay sai công thức tọa độ đỉnh parabol.'],
-    reviewSuggestions: ['Kiểm tra lại bằng cách thay tọa độ đỉnh I(2; -1) và điểm M(1; 6) trực tiếp vào hàm số xem có thỏa mãn không.']
+    reviewSuggestions: ['Kiểm tra lại bằng cách thay tọa độ đỉnh I(2; -1) và điểm M(1; 0) trực tiếp vào hàm số xem có thỏa mãn không.']
   },
   {
     id: 'mock-math10-s71',

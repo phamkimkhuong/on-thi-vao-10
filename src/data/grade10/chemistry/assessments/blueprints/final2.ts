@@ -6,11 +6,11 @@ import type { AssessmentBlueprint } from '@/types';
  * M1=0,75; M2=0,75; M3=0,75; M4=1,75; M5=1,75; M6=1,50; M7=2,75 điểm.
  */
 export const final2Blueprint: AssessmentBlueprint = {
-  id: 'chem10-blueprint-final2-v1',
+  id: 'chem10-blueprint-final2-auto-v2',
   subjectId: 'chemistry',
   title: 'Ma trận Cuối học kỳ II – Hóa học 10',
   kind: 'final',
-  duration: 60,
+  duration: 45,
   totalPoints: 10,
   scopeTopicIds: ['chem10-t1', 'chem10-t2', 'chem10-t3', 'chem10-t4', 'chem10-t5', 'chem10-t6', 'chem10-t7'],
   topicWeights: {
@@ -42,7 +42,8 @@ export const final2Blueprint: AssessmentBlueprint = {
   },
   difficultyWeights: { easy: 0.25, medium: 0.55, hard: 0.2 },
   sections: [
-    { id: 'mcq', title: 'Trắc nghiệm nhiều lựa chọn', itemCount: 20, points: 5, responseType: 'multiple_choice' },
-    { id: 'short', title: 'Trả lời ngắn', itemCount: 5, points: 5, responseType: 'short_answer' }
+    { id: 'mcq', title: 'Trắc nghiệm nhiều lựa chọn', itemCount: 12, points: 3, responseType: 'multiple_choice' },
+    { id: 'tf', title: 'Trắc nghiệm Đúng/Sai', itemCount: 4, points: 4, responseType: 'true_false_cluster' },
+    { id: 'short', title: 'Trả lời ngắn', itemCount: 6, points: 3, responseType: 'short_answer' }
   ]
 };

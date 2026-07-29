@@ -104,11 +104,12 @@ export const loadSubjectData = async (grade: GradeCode, subject: SubjectCode): P
           learningMisconceptions: learningPathMod.g10MathMisconceptions
         };
       } else if (subject === 'english') {
-        const [topicsMod, qtMod, qMod, sMod, assessmentsMod] = await Promise.all([
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
           import('./grade10/english/topics'),
           import('./grade10/english/questionTypes'),
           import('./grade10/english/questions'),
           import('./grade10/english/solutions'),
+          import('./grade10/english/learningPath'),
           import('./grade10/english/assessments')
         ]);
         data = {
@@ -117,7 +118,9 @@ export const loadSubjectData = async (grade: GradeCode, subject: SubjectCode): P
           questions: qMod.g10EnglishQuestions,
           solutions: sMod.g10EnglishSolutions,
           mockExams: assessmentsMod.g10EnglishAssessmentExams,
-          assessmentBlueprints: assessmentsMod.g10EnglishAssessmentBlueprints
+          assessmentBlueprints: assessmentsMod.g10EnglishAssessmentBlueprints,
+          learningOutcomes: learningPathMod.g10EnglishOutcomes,
+          learningMisconceptions: learningPathMod.g10EnglishMisconceptions
         };
       } else if (subject === 'chemistry') {
         const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([

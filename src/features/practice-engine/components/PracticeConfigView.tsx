@@ -72,14 +72,14 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
           <div className="space-y-1.5">
             <h3 className="text-xs font-extrabold uppercase text-muted-foreground tracking-wider">
               {usesTopicSelection
-                ? "1. Chọn các Unit muốn tổng ôn (Ít nhất 1 Unit):"
+                ? "1. Chọn các Unit/chuyên đề muốn luyện (Ít nhất 1 mục):"
                 : isGlobal
                   ? "1. Chọn các dạng bài muốn luyện tập (Ít nhất 1 dạng):"
                   : "1. Chọn các dạng thì muốn luyện tập (Ít nhất 2 dạng):"}
             </h3>
             <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
               {usesTopicSelection
-                ? "Hệ thống sẽ trộn câu hỏi ngữ pháp, từ vựng và phát âm thuộc các Unit đã chọn."
+                ? "Hệ thống sẽ trộn câu hỏi thuộc các Unit/chuyên đề đã chọn. Listening là chuyên đề luyện thêm độc lập, không thuộc đề định kỳ."
                 : isGlobal
                   ? "Hệ thống sẽ tổng hợp câu hỏi từ các dạng bài đã chọn để tạo đề ôn tập tổng hợp."
                   : "Hệ thống sẽ tổng hợp câu hỏi từ các dạng thì đã chọn để rèn luyện phản xạ hỗn hợp."}
@@ -128,7 +128,7 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
           {!hasEnoughTenses && (
             <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-semibold">
               {usesTopicSelection
-                ? "⚠️ Bạn cần chọn ít nhất 1 Unit để bắt đầu."
+                ? "⚠️ Bạn cần chọn ít nhất 1 Unit hoặc chuyên đề để bắt đầu."
                 : isGlobal
                   ? "⚠️ Bạn cần chọn ít nhất 1 dạng bài để bắt đầu."
                   : "⚠️ Bạn cần chọn ít nhất 2 thì ngữ pháp để có thể trộn đề luyện tập."}

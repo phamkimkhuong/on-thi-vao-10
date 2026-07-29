@@ -48,12 +48,23 @@ type ExamSectionView = {
 
 const questionMatchesBlueprintSection = (
   question: Question,
-  responseType: AssessmentBlueprint['sections'][number]['responseType']
+  section: AssessmentBlueprint['sections'][number]
 ) => {
-  if (responseType === 'multiple_choice') {
+  const competencyBySectionId: Record<string, Question['competency'][]> = {
+    language: ['english_language_knowledge'],
+    reading: ['english_reading'],
+    listening: ['english_listening'],
+    writing: ['english_writing'],
+    speaking: ['english_speaking', 'english_interaction']
+  };
+  const expectedCompetencies = competencyBySectionId[section.id];
+  if (expectedCompetencies && question.competency) {
+    return expectedCompetencies.includes(question.competency);
+  }
+  if (section.responseType === 'multiple_choice') {
     return question.responseType === 'single_choice' || (!question.responseType && Boolean(question.options?.length));
   }
-  return question.responseType === responseType;
+  return question.responseType === section.responseType;
 };
 
 /**
@@ -68,7 +79,7 @@ const buildExamSections = (questions: Question[], blueprint?: AssessmentBlueprin
   const sections: ExamSectionView[] = blueprint.sections.map(section => {
     const sectionEntries = entries.filter(entry => {
       if (assignedQuestionIds.has(entry.question.id)) return false;
-      if (!questionMatchesBlueprintSection(entry.question, section.responseType)) return false;
+      if (!questionMatchesBlueprintSection(entry.question, section)) return false;
       assignedQuestionIds.add(entry.question.id);
       return true;
     });
@@ -93,6 +104,24 @@ const buildExamSections = (questions: Question[], blueprint?: AssessmentBlueprin
   }
 
   return sections;
+};
+
+const buildQuestionPointMap = (sections: ExamSectionView[]): Map<string, number> => {
+  const pointsByQuestionId = new Map<string, number>();
+  for (const section of sections) {
+    if (section.entries.length === 0) continue;
+    if (section.points === undefined) {
+      for (const { question } of section.entries) {
+        pointsByQuestionId.set(question.id, question.points ?? 1);
+      }
+      continue;
+    }
+    const pointsPerItem = section.points / section.entries.length;
+    for (const { question } of section.entries) {
+      pointsByQuestionId.set(question.id, pointsPerItem);
+    }
+  }
+  return pointsByQuestionId;
 };
 
 export const ExamEngine: React.FC = () => {
@@ -337,7 +366,14 @@ export const ExamEngine: React.FC = () => {
   const currentBlueprint = currentExam?.blueprintId
     ? subjectAssessmentBlueprints.find(blueprint => blueprint.id === currentExam.blueprintId)
     : undefined;
-  const examSections = buildExamSections(examQuestions, currentBlueprint);
+  const examSections = React.useMemo(
+    () => buildExamSections(examQuestions, currentBlueprint),
+    [examQuestions, currentBlueprint]
+  );
+  const questionPointsById = React.useMemo(
+    () => buildQuestionPointMap(examSections),
+    [examSections]
+  );
   const durationMinutes = currentExam ? currentExam.duration : (selectedSubject === 'chemistry' ? 45 : selectedSubject === 'math' ? 120 : 60);
 
   useEffect(() => {
@@ -364,7 +400,10 @@ export const ExamEngine: React.FC = () => {
     let gradedMaxPoints = 0;
     let gradedCount = 0;
     const totalCount = examQuestions.length;
-    const maxPoints = examQuestions.reduce((sum, question) => sum + (question.points ?? 1), 0);
+    const maxPoints = Math.round(examQuestions.reduce(
+      (sum, question) => sum + (questionPointsById.get(question.id) ?? question.points ?? 1),
+      0
+    ) * 1000) / 1000;
     const attemptResults: ExamResult['attempts'] = {};
     const currentUserId = user!.uid;
     const completedAt = new Date().toISOString();
@@ -375,7 +414,7 @@ export const ExamEngine: React.FC = () => {
       const answerInput = q.answerSchema ? (finalAnswers[q.id] ?? {}) : answers[q.id] || '';
       const userAns = formatAnswerForDisplay(q, answerInput);
       const isManual = q.answerSchema?.autoCheckMode === 'manual' || q.validatorType === 'manual';
-      const questionPoints = q.points ?? 1;
+      const questionPoints = questionPointsById.get(q.id) ?? q.points ?? 1;
       const answerScore = isManual
         ? null
         : scoreAnswer(q, answerInput, questionPoints);
@@ -487,7 +526,7 @@ export const ExamEngine: React.FC = () => {
         origin: { y: 0.6 }
       });
     }
-  }, [examQuestions, answers, finalAnswers, proofImagesByQuestion, selectedSubject, timeSpent, user, isSubmittingExam, currentExam]);
+  }, [examQuestions, answers, finalAnswers, proofImagesByQuestion, selectedSubject, timeSpent, user, isSubmittingExam, currentExam, questionPointsById]);
 
   useEffect(() => {
     let timer: any;
@@ -622,7 +661,7 @@ export const ExamEngine: React.FC = () => {
       if (outcomeIds.length === 0) return;
 
       const attempt = examResult.attempts[question.id];
-      const questionMaximum = question.points ?? 1;
+      const questionMaximum = attempt?.maxPoints ?? question.points ?? 1;
       const questionEarned = attempt?.earnedPoints ?? (attempt?.isCorrect ? questionMaximum : 0);
       const maximumShare = questionMaximum / outcomeIds.length;
       const earnedShare = questionEarned / outcomeIds.length;

@@ -20,6 +20,16 @@ const readNodeValue = node => {
       const count = readNodeValue(node.arguments[1]);
       return Array.from({ length: count }, (_, index) => `${prefix}${String(index + 1).padStart(2, '0')}`);
     }
+    if (callee === 'midtermIds' && node.arguments.length === 1) {
+      const prefix = readNodeValue(node.arguments[0]);
+      const ids = count => Array.from({ length: count }, (_, index) => `${prefix}${String(index + 1).padStart(2, '0')}`);
+      return [
+        ...ids(4),
+        ...Array.from({ length: 8 }, (_, index) => `${prefix}${String(index + 11).padStart(2, '0')}`),
+        `${prefix}05`, `${prefix}06`, `${prefix}19`, `${prefix}20`,
+        `${prefix}07`, `${prefix}08`, `${prefix}09`, `${prefix}10`, `${prefix}21`, `${prefix}22`
+      ];
+    }
   }
   if (ts.isArrayLiteralExpression(node)) return node.elements.filter(item => !ts.isSpreadElement(item)).map(readNodeValue);
   if (ts.isObjectLiteralExpression(node)) {
@@ -127,8 +137,42 @@ const exams = readExportedArray(path.join(dataDirectory, 'assessments', 'exams.t
 const semester2DataFile = path.join(dataDirectory, 'assessments', 'semester2', 'data.ts');
 const semester2Seeds = ['mid2A', 'mid2B', 'final2A', 'final2B'].flatMap(name => readExportedArray(semester2DataFile, name));
 assessmentQuestions.push(...semester2Seeds);
-assessmentSolutions.push(...semester2Seeds.map(item => ({ questionId: item.id })));
+assessmentSolutions.push(...semester2Seeds.map(item => ({
+  questionId: item.id,
+  recognition: item.questionTypeId,
+  detailedSteps: [item.explanation, `Kết luận: ${item.correctAnswer ?? 'đánh giá từng phát biểu'}.`],
+  commonMistakes: [item.mistake]
+})));
+const midtermExpansionFile = path.join(dataDirectory, 'assessments', 'midtermExpansion.ts');
+const midtermExpansionSeeds = readExportedArray(midtermExpansionFile, 'g10MathMidtermExpansionSeeds');
+assessmentQuestions.push(...midtermExpansionSeeds);
+assessmentSolutions.push(...midtermExpansionSeeds.map(item => ({
+  questionId: item.id,
+  recognition: item.recognition,
+  detailedSteps: item.analyses ?? item.reasoning,
+  commonMistakes: [item.mistake]
+})));
 exams.push(...readExportedArray(path.join(dataDirectory, 'assessments', 'semester2', 'exams.ts'), 'g10MathSemester2AssessmentExams'));
+
+const responseTypeOf = question => {
+  if (question.responseType) return question.responseType;
+  if (Array.isArray(question.options)) return 'single_choice';
+  if (Array.isArray(question.statements)) return 'true_false_cluster';
+  return 'short_answer';
+};
+
+const semester1MidtermQuestionIds = new Set([
+  ...Array.from({ length: 10 }, (_, index) => `mock-math10-q${index + 1}`),
+  ...Array.from({ length: 10 }, (_, index) => `mock-math10-q${index + 21}`),
+  ...Array.from({ length: 24 }, (_, index) => `mock-math10-q${index + 75}`)
+]);
+
+for (const question of assessmentQuestions) {
+  question.responseType = responseTypeOf(question);
+  if (semester1MidtermQuestionIds.has(question.id) || question.id.startsWith('math10-assess-mid2-')) {
+    question.points = question.responseType === 'single_choice' ? 0.25 : question.responseType === 'true_false_cluster' ? 1 : 0.5;
+  }
+}
 
 const errors = [];
 const warnings = [];
@@ -298,24 +342,74 @@ for (const topic of topics) {
 const assessmentQuestionById = new Map(assessmentQuestions.map(item => [item.id, item]));
 const assessmentSolutionByQuestionId = new Map(assessmentSolutions.map(item => [item.questionId, item]));
 const referencedAssessmentIds = new Set();
+const assessmentBlueprintIds = new Set([
+  'math10-blueprint-midterm1-auto-v2',
+  'math10-blueprint-final1-auto-v2',
+  'math10-blueprint-midterm2-auto-v2',
+  'math10-blueprint-final2-v1'
+]);
+const officialPeriodicExams = [];
 for (const exam of exams) {
   if (!Array.isArray(exam.questionIds) || exam.questionIds.length === 0) errors.push(`${exam.id}: đề chưa có câu hỏi.`);
+  if (new Set(exam.questionIds ?? []).size !== (exam.questionIds ?? []).length) errors.push(`${exam.id}: có questionId bị lặp trong cùng đề.`);
   let calculatedPoints = 0;
+  const responseCounts = { single_choice: 0, true_false_cluster: 0, short_answer: 0, constructed_response: 0 };
+  const difficultyCounts = { easy: 0, medium: 0, hard: 0 };
   for (const questionId of exam.questionIds ?? []) {
     referencedAssessmentIds.add(questionId);
     const question = assessmentQuestionById.get(questionId);
     if (!question) errors.push(`${exam.id}: questionId ${questionId} không tồn tại.`);
     else {
       calculatedPoints += question.points ?? 1;
+      responseCounts[question.responseType] = (responseCounts[question.responseType] ?? 0) + 1;
+      difficultyCounts[question.difficulty] = (difficultyCounts[question.difficulty] ?? 0) + 1;
       if (Array.isArray(exam.scopeTopicIds) && !exam.scopeTopicIds.includes(question.topicId)) errors.push(`${exam.id}: ${questionId} nằm ngoài scopeTopicIds.`);
     }
   }
   if (typeof exam.totalPoints === 'number' && Math.abs(calculatedPoints - exam.totalPoints) > 1e-9) errors.push(`${exam.id}: tổng points câu hỏi là ${calculatedPoints}, khác totalPoints=${exam.totalPoints}.`);
+  if (['midterm', 'final'].includes(exam.kind)) {
+    officialPeriodicExams.push({ exam, responseCounts, difficultyCounts });
+    if (exam.duration !== 90) errors.push(`${exam.id}: đề định kỳ phải có thời lượng 90 phút.`);
+    if ((exam.questionIds ?? []).length !== 22) errors.push(`${exam.id}: đề định kỳ chấm tự động phải có đúng 22 câu hiển thị.`);
+    if (responseCounts.single_choice !== 12 || responseCounts.true_false_cluster !== 4 || responseCounts.short_answer !== 6) {
+      errors.push(`${exam.id}: cấu trúc phải là 12 nhiều lựa chọn – 4 Đúng/Sai – 6 trả lời ngắn, hiện là ${responseCounts.single_choice}–${responseCounts.true_false_cluster}–${responseCounts.short_answer}.`);
+    }
+    if (responseCounts.constructed_response > 0) errors.push(`${exam.id}: không được chứa câu tự luận cần chấm thủ công/AI.`);
+    if (!assessmentBlueprintIds.has(exam.blueprintId)) errors.push(`${exam.id}: thiếu blueprintId hợp lệ.`);
+    if (!exam.parallelFormGroup) errors.push(`${exam.id}: thiếu parallelFormGroup để đối sánh mã A/B.`);
+    if (difficultyCounts.easy < 4 || difficultyCounts.medium < 7 || difficultyCounts.hard < 2) {
+      errors.push(`${exam.id}: phân tầng chưa đủ, hiện có ${difficultyCounts.easy} dễ – ${difficultyCounts.medium} vừa – ${difficultyCounts.hard} khó.`);
+    }
+  }
 }
+
+for (const groupId of new Set(officialPeriodicExams.map(item => item.exam.parallelFormGroup))) {
+  const forms = officialPeriodicExams.filter(item => item.exam.parallelFormGroup === groupId);
+  if (forms.length !== 2) {
+    errors.push(`${groupId}: cần đúng hai mã đề song song A/B, hiện có ${forms.length}.`);
+    continue;
+  }
+  const [first, second] = forms;
+  for (const responseType of ['single_choice', 'true_false_cluster', 'short_answer']) {
+    if (first.responseCounts[responseType] !== second.responseCounts[responseType]) errors.push(`${groupId}: hai mã đề lệch số câu ${responseType}.`);
+  }
+  for (const difficulty of ['easy', 'medium', 'hard']) {
+    if (Math.abs(first.difficultyCounts[difficulty] - second.difficultyCounts[difficulty]) > 2) {
+      errors.push(`${groupId}: hai mã đề lệch quá 2 câu ở mức ${difficulty}.`);
+    }
+  }
+}
+
 for (const question of assessmentQuestions) {
   if (!assessmentSolutionByQuestionId.has(question.id)) errors.push(`${question.id}: câu kiểm tra thiếu lời giải.`);
   if (!referencedAssessmentIds.has(question.id)) warnings.push(`${question.id}: chưa được đề nào sử dụng.`);
   if (question.points === undefined) warnings.push(`${question.id}: chưa khai báo points, runtime sẽ dùng trọng số mặc định.`);
+}
+for (const seed of midtermExpansionSeeds) {
+  if (!seed.recognition?.trim()) errors.push(`${seed.id}: lời giải mở rộng thiếu dấu hiệu nhận biết.`);
+  const reasoning = seed.analyses ?? seed.reasoning;
+  if (!Array.isArray(reasoning) || reasoning.length < 2) errors.push(`${seed.id}: lời giải mở rộng cần ít nhất 2 bước phân tích.`);
+  if (!seed.mistake?.trim() || !seed.review?.trim()) errors.push(`${seed.id}: lời giải mở rộng thiếu lỗi thường gặp hoặc gợi ý ôn tập.`);
 }
 if (!exams.some(exam => /học kỳ II/.test(exam.title))) warnings.push('Assessment: chưa có đề giữa kỳ II và cuối kỳ II.');
 

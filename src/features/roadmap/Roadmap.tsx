@@ -99,7 +99,18 @@ export const Roadmap: React.FC = () => {
     });
   });
 
+  const isOptionalEnglishListeningTopic = (topicId?: string) => (
+    selectedGrade === 'grade10'
+    && selectedSubject === 'english'
+    && topicId === 'eng10-listening-extension'
+  );
+
+  const isOptionalEnglishListeningType = (typeId: string) => {
+    return isOptionalEnglishListeningTopic(questionTypes.find(type => type.id === typeId)?.topicId);
+  };
+
   const isUnlocked = (typeId: string) => {
+    if (isOptionalEnglishListeningType(typeId)) return true;
     const idx = sequentialTypes.findIndex(t => t.id === typeId);
     if (idx === -1) return false;
     if (idx === 0) return true; // Dạng bài đầu tiên luôn luôn mở khóa
@@ -146,7 +157,7 @@ export const Roadmap: React.FC = () => {
     const qType = questionTypes.find(t => t.id === id);
     const topic = topics.find(t => t.id === qType?.topicId);
 
-    if (topic?.tier === 3 && !isPremium) {
+    if (topic?.tier === 3 && !isPremium && !isOptionalEnglishListeningTopic(topic.id)) {
       setModalConfig({
         isOpen: true,
         title: "Mở khóa đặc quyền Premium 🌟",
@@ -236,7 +247,9 @@ export const Roadmap: React.FC = () => {
               ? 'Chinh phục chuyên đề sinh học phân tử và bài tập di truyền nâng cao.'
               : selectedSubject === 'physics'
                 ? 'Chinh phục các chuyên đề vật lý nâng cao và bài tập vận dụng cao.'
-                : 'Rèn luyện các cấu trúc ngữ pháp học thuật, bài đọc hiểu và viết luận nâng cao.'
+                : selectedGrade === 'grade10'
+                  ? 'Luyện nghe tự chọn theo 10 Unit; chuyên đề này độc lập và không thuộc cấu trúc đề giữa kỳ/cuối kỳ.'
+                  : 'Rèn luyện các cấu trúc ngữ pháp học thuật, bài đọc hiểu và viết luận nâng cao.'
       }
     ];
 
@@ -347,7 +360,7 @@ export const Roadmap: React.FC = () => {
                     <div className="absolute top-0 right-0 w-24 h-24 bg-current/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500" />
                     <div className="flex items-center justify-between gap-3 flex-wrap relative z-10">
                       <h3 className="text-base font-black tracking-tight uppercase tracking-wider font-sans">{tier.title}</h3>
-                      {tier.id === 3 && !isPremium && (
+                      {tier.id === 3 && !isPremium && visibleTopics.some(topic => !isOptionalEnglishListeningTopic(topic.id)) && (
                         <span className="px-2.5 py-0.75 text-[8px] bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 text-white rounded-md font-black tracking-widest uppercase shadow-sm animate-pulse-glow">👑 Khóa Premium</span>
                       )}
                     </div>
@@ -407,7 +420,9 @@ export const Roadmap: React.FC = () => {
                                   </div>
                                   <div className="flex items-center gap-3 flex-wrap">
                                     <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-                                      {filteredTypes.length} dạng bài thi cốt lõi
+                                      {topic.id === 'eng10-listening-extension'
+                                        ? `${filteredTypes.length} bài luyện nghe tự chọn`
+                                        : `${filteredTypes.length} dạng bài thi cốt lõi`}
                                     </span>
                                     {topicOutcomes.length > 0 && (
                                       <button

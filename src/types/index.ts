@@ -94,7 +94,12 @@ export type LearningEvidenceType =
   | 'calculation'
   | 'data'
   | 'experiment'
-  | 'application';
+  | 'application'
+  | 'reading'
+  | 'listening'
+  | 'writing'
+  | 'speaking'
+  | 'interaction';
 
 export type AssessmentKind =
   | 'diagnostic'
@@ -126,7 +131,13 @@ export type AssessmentCompetency =
   | 'chemical_application'
   | 'biological_cognition'
   | 'biological_inquiry'
-  | 'biological_application';
+  | 'biological_application'
+  | 'english_language_knowledge'
+  | 'english_reading'
+  | 'english_listening'
+  | 'english_writing'
+  | 'english_speaking'
+  | 'english_interaction';
 
 export type AssessmentCognitiveLevel =
   | 'recognition'
@@ -231,7 +242,10 @@ export type QuestionRepresentationType =
   | 'table'
   | 'graph'
   | 'diagram'
-  | 'experiment';
+  | 'experiment'
+  | 'audio'
+  | 'dialogue'
+  | 'extended_response';
 
 export interface QuestionTypePracticeCoverage {
   /** Quy mô ngân hàng đích; không dùng để ép mọi học sinh làm hết. */
@@ -325,6 +339,10 @@ export interface QuestionStimulus {
   id: string;
   title?: string;
   content?: string;
+  /** Văn bản được Speech Synthesis đọc như một ngữ liệu nghe; không hiển thị trước khi nộp bài. */
+  audioText?: string;
+  audioLanguage?: string;
+  audioPlaybackRate?: number;
   media?: QuestionMedia[];
   dataTable?: QuestionDataTable;
 }

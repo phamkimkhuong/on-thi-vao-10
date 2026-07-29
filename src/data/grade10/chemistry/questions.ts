@@ -1,6 +1,7 @@
 import type { Question } from '@/types';
 import { g10ChemistryPracticeMetadata } from './practiceMetadata';
 import { normalizeChemistryPracticeChoice } from './practiceChoiceNormalizer';
+import { g10ChemistryRemediationQuestions } from './practiceRemediation';
 
 const modules = import.meta.glob('./modules/module*/index.ts', { eager: true });
 
@@ -13,7 +14,7 @@ const practiceMetadataByQuestionId = new Map(
 );
 
 /** Aggregator: chỉ gộp module và gắn metadata theo ID, không chứa dữ liệu thô. */
-const enrichedQuestions: Question[] = moduleQuestions.map(question => {
+const enrichedQuestions: Question[] = [...moduleQuestions, ...g10ChemistryRemediationQuestions].map(question => {
   const metadata = practiceMetadataByQuestionId.get(question.id);
   return metadata ? { ...question, ...metadata, id: question.id } : question;
 });

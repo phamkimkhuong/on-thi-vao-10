@@ -12,7 +12,7 @@ export const g10MathAssessmentExams: MockExam[] = [
     formCode: 'A',
     resultReleasePolicy: 'after_submit',
     instructions: [
-      'Bài gồm 4 câu nhiều lựa chọn, 2 cụm Đúng/Sai và 4 câu trả lời ngắn.',
+      'Bài gồm 12 câu nhiều lựa chọn, 4 cụm Đúng/Sai và 6 câu trả lời ngắn.',
       'Chọn đủ Đúng hoặc Sai cho từng phát biểu trong mỗi cụm trước khi nộp bài.',
       'Hết 90 phút hệ thống sẽ tự động nộp bài và hiển thị kết quả.'
     ],
@@ -21,13 +21,28 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q2',
       'mock-math10-q3',
       'mock-math10-q4',
+      'mock-math10-q75',
+      'mock-math10-q76',
+      'mock-math10-q77',
+      'mock-math10-q78',
+      'mock-math10-q79',
+      'mock-math10-q80',
+      'mock-math10-q81',
+      'mock-math10-q82',
       'mock-math10-q5',
       'mock-math10-q6',
+      'mock-math10-q83',
+      'mock-math10-q84',
       'mock-math10-q7',
       'mock-math10-q8',
       'mock-math10-q9',
-      'mock-math10-q10'
+      'mock-math10-q10',
+      'mock-math10-q85',
+      'mock-math10-q86'
     ],
+    blueprintId: 'math10-blueprint-midterm1-auto-v2',
+    assessmentVersion: '2.0.0',
+    parallelFormGroup: 'math10-midterm1-auto-v2',
     createdAt: '2026-07-16T00:00:00.000Z'
   },
   {
@@ -41,7 +56,7 @@ export const g10MathAssessmentExams: MockExam[] = [
     formCode: 'B',
     resultReleasePolicy: 'after_submit',
     instructions: [
-      'Bài gồm 4 câu nhiều lựa chọn, 2 cụm Đúng/Sai và 4 câu trả lời ngắn.',
+      'Bài gồm 12 câu nhiều lựa chọn, 4 cụm Đúng/Sai và 6 câu trả lời ngắn.',
       'Chọn đủ Đúng hoặc Sai cho từng phát biểu trong mỗi cụm trước khi nộp bài.',
       'Hết 90 phút hệ thống sẽ tự động nộp bài và hiển thị kết quả.'
     ],
@@ -50,13 +65,28 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q22',
       'mock-math10-q23',
       'mock-math10-q24',
+      'mock-math10-q87',
+      'mock-math10-q88',
+      'mock-math10-q89',
+      'mock-math10-q90',
+      'mock-math10-q91',
+      'mock-math10-q92',
+      'mock-math10-q93',
+      'mock-math10-q94',
       'mock-math10-q25',
       'mock-math10-q26',
+      'mock-math10-q95',
+      'mock-math10-q96',
       'mock-math10-q27',
       'mock-math10-q28',
       'mock-math10-q29',
-      'mock-math10-q30'
+      'mock-math10-q30',
+      'mock-math10-q97',
+      'mock-math10-q98'
     ],
+    blueprintId: 'math10-blueprint-midterm1-auto-v2',
+    assessmentVersion: '2.0.0',
+    parallelFormGroup: 'math10-midterm1-auto-v2',
     createdAt: '2026-07-16T00:00:00.000Z'
   },
   {
@@ -98,6 +128,9 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q51',
       'mock-math10-q52'
     ],
+    blueprintId: 'math10-blueprint-final1-auto-v2',
+    assessmentVersion: '2.0.0',
+    parallelFormGroup: 'math10-final1-auto-v2',
     createdAt: '2026-07-16T00:00:00.000Z'
   },
   {
@@ -139,6 +172,9 @@ export const g10MathAssessmentExams: MockExam[] = [
       'mock-math10-q73',
       'mock-math10-q74'
     ],
+    blueprintId: 'math10-blueprint-final1-auto-v2',
+    assessmentVersion: '2.0.0',
+    parallelFormGroup: 'math10-final1-auto-v2',
     createdAt: '2026-07-16T00:00:00.000Z'
   },
   {

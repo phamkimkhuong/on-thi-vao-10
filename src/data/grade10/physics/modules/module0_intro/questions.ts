@@ -129,7 +129,7 @@ export const g10PhysicsModule0Questions: Question[] = [
   {
     id: 'phy10-m0-q021', subjectId: 'physics', topicId: 'phy10-t0', questionTypeId: 'phy10-qt6',
     content: 'Hình chữ nhật có $l=(20{,}0\\pm0{,}1)$ cm và $w=(10{,}0\\pm0{,}1)$ cm. Dùng quy tắc cộng sai số tỉ đối cho tích, kết quả diện tích phù hợp là',
-    options: ['A. $(200\\pm1)$ cm²', 'B. $(200\\pm2)$ cm²', 'C. $(200\\pm3)$ cm²', 'D. $(200\\pm20)$ cm²'], correctAnswer: 'C', acceptedAnswers: ['C', 'c'], validatorType: 'choice',
+    responseType: 'single_choice', options: ['A. $(200\\pm1)$ cm²', 'B. $(200\\pm2)$ cm²', 'C. $(200\\pm3)$ cm²', 'D. $(200\\pm20)$ cm²'], correctAnswer: 'C', acceptedAnswers: ['C', 'c'], validatorType: 'choice',
     difficulty: 'easy', sourceType: 'manual', outcomeIds: ['PHY10-M0-O07'], competency: 'physical_cognition', cognitiveLevel: 'application', estimatedSeconds: 100
   },
   {

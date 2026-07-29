@@ -45,6 +45,7 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule0Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule0GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule0GapFillSolutions',
+    remediationSeedExport: 'g10PhysicsModule0RemediationSeeds',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 3 }
   },
   {
@@ -55,6 +56,7 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule1Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule1GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule1GapFillSolutions',
+    remediationSeedExport: 'g10PhysicsModule1RemediationSeeds',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 3 }
   },
   {
@@ -65,6 +67,7 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule2Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule2GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule2GapFillSolutions',
+    remediationSeedExport: 'g10PhysicsModule2RemediationSeeds',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 3 }
   },
   {
@@ -75,6 +78,7 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule3Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule3GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule3GapFillSolutions',
+    remediationSeedExport: 'g10PhysicsModule3RemediationSeeds',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 4 }
   },
   {
@@ -85,6 +89,7 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule4Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule4GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule4GapFillSolutions',
+    remediationCompactExport: 'g10PhysicsModule4RemediationEntries',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 4 }
   },
   {
@@ -95,6 +100,7 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule5Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule5GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule5GapFillSolutions',
+    remediationCompactExport: 'g10PhysicsModule5RemediationEntries',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 4 }
   },
   {
@@ -105,17 +111,68 @@ const moduleSpecs = [
     expansion2SolutionExport: 'g10PhysicsModule6Expansion2Solutions',
     gapFillQuestionExport: 'g10PhysicsModule6GapFillQuestions',
     gapFillSolutionExport: 'g10PhysicsModule6GapFillSolutions',
+    remediationCompactExport: 'g10PhysicsModule6RemediationEntries',
     minimumQuestions: 12, minimumDifficulty: { easy: 3, medium: 5, hard: 4 }
   }
 ];
 
 const moduleData = moduleSpecs.map(spec => {
   const moduleRoot = path.join(physicsRoot, 'modules', spec.directory);
+  const topics = readExport(path.join(moduleRoot, 'topics.ts'), `${spec.prefix}Topics`);
+  const remediationSeeds = spec.remediationSeedExport
+    ? readExport(path.join(moduleRoot, 'practiceRemediation.ts'), spec.remediationSeedExport)
+    : spec.remediationCompactExport
+      ? readExport(path.join(moduleRoot, 'practiceRemediation.ts'), spec.remediationCompactExport).map(entry => ({
+          id: entry.id, subTypeId: entry.st, outcomeIds: [entry.o], content: entry.c,
+          difficulty: entry.d, correctAnswer: entry.a, reasoning: entry.r,
+          ...(entry.opts ? { options: entry.opts } : {}),
+          ...(entry.acc ? { acceptedAnswers: entry.acc } : {}),
+          ...(entry.rep ? { representationType: entry.rep } : {})
+        }))
+      : [];
+  const remediationQuestions = remediationSeeds.map(seed => ({
+    id: seed.id,
+    subjectId: 'physics',
+    topicId: topics[0]?.id,
+    questionTypeId: seed.subTypeId.replace(/-st\d+$/, ''),
+    subTypeId: seed.subTypeId,
+    content: seed.content,
+    responseType: Array.isArray(seed.options) ? 'single_choice' : 'short_answer',
+    ...(Array.isArray(seed.options) ? { options: seed.options } : {}),
+    correctAnswer: seed.correctAnswer,
+    acceptedAnswers: Array.isArray(seed.options)
+      ? [seed.correctAnswer, String(seed.correctAnswer).toLowerCase()]
+      : (seed.acceptedAnswers ?? [seed.correctAnswer]),
+    validatorType: Array.isArray(seed.options) ? 'choice' : 'exact',
+    difficulty: seed.difficulty,
+    sourceType: 'manual',
+    outcomeIds: seed.outcomeIds,
+    competency: seed.competency ?? (seed.difficulty === 'hard' ? 'physical_application' : 'physical_cognition'),
+    cognitiveLevel: seed.cognitiveLevel ?? (seed.difficulty === 'easy' ? 'recognition' : seed.difficulty === 'hard' ? 'application' : 'understanding'),
+    estimatedSeconds: seed.estimatedSeconds ?? (seed.difficulty === 'easy' ? 40 : seed.difficulty === 'hard' ? 85 : 60),
+    practiceRole: seed.practiceRole ?? (seed.difficulty === 'easy' ? 'guided' : seed.difficulty === 'hard' ? 'mastery_holdout' : 'near_transfer'),
+    representationType: seed.representationType ?? (Array.isArray(seed.options) ? 'text' : 'equation'),
+    isMasteryHoldout: (seed.practiceRole ?? (seed.difficulty === 'hard' ? 'mastery_holdout' : 'near_transfer')) === 'mastery_holdout',
+    ...(seed.stimulus && typeof seed.stimulus === 'object' ? { stimulus: seed.stimulus } : {})
+  }));
+  const remediationSolutions = remediationSeeds.map(seed => ({
+    id: seed.id.replace('-q', '-s'),
+    questionId: seed.id,
+    recognition: `Dạng bù coverage ${seed.subTypeId}: xác định dữ kiện và quy tắc trước khi kết luận.`,
+    detailedSteps: seed.reasoning.map((explanation, index) => ({
+      order: index + 1,
+      title: index === 0 ? 'Nhận dạng' : 'Giải',
+      explanation
+    })),
+    finalAnswer: seed.correctAnswer,
+    commonMistakes: ['Áp dụng quy tắc chưa đúng điều kiện.'],
+    reviewSuggestions: ['Đối chiếu lý thuyết của dạng nhỏ.']
+  }));
   return {
     label: spec.label,
     minimumQuestions: spec.minimumQuestions,
     minimumDifficulty: spec.minimumDifficulty,
-    topics: readExport(path.join(moduleRoot, 'topics.ts'), `${spec.prefix}Topics`),
+    topics,
     types: readExport(path.join(moduleRoot, 'questionTypes.ts'), `${spec.prefix}QuestionTypes`),
     questions: [
       ...readExport(path.join(moduleRoot, 'questions.ts'), `${spec.prefix}Questions`),
@@ -127,7 +184,8 @@ const moduleData = moduleSpecs.map(spec => {
         : []),
       ...(spec.gapFillQuestionExport
         ? readExport(path.join(moduleRoot, 'practiceGapFill', 'questions.ts'), spec.gapFillQuestionExport)
-        : [])
+        : []),
+      ...remediationQuestions
     ],
     solutions: [
       ...readExport(path.join(moduleRoot, 'solutions.ts'), `${spec.prefix}Solutions`),
@@ -139,7 +197,8 @@ const moduleData = moduleSpecs.map(spec => {
         : []),
       ...(spec.gapFillSolutionExport
         ? readExport(path.join(moduleRoot, 'practiceGapFill', 'solutions.ts'), spec.gapFillSolutionExport)
-        : [])
+        : []),
+      ...remediationSolutions
     ],
     practiceBlueprints: readExport(
       path.join(moduleRoot, 'practiceBlueprint.ts'),
@@ -380,13 +439,58 @@ for (const type of types) {
   const missingRepresentations = (blueprint.coverage?.requiredRepresentations ?? [])
     .filter(representation => !coveredRepresentations.has(representation));
   const holdoutCount = mappedQuestions.filter(question => question.isMasteryHoldout).length;
+  const subtypeTargetRows = (blueprint.subTypes ?? []).map(subtype => {
+    const subtypeQuestions = mappedQuestions.filter(question => question.subTypeId === subtype.id);
+    return {
+      id: subtype.id,
+      actual: subtypeQuestions.length,
+      target: subtype.targetQuestionCount,
+      difficulties: new Set(subtypeQuestions.map(question => question.difficulty))
+    };
+  });
+  const subtypesAtTarget = subtypeTargetRows.filter(row => row.actual >= row.target).length;
+  const subtypesWithFullDifficulty = subtypeTargetRows.filter(
+    row => ['easy', 'medium', 'hard'].every(level => row.difficulties.has(level))
+  ).length;
+  const subtypeQuestionDeficit = subtypeTargetRows.reduce(
+    (sum, row) => sum + Math.max(0, row.target - row.actual),
+    0
+  );
+  if (subtypeQuestionDeficit > 0) {
+    warnings.push(
+      `${type.id}: ${subtypesAtTarget}/${subtypeTargetRows.length} subtype đạt target; còn thiếu ${subtypeQuestionDeficit} câu theo dạng nhỏ.`
+    );
+  }
+  const completedSubtypeTierGaps = subtypeTargetRows
+    .filter(row => row.actual >= row.target)
+    .map(row => ({
+      id: row.id,
+      missing: ['easy', 'medium', 'hard'].filter(level => !row.difficulties.has(level))
+    }))
+    .filter(row => row.missing.length);
+  if (completedSubtypeTierGaps.length) {
+    warnings.push(
+      `${type.id}: subtype đã đủ số lượng nhưng thiếu tầng độ khó: ` +
+      `${completedSubtypeTierGaps.map(row => `${row.id}(${row.missing.join('/')})`).join(', ')}.`
+    );
+  }
   practiceAuditSummaries.push(
-    `${type.id}: ${mappedQuestions.length}/${typeQuestions.length} câu đã map, ` +
-    `${coveredSubtypeIds.size}/${blueprint.subTypes.length} subtype, holdout ${holdoutCount}/${blueprint.coverage.masteryHoldoutCount}` +
+    `${type.id}: ${mappedQuestions.length}/${blueprint.coverage.targetQuestionCount} câu hiện có/mục tiêu, ` +
+    `${subtypesAtTarget}/${blueprint.subTypes.length} subtype đạt target, ` +
+    `${subtypesWithFullDifficulty}/${blueprint.subTypes.length} subtype đủ dễ-vừa-khó, ` +
+    `holdout ${holdoutCount}/${blueprint.coverage.masteryHoldoutCount}` +
     `${missingSubtypeIds.length ? `; thiếu subtype ${missingSubtypeIds.join(', ')}` : ''}` +
     `${missingRoles.length ? `; thiếu role ${missingRoles.join(', ')}` : ''}` +
     `${missingRepresentations.length ? `; thiếu biểu diễn ${missingRepresentations.join(', ')}` : ''}.`
   );
+  if (process.env.PHYSICS10_VERBOSE_SUBTYPES === '1') {
+    practiceAuditSummaries.push(
+      `${type.id} chi tiết: ` +
+      subtypeTargetRows.map(row =>
+        `${row.id}=${row.actual}/${row.target}[${[...row.difficulties].join(',')}]`
+      ).join('; ') + '.'
+    );
+  }
 }
 
 if (questionsWithSubType < practiceQuestions.length) {
@@ -406,6 +510,7 @@ for (const question of questions) {
   if (!type) errors.push(`${question.id}: questionTypeId không tồn tại.`);
   if (type && type.topicId !== question.topicId) errors.push(`${question.id}: topic lệch question type.`);
   if (!solutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải.`);
+  if (!question.responseType) errors.push(`${question.id}: thiếu responseType.`);
   if (!(question.outcomeIds ?? []).length) errors.push(`${question.id}: thiếu outcomeIds.`);
   for (const outcomeId of question.outcomeIds ?? []) if (!outcomeById.has(outcomeId)) errors.push(`${question.id}: outcome không tồn tại (${outcomeId}).`);
   if (!String(question.competency).startsWith('physical_')) errors.push(`${question.id}: sai competency (${question.competency}).`);
@@ -581,9 +686,17 @@ for (const blueprint of assessmentBlueprints) {
   }
 }
 
+const practiceDifficultyCounts = Object.fromEntries(
+  ['easy', 'medium', 'hard'].map(level => [
+    level,
+    practiceQuestions.filter(question => question.difficulty === level).length
+  ])
+);
+
 console.log(`Vật lí 10: ${curriculum.length} module blueprint, ${assessmentBlueprints.length} ma trận đề, ${blueprintOutcomes.length} outcome toàn khóa.`);
 console.log(`Đánh giá Vật lí 10: ${exams.length} đề, ${assessmentQuestions.length} câu riêng, ${assessmentSolutions.length} lời giải.`);
 console.log(`Luyện tập Vật lí 10: ${practiceBlueprints.length} blueprint, ${subtypeTotal} dạng con, ${practiceQuestions.length}/${practiceTargetTotal} câu hiện có/mục tiêu.`);
+console.log(`Độ khó luyện tập: ${practiceDifficultyCounts.easy} dễ, ${practiceDifficultyCounts.medium} vừa, ${practiceDifficultyCounts.hard} khó.`);
 console.log(`Metadata luyện tập: ${questionsWithSubType} subtype, ${questionsWithPracticeRole} vai trò, ${questionsWithRepresentation} biểu diễn, ${questionsMarkedHoldout} holdout.`);
 for (const summary of examAuditSummaries) console.log(`Audit ${summary}`);
 for (const summary of practiceAuditSummaries) console.log(`Coverage ${summary}`);
