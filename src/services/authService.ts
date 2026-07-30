@@ -25,10 +25,21 @@ export const authService = {
       logCustomEvent('sign_in', { method: 'google' });
     } catch (err: any) {
       console.error("Lỗi đăng nhập bằng Google:", err);
-      // Ném lỗi lên trên để component hiển thị toast hoặc thông báo nếu cần
-      if (err.code !== 'auth/popup-closed-by-user') {
-        throw new Error(err.message || 'Lỗi đăng nhập bằng Google. Vui lòng thử lại.', { cause: err });
+      const errorCode = err?.code || '';
+
+      // Bỏ qua lỗi người dùng hoặc trình duyệt đóng / hủy popup đăng nhập
+      if (
+        errorCode === 'auth/popup-closed-by-user' ||
+        errorCode === 'auth/cancelled-popup-request'
+      ) {
+        return;
       }
+
+      if (errorCode === 'auth/popup-blocked') {
+        throw new Error('Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép mở popup và thử lại.');
+      }
+
+      throw new Error('Đăng nhập bằng Google không thành công. Vui lòng thử lại.');
     }
   }
 };

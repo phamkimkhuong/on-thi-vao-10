@@ -9,7 +9,9 @@ const courseBundleLoaders: Partial<Record<CourseId, CourseBundleLoader>> = {
   'grade11:math': () =>
     import('./grade11/math/course').then(module => module.g11MathCourse),
   'grade11:english': () =>
-    import('./grade11/english/course').then(module => module.g11EnglishCourse)
+    import('./grade11/english/course').then(module => module.g11EnglishCourse),
+  'grade11:biology': () =>
+    import('./grade11/biology/course').then(module => module.g11BiologyCourse)
 };
 
 export const getCourseId = (

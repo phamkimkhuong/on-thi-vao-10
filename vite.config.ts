@@ -14,5 +14,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['recharts', 'lucide-react', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
+  },
 })
 

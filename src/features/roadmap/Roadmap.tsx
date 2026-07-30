@@ -281,7 +281,7 @@ export const Roadmap: React.FC = () => {
                     : "text-muted-foreground hover:text-foreground font-bold"
                 )}
               >
-                📺 Video bài giảng {selectedSubject === 'chemistry' ? (selectedGrade === 'grade11' ? '(6 chương)' : '(7 chương)') : selectedSubject === 'biology' ? '(8 chương)' : '(7 chương)'}
+                📺 Video bài giảng {selectedSubject === 'chemistry' ? (selectedGrade === 'grade11' ? '(6 chương)' : '(7 chương)') : selectedSubject === 'biology' ? (selectedGrade === 'grade11' ? '(5 chương)' : '(8 chương)') : '(7 chương)'}
               </button>
               <button
                 type="button"

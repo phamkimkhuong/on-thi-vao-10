@@ -1012,7 +1012,7 @@ export const PracticeEngine: React.FC = () => {
 
   // Render switches
 
-  if (!user) {
+  if (questionTypeId !== undefined && !user) {
     return (
       <MathLoginRequired
         title="Yêu cầu đăng nhập luyện tập"

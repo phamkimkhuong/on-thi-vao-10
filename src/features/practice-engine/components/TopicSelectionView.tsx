@@ -11,6 +11,7 @@ import { getSubjectTheme, getStarsFromScore } from '../../../utils/theme';
 import { storageService } from '../../../services/storage';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
+import { authService } from '../../../services/authService';
 import { buildAdaptivePracticeSequence } from '../utils/adaptivePracticeSequence';
 
 interface TopicSelectionViewProps {
@@ -53,6 +54,15 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const navigate = useNavigate();
   const { selectedGrade, user, progressVersion } = useAppStore();
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+  const [showLoginConfirm, setShowLoginConfirm] = useState(false);
+
+  const requireAuth = (action: () => void) => {
+    if (!user) {
+      setShowLoginConfirm(true);
+      return;
+    }
+    action();
+  };
   const theme = getSubjectTheme(routeSubject);
   const isMath = routeSubject === 'math';
   const isEnglish = routeSubject === 'english';
@@ -182,10 +192,12 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setSelectedTensesForCombo(isG9
-                ? ['module1', 'module2', 'module3', 'module4', 'module5']
-                : topics.map(topic => topic.id));
-              setIsConfiguringAll(true);
+              requireAuth(() => {
+                setSelectedTensesForCombo(isG9
+                  ? ['module1', 'module2', 'module3', 'module4', 'module5']
+                  : topics.map(topic => topic.id));
+                setIsConfiguringAll(true);
+              });
             }}
           >
             <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
@@ -229,8 +241,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setExamTenses(['module1', 'module2', 'module3', 'module4', 'module5']);
-              setIsConfiguringExam(true);
+              requireAuth(() => {
+                setExamTenses(['module1', 'module2', 'module3', 'module4', 'module5']);
+                setIsConfiguringExam(true);
+              });
             }}
           >
             <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
@@ -450,7 +464,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 )}
               </div>
               <Button
-                onClick={startTensesReview}
+                onClick={() => requireAuth(startTensesReview)}
                 className="font-bold text-xs py-2 px-5 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer h-10 shrink-0 shadow-sm"
               >
                 {tensesReviewAttemptsCount > 0 ? '🔄 Kiểm tra lại' : '✍️ Làm bài ngay'}
@@ -467,13 +481,15 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 key={card.id}
                 className="hover:border-primary/50 cursor-pointer transition-all duration-200 hover:translate-x-[2px] border bg-card flex flex-col justify-between"
                 onClick={() => {
-                  if (card.id === 'all') {
-                    setIsConfiguringAll(true);
-                  } else if (card.id === 'exam') {
-                    setIsConfiguringExam(true);
-                  } else {
-                    setSelectedSubTense(card.id as any);
-                  }
+                  requireAuth(() => {
+                    if (card.id === 'all') {
+                      setIsConfiguringAll(true);
+                    } else if (card.id === 'exam') {
+                      setIsConfiguringExam(true);
+                    } else {
+                      setSelectedSubTense(card.id as any);
+                    }
+                  });
                 }}
               >
                 <CardContent className="p-5 flex flex-col justify-between h-full gap-4">
@@ -669,14 +685,16 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                         return;
                       }
 
-                      if (qType.id === 'eng-qt6') {
-                        setGrammarSection(null);
-                        navigate(`/practice/eng-qt6`);
-                      } else {
-                        setSelectedSubTense(null);
-                        setGrammarSection(null);
-                        navigate(`/practice/${qType.id}`);
-                      }
+                      requireAuth(() => {
+                        if (qType.id === 'eng-qt6') {
+                          setGrammarSection(null);
+                          navigate(`/practice/eng-qt6`);
+                        } else {
+                          setSelectedSubTense(null);
+                          setGrammarSection(null);
+                          navigate(`/practice/${qType.id}`);
+                        }
+                      });
                     }}
                   >
                     <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
@@ -760,10 +778,12 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setSelectedTensesForCombo(isG9
-                ? ['module1', 'module2', 'module3', 'module4', 'module5']
-                : topics.map(topic => topic.id));
-              setIsConfiguringAll(true);
+              requireAuth(() => {
+                setSelectedTensesForCombo(isG9
+                  ? ['module1', 'module2', 'module3', 'module4', 'module5']
+                  : topics.map(topic => topic.id));
+                setIsConfiguringAll(true);
+              });
             }}
           >
             <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
@@ -809,10 +829,12 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           <Card
             className="cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md hover:border-indigo-500/30"
             onClick={() => {
-              setExamTenses(isG9
-                ? ['module1', 'module2', 'module3', 'module4', 'module5']
-                : topics.map(topic => topic.id));
-              setIsConfiguringExam(true);
+              requireAuth(() => {
+                setExamTenses(isG9
+                  ? ['module1', 'module2', 'module3', 'module4', 'module5']
+                  : topics.map(topic => topic.id));
+                setIsConfiguringExam(true);
+              });
             }}
           >
             <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
@@ -875,6 +897,26 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           navigate('/premium');
         }}
         onCancel={() => setPremiumModalOpen(false)}
+      />
+
+      {/* 🔒 Login Requirement Modal */}
+      <ConfirmationModal
+        isOpen={showLoginConfirm}
+        title="Yêu cầu đăng nhập học tập"
+        description="Bạn cần đăng nhập học tập để bắt đầu luyện tập dạng bài này, lưu lịch sử tiến trình học tập và nhận đánh giá từ AI."
+        confirmLabel="Đăng nhập với Google"
+        cancelLabel="Hủy bỏ"
+        onConfirm={async () => {
+          setShowLoginConfirm(false);
+          try {
+            await authService.signInWithGoogle();
+          } catch (err: any) {
+            if (err?.message) {
+              alert(err.message);
+            }
+          }
+        }}
+        onCancel={() => setShowLoginConfirm(false)}
       />
     </div>
   );

@@ -6,6 +6,7 @@ import { db } from '../../services/firebase';
 import { useAppStore } from '../../services/store';
 import { VIETNAM_PROVINCES } from '../../constants/provinces';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmationModal } from './ConfirmationModal';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
   const [birthYear, setBirthYear] = useState('');
   const [gender, setGender] = useState('');
   const [province, setProvince] = useState('');
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -255,13 +257,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
             <button
               type="button"
-              onClick={() => {
-                if (window.confirm('Bạn có chắc chắn muốn đăng xuất tài khoản?')) {
-                  logout();
-                  onClose();
-                  navigate('/dashboard');
-                }
-              }}
+              onClick={() => setShowLogoutConfirm(true)}
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border border-rose-500/20 hover:bg-rose-500/5 text-rose-500 font-bold text-xs transition-all duration-300 active:scale-97 cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -269,6 +265,22 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             </button>
           </div>
         </form>
+
+        <ConfirmationModal
+          isOpen={showLogoutConfirm}
+          title="Xác nhận đăng xuất"
+          description="Bạn có chắc chắn muốn đăng xuất tài khoản khỏi hệ thống không?"
+          confirmLabel="Đăng xuất"
+          cancelLabel="Hủy bỏ"
+          variant="danger"
+          onConfirm={() => {
+            setShowLogoutConfirm(false);
+            logout();
+            onClose();
+            navigate('/dashboard');
+          }}
+          onCancel={() => setShowLogoutConfirm(false)}
+        />
       </div>
     </div>
   );
