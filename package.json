@@ -16,6 +16,7 @@
     "validate:chemistry11": "node scripts/validateChemistry11.mjs",
     "validate:physics11": "node scripts/validatePhysics11.mjs",
     "validate:math11": "node scripts/validateMath11.mjs",
+    "validate:english11": "node scripts/validateEnglish11.mjs",
     "validate:physics-practice-runtime": "node scripts/validatePhysicsPracticeRuntime.mjs",
     "validate:latex": "node scripts/validateLatex.mjs",
     "preview": "vite preview",

@@ -21,6 +21,8 @@ import { g11ChemistryQuestionTypes } from './grade11/chemistry/questionTypes';
 import { g11ChemistryQuestions } from './grade11/chemistry/questions';
 import { g11PhysicsQuestionTypes } from './grade11/physics/questionTypes';
 import { g11PhysicsQuestions } from './grade11/physics/questions';
+import { g11EnglishQuestionTypes } from './grade11/english/questionTypes';
+import { g11EnglishQuestions } from './grade11/english/questions';
 
 export interface SubjectCategoryInfo {
   key: string;
@@ -92,6 +94,7 @@ export const getSubjectInfoByTypeId = (typeId: string): SubjectCategoryInfo => {
 
 // Tổng hợp toàn bộ QuestionTypes của hệ thống
 export const allQuestionTypesList: QuestionType[] = [
+  ...g11EnglishQuestionTypes,
   ...g11ChemistryQuestionTypes,
   ...g11PhysicsQuestionTypes,
   ...g10ChemistryQuestionTypes,
@@ -109,6 +112,7 @@ export const allQuestionTypesMap = new Map<string, QuestionType>(
 
 // Tổng hợp toàn bộ Questions của hệ thống
 export const allQuestionsList: Question[] = [
+  ...g11EnglishQuestions,
   ...g11ChemistryQuestions,
   ...g11PhysicsQuestions,
   ...g10ChemistryQuestions,

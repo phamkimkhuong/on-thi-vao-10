@@ -1648,7 +1648,7 @@ export const ExamEngine: React.FC = () => {
                             <div className="mt-3 p-4 bg-primary/5 rounded-xl border border-primary/10 space-y-4 text-xs leading-relaxed animate-fade-in text-muted-foreground font-semibold">
                               {solution.translation && (
                                 <div className="space-y-1">
-                                  <h6 className="font-extrabold text-foreground">Dịch nghĩa câu hỏi:</h6>
+                                  <h6 className="font-extrabold text-foreground">Dịch nghĩa / yêu cầu câu hỏi:</h6>
                                   <p className="text-[11px] text-muted-foreground">{solution.translation}</p>
                                 </div>
                               )}
@@ -1660,7 +1660,7 @@ export const ExamEngine: React.FC = () => {
                                     <div className="font-extrabold text-foreground">
                                       Bước {step.order}: {step.title}
                                     </div>
-                                    <div className="text-[11px]">
+                                    <div className="text-[11px] whitespace-pre-line">
                                       <LatexRenderer text={step.explanation} />
                                     </div>
                                     {step.formula && (
@@ -1682,6 +1682,16 @@ export const ExamEngine: React.FC = () => {
                                   <h6 className="font-extrabold flex items-center gap-1"><AlertTriangle size={12} /> Lỗi sai thường gặp:</h6>
                                   <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
                                     {solution.commonMistakes.map((m, i) => <li key={i}>{m}</li>)}
+                                  </ul>
+                                </div>
+                              )}
+                              {solution.reviewSuggestions && solution.reviewSuggestions.length > 0 && (
+                                <div className="space-y-1 bg-indigo-500/5 border border-indigo-500/10 p-3 rounded-lg text-indigo-700 dark:text-indigo-400">
+                                  <h6 className="font-extrabold">Cần ôn lại:</h6>
+                                  <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
+                                    {solution.reviewSuggestions.map((suggestion, index) => (
+                                      <li key={index}>{suggestion}</li>
+                                    ))}
                                   </ul>
                                 </div>
                               )}

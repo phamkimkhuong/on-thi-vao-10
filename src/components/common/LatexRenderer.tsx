@@ -7,6 +7,14 @@ interface LatexRendererProps {
   className?: string;
 }
 
+const ALLOWED_MATH_WORDS = new Set([
+  'sin', 'cos', 'tan', 'cot', 'sec', 'csc', 'log', 'ln', 'lim', 'max', 'min',
+  'det', 'rad', 'deg', 'mod', 'gcd', 'lcm', 'abs', 'exp', 'sqrt', 'vec', 'arg',
+  'dim', 'ker', 'sup', 'inf', 'cm', 'mm', 'm', 'km', 'g', 'kg', 'mol', 'hz',
+  'khz', 'mhz', 'ghz', 's', 'ms', 'h', 'v', 'mv', 'a', 'ma', 'w', 'kw',
+  'mw', 'j', 'kj', 'cal', 'kcal', 'n', 'pa', 'kpa', 'atm', 'bar', 'db'
+]);
+
 /**
  * Kiểm tra xem chuỗi có nên được render bằng KaTeX hay không.
  * Tự động nhận diện raw LaTeX và các biểu thức toán học thuần túy (không có delimiters).
@@ -24,7 +32,11 @@ const shouldRenderAsLatex = (text: string, block: boolean): boolean => {
   const vietnameseStopWords = /\b(cho|voi|co|la|va|tim|de|rut|gon|bieu|thuc|phuong|trinh|he|so|duong|am|nghiem|thoa|man|chung|minh|tu|giac|noi|tiep|duong|tron|tam|ban|kinh|cat|diem|thang|giao|tuyen|song|song|vuong|goc|tam|giac|can|deu|vuong|dien|tich|chu|vi|dat|bien|ta|duoc|thu|nghiem|thay|vao|phap|the|cong|dai|so|nhan|chia|cong|tru|quy|dong|tu|mau|chung)\b/i;
   const hasVietnameseStopWords = vietnameseStopWords.test(text);
 
-  if (hasVietnameseAccents || hasVietnameseStopWords) {
+  // Trích xuất các từ tiếng Anh (từ 2 ký tự trở lên)
+  const words = text.match(/\b[a-zA-Z]{2,}\b/g) || [];
+  const hasNaturalLanguageEnglishWords = words.some(w => !ALLOWED_MATH_WORDS.has(w.toLowerCase()));
+
+  if (hasVietnameseAccents || hasVietnameseStopWords || hasNaturalLanguageEnglishWords) {
     return false;
   }
 

@@ -77,6 +77,10 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
       displayOptions = parts.slice(1).map(opt => opt.trim());
     }
   }
+  const correctOptionIndex = ['A', 'B', 'C', 'D'].indexOf(currentQuestion.correctAnswer);
+  const correctOptionText = correctOptionIndex >= 0
+    ? displayOptions?.[correctOptionIndex]?.replace(/^[A-D][.)]\s*/, '').trim()
+    : undefined;
   const score = questions.filter(q => validateAnswer(q, examAnswers[q.id] || '')).length;
   const correctAnswersCount = score;
   const incorrectAnswersCount = questions.length - score;
@@ -389,7 +393,7 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
 
               {solutionDetail.translation && (
                 <div className="text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/10 border-border/30">
-                  <span className="font-extrabold text-foreground block mb-1">🇬🇧 Dịch nghĩa câu hỏi:</span>
+                  <span className="font-extrabold text-foreground block mb-1">🇬🇧 Dịch nghĩa / yêu cầu câu hỏi:</span>
                   <p className="italic">"{solutionDetail.translation}"</p>
                 </div>
               )}
@@ -403,7 +407,7 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
                       </span>
                       {step.title}
                     </h5>
-                    <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed">
+                    <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed whitespace-pre-line">
                       <LatexRenderer text={step.explanation} />
                       {step.formula && (
                         <div className="my-2 p-2 bg-secondary/50 rounded-lg text-foreground border border-border/5 overflow-x-auto">
@@ -422,13 +426,26 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
 
               <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2">
                 <div className="font-extrabold text-foreground">
-                  Đáp số đúng: <span className="text-emerald-500 font-black"><LatexRenderer text={currentQuestion.correctAnswer} /></span>
+                  Đáp án đúng:{' '}
+                  <span className="text-emerald-500 font-black">
+                    <LatexRenderer
+                      text={`${currentQuestion.correctAnswer}${correctOptionText ? `. ${correctOptionText}` : ''}`}
+                    />
+                  </span>
                 </div>
                 {solutionDetail.commonMistakes.length > 0 && (
                   <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
                     <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
                     {solutionDetail.commonMistakes.map((m: string, i: number) => (
                       <p key={i}>• <LatexRenderer text={m} /></p>
+                    ))}
+                  </div>
+                )}
+                {solutionDetail.reviewSuggestions.length > 0 && (
+                  <div className="pt-2 border-t border-border/20 text-indigo-600 dark:text-indigo-400 font-semibold leading-relaxed">
+                    <span className="font-extrabold block text-foreground mb-1">📚 Cần ôn lại:</span>
+                    {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => (
+                      <p key={index}>• <LatexRenderer text={suggestion} /></p>
                     ))}
                   </div>
                 )}

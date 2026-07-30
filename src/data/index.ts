@@ -223,6 +223,25 @@ export const loadSubjectData = async (grade: GradeCode, subject: SubjectCode): P
           learningOutcomes: learningPathMod.g11PhysicsOutcomes,
           learningMisconceptions: learningPathMod.g11PhysicsMisconceptions
         };
+      } else if (subject === 'english') {
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
+          import('./grade11/english/topics'),
+          import('./grade11/english/questionTypes'),
+          import('./grade11/english/questions'),
+          import('./grade11/english/solutions'),
+          import('./grade11/english/learningPath'),
+          import('./grade11/english/assessments')
+        ]);
+        data = {
+          topics: topicsMod.g11EnglishTopics,
+          questionTypes: qtMod.g11EnglishQuestionTypes,
+          questions: [...qMod.g11EnglishQuestions, ...assessmentsMod.g11EnglishAssessmentQuestions],
+          solutions: [...sMod.g11EnglishSolutions, ...assessmentsMod.g11EnglishAssessmentSolutions],
+          mockExams: assessmentsMod.g11EnglishAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g11EnglishAssessmentBlueprints,
+          learningOutcomes: learningPathMod.g11EnglishOutcomes,
+          learningMisconceptions: learningPathMod.g11EnglishMisconceptions
+        };
       } else {
         data = { topics: [], questionTypes: [], questions: [], solutions: [], mockExams: [] };
       }

@@ -122,6 +122,7 @@ export const AppLayout: React.FC = () => {
       gradeTitle: 'Lớp 11',
       courses: [
         { code: 'math', name: 'Toán học', icon: '📐', isLocked: false },
+        { code: 'english', name: 'Tiếng Anh', icon: '🗣️', isLocked: false },
         { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: false },
         { code: 'physics', name: 'Vật lý', icon: '⚛️', isLocked: false },
       ]
