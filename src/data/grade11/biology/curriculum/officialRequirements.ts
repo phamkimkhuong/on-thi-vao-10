@@ -43,18 +43,18 @@ const implemented: RequirementSeed[] = [
   { id: 'behaviour-application', module: 2, lessons: [18], title: 'Quan sát và ứng dụng tập tính', requirement: 'Phân tích được dữ liệu quan sát tập tính và vận dụng hiểu biết về tập tính trong đời sống.', verbs: ['quan sát', 'phân tích', 'vận dụng'], evidence: ['data', 'application'], outcomes: [29] }
 ];
 
-const pending: RequirementSeed[] = [
-  { id: 'growth-overview', module: 3, lessons: [19], title: 'Khái quát sinh trưởng và phát triển', requirement: 'Trình bày được khái niệm và quan hệ giữa sinh trưởng với phát triển.', verbs: ['trình bày'], evidence: ['recognition'] },
-  { id: 'plant-growth', module: 3, lessons: [20], title: 'Sinh trưởng thực vật', requirement: 'Phân tích được sinh trưởng sơ cấp, thứ cấp và vai trò mô phân sinh.', verbs: ['phân tích'], evidence: ['representation'] },
-  { id: 'plant-hormones', module: 3, lessons: [20, 21], title: 'Hormone thực vật và ứng dụng', requirement: 'Giải thích được tác động của hormone và ứng dụng điều tiết sinh trưởng thực vật.', verbs: ['giải thích', 'vận dụng'], evidence: ['application'] },
-  { id: 'animal-growth', module: 3, lessons: [22], title: 'Sinh trưởng động vật', requirement: 'Phân tích được các kiểu phát triển và sự điều hòa sinh trưởng ở động vật.', verbs: ['phân tích'], evidence: ['representation'] },
-  { id: 'growth-practice', module: 3, lessons: [23], title: 'Thực hành sinh trưởng và phát triển', requirement: 'Quan sát, thu thập và xử lí được dữ liệu sinh trưởng hoặc biến thái.', verbs: ['quan sát', 'xử lí'], evidence: ['experiment', 'data'] },
-  { id: 'reproduction-overview', module: 4, lessons: [24], title: 'Khái quát sinh sản', requirement: 'Phân biệt được sinh sản vô tính và hữu tính.', verbs: ['phân biệt'], evidence: ['recognition'] },
-  { id: 'plant-reproduction', module: 4, lessons: [25], title: 'Sinh sản thực vật', requirement: 'Phân tích được sinh sản vô tính, hữu tính và thụ tinh kép ở thực vật.', verbs: ['phân tích'], evidence: ['representation'] },
-  { id: 'reproduction-practice', module: 4, lessons: [26], title: 'Thực hành nhân giống và thụ phấn', requirement: 'Thực hiện hoặc phân tích được quy trình nhân giống vô tính, thụ phấn.', verbs: ['thực hiện', 'phân tích'], evidence: ['experiment'] },
-  { id: 'animal-reproduction', module: 4, lessons: [27], title: 'Sinh sản động vật', requirement: 'Giải thích được sinh sản và điều hòa sinh sản ở động vật, người.', verbs: ['giải thích', 'vận dụng'], evidence: ['application'] },
-  { id: 'physiology-integration', module: 5, lessons: [28], title: 'Cơ thể là hệ thống mở, tự điều chỉnh', requirement: 'Phân tích được mối quan hệ giữa các quá trình sinh lí trong cơ thể.', verbs: ['phân tích'], evidence: ['explanation', 'application'] },
-  { id: 'body-biology-careers', module: 5, lessons: [29], title: 'Ngành nghề sinh học cơ thể', requirement: 'Tìm hiểu và đánh giá được một số ngành nghề liên quan đến sinh học cơ thể.', verbs: ['tìm hiểu', 'đánh giá'], evidence: ['application'] }
+const remaining: RequirementSeed[] = [
+  { id: 'growth-overview', module: 3, lessons: [19], title: 'Khái quát sinh trưởng và phát triển', requirement: 'Trình bày được khái niệm và quan hệ giữa sinh trưởng với phát triển.', verbs: ['trình bày'], evidence: ['recognition'], outcomes: [30] },
+  { id: 'plant-growth', module: 3, lessons: [20], title: 'Sinh trưởng thực vật', requirement: 'Phân tích được sinh trưởng sơ cấp, thứ cấp, vai trò mô phân sinh và các yếu tố ảnh hưởng.', verbs: ['phân tích'], evidence: ['representation', 'data'], outcomes: [31, 33] },
+  { id: 'plant-hormones', module: 3, lessons: [20, 21], title: 'Hormone thực vật và ứng dụng', requirement: 'Giải thích được tác động của hormone và ứng dụng điều tiết sinh trưởng thực vật.', verbs: ['giải thích', 'vận dụng'], evidence: ['application', 'experiment'], outcomes: [32, 34] },
+  { id: 'animal-growth', module: 3, lessons: [22], title: 'Sinh trưởng động vật', requirement: 'Phân tích được các kiểu phát triển, sự điều hòa và yếu tố ảnh hưởng đến sinh trưởng ở động vật.', verbs: ['phân tích', 'vận dụng'], evidence: ['representation', 'application'], outcomes: [35, 36, 37] },
+  { id: 'growth-practice', module: 3, lessons: [23], title: 'Thực hành sinh trưởng và phát triển', requirement: 'Quan sát, thu thập và xử lí được dữ liệu sinh trưởng hoặc biến thái.', verbs: ['quan sát', 'xử lí'], evidence: ['experiment', 'data'], outcomes: [38] },
+  { id: 'reproduction-overview', module: 4, lessons: [24], title: 'Khái quát sinh sản', requirement: 'Phân biệt được sinh sản vô tính và hữu tính.', verbs: ['phân biệt'], evidence: ['recognition'], outcomes: [39] },
+  { id: 'plant-reproduction', module: 4, lessons: [25], title: 'Sinh sản thực vật', requirement: 'Phân tích được sinh sản vô tính, hữu tính và thụ tinh kép ở thực vật.', verbs: ['phân tích'], evidence: ['representation'], outcomes: [40, 41, 42] },
+  { id: 'reproduction-practice', module: 4, lessons: [26], title: 'Thực hành nhân giống và thụ phấn', requirement: 'Thực hiện hoặc phân tích được quy trình nhân giống vô tính, thụ phấn.', verbs: ['thực hiện', 'phân tích'], evidence: ['experiment'], outcomes: [43, 44] },
+  { id: 'animal-reproduction', module: 4, lessons: [27], title: 'Sinh sản động vật', requirement: 'Giải thích được các hình thức, quá trình, điều hòa sinh sản và sức khỏe sinh sản ở động vật, người.', verbs: ['giải thích', 'vận dụng'], evidence: ['representation', 'application'], outcomes: [45, 46, 47, 48] },
+  { id: 'physiology-integration', module: 5, lessons: [28], title: 'Cơ thể là hệ thống mở, tự điều chỉnh', requirement: 'Phân tích được mối quan hệ giữa các quá trình sinh lí trong cơ thể thực vật và động vật.', verbs: ['phân tích'], evidence: ['explanation', 'application'], outcomes: [49, 50, 51] },
+  { id: 'body-biology-careers', module: 5, lessons: [29], title: 'Ngành nghề sinh học cơ thể', requirement: 'Tìm hiểu và đánh giá được một số ngành nghề liên quan đến sinh học cơ thể.', verbs: ['tìm hiểu', 'đánh giá'], evidence: ['application'], outcomes: [52] }
 ];
 
 const toRequirement = (seed: RequirementSeed): OfficialRequirement => ({
@@ -68,12 +68,11 @@ const toRequirement = (seed: RequirementSeed): OfficialRequirement => ({
   evidenceTypes: seed.evidence,
   sourceLocators: [`Tài liệu hướng dẫn Sinh học 11 → ${seed.title}`],
   implementedOutcomeIds: (seed.outcomes ?? []).map(number => `out-bio11-${String(number).padStart(2, '0')}`),
-  coverageStatus: seed.outcomes ? 'covered' : 'not_started',
-  coverageNotes: seed.outcomes ? undefined : 'Dự kiến triển khai trong đợt Chương 3–5.',
+  coverageStatus: 'covered',
   reviewStatus: 'source_checked'
 });
 
 export const g11BiologyOfficialRequirements: OfficialRequirement[] = [
   ...implemented.map(toRequirement),
-  ...pending.map(toRequirement)
+  ...remaining.map(toRequirement)
 ];

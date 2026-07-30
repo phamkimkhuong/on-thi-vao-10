@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       </ErrorBoundary>
     ),
     children: [
-      { index: true, element: <Navigate to={ROUTES.DASHBOARD} replace /> },
+      { index: true, element: <Navigate to={ROUTES.ABOUT} replace /> },
       { path: ROUTES.DASHBOARD.substring(1), element: <Dashboard /> },
       { path: ROUTES.ROADMAP.substring(1), element: <Roadmap /> },
       { path: 'question-types/:questionTypeId', element: <QuestionTypeDetail /> },

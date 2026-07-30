@@ -1,0 +1,53 @@
+import type { TheoryBlock } from '@/data/schema';
+
+const seeds = [
+  { number: 30, lesson: 19, title: 'Sinh trưởng và phát triển', definition: 'Sinh trưởng là tăng không thuận nghịch về kích thước và khối lượng; phát triển gồm phân hóa, phát sinh hình thái và hoàn thiện chức năng.', mechanism: 'Tăng số lượng, kích thước tế bào tạo vật chất cho cơ thể. Biểu hiện gene và tín hiệu điều hòa khiến tế bào chuyên hóa, cơ quan đổi cấu trúc và chức năng.', application: 'Cần dùng cả số đo định lượng và dấu hiệu giai đoạn. Tăng khối lượng tạm thời do nước không đủ chứng minh sinh trưởng.', misconception: 'Hai quá trình liên quan chặt nhưng không đồng nhất; một cơ thể có thể tăng kích thước mà chưa chuyển giai đoạn phát triển.', example: 'Nòng nọc tăng dài đồng thời xuất hiện chân.', answer: 'Tăng dài là sinh trưởng; xuất hiện chân là phát triển hình thái.', keyPoints: ['Sinh trưởng thiên về biến đổi định lượng.', 'Phát triển gồm biến đổi định tính.', 'Hai quá trình tác động qua lại.', 'Phải chọn chỉ số phù hợp câu hỏi.'] },
+  { number: 31, lesson: 20, title: 'Mô phân sinh và sinh trưởng thực vật', definition: 'Mô phân sinh gồm tế bào chưa biệt hóa, còn khả năng phân chia mạnh. Mô đỉnh tạo sinh trưởng sơ cấp; mô bên tạo sinh trưởng thứ cấp.', mechanism: 'Tế bào mới từ mô đỉnh kéo dài và biệt hóa làm thân, rễ dài ra. Tầng sinh mạch tạo gỗ, libe thứ cấp; tầng sinh bần tạo mô bảo vệ.', application: 'Vòng gỗ sớm–muộn hỗ trợ xác định tuổi và điều kiện sinh trưởng, nhưng vòng giả có thể xuất hiện khi môi trường biến động.', misconception: 'Đa số cây một lá mầm không sinh trưởng thứ cấp kiểu tầng sinh mạch như cây gỗ hai lá mầm.', example: 'Khoanh vị trí phân chia mạnh ở ngay sau chóp rễ.', answer: 'Đó là vùng mô phân sinh đỉnh rễ, cung cấp tế bào cho sinh trưởng sơ cấp.', keyPoints: ['Mô đỉnh làm cơ quan dài ra.', 'Mô bên làm cơ quan tăng đường kính.', 'Tế bào mới tiếp tục kéo dài và biệt hóa.', 'Vòng năm cần được diễn giải có điều kiện.'] },
+  { number: 32, lesson: 20, title: 'Hormone thực vật', definition: 'Hormone thực vật là chất hữu cơ do cây tạo với lượng nhỏ, truyền tín hiệu và điều hòa sinh trưởng, phát triển.', mechanism: 'Auxin liên quan kéo dài và ưu thế ngọn; gibberellin kéo dài, nảy mầm; cytokinin phân chia; ethylene chín quả; abscisic acid ngủ nghỉ và đáp ứng hạn. Tác động thay đổi theo mô, liều, giai đoạn.', application: 'Không chọn hormone chỉ bằng tên tác dụng. Phải xét mục tiêu, nồng độ, mô đích và tương tác với tín hiệu khác.', misconception: 'Hormone không chỉ kích thích và không phải phân bón; cùng một hormone có thể cho kết quả khác ở mô hoặc nồng độ khác.', example: 'Chồi ngọn bị cắt làm chồi bên phát triển.', answer: 'Giảm nguồn auxin duy trì ưu thế ngọn làm chồi nách bớt bị ức chế.', keyPoints: ['Hormone hoạt động ở lượng nhỏ.', 'Tác động phụ thuộc nồng độ và mô.', 'Các hormone tương tác với nhau.', 'Ứng dụng cần có đối chứng và liều phù hợp.'] },
+  { number: 33, lesson: 20, title: 'Yếu tố ảnh hưởng sinh trưởng cây', definition: 'Sinh trưởng chịu ảnh hưởng của kiểu gene và môi trường như nước, khoáng, ánh sáng, nhiệt độ.', mechanism: 'Mỗi yếu tố có khoảng thích hợp và có thể trở thành yếu tố giới hạn. Tốc độ trong một khoảng bằng độ tăng đại lượng chia thời gian.', application: 'Đồ thị phải được đọc theo trục, đơn vị và độ dốc. Thí nghiệm chỉ kết luận nguyên nhân khi biến khác được kiểm soát.', misconception: 'Tăng một nguồn lực không làm sinh trưởng tăng vô hạn vì yếu tố khác có thể giới hạn hoặc mức quá cao gây độc.', example: 'Cây tăng từ 12 cm lên 24 cm trong 6 ngày.', answer: 'Tốc độ tăng chiều cao trung bình là (24−12)/6 = 2 cm/ngày.', keyPoints: ['Kiểu gene đặt giới hạn tiềm năng.', 'Môi trường quyết định mức biểu hiện.', 'Có vùng tối ưu và ngưỡng gây hại.', 'Độ dốc biểu thị tốc độ thay đổi.'] },
+  { number: 34, lesson: 21, title: 'Điều khiển sinh trưởng thực vật', definition: 'Bấm ngọn, tỉa cành và xử lí chất điều hòa dựa trên cơ chế hormone, nguồn–nơi chứa và đáp ứng với môi trường.', mechanism: 'Bấm ngọn giảm ưu thế ngọn; tỉa cành đổi ánh sáng và phân bổ nguồn lực; hormone ngoại sinh tác động tùy liều, mô và thời điểm.', application: 'Thực hành cần đối chứng, số mẫu đủ, thao tác giống nhau và chỉ số định lượng. Vòng năm có thể hỗ trợ tính tuổi cây gỗ.', misconception: 'Không có quy tắc “cắt càng nhiều càng tốt” hay “hormone càng đậm càng hiệu quả”.', example: 'Khảo sát auxin lên ra rễ cành giâm.', answer: 'Dùng dãy nồng độ cùng nhóm dung môi đối chứng, cành tương đương và đo số hoặc chiều dài rễ.', keyPoints: ['Bấm ngọn liên quan ưu thế ngọn.', 'Tỉa cành phải hợp loài và mục tiêu.', 'Hormone cần đúng liều và thời điểm.', 'Thực hành phải có đối chứng.'] },
+  { number: 35, lesson: 22, title: 'Các kiểu phát triển ở động vật', definition: 'Động vật có thể phát triển trực tiếp, biến thái không hoàn toàn hoặc biến thái hoàn toàn.', mechanism: 'Trực tiếp: con non gần giống trưởng thành. Không hoàn toàn: trứng–con non–trưởng thành, không có nhộng. Hoàn toàn: trứng–ấu trùng–nhộng–trưởng thành.', application: 'Phân loại bằng toàn bộ vòng đời, mức khác biệt hình thái và sự có mặt của nhộng, không bằng riêng kích thước hay lột xác.', misconception: 'Lột xác cũng có ở biến thái không hoàn toàn; lột xác không tự động đồng nghĩa biến thái hoàn toàn.', example: 'Vòng đời có sâu non và nhộng.', answer: 'Đó là biến thái hoàn toàn vì ấu trùng khác trưởng thành và có nhộng.', keyPoints: ['Trực tiếp có con non gần giống trưởng thành.', 'Không hoàn toàn không có nhộng.', 'Hoàn toàn có ấu trùng và nhộng.', 'Cần nhìn toàn bộ chuỗi giai đoạn.'] },
+  { number: 36, lesson: 22, title: 'Hormone phát triển ở động vật', definition: 'Hormone phối hợp gene, dinh dưỡng và môi trường để điều hòa sinh trưởng, biến thái.', mechanism: 'Growth hormone hỗ trợ sinh trưởng ở người; thyroxine cần cho biến thái lưỡng cư; ecdysone gây lột xác và juvenile hormone cao duy trì trạng thái ấu trùng ở côn trùng.', application: 'Dự đoán hậu quả bằng vị trí hormone trong chuỗi điều hòa và giai đoạn cơ thể, không dùng quy tắc càng nhiều càng tốt.', misconception: 'Ecdysone và juvenile hormone không đối lập đơn giản: kết quả lần lột xác phụ thuộc phối hợp nồng độ.', example: 'Ecdysone tăng khi juvenile hormone vẫn cao.', answer: 'Ấu trùng lột xác sang tuổi ấu trùng tiếp theo, chưa thành trưởng thành.', keyPoints: ['Hormone tác động theo giai đoạn.', 'Thyroxine hỗ trợ biến thái lưỡng cư.', 'Ecdysone khởi phát lột xác.', 'Juvenile hormone cao duy trì đặc điểm ấu trùng.'] },
+  { number: 37, lesson: 22, title: 'Yếu tố ảnh hưởng sinh trưởng động vật', definition: 'Kiểu gene, hormone, dinh dưỡng, nhiệt độ, bệnh và điều kiện chăm sóc cùng ảnh hưởng sinh trưởng.', mechanism: 'Dinh dưỡng cung cấp vật chất, năng lượng; nhiệt độ chi phối phản ứng, đặc biệt ở động vật biến nhiệt; hormone điều phối nhưng không thay thế điều kiện sống.', application: 'Chăn nuôi cần khẩu phần cân đối và phúc lợi. Sử dụng hormone ở người hay vật nuôi phải đúng quy định, chỉ định và đánh giá nguy cơ.', misconception: 'Tăng nhanh không đồng nghĩa khỏe mạnh; tự dùng hormone có thể gây hại và che lấp nguyên nhân bệnh.', example: 'Hai khẩu phần cùng năng lượng nhưng một nhóm thiếu protein.', answer: 'Nhóm thiếu protein có thể tạo mô kém dù tổng năng lượng tương tự.', keyPoints: ['Nhiều yếu tố cùng tác động.', 'Khẩu phần phải cân đối.', 'Động vật biến nhiệt nhạy với nhiệt độ.', 'Can thiệp hormone cần chuyên môn.'] },
+  { number: 38, lesson: 23, title: 'Thực hành quan sát biến thái', definition: 'Quan sát biến thái cần mô tả giai đoạn bằng tiêu chí hình thái rõ và theo dõi theo thời gian.', mechanism: 'Lập bảng ngày–giai đoạn–dấu hiệu–điều kiện; theo dõi nhiều cá thể; chụp cùng tỉ lệ; nếu thử một yếu tố phải có đối chứng và giữ biến khác tương đương.', application: 'Dữ liệu cho phép mô tả vòng đời, thời lượng và biến thiên trong điều kiện khảo sát, không tự động khái quát cho mọi loài.', misconception: 'Một cá thể hoặc ảnh chụp không có thời gian không đủ suy ra tốc độ và quan hệ nhân quả.', example: 'Hai nhóm khác nhiệt độ và lượng thức ăn.', answer: 'Không thể tách riêng tác động nhiệt độ vì thức ăn là biến gây nhiễu.', keyPoints: ['Định nghĩa giai đoạn bằng dấu hiệu.', 'Ghi thời gian và điều kiện.', 'Theo dõi nhiều cá thể.', 'Không kết luận vượt thiết kế.'] }
+] as const;
+
+const letters = ['A', 'B', 'C', 'D'] as const;
+
+export const g11BiologyModule3Theory: TheoryBlock[] = seeds.map((seed, index) => ({
+  id: `bio11-theory-${seed.number}`,
+  courseId: 'grade11:biology',
+  moduleId: 'bio11-m3',
+  lessonIds: [`bio11-kntt-l${seed.lesson}`],
+  outcomeIds: [`out-bio11-${seed.number}`],
+  questionTypeIds: [`bio11-qt${seed.number}`],
+  sourceIds: ['bio11-source-official-guide', 'bio11-source-kntt-textbook'],
+  title: seed.title,
+  objectives: ['Nêu đúng khái niệm và dấu hiệu.', 'Giải thích cơ chế điều hòa.', 'Phân tích dữ liệu hoặc thực hành.'],
+  content: `**Khái niệm nền tảng**\n${seed.definition}\n\n**Cơ chế cần hiểu**\n${seed.mechanism}\n\n**Vận dụng**\n${seed.application}\n\n**Dễ nhầm**\n${seed.misconception}`,
+  formulas: seed.number === 33 ? [{
+    id: 'bio11-growth-rate',
+    label: 'Tốc độ sinh trưởng trung bình',
+    expression: 'v = (X₂ − X₁)/(t₂ − t₁)',
+    variables: [{ symbol: 'X', meaning: 'Đại lượng sinh trưởng như chiều cao hoặc sinh khối' }, { symbol: 't', meaning: 'Thời gian' }],
+    conditions: ['Hai số đo cùng đại lượng, cùng đơn vị.', 'Chỉ mô tả tốc độ trung bình trong khoảng khảo sát.']
+  }] : [],
+  keyPoints: [...seed.keyPoints],
+  workedExamples: [
+    { id: `bio11-theory-${seed.number}-ex1`, title: 'Giải thích tình huống', problem: seed.example, steps: ['Xác định dấu hiệu sinh trưởng hoặc giai đoạn.', `Đối chiếu cơ chế: ${seed.mechanism}`], answer: seed.answer },
+    { id: `bio11-theory-${seed.number}-ex2`, title: 'Sửa hiểu lầm', problem: seed.misconception, steps: ['Tìm từ tuyệt đối hóa hoặc dấu hiệu bị bỏ qua.', `Thay bằng nguyên tắc: ${seed.keyPoints[0]}`], answer: `Ghi nhớ: ${seed.keyPoints[0]} ${seed.keyPoints[1]}` }
+  ],
+  checkpoints: seed.keyPoints.map((point, checkpointIndex) => {
+    const shift = (index + checkpointIndex) % 4;
+    const base = [point, `Mọi trường hợp về ${seed.title.toLocaleLowerCase('vi')} đều diễn ra ngược lại.`, 'Kết quả không phụ thuộc giai đoạn, liều hay điều kiện.', 'Chỉ cần nhớ tên, không cần kiểm tra bằng chứng.'];
+    return {
+      id: `bio11-theory-${seed.number}-cp${checkpointIndex + 1}`,
+      question: `Nhận định nào đúng về ${seed.title.toLocaleLowerCase('vi')}?`,
+      options: [...base.slice(shift), ...base.slice(0, shift)] as [string, string, string, string],
+      correctAnswer: letters[(4 - shift) % 4],
+      explanation: point
+    };
+  }),
+  orderIndex: seed.number,
+  reviewStatus: 'draft'
+}));

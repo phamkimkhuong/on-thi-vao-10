@@ -9,16 +9,16 @@ const result = await validateCourseDataV4({
   expectedLessonCount: 29,
   expectedCurriculumModuleCount: 5,
   expectedOfficialRequirementCount: 40,
-  expectedOutcomeCount: 29,
-  expectedQuestionTypeCount: 29,
-  expectedPracticeTargetCount: 522,
-  expectedAssessmentExamCount: 0,
-  expectedAssessmentBlueprintCount: 0,
-  expectedAssessmentQuestionCount: 0,
-  expectedAssessmentSolutionCount: 0,
-  expectedAssessmentQuestionTypeCount: 0,
-  expectedTheoryLessonCount: 18,
-  expectedTheoryQuestionTypeCount: 29
+  expectedOutcomeCount: 52,
+  expectedQuestionTypeCount: 52,
+  expectedPracticeTargetCount: 936,
+  expectedAssessmentExamCount: 8,
+  expectedAssessmentBlueprintCount: 4,
+  expectedAssessmentQuestionCount: 192,
+  expectedAssessmentSolutionCount: 192,
+  expectedAssessmentQuestionTypeCount: 52,
+  expectedTheoryLessonCount: 29,
+  expectedTheoryQuestionTypeCount: 52
 });
 
 console.log('📊 Thống kê:', result.stats);
@@ -30,4 +30,4 @@ if (result.errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`✅ Sinh học 11 Chương 1–2 hợp lệ; còn ${result.warnings.length} cảnh báo thuộc Chương 3–5.`);
+console.log(`✅ Sinh học 11 đủ 5 chương hợp lệ; còn ${result.warnings.length} cảnh báo.`);
