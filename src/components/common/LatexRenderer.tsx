@@ -247,7 +247,7 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
   return (
     <span
       ref={containerRef}
-      className={`inline-block text-left notranslate ${className}`}
+      className={`inline-block max-w-full overflow-x-auto text-left notranslate ${className}`}
       aria-label={text}
       title={text}
     />

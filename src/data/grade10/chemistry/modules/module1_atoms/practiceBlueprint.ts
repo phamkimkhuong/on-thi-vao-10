@@ -19,7 +19,7 @@ export const m1PracticeBlueprints: QuestionTypePracticeBlueprint[] = [
       { id: 'chem10-qt2-st3', name: 'Nhận diện cùng nguyên tố và đồng vị', example: 'So sánh các hạt có cùng Z nhưng khác A.', recognitionSigns: ['Đề cho nhiều nguyên tử để phân nhóm.'], targetQuestionCount: 5 },
       { id: 'chem10-qt2-st4', name: 'Tiểu phân đẳng electron', example: 'So sánh ion và nguyên tử có cùng số electron.', recognitionSigns: ['Có nhiều tiểu phân mang điện khác nhau.'], targetQuestionCount: 5 }
     ],
-    coverage: { targetQuestionCount: 20, minimumQuestionsPerSubType: 4, requiredPracticeRoles: ['guided', 'near_transfer', 'representation_switch', 'misconception_check', 'far_transfer', 'retention', 'mastery_holdout'], requiredRepresentations: ['text', 'equation', 'table'], masteryHoldoutCount: 3 }
+    coverage: { targetQuestionCount: 20, minimumQuestionsPerSubType: 4, requiredPracticeRoles: ['guided', 'near_transfer', 'representation_switch', 'misconception_check', 'far_transfer', 'retention', 'mastery_holdout'], requiredRepresentations: ['text', 'equation', 'table'], masteryHoldoutCount: 4 }
   },
   {
     questionTypeId: 'chem10-qt3',

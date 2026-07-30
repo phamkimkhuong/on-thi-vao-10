@@ -291,6 +291,26 @@ export const getQuestions = (grade: GradeCode, subject: SubjectCode): Question[]
   return dataCache[cacheKey]?.questions || [];
 };
 
+/**
+ * Ngân hàng chỉ dùng cho màn hình luyện tập.
+ *
+ * Hóa 10 đang dùng contract legacy nên câu luyện và câu kiểm tra vẫn phải cùng
+ * tồn tại trong `questions` để ExamEngine tra cứu theo ID. Tách chúng tại biên
+ * đọc của PracticeEngine để câu kiểm tra định kỳ không lọt vào lộ trình học.
+ */
+export const getPracticeQuestions = (grade: GradeCode, subject: SubjectCode): Question[] => {
+  const questions = getQuestions(grade, subject);
+
+  if (grade === 'grade10' && subject === 'chemistry') {
+    return questions.filter(question => (
+      !question.id.startsWith('chem10-assess-')
+      && !question.id.startsWith('chem10-theory-')
+    ));
+  }
+
+  return questions;
+};
+
 export const getSolutions = (grade: GradeCode, subject: SubjectCode): Solution[] => {
   const cacheKey = `${grade}-${subject}`;
   return dataCache[cacheKey]?.solutions || [];

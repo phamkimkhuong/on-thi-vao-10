@@ -5,7 +5,7 @@ import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { aiService } from '../../services/aiService';
 import { logCustomEvent } from '../../services/firebase';
-import { getQuestionTypes, getQuestions, getSolutions, getTopics } from '../../data';
+import { getPracticeQuestions, getQuestionTypes, getSolutions, getTopics } from '../../data';
 import { Button } from '../../components/ui/button';
 import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 
@@ -35,12 +35,6 @@ import {
 
 const getNow = () => Date.now();
 
-const chemistryDifficultyRank: Record<Question['difficulty'], number> = {
-  easy: 0,
-  medium: 1,
-  hard: 2
-};
-
 const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: string }> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -66,7 +60,10 @@ export const PracticeEngine: React.FC = () => {
   const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as SubjectCode;
 
   const currentQuestionTypes = useMemo(() => getQuestionTypes(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
-  const currentQuestions = useMemo(() => getQuestions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
+  const currentQuestions = useMemo(
+    () => getPracticeQuestions(selectedGrade, routeSubject),
+    [selectedGrade, routeSubject]
+  );
   const currentSolutions = useMemo(() => getSolutions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
   const isGrade10English = routeSubject === 'english' && selectedGrade === 'grade10';
   const grade10EnglishSelectionOptions = isGrade10English
@@ -234,7 +231,7 @@ export const PracticeEngine: React.FC = () => {
   const isChemistry = routeSubject === 'chemistry';
   const isPhysics = routeSubject === 'physics';
   const isBiology = routeSubject === 'biology';
-  const usesAdaptivePractice = isMath || isPhysics || isBiology;
+  const usesAdaptivePractice = isMath || isChemistry || isPhysics || isBiology;
   const qList = currentQuestions;
 
   const filteredQuestions = useEnglishQuestionFilter(
@@ -265,23 +262,13 @@ export const PracticeEngine: React.FC = () => {
     setAdaptivePracticeStatus(buildAdaptivePracticeSequence(filteredQuestions, attemptsAtSessionStart));
   }, [filteredQuestions, isExamMode, questionTypeId, user?.uid, usesAdaptivePractice]);
 
-  // Toán học, Sinh học và Vật lí dùng snapshot thích nghi để giữ nguyên câu hiện tại trong
-  // suốt phiên. Hóa học hiện chỉ sắp xếp tăng dần độ khó. Chế độ thi luôn giữ
-  // nguyên thứ tự đề để không làm biến đổi cấu trúc bài kiểm tra.
+  // Các môn có metadata luyện tập dùng snapshot thích nghi để giữ nguyên câu
+  // hiện tại trong suốt phiên. Chế độ thi luôn giữ nguyên thứ tự đề.
   const questions = useMemo(() => {
     if (isExamMode) return filteredQuestions;
     if (usesAdaptivePractice && adaptivePracticeStatus) return adaptivePracticeStatus.questions;
-    if (!isChemistry) return filteredQuestions;
-
-    return filteredQuestions
-      .map((question, sourceIndex) => ({ question, sourceIndex }))
-      .sort((left, right) => (
-        chemistryDifficultyRank[left.question.difficulty]
-        - chemistryDifficultyRank[right.question.difficulty]
-        || left.sourceIndex - right.sourceIndex
-      ))
-      .map(({ question }) => question);
-  }, [adaptivePracticeStatus, filteredQuestions, isChemistry, isExamMode, usesAdaptivePractice]);
+    return filteredQuestions;
+  }, [adaptivePracticeStatus, filteredQuestions, isExamMode, usesAdaptivePractice]);
 
   const questionAtIdx = questions[currentIdx] || null;
 
@@ -1173,7 +1160,15 @@ export const PracticeEngine: React.FC = () => {
       {adaptivePracticeStatus && adaptivePracticeStatus.holdoutQuestionCount > 0 && (
         <AdaptivePracticeStatus
           status={adaptivePracticeStatus}
-          variant={isBiology ? 'biology' : 'physics'}
+          variant={
+            isMath
+              ? 'math'
+              : isChemistry
+                ? 'chemistry'
+                : isBiology
+                  ? 'biology'
+                  : 'physics'
+          }
         />
       )}
 

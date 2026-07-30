@@ -14,10 +14,19 @@ export const getSubjectFromQuestionTypeId = (questionTypeId?: string): SubjectCo
 
 export const getGradeFromQuestionTypeId = (questionTypeId?: string): string => {
   if (!questionTypeId) return 'Lớp 9';
-  const match = questionTypeId.match(/^g(\d+)-/);
-  if (match) {
-    return `Lớp ${match[1]}`;
+
+  // 1. Kiểm tra tiền tố g10-, g11-
+  const prefixMatch = questionTypeId.match(/^g(\d+)[-_]/i);
+  if (prefixMatch) {
+    return `Lớp ${prefixMatch[1]}`;
   }
+
+  // 2. Kiểm tra các ID có gắn số khối như math10-, eng10-, chem10-, phy10-, bio10-, math11-, ...
+  const typeMatch = questionTypeId.match(/^(?:math|eng|chem|phy|bio|physics|chemistry|biology)(\d+)[-_]/i);
+  if (typeMatch) {
+    return `Lớp ${typeMatch[1]}`;
+  }
+
   return 'Lớp 9';
 };
 

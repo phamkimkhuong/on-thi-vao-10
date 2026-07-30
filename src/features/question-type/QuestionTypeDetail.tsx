@@ -674,7 +674,7 @@ export const QuestionTypeDetail: React.FC = () => {
                   </div>
                 )}
 
-                <div className="flex items-center gap-2 self-end sm:self-auto">
+                <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto">
                   {textbookData && (
                     <button
                       onClick={() => setIsTextbookOpen(true)}
@@ -708,7 +708,7 @@ export const QuestionTypeDetail: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <Volume2 size={12} /> 🔊 Nghe đọc bài giảng
+                        <Volume2 size={12} /> Nghe đọc bài giảng
                       </>
                     )}
                   </button>

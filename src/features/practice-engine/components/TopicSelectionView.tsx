@@ -5,7 +5,7 @@ import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
 import { QuestionType, SubjectCode } from '../../../types';
-import { getTopics, getQuestions } from '../../../data';
+import { getPracticeQuestions, getTopics } from '../../../data';
 import { useAppStore } from '../../../services/store';
 import { getSubjectTheme, getStarsFromScore } from '../../../utils/theme';
 import { storageService } from '../../../services/storage';
@@ -69,7 +69,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const isChemistry = routeSubject === 'chemistry';
   const isPhysics = routeSubject === 'physics';
 
-  const allQuestions = useMemo(() => getQuestions(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
+  const allQuestions = useMemo(
+    () => getPracticeQuestions(selectedGrade, routeSubject),
+    [selectedGrade, routeSubject]
+  );
   const userId = user?.uid || 'guest';
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const progress = useMemo(() => storageService.getProgress(userId), [userId, progressVersion]);
@@ -595,18 +598,18 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
               {topicQTypes.map((qType) => {
                 const qTypeAttempts = attempts.filter(a => a.questionTypeId === qType.id);
                 const qTypeQuestions = allQuestions.filter(q => q.questionTypeId === qType.id);
-                const physicsStatus = isPhysics
+                const adaptiveStatus = (isChemistry || isPhysics)
                   ? buildAdaptivePracticeSequence(qTypeQuestions, qTypeAttempts)
                   : null;
-                const totalQuestions = physicsStatus?.learningQuestionCount ?? qTypeQuestions.length;
+                const totalQuestions = adaptiveStatus?.learningQuestionCount ?? qTypeQuestions.length;
                 const solvedQuestionIds = new Set(
                   qTypeAttempts
                     .filter(a => a.isCorrect)
                     .filter(a => !qTypeQuestions.find(question => question.id === a.questionId)?.isMasteryHoldout)
                     .map(a => a.questionId)
                 );
-                const solvedCount = physicsStatus
-                  ? physicsStatus.readiness.correctLearningCount
+                const solvedCount = adaptiveStatus
+                  ? adaptiveStatus.readiness.correctLearningCount
                   : Math.min(solvedQuestionIds.size, totalQuestions);
                 const progressPercent = totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
                 const masteryScore = progress?.masteryLevels[qType.id] ?? 0;
@@ -629,9 +632,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     );
                   }
                   if (
-                    physicsStatus
-                    && physicsStatus.holdoutQuestionCount > 0
-                    && physicsStatus.correctHoldoutCount === physicsStatus.holdoutQuestionCount
+                    adaptiveStatus
+                    && adaptiveStatus.holdoutQuestionCount > 0
+                    && adaptiveStatus.correctHoldoutCount === adaptiveStatus.holdoutQuestionCount
                   ) {
                     return (
                       <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 inline-flex items-center gap-1">
@@ -639,7 +642,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                       </span>
                     );
                   }
-                  if (physicsStatus?.holdoutUnlocked && physicsStatus.holdoutQuestionCount > 0) {
+                  if (adaptiveStatus?.holdoutUnlocked && adaptiveStatus.holdoutQuestionCount > 0) {
                     return (
                       <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 inline-flex items-center gap-1">
                         🛡️ Sẵn sàng kiểm tra
@@ -647,10 +650,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     );
                   }
                   if (
-                    (!physicsStatus && (solvedCount === totalQuestions || masteryScore >= 80))
+                    (!adaptiveStatus && (solvedCount === totalQuestions || masteryScore >= 80))
                     || (
-                      physicsStatus
-                      && physicsStatus.holdoutQuestionCount === 0
+                      adaptiveStatus
+                      && adaptiveStatus.holdoutQuestionCount === 0
                       && (solvedCount === totalQuestions || masteryScore >= 80)
                     )
                   ) {

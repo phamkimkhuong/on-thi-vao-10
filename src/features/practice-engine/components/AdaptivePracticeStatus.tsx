@@ -4,7 +4,7 @@ import type { AdaptivePracticeSequenceResult } from '../utils/adaptivePracticeSe
 
 interface AdaptivePracticeStatusProps {
   status: AdaptivePracticeSequenceResult;
-  variant?: 'physics' | 'biology';
+  variant?: 'math' | 'chemistry' | 'physics' | 'biology';
 }
 
 export const AdaptivePracticeStatus: React.FC<AdaptivePracticeStatusProps> = ({
@@ -13,21 +13,37 @@ export const AdaptivePracticeStatus: React.FC<AdaptivePracticeStatusProps> = ({
 }) => {
   const { readiness } = status;
   const accuracyPercent = Math.round(readiness.accuracy * 100);
-  const isBiology = variant === 'biology';
-  const subjectName = isBiology ? 'Sinh học' : 'Vật lí';
+  const theme = {
+    math: {
+      subjectName: 'Toán học',
+      section: 'border-indigo-500/20 bg-indigo-500/5',
+      icon: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+    },
+    chemistry: {
+      subjectName: 'Hóa học',
+      section: 'border-emerald-500/25 bg-emerald-500/5',
+      icon: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    },
+    physics: {
+      subjectName: 'Vật lí',
+      section: 'border-cyan-500/20 bg-cyan-500/5',
+      icon: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400',
+    },
+    biology: {
+      subjectName: 'Sinh học',
+      section: 'border-green-500/25 bg-green-500/5',
+      icon: 'bg-green-500/10 text-green-600 dark:text-green-400',
+    },
+  }[variant];
 
   return (
     <section
-      className={isBiology
-        ? 'rounded-2xl border border-emerald-500/25 bg-emerald-500/5 px-4 py-3 shadow-sm'
-        : 'rounded-2xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-3 shadow-sm'}
-      aria-label={`Trạng thái lộ trình luyện tập thích nghi môn ${subjectName}`}
+      className={`rounded-2xl border px-4 py-3 shadow-sm ${theme.section}`}
+      aria-label={`Trạng thái lộ trình luyện tập thích nghi môn ${theme.subjectName}`}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-2.5">
-          <div className={isBiology
-            ? 'mt-0.5 rounded-xl bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400'
-            : 'mt-0.5 rounded-xl bg-cyan-500/10 p-2 text-cyan-600 dark:text-cyan-400'}>
+          <div className={`mt-0.5 rounded-xl p-2 ${theme.icon}`}>
             {status.holdoutUnlocked
               ? <ShieldCheck size={17} aria-hidden="true" />
               : <LockKeyhole size={17} aria-hidden="true" />}
