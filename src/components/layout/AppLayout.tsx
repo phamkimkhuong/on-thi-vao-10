@@ -26,6 +26,10 @@ import { authService } from '../../services/authService';
 import { teacherAccessService } from '../../services/teacherAccessService';
 import { PolicyModal } from '../common/PolicyModal';
 import { ProfileModal } from '../common/ProfileModal';
+import { DictionaryModal } from '../dictionary/DictionaryModal';
+import { QuickLookupPopover } from '../dictionary/QuickLookupPopover';
+import { FloatingDictionaryWidget } from '../dictionary/FloatingDictionaryWidget';
+import { QuickLookupWrapper } from '../dictionary/QuickLookupWrapper';
 import { cn } from '../../utils/cn';
 import { getQuestionTypes, loadSubjectData } from '../../data';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
@@ -125,6 +129,7 @@ export const AppLayout: React.FC = () => {
         { code: 'english', name: 'Tiếng Anh', icon: '🗣️', isLocked: false },
         { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: false },
         { code: 'physics', name: 'Vật lý', icon: '⚛️', isLocked: false },
+        { code: 'biology', name: 'Sinh học', icon: '🧬', isLocked: false },
       ]
     },
     {
@@ -742,7 +747,13 @@ export const AppLayout: React.FC = () => {
                 </div>
               </div>
             }>
-              <Outlet />
+              {selectedSubject === 'english' ? (
+                <QuickLookupWrapper>
+                  <Outlet />
+                </QuickLookupWrapper>
+              ) : (
+                <Outlet />
+              )}
             </React.Suspense>
           )}
         </div>
@@ -750,6 +761,15 @@ export const AppLayout: React.FC = () => {
 
       <PolicyModal isOpen={showPolicyModal} onClose={() => setShowPolicyModal(false)} />
       <ProfileModal isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
+
+      {/* Chỉ hiển thị tính năng Từ điển khi học sinh đang học môn Tiếng Anh */}
+      {selectedSubject === 'english' && (
+        <>
+          <DictionaryModal />
+          <QuickLookupPopover />
+          <FloatingDictionaryWidget />
+        </>
+      )}
     </div>
   );
 };

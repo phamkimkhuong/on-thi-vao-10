@@ -9,6 +9,6 @@ export const g11PhysicsModule4Topics: CourseTopic[] = [
     name: 'Chương IV: Dòng điện và mạch điện',
     slug: 'chuong-4-dong-dien-va-mach-dien',
     orderIndex: 4,
-    tier: 1
+    tier: 3
   }
 ];

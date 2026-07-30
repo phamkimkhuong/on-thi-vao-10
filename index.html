@@ -1,50 +1,69 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      if (window.location.hostname.endsWith('.web.app') || window.location.hostname.endsWith('.firebaseapp.com')) {
-        window.location.replace('https://ezonthi.com' + window.location.pathname + window.location.search + window.location.hash);
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    if (window.location.hostname.endsWith('.web.app') || window.location.hostname.endsWith('.firebaseapp.com')) {
+      window.location.replace('https://ezonthi.com' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta name="description"
+    content="ezonthi - Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12. Chuyên sâu luyện đề, giải dạng bài thực chiến các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát chương trình GDPT 2018." />
+  <meta name="google-site-verification" content="t1TGIrg68ub2tD9DX38uFPPBpDcBaMx7MyPtD7qH0yY" />
+  <meta name="keywords"
+    content="ezonthi, ôn thi vào 10, luyện thi THPT, toán 11, hóa 11, vật lý 11, toán 10, tiếng anh 10, học trực tuyến, GDPT 2018" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://ezonthi.com/" />
+
+  <!-- Open Graph / Facebook / Zalo -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ezonthi.com/" />
+  <meta property="og:site_name" content="ezonthi" />
+  <meta property="og:title" content="EZ Ôn thi | Nền tảng Học tốt &amp; Luyện thi Lớp 9 - 12" />
+  <meta property="og:description"
+    content="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT mới." />
+  <meta property="og:image" content="https://ezonthi.com/logo.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EZ Ônthi | Nền tảng Học tốt &amp; Luyện thi Lớp 9 - 12" />
+  <meta name="twitter:description"
+    content="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT mới." />
+  <meta name="twitter:image" content="https://ezonthi.com/logo.png" />
+
+  <!-- Google Fonts, Firebase & jsDelivr Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firebase.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- KaTeX CSS for math rendering (Non render-blocking) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" media="print"
+    onload="this.media='all'" crossorigin="anonymous">
+  <noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  </noscript>
+
+  <!-- Structured Data (JSON-LD) for Google Search Rich Snippets & Site Name -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ezonthi",
+        "alternateName": ["Ôn thi EZ", "Ezonthi", "ezonthi.com"],
+        "url": "https://ezonthi.com/"
       }
     </script>
-    <meta name="description" content="ezonthi - Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12. Chuyên sâu luyện đề, giải dạng bài thực chiến các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát chương trình GDPT 2018." />
-    <meta name="google-site-verification" content="t1TGIrg68ub2tD9DX38uFPPBpDcBaMx7MyPtD7qH0yY" />
-    <meta name="keywords" content="ezonthi, ôn thi vào 10, luyện thi THPT, toán 11, hóa 11, vật lý 11, toán 10, tiếng anh 10, học trực tuyến, GDPT 2018" />
-    <meta name="robots" content="index, follow" />
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://ezonthi.com/" />
-    
-    <!-- Open Graph / Facebook / Zalo -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://ezonthi.com/" />
-    <meta property="og:site_name" content="ezonthi" />
-    <meta property="og:title" content="ezonthi | Nền tảng Học tốt &amp; Luyện thi Lớp 9 - 12" />
-    <meta property="og:description" content="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT mới." />
-    <meta property="og:image" content="https://ezonthi.com/logo.png" />
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ezonthi | Nền tảng Học tốt &amp; Luyện thi Lớp 9 - 12" />
-    <meta name="twitter:description" content="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT mới." />
-    <meta name="twitter:image" content="https://ezonthi.com/logo.png" />
-
-    <!-- Google Fonts, Firebase & jsDelivr Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://firebase.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- KaTeX CSS for math rendering (Non render-blocking) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" media="print" onload="this.media='all'" crossorigin="anonymous">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"></noscript>
-    
-    <!-- Structured Data (JSON-LD) for Google Search Rich Snippets -->
-    <script type="application/ld+json">
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
@@ -56,10 +75,12 @@
       }
     </script>
 
-    <title>ezonthi | Nền tảng Học tốt &amp; Luyện thi Lớp 9 - 12</title>
-  </head>
-  <body class="antialiased selection:bg-indigo-500/30">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <title>ezonthi | Nền tảng Học tốt &amp; Luyện thi Lớp 9 - 12</title>
+</head>
+
+<body class="antialiased selection:bg-indigo-500/30">
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

@@ -242,6 +242,25 @@ export const loadSubjectData = async (grade: GradeCode, subject: SubjectCode): P
           learningOutcomes: learningPathMod.g11EnglishOutcomes,
           learningMisconceptions: learningPathMod.g11EnglishMisconceptions
         };
+      } else if (subject === 'biology') {
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
+          import('./grade11/biology/topics'),
+          import('./grade11/biology/questionTypes'),
+          import('./grade11/biology/questions'),
+          import('./grade11/biology/solutions'),
+          import('./grade11/biology/learningPath'),
+          import('./grade11/biology/assessments')
+        ]);
+        data = {
+          topics: topicsMod.g11BiologyTopics,
+          questionTypes: qtMod.g11BiologyQuestionTypes,
+          questions: [...qMod.g11BiologyQuestions, ...assessmentsMod.g11BiologyAssessmentQuestions],
+          solutions: [...sMod.g11BiologySolutions, ...assessmentsMod.g11BiologyAssessmentSolutions],
+          mockExams: assessmentsMod.g11BiologyAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g11BiologyAssessmentBlueprints || [],
+          learningOutcomes: learningPathMod.g11BiologyOutcomes,
+          learningMisconceptions: learningPathMod.g11BiologyMisconceptions
+        };
       } else {
         data = { topics: [], questionTypes: [], questions: [], solutions: [], mockExams: [] };
       }

@@ -89,18 +89,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 }) => {
   const theme = getSubjectTheme(routeSubject);
   const mathInputRef = useRef<HTMLInputElement>(null);
-  const isAutoCheckMath = isMath && currentQuestion.validatorType && currentQuestion.validatorType !== 'manual';
-  const keyboardLayout = currentQuestion.topicId === 'math10-t3'
-    ? 'algebra'
-    : currentQuestion.topicId === 'math10-t2'
-      ? 'inequality'
-      : currentQuestion.topicId === 'math10-t4'
-        ? 'geometry'
-        : currentQuestion.questionTypeId === 'math10-qt7'
-          ? 'dot-product'
-          : currentQuestion.topicId === 'math10-t5'
-            ? 'vector'
-            : 'set';
 
   // Phân tách options từ content nếu validatorType === 'choice' và không có options riêng biệt
   let displayOptions = currentQuestion.options;
@@ -117,6 +105,22 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       displayOptions = parts.slice(1).map(opt => opt.trim());
     }
   }
+
+  const hasOptions = Boolean(displayOptions && displayOptions.length > 0);
+  const isChoiceQuestion = currentQuestion.validatorType === 'choice' || hasOptions;
+  const isAutoCheckMath = isMath && !isChoiceQuestion && Boolean(currentQuestion.validatorType) && currentQuestion.validatorType !== 'manual';
+
+  const keyboardLayout = currentQuestion.topicId === 'math10-t3'
+    ? 'algebra'
+    : currentQuestion.topicId === 'math10-t2'
+      ? 'inequality'
+      : currentQuestion.topicId === 'math10-t4'
+        ? 'geometry'
+        : currentQuestion.questionTypeId === 'math10-qt7'
+          ? 'dot-product'
+          : currentQuestion.topicId === 'math10-t5'
+            ? 'vector'
+            : 'set';
 
   return (
     <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden">
@@ -180,7 +184,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 />
               </div>
             )
-          ) : isMath ? (
+          ) : currentQuestion.validatorType === 'manual' ? (
             // Trình bày hướng dẫn nộp ảnh giải cho môn Toán
             <div className="bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 p-4.5 rounded-2xl space-y-2">
               <h4 className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
@@ -386,9 +390,11 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             <div className="grid grid-cols-1 gap-3.5">
               {displayOptions && displayOptions.length > 0 ? (
                 displayOptions.map((opt: string, i: number) => {
-                  const optLetter = opt.charAt(0); // A, B, C, D
+                  const letters = ['A', 'B', 'C', 'D'];
+                  const hasPrefix = /^[A-D]\.\s*/i.test(opt);
+                  const optLetter = hasPrefix ? opt.charAt(0).toUpperCase() : (letters[i] || String.fromCharCode(65 + i));
                   const isSelected = selectedOption === optLetter;
-                  const cleanOpt = opt.replace(/^[A-D]\.\s*/i, '');
+                  const cleanOpt = hasPrefix ? opt.replace(/^[A-D]\.\s*/i, '') : opt;
                   return (
                     <button
                       key={i}
@@ -530,7 +536,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             );
           })()}
 
-          {isMath && !isAutoCheckMath && (
+          {isMath && currentQuestion.validatorType === 'manual' && (
             <ProofImageUploader
               images={proofImages}
               onChange={setProofImages}

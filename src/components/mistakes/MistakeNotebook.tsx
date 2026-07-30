@@ -470,7 +470,9 @@ export const MistakeNotebook: React.FC = () => {
                   // Chọn đáp án cho câu trắc nghiệm (Tiếng Anh hoặc trắc nghiệm Toán/Hóa)
                   <div className="grid grid-cols-1 gap-3">
                     {activeMistake.question.options?.map((opt: string, i: number) => {
-                      const optLetter = opt.charAt(0);
+                      const letters = ['A', 'B', 'C', 'D'];
+                      const hasPrefix = /^[A-D]\.\s*/i.test(opt);
+                      const optLetter = hasPrefix ? opt.charAt(0).toUpperCase() : (letters[i] || String.fromCharCode(65 + i));
                       const isSelected = selectedOption === optLetter;
                       return (
                         <button

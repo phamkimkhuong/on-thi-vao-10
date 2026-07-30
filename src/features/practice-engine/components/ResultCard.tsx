@@ -589,9 +589,17 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             {solutionDetail.reviewSuggestions.length > 0 && (
               <div className="pt-2 border-t border-border/20 text-indigo-600 dark:text-indigo-400 font-semibold leading-relaxed">
                 <span className="font-extrabold block text-foreground mb-1">📚 Cần ôn lại:</span>
-                {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => (
-                  <p key={index}>• <LatexRenderer text={suggestion} /></p>
-                ))}
+                {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => {
+                  let formattedSuggestion = suggestion;
+                  if (currentQuestionType?.name) {
+                    formattedSuggestion = formattedSuggestion.replace(/[a-z0-9]+-[a-z0-9]+/gi, `dạng bài "${currentQuestionType.name}"`);
+                  } else {
+                    formattedSuggestion = formattedSuggestion.replace(/[a-z0-9]+-[a-z0-9]+/gi, 'dạng bài tương ứng');
+                  }
+                  return (
+                    <p key={index}>• <LatexRenderer text={formattedSuggestion} /></p>
+                  );
+                })}
               </div>
             )}
           </div>

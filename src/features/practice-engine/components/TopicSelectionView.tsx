@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Crown } from 'lucide-react';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
@@ -9,6 +10,7 @@ import { useAppStore } from '../../../services/store';
 import { getSubjectTheme, getStarsFromScore } from '../../../utils/theme';
 import { storageService } from '../../../services/storage';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
+import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
 import { buildAdaptivePracticeSequence } from '../utils/adaptivePracticeSequence';
 
 interface TopicSelectionViewProps {
@@ -50,6 +52,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
 }) => {
   const navigate = useNavigate();
   const { selectedGrade, user, progressVersion } = useAppStore();
+  const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const theme = getSubjectTheme(routeSubject);
   const isMath = routeSubject === 'math';
   const isEnglish = routeSubject === 'english';
@@ -662,9 +665,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                     )}
                     onClick={() => {
                       if (topic.tier === 3 && !isPremium) {
-                        if (window.confirm("Chặng 3 (Mục tiêu điểm 9-10) là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa không?")) {
-                          navigate('/premium');
-                        }
+                        setPremiumModalOpen(true);
                         return;
                       }
 
@@ -855,6 +856,26 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           </Card>
         </div>
       )}
+
+      {/* 🌟 Premium Unlock Modal */}
+      <ConfirmationModal
+        isOpen={premiumModalOpen}
+        title="Mở khóa đặc quyền Premium 🌟"
+        description="Chặng 3 (Mục tiêu điểm 9-10) là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ nội dung không?"
+        confirmLabel="Nâng cấp Premium"
+        cancelLabel="Để sau"
+        variant="warning"
+        icon={
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+            <Crown size={26} />
+          </div>
+        }
+        onConfirm={() => {
+          setPremiumModalOpen(false);
+          navigate('/premium');
+        }}
+        onCancel={() => setPremiumModalOpen(false)}
+      />
     </div>
   );
 };

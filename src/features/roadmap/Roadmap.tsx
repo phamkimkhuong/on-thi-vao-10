@@ -24,7 +24,7 @@ export const Roadmap: React.FC = () => {
   const { selectedSubject, selectedGrade, progressVersion, isPremium, user } = useAppStore();
   void progressVersion;
 
-  const hasVideos = selectedSubject === 'chemistry' || selectedSubject === 'biology' || (selectedSubject === 'physics' && selectedGrade === 'grade10');
+  const hasVideos = selectedSubject === 'chemistry' || (selectedSubject === 'biology' && selectedGrade === 'grade10') || (selectedSubject === 'physics' && selectedGrade === 'grade10');
 
   const getInitialView = (): 'roadmap' | 'videos' => {
     const paramView = searchParams.get('view');

@@ -162,6 +162,6 @@ export const g11PhysicsModule1Solutions: CourseSolution[] = groups.flatMap(group
     ],
     finalAnswer: answerLetters[(group.start + index - 1) % answerLetters.length],
     commonMistakes: [group.commonMistake],
-    reviewSuggestions: [`Ôn lại hướng giải và dấu hiệu nhận biết của ${group.questionTypeId}.`]
+    reviewSuggestions: ['Ôn lại hướng giải và dấu hiệu nhận biết của dạng bài này.']
   }))
 );

@@ -520,5 +520,5 @@ export const g11PhysicsModule1ExpansionSolutions: CourseSolution[] = solutionRow
   })),
   finalAnswer: row.answer,
   commonMistakes: ['Thay số trước khi đổi đơn vị hoặc dùng công thức đúng nhưng sai trạng thái pha.'],
-  reviewSuggestions: [`Ôn lại dấu hiệu nhận dạng và chuỗi suy luận của ${row.questionTypeId}.`]
+  reviewSuggestions: ['Ôn lại dấu hiệu nhận dạng và chuỗi suy luận của dạng bài này.']
 }));

@@ -770,7 +770,10 @@ export const PracticeEngine: React.FC = () => {
 
     const currentQ = questions[currentIdx];
     const isMath = routeSubject === 'math';
-    const isAutoCheckMath = isMath && currentQ.validatorType && currentQ.validatorType !== 'manual';
+    const hasOptions = Boolean(currentQ.options && currentQ.options.length > 0);
+    const isChoiceQuestion = currentQ.validatorType === 'choice' || hasOptions;
+    const isAutoCheckMath = isMath && !isChoiceQuestion && Boolean(currentQ.validatorType) && currentQ.validatorType !== 'manual';
+    const isManualMath = isMath && currentQ.validatorType === 'manual';
 
     const answerInput = currentQ.answerSchema
       ? structuredAnswer
@@ -801,13 +804,13 @@ export const PracticeEngine: React.FC = () => {
     }
 
     let aiEvaluation: AiEvaluation | undefined = undefined;
-    let correct = (isMath && !isAutoCheckMath) ? true : validateAnswer(currentQ, answerInput);
+    let correct = isManualMath ? true : validateAnswer(currentQ, answerInput);
     // Tự động phân loại chế độ chấm điểm:
     // Môn Toán hoặc các câu tự luận cần upload ảnh/chấm thủ công -> 'manual'
     // Các câu hỏi trắc nghiệm (choice), điền số (number), điền từ (exact) -> 'auto'
-    let gradingMode: 'auto' | 'manual' = 'auto';
+    let gradingMode: 'auto' | 'manual' = isManualMath ? 'manual' : 'auto';
 
-    if (isMath && !isAutoCheckMath) {
+    if (isManualMath) {
       gradingMode = 'manual';
       if (proofImages.length > 0) {
         try {
@@ -1157,14 +1160,13 @@ export const PracticeEngine: React.FC = () => {
   }
 
   const currentQuestion = questions[currentIdx];
-  const isAutoCheckMath = isMath && currentQuestion.validatorType && currentQuestion.validatorType !== 'manual';
-  const submitDisabled = currentQuestion.answerSchema
+  const isManualMath = isMath && currentQuestion?.validatorType === 'manual';
+
+  const submitDisabled = currentQuestion?.answerSchema
     ? !isAnswerComplete(currentQuestion, structuredAnswer)
-    : isAutoCheckMath
-      ? !selectedOption
-      : isMath
-        ? proofImages.length === 0
-        : !selectedOption;
+    : isManualMath
+      ? proofImages.length === 0
+      : !selectedOption;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 px-4">

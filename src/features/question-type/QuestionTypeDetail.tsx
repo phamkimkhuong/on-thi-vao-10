@@ -448,7 +448,7 @@ export const QuestionTypeDetail: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-5">
                       {exampleQuestion.options.map((opt: string, i: number) => (
                         <div key={i} className="p-4 bg-secondary/40 rounded-2xl border border-border/10 hover:border-border/30 transition-colors font-medium">
-                          {opt}
+                          <LatexRenderer text={opt} />
                         </div>
                       ))}
                     </div>
