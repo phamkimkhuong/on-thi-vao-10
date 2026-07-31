@@ -27,6 +27,7 @@
     "deploy-rules": "firebase deploy --only firestore:rules,storage --project on-thi-vao-10-7d87c"
   },
   "dependencies": {
+    "@sentry/react": "^10.69.0",
     "@tailwindcss/vite": "^4.3.2",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
@@ -36,6 +37,7 @@
     "lucide-react": "^1.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-is": "^19.2.8",
     "react-router-dom": "^7.18.1",
     "recharts": "^3.9.2",
     "tailwind-merge": "^3.0.2",
@@ -47,6 +49,8 @@
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react-oxc": "^0.4.3",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.3",
     "postcss": "^8.5.3",

@@ -28,14 +28,15 @@ export const teacherService = {
   ): Promise<{ students: SimulatedStudent[]; lastActiveAt?: string; hasMore: boolean }> {
     try {
       const usersRef = collection(db, 'users');
+      const fetchLimit = limitCount !== undefined ? limitCount + excludedUserIds.length + 1 : undefined;
       let q = query(usersRef, orderBy('lastActiveAt', 'desc'));
       
       if (startAfterActiveAt) {
         q = query(q, startAfter(startAfterActiveAt));
       }
       
-      if (limitCount !== undefined) {
-        q = query(q, limit(limitCount + 1));
+      if (fetchLimit !== undefined) {
+        q = query(q, limit(fetchLimit));
       }
       
       const querySnapshot = await getDocs(q);
@@ -44,7 +45,7 @@ export const teacherService = {
       const excludedIds = new Set(excludedUserIds);
       
       querySnapshot.forEach(docRef => {
-        const data = docRef.data();
+        const data = docRef.data() as any;
         if (!excludedIds.has(docRef.id)) {
           students.push({
             id: docRef.id,

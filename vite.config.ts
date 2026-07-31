@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['recharts', 'lucide-react', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
+    include: ['recharts', 'react-is', 'lucide-react', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
   },
 })
 
