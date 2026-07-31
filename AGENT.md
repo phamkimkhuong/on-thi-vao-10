@@ -579,6 +579,30 @@ npm run deploy     # Build + Firebase deploy hosting
   - **Hàng đợi bài tự luận:** Sử dụng collection root phẳng `/manual_attempts/{attemptId}` làm hàng đợi trung gian cho các bài làm tự luận cần chấm.
   - **Kết quả:** Giảm tải kết nối mạng từ **$1 + 2N$ reads** xuống cố định chỉ còn **2 connection reads** ($O(1)$ complexity) giúp trang Dashboard tải tức thì.
 
+### 12.7 Hệ Thống Thông Báo Email Hàng Loạt (Resend API & Firebase Cloud Functions)
+- **Mục đích:** Cho phép giáo viên phát bản tin email thông báo tính năng mới, sự kiện hoặc bài giảng mới đến toàn bộ học sinh trong hệ thống.
+- **Tên miền gửi chính chủ:** Đã xác minh thành công tên miền `ezonthi.com` trên Resend (đủ bản ghi DKIM `resend._domainkey`, SPF `send`, DMARC `_dmarc`). Người gửi mặc định: `Ban Giáo Dục ezonthi <thongbao@ezonthi.com>`.
+- **Bảo mật & Tránh rào cản CORS:** 
+  - Toàn bộ lệnh gửi mail được xử lý qua Firebase Cloud Function proxy `sendResendEmail` trên Serverless Backend (Node 22 Gen 2).
+  - API Key được bảo vệ tuyệt đối trên Server (`process.env.RESEND_API_KEY`), không hề lộ diện trên trình duyệt Web App.
+
+### 12.8 Kiến Trúc Danh Bạ Email 1-Read & Cơ Chế Phân Đợt Gửi (95 mail/ngày)
+- **Tệp tin giao diện:** [EmailBroadcastManager.tsx](file:///d:/a_duan/on-thi-vao-10/src/features/teacher/components/EmailBroadcastManager.tsx).
+- **Tệp tin Cloud Function:** [email.ts](file:///d:/a_duan/on-thi-vao-10/functions/src/handlers/email.ts).
+- **Mô hình Danh Bạ Tập Trung (`system/email_directory`):**
+  - Lưu toàn bộ email học sinh vào 1 document duy nhất `/system/email_directory` trong Firestore.
+  - Hàm `getEmailDirectory` đọc thông tin danh bạ chỉ tốn **đúng 1 READ** cho toàn hệ thống.
+  - Hàm `syncEmailDirectory` cho phép quét lại và Re-index toàn bộ dữ liệu khi cần bảo trì.
+- **Cơ chế Phân Đợt (Batching 95 mail/ngày):**
+  - Tự động chia tổng số học sinh thành các đợt 95 email/ngày (vừa vặn hạn mức 100/ngày của Resend Free).
+  - Giao diện cung cấp thanh chọn đợt gửi (Đợt 1 [1-95], Đợt 2 [96-190],...) giúp giáo viên chủ động gửi mỗi ngày mà không bao giờ vượt hạn mức free.
+
+### 12.9 Định Tuyến URL Tab & Tối Ưu Firestore Reads (Teacher Dashboard URL Routing)
+- **Tệp tin:** [TeacherDashboard.tsx](file:///d:/a_duan/on-thi-vao-10/src/features/teacher/TeacherDashboard.tsx).
+- **URL SearchParams:** Quản lý tab active qua URL query param `/teacher?tab=email_broadcast`, `/teacher?tab=students`,... Nhấn `F5` / `Reload` giữ nguyên tab hiện tại.
+- **Tải dữ liệu lười (Lazy Loading):** Tải danh sách 20 học sinh chỉ khi đang ở tab `students` hoặc `grading`. Ngăn chặn hoàn toàn 20 lượt Read dư thừa khi reload ở các tab khác.
+- **Đếm tổng số học sinh tối ưu (Aggregation Query):** Sử dụng `getCountFromServer(collection(db, 'users'))` để hiển thị chính xác tổng số học sinh toàn hệ thống với chi phí **chỉ 1 READ**.
+
 ---
 
 ## 13. Checklist Trước Khi Commit

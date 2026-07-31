@@ -11,6 +11,11 @@ Sentry.init({
     'Database is closing/hidden',
     'Database is closing',
     /Database is closing\/hidden/i,
+    'Error invoking postMessage: Java object is gone',
+    /Error invoking postMessage/i,
+    /Java object is gone/i,
+    'zaloJSV2 is not defined',
+    /zaloJSV2/i,
   ],
   integrations: [
     Sentry.browserTracingIntegration(),

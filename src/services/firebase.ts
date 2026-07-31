@@ -8,7 +8,7 @@ import { getPerformance, FirebasePerformance } from 'firebase/performance';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC--Q8dDklMtRVrTkgczovpDPma28jq8xI",
-  authDomain: "on-thi-vao-10-7d87c.firebaseapp.com",
+  authDomain: "ezonthi.com",
   projectId: "on-thi-vao-10-7d87c",
   storageBucket: "on-thi-vao-10-7d87c.firebasestorage.app",
   messagingSenderId: "326319018998",
