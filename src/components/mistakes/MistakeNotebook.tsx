@@ -16,8 +16,7 @@ import {
   XCircle,
   Calendar,
   AlertTriangle,
-  ArrowRight,
-  Sparkles
+  ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer, AiEvaluation } from '../../types';
@@ -27,7 +26,6 @@ import { getSubjectName } from '../../utils/subject';
 import { formatAnswerForDisplay, isAnswerComplete, validateAnswer } from '../../utils/answerValidator';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
 import { proofImageService } from '../../services/proofImageService';
-import { AiTutorPanel } from '../common/AiTutorPanel';
 import { MathLoginRequired } from '../common/MathLoginRequired';
 
 const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: string }> => {
@@ -69,7 +67,6 @@ export const MistakeNotebook: React.FC = () => {
   const [reSolution, setReSolution] = useState<Solution | null>(null);
   const [isReSubmitting, setIsReSubmitting] = useState(false);
   const [reSubmitError, setReSubmitError] = useState<string | null>(null);
-  const [isTutorOpen, setIsTutorOpen] = useState(false);
   const [latestAttempt, setLatestAttempt] = useState<UserAttempt | null>(null);
 
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
@@ -195,7 +192,7 @@ export const MistakeNotebook: React.FC = () => {
       questionTypeId: activeMistake.questionTypeId,
       userAnswer: finalAns,
       ...(activeMistake.question.answerSchema ? { finalAnswer: reStructuredAnswer } : {}),
-      ...(uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
+      ...(uploadedProofImages && uploadedProofImages.length > 0 ? { proofImages: uploadedProofImages } : {}),
       gradingMode,
       isCorrect: correct,
       timeSpent: 30, // Mock time
@@ -442,14 +439,6 @@ export const MistakeNotebook: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => setIsTutorOpen(true)}
-                type="button"
-                className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg border border-emerald-500/20 transition-all flex items-center gap-1 cursor-pointer"
-              >
-                <Sparkles size={11} className="text-emerald-500 fill-emerald-500 animate-pulse" />
-                Hỏi Gia sư
-              </button>
-              <button
                 onClick={closeReview}
                 className="text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer"
               >
@@ -694,16 +683,6 @@ export const MistakeNotebook: React.FC = () => {
             )}
           </CardContent>
         </Card>
-      )}
-
-      {activeMistake && (
-        <AiTutorPanel
-          isOpen={isTutorOpen}
-          onClose={() => setIsTutorOpen(false)}
-          question={activeMistake.question}
-          solution={reSolution || undefined}
-          studentAnswer={selectedOption || reAnswer || ''}
-        />
       )}
     </div>
   );

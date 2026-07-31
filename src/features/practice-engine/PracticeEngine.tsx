@@ -10,7 +10,7 @@ import { Button } from '../../components/ui/button';
 import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 
 import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '../../types';
-import { AlertTriangle, BookOpenCheck, Sparkles } from 'lucide-react';
+import { AlertTriangle, BookOpenCheck } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '../../utils/answerValidator';
 import { getSubjectFromQuestionTypeId, getSubjectName } from '../../utils/subject';
@@ -24,7 +24,6 @@ import { ExamConfigView } from './components/ExamConfigView';
 import { ExamPracticeView } from './components/ExamPracticeView';
 import { QuestionCard } from './components/QuestionCard';
 import { ResultCard } from './components/ResultCard';
-import { AiTutorPanel } from '../../components/common/AiTutorPanel';
 import { useEnglishQuestionFilter } from './hooks/useEnglishQuestionFilter';
 import { useProofUpload } from './hooks/useProofUpload';
 import { AdaptivePracticeStatus } from './components/AdaptivePracticeStatus';
@@ -185,7 +184,6 @@ export const PracticeEngine: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [existingAttempt, setExistingAttempt] = useState<UserAttempt | null>(null);
   const [pastAttempts, setPastAttempts] = useState<UserAttempt[]>([]);
-  const [isTutorOpen, setIsTutorOpen] = useState(false);
 
   // Tab chọn thì cho phần Thì động từ cơ bản (eng-qt6)
   const [selectedSubTense, setSelectedSubTense] = useState<'all' | 'present_simple' | 'past_simple' | 'present_continuous' | 'past_continuous' | 'present_perfect' | 'future_simple' | 'exam' | 'to_v' | 'v_ing' | 'v0' | 'verb_combo' | 'tenses_review' | 'prep_phrasal' | 'comparison' | 'word_position' | null>(null);
@@ -1192,17 +1190,6 @@ export const PracticeEngine: React.FC = () => {
           >
             ← Quay lại
           </button>
-
-          {!isExamMode && currentQuestion && (
-            <button
-              onClick={() => setIsTutorOpen(true)}
-              type="button"
-              className="text-xs font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm border border-emerald-500/25"
-            >
-              <Sparkles size={13} className="text-emerald-500 fill-emerald-500 animate-pulse" />
-              Hỏi Gia sư
-            </button>
-          )}
         </div>
 
         {/* Bong bóng tròn hiển thị số câu */}
@@ -1291,16 +1278,6 @@ export const PracticeEngine: React.FC = () => {
           resetQuestionState={resetQuestionState}
           handleRetry={handleRetry}
           handleNext={handleNext}
-        />
-      )}
-
-      {currentQuestion && (
-        <AiTutorPanel
-          isOpen={isTutorOpen}
-          onClose={() => setIsTutorOpen(false)}
-          question={currentQuestion}
-          solution={solutionDetail || undefined}
-          studentAnswer={selectedOption || ''}
         />
       )}
     </div>

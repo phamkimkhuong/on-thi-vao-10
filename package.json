@@ -27,8 +27,8 @@
     "validate:physics-practice-runtime": "node scripts/validatePhysicsPracticeRuntime.mjs",
     "validate:latex": "node scripts/validateLatex.mjs",
     "preview": "vite preview",
-    "deploy": "npm run build && npx firebase-tools deploy --only hosting --project on-thi-vao-10-7d87c",
-    "deploy-rules": "npx firebase-tools deploy --only firestore:rules,storage --project on-thi-vao-10-7d87c"
+    "deploy": "npm run build && firebase deploy --only hosting --project on-thi-vao-10-7d87c",
+    "deploy-rules": "firebase deploy --only firestore:rules,storage --project on-thi-vao-10-7d87c"
   },
   "dependencies": {
     "@sentry/react": "^10.69.0",

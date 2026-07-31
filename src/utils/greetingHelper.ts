@@ -79,7 +79,7 @@ export function getPersonalizedGreeting(
   displayName: string | null | undefined,
   profile: StudentProfile | null | undefined,
   subject: SubjectCode,
-  topicName?: string
+  _topicName?: string
 ): string {
   // Extract student's first name
   let name = 'em';
@@ -103,49 +103,7 @@ export function getPersonalizedGreeting(
   strengths = strengths.filter(Boolean);
   weaknesses = weaknesses.filter(Boolean);
 
-  // Scenario 1: Topic-specific chat (AiTutorPanel)
-  if (topicName) {
-    // 1a. Student is strong in this topic
-    const relevantStrength = strengths.find(s => isRelevantToTopic(s, topicName));
-    if (relevantStrength) {
-      return `Chào ${name}! Thầy thấy phần ${relevantStrength.toLowerCase()} em đã làm rất tốt. Hôm nay chúng ta cùng tiếp tục chinh phục chuyên đề ${topicName} nhé. Em đã sẵn sàng chưa?`;
-    }
-
-    // 1b. Student is weak in this topic
-    const relevantWeakness = weaknesses.find(w => isRelevantToTopic(w, topicName));
-    if (relevantWeakness) {
-      return `Chào ${name}! Thầy thấy ở chuyên đề ${topicName}, phần ${relevantWeakness.toLowerCase()} em còn hay gặp chút khó khăn. Thầy trò mình cùng luyện tập để giải quyết dứt điểm phần này nhé. Em đã sẵn sàng chưa?`;
-    }
-
-    // 1c. Student has other strengths (different topic)
-    if (strengths.length > 0) {
-      const firstStrength = strengths[0];
-      return `Chào ${name}! Thầy thấy phần ${firstStrength.toLowerCase()} em đã làm rất tốt. Hôm nay chúng ta cùng chinh phục chuyên đề ${topicName} nhé. Em đã sẵn sàng chưa?`;
-    }
-
-    // 1d. Student has other weaknesses (different topic)
-    if (weaknesses.length > 0) {
-      const firstWeakness = weaknesses[0];
-      return `Chào ${name}! Hy vọng em đã nắm vững các bài học trước. Hôm nay chúng ta cùng chinh phục chuyên đề ${topicName} nhé. Thầy sẽ đồng hành để giúp em tránh các lỗi hay gặp như ${firstWeakness.toLowerCase()}. Em sẵn sàng chưa?`;
-    }
-
-    // 1e. No profile data
-    const grade = useAppStore.getState().selectedGrade;
-    const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
-    if (subject === 'math') {
-      return `Chào ${name}! Thầy là Gia sư môn Toán ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
-    } else if (subject === 'chemistry') {
-      return `Chào ${name}! Thầy là Gia sư môn Hóa học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
-    } else if (subject === 'physics') {
-      return `Chào ${name}! Thầy là Gia sư môn Vật lý ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
-    } else if (subject === 'biology') {
-      return `Chào ${name}! Thầy là Gia sư môn Sinh học ${gradeText}. Thầy thấy em đang làm câu hỏi về chuyên đề ${topicName}. Thầy đã đọc đề bài và lời giải chi tiết. Em có gặp khó khăn hay thắc mắc gì cần thầy gợi ý không?`;
-    } else {
-      return `Hello ${name}! Thầy là Gia sư môn Tiếng Anh ${gradeText}. Thầy thấy em đang ôn tập chủ điểm ${topicName}. Em có vướng mắc gì ở câu hỏi này cần thầy trợ giúp không?`;
-    }
-  }
-
-  // Scenario 2: General Chat (GeneralAiTutor)
+  // General Chat (GeneralAiTutor)
   // Find recommended topic based on student's actual progress
   const grade = useAppStore.getState().selectedGrade;
   const gradeText = grade === 'grade9' ? 'ôn thi vào 10' : 'học tốt Lớp 10';
