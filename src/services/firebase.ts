@@ -4,6 +4,7 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported, Analytics, setUserId, setUserProperties, logEvent as firebaseLogEvent } from 'firebase/analytics';
 import { getFunctions } from 'firebase/functions';
+import { getPerformance, FirebasePerformance } from 'firebase/performance';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC--Q8dDklMtRVrTkgczovpDPma28jq8xI",
@@ -34,9 +35,18 @@ export const db = initializeFirestore(app, {
   })
 });
 
-// Khởi tạo Analytics an toàn cho môi trường Web
-// analytics chỉ được import khi đang ở môi trường Web/Browser
+// Khởi tạo Analytics & Performance Monitoring an toàn cho môi trường Web
 export let analytics: Analytics | null = null;
+export let performance: FirebasePerformance | null = null;
+
+if (typeof window !== 'undefined') {
+  try {
+    performance = getPerformance(app);
+  } catch (e) {
+    console.warn('Firebase Performance Monitoring chưa hỗ trợ hoặc bị chặn trên trình duyệt hiện tại:', e);
+  }
+}
+
 isSupported().then((supported) => {
   if (supported) {
     analytics = getAnalytics(app);

@@ -1,11 +1,13 @@
 User-agent: *
 Allow: /
+Allow: /about
 Allow: /dashboard
 Allow: /roadmap
+Allow: /practice
+Allow: /question-types
+Allow: /exam
 Allow: /premium
 Allow: /support
-Disallow: /practice/
-Disallow: /exam/
 Disallow: /teacher/
 
 Sitemap: https://ezonthi.com/sitemap.xml

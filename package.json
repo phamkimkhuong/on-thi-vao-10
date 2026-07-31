@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build:sitemap": "node scripts/generateSitemap.mjs",
+    "build": "node scripts/generateSitemap.mjs && tsc -b && vite build",
     "lint": "eslint .",
     "type-check": "tsc -b --noEmit",
     "validate:english10": "node scripts/validateEnglish10.mjs",
@@ -37,25 +38,20 @@
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
     "recharts": "^3.9.2",
-    "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.2",
-    "zustand": "^5.0.14"
+    "tailwind-merge": "^3.0.2",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@types/canvas-confetti": "^1.9.0",
-    "@types/katex": "^0.16.8",
-    "@types/node": "^26.1.0",
-    "@types/react": "^19.2.17",
+    "@types/katex": "^0.16.7",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
-    "eslint": "^10.6.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.3",
-    "firebase-tools": "^15.22.4",
-    "globals": "^17.7.0",
-    "typescript": "~6.0.3",
-    "typescript-eslint": "^8.62.1",
-    "vite": "^8.1.3"
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.39.3",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0"
   }
 }
