@@ -13,6 +13,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. have invented",
       "D. are inventing"
     ],
+    translation: {
+      content: "Các nhà khoa học __________ nhiều thiết bị thông minh kể từ đầu thế kỷ 21.",
+      options: [
+        "A. invented",
+        "B. invent",
+        "C. have invented (chia Hiện tại hoàn thành với since)",
+        "D. are inventing"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -30,6 +39,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. used",
       "D. am using"
     ],
+    translation: {
+      content: "Tớ __________ chiếc điện thoại thông minh này được 3 năm rồi, và nó vẫn hoạt động rất tốt.",
+      options: [
+        "A. use",
+        "B. have used (chia Hiện tại hoàn thành với for)",
+        "C. used",
+        "D. am using"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -47,6 +65,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. spending",
       "D. spent"
     ],
+    translation: {
+      content: "Chúng ta nên tránh __________ quá nhiều thời gian lướt internet trên các thiết bị kỹ thuật số.",
+      options: [
+        "A. spend",
+        "B. to spend",
+        "C. spending (cấu trúc: avoid + V-ing)",
+        "D. spent"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -64,6 +91,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. to search",
       "D. searched"
     ],
+    translation: {
+      content: "Máy tính xách tay rất hữu ích cho việc __________ và học tập trực tuyến.",
+      options: [
+        "A. search",
+        "B. searching for information (cấu trúc: useful for + V-ing)",
+        "C. to search",
+        "D. searched"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -81,6 +117,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. Have you ever tried",
       "D. Are you ever trying"
     ],
+    translation: {
+      content: "Bạn __________ dùng máy in 3D để làm mô hình nhựa trước đây chưa?",
+      options: [
+        "A. Did you ever try",
+        "B. Do you ever try",
+        "C. Have you ever tried (câu hỏi trải nghiệm với ever... before)",
+        "D. Are you ever trying"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -98,6 +143,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. studying",
       "D. studied"
     ],
+    translation: {
+      content: "Nhiều học sinh thích __________ tiếng Anh bằng các ứng dụng giáo dục trên máy tính bảng.",
+      options: [
+        "A. study",
+        "B. to study",
+        "C. studying (cấu trúc: enjoy + V-ing)",
+        "D. studied"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -115,6 +169,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. is downloading",
       "D. downloads"
     ],
+    translation: {
+      content: "Cô ấy __________ phần mềm dịch thuật mới nhất về máy tính của mình rồi.",
+      options: [
+        "A. has downloaded (chia Hiện tại hoàn thành với already)",
+        "B. downloaded",
+        "C. is downloading",
+        "D. downloads"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -132,6 +195,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. buying",
       "D. bought"
     ],
+    translation: {
+      content: "Họ khuyên nên __________ máy đọc sách điện tử này vì nó bảo vệ mắt khỏi ánh sáng xanh.",
+      options: [
+        "A. buy",
+        "B. to buy",
+        "C. buying (cấu trúc: recommend + V-ing)",
+        "D. bought"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -149,6 +221,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. to sweep",
       "D. swept"
     ],
+    translation: {
+      content: "Con robot hút bụi đặc biệt này được dùng để __________ những sàn nhà lớn một cách tự động.",
+      options: [
+        "A. sweep",
+        "B. sweeping (cấu trúc: be used for + V-ing)",
+        "C. to sweep",
+        "D. swept"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -166,6 +247,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. does not finish",
       "D. is not finishing"
     ],
+    translation: {
+      content: "Cậu ấy __________ viết bài luận khoa học về các phát minh AI.",
+      options: [
+        "A. has not finished (chia phủ định Hiện tại hoàn thành với yet)",
+        "B. did not finish",
+        "C. does not finish",
+        "D. is not finishing"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "easy",
     sourceType: "manual",
@@ -183,6 +273,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. invention",
       "D. volunteer"
     ],
+    translation: {
+      content: "Động cơ hơi nước là một __________ nổi tiếng làm thay đổi lịch sử giao thông vận tải.",
+      options: [
+        "A. audience (khán giả)",
+        "B. charity (từ thiện)",
+        "C. invention (phát minh)",
+        "D. volunteer (tình nguyện viên)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -200,6 +299,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. phenomenon",
       "D. instrument"
     ],
+    translation: {
+      content: "Điện thoại thông minh là một __________ kỹ thuật số rất hữu ích cho việc giao tiếp và học tập.",
+      options: [
+        "A. volunteer (tình nguyện viên)",
+        "B. device (thiết bị)",
+        "C. phenomenon (hiện tượng)",
+        "D. instrument (nhạc cụ)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -217,6 +325,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. charity",
       "D. volunteer"
     ],
+    translation: {
+      content: "Máy tính chạy mượt mà các tựa game nặng nhờ có một __________ tốc độ cao.",
+      options: [
+        "A. homemaker (người nội trợ)",
+        "B. processor (bộ vi xử lý)",
+        "C. charity (từ thiện)",
+        "D. volunteer (tình nguyện viên)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -234,6 +351,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. talented",
       "D. heavy"
     ],
+    translation: {
+      content: "Chúng tớ đã mua một chiếc máy cắt cỏ __________ tự động cắt cỏ trong vườn.",
+      options: [
+        "A. robotic (rô-bốt/tự động)",
+        "B. remote (xa xôi)",
+        "C. talented (tài năng)",
+        "D. heavy (nặng)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "easy",
     sourceType: "manual",
@@ -251,6 +377,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. AI",
       "D. charities"
     ],
+    translation: {
+      content: "Nhiều công cụ tìm kiếm hiện đại sử dụng __________ để hiểu rõ hơn truy vấn của người dùng.",
+      options: [
+        "A. devices (thiết bị)",
+        "B. instruments (nhạc cụ)",
+        "C. AI (trí tuệ nhân tạo)",
+        "D. charities (tổ chức từ thiện)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -268,6 +403,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. greenhouse",
       "D. solar panel"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. laptop (danh từ ghép nhấn âm 1)",
+        "B. smartphone (danh từ ghép nhấn âm 1)",
+        "C. greenhouse (danh từ ghép nhấn âm 1)",
+        "D. solar panel (cụm danh từ nhấn chính ở panel - Đáp án khác)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "medium",
     sourceType: "manual",
@@ -285,6 +429,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. search engine",
       "D. smartphone"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. smart device (cụm danh từ nhấn âm 2 /dɪˈvaɪs/ - Đáp án khác)",
+        "B. washing machine (danh từ ghép nhấn âm 1)",
+        "C. search engine (danh từ ghép nhấn âm 1)",
+        "D. smartphone (danh từ ghép nhấn âm 1)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -302,6 +455,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. cell phone",
       "D. online class"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. food waste (danh từ ghép nhấn âm 1)",
+        "B. software (danh từ ghép nhấn âm 1)",
+        "C. cell phone (danh từ ghép nhấn âm 1)",
+        "D. online class (cụm danh từ nhấn âm 2 /klɑːs/ - Đáp án khác)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "medium",
     sourceType: "manual",
@@ -319,6 +481,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. solar panel",
       "D. headphone"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. keyboard (danh từ ghép nhấn âm 1)",
+        "B. e-reader (danh từ ghép nhấn âm 1)",
+        "C. solar panel (cụm danh từ nhấn chính ở panel - Đáp án khác)",
+        "D. headphone (danh từ ghép nhấn âm 1)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -336,6 +507,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. post office",
       "D. bus stop"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. public school (cụm danh từ nhấn âm 2 /skuːl/ - Đáp án khác)",
+        "B. high school (danh từ ghép nhấn âm 1)",
+        "C. post office (danh từ ghép nhấn âm 1)",
+        "D. bus stop (danh từ ghép nhấn âm 1)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -353,6 +533,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. white house (President)",
       "D. white house (a white house)"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. greenhouse (danh từ ghép nhấn âm 1)",
+        "B. smart phone (danh từ ghép nhấn âm 1)",
+        "C. white house (danh từ ghép chỉ Nhà Trắng, nhấn âm 1)",
+        "D. white house (cụm tính từ + danh từ chỉ ngôi nhà sơn trắng, nhấn âm 2 /haʊs/ - Đáp án khác)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "hard",
     sourceType: "manual",
@@ -370,6 +559,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. software",
       "D. raincoat"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. online game (cụm danh từ nhấn âm 2 /ɡeɪm/ - Đáp án khác)",
+        "B. credit card (danh từ ghép nhấn âm 1)",
+        "C. software (danh từ ghép nhấn âm 1)",
+        "D. raincoat (danh từ ghép nhấn âm 1)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -387,6 +585,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. dining room",
       "D. shopping mall"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. living room (danh từ ghép nhấn âm 1)",
+        "B. smart device (cụm danh từ nhấn âm 2 /dɪˈvaɪs/ - Đáp án khác)",
+        "C. dining room (danh từ ghép nhấn âm 1)",
+        "D. shopping mall (danh từ ghép nhấn âm 1)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -404,6 +611,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. modern appliance",
       "D. washing machine"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. digital camera (cụm danh từ nhấn chính âm 1 camera)",
+        "B. robotic vacuum (cụm danh từ nhấn chính âm 1 vacuum)",
+        "C. modern appliance (cụm danh từ nhấn âm 2 appliance)",
+        "D. washing machine (danh từ ghép nhấn trọng âm đầu ở washing - Đáp án khác)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "hard",
     sourceType: "manual",
@@ -421,6 +637,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. social media",
       "D. password"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. website (danh từ ghép nhấn âm 1)",
+        "B. search engine (danh từ ghép nhấn âm 1)",
+        "C. social media (cụm danh từ nhấn trọng âm ở me- trong media - Đáp án khác)",
+        "D. password (danh từ ghép nhấn âm 1)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -438,6 +663,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. has used",
       "D. is using"
     ],
+    translation: {
+      content: "Trường của chúng tớ __________ ứng dụng học tập này từ năm 2022.",
+      options: [
+        "A. uses",
+        "B. used",
+        "C. has used (chia Hiện tại hoàn thành với since)",
+        "D. is using"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -455,6 +689,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. own",
       "D. are owning"
     ],
+    translation: {
+      content: "Lan và Minh __________ đồng hồ thông minh được 3 tháng rồi.",
+      options: [
+        "A. owned",
+        "B. have owned (chia Hiện tại hoàn thành với for)",
+        "C. own",
+        "D. are owning"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -472,6 +715,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. using",
       "D. uses"
     ],
+    translation: {
+      content: "Bạn đã bao giờ __________ máy in 3D chưa?",
+      options: [
+        "A. use",
+        "B. used (chia V3 sau have... ever)",
+        "C. using",
+        "D. uses"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -489,6 +741,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. yet",
       "D. ever"
     ],
+    translation: {
+      content: "Các kỹ sư vẫn chưa thử nghiệm mẫu thử mới __________.",
+      options: [
+        "A. already",
+        "B. since",
+        "C. yet (đứng cuối câu phủ định Hiện tại hoàn thành)",
+        "D. ever"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -506,6 +767,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. have operated",
       "D. am operating"
     ],
+    translation: {
+      content: "Đây là lần đầu tiên tớ __________ một con robot công nghiệp.",
+      options: [
+        "A. operate",
+        "B. operated",
+        "C. have operated (cấu trúc: This is the first time + Present Perfect)",
+        "D. am operating"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -523,6 +793,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. are becoming",
       "D. become"
     ],
+    translation: {
+      content: "Chúng tớ __________ làm việc hiệu quả hơn kể từ khi bắt đầu sử dụng ứng dụng lập kế hoạch.",
+      options: [
+        "A. became",
+        "B. have become (chia Hiện tại hoàn thành với since)",
+        "C. are becoming",
+        "D. become"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "hard",
     sourceType: "manual",
@@ -540,6 +819,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. already",
       "D. ever"
     ],
+    translation: {
+      content: "Pin đã __________ sạc đầy rồi, nên bạn có thể rút phích cắm thiết bị.",
+      options: [
+        "A. yet",
+        "B. since",
+        "C. already (đã... rồi)",
+        "D. ever"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -557,6 +845,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. exposing",
       "D. exposed"
     ],
+    translation: {
+      content: "Bạn nên tránh __________ điện thoại của mình với nước.",
+      options: [
+        "A. expose",
+        "B. to expose",
+        "C. exposing (cấu trúc: avoid + V-ing)",
+        "D. exposed"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -574,6 +871,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. to learn",
       "D. learned"
     ],
+    translation: {
+      content: "Nhiều thanh thiếu niên rất thích thú với việc __________ cách robot vận hành.",
+      options: [
+        "A. learning (sau giới từ in + V-ing)",
+        "B. learn",
+        "C. to learn",
+        "D. learned"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -591,6 +897,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. to understand",
       "D. understood"
     ],
+    translation: {
+      content: "Các học sinh đã mở ứng dụng dịch thuật để __________ hướng dẫn bằng tiếng nước ngoài.",
+      options: [
+        "A. understanding",
+        "B. understand",
+        "C. to understand (chỉ mục đích: to + V-bare)",
+        "D. understood"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -608,6 +923,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. using",
       "D. uses"
     ],
+    translation: {
+      content: "Cô ấy thích __________ đồng hồ thông minh để theo dõi việc tập thể dục hằng ngày.",
+      options: [
+        "A. use",
+        "B. to use",
+        "C. using (cấu trúc: enjoy + V-ing)",
+        "D. uses"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -625,6 +949,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. to turn off",
       "D. turned off"
     ],
+    translation: {
+      content: "Hãy nhớ __________ loa thông minh trước khi rời khỏi nhà tối nay nhé.",
+      options: [
+        "A. turn off",
+        "B. turning off",
+        "C. to turn off (nhớ làm gì trong tương lai: remember + to-V)",
+        "D. turned off"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -642,6 +975,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. charge",
       "D. charged"
     ],
+    translation: {
+      content: "Trên đường về nhà, Nam đã dừng lại để __________ sạc điện thoại tại trạm sạc.",
+      options: [
+        "A. charging",
+        "B. to charge (dừng lại để làm gì: stop + to-V)",
+        "C. charge",
+        "D. charged"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "hard",
     sourceType: "manual",
@@ -659,6 +1001,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. restarting",
       "D. restarted"
     ],
+    translation: {
+      content: "Nếu ứng dụng quyên góp bị đơ, hãy thử __________ lại nó trước khi liên hệ hỗ trợ.",
+      options: [
+        "A. restart",
+        "B. to restart",
+        "C. restarting (thử làm gì xem có kết quả không: try + V-ing)",
+        "D. restarted"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -676,6 +1027,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. appliance",
       "D. discovery"
     ],
+    translation: {
+      content: "Đồng hồ thông minh là một __________ đeo tay có thể theo dõi nhịp tim của bạn.",
+      options: [
+        "A. device (thiết bị)",
+        "B. engine",
+        "C. appliance",
+        "D. discovery"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -693,6 +1053,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. access",
       "D. store"
     ],
+    translation: {
+      content: "Cục sạc dự phòng di động này cho phép người dùng __________ điện thoại khi đi du lịch.",
+      options: [
+        "A. invent",
+        "B. charge (sạc pin)",
+        "C. access",
+        "D. store"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -710,6 +1079,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. digital",
       "D. effective"
     ],
+    translation: {
+      content: "Không giống máy tính bàn, máy tính bảng rất nhẹ và vô cùng __________.",
+      options: [
+        "A. portable (dễ mang theo/di động)",
+        "B. automatic",
+        "C. digital",
+        "D. effective"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -727,6 +1105,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. discover",
       "D. attach"
     ],
+    translation: {
+      content: "Dịch vụ điện toán đám mây cho phép người dùng __________ các tệp của họ từ nhiều thiết bị khác nhau.",
+      options: [
+        "A. access (truy cập)",
+        "B. operate",
+        "C. discover",
+        "D. attach"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -744,6 +1131,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. functionally",
       "D. functioning"
     ],
+    translation: {
+      content: "Ứng dụng mới có một __________ nhận diện giọng nói giúp chuyển giọng nói thành văn bản.",
+      options: [
+        "A. function (danh từ: chức năng)",
+        "B. functional",
+        "C. functionally",
+        "D. functioning"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "hard",
     sourceType: "manual",
@@ -761,6 +1157,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. store",
       "D. release"
     ],
+    translation: {
+      content: "Máy hút bụi tự động có thể __________ chướng ngại vật và đổi hướng mà không cần con người điều khiển.",
+      options: [
+        "A. detect (phát hiện/nhận biết)",
+        "B. invent",
+        "C. store",
+        "D. release"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "hard",
     sourceType: "manual",
@@ -778,6 +1183,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. efficiency",
       "D. inefficiency"
     ],
+    translation: {
+      content: "Phát minh này được đánh giá cao nhờ __________ của nó: tiết kiệm cả thời gian và sức lực.",
+      options: [
+        "A. efficient",
+        "B. efficiently",
+        "C. efficiency (danh từ: hiệu suất/hiệu quả)",
+        "D. inefficiency"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -795,6 +1209,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. website",
       "D. green house"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. greenhouse (danh từ ghép nhấn âm 1)",
+        "B. smartphone (danh từ ghép nhấn âm 1)",
+        "C. website (danh từ ghép nhấn âm 1)",
+        "D. green house (cụm danh từ chỉ nhà màu xanh, nhấn âm 2 /haʊs/ - Đáp án khác)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "hard",
     sourceType: "manual",
@@ -812,6 +1235,15 @@ export const g10EnglishModule5Questions: Question[] = [
       "C. bus stop",
       "D. digital device"
     ],
+    translation: {
+      content: "Chọn từ/cụm từ có trọng âm chính khác với các từ còn lại:",
+      options: [
+        "A. washing machine (danh từ ghép nhấn âm 1)",
+        "B. credit card (danh từ ghép nhấn âm 1)",
+        "C. bus stop (danh từ ghép nhấn âm 1)",
+        "D. digital device (cụm danh từ nhấn âm 2 device - Đáp án khác)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "hard",
     sourceType: "manual",

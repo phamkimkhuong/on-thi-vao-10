@@ -54,6 +54,10 @@ interface ChoiceSeed {
   difficulty: Difficulty;
   explanation: string;
   subtype: string;
+  translation?: {
+    content: string;
+    options?: string[];
+  };
 }
 
 interface OpenSeed {
@@ -462,84 +466,1084 @@ const unitSpecs: UnitDepthSpec[] = [
 
 const languageSeedsByUnit: Record<number, ChoiceSeed[]> = {
   1: [
-    { prompt: 'My father usually __________ breakfast before the children wake up.', correct: 'prepares', distractors: ['is preparing', 'prepare', 'prepared'], difficulty: 'easy', explanation: '“Usually” describes a routine, so use the present simple.', subtype: 'grammar-context' },
-    { prompt: 'Look! The twins __________ the washing-up together.', correct: 'are doing', distractors: ['do', 'does', 'did'], difficulty: 'easy', explanation: '“Look!” signals an action happening now.', subtype: 'grammar-context' },
-    { prompt: 'Mai __________ that a fair chore plan prevents arguments.', correct: 'believes', distractors: ['is believing', 'believe', 'believed now'], difficulty: 'easy', explanation: '“Believe” is normally a stative verb in the present simple.', subtype: 'grammar-context' },
-    { prompt: 'The children __________ turns taking out the rubbish.', correct: 'take', distractors: ['make', 'do', 'have'], difficulty: 'easy', explanation: 'The fixed expression is “take turns doing something”.', subtype: 'vocabulary-use' },
-    { prompt: 'This week, Nam __________ with dinner because his mother is working late.', correct: 'is helping', distractors: ['helps always', 'help', 'has help'], difficulty: 'medium', explanation: '“This week” marks a temporary current arrangement.', subtype: 'grammar-context' },
-    { prompt: 'Choose the grammatically correct sentence.', correct: 'At the moment, each family member is completing one task.', distractors: ['At the moment, each family member complete one task.', 'At the moment, each family member are completing one task.', 'At the moment, each family member completing one task.'], difficulty: 'hard', explanation: '“Each family member” is singular and the action is in progress.', subtype: 'editing' }
+    {
+      prompt: 'My father usually __________ breakfast before the children wake up.',
+      correct: 'prepares',
+      distractors: ['is preparing', 'prepare', 'prepared'],
+      difficulty: 'easy',
+      explanation: '“Usually” describes a routine, so use the present simple.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Bố tôi thường __________ bữa sáng trước khi các con thức dậy.',
+        options: [
+          'prepares (chuẩn bị - hiện tại đơn số ít)',
+          'is preparing (đang chuẩn bị)',
+          'prepare (chuẩn bị - nguyên mẫu)',
+          'prepared (đã chuẩn bị)'
+        ]
+      }
+    },
+    {
+      prompt: 'Look! The twins __________ the washing-up together.',
+      correct: 'are doing',
+      distractors: ['do', 'does', 'did'],
+      difficulty: 'easy',
+      explanation: '“Look!” signals an action happening now.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nhìn kìa! Hai đứa trẻ sinh đôi __________ việc rửa bát đĩa cùng nhau.',
+        options: [
+          'are doing (đang rửa - hiện tại tiếp diễn số nhiều)',
+          'do (rửa - hiện tại đơn)',
+          'does (rửa - số ít)',
+          'did (đã rửa)'
+        ]
+      }
+    },
+    {
+      prompt: 'Mai __________ that a fair chore plan prevents arguments.',
+      correct: 'believes',
+      distractors: ['is believing', 'believe', 'believed now'],
+      difficulty: 'easy',
+      explanation: '“Believe” is normally a stative verb in the present simple.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Mai __________ rằng một kế hoạch phân công việc nhà công bằng sẽ ngăn chặn tranh cãi.',
+        options: [
+          'believes (tin tưởng - động từ trạng thái hiện tại đơn)',
+          'is believing (sai vì believe không chia tiếp diễn)',
+          'believe (nguyên mẫu)',
+          'believed now (dùng sai thì)'
+        ]
+      }
+    },
+    {
+      prompt: 'The children __________ turns taking out the rubbish.',
+      correct: 'take',
+      distractors: ['make', 'do', 'have'],
+      difficulty: 'easy',
+      explanation: 'The fixed expression is “take turns doing something”.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Bọn trẻ __________ luân phiên nhau đi đổ rác.',
+        options: [
+          'take (take turns: luân phiên nhau làm)',
+          'make (tạo ra)',
+          'do (làm)',
+          'have (có)'
+        ]
+      }
+    },
+    {
+      prompt: 'This week, Nam __________ with dinner because his mother is working late.',
+      correct: 'is helping',
+      distractors: ['helps always', 'help', 'has help'],
+      difficulty: 'medium',
+      explanation: '“This week” marks a temporary current arrangement.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Tuần này, Nam __________ phụ nấu bữa tối vì mẹ bạn ấy làm việc về muộn.',
+        options: [
+          'is helping (đang giúp đỡ - mang tính tạm thời)',
+          'helps always (dùng sai cấu trúc)',
+          'help (nguyên mẫu)',
+          'has help (dùng sai thì)'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the grammatically correct sentence.',
+      correct: 'At the moment, each family member is completing one task.',
+      distractors: [
+        'At the moment, each family member complete one task.',
+        'At the moment, each family member are completing one task.',
+        'At the moment, each family member completing one task.'
+      ],
+      difficulty: 'hard',
+      explanation: '“Each family member” is singular and the action is in progress.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu đúng cấu trúc ngữ pháp nhất:',
+        options: [
+          'At the moment, each family member is completing one task. (Ngay lúc này, mỗi thành viên đang hoàn thành một nhiệm vụ.)',
+          'At the moment, each family member complete one task. (Sai: thiếu is/V-ing)',
+          'At the moment, each family member are completing one task. (Sai: each family member đi với is)',
+          'At the moment, each family member completing one task. (Sai: thiếu to be)'
+        ]
+      }
+    }
   ],
   2: [
-    { prompt: 'Look at those dark clouds. It __________ rain.', correct: 'is going to', distractors: ['will to', 'goes to', 'is going'], difficulty: 'easy', explanation: 'Visible evidence supports a “be going to” prediction.', subtype: 'grammar-context' },
-    { prompt: '“I forgot my reusable bag.” “Don’t worry. I __________ lend you mine.”', correct: 'will', distractors: ['am going', 'was', 'have'], difficulty: 'easy', explanation: '“Will” is appropriate for a decision made at the moment of speaking.', subtype: 'grammar-context' },
-    { prompt: 'Plastic bottles __________ in the blue container every Friday.', correct: 'are collected', distractors: ['collect', 'collected', 'are collecting'], difficulty: 'easy', explanation: 'The present simple passive describes a regular process.', subtype: 'grammar-context' },
-    { prompt: 'The repair café helps reduce the amount of electronic __________.', correct: 'waste', distractors: ['wasteful', 'wasted', 'wastingly'], difficulty: 'easy', explanation: 'The uncountable noun “waste” completes the environmental collocation.', subtype: 'vocabulary-use' },
-    { prompt: 'The eco-club has bought the materials, so it __________ a repair workshop next Saturday.', correct: 'is going to hold', distractors: ['will holding', 'holds yesterday', 'is hold'], difficulty: 'medium', explanation: 'The materials show that this is a prior plan.', subtype: 'grammar-context' },
-    { prompt: 'Choose the correct passive sentence about the approved plan.', correct: 'A new refill station will be installed next month.', distractors: ['A new refill station will install next month.', 'A new refill station is install next month.', 'They will be installed a new refill station next month.'], difficulty: 'hard', explanation: 'Future passive uses “will be + past participle”.', subtype: 'editing' }
+    {
+      prompt: 'Look at those dark clouds. It __________ rain.',
+      correct: 'is going to',
+      distractors: ['will to', 'goes to', 'is going'],
+      difficulty: 'easy',
+      explanation: 'Visible evidence supports a “be going to” prediction.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nhìn những đám mây đen kìa. Trời __________ mưa.',
+        options: [
+          'is going to (dự đoán có căn cứ thực tế)',
+          'will to (dùng sai cấu trúc)',
+          'goes to (dùng sai thì)',
+          'is going (thiếu to V)'
+        ]
+      }
+    },
+    {
+      prompt: '“I forgot my reusable bag.” “Don’t worry. I __________ lend you mine.”',
+      correct: 'will',
+      distractors: ['am going', 'was', 'have'],
+      difficulty: 'easy',
+      explanation: '“Will” is appropriate for a decision made at the moment of speaking.',
+      subtype: 'grammar-context',
+      translation: {
+        content: '“Tớ quên mang túi tái sử dụng rồi.” “Đừng lo. Tớ __________ cho bạn mượn túi của tớ.”',
+        options: [
+          'will (bột phát ngay lúc nói)',
+          'am going (thiếu to V)',
+          'was (quá khứ)',
+          'have (hiện tại)'
+        ]
+      }
+    },
+    {
+      prompt: 'Plastic bottles __________ in the blue container every Friday.',
+      correct: 'are collected',
+      distractors: ['collect', 'collected', 'are collecting'],
+      difficulty: 'easy',
+      explanation: 'The present simple passive describes a regular process.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Các chai nhựa __________ trong thùng màu xanh vào mỗi Thứ Sáu.',
+        options: [
+          'are collected (bị động hiện tại đơn số nhiều)',
+          'collect (chủ động)',
+          'collected (quá khứ)',
+          'are collecting (tiếp diễn)'
+        ]
+      }
+    },
+    {
+      prompt: 'The repair café helps reduce the amount of electronic __________.',
+      correct: 'waste',
+      distractors: ['wasteful', 'wasted', 'wastingly'],
+      difficulty: 'easy',
+      explanation: 'The uncountable noun “waste” completes the environmental collocation.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Quán cà phê sửa chữa giúp giảm lượng rác thải __________.',
+        options: [
+          'waste (danh từ: electronic waste - rác thải điện tử)',
+          'wasteful (tính từ: lãng phí)',
+          'wasted (tính từ/V-ed)',
+          'wastingly (trạng từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'The eco-club has bought the materials, so it __________ a repair workshop next Saturday.',
+      correct: 'is going to hold',
+      distractors: ['will holding', 'holds yesterday', 'is hold'],
+      difficulty: 'medium',
+      explanation: 'The materials show that this is a prior plan.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'CLB môi trường đã mua vật liệu rồi, nên họ __________ một buổi xưởng sửa chữa vào Thứ Bảy tuần tới.',
+        options: [
+          'is going to hold (kế hoạch đã chuẩn bị vật liệu)',
+          'will holding (sai cấu trúc)',
+          'holds yesterday (sai thời gian)',
+          'is hold (sai cấu trúc)'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the correct passive sentence about the approved plan.',
+      correct: 'A new refill station will be installed next month.',
+      distractors: [
+        'A new refill station will install next month.',
+        'A new refill station is install next month.',
+        'They will be installed a new refill station next month.'
+      ],
+      difficulty: 'hard',
+      explanation: 'Future passive uses “will be + past participle”.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu bị động đúng về kế hoạch đã phê duyệt:',
+        options: [
+          'A new refill station will be installed next month. (Một trạm tiếp nước mới sẽ được lắp đặt vào tháng tới.)',
+          'A new refill station will install next month. (Sai: dùng chủ động)',
+          'A new refill station is install next month. (Sai: dùng sai to be/V-bare)',
+          'They will be installed a new refill station next month. (Sai: nhầm chủ ngữ)'
+        ]
+      }
+    }
   ],
   3: [
-    { prompt: 'The music teacher let us __________ the instruments before rehearsal.', correct: 'try', distractors: ['to try', 'trying', 'tried'], difficulty: 'easy', explanation: '“Let + object” is followed by a bare infinitive.', subtype: 'grammar-context' },
-    { prompt: 'Our band hopes __________ at the community concert.', correct: 'to perform', distractors: ['perform', 'performing to', 'performed'], difficulty: 'easy', explanation: '“Hope” is followed by a to-infinitive.', subtype: 'grammar-context' },
-    { prompt: 'The melody was simple, __________ the lyrics carried a powerful message.', correct: 'but', distractors: ['so', 'or', 'and therefore because'], difficulty: 'easy', explanation: '“But” expresses the contrast between simple melody and powerful lyrics.', subtype: 'grammar-context' },
-    { prompt: 'A person who writes music is called a __________.', correct: 'composer', distractors: ['composition', 'compose', 'composingly'], difficulty: 'easy', explanation: '“Composer” is the noun for a person who writes music.', subtype: 'vocabulary-use' },
-    { prompt: 'The organisers decided __________ a quieter seating area for the audience.', correct: 'to create', distractors: ['create', 'creating to', 'created'], difficulty: 'medium', explanation: '“Decide” is followed by a to-infinitive.', subtype: 'grammar-context' },
-    { prompt: 'Choose the correctly connected sentence.', correct: 'The singer was tired, but she completed the performance confidently.', distractors: ['The singer was tired, so but she completed the performance confidently.', 'The singer was tired but, she completed the performance confidently.', 'The singer was tired, or she completed because the performance confidently.'], difficulty: 'hard', explanation: 'Two independent clauses can be joined by comma + coordinating conjunction.', subtype: 'editing' }
+    {
+      prompt: 'The music teacher let us __________ the instruments before rehearsal.',
+      correct: 'try',
+      distractors: ['to try', 'trying', 'tried'],
+      difficulty: 'easy',
+      explanation: '“Let + object” is followed by a bare infinitive.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Thầy giáo dạy nhạc đã cho phép chúng tớ __________ các nhạc cụ trước giờ tổng duyệt.',
+        options: [
+          'try (cấu trúc: let + O + V-bare)',
+          'to try',
+          'trying',
+          'tried'
+        ]
+      }
+    },
+    {
+      prompt: 'Our band hopes __________ at the community concert.',
+      correct: 'to perform',
+      distractors: ['perform', 'performing to', 'performed'],
+      difficulty: 'easy',
+      explanation: '“Hope” is followed by a to-infinitive.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Ban nhạc của chúng tớ hy vọng __________ tại buổi hòa nhạc cộng đồng.',
+        options: [
+          'to perform (cấu trúc: hope + to-V)',
+          'perform',
+          'performing to',
+          'performed'
+        ]
+      }
+    },
+    {
+      prompt: 'The melody was simple, __________ the lyrics carried a powerful message.',
+      correct: 'but',
+      distractors: ['so', 'or', 'and therefore because'],
+      difficulty: 'easy',
+      explanation: '“But” expresses the contrast between simple melody and powerful lyrics.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Giai điệu thật đơn giản, __________ lời bài hát mang một thông điệp vô cùng mạnh mẽ.',
+        options: [
+          'but (tương phản: nhưng)',
+          'so (vì vậy)',
+          'or (hoặc)',
+          'and therefore because (dùng sai liên từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'A person who writes music is called a __________.',
+      correct: 'composer',
+      distractors: ['composition', 'compose', 'composingly'],
+      difficulty: 'easy',
+      explanation: '“Composer” is the noun for a person who writes music.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Người viết nhạc được gọi là một __________.',
+        options: [
+          'composer (danh từ: nhà soạn nhạc)',
+          'composition (danh từ: tác phẩm/bản nhạc)',
+          'compose (động từ: soạn nhạc)',
+          'composingly (trạng từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'The organisers decided __________ a quieter seating area for the audience.',
+      correct: 'to create',
+      distractors: ['create', 'creating to', 'created'],
+      difficulty: 'medium',
+      explanation: '“Decide” is followed by a to-infinitive.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Ban tổ chức đã quyết định __________ một khu vực chỗ ngồi yên tĩnh hơn cho khán giả.',
+        options: [
+          'to create (cấu trúc: decide + to-V)',
+          'create',
+          'creating to',
+          'created'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the correctly connected sentence.',
+      correct: 'The singer was tired, but she completed the performance confidently.',
+      distractors: [
+        'The singer was tired, so but she completed the performance confidently.',
+        'The singer was tired but, she completed the performance confidently.',
+        'The singer was tired, or she completed because the performance confidently.'
+      ],
+      difficulty: 'hard',
+      explanation: 'Two independent clauses can be joined by comma + coordinating conjunction.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu nối đúng ngữ pháp:',
+        options: [
+          'The singer was tired, but she completed the performance confidently. (Nữ ca sĩ đã mệt, nhưng cô ấy vẫn hoàn thành phần biểu diễn một cách tự tin.)',
+          'The singer was tired, so but she completed the performance confidently. (Sai: dùng thừa liên từ so but)',
+          'The singer was tired but, she completed the performance confidently. (Sai: đặt dấu phẩy sau but)',
+          'The singer was tired, or she completed because the performance confidently. (Sai: dùng sai liên từ or/because)'
+        ]
+      }
+    }
   ],
   4: [
-    { prompt: 'While the volunteers __________ the wall, a local artist arrived.', correct: 'were painting', distractors: ['painted', 'are painting', 'paint'], difficulty: 'easy', explanation: 'The longer background action uses the past continuous.', subtype: 'grammar-context' },
-    { prompt: 'When we reached the centre, the children __________ books into boxes.', correct: 'were putting', distractors: ['put now', 'are putting', 'puts'], difficulty: 'easy', explanation: 'The action was already in progress when another event occurred.', subtype: 'grammar-context' },
-    { prompt: 'The youth group __________ enough money for the ramp last summer.', correct: 'raised', distractors: ['was raise', 'raises yesterday', 'is raising last summer'], difficulty: 'easy', explanation: 'A finished action at a specified past time uses the past simple.', subtype: 'grammar-context' },
-    { prompt: 'The organisation provides practical __________ to families in difficulty.', correct: 'support', distractors: ['supportive', 'supporting', 'supportedly'], difficulty: 'easy', explanation: 'A noun is needed after the adjective “practical”.', subtype: 'vocabulary-use' },
-    { prompt: 'While one team __________ the lights, another team was checking the entrance.', correct: 'was replacing', distractors: ['replaced suddenly', 'is replacing', 'has replaced'], difficulty: 'medium', explanation: 'Two simultaneous background actions use the past continuous.', subtype: 'grammar-context' },
-    { prompt: 'Choose the sentence with the correct time relationship.', correct: 'The residents were testing the ramp when the survey team arrived.', distractors: ['The residents tested the ramp while the survey team was arrived.', 'The residents were test the ramp when the survey team arrived.', 'The residents are testing the ramp when the survey team arrived yesterday.'], difficulty: 'hard', explanation: 'Past continuous marks the ongoing action; past simple marks the interrupting event.', subtype: 'editing' }
+    {
+      prompt: 'While the volunteers __________ the wall, a local artist arrived.',
+      correct: 'were painting',
+      distractors: ['painted', 'are painting', 'paint'],
+      difficulty: 'easy',
+      explanation: 'The longer background action uses the past continuous.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Trong khi các tình nguyện viên __________ bức tường, một nghệ sĩ địa phương đã tới.',
+        options: [
+          'were painting (hành động đang diễn ra trong quá khứ)',
+          'painted',
+          'are painting',
+          'paint'
+        ]
+      }
+    },
+    {
+      prompt: 'When we reached the centre, the children __________ books into boxes.',
+      correct: 'were putting',
+      distractors: ['put now', 'are putting', 'puts'],
+      difficulty: 'easy',
+      explanation: 'The action was already in progress when another event occurred.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Khi chúng tớ đến trung tâm, bọn trẻ __________ sách vào các thùng.',
+        options: [
+          'were putting (hành động đang diễn ra tại thời điểm quá khứ)',
+          'put now',
+          'are putting',
+          'puts'
+        ]
+      }
+    },
+    {
+      prompt: 'The youth group __________ enough money for the ramp last summer.',
+      correct: 'raised',
+      distractors: ['was raise', 'raises yesterday', 'is raising last summer'],
+      difficulty: 'easy',
+      explanation: 'A finished action at a specified past time uses the past simple.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nhóm thanh niên __________ đủ tiền để xây đường dốc vào mùa hè năm ngoái.',
+        options: [
+          'raised (hành động đã hoàn thành tại mốc thời gian quá khứ: last summer)',
+          'was raise',
+          'raises yesterday',
+          'is raising last summer'
+        ]
+      }
+    },
+    {
+      prompt: 'The organisation provides practical __________ to families in difficulty.',
+      correct: 'support',
+      distractors: ['supportive', 'supporting', 'supportedly'],
+      difficulty: 'easy',
+      explanation: 'A noun is needed after the adjective “practical”.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Tổ chức cung cấp sự __________ thực tế cho các gia đình gặp khó khăn.',
+        options: [
+          'support (danh từ: sự hỗ trợ / practical support)',
+          'supportive (tính từ)',
+          'supporting (V-ing)',
+          'supportedly (trạng từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'While one team __________ the lights, another team was checking the entrance.',
+      correct: 'was replacing',
+      distractors: ['replaced suddenly', 'is replacing', 'has replaced'],
+      difficulty: 'medium',
+      explanation: 'Two simultaneous background actions use the past continuous.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Trong khi một đội __________ hệ thống đèn, một đội khác đang kiểm tra lối vào.',
+        options: [
+          'was replacing (hai hành động song song cùng diễn ra trong quá khứ)',
+          'replaced suddenly',
+          'is replacing',
+          'has replaced'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the sentence with the correct time relationship.',
+      correct: 'The residents were testing the ramp when the survey team arrived.',
+      distractors: [
+        'The residents tested the ramp while the survey team was arrived.',
+        'The residents were test the ramp when the survey team arrived.',
+        'The residents are testing the ramp when the survey team arrived yesterday.'
+      ],
+      difficulty: 'hard',
+      explanation: 'Past continuous marks the ongoing action; past simple marks the interrupting event.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu có mối quan hệ thời gian đúng ngữ pháp:',
+        options: [
+          'The residents were testing the ramp when the survey team arrived. (Người dân đang thử đường dốc thì đội khảo sát tới.)',
+          'The residents tested the ramp while the survey team was arrived. (Sai: was arrived)',
+          'The residents were test the ramp when the survey team arrived. (Sai: were test)',
+          'The residents are testing the ramp when the survey team arrived yesterday. (Sai: phối hợp thì hiện tại - quá khứ)'
+        ]
+      }
+    }
   ],
   5: [
-    { prompt: 'The team __________ this prototype for three months.', correct: 'has tested', distractors: ['tested for', 'is test', 'have testing'], difficulty: 'easy', explanation: '“For three months” with an unfinished period calls for the present perfect.', subtype: 'grammar-context' },
-    { prompt: 'We have not received the user feedback __________.', correct: 'yet', distractors: ['already not', 'ever yesterday', 'since'], difficulty: 'easy', explanation: '“Yet” is common in present-perfect negatives and questions.', subtype: 'grammar-context' },
-    { prompt: 'The designers enjoy __________ users operate the device.', correct: 'watching', distractors: ['to watching', 'watch', 'watched to'], difficulty: 'easy', explanation: '“Enjoy” is followed by a gerund.', subtype: 'grammar-context' },
-    { prompt: 'The team built an early __________ so that users could test the design.', correct: 'prototype', distractors: ['prototypical', 'prototyping quickly', 'prototyped'], difficulty: 'easy', explanation: 'The countable noun “prototype” names an early test version.', subtype: 'vocabulary-use' },
-    { prompt: 'The application has been available __________ 2024.', correct: 'since', distractors: ['for', 'yet', 'ever'], difficulty: 'medium', explanation: '“Since” introduces the starting point of a continuing period.', subtype: 'grammar-context' },
-    { prompt: 'Choose the grammatically correct evaluation.', correct: 'After testing the device, the team decided to simplify its controls.', distractors: ['After test the device, the team decided simplifying its controls.', 'After testing the device, the team decided simplify its controls.', 'After to test the device, the team decided to simplifying its controls.'], difficulty: 'hard', explanation: 'Use a gerund after “after” and a to-infinitive after “decide”.', subtype: 'editing' }
+    {
+      prompt: 'The team __________ this prototype for three months.',
+      correct: 'has tested',
+      distractors: ['tested for', 'is test', 'have testing'],
+      difficulty: 'easy',
+      explanation: '“For three months” with an unfinished period calls for the present perfect.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Đội ngũ __________ mẫu thử này được 3 tháng rồi.',
+        options: [
+          'has tested (chia Hiện tại hoàn thành với for + khoảng thời gian)',
+          'tested for',
+          'is test',
+          'have testing'
+        ]
+      }
+    },
+    {
+      prompt: 'We have not received the user feedback __________.',
+      correct: 'yet',
+      distractors: ['already not', 'ever yesterday', 'since'],
+      difficulty: 'easy',
+      explanation: '“Yet” is common in present-perfect negatives and questions.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Chúng tớ vẫn chưa nhận được phản hồi của người dùng __________.',
+        options: [
+          'yet (chưa: đứng cuối câu phủ định Hiện tại hoàn thành)',
+          'already not',
+          'ever yesterday',
+          'since'
+        ]
+      }
+    },
+    {
+      prompt: 'The designers enjoy __________ users operate the device.',
+      correct: 'watching',
+      distractors: ['to watching', 'watch', 'watched to'],
+      difficulty: 'easy',
+      explanation: '“Enjoy” is followed by a gerund.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Các nhà thiết kế thích __________ người dùng vận hành thiết bị.',
+        options: [
+          'watching (cấu trúc: enjoy + V-ing)',
+          'to watching',
+          'watch',
+          'watched to'
+        ]
+      }
+    },
+    {
+      prompt: 'The team built an early __________ so that users could test the design.',
+      correct: 'prototype',
+      distractors: ['prototypical', 'prototyping quickly', 'prototyped'],
+      difficulty: 'easy',
+      explanation: 'The countable noun “prototype” names an early test version.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Đội ngũ đã chế tạo một __________ ban đầu để người dùng có thể thử nghiệm thiết kế.',
+        options: [
+          'prototype (danh từ: mẫu thử nghiệm ban đầu)',
+          'prototypical (tính từ)',
+          'prototyping quickly (cụm V-ing)',
+          'prototyped (động từ V-ed)'
+        ]
+      }
+    },
+    {
+      prompt: 'The application has been available __________ 2024.',
+      correct: 'since',
+      distractors: ['for', 'yet', 'ever'],
+      difficulty: 'medium',
+      explanation: '“Since” introduces the starting point of a continuing period.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Ứng dụng đã có sẵn kể từ năm __________ 2024.',
+        options: [
+          'since (kể từ + mốc thời gian)',
+          'for (khoảng thời gian)',
+          'yet',
+          'ever'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the grammatically correct evaluation.',
+      correct: 'After testing the device, the team decided to simplify its controls.',
+      distractors: [
+        'After test the device, the team decided simplifying its controls.',
+        'After testing the device, the team decided simplify its controls.',
+        'After to test the device, the team decided to simplifying its controls.'
+      ],
+      difficulty: 'hard',
+      explanation: 'Use a gerund after “after” and a to-infinitive after “decide”.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu đánh giá đúng ngữ pháp:',
+        options: [
+          'After testing the device, the team decided to simplify its controls. (Sau khi thử nghiệm thiết bị, nhóm đã quyết định đơn giản hóa bảng điều khiển.)',
+          'After test the device, the team decided simplifying its controls. (Sai: sau giới từ after phải dùng V-ing)',
+          'After testing the device, the team decided simplify its controls. (Sai: sau decide phải dùng to-V)',
+          'After to test the device, the team decided to simplifying its controls. (Sai: dùng sai to V-ing)'
+        ]
+      }
+    }
   ],
   6: [
-    { prompt: 'All candidates __________ the same core questions.', correct: 'must be asked', distractors: ['must ask', 'must be asking by', 'are must asked'], difficulty: 'easy', explanation: 'Modal passive uses “modal + be + past participle”.', subtype: 'grammar-context' },
-    { prompt: 'Leadership skills __________ through practice and feedback.', correct: 'can be developed', distractors: ['can develop by', 'can developed', 'are can develop'], difficulty: 'easy', explanation: 'The receiver of the action requires the passive form.', subtype: 'grammar-context' },
-    { prompt: 'Students __________ by gender stereotypes.', correct: 'should not be judged', distractors: ['should not judge', 'should not judged', 'do not should judge'], difficulty: 'easy', explanation: 'Use “should not be + past participle”.', subtype: 'grammar-context' },
-    { prompt: 'The new process aims to promote gender __________.', correct: 'equality', distractors: ['equal', 'equally', 'equalise'], difficulty: 'easy', explanation: 'A noun is needed after “gender”.', subtype: 'vocabulary-use' },
-    { prompt: 'Application data __________ regularly if the school wants to identify hidden barriers.', correct: 'should be reviewed', distractors: ['should review', 'should be review', 'reviews should'], difficulty: 'medium', explanation: 'The data receives the action, so use the modal passive.', subtype: 'grammar-context' },
-    { prompt: 'Choose the most accurate modal-perfect passive sentence.', correct: 'The unequal access may have been overlooked in earlier reviews.', distractors: ['The unequal access may have overlooked in earlier reviews.', 'The unequal access may has been overlook in earlier reviews.', 'Earlier reviews may been overlooked the unequal access.'], difficulty: 'hard', explanation: 'Modal-perfect passive uses “may have been + past participle”.', subtype: 'editing' }
+    {
+      prompt: 'All candidates __________ the same core questions.',
+      correct: 'must be asked',
+      distractors: ['must ask', 'must be asking by', 'are must asked'],
+      difficulty: 'easy',
+      explanation: 'Modal passive uses “modal + be + past participle”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Tất cả các ứng viên __________ cùng những câu hỏi cốt lõi như nhau.',
+        options: [
+          'must be asked (bị động với modal: must be + V3)',
+          'must ask',
+          'must be asking by',
+          'are must asked'
+        ]
+      }
+    },
+    {
+      prompt: 'Leadership skills __________ through practice and feedback.',
+      correct: 'can be developed',
+      distractors: ['can develop by', 'can developed', 'are can develop'],
+      difficulty: 'easy',
+      explanation: 'The receiver of the action requires the passive form.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Các kỹ năng lãnh đạo __________ thông qua rèn luyện và phản hồi.',
+        options: [
+          'can be developed (bị động với can: can be + V3)',
+          'can develop by',
+          'can developed',
+          'are can develop'
+        ]
+      }
+    },
+    {
+      prompt: 'Students __________ by gender stereotypes.',
+      correct: 'should not be judged',
+      distractors: ['should not judge', 'should not judged', 'do not should judge'],
+      difficulty: 'easy',
+      explanation: 'Use “should not be + past participle”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Học sinh __________ dựa trên những định kiến giới.',
+        options: [
+          'should not be judged (không nên bị đánh giá: should not be + V3)',
+          'should not judge',
+          'should not judged',
+          'do not should judge'
+        ]
+      }
+    },
+    {
+      prompt: 'The new process aims to promote gender __________.',
+      correct: 'equality',
+      distractors: ['equal', 'equally', 'equalise'],
+      difficulty: 'easy',
+      explanation: 'A noun is needed after “gender”.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Quy trình mới nhằm thúc đẩy bình đẳng __________.',
+        options: [
+          'equality (danh từ: gender equality)',
+          'equal (tính từ)',
+          'equally (trạng từ)',
+          'equalise (động từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'Application data __________ regularly if the school wants to identify hidden barriers.',
+      correct: 'should be reviewed',
+      distractors: ['should review', 'should be review', 'reviews should'],
+      difficulty: 'medium',
+      explanation: 'The data receives the action, so use the modal passive.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Dữ liệu đơn đăng ký __________ thường xuyên nếu nhà trường muốn xác định các rào cản tiềm ẩn.',
+        options: [
+          'should be reviewed (bị động với should: should be + V3)',
+          'should review',
+          'should be review',
+          'reviews should'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the most accurate modal-perfect passive sentence.',
+      correct: 'The unequal access may have been overlooked in earlier reviews.',
+      distractors: [
+        'The unequal access may have overlooked in earlier reviews.',
+        'The unequal access may has been overlook in earlier reviews.',
+        'Earlier reviews may been overlooked the unequal access.'
+      ],
+      difficulty: 'hard',
+      explanation: 'Modal-perfect passive uses “may have been + past participle”.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu bị động khuyết thiếu hoàn thành chính xác nhất:',
+        options: [
+          'The unequal access may have been overlooked in earlier reviews. (Sự tiếp cận không bình đẳng có thể đã bị bỏ qua trong các đợt xem xét trước đó.)',
+          'The unequal access may have overlooked in earlier reviews. (Sai: thiếu been)',
+          'The unequal access may has been overlook in earlier reviews. (Sai: may has been -> may have been)',
+          'Earlier reviews may been overlooked the unequal access. (Sai: dùng sai cấu trúc)'
+        ]
+      }
+    }
   ],
   7: [
-    { prompt: 'The revised plan is __________ than the first draft.', correct: 'more specific', distractors: ['specificer', 'most specific', 'more specifically plan'], difficulty: 'easy', explanation: 'A multi-syllable adjective normally forms the comparative with “more”.', subtype: 'grammar-context' },
-    { prompt: 'This is the __________ youth project in the programme.', correct: 'most collaborative', distractors: ['more collaborative', 'collaborativest', 'most collaboratively'], difficulty: 'easy', explanation: 'Use the superlative after “the” when comparing the whole group.', subtype: 'grammar-context' },
-    { prompt: 'Local knowledge made the evacuation map __________ accurate.', correct: 'more', distractors: ['most than', 'many', 'muchest'], difficulty: 'easy', explanation: '“More accurate” is the correct comparative form.', subtype: 'grammar-context' },
-    { prompt: 'The project depends on international __________.', correct: 'cooperation', distractors: ['cooperate', 'cooperative', 'cooperatively'], difficulty: 'easy', explanation: 'A noun is required after the adjective “international”.', subtype: 'vocabulary-use' },
-    { prompt: 'The tested route was __________ safer than the route in the original plan.', correct: 'far', distractors: ['very more', 'most', 'many'], difficulty: 'medium', explanation: '“Far” can intensify a comparative adjective.', subtype: 'grammar-context' },
-    { prompt: 'Choose the equivalent sentence: “This is the most practical proposal in the forum.”', correct: 'No other proposal in the forum is as practical as this one.', distractors: ['Every proposal is more practical than this one.', 'This proposal is less practical than all the others.', 'No proposal in the forum is practical.'], difficulty: 'hard', explanation: '“No other … as + adjective + as” preserves the superlative meaning.', subtype: 'editing' }
+    {
+      prompt: 'The revised plan is __________ than the first draft.',
+      correct: 'more specific',
+      distractors: ['specificer', 'most specific', 'more specifically plan'],
+      difficulty: 'easy',
+      explanation: 'A multi-syllable adjective normally forms the comparative with “more”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Kế hoạch sửa đổi thì __________ hơn so với bản thảo đầu tiên.',
+        options: [
+          'more specific (cụ thể hơn: so sánh hơn tính từ dài)',
+          'specificer',
+          'most specific',
+          'more specifically plan'
+        ]
+      }
+    },
+    {
+      prompt: 'This is the __________ youth project in the programme.',
+      correct: 'most collaborative',
+      distractors: ['more collaborative', 'collaborativest', 'most collaboratively'],
+      difficulty: 'easy',
+      explanation: 'Use the superlative after “the” when comparing the whole group.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Đây là dự án thanh niên mang tính hợp tác __________ trong chương trình.',
+        options: [
+          'most collaborative (mang tính hợp tác nhất - so sánh nhất với the)',
+          'more collaborative',
+          'collaborativest',
+          'most collaboratively'
+        ]
+      }
+    },
+    {
+      prompt: 'Local knowledge made the evacuation map __________ accurate.',
+      correct: 'more',
+      distractors: ['most than', 'many', 'muchest'],
+      difficulty: 'easy',
+      explanation: '“More accurate” is the correct comparative form.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Tri thức địa phương đã làm cho bản đồ sơ tán trở nên chính xác __________.',
+        options: [
+          'more (chính xác hơn: more accurate)',
+          'most than',
+          'many',
+          'muchest'
+        ]
+      }
+    },
+    {
+      prompt: 'The project depends on international __________.',
+      correct: 'cooperation',
+      distractors: ['cooperate', 'cooperative', 'cooperatively'],
+      difficulty: 'easy',
+      explanation: 'A noun is required after the adjective “international”.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Dự án phụ thuộc vào sự __________ quốc tế.',
+        options: [
+          'cooperation (danh từ: sự hợp tác)',
+          'cooperate (động từ)',
+          'cooperative (tính từ)',
+          'cooperatively (trạng từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'The tested route was __________ safer than the route in the original plan.',
+      correct: 'far',
+      distractors: ['very more', 'most', 'many'],
+      difficulty: 'medium',
+      explanation: '“Far” can intensify a comparative adjective.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Tuyến đường thử nghiệm an toàn hơn __________ nhiều so với tuyến đường trong kế hoạch ban đầu.',
+        options: [
+          'far (nhấn mạnh so sánh hơn: far safer)',
+          'very more',
+          'most',
+          'many'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the equivalent sentence: “This is the most practical proposal in the forum.”',
+      correct: 'No other proposal in the forum is as practical as this one.',
+      distractors: [
+        'Every proposal is more practical than this one.',
+        'This proposal is less practical than all the others.',
+        'No proposal in the forum is practical.'
+      ],
+      difficulty: 'hard',
+      explanation: '“No other … as + adjective + as” preserves the superlative meaning.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu tương đương nghĩa với câu: “Đây là đề xuất thực tế nhất trong diễn đàn.”',
+        options: [
+          'No other proposal in the forum is as practical as this one. (Không có đề xuất nào khác trong diễn đàn thực tế bằng đề xuất này.)',
+          'Every proposal is more practical than this one. (Mọi đề xuất đều thực tế hơn đề xuất này.)',
+          'This proposal is less practical than all the others. (Đề xuất này kém thực tế hơn tất cả các đề xuất khác.)',
+          'No proposal in the forum is practical. (Không đề xuất nào trong diễn đàn là thực tế.)'
+        ]
+      }
+    }
   ],
   8: [
-    { prompt: 'The teacher __________ introduced retrieval practice is very patient.', correct: 'who', distractors: ['which', 'where', 'whose practice'], difficulty: 'easy', explanation: '“Who” refers to a person and functions as the subject.', subtype: 'grammar-context' },
-    { prompt: 'The questions __________ we answer from memory reveal learning gaps.', correct: 'which', distractors: ['who', 'where', 'whose'], difficulty: 'easy', explanation: '“Which” refers to things.', subtype: 'grammar-context' },
-    { prompt: 'The online room __________ our group meets has a shared whiteboard.', correct: 'where', distractors: ['who', 'which person', 'whose students'], difficulty: 'easy', explanation: '“Where” refers to a place.', subtype: 'grammar-context' },
-    { prompt: 'Timely __________ helps students recognise and correct mistakes.', correct: 'feedback', distractors: ['feed backly', 'feedbacking', 'fed back'], difficulty: 'easy', explanation: 'The noun “feedback” is the natural learning-related collocation.', subtype: 'vocabulary-use' },
-    { prompt: 'Our learning platform, __________ was updated yesterday, now loads more quickly.', correct: 'which', distractors: ['that without commas', 'who', 'where'], difficulty: 'medium', explanation: 'A non-defining clause about a thing uses comma + “which”.', subtype: 'grammar-context' },
-    { prompt: 'Choose the correctly punctuated sentence.', correct: 'Trang, who facilitates today’s session, has prepared three questions.', distractors: ['Trang who facilitates today’s session, has prepared three questions.', 'Trang, that facilitates today’s session has prepared three questions.', 'Trang which facilitates today’s session, has prepared three questions.'], difficulty: 'hard', explanation: 'The non-defining clause about Trang uses “who” between two commas.', subtype: 'editing' }
+    {
+      prompt: 'The teacher __________ introduced retrieval practice is very patient.',
+      correct: 'who',
+      distractors: ['which', 'where', 'whose practice'],
+      difficulty: 'easy',
+      explanation: '“Who” refers to a person and functions as the subject.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Thầy giáo, người __________ giới thiệu phương pháp luyện tập gợi nhớ kiến thức, rất kiên nhẫn.',
+        options: [
+          'who (đại từ chỉ người làm chủ ngữ)',
+          'which',
+          'where',
+          'whose practice'
+        ]
+      }
+    },
+    {
+      prompt: 'The questions __________ we answer from memory reveal learning gaps.',
+      correct: 'which',
+      distractors: ['who', 'where', 'whose'],
+      difficulty: 'easy',
+      explanation: '“Which” refers to things.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Những câu hỏi __________ chúng tớ trả lời từ trí nhớ giúp bộc lộ các lỗ hổng kiến thức.',
+        options: [
+          'which (đại từ chỉ vật)',
+          'who',
+          'where',
+          'whose'
+        ]
+      }
+    },
+    {
+      prompt: 'The online room __________ our group meets has a shared whiteboard.',
+      correct: 'where',
+      distractors: ['who', 'which person', 'whose students'],
+      difficulty: 'easy',
+      explanation: '“Where” refers to a place.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Phòng học trực tuyến __________ nhóm chúng tớ họp có một bảng trắng chung.',
+        options: [
+          'where (trạng từ quan hệ chỉ nơi chốn)',
+          'who',
+          'which person',
+          'whose students'
+        ]
+      }
+    },
+    {
+      prompt: 'Timely __________ helps students recognise and correct mistakes.',
+      correct: 'feedback',
+      distractors: ['feed backly', 'feedbacking', 'fed back'],
+      difficulty: 'easy',
+      explanation: 'The noun “feedback” is the natural learning-related collocation.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Những __________ kịp thời giúp học sinh nhận ra và sửa chữa các sai sót.',
+        options: [
+          'feedback (danh từ: phản hồi/nhận xét)',
+          'feed backly',
+          'feedbacking',
+          'fed back'
+        ]
+      }
+    },
+    {
+      prompt: 'Our learning platform, __________ was updated yesterday, now loads more quickly.',
+      correct: 'which',
+      distractors: ['that without commas', 'who', 'where'],
+      difficulty: 'medium',
+      explanation: 'A non-defining clause about a thing uses comma + “which”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nền tảng học tập của chúng tớ, cái __________ được cập nhật ngày hôm qua, giờ đây tải nhanh hơn.',
+        options: [
+          'which (đại từ chỉ vật trong mệnh đề không xác định có dấu phẩy)',
+          'that without commas',
+          'who',
+          'where'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the correctly punctuated sentence.',
+      correct: 'Trang, who facilitates today’s session, has prepared three questions.',
+      distractors: [
+        'Trang who facilitates today’s session, has prepared three questions.',
+        'Trang, that facilitates today’s session has prepared three questions.',
+        'Trang which facilitates today’s session, has prepared three questions.'
+      ],
+      difficulty: 'hard',
+      explanation: 'The non-defining clause about Trang uses “who” between two commas.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu sử dụng dấu câu đúng ngữ pháp:',
+        options: [
+          'Trang, who facilitates today’s session, has prepared three questions. (Trang, người điều phối buổi học hôm nay, đã chuẩn bị ba câu hỏi.)',
+          'Trang who facilitates today’s session, has prepared three questions. (Sai: thiếu dấu phẩy đầu)',
+          'Trang, that facilitates today’s session has prepared three questions. (Sai: không dùng that sau dấu phẩy)',
+          'Trang which facilitates today’s session, has prepared three questions. (Sai: không dùng which cho người)'
+        ]
+      }
+    }
   ],
   9: [
-    { prompt: 'Lan said that she __________ water samples after school.', correct: 'was collecting', distractors: ['is collecting yesterday', 'collects tomorrow', 'has collect'], difficulty: 'easy', explanation: 'Present continuous normally backshifts to past continuous in reported speech.', subtype: 'grammar-context' },
-    { prompt: 'The teacher asked whether the samples __________ from the same site.', correct: 'had come', distractors: ['do come', 'are coming yesterday', 'comes'], difficulty: 'easy', explanation: 'The earlier past action is reported with the past perfect.', subtype: 'grammar-context' },
-    { prompt: 'The reporter asked __________ the dark water had first appeared.', correct: 'where', distractors: ['if where', 'that', 'did where'], difficulty: 'easy', explanation: 'A reported wh-question keeps the wh-word and statement word order.', subtype: 'grammar-context' },
-    { prompt: 'Regular monitoring provides more reliable __________.', correct: 'evidence', distractors: ['evident', 'evidently', 'evidenceful'], difficulty: 'easy', explanation: 'A noun is required after “reliable”.', subtype: 'vocabulary-use' },
-    { prompt: 'The teacher told the team __________ an unsupported accusation.', correct: 'not to make', distractors: ['to not made', 'do not make', 'not making to'], difficulty: 'medium', explanation: 'A negative reported command uses “told + object + not to + verb”.', subtype: 'grammar-context' },
-    { prompt: 'Choose the correct reported sentence for “We will test the water tomorrow,” they said.', correct: 'They said that they would test the water the following day.', distractors: ['They said that we will test the water tomorrow.', 'They said that they would tested the water the following day.', 'They asked that they will test the water yesterday.'], difficulty: 'hard', explanation: '“Will” backshifts to “would” and “tomorrow” changes to “the following day”.', subtype: 'editing' }
+    {
+      prompt: 'Lan said that she __________ water samples after school.',
+      correct: 'was collecting',
+      distractors: ['is collecting yesterday', 'collects tomorrow', 'has collect'],
+      difficulty: 'easy',
+      explanation: 'Present continuous normally backshifts to past continuous in reported speech.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Lan nói rằng bạn ấy __________ các mẫu nước sau giờ học.',
+        options: [
+          'was collecting (lùi thì hiện tại tiếp diễn -> quá khứ tiếp diễn)',
+          'is collecting yesterday',
+          'collects tomorrow',
+          'has collect'
+        ]
+      }
+    },
+    {
+      prompt: 'The teacher asked whether the samples __________ from the same site.',
+      correct: 'had come',
+      distractors: ['do come', 'are coming yesterday', 'comes'],
+      difficulty: 'easy',
+      explanation: 'The earlier past action is reported with the past perfect.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Thầy giáo đã hỏi liệu các mẫu thử __________ từ cùng một địa điểm hay không.',
+        options: [
+          'had come (hành động xảy ra trước thời điểm hỏi nên chia quá khứ hoàn thành)',
+          'do come',
+          'are coming yesterday',
+          'comes'
+        ]
+      }
+    },
+    {
+      prompt: 'The reporter asked __________ the dark water had first appeared.',
+      correct: 'where',
+      distractors: ['if where', 'that', 'did where'],
+      difficulty: 'easy',
+      explanation: 'A reported wh-question keeps the wh-word and statement word order.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Phóng viên đã hỏi xem nguồn nước đen đã xuất hiện đầu tiên ở __________.',
+        options: [
+          'where (trạng từ quan hệ/từ để hỏi chỉ nơi chốn)',
+          'if where',
+          'that',
+          'did where'
+        ]
+      }
+    },
+    {
+      prompt: 'Regular monitoring provides more reliable __________.',
+      correct: 'evidence',
+      distractors: ['evident', 'evidently', 'evidenceful'],
+      difficulty: 'easy',
+      explanation: 'A noun is required after “reliable”.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Việc giám sát thường xuyên cung cấp các __________ đáng tin cậy hơn.',
+        options: [
+          'evidence (danh từ: bằng chứng)',
+          'evident (tính từ)',
+          'evidently (trạng từ)',
+          'evidenceful'
+        ]
+      }
+    },
+    {
+      prompt: 'The teacher told the team __________ an unsupported accusation.',
+      correct: 'not to make',
+      distractors: ['to not made', 'do not make', 'not making to'],
+      difficulty: 'medium',
+      explanation: 'A negative reported command uses “told + object + not to + verb”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Thầy giáo đã bảo nhóm __________ một lời cáo buộc thiếu căn cứ.',
+        options: [
+          'not to make (cấu trúc câu mệnh lệnh gián tiếp phủ định: told + O + not to V)',
+          'to not made',
+          'do not make',
+          'not making to'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the correct reported sentence for “We will test the water tomorrow,” they said.',
+      correct: 'They said that they would test the water the following day.',
+      distractors: [
+        'They said that we will test the water tomorrow.',
+        'They said that they would tested the water the following day.',
+        'They asked that they will test the water yesterday.'
+      ],
+      difficulty: 'hard',
+      explanation: '“Will” backshifts to “would” and “tomorrow” changes to “the following day”.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu tường thuật đúng cho: “Chúng tớ sẽ xét nghiệm nước vào ngày mai,” họ nói.',
+        options: [
+          'They said that they would test the water the following day. (Họ nói rằng họ sẽ xét nghiệm nước vào ngày hôm sau.)',
+          'They said that we will test the water tomorrow. (Sai: chưa đổi ngôi và chưa lùi thì)',
+          'They said that they would tested the water the following day. (Sai: would + V1 không chia V-ed)',
+          'They asked that they will test the water yesterday. (Sai cấu trúc)'
+        ]
+      }
+    }
   ],
   10: [
-    { prompt: 'If visitors follow the marked trail, they __________ the nesting area.', correct: 'will protect', distractors: ['would protected', 'protecting', 'will protected'], difficulty: 'easy', explanation: 'A real future condition uses present simple + “will”.', subtype: 'grammar-context' },
-    { prompt: 'If I __________ the village guide, I would limit group size.', correct: 'were', distractors: ['am', 'will be', 'have been tomorrow'], difficulty: 'easy', explanation: 'A hypothetical type-2 condition commonly uses “were”.', subtype: 'grammar-context' },
-    { prompt: 'Visitors will not enter the wetland __________ they book a guided time slot.', correct: 'unless', distractors: ['if not because', 'when not', 'although if'], difficulty: 'easy', explanation: '“Unless” means “if not”.', subtype: 'grammar-context' },
-    { prompt: 'The village wants tourism to be environmentally __________.', correct: 'sustainable', distractors: ['sustain', 'sustainably tourism', 'sustainability'], difficulty: 'easy', explanation: 'An adjective is needed after “be environmentally”.', subtype: 'vocabulary-use' },
-    { prompt: 'If tour fees __________ transparent, residents would trust the programme more.', correct: 'were', distractors: ['will be', 'are yesterday', 'would be'], difficulty: 'medium', explanation: 'A hypothetical present condition uses past simple in the if-clause.', subtype: 'grammar-context' },
-    { prompt: 'Choose the sentence that correctly contrasts a real and a hypothetical result.', correct: 'If the guide explains the rule, visitors will follow it; if there were no guide, some might enter the nesting area.', distractors: ['If the guide will explain the rule, visitors follow it; if there is no guide, some would entered.', 'If the guide explained the rule tomorrow, visitors will followed it; if there were no guide, some enter.', 'If the guide explains the rule, visitors would followed it; if there was no guide, some will entering.'], difficulty: 'hard', explanation: 'The first clause uses type 1; the second uses type 2 consistently.', subtype: 'editing' }
+    {
+      prompt: 'If visitors follow the marked trail, they __________ the nesting area.',
+      correct: 'will protect',
+      distractors: ['would protected', 'protecting', 'will protected'],
+      difficulty: 'easy',
+      explanation: 'A real future condition uses present simple + “will”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nếu du khách tuân thủ tuyến đường đã đánh dấu, họ __________ khu vực làm tổ của động vật.',
+        options: [
+          'will protect (Mệnh đề chính loại 1 dùng will + V)',
+          'would protected',
+          'protecting',
+          'will protected'
+        ]
+      }
+    },
+    {
+      prompt: 'If I __________ the village guide, I would limit group size.',
+      correct: 'were',
+      distractors: ['am', 'will be', 'have been tomorrow'],
+      difficulty: 'easy',
+      explanation: 'A hypothetical type-2 condition commonly uses “were”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nếu tớ __________ hướng dẫn viên của làng, tớ sẽ giới hạn quy mô nhóm tham quan.',
+        options: [
+          'were (Giả định loại 2: If I were...)',
+          'am',
+          'will be',
+          'have been tomorrow'
+        ]
+      }
+    },
+    {
+      prompt: 'Visitors will not enter the wetland __________ they book a guided time slot.',
+      correct: 'unless',
+      distractors: ['if not because', 'when not', 'although if'],
+      difficulty: 'easy',
+      explanation: '“Unless” means “if not”.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Du khách sẽ không được vào khu đất ngập nước __________ họ đặt trước một khung giờ có hướng dẫn viên.',
+        options: [
+          'unless (trừ khi / nếu không: unless = if not)',
+          'if not because',
+          'when not',
+          'although if'
+        ]
+      }
+    },
+    {
+      prompt: 'The village wants tourism to be environmentally __________.',
+      correct: 'sustainable',
+      distractors: ['sustain', 'sustainably tourism', 'sustainability'],
+      difficulty: 'easy',
+      explanation: 'An adjective is needed after “be environmentally”.',
+      subtype: 'vocabulary-use',
+      translation: {
+        content: 'Ngôi làng muốn hoạt động du lịch phải __________ về mặt môi trường.',
+        options: [
+          'sustainable (tính từ: bền vững / environmentally sustainable)',
+          'sustain (động từ)',
+          'sustainably tourism',
+          'sustainability (danh từ)'
+        ]
+      }
+    },
+    {
+      prompt: 'If tour fees __________ transparent, residents would trust the programme more.',
+      correct: 'were',
+      distractors: ['will be', 'are yesterday', 'would be'],
+      difficulty: 'medium',
+      explanation: 'A hypothetical present condition uses past simple in the if-clause.',
+      subtype: 'grammar-context',
+      translation: {
+        content: 'Nếu phí tham quan __________ minh bạch, người dân sẽ tin tưởng chương trình hơn.',
+        options: [
+          'were (Mệnh đề if loại 2 chia quá khứ đơn/were)',
+          'will be',
+          'are yesterday',
+          'would be'
+        ]
+      }
+    },
+    {
+      prompt: 'Choose the sentence that correctly contrasts a real and a hypothetical result.',
+      correct: 'If the guide explains the rule, visitors will follow it; if there were no guide, some might enter the nesting area.',
+      distractors: [
+        'If the guide will explain the rule, visitors follow it; if there is no guide, some would entered.',
+        'If the guide explained the rule tomorrow, visitors will followed it; if there were no guide, some enter.',
+        'If the guide explains the rule, visitors would followed it; if there was no guide, some will entering.'
+      ],
+      difficulty: 'hard',
+      explanation: 'The first clause uses type 1; the second uses type 2 consistently.',
+      subtype: 'editing',
+      translation: {
+        content: 'Chọn câu tương phản đúng giữa kết quả có thật và kết quả giả định:',
+        options: [
+          'If the guide explains the rule, visitors will follow it; if there were no guide, some might enter the nesting area. (Nếu hướng dẫn viên giải thích quy định, du khách sẽ tuân thủ; nếu không có hướng dẫn viên, một số người có thể đi vào khu vực làm tổ.)',
+          'If the guide will explain the rule, visitors follow it; if there is no guide, some would entered. (Sai ngữ pháp)',
+          'If the guide explained the rule tomorrow, visitors will followed it; if there were no guide, some enter. (Sai ngữ pháp)',
+          'If the guide explains the rule, visitors would followed it; if there was no guide, some will entering. (Sai ngữ pháp)'
+        ]
+      }
+    }
   ]
 };
 
@@ -599,6 +1603,7 @@ const languageQuestion = (spec: UnitDepthSpec, index: number, seed: ChoiceSeed):
     content: seed.prompt,
     options: arranged.options,
     correctAnswer: arranged.answer,
+    translation: seed.translation,
     difficulty: seed.difficulty,
     sourceType: 'manual',
     validatorType: 'choice',

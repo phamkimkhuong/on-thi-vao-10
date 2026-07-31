@@ -17,6 +17,10 @@ import { g10PhysicsQuestionTypes } from './grade10/physics/questionTypes';
 import { g10PhysicsQuestions } from './grade10/physics/questions';
 import { g10BiologyQuestionTypes } from './grade10/biology/questionTypes';
 import { g10BiologyQuestions } from './grade10/biology/questions';
+import { g11MathQuestionTypes } from './grade11/math/questionTypes';
+import { g11MathQuestions } from './grade11/math/questions';
+import { g11BiologyQuestionTypes } from './grade11/biology/questionTypes';
+import { g11BiologyQuestions } from './grade11/biology/questions';
 import { g11ChemistryQuestionTypes } from './grade11/chemistry/questionTypes';
 import { g11ChemistryQuestions } from './grade11/chemistry/questions';
 import { g11PhysicsQuestionTypes } from './grade11/physics/questionTypes';
@@ -94,9 +98,11 @@ export const getSubjectInfoByTypeId = (typeId: string): SubjectCategoryInfo => {
 
 // Tổng hợp toàn bộ QuestionTypes của hệ thống
 export const allQuestionTypesList: QuestionType[] = [
+  ...g11MathQuestionTypes,
   ...g11EnglishQuestionTypes,
   ...g11ChemistryQuestionTypes,
   ...g11PhysicsQuestionTypes,
+  ...g11BiologyQuestionTypes,
   ...g10ChemistryQuestionTypes,
   ...g10MathQuestionTypes,
   ...g10EnglishQuestionTypes,
@@ -112,9 +118,11 @@ export const allQuestionTypesMap = new Map<string, QuestionType>(
 
 // Tổng hợp toàn bộ Questions của hệ thống
 export const allQuestionsList: Question[] = [
+  ...g11MathQuestions,
   ...g11EnglishQuestions,
   ...g11ChemistryQuestions,
   ...g11PhysicsQuestions,
+  ...g11BiologyQuestions,
   ...g10ChemistryQuestions,
   ...g10MathQuestions,
   ...g10EnglishQuestions,

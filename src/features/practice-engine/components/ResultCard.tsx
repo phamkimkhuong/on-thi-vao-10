@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../../../components/ui/button';
 import { LatexRenderer } from '../../../components/common/LatexRenderer';
 import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
@@ -6,7 +6,7 @@ import { Question, QuestionType, Solution, UserAttempt, SubjectCode } from '../.
 import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
 import { cn } from '../../../utils/cn';
 import { getSubjectTheme } from '../../../utils/theme';
-import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight, Languages } from 'lucide-react';
 import { logCustomEvent } from '../../../services/firebase';
 import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
@@ -111,20 +111,48 @@ export const ResultCard: React.FC<ResultCardProps> = ({
     ? displayOptions?.[correctOptionIndex]?.replace(/^[A-D][.)]\s*/, '').trim()
     : undefined;
 
+  const [showTranslation, setShowTranslation] = useState(false);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-fade-in">
       <div className="lg:col-span-7 space-y-6">
         {/* Đề bài (Xem lại câu hỏi) */}
         <div className="bg-card border border-border/40 shadow-sm rounded-2xl overflow-hidden text-left">
-          <div className="bg-secondary/15 border-b border-border/20 px-5 py-3">
+          <div className="bg-secondary/15 border-b border-border/20 px-5 py-3 flex items-center justify-between">
             <h4 className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wider">
               📖 Đề bài:
             </h4>
+
+            {/* Nút "Dịch nghĩa" nếu câu hỏi có dữ liệu bản dịch */}
+            {currentQuestion.translation && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowTranslation(!showTranslation)}
+                className="text-xs font-extrabold gap-1.5 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950/40 cursor-pointer h-8 px-2.5 rounded-lg border border-indigo-500/20"
+              >
+                <Languages className="w-3.5 h-3.5" />
+                {showTranslation ? '🔤 xem Tiếng Anh gốc' : '🌐 Dịch nghĩa Tiếng Việt'}
+              </Button>
+            )}
           </div>
           <div className="space-y-4 p-5 text-sm font-bold leading-relaxed text-foreground bg-secondary/10 dark:bg-slate-950/10 font-sans">
             <QuestionStimulusRenderer question={currentQuestion} />
             <LatexRenderer text={cleanContent} />
+
+            {/* Bản dịch Đề bài tiếng Việt */}
+            {showTranslation && currentQuestion.translation?.content && (
+              <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-950 dark:text-indigo-200 text-xs font-medium space-y-1 animate-fade-in">
+                <div className="text-[10px] font-black uppercase text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                  <Languages className="w-3 h-3" /> Bản dịch Tiếng Việt:
+                </div>
+                <div className="font-semibold text-xs leading-relaxed">
+                  {currentQuestion.translation.content}
+                </div>
+              </div>
+            )}
           </div>
+
           {/* Nếu có options (đối với trắc nghiệm) thì hiển thị các lựa chọn cho học sinh dễ đối chiếu */}
           {displayOptions && displayOptions.length > 0 && (
             <div className="px-5 pb-5 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-card">
@@ -133,6 +161,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 const letter = letters[oIdx] || String.fromCharCode(65 + oIdx);
                 // Lọc bỏ tiền tố dạng "A. " nếu có trong text
                 const cleanOpt = opt.replace(/^[A-D]\.\s*/, '');
+                const translatedOpt = currentQuestion.translation?.options?.[oIdx]?.replace(/^[A-D]\.\s*/, '');
                 const isSelected = selectedOption === letter || selectedOption === cleanOpt || selectedOption === opt;
                 const isCorrectAnswer = currentQuestion.correctAnswer === letter || currentQuestion.correctAnswer === cleanOpt || currentQuestion.correctAnswer === opt;
 
@@ -158,8 +187,13 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                     )}>
                       {letter}
                     </span>
-                    <div className="leading-relaxed">
+                    <div className="leading-relaxed flex-1">
                       <LatexRenderer text={cleanOpt} />
+                      {showTranslation && translatedOpt && (
+                        <div className="text-[11px] font-normal text-indigo-700 dark:text-indigo-300 mt-0.5 italic">
+                          ({translatedOpt})
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

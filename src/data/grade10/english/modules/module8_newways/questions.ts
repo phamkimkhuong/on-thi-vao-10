@@ -13,6 +13,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. whose",
       "D. where"
     ],
+    "translation": {
+      "content": "Giáo viên __________ hướng dẫn chúng tớ sử dụng nền tảng học tập mới rất kiên nhẫn.",
+      "options": [
+        "A. who (đại từ chỉ người làm chủ ngữ)",
+        "B. which",
+        "C. whose",
+        "D. where"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -30,6 +39,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. whose",
       "D. whom"
     ],
+    "translation": {
+      "content": "Chiếc máy tính bảng __________ tớ dùng để ghi chép là của chị gái tớ.",
+      "options": [
+        "A. who",
+        "B. which (đại từ chỉ vật)",
+        "C. whose",
+        "D. whom"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -47,6 +65,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. whose",
       "D. that"
     ],
+    "translation": {
+      "content": "Bạn học sinh __________ có máy tính xách tay bị hỏng đã mượn máy của tớ.",
+      "options": [
+        "A. who",
+        "B. which",
+        "C. whose (tính từ quan hệ chỉ sở hữu: whose laptop)",
+        "D. that"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -64,6 +91,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. whose",
       "D. whom"
     ],
+    "translation": {
+      "content": "Các khóa học trực tuyến __________ cung cấp phản hồi thường xuyên thì hiệu quả hơn.",
+      "options": [
+        "A. who",
+        "B. that (thay cho which chỉ vật trong mệnh đề xác định)",
+        "C. whose",
+        "D. whom"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -81,6 +117,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. whose",
       "D. whom"
     ],
+    "translation": {
+      "content": "Cô Hoa, người __________ dạy lớp học trực tuyến của chúng tớ, đã tạo một bài giảng video mới.",
+      "options": [
+        "A. that",
+        "B. who (đại từ chỉ người trong mệnh đề không xác định có dấu phẩy)",
+        "C. whose",
+        "D. whom"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -98,6 +143,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. which",
       "D. whose"
     ],
+    "translation": {
+      "content": "Ứng dụng từ điển này, cái __________ hoạt động ngoại tuyến, rất hữu ích trong các chuyến dã ngoại.",
+      "options": [
+        "A. that",
+        "B. who",
+        "C. which (đại từ chỉ vật trong mệnh đề không xác định)",
+        "D. whose"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -115,6 +169,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. which",
       "D. whom"
     ],
+    "translation": {
+      "content": "Trang web __________ thầy giáo tớ giới thiệu có chứa các bài luyện tập miễn phí.",
+      "options": [
+        "A. who",
+        "B. whose",
+        "C. which (đại từ chỉ vật làm tân ngữ)",
+        "D. whom"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -132,6 +195,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. which",
       "D. that"
     ],
+    "translation": {
+      "content": "Những người học __________ có tiến trình học tập được ghi lại có thể xem báo cáo hằng tuần.",
+      "options": [
+        "A. whose (chỉ sở hữu: whose progress)",
+        "B. who",
+        "C. which",
+        "D. that"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -149,6 +221,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. who",
       "D. whose"
     ],
+    "translation": {
+      "content": "Máy đọc sách của tớ, cái __________ tớ mua năm ngoái, vẫn hoạt động rất tốt.",
+      "options": [
+        "A. that",
+        "B. which (đại từ chỉ vật sau dấu phẩy)",
+        "C. who",
+        "D. whose"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -166,6 +247,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. Khan Academy, which offers free lessons, is widely used.",
       "D. Khan Academy which offers free lessons is, widely used."
     ],
+    "translation": {
+      "content": "Chọn câu sử dụng dấu câu đúng cấu trúc:",
+      "options": [
+        "A. Khan Academy that offers free lessons is widely used. (Sai: danh từ riêng phải dùng mệnh đề không xác định)",
+        "B. Khan Academy, that offers free lessons, is widely used. (Sai: không dùng that sau dấu phẩy)",
+        "C. Khan Academy, which offers free lessons, is widely used. (Mệnh đề không xác định bổ sung thông tin cho Khan Academy dùng dấu phẩy và which)",
+        "D. Khan Academy which offers free lessons is, widely used. (Sai dấu phẩy)"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -183,6 +273,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. I downloaded an app which exercises adapt to my level.",
       "D. I downloaded an app that its exercises adapt to my level."
     ],
+    "translation": {
+      "content": "Chọn câu gần nghĩa nhất với câu: “Tớ đã tải một ứng dụng. Các bài tập của nó tự điều chỉnh theo trình độ của tớ.”",
+      "options": [
+        "A. I downloaded an app who exercises adapt to my level.",
+        "B. I downloaded an app whose exercises adapt to my level. (Tớ đã tải một ứng dụng mà các bài tập của nó tự điều chỉnh theo trình độ của tớ.)",
+        "C. I downloaded an app which exercises adapt to my level.",
+        "D. I downloaded an app that its exercises adapt to my level."
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -200,6 +299,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. whose",
       "D. where"
     ],
+    "translation": {
+      "content": "Đại từ quan hệ nào có thể được lược bỏ trong câu sau: “Công cụ kỹ thuật số mà các học sinh sử dụng thường xuyên nhất là bảng trắng chung”?",
+      "options": [
+        "A. who",
+        "B. which (đại từ quan hệ chỉ vật làm tân ngữ có thể được lược bỏ)",
+        "C. whose",
+        "D. where"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -217,6 +325,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. original",
       "D. printed"
     ],
+    "translation": {
+      "content": "Một khóa học kết hợp bài học trên lớp với các hoạt động trực tuyến sử dụng phương pháp học __________.",
+      "options": [
+        "A. blended (kết hợp: blended learning)",
+        "B. distracted (xao nhãng)",
+        "C. original (nguyên bản)",
+        "D. printed (được in)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -234,6 +351,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. control",
       "D. exchange"
     ],
+    "translation": {
+      "content": "Học sinh có thể __________ tài liệu học tập từ nền tảng của trường bất cứ lúc nào.",
+      "options": [
+        "A. access (truy cập)",
+        "B. distract (xao nhãng)",
+        "C. control (kiểm soát)",
+        "D. exchange (trao đổi)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -251,6 +377,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. control",
       "D. account"
     ],
+    "translation": {
+      "content": "Các giáo viên thường gửi cho học sinh __________ về bài tập trực tuyến của họ.",
+      "options": [
+        "A. feedback (phản hồi/nhận xét)",
+        "B. distraction (sự xao nhãng)",
+        "C. control (sự kiểm soát)",
+        "D. account (tài khoản)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -268,6 +403,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. distraction",
       "D. distracting"
     ],
+    "translation": {
+      "content": "Thông báo từ mạng xã hội có thể là một yếu tố gây __________ lớn khi học sinh đang học bài.",
+      "options": [
+        "A. distract (động từ)",
+        "B. distracted (tính từ)",
+        "C. distraction (danh từ: sự xao nhãng)",
+        "D. distracting (tính từ)"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -285,6 +429,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. print",
       "D. download"
     ],
+    "translation": {
+      "content": "Các cuộc gọi video cho phép người học từ xa __________ với giáo viên theo thời gian thực.",
+      "options": [
+        "A. interact (tương tác: interact with)",
+        "B. store (Lưu trữ)",
+        "C. print (in)",
+        "D. download (tải xuống)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -302,6 +455,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. platform",
       "D. distraction"
     ],
+    "translation": {
+      "content": "Một __________ hiển thị các bước của một quy trình bằng các hình hộp và mũi tên.",
+      "options": [
+        "A. flow chart (sơ đồ tiến trình/sơ đồ khối)",
+        "B. comment (bình luận)",
+        "C. platform (nền tảng)",
+        "D. distraction (sự xao nhãng)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -319,6 +481,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. control",
       "D. distract"
     ],
+    "translation": {
+      "content": "Các diễn đàn thảo luận cho phép học sinh __________ ý kiến ngay cả khi họ không trực tuyến cùng lúc.",
+      "options": [
+        "A. exchange (trao đổi: exchange ideas)",
+        "B. revise (ôn tập)",
+        "C. control (kiểm soát)",
+        "D. distract (gây xao nhãng)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -336,6 +507,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. interact",
       "D. interactively"
     ],
+    "translation": {
+      "content": "Các buổi học trực tiếp cung cấp sự __________ trực tiếp giữa con người mà một số người học trực tuyến thiếu vắng.",
+      "options": [
+        "A. interaction (danh từ: sự tương tác)",
+        "B. interactive (tính từ)",
+        "C. interact (động từ)",
+        "D. interactively (trạng từ)"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -353,6 +533,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. blended",
       "D. face-to-face"
     ],
+    "translation": {
+      "content": "Người học nên kiểm tra xem thông tin trên mạng có đến từ một nguồn __________ hay không.",
+      "options": [
+        "A. reliable (đáng tin cậy)",
+        "B. distracted",
+        "C. blended",
+        "D. face-to-face"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -370,6 +559,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. personally",
       "D. personality"
     ],
+    "translation": {
+      "content": "Nền tảng hỗ trợ việc học được __________ hóa bằng cách cho phép mỗi học sinh tiến bộ theo tốc độ phù hợp.",
+      "options": [
+        "A. personal",
+        "B. personalised (cá nhân hóa: personalised learning)",
+        "C. personally",
+        "D. personality"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -387,6 +585,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. focused",
       "D. focuses"
     ],
+    "translation": {
+      "content": "Các thông báo bật lên liên tục khiến người học khó có thể giữ sự __________ vào nhiệm vụ.",
+      "options": [
+        "A. focus",
+        "B. focusing",
+        "C. focused (tập trung: stay focused)",
+        "D. focuses"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -404,6 +611,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. objectively",
       "D. object"
     ],
+    "translation": {
+      "content": "Các công cụ kỹ thuật số đạt hiệu quả cao nhất khi được sử dụng để hỗ trợ các __________ học tập rõ ràng.",
+      "options": [
+        "A. objective (danh từ số ít)",
+        "B. objectives (danh từ số nhiều: mục tiêu học tập)",
+        "C. objectively (trạng từ)",
+        "D. object (đối tượng)"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -421,6 +637,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. students – in – the",
       "D. the – tools – in"
     ],
+    "translation": {
+      "content": "Trong câu trung tính “Students use digital tools in class”, nhóm từ nào thường nhận trọng âm?",
+      "options": [
+        "A. students – use – digital – tools – class (nhóm các thực từ: danh từ, động từ, tính từ)",
+        "B. in – the – in",
+        "C. students – in – the",
+        "D. the – tools – in"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -438,6 +663,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. will – give – us",
       "D. the – feedback – us"
     ],
+    "translation": {
+      "content": "Những từ nào thường được nhấn trọng âm trong câu “The teacher will give us feedback tomorrow”?",
+      "options": [
+        "A. the – will – us",
+        "B. teacher – give – feedback – tomorrow (các thực từ: teacher, give, feedback, tomorrow)",
+        "C. will – give – us",
+        "D. the – feedback – us"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -455,6 +689,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. for – her – exam",
       "D. is – final – her"
     ],
+    "translation": {
+      "content": "Nhóm nào chỉ chứa các thực từ (content words) trong câu “She is revising for her final exam”?",
+      "options": [
+        "A. she – is – for",
+        "B. revising – final – exam (động từ chính, tính từ, danh từ)",
+        "C. for – her – exam",
+        "D. is – final – her"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "easy",
     "sourceType": "manual",
@@ -472,6 +715,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. what – are – the",
       "D. the – blended – of"
     ],
+    "translation": {
+      "content": "Những từ nào thường nhận trọng âm trong câu “What are the benefits of blended learning”?",
+      "options": [
+        "A. what – benefits – blended – learning (từ để hỏi và các thực từ)",
+        "B. are – the – of",
+        "C. what – are – the",
+        "D. the – blended – of"
+      ]
+    },
     "correctAnswer": "A",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -489,6 +741,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. printed",
       "D. textbooks"
     ],
+    "translation": {
+      "content": "Trong câu “Students don’t need to buy printed textbooks”, từ nào được nhấn một phần vì nó mang ý nghĩa phủ định?",
+      "options": [
+        "A. to",
+        "B. don’t (từ phủ định don't được nhấn trong câu)",
+        "C. printed",
+        "D. textbooks"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -506,6 +767,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. uploaded",
       "D. it"
     ],
+    "translation": {
+      "content": "A hỏi: “Lan đã tải tệp lên à?” B sửa lại: “Không, Minh đã tải nó lên.” Từ nào nên nhận trọng âm tương phản?",
+      "options": [
+        "A. no",
+        "B. Minh (nhấn Minh để đính chính đối tượng)",
+        "C. uploaded",
+        "D. it"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -523,6 +793,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. said – not",
       "D. I – not"
     ],
+    "translation": {
+      "content": "Trong câu “I said Tuesday, not Thursday”, cặp từ nào mang sự đối chiếu tương phản chính?",
+      "options": [
+        "A. I – said",
+        "B. Tuesday – Thursday (nhấn Tuesday và Thursday để đối chiếu)",
+        "C. said – not",
+        "D. I – not"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -540,6 +819,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. access – learning – materials – online",
       "D. we – online – can"
     ],
+    "translation": {
+      "content": "Nhóm nào thường nhận trọng âm trong câu “We can access learning materials online”?",
+      "options": [
+        "A. we – can",
+        "B. can – materials",
+        "C. access – learning – materials – online (các thực từ)",
+        "D. we – online – can"
+      ]
+    },
     "correctAnswer": "C",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -557,6 +845,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. is – useful – than",
       "D. this – more – the"
     ],
+    "translation": {
+      "content": "Những từ nào thường được nhấn trong câu “This app is more useful than the printed dictionary”?",
+      "options": [
+        "A. this – is – than – the",
+        "B. app – more – useful – printed – dictionary (các thực từ)",
+        "C. is – useful – than",
+        "D. this – more – the"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "medium",
     "sourceType": "manual",
@@ -574,6 +871,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. It is followed by a verb.",
       "D. It appears near the beginning."
     ],
+    "translation": {
+      "content": "Tại sao từ CAN lại được nhấn trọng âm trong câu trả lời của B?",
+      "options": [
+        "A. It is always stressed as a modal.",
+        "B. It corrects the negative claim. (Nó đính chính lại khẳng định phủ định trước đó)",
+        "C. It is followed by a verb.",
+        "D. It appears near the beginning."
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -591,6 +897,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. on",
       "D. Tuesday"
     ],
+    "translation": {
+      "content": "Từ nào mang trọng âm sửa lỗi mạnh nhất trong câu trả lời của B?",
+      "options": [
+        "A. it",
+        "B. starts",
+        "C. on",
+        "D. Tuesday (nhấn Tuesday để sửa lại thông tin Monday)"
+      ]
+    },
     "correctAnswer": "D",
     "difficulty": "hard",
     "sourceType": "manual",
@@ -608,6 +923,15 @@ export const g10EnglishModule8Questions: Question[] = [
       "C. working – on – project",
       "D. students – are – group"
     ],
+    "translation": {
+      "content": "Nhóm nào chứa các từ thường KHÔNG nhận trọng âm (hư từ / structure words) trong câu?",
+      "options": [
+        "A. students – working – group – project",
+        "B. the – are – on – a (mạo từ, trợ động từ to be, giới từ)",
+        "C. working – on – project",
+        "D. students – are – group"
+      ]
+    },
     "correctAnswer": "B",
     "difficulty": "hard",
     "sourceType": "manual",

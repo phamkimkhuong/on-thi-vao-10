@@ -13,6 +13,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is cooking",
       "D. cooks"
     ],
+    translation: {
+      content: "Nhìn kìa! Những đứa trẻ __________ bữa tối cùng mẹ trong căn bếp.",
+      options: [
+        "A. cook (nấu - hiện tại đơn)",
+        "B. are cooking (đang nấu - hiện tại tiếp diễn)",
+        "C. is cooking (đang nấu - dùng cho số ít)",
+        "D. cooks (nấu - số ít)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -30,6 +39,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is working",
       "D. has worked"
     ],
+    translation: {
+      content: "Trong gia đình tôi, bố tôi là trụ cột kinh tế; ông ấy __________ chăm chỉ để nuôi sống chúng tôi.",
+      options: [
+        "A. work (làm việc - nguyên mẫu)",
+        "B. works (làm việc - hiện tại đơn số ít)",
+        "C. is working (đang làm việc)",
+        "D. has worked (đã làm việc)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -47,6 +65,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is dividing",
       "D. divided"
     ],
+    translation: {
+      content: "Mẹ tôi thường __________ công việc nhà đều đặn giữa chị tôi và tôi.",
+      options: [
+        "A. divides (phân chia - hiện tại đơn số ít)",
+        "B. divide (phân chia - nguyên mẫu)",
+        "C. is dividing (đang phân chia)",
+        "D. divided (đã phân chia)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "easy",
     sourceType: "manual",
@@ -64,6 +91,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is sweeping",
       "D. is sweep"
     ],
+    translation: {
+      content: "Ngay lúc này, chị tôi __________ nhà trong khi anh tôi đang rửa bát đĩa.",
+      options: [
+        "A. sweeps (quét - hiện tại đơn)",
+        "B. sweep (quét - nguyên mẫu)",
+        "C. is sweeping (đang quét nhà)",
+        "D. is sweep (sai cấu trúc)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -81,6 +117,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. taking",
       "D. took"
     ],
+    translation: {
+      content: "Phân chia việc nhà giúp trẻ em __________ trách nhiệm và học các kỹ năng sống cần thiết.",
+      options: [
+        "A. take (gánh vác / nhận trách nhiệm)",
+        "B. takes (ngôi thứ 3 số ít)",
+        "C. taking (dạng V-ing)",
+        "D. took (quá khứ)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -98,6 +143,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. am preparing",
       "D. prepared"
     ],
+    translation: {
+      content: "Tớ xin lỗi, bây giờ tớ không thể đi chơi cùng bạn vì tớ __________ bữa tối cho gia đình.",
+      options: [
+        "A. prepare (chuẩn bị - nguyên mẫu)",
+        "B. prepares (chuẩn bị - số ít)",
+        "C. am preparing (đang chuẩn bị)",
+        "D. prepared (đã chuẩn bị)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -115,6 +169,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is doing",
       "D. did"
     ],
+    translation: {
+      content: "Hằng ngày, bố tôi làm những việc nặng nhọc, còn mẹ tôi __________ việc nấu nướng.",
+      options: [
+        "A. do (làm - nguyên mẫu)",
+        "B. does (làm - chia cho ngôi thứ 3 số ít)",
+        "C. is doing (đang làm)",
+        "D. did (đã làm)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -132,6 +195,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is sleeping",
       "D. are sleeping"
     ],
+    translation: {
+      content: "Hãy giữ trật tự! Em bé __________ bình yên trong phòng ngủ.",
+      options: [
+        "A. sleeps (ngủ - hiện tại đơn)",
+        "B. sleep (ngủ - nguyên mẫu)",
+        "C. is sleeping (đang ngủ)",
+        "D. are sleeping (đang ngủ - số nhiều)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -149,6 +221,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. knows",
       "D. have known"
     ],
+    translation: {
+      content: "Tớ __________ anh trai bạn rất rõ; anh ấy là một thành viên rất tích cực của câu lạc bộ tình nguyện xanh.",
+      options: [
+        "A. know (biết - động từ trạng thái hiện tại)",
+        "B. am knowing (sai vì know không chia tiếp diễn)",
+        "C. knows (biết - số ít)",
+        "D. have known (đã biết)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -166,6 +247,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. is needing",
       "D. needed"
     ],
+    translation: {
+      content: "Hiện tại, cô ấy __________ hoàn thành các việc nhà trước khi đi ngủ.",
+      options: [
+        "A. need (cần - nguyên mẫu)",
+        "B. needs (cần - động từ trạng thái hiện tại số ít)",
+        "C. is needing (sai vì need không chia tiếp diễn)",
+        "D. needed (đã cần)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -183,6 +273,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. lifter",
       "D. volunteer"
     ],
+    translation: {
+      content: "Ở nhiều quốc gia, người chồng không còn là __________ duy nhất nữa, vì người vợ cũng ra ngoài đi làm.",
+      options: [
+        "A. homemaker (người nội trợ)",
+        "B. breadwinner (trụ cột kinh tế gia đình)",
+        "C. lifter (người khiêng vác)",
+        "D. volunteer (tình nguyện viên)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -200,6 +299,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. worker",
       "D. singer"
     ],
+    translation: {
+      content: "Mẹ tôi là một người làm nội trợ và là một __________ tuyệt vời; bà chăm sóc ngôi nhà của chúng tôi rất chu đáo.",
+      options: [
+        "A. breadwinner (trụ cột kinh tế)",
+        "B. homemaker (người nội trợ gia đình)",
+        "C. worker (công nhân)",
+        "D. singer (ca sĩ)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -217,6 +325,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. groceries",
       "D. finance"
     ],
+    translation: {
+      content: "Phân chia __________ đều đặn giữa các thành viên giúp thắt chặt tình cảm gia đình.",
+      options: [
+        "A. heavy lifting (công việc nặng nhọc)",
+        "B. household chores (công việc nhà)",
+        "C. groceries (thực phẩm / tạp hóa)",
+        "D. finance (tài chính)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -234,6 +351,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. washing-up",
       "D. laundry"
     ],
+    translation: {
+      content: "Bố tôi thường làm những __________ như bê vác các thùng nặng hoặc sửa chữa mái nhà.",
+      options: [
+        "A. heavy lifting (công việc mang vác nặng nhọc)",
+        "B. grocery shopping (đi chợ mua thực phẩm)",
+        "C. washing-up (rửa bát đĩa)",
+        "D. laundry (giặt giũ quần áo)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "easy",
     sourceType: "manual",
@@ -251,6 +377,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. homemakers",
       "D. devices"
     ],
+    translation: {
+      content: "Mỗi sáng thứ Bảy, mẹ tôi đi chợ để mua __________ cho cả tuần.",
+      options: [
+        "A. heavy liftings (việc nặng)",
+        "B. groceries (thực phẩm và đồ tạp hóa)",
+        "C. homemakers (người nội trợ)",
+        "D. devices (thiết bị)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -268,6 +403,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. create",
       "D. brown"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. breadwinner (phát âm cụm /br/)",
+        "B. break (phát âm cụm /br/)",
+        "C. create (phát âm cụm /kr/ - Đáp án khác biệt)",
+        "D. brown (phát âm cụm /br/)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -285,6 +429,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. brain",
       "D. travel"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. tree (phát âm cụm /tr/)",
+        "B. track (phát âm cụm /tr/)",
+        "C. brain (phát âm cụm /br/ - Đáp án khác biệt)",
+        "D. travel (phát âm cụm /tr/)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -302,6 +455,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. crowd",
       "D. critique"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. crash (phát âm cụm /kr/)",
+        "B. truth (phát âm cụm /tr/ - Đáp án khác biệt)",
+        "C. crowd (phát âm cụm /kr/)",
+        "D. critique (phát âm cụm /kr/)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -319,6 +481,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. branch",
       "D. brick"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. brush (phát âm cụm /br/)",
+        "B. crust (phát âm cụm /kr/ - Đáp án khác biệt)",
+        "C. branch (phát âm cụm /br/)",
+        "D. brick (phát âm cụm /br/)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "easy",
     sourceType: "manual",
@@ -336,6 +507,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. crystal",
       "D. transfer"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. trust (phát âm cụm /tr/)",
+        "B. true (phát âm cụm /tr/)",
+        "C. crystal (phát âm cụm /kr/ - Đáp án khác biệt)",
+        "D. transfer (phát âm cụm /tr/)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -353,6 +533,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. crawl",
       "D. crazy"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. cram (phát âm cụm /kr/)",
+        "B. tray (phát âm cụm /tr/ - Đáp án khác biệt)",
+        "C. crawl (phát âm cụm /kr/)",
+        "D. crazy (phát âm cụm /kr/)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -370,6 +559,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. trip",
       "D. bride"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. bridge (phát âm cụm /br/)",
+        "B. brave (phát âm cụm /br/)",
+        "C. trip (phát âm cụm /tr/ - Đáp án khác biệt)",
+        "D. bride (phát âm cụm /br/)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -387,6 +585,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. trunk",
       "D. trade"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. creep (phát âm cụm /kr/ - Đáp án khác biệt)",
+        "B. trend (phát âm cụm /tr/)",
+        "C. trunk (phát âm cụm /tr/)",
+        "D. trade (phát âm cụm /tr/)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -404,6 +611,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. craft",
       "D. brought"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. broom (phát âm cụm /br/)",
+        "B. breed (phát âm cụm /br/)",
+        "C. craft (phát âm cụm /kr/ - Đáp án khác biệt)",
+        "D. brought (phát âm cụm /br/)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "easy",
     sourceType: "manual",
@@ -421,6 +637,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. traffic",
       "D. traditional"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. tractor (phát âm cụm /tr/)",
+        "B. bronze (phát âm cụm /br/ - Đáp án khác biệt)",
+        "C. traffic (phát âm cụm /tr/)",
+        "D. traditional (phát âm cụm /tr/)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -438,6 +663,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. housekeeper",
       "D. caregiver"
     ],
+    translation: {
+      content: "Với vai trò là người __________ chính, ông Long kiếm phần lớn số tiền cần thiết cho gia đình mình.",
+      options: [
+        "A. homemaker (người nội trợ)",
+        "B. breadwinner (người trụ cột kinh tế)",
+        "C. housekeeper (người quản gia)",
+        "D. caregiver (người chăm sóc)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "medium",
     sourceType: "manual",
@@ -455,6 +689,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. chores",
       "D. benefits"
     ],
+    translation: {
+      content: "Giặt giũ và rửa bát đĩa là những __________ phổ biến trong gia đình.",
+      options: [
+        "A. bonds (tình cảm gắn kết)",
+        "B. routines (thói quen hằng ngày)",
+        "C. chores (công việc nhà)",
+        "D. benefits (lợi ích)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "medium",
     sourceType: "manual",
@@ -472,6 +715,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. strengthen",
       "D. contribute"
     ],
+    translation: {
+      content: "Cha mẹ nên __________ trách nhiệm việc nhà một cách công bằng giữa các thành viên trong gia đình.",
+      options: [
+        "A. divide (phân chia)",
+        "B. prepare (chuẩn bị)",
+        "C. strengthen (thắt chặt)",
+        "D. contribute (đóng góp)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -489,6 +741,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. sharing",
       "D. raising"
     ],
+    translation: {
+      content: "Di chuyển tủ quần áo đòi hỏi một số công việc mang vác __________, vì vậy hãy nhờ người lớn giúp đỡ.",
+      options: [
+        "A. lifting (mang vác nặng nhọc)",
+        "B. washing (giặt giũ)",
+        "C. sharing (chia sẻ)",
+        "D. raising (nuôi dưỡng)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "medium",
     sourceType: "manual",
@@ -506,6 +767,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. responsibility",
       "D. responsibilities"
     ],
+    translation: {
+      content: "Trẻ em chia sẻ việc nhà thường phát triển ý thức __________ cao hơn đối với ngôi nhà của mình.",
+      options: [
+        "A. responsible (tính từ: có trách nhiệm)",
+        "B. responsibly (trạng từ: một cách có trách nhiệm)",
+        "C. responsibility (danh từ: tinh thần trách nhiệm)",
+        "D. responsibilities (danh từ số nhiều)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -523,6 +793,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. strong",
       "D. strongly"
     ],
+    translation: {
+      content: "Bữa ăn gia đình thường xuyên có thể giúp __________ sự gắn kết giữa cha mẹ và con cái.",
+      options: [
+        "A. strengthen (động từ: thắt chặt / làm mạnh thêm)",
+        "B. strength (danh từ: sức mạnh)",
+        "C. strong (tính từ: mạnh mẽ)",
+        "D. strongly (trạng từ: một cách mạnh mẽ)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "hard",
     sourceType: "manual",
@@ -540,6 +819,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. divisive",
       "D. divided"
     ],
+    translation: {
+      content: "Sự __________ việc nhà công bằng giúp ngăn một người phải gánh vác toàn bộ gánh nặng.",
+      options: [
+        "A. division (danh từ: sự phân chia)",
+        "B. divide (động từ: phân chia)",
+        "C. divisive (tính từ: gây chia rẽ)",
+        "D. divided (dạng quá khứ)"
+      ]
+    },
     correctAnswer: "A",
     difficulty: "hard",
     sourceType: "manual",
@@ -557,6 +845,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. worked / works",
       "D. has worked / is working"
     ],
+    translation: {
+      content: "Tháng này, bố tôi __________ tại nhà, mặc dù thông thường ông ấy __________ tại văn phòng.",
+      options: [
+        "A. works / is working (dùng sai thì)",
+        "B. is working / works (đang làm tạm thời / thói quen hằng ngày)",
+        "C. worked / works (dùng sai thì)",
+        "D. has worked / is working (dùng sai thì)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "hard",
     sourceType: "manual",
@@ -574,6 +871,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. understands",
       "D. understood"
     ],
+    translation: {
+      content: "Bây giờ tớ đã __________ tại sao chia sẻ việc nhà lại quan trọng rồi.",
+      options: [
+        "A. am understanding (sai vì understand không chia tiếp diễn)",
+        "B. understand (hiểu - động từ trạng thái)",
+        "C. understands (dùng cho ngôi thứ 3 số ít)",
+        "D. understood (dạng quá khứ)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "hard",
     sourceType: "manual",
@@ -591,6 +897,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. brother",
       "D. train"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. bread (phát âm cụm /br/)",
+        "B. bridge (phát âm cụm /br/)",
+        "C. brother (phát âm cụm /br/)",
+        "D. train (phát âm cụm /tr/ - Đáp án khác biệt)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "hard",
     sourceType: "manual",
@@ -608,6 +923,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. chemistry",
       "D. cross"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. create (phát âm cụm /kr/)",
+        "B. crowd (phát âm cụm /kr/)",
+        "C. chemistry (phát âm /k/ đơn, không có âm r - Đáp án khác biệt)",
+        "D. cross (phát âm cụm /kr/)"
+      ]
+    },
     correctAnswer: "C",
     difficulty: "hard",
     sourceType: "manual",
@@ -625,6 +949,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. smells / tastes",
       "D. is smelling / is tasting"
     ],
+    translation: {
+      content: "Món súp __________ rất ngon, và Mẹ __________ súp để kiểm tra xem có cần thêm muối không.",
+      options: [
+        "A. is smelling / tastes (sai cách dùng động từ chỉ cảm giác/hành động)",
+        "B. smells / is tasting (smells: tỏa mùi thơm / is tasting: đang nếm thử)",
+        "C. smells / tastes (tastes sai vì mẹ đang nếm tại thời điểm nói)",
+        "D. is smelling / is tasting (is smelling sai)"
+      ]
+    },
     correctAnswer: "B",
     difficulty: "hard",
     sourceType: "manual",
@@ -642,6 +975,15 @@ export const g10EnglishModule1Questions: Question[] = [
       "C. crop",
       "D. tree"
     ],
+    translation: {
+      content: "Chọn từ có cụm phụ âm đầu được phát âm khác với các từ còn lại:",
+      options: [
+        "A. crime (phát âm cụm /kr/)",
+        "B. crab (phát âm cụm /kr/)",
+        "C. crop (phát âm cụm /kr/)",
+        "D. tree (phát âm cụm /tr/ - Đáp án khác biệt)"
+      ]
+    },
     correctAnswer: "D",
     difficulty: "hard",
     sourceType: "manual",

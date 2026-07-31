@@ -373,6 +373,10 @@ export interface Question {
   province?: string;
   year?: number;
   options?: string[]; // Dùng cho trắc nghiệm (Tiếng Anh)
+  translation?: {
+    content: string;
+    options?: string[];
+  };
   correctAnswer: string;
   acceptedAnswers?: string[];
   validatorType?: ValidatorType;
