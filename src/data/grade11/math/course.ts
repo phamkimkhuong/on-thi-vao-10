@@ -16,6 +16,19 @@ import {
   g11MathAssessmentSolutions
 } from './assessments';
 import { g11MathVideos } from './videos';
+import { normalizeMath11PracticeModules } from './practiceChoiceNormalizer';
+
+const g11MathPracticeModules = normalizeMath11PracticeModules([
+  g11MathModule1,
+  g11MathModule2,
+  g11MathModule3,
+  g11MathModule4,
+  g11MathModule5,
+  g11MathModule6,
+  g11MathModule7,
+  g11MathModule8,
+  g11MathModule9
+]);
 
 export const g11MathCourse = defineCourse({
   course: {
@@ -30,17 +43,7 @@ export const g11MathCourse = defineCourse({
     reviewStatus: 'draft'
   },
   curriculum: g11MathCurriculum,
-  modules: [
-    g11MathModule1,
-    g11MathModule2,
-    g11MathModule3,
-    g11MathModule4,
-    g11MathModule5,
-    g11MathModule6,
-    g11MathModule7,
-    g11MathModule8,
-    g11MathModule9
-  ],
+  modules: g11MathPracticeModules,
   assessments: {
     ...emptyAssessmentBundle(),
     exams: g11MathAssessmentExams,

@@ -174,6 +174,37 @@ for (const question of assessmentQuestions) {
   }
 }
 
+const practiceChoices = readExportedArray(
+  path.join(dataDirectory, 'practiceChoices.ts'),
+  'g10MathPracticeChoices'
+);
+const legacyInputQuestionIds = new Set(
+  questions
+    .filter(question => !Array.isArray(question.options) || question.options.length === 0)
+    .map(question => question.id)
+);
+const practiceChoiceByQuestionId = new Map(
+  practiceChoices.map(choice => [choice.id, choice])
+);
+
+for (const question of questions) {
+  const choice = practiceChoiceByQuestionId.get(question.id);
+  if (!choice) continue;
+  delete question.answerSchema;
+  question.responseType = 'single_choice';
+  question.options = choice.options;
+  question.correctAnswer = choice.correctAnswer;
+  question.acceptedAnswers = [choice.correctAnswer, choice.correctAnswer.toLowerCase()];
+  question.validatorType = 'choice';
+}
+
+for (const solution of solutions) {
+  const choice = practiceChoiceByQuestionId.get(solution.questionId);
+  if (!choice) continue;
+  const answerIndex = choice.correctAnswer.charCodeAt(0) - 65;
+  solution.finalAnswer = choice.options[answerIndex];
+}
+
 const errors = [];
 const warnings = [];
 const mediaIds = new Set();
@@ -192,6 +223,7 @@ for (const [label, items, keyOf] of [
   ['Misconception', misconceptions, item => item.id],
   ['Practice blueprint', blueprints, item => item.questionTypeId],
   ['Practice metadata', metadata, item => item.questionId],
+  ['Practice choice', practiceChoices, item => item.id],
   ['Assessment question', assessmentQuestions, item => item.id],
   ['Assessment solution', assessmentSolutions, item => item.questionId],
   ['Exam', exams, item => item.id]
@@ -213,6 +245,15 @@ for (const content of duplicateKeys(questions, item => String(item.content).toLo
 
 if (moduleDirs.length !== 8) errors.push(`Cần đúng 8 module cốt lõi, hiện có ${moduleDirs.length}.`);
 if (topics.length !== 8) errors.push(`Cần đúng 8 topic, hiện có ${topics.length}.`);
+if (practiceChoices.length !== legacyInputQuestionIds.size) {
+  errors.push(`Choice overlay có ${practiceChoices.length} mục nhưng dữ liệu gốc có ${legacyInputQuestionIds.size} câu nhập đáp án.`);
+}
+for (const questionId of legacyInputQuestionIds) {
+  if (!practiceChoiceByQuestionId.has(questionId)) errors.push(`${questionId}: thiếu bộ phương án chuyển đổi A–B–C–D.`);
+}
+for (const choice of practiceChoices) {
+  if (!legacyInputQuestionIds.has(choice.id)) errors.push(`${choice.id}: choice overlay không trỏ tới câu nhập đáp án gốc.`);
+}
 
 for (const type of questionTypes) {
   if (!topicById.has(type.topicId)) errors.push(`${type.id}: topicId không tồn tại.`);
@@ -226,6 +267,10 @@ for (const question of questions) {
   if (!typeById.has(question.questionTypeId)) errors.push(`${question.id}: questionTypeId không tồn tại.`);
   if (!solutionByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu lời giải.`);
   if (!metadataByQuestionId.has(question.id)) errors.push(`${question.id}: thiếu practice metadata.`);
+  if (question.responseType !== 'single_choice' || question.validatorType !== 'choice') {
+    errors.push(`${question.id}: câu luyện tập Toán 10 phải dùng lựa chọn A–B–C–D.`);
+  }
+  if (question.answerSchema !== undefined) errors.push(`${question.id}: còn answerSchema của ô nhập đáp án.`);
   const mediaItems = [
     ...(Array.isArray(question.stimulus?.media) ? question.stimulus.media : []),
     ...(Array.isArray(question.media) ? question.media : [])
@@ -248,7 +293,13 @@ for (const question of questions) {
   if (question.validatorType === 'choice') {
     if (!Array.isArray(question.options) || question.options.length !== 4) errors.push(`${question.id}: câu lựa chọn phải có đúng 4 phương án.`);
     if (!['A', 'B', 'C', 'D'].includes(question.correctAnswer)) errors.push(`${question.id}: đáp án lựa chọn phải là A, B, C hoặc D.`);
-    if (new Set(question.options ?? []).size !== (question.options ?? []).length) errors.push(`${question.id}: phương án lựa chọn bị trùng.`);
+    const semanticOptions = (question.options ?? []).map(option => String(option)
+      .replace(/^[A-D]\.\s*/, '')
+      .replace(/\\(?:left|right)/g, '')
+      .replace(/[{}\s$]/g, '')
+      .replace(/,/g, '.')
+      .toLocaleLowerCase('vi'));
+    if (new Set(semanticOptions).size !== semanticOptions.length) errors.push(`${question.id}: phương án lựa chọn bị trùng về nội dung.`);
     if (Array.isArray(question.acceptedAnswers) && !question.acceptedAnswers.includes(question.correctAnswer)) {
       errors.push(`${question.id}: acceptedAnswers không chứa khóa ${question.correctAnswer}.`);
     }
@@ -270,14 +321,20 @@ for (const solution of solutions) {
   if (!Array.isArray(solution.detailedSteps) || solution.detailedSteps.length === 0) errors.push(`${solution.questionId}: thiếu các bước giải.`);
   if (!Array.isArray(solution.commonMistakes) || solution.commonMistakes.length === 0) warnings.push(`${solution.questionId}: chưa nêu lỗi thường gặp.`);
   const question = questionById.get(solution.questionId);
-  if (question?.id.startsWith('math10-m1-') || question?.id.startsWith('math10-m2-') || question?.id.startsWith('math10-m3-') || question?.id.startsWith('math10-m4-') || question?.id.startsWith('math10-m5-') || question?.id.startsWith('math10-m6-') || question?.id.startsWith('math10-m7-') || question?.id.startsWith('math10-m8-')) {
-    if (question.validatorType === 'choice' && !String(solution.finalAnswer).startsWith(`${question.correctAnswer}.`)) {
-      errors.push(`${solution.questionId}: lời giải không khớp khóa đáp án lựa chọn.`);
-    }
-    if (question.validatorType !== 'choice' && String(solution.finalAnswer) !== String(question.correctAnswer)) {
-      errors.push(`${solution.questionId}: finalAnswer không khớp correctAnswer.`);
-    }
+  if (question?.validatorType === 'choice' && !String(solution.finalAnswer).startsWith(`${question.correctAnswer}.`)) {
+    errors.push(`${solution.questionId}: lời giải không khớp khóa đáp án lựa chọn.`);
   }
+}
+
+const practiceAnswerCounts = { A: 0, B: 0, C: 0, D: 0 };
+for (const question of questions) {
+  if (Object.hasOwn(practiceAnswerCounts, question.correctAnswer)) {
+    practiceAnswerCounts[question.correctAnswer] += 1;
+  }
+}
+const answerCountValues = Object.values(practiceAnswerCounts);
+if (Math.max(...answerCountValues) - Math.min(...answerCountValues) > 1) {
+  errors.push(`Khóa đáp án luyện tập chưa cân bằng: ${JSON.stringify(practiceAnswerCounts)}.`);
 }
 
 const subtypeById = new Map();

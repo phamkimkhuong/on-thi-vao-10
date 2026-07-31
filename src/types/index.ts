@@ -361,6 +361,9 @@ export interface Question {
   subjectId: SubjectCode;
   topicId: string;
   questionTypeId: string;
+  courseId?: string;
+  moduleId?: string;
+  lessonId?: string;
   content: string; // Hỗ trợ LaTeX
   responseType?: QuestionResponseType;
   media?: QuestionMedia[];
@@ -413,6 +416,9 @@ export interface AssessmentRubricCriterion {
 export interface Solution {
   id: string;
   questionId: string;
+  courseId?: string;
+  moduleId?: string;
+  lessonId?: string;
   recognition: string;
   translation?: string; // Dịch nghĩa của câu hỏi tiếng Anh
   detailedSteps: SolutionStep[];
@@ -484,8 +490,6 @@ export interface ActiveMistakesDoc {
 
 export interface UserProgress {
   userId: string;
-  // Map từ questionTypeId -> mastery score 0-100.
-  // Chuyển sang sao 0-3 bằng getStarsFromScore trước khi render/unlock UI.
   masteryLevels: Record<string, number>;
   completedLessons: string[]; // Danh sách các bài/dạng bài đã hoàn thành
   lastUpdatedAt: string;

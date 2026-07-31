@@ -209,10 +209,75 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
           svgDiv.innerHTML = segment;
           containerRef.current?.appendChild(svgDiv);
         } else {
-          // Xử lý đoạn văn bản / công thức Toán bình thường theo từng dòng
+          // Xử lý đoạn văn bản / công thức Toán / Bảng Markdown theo từng dòng
           const lines = segment.split('\n');
-          lines.forEach((line, lineIdx) => {
-            if (lineIdx > 0) {
+          let i = 0;
+          
+          while (i < lines.length) {
+            const line = lines[i];
+            
+            // Kiểm tra xem dòng hiện tại có phải là bắt đầu của một bảng Markdown (| col1 | col2 |) hay không
+            if (/^\s*\|.*\|\s*$/.test(line.trim())) {
+              const tableLines: string[] = [];
+              while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i].trim())) {
+                tableLines.push(lines[i].trim());
+                i++;
+              }
+
+              if (tableLines.length >= 2) {
+                const tableWrapper = document.createElement('div');
+                tableWrapper.className = 'my-3 max-w-full overflow-x-auto rounded-xl border border-border/50 bg-card shadow-xs';
+                
+                const table = document.createElement('table');
+                table.className = 'w-full text-xs text-left border-collapse';
+
+                const thead = document.createElement('thead');
+                thead.className = 'bg-secondary/40 font-black text-foreground border-b border-border/40';
+
+                const tbody = document.createElement('tbody');
+                tbody.className = 'divide-y divide-border/20';
+
+                let isHeader = true;
+                tableLines.forEach((tLine) => {
+                  // Bỏ qua dòng đường gạch nối phân cách |---|---|---|
+                  if (/^\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$/.test(tLine)) {
+                    isHeader = false;
+                    return;
+                  }
+
+                  const cells = tLine.split('|').slice(1, -1).map(c => c.trim());
+                  const tr = document.createElement('tr');
+
+                  if (isHeader) {
+                    cells.forEach((cellText) => {
+                      const th = document.createElement('th');
+                      th.className = 'p-2.5 font-black border-r border-border/30 last:border-r-0';
+                      renderLineContent(th, cellText, block);
+                      tr.appendChild(th);
+                    });
+                    thead.appendChild(tr);
+                    isHeader = false;
+                  } else {
+                    cells.forEach((cellText) => {
+                      const td = document.createElement('td');
+                      td.className = 'p-2.5 font-medium border-r border-border/20 last:border-r-0 text-foreground/90';
+                      renderLineContent(td, cellText, block);
+                      tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                  }
+                });
+
+                if (thead.children.length > 0) table.appendChild(thead);
+                table.appendChild(tbody);
+                tableWrapper.appendChild(table);
+                containerRef.current?.appendChild(tableWrapper);
+                continue;
+              }
+            }
+
+            // Xử lý dòng thông thường
+            if (i > 0) {
               containerRef.current?.appendChild(document.createElement('br'));
             }
 
@@ -233,7 +298,9 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
               // Render nội dung của dòng vào lineContainer tương ứng
               renderLineContent(lineContainer, contentToRender, block);
             }
-          });
+
+            i++;
+          }
         }
       });
     } catch (error) {

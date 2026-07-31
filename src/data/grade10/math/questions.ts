@@ -1,5 +1,7 @@
 import type { Question } from '@/types';
 import { g10MathPracticeMetadata } from './practiceMetadata';
+import { g10MathPracticeChoices } from './practiceChoices';
+import { applyMath10PracticeChoice } from './practiceChoiceNormalizer';
 import { g10MathModule1Questions } from './modules/module1_logic_sets/questions';
 import { g10MathModule2Questions } from './modules/module2_inequalities/questions';
 import { g10MathModule3Questions } from './modules/module3_functions/questions';
@@ -23,9 +25,18 @@ const rawQuestions: Question[] = [
 const metadataByQuestionId = new Map(
   g10MathPracticeMetadata.map(metadata => [metadata.questionId, metadata])
 );
+const choiceByQuestionId = new Map(
+  g10MathPracticeChoices.map(choice => [choice.id, choice])
+);
 
-/** Aggregator: gắn vai trò học tập và dạng con mà vẫn giữ nguyên dữ liệu nguồn. */
+/** Aggregator: chuẩn hóa câu luyện tập về A–B–C–D rồi gắn metadata học tập. */
 export const g10MathQuestions: Question[] = rawQuestions.map(question => {
+  const normalizedQuestion = applyMath10PracticeChoice(
+    question,
+    choiceByQuestionId.get(question.id)
+  );
   const metadata = metadataByQuestionId.get(question.id);
-  return metadata ? { ...question, ...metadata, id: question.id } : question;
+  return metadata
+    ? { ...normalizedQuestion, ...metadata, id: question.id }
+    : normalizedQuestion;
 });

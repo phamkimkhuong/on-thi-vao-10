@@ -16,6 +16,9 @@ const result = await validateCourseDataV4({
   expectedTheoryQuestionTypeCount: 33,
   expectedAssessmentExamCount: 13,
   expectedAssessmentBlueprintCount: 13,
+  expectedAssessmentQuestionCount: 129,
+  expectedAssessmentSolutionCount: 129,
+  expectedAssessmentQuestionTypeCount: 33,
   allowPartialCoverage: true
 });
 

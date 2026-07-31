@@ -294,12 +294,23 @@ export const getQuestions = (grade: GradeCode, subject: SubjectCode): Question[]
 /**
  * Ngân hàng chỉ dùng cho màn hình luyện tập.
  *
- * Hóa 10 đang dùng contract legacy nên câu luyện và câu kiểm tra vẫn phải cùng
- * tồn tại trong `questions` để ExamEngine tra cứu theo ID. Tách chúng tại biên
- * đọc của PracticeEngine để câu kiểm tra định kỳ không lọt vào lộ trình học.
+ * Toán 11, Toán 10 và Hóa 10 có câu luyện và câu kiểm tra cùng runtime nên câu luyện và câu kiểm tra vẫn
+ * phải cùng tồn tại trong `questions` để ExamEngine tra cứu theo ID. Tách chúng
+ * tại biên đọc của PracticeEngine để câu kiểm tra định kỳ không lọt vào lộ trình.
  */
 export const getPracticeQuestions = (grade: GradeCode, subject: SubjectCode): Question[] => {
   const questions = getQuestions(grade, subject);
+
+  if (grade === 'grade11' && subject === 'math') {
+    return questions.filter(question => !question.id.startsWith('math11-assess-'));
+  }
+
+  if (grade === 'grade10' && subject === 'math') {
+    return questions.filter(question => (
+      !question.id.startsWith('mock-math10-')
+      && !question.id.startsWith('math10-assess-')
+    ));
+  }
 
   if (grade === 'grade10' && subject === 'chemistry') {
     return questions.filter(question => (
