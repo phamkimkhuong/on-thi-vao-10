@@ -274,5 +274,20 @@ export const teacherService = {
       logger.error('Đếm bài chờ chấm', e);
       return 0;
     }
+  },
+
+  /**
+   * Đếm tổng số học sinh thực tế trong hệ thống bằng API getCountFromServer (chỉ tốn 1 Read)
+   */
+  async getTotalStudentsCount(): Promise<number> {
+    try {
+      const q = collection(db, 'users');
+      const snapshot = await getCountFromServer(q);
+      logger.dbRead('Đếm tổng số học sinh (getCountFromServer)', 1);
+      return snapshot.data().count;
+    } catch (e) {
+      logger.error('Đếm tổng số học sinh', e);
+      return 0;
+    }
   }
 };

@@ -7,6 +7,11 @@ import App from './App.tsx';
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
+  ignoreErrors: [
+    'Database is closing/hidden',
+    'Database is closing',
+    /Database is closing\/hidden/i,
+  ],
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration({

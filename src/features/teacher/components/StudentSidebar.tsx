@@ -12,6 +12,7 @@ interface StudentSidebarProps {
   hasMore: boolean;
   isLoadingMore: boolean;
   onLoadMore: () => void;
+  totalCount?: number;
 }
 
 export const StudentSidebar: React.FC<StudentSidebarProps> = ({
@@ -21,11 +22,14 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
   hasMore,
   isLoadingMore,
   onLoadMore,
+  totalCount,
 }) => {
+  const displayCount = totalCount !== undefined && totalCount > 0 ? totalCount : students.length;
+
   return (
     <div className="space-y-4">
       <h3 className="text-xs font-black uppercase text-muted-foreground tracking-wider flex items-center gap-1">
-        <Users size={14} /> Danh sách học sinh ({students.length})
+        <Users size={14} /> Danh sách học sinh ({displayCount})
       </h3>
 
       <div className="space-y-3">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { progressService } from '../../services/progressService';
 import { teacherService } from '../../services/teacherService';
@@ -26,11 +26,13 @@ import {
   Loader,
   LifeBuoy,
   Wallet,
+  Mail
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getStarsFromScore } from '../../utils/theme';
 import { TeacherAiStatistics } from './TeacherAiStatistics';
 import { TeacherAffiliateManager } from './TeacherAffiliateManager';
+import { EmailBroadcastManager } from './components/EmailBroadcastManager';
 import { supportService } from '../../services/supportService';
 import { StudentSidebar } from './components/StudentSidebar';
 import { StudentSummary } from './components/StudentSummary';
@@ -38,13 +40,20 @@ import { StudentMasteryTab } from './components/StudentMasteryTab';
 import { StudentExamsTab } from './components/StudentExamsTab';
 import { GradingPanel } from './components/GradingPanel';
 
+type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast';
 
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [activeTab, setActiveTab] = useState<'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin'>('students');
+  const activeTab = (searchParams.get('tab') as TeacherTabKey) || 'students';
+
+  const changeTab = useCallback((newTab: TeacherTabKey) => {
+    setSearchParams({ tab: newTab }, { replace: true });
+  }, [setSearchParams]);
   const [students, setStudents] = useState<SimulatedStudent[]>([]);
+  const [totalStudentsCount, setTotalStudentsCount] = useState<number>(0);
   const [lastActiveAtCursor, setLastActiveAtCursor] = useState<string | undefined>(undefined);
   const [hasMoreStudents, setHasMoreStudents] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -265,13 +274,17 @@ export const TeacherDashboard: React.FC = () => {
     setStudentProgress(null);
 
     try {
-      const res = await teacherService.getRealStudents(teacherUserId ? [teacherUserId] : [], 20);
+      const [res, pending, totalCount] = await Promise.all([
+        teacherService.getRealStudents(teacherUserId ? [teacherUserId] : [], 10),
+        teacherService.getRealPendingManualAttempts(100),
+        teacherService.getTotalStudentsCount()
+      ]);
+
       setStudents(res.students);
       setLastActiveAtCursor(res.lastActiveAt);
       setHasMoreStudents(res.hasMore);
-
-      const pending = await teacherService.getRealPendingManualAttempts(100);
       setPendingAttempts(pending);
+      setTotalStudentsCount(totalCount);
     } catch (e) {
       console.error(
         `Lỗi khi load dữ liệu giáo viên từ Firestore. UID hiện tại: "${user?.uid}". ` +
@@ -323,13 +336,23 @@ export const TeacherDashboard: React.FC = () => {
       }
 
       setAccessStatus('allowed');
-      loadData(user.uid);
+      if (activeTab === 'students' || activeTab === 'grading') {
+        loadData(user.uid);
+      } else {
+        setIsLoading(false);
+      }
     });
 
     return () => {
       cancelled = true;
     };
-  }, [user, loadData]);
+  }, [user, loadData, activeTab]);
+
+  useEffect(() => {
+    if (accessStatus === 'allowed' && user?.uid && (activeTab === 'students' || activeTab === 'grading') && students.length === 0) {
+      loadData(user.uid);
+    }
+  }, [activeTab, accessStatus, user, students.length, loadData]);
 
   if (!user) {
     return <Navigate to="/dashboard" replace />;
@@ -493,7 +516,7 @@ export const TeacherDashboard: React.FC = () => {
       {/* Tabs Menu */}
       <div className="flex border-b border-border/30 gap-2">
         <button
-          onClick={() => { setActiveTab('students'); }}
+          onClick={() => changeTab('students')}
           className={cn(
             "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
             activeTab === 'students'
@@ -505,7 +528,7 @@ export const TeacherDashboard: React.FC = () => {
           Báo cáo Tiến độ Học sinh
         </button>
         <button
-          onClick={() => { setActiveTab('grading'); }}
+          onClick={() => changeTab('grading')}
           className={cn(
             "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer relative",
             activeTab === 'grading'
@@ -522,7 +545,7 @@ export const TeacherDashboard: React.FC = () => {
           )}
         </button>
         <button
-          onClick={() => { setActiveTab('ai_statistics'); }}
+          onClick={() => changeTab('ai_statistics')}
           className={cn(
             "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
             activeTab === 'ai_statistics'
@@ -534,7 +557,7 @@ export const TeacherDashboard: React.FC = () => {
           Thống kê AI & Token
         </button>
         <button
-          onClick={() => { setActiveTab('premium'); }}
+          onClick={() => changeTab('premium')}
           className={cn(
             "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
             activeTab === 'premium'
@@ -546,7 +569,7 @@ export const TeacherDashboard: React.FC = () => {
           Cấp Quyền Premium
         </button>
         <button
-          onClick={() => { setActiveTab('support'); }}
+          onClick={() => changeTab('support')}
           className={cn(
             "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
             activeTab === 'support'
@@ -558,7 +581,7 @@ export const TeacherDashboard: React.FC = () => {
           Yêu cầu Hỗ trợ
         </button>
         <button
-          onClick={() => { setActiveTab('affiliate_admin'); }}
+          onClick={() => changeTab('affiliate_admin')}
           className={cn(
             "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
             activeTab === 'affiliate_admin'
@@ -568,6 +591,18 @@ export const TeacherDashboard: React.FC = () => {
         >
           <Wallet size={15} />
           Quản lý Affiliate
+        </button>
+        <button
+          onClick={() => changeTab('email_broadcast')}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'email_broadcast'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Mail size={15} />
+          Thông báo Email
         </button>
       </div>
 
@@ -583,6 +618,7 @@ export const TeacherDashboard: React.FC = () => {
           {/* Cột trái: Danh sách học sinh */}
           <StudentSidebar
             students={students}
+            totalCount={totalStudentsCount}
             selectedStudent={selectedStudent}
             onSelectStudent={handleSelectStudent}
             hasMore={hasMoreStudents}
@@ -984,6 +1020,8 @@ export const TeacherDashboard: React.FC = () => {
         </div>
       ) : activeTab === 'affiliate_admin' ? (
         <TeacherAffiliateManager />
+      ) : activeTab === 'email_broadcast' ? (
+        <EmailBroadcastManager />
       ) : null}
 
     </div>
