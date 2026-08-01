@@ -16,6 +16,9 @@ Sentry.init({
     /Java object is gone/i,
     'zaloJSV2 is not defined',
     /zaloJSV2/i,
+    'INTERNAL ASSERTION FAILED: Pending promise was never set',
+    'INTERNAL ASSERTION FAILED',
+    /INTERNAL ASSERTION FAILED/i,
   ],
   integrations: [
     Sentry.browserTracingIntegration(),
