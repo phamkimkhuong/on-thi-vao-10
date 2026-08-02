@@ -1550,14 +1550,25 @@ const languageSeedsByUnit: Record<number, ChoiceSeed[]> = {
 const arrangeChoice = (
   questionId: string,
   correct: string,
-  distractors: [string, string, string]
-): { options: string[]; answer: ChoiceLetter } => {
+  distractors: [string, string, string],
+  translationOptions?: string[]
+): { options: string[]; answer: ChoiceLetter; arrangedTranslationOptions?: string[] } => {
   const correctIndex = [...questionId].reduce((total, character) => total + character.charCodeAt(0), 0) % 4;
   const rawOptions = [...distractors];
   rawOptions.splice(correctIndex, 0, correct);
+
+  let arrangedTranslationOptions: string[] | undefined;
+  if (translationOptions && translationOptions.length === 4) {
+    // translation.options gốc theo thứ tự [correct, dist0, dist1, dist2]
+    const rawTranslation = [translationOptions[1], translationOptions[2], translationOptions[3]];
+    rawTranslation.splice(correctIndex, 0, translationOptions[0]);
+    arrangedTranslationOptions = rawTranslation;
+  }
+
   return {
     options: rawOptions.map((option, index) => `${letters[index]}. ${option}`),
-    answer: letters[correctIndex]
+    answer: letters[correctIndex],
+    arrangedTranslationOptions
   };
 };
 
@@ -1594,7 +1605,7 @@ const languageQuestionType = (spec: UnitDepthSpec): QuestionType => ({
 
 const languageQuestion = (spec: UnitDepthSpec, index: number, seed: ChoiceSeed): Question => {
   const questionId = `eng10-deep-u${spec.unit}-g${index + 1}`;
-  const arranged = arrangeChoice(questionId, seed.correct, seed.distractors);
+  const arranged = arrangeChoice(questionId, seed.correct, seed.distractors, seed.translation?.options);
   return {
     id: questionId,
     subjectId: 'english',
@@ -1603,7 +1614,10 @@ const languageQuestion = (spec: UnitDepthSpec, index: number, seed: ChoiceSeed):
     content: seed.prompt,
     options: arranged.options,
     correctAnswer: arranged.answer,
-    translation: seed.translation,
+    translation: seed.translation ? {
+      ...seed.translation,
+      options: arranged.arrangedTranslationOptions ?? seed.translation.options
+    } : undefined,
     difficulty: seed.difficulty,
     sourceType: 'manual',
     validatorType: 'choice',

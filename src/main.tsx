@@ -19,6 +19,10 @@ Sentry.init({
     'INTERNAL ASSERTION FAILED: Pending promise was never set',
     'INTERNAL ASSERTION FAILED',
     /INTERNAL ASSERTION FAILED/i,
+    'e.Tc.get is not a function or its return value is not iterable',
+    /is not a function or its return value is not iterable/i,
+    'INTERNAL UNHANDLED ERROR',
+    /INTERNAL UNHANDLED ERROR/i,
   ],
   integrations: [
     Sentry.browserTracingIntegration(),

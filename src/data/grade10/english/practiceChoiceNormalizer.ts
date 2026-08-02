@@ -31,11 +31,23 @@ export const normalizeEnglishPracticeChoice = (question: Question): Question => 
   reordered.splice(targetIndex, 0, correctOption);
   const displayAnswer = LETTERS[targetIndex];
 
+  let reorderedTranslationOptions: string[] | undefined = undefined;
+  if (question.translation?.options && question.translation.options.length === options.length) {
+    const transOpts = [...question.translation.options];
+    const [correctTransOpt] = transOpts.splice(correctIndex, 1);
+    transOpts.splice(targetIndex, 0, correctTransOpt);
+    reorderedTranslationOptions = transOpts;
+  }
+
   return {
     ...question,
     options: reordered.map((option, index) => `${LETTERS[index]}. ${option}`),
     correctAnswer: displayAnswer,
-    acceptedAnswers: [displayAnswer, displayAnswer.toLowerCase()]
+    acceptedAnswers: [displayAnswer, displayAnswer.toLowerCase()],
+    translation: question.translation ? {
+      ...question.translation,
+      ...(reorderedTranslationOptions ? { options: reorderedTranslationOptions } : {})
+    } : undefined
   };
 };
 
