@@ -17,6 +17,7 @@ import {
   Sparkles,
   LifeBuoy,
   TrendingUp,
+  BookMarked,
   Loader
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
@@ -211,6 +212,10 @@ export const AppLayout: React.FC = () => {
       document.title = `Gia Sư Socratic | ${brandName}`;
       return;
     }
+    if (path.startsWith(ROUTES.VOCABULARY)) {
+      document.title = `Từ Vựng Tiếng Anh Lớp 10 | ${brandName}`;
+      return;
+    }
 
     // Theo môn và lớp
     const subjectLabel = selectedSubject === 'math' ? 'Toán Học' : selectedSubject === 'english' ? 'Tiếng Anh' : selectedSubject === 'chemistry' ? 'Hóa Học' : '';
@@ -278,6 +283,9 @@ export const AppLayout: React.FC = () => {
     { path: ROUTES.DASHBOARD, label: 'Bảng điều khiển', icon: GraduationCap },
     { path: ROUTES.ROADMAP, label: 'Lộ trình học', icon: Map },
     { path: ROUTES.PRACTICE, label: 'Luyện tập', icon: BookOpen },
+    ...(selectedSubject === 'english'
+      ? [{ path: ROUTES.VOCABULARY, label: 'Từ vựng 10', icon: BookMarked }]
+      : []),
     { path: ROUTES.AI_TUTOR, label: 'Gia sư', icon: Sparkles },
     { path: ROUTES.MISTAKES, label: 'Sổ lỗi sai', icon: Bookmark },
     {
@@ -302,6 +310,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/roadmap')) return 'Lộ trình học';
     if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
     if (path.startsWith('/practice')) return 'Luyện tập';
+    if (path.startsWith('/vocabulary')) return 'Từ vựng Tiếng Anh 10';
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';

@@ -11,6 +11,7 @@ export const ROUTES = {
   ABOUT: '/about',
   TEACHER: '/teacher',
   AFFILIATE: '/affiliate',
+  VOCABULARY: '/vocabulary',
   QUESTION_TYPE_DETAIL: (questionTypeId: string) => `/question-types/${questionTypeId}`
 } as const;
 
