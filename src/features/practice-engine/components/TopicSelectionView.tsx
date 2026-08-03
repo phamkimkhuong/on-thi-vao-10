@@ -1,17 +1,17 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown, ArrowLeft } from 'lucide-react';
-import { Card, CardContent } from '../../../components/ui/card';
-import { Button } from '../../../components/ui/button';
-import { cn } from '../../../utils/cn';
-import { QuestionType, SubjectCode } from '../../../types';
-import { getPracticeQuestions, getTopics } from '../../../data';
-import { useAppStore } from '../../../services/store';
-import { getSubjectTheme, getStarsFromScore } from '../../../utils/theme';
-import { storageService } from '../../../services/storage';
-import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
-import { authService } from '../../../services/authService';
+import { Crown, ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/cn';
+import { QuestionType, SubjectCode } from '@/types';
+import { getPracticeQuestions, getTopics } from '@/data';
+import { useAppStore } from '@/services/store';
+import { getSubjectTheme, getStarsFromScore } from '@/utils/theme';
+import { storageService } from '@/services/storage';
+import { LatexRenderer } from '@/components/common/LatexRenderer';
+import { ConfirmationModal } from '@/components/common/ConfirmationModal';
+import { authService } from '@/services/authService';
 import { buildAdaptivePracticeSequence } from '../utils/adaptivePracticeSequence';
 
 interface TopicSelectionViewProps {
@@ -55,6 +55,14 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const { selectedGrade, user, progressVersion } = useAppStore();
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [showLoginConfirm, setShowLoginConfirm] = useState(false);
+  const [collapsedTopics, setCollapsedTopics] = useState<Record<string, boolean>>({});
+
+  const toggleTopic = (topicId: string) => {
+    setCollapsedTopics(prev => ({
+      ...prev,
+      [topicId]: !prev[topicId]
+    }));
+  };
 
   const requireAuth = (action: () => void) => {
     if (!user) {
@@ -545,10 +553,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const gradeTextLower = isG9 ? 'ôn thi vào 10' : isG11 ? 'lớp 11' : isG12 ? 'lớp 12' : 'lớp 10';
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 px-3 sm:px-6 py-3 animate-fade-in pb-12">
+    <div className="w-full max-w-7xl mx-auto space-y-6 px-3 sm:px-6 lg:px-8 py-3 animate-fade-in pb-12 font-sans">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-foreground tracking-tight">
-          {isMath 
+          {isMath
             ? (isG9 ? '📐 Luyện tập Toán tuyển sinh 10' : `📐 Học tốt Toán ${gradeText}`)
             : isChemistry
               ? `🧪 Luyện tập Hóa học ${gradeText}`
@@ -559,7 +567,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                   : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : `🗣️ Học tốt Tiếng Anh ${gradeText}`)}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
-          {isMath 
+          {isMath
             ? (isG9 ? 'Học sinh làm bài tự luận chi tiết ra giấy, chụp ảnh gửi bài để thầy cô chấm và nhận xét.' : `Bài tập tự luận ${gradeTextLower} bám sát chương trình mới, chụp ảnh để nhận xét chi tiết.`)
             : isChemistry
               ? `Luyện tập các dạng bài Hóa học ${gradeTextLower} bám sát chương trình GDPT 2018 mới.`
@@ -574,206 +582,205 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
       {topics.map((topic) => {
         const topicQTypes = qTypes.filter(qt => qt.topicId === topic.id);
         if (topicQTypes.length === 0) return null;
+        const isCollapsed = Boolean(collapsedTopics[topic.id]);
 
         return (
-          <div key={topic.id} className="space-y-4">
-            <div className="flex items-center gap-2.5 border-b border-border/20 pb-2">
-              {/* Chỉ thị dọc đổi màu theo môn học */}
-              <div className={cn(
-                "h-4 w-1 rounded-full",
-                routeSubject === 'math' ? 'bg-indigo-500' :
-                routeSubject === 'chemistry' ? 'bg-emerald-500' :
-                routeSubject === 'physics' ? 'bg-cyan-500' :
-                routeSubject === 'biology' ? 'bg-green-500' :
-                'bg-purple-500'
-              )} />
-              <h3 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
-                {topic.name}
-              </h3>
-              <span className="text-[9px] bg-slate-100 dark:bg-slate-800 text-muted-foreground font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                {topicQTypes.length} dạng bài
-              </span>
+          <div key={topic.id} className="space-y-3">
+            {/* Header Accordion Toggle - Nút xổ xuống thu gọn/mở rộng chuyên đề */}
+            <div
+              onClick={() => toggleTopic(topic.id)}
+              className="flex items-start justify-between gap-3 border-b border-border/20 pb-2.5 cursor-pointer select-none group/topic py-1.5"
+            >
+              <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                {/* Chỉ thị dọc đổi màu theo môn học */}
+                <div className={cn(
+                  "h-4 w-1 rounded-full shrink-0 mt-1 transition-all",
+                  routeSubject === 'math' ? 'bg-indigo-500' :
+                    routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                      routeSubject === 'physics' ? 'bg-cyan-500' :
+                        routeSubject === 'biology' ? 'bg-green-500' :
+                          'bg-purple-500'
+                )} />
+                <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0">
+                  <h3 className="text-sm font-black text-foreground tracking-tight group-hover/topic:text-primary transition-colors leading-snug">
+                    {topic.name}
+                  </h3>
+                  <span className="text-[9px] bg-secondary text-muted-foreground border border-border/40 font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shrink-0 whitespace-nowrap">
+                    {topicQTypes.length} dạng bài
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 text-muted-foreground group-hover/topic:text-foreground transition-colors shrink-0 mt-0.5">
+                <span className="text-[10px] font-bold hidden sm:inline-block">
+                  {isCollapsed ? "Mở rộng" : "Thu gọn"}
+                </span>
+                <div className="p-1 rounded-lg hover:bg-secondary transition-colors">
+                  {isCollapsed ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
+                </div>
+              </div>
             </div>
 
-            {/* Grid nâng lên 4 cột trên màn hình Desktop lớn */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5">
-              {topicQTypes.map((qType) => {
-                const qTypeAttempts = attempts.filter(a => a.questionTypeId === qType.id);
-                const qTypeQuestions = allQuestions.filter(q => q.questionTypeId === qType.id);
-                const adaptiveStatus = (isChemistry || isPhysics)
-                  ? buildAdaptivePracticeSequence(qTypeQuestions, qTypeAttempts)
-                  : null;
-                const totalQuestions = adaptiveStatus?.learningQuestionCount ?? qTypeQuestions.length;
-                const solvedQuestionIds = new Set(
-                  qTypeAttempts
-                    .filter(a => a.isCorrect)
-                    .filter(a => !qTypeQuestions.find(question => question.id === a.questionId)?.isMasteryHoldout)
-                    .map(a => a.questionId)
-                );
-                const solvedCount = adaptiveStatus
-                  ? adaptiveStatus.readiness.correctLearningCount
-                  : Math.min(solvedQuestionIds.size, totalQuestions);
-                const progressPercent = totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
-                const masteryScore = progress?.masteryLevels[qType.id] ?? 0;
-                const starsCount = getStarsFromScore(masteryScore);
-
-                const statusBadge = (() => {
-                  if (topic.tier === 3 && !isPremium) {
-                    return (
-                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
-                        👑 Khóa Premium
-                      </span>
-                    );
-                  }
-                  if (qTypeAttempts.length === 0) {
-                    return (
-                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground border border-border/40 inline-flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                        Sẵn sàng
-                      </span>
-                    );
-                  }
-                  if (
-                    adaptiveStatus
-                    && adaptiveStatus.holdoutQuestionCount > 0
-                    && adaptiveStatus.correctHoldoutCount === adaptiveStatus.holdoutQuestionCount
-                  ) {
-                    return (
-                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 inline-flex items-center gap-1">
-                        🛡️ Đã vượt kiểm tra làm chủ
-                      </span>
-                    );
-                  }
-                  if (adaptiveStatus?.holdoutUnlocked && adaptiveStatus.holdoutQuestionCount > 0) {
-                    return (
-                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 inline-flex items-center gap-1">
-                        🛡️ Sẵn sàng kiểm tra
-                      </span>
-                    );
-                  }
-                  if (
-                    (!adaptiveStatus && (solvedCount === totalQuestions || masteryScore >= 80))
-                    || (
-                      adaptiveStatus
-                      && adaptiveStatus.holdoutQuestionCount === 0
-                      && (solvedCount === totalQuestions || masteryScore >= 80)
-                    )
-                  ) {
-                    return (
-                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 inline-flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                        ✓ Đã luyện xong ({solvedCount}/{totalQuestions})
-                      </span>
-                    );
-                  }
-                  return (
-                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600 border border-blue-500/20 inline-flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 animate-pulse" />
-                      ⏳ Đang luyện ({solvedCount}/{totalQuestions})
-                    </span>
+            {/* Grid 3 cột rộng rãi thoáng đãng trên Laptop, 4 cột trên 2xl */}
+            {!isCollapsed && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-5 animate-fade-in pt-1">
+                {topicQTypes.map((qType) => {
+                  const qTypeAttempts = attempts.filter(a => a.questionTypeId === qType.id);
+                  const qTypeQuestions = allQuestions.filter(q => q.questionTypeId === qType.id);
+                  const adaptiveStatus = (isChemistry || isPhysics)
+                    ? buildAdaptivePracticeSequence(qTypeQuestions, qTypeAttempts)
+                    : null;
+                  const totalQuestions = adaptiveStatus?.learningQuestionCount ?? qTypeQuestions.length;
+                  const solvedQuestionIds = new Set(
+                    qTypeAttempts
+                      .filter(a => a.isCorrect)
+                      .filter(a => !qTypeQuestions.find(question => question.id === a.questionId)?.isMasteryHoldout)
+                      .map(a => a.questionId)
                   );
-                })();
+                  const solvedCount = adaptiveStatus
+                    ? adaptiveStatus.readiness.correctLearningCount
+                    : Math.min(solvedQuestionIds.size, totalQuestions);
+                  const progressPercent = totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
+                  const masteryScore = progress?.masteryLevels[qType.id] ?? 0;
+                  const starsCount = getStarsFromScore(masteryScore);
 
-                return (
-                  <div
-                    key={qType.id}
-                    className={cn(
-                      "cursor-pointer transition-all duration-200 border border-border bg-card p-4.5 sm:p-5 rounded-xl flex flex-col justify-between space-y-3.5 group shadow-sm hover:shadow-md",
-                      routeSubject === 'math' ? 'hover:border-indigo-500/50' :
-                        routeSubject === 'chemistry' ? 'hover:border-emerald-500/50' :
-                          routeSubject === 'physics' ? 'hover:border-cyan-500/50' :
-                            'hover:border-purple-500/50'
-                    )}
-                    onClick={() => {
-                      if (topic.tier === 3 && !isPremium) {
-                        setPremiumModalOpen(true);
-                        return;
+                  const statusBadge = (() => {
+                    if (topic.tier === 3 && !isPremium) {
+                      return (
+                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
+                          👑 Khóa Premium
+                        </span>
+                      );
+                    }
+                    if (qTypeAttempts.length === 0) {
+                      return (
+                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-secondary text-muted-foreground border border-border/40 inline-flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                          Sẵn sàng
+                        </span>
+                      );
+                    }
+                    if (
+                      adaptiveStatus
+                      && adaptiveStatus.holdoutQuestionCount > 0
+                      && adaptiveStatus.correctHoldoutCount === adaptiveStatus.holdoutQuestionCount
+                    ) {
+                      return (
+                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 inline-flex items-center gap-1">
+                          🛡️ Đã vượt kiểm tra làm chủ
+                        </span>
+                      );
+                    }
+                    if (adaptiveStatus?.holdoutUnlocked && adaptiveStatus.holdoutQuestionCount > 0) {
+                      return (
+                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 inline-flex items-center gap-1">
+                          🛡️ Sẵn sàng kiểm tra
+                        </span>
+                      );
+                    }
+                    if (progressPercent === 100) {
+                      return (
+                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 inline-flex items-center gap-1">
+                          ✓ Đã hoàn thành
+                        </span>
+                      );
+                    }
+                    return (
+                      <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 inline-flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 animate-pulse" />
+                        Đang luyện ({solvedCount}/{totalQuestions})
+                      </span>
+                    );
+                  })();
+
+                  const handleTypeClick = () => {
+                    if (topic.tier === 3 && !isPremium) {
+                      setPremiumModalOpen(true);
+                      return;
+                    }
+                    requireAuth(() => {
+                      if (qType.id === 'eng-qt6') {
+                        setGrammarSection('dang1');
+                      } else {
+                        navigate(`/question-type/${qType.id}`);
                       }
+                    });
+                  };
 
-                      requireAuth(() => {
-                        if (qType.id === 'eng-qt6') {
-                          setGrammarSection(null);
-                          navigate(`/practice/eng-qt6`);
-                        } else {
-                          setSelectedSubTense(null);
-                          setGrammarSection(null);
-                          navigate(`/practice/${qType.id}`);
-                        }
-                      });
-                    }}
-                  >
-                    <div className="space-y-3">
+                  return (
+                    <div
+                      key={qType.id}
+                      onClick={handleTypeClick}
+                      className={cn(
+                        "p-5 rounded-2xl border border-border/40 transition-all duration-300 flex flex-col justify-between h-full bg-card hover:shadow-md hover:-translate-y-0.5 cursor-pointer select-none relative overflow-hidden group font-sans",
+                        routeSubject === 'math' ? 'hover:border-indigo-500/50' :
+                          routeSubject === 'chemistry' ? 'hover:border-emerald-500/50' :
+                            routeSubject === 'physics' ? 'hover:border-cyan-500/50' :
+                              'hover:border-purple-500/50'
+                      )}
+                    >
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          {/* Badge đồng bộ màu môn học */}
-                          <span className={cn("text-[9px] font-bold px-2.5 py-1 rounded-full", theme.badge)}>
-                            {qType.id === 'eng-qt6' ? 'Module 1' : qType.id === 'eng-qt7' ? 'Module 6' : qType.id === 'eng-qt8' ? 'Module 7' : 'Luyện tập'}
-                          </span>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 bg-secondary/80 px-2.5 py-1 rounded-full text-[9px] font-extrabold text-muted-foreground border border-border/30">
+                            <span>Luyện tập</span>
+                          </div>
                           {statusBadge}
                         </div>
 
                         {/* Hover text color đồng bộ môn học */}
                         <h3 className={cn(
-                          "font-extrabold text-base text-foreground transition-colors", 
+                          "font-extrabold text-base text-foreground transition-colors",
                           routeSubject === 'math' ? 'group-hover:text-indigo-600' :
-                          routeSubject === 'chemistry' ? 'group-hover:text-emerald-600' :
-                          routeSubject === 'physics' ? 'group-hover:text-cyan-600' :
-                          'group-hover:text-purple-600'
+                            routeSubject === 'chemistry' ? 'group-hover:text-emerald-600' :
+                              routeSubject === 'physics' ? 'group-hover:text-cyan-600' :
+                                'group-hover:text-purple-600'
                         )}>
                           <LatexRenderer text={qType.name} />
                         </h3>
-                        <div className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
                           <LatexRenderer text={qType.description} />
-                        </div>
+                        </p>
+                      </div>
 
+                      <div className="space-y-3 pt-4">
                         {/* Progress Bar & Stars */}
-                        {qTypeAttempts.length > 0 && totalQuestions > 0 && (
-                          <div className="space-y-2 mt-2 border-t border-border/10 pt-2">
-                            <div className="flex justify-between items-center text-[10px] font-bold">
-                              <span className="text-muted-foreground">
-                                Tiến độ: {solvedCount}/{totalQuestions} ({progressPercent}%)
-                              </span>
-                              <div className="flex gap-0.5">
-                                {[1, 2, 3].map((starNum) => (
-                                  <span
-                                    key={starNum}
-                                    className={cn(
-                                      "text-[10px] transition-all",
-                                      starNum <= starsCount ? "opacity-100 scale-105" : "opacity-25 grayscale"
-                                    )}
-                                  >
-                                    ⭐
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                              <div 
-                                className={cn(
-                                  "h-full rounded-full transition-all duration-500",
-                                  routeSubject === 'math' ? 'bg-indigo-500' :
-                                   routeSubject === 'chemistry' ? 'bg-emerald-500' :
-                                   routeSubject === 'physics' ? 'bg-cyan-500' :
-                                   'bg-purple-500'
-                                )}
-                                style={{ width: `${progressPercent}%` }}
-                              />
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between text-[10px] font-extrabold">
+                            <span className="text-muted-foreground">Tiến độ: {solvedCount}/{totalQuestions} ({progressPercent}%)</span>
+                            <div className="flex gap-0.5 text-amber-400">
+                              {[1, 2, 3].map((star) => (
+                                <span key={star} className={star <= starsCount ? 'opacity-100' : 'opacity-25'}>
+                                  ★
+                                </span>
+                              ))}
                             </div>
                           </div>
-                        )}
-                      </div>
+                          <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div
+                              className={cn(
+                                "h-full rounded-full transition-all duration-500",
+                                routeSubject === 'math' ? 'bg-indigo-500' :
+                                  routeSubject === 'chemistry' ? 'bg-emerald-500' :
+                                    routeSubject === 'physics' ? 'bg-cyan-500' :
+                                      'bg-purple-500'
+                              )}
+                              style={{ width: `${progressPercent}%` }}
+                            />
+                          </div>
+                        </div>
 
-                      {/* Text link đồng bộ màu môn học */}
-                      <div className={cn("flex items-center justify-between border-t border-border/20 pt-3 text-xs font-black", theme.text)}>
-                        <span>
-                          {qType.id === 'eng-qt6' ? 'Khám phá 6 chuyên đề →' : 'Luyện tập ngay →'}
-                        </span>
+                        {/* Text link đồng bộ màu môn học */}
+                        <div className={cn("flex items-center justify-between border-t border-border/20 pt-3 text-xs font-black", theme.text)}>
+                          <span>
+                            {qType.id === 'eng-qt6' ? 'Khám phá 6 chuyên đề →' : 'Luyện tập ngay →'}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
       })}
