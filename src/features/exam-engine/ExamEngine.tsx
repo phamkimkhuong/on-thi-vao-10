@@ -657,6 +657,10 @@ export const ExamEngine: React.FC = () => {
 
     examQuestions.forEach(question => {
       if (examResult.attempts[question.id]?.gradingStatus === 'pending') return;
+
+
+
+
       const outcomeIds = question.outcomeIds ?? [];
       if (outcomeIds.length === 0) return;
 
@@ -725,26 +729,25 @@ export const ExamEngine: React.FC = () => {
   // RENDER GIAO DIỆN GIỚI THIỆU ĐỀ THI
   if (examState === 'intro') {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 space-y-6 animate-in fade-in duration-300 font-sans pb-16">
         
-        {/* Header Section */}
-        <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-indigo-500/5 via-primary/5 to-purple-500/5 border border-primary/10 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-          <div className="space-y-2 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/15 text-xs font-black text-primary uppercase tracking-wider mb-1">
+        {/* Header Section - Pure Flat Hero Banner */}
+        <div className="py-2 space-y-4">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/15 text-xs font-black text-primary uppercase tracking-wider">
               <Award className="w-3.5 h-3.5" />
               Phòng Thi Thử Thực Chiến
             </div>
             <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground">
               Thi thử & Kiểm tra {subjectLabel}
             </h2>
-            <p className="text-xs md:text-sm text-muted-foreground font-semibold">
+            <p className="text-xs md:text-sm text-muted-foreground font-semibold max-w-3xl leading-relaxed">
               Đánh giá mức độ làm chủ kiến thức bằng đề kiểm tra có phạm vi và thời gian rõ ràng.
             </p>
           </div>
 
-          {/* Lọc đề thi theo Tab */}
-          <div role="tablist" aria-label="Lọc loại bài kiểm tra" className="flex w-full items-center gap-1 overflow-x-auto bg-slate-200/60 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-border/40 self-start md:w-auto relative z-10 shrink-0">
+          {/* Lọc đề thi theo Tab - Cuộn ngang 1 hàng mượt mà */}
+          <div role="tablist" aria-label="Lọc loại bài kiểm tra" className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-1 justify-start scroll-smooth pt-1">
             {availableTabs.map(tab => {
               const tabLabels = {
                 all: 'Tất cả',
@@ -762,11 +765,12 @@ export const ExamEngine: React.FC = () => {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveTab(tab)}
-                  className={`min-h-11 shrink-0 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
+                  className={cn(
+                    'px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap border shadow-2xs',
                     isActive
-                      ? 'bg-card text-foreground shadow-sm scale-102 font-black'
-                      : 'text-muted-foreground hover:text-foreground font-bold'
-                  }`}
+                      ? 'bg-primary text-primary-foreground border-primary/30'
+                      : 'bg-secondary/60 text-muted-foreground hover:text-foreground hover:bg-secondary border-border/20'
+                  )}
                 >
                   {tabLabels[tab]}
                 </button>

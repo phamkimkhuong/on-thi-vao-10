@@ -22,7 +22,6 @@ import {
   Eye
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
-import { Card, CardContent } from '../../components/ui/card';
 import { cn } from '../../utils/cn';
 
 type Mode = 'flashcard' | 'quiz' | 'spelling';
@@ -230,312 +229,283 @@ export const VocabularyPage: React.FC = () => {
   }, [currentIndex, filteredVocab.length]);
 
   return (
-    <div className="min-h-screen bg-slate-50/60 dark:bg-slate-950 p-4 sm:p-6 md:p-8 space-y-6">
+    <div className="min-h-screen bg-background text-foreground w-full max-w-4xl mx-auto space-y-4 pb-12">
       {/* LEVEL 1: UNIT SELECTION GRID VIEW */}
       {selectedUnit === null ? (
-        <div className="space-y-6 animate-fade-in max-w-7xl mx-auto">
+        <div className="space-y-4 px-3 sm:px-6 py-3 animate-fade-in">
           {/* Header Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-800 p-6 sm:p-8 text-white shadow-xl">
-            <div className="relative z-10 space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold uppercase tracking-wider text-indigo-100 border border-white/20">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-                <span>Tiếng Anh Lớp 10 — Global Success</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-                Kho Từ Vựng Tiếng Anh 10 📚
-              </h1>
-              <p className="text-sm text-indigo-100 font-medium leading-relaxed">
-                Chọn bài học (Unit) để học từ vựng chuyên sâu qua Flashcards 3D, Trắc nghiệm Quiz và Luyện viết từ vựng.
-              </p>
+          <div className="border-b border-border pb-3 space-y-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Tiếng Anh Lớp 10 — Global Success</span>
             </div>
-            <div className="absolute -right-8 -bottom-8 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground">
+              Kho Từ Vựng Tiếng Anh 10 📚
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
+              Chọn bài học (Unit) để bắt đầu luyện tập qua Flashcards, Trắc nghiệm Quiz và Luyện viết từ vựng.
+            </p>
           </div>
 
           {/* Unit Cards Grid */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-black text-foreground flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h2 className="text-sm sm:text-base font-black text-foreground flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Danh sách các bài học (Unit 1 - 10)</span>
               </h2>
               <span className="text-xs font-bold text-muted-foreground">
-                Tổng cộng {ENGLISH_10_VOCABULARY.length} từ vựng
+                Tổng {ENGLISH_10_VOCABULARY.length} từ vựng
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-              {/* 10 Unit Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {/* 10 Unit Items */}
               {ENGLISH_10_UNITS.map(u => {
                 const count = unitVocabCountMap[u.unit] || 0;
                 return (
-                  <Card
+                  <div
                     key={u.unit}
                     onClick={() => handleSelectUnit(u.unit)}
-                    className="group cursor-pointer border border-border/50 hover:border-indigo-500/50 bg-card hover:shadow-lg transition-all duration-200 hover:-translate-y-1 rounded-2xl flex flex-col justify-between"
+                    className="group cursor-pointer border border-border hover:border-indigo-500 bg-card p-4 rounded-xl transition-all flex flex-col justify-between space-y-3"
                   >
-                    <CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
-                      <div className="space-y-2.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 uppercase tracking-wider border border-indigo-500/20">
-                            Unit {u.unit}
-                          </span>
-                          <span className="text-xs font-mono font-bold text-muted-foreground">
-                            {count} từ vựng
-                          </span>
-                        </div>
-
-                        <h3 className="font-extrabold text-base text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
-                          {u.title}
-                        </h3>
-                        <p className="text-xs font-medium text-muted-foreground">
-                          📌 Chủ đề: <span className="font-bold text-foreground">{u.theme}</span>
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between border-t border-border/30 pt-3">
-                        <span className="text-xs font-bold text-muted-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                          Học từ vựng bài này
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 uppercase">
+                          Unit {u.unit}
                         </span>
-                        <Button variant="outline" size="sm" className="h-8 text-xs font-extrabold rounded-xl px-3 cursor-pointer border-border/50 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                          Vào học →
-                        </Button>
+                        <span className="text-xs font-mono font-bold text-muted-foreground">
+                          {count} từ
+                        </span>
                       </div>
-                    </CardContent>
-                  </Card>
+
+                      <h3 className="font-extrabold text-sm text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
+                        {u.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        📌 Chủ đề: <span className="font-semibold text-foreground">{u.theme}</span>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-border/40 pt-2.5 text-xs font-bold text-muted-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                      <span>Vào học</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </div>
                 );
               })}
 
-              {/* All Units Summary Card */}
-              <Card
+              {/* All Units Summary Item */}
+              <div
                 onClick={() => handleSelectUnit('all')}
-                className="group cursor-pointer border border-indigo-500/30 hover:border-indigo-500/60 bg-gradient-to-br from-indigo-500/10 via-card to-purple-500/10 hover:shadow-xl transition-all duration-200 hover:-translate-y-1 rounded-2xl flex flex-col justify-between overflow-hidden"
+                className="group cursor-pointer border border-indigo-500/40 hover:border-indigo-500 bg-indigo-500/5 dark:bg-indigo-950/20 p-4 rounded-xl transition-all flex flex-col justify-between space-y-3"
               >
-                <CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black px-2.5 py-1 rounded-lg bg-indigo-600 text-white uppercase tracking-wider">
-                        🌟 Tất cả Unit
-                      </span>
-                      <span className="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">
-                        {ENGLISH_10_VOCABULARY.length} từ vựng
-                      </span>
-                    </div>
-
-                    <h3 className="font-extrabold text-base text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      Tổng ôn từ vựng toàn bộ 10 Unit
-                    </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                      Luyện tập tất cả từ vựng môn Tiếng Anh Lớp 10 cùng lúc qua Flashcard, Trắc nghiệm và Luyện viết.
-                    </p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded bg-indigo-600 text-white uppercase">
+                      🌟 Tất cả Unit
+                    </span>
+                    <span className="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                      {ENGLISH_10_VOCABULARY.length} từ
+                    </span>
                   </div>
 
-                  <div className="flex items-center justify-between border-t border-border/30 pt-3 text-xs font-bold text-indigo-600 dark:text-indigo-400">
-                    <span>Học ngay tất cả từ →</span>
-                    <Button variant="primary" size="sm" className="h-8 text-xs font-extrabold rounded-xl px-3 cursor-pointer">
-                      Bắt đầu →
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                  <h3 className="font-extrabold text-sm text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    Tổng ôn toàn bộ 10 Unit
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Luyện tất cả từ vựng môn Tiếng Anh 10 cùng lúc.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-indigo-500/20 pt-2.5 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                  <span>Bắt đầu ngay</span>
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       ) : (
-        /* LEVEL 2: VOCABULARY LEARNING VIEW */
-        <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
-          {/* Top Integrated Control Header */}
-          <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              {/* Back Button & Unit Title */}
-              <div className="flex items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSelectedUnit(null)}
-                  className="rounded-xl gap-2 font-extrabold text-xs cursor-pointer border-border/50 hover:bg-secondary"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span>Danh sách Unit</span>
-                </Button>
+        /* LEVEL 2: VOCABULARY LEARNING VIEW (FLAT MODERN ARCHITECTURE) */
+        <div className="space-y-4 px-3 sm:px-6 py-3 animate-fade-in">
+          {/* Top Control Header Bar */}
+          <div className="border-b border-border pb-3 flex flex-wrap items-center justify-between gap-3">
+            {/* Back Button & Unit Title */}
+            <div className="flex items-center gap-2.5">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSelectedUnit(null)}
+                className="rounded-lg font-bold text-xs cursor-pointer border-border px-2.5 py-1.5 h-8"
+                title="Quay lại"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
 
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase">
-                      {selectedUnit === 'all' ? 'Tất cả' : `Unit ${currentUnitSpec?.unit}`}
-                    </span>
-                    <h2 className="text-base sm:text-lg font-black text-foreground">
-                      {selectedUnit === 'all'
-                        ? 'Tổng ôn từ vựng (Unit 1 - 10)'
-                        : currentUnitSpec?.title}
-                    </h2>
-                  </div>
-                  {currentUnitSpec && (
-                    <p className="text-xs text-muted-foreground font-medium">
-                      Chủ đề: <span className="font-semibold text-foreground">{currentUnitSpec.theme}</span> • <span className="font-mono">{filteredVocab.length}</span> từ vựng
-                    </p>
-                  )}
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase">
+                    {selectedUnit === 'all' ? 'Tất cả' : `Unit ${currentUnitSpec?.unit}`}
+                  </span>
+                  <h2 className="text-sm sm:text-base font-black text-foreground">
+                    {selectedUnit === 'all'
+                      ? 'Tổng ôn từ vựng (Unit 1 - 10)'
+                      : currentUnitSpec?.title}
+                  </h2>
                 </div>
               </div>
+            </div>
 
-              {/* Segmented Mode Selector Stepper Tabs (Matching User Mockup Image) */}
-              <div className="flex flex-wrap items-center p-1.5 bg-secondary/40 rounded-2xl border border-border/40 gap-1.5">
-                <button
-                  onClick={() => { setMode('flashcard'); setIsFlipped(false); }}
-                  className={cn(
-                    "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer border",
-                    mode === 'flashcard'
-                      ? "bg-indigo-900 text-white dark:bg-indigo-600 border-indigo-900 dark:border-indigo-600 shadow-md"
-                      : "bg-card text-muted-foreground border-border/40 hover:text-foreground"
-                  )}
-                >
-                  <span className="w-4 h-4 rounded-full bg-secondary/80 flex items-center justify-center text-[10px] font-mono">1</span>
-                  <span>Flashcards 3D</span>
-                </button>
+            {/* Segmented Mode Selector Tabs (Flat Modern Stepper) */}
+            <div className="flex items-center gap-1 bg-secondary/50 p-1 rounded-lg border border-border">
+              <button
+                onClick={() => { setMode('flashcard'); setIsFlipped(false); }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer",
+                  mode === 'flashcard'
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <span className="w-3.5 h-3.5 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-mono">1</span>
+                <span>Flashcard</span>
+              </button>
 
-                <span className="text-muted-foreground/30 text-xs">➔</span>
+              <button
+                onClick={() => { setMode('quiz'); handleRestartQuiz(); }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer",
+                  mode === 'quiz'
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <span className="w-3.5 h-3.5 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-mono">2</span>
+                <span>Trắc nghiệm</span>
+              </button>
 
-                <button
-                  onClick={() => { setMode('quiz'); handleRestartQuiz(); }}
-                  className={cn(
-                    "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer border",
-                    mode === 'quiz'
-                      ? "bg-indigo-900 text-white dark:bg-indigo-600 border-indigo-900 dark:border-indigo-600 shadow-md"
-                      : "bg-card text-muted-foreground border-border/40 hover:text-foreground"
-                  )}
-                >
-                  <span className="w-4 h-4 rounded-full bg-secondary/80 flex items-center justify-center text-[10px] font-mono">2</span>
-                  <span>Trắc nghiệm Quiz</span>
-                </button>
-
-                <span className="text-muted-foreground/30 text-xs">➔</span>
-
-                <button
-                  onClick={() => { setMode('spelling'); handleRestartSpelling(); }}
-                  className={cn(
-                    "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer border",
-                    mode === 'spelling'
-                      ? "bg-indigo-900 text-white dark:bg-indigo-600 border-indigo-900 dark:border-indigo-600 shadow-md ring-2 ring-indigo-500/30"
-                      : "bg-card text-muted-foreground border-border/40 hover:text-foreground"
-                  )}
-                >
-                  <span className="w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-mono">3</span>
-                  <span>Luyện viết</span>
-                </button>
-              </div>
+              <button
+                onClick={() => { setMode('spelling'); handleRestartSpelling(); }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer",
+                  mode === 'spelling'
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <span className="w-3.5 h-3.5 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-mono">3</span>
+                <span>Luyện viết</span>
+              </button>
             </div>
           </div>
 
-          {/* LEARNING MODES CONTENT */}
+          {/* LEARNING MODES CONTENT (FLAT & EDGE-TO-EDGE) */}
           {filteredVocab.length === 0 ? (
-            <Card className="p-12 text-center space-y-3">
-              <BookOpen className="w-12 h-12 text-muted-foreground mx-auto opacity-40" />
-              <h3 className="text-base font-bold text-foreground">Không tìm thấy từ vựng</h3>
+            <div className="p-8 text-center space-y-2 border border-border rounded-xl">
+              <BookOpen className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
+              <h3 className="text-sm font-bold text-foreground">Không tìm thấy từ vựng</h3>
               <p className="text-xs text-muted-foreground">Vui lòng chọn bài học khác.</p>
-            </Card>
+            </div>
           ) : mode === 'flashcard' ? (
-            /* CLEAN & CENTERED FLASHCARD MODE */
-            <div className="flex flex-col items-center justify-center space-y-5 py-2 max-w-2xl mx-auto">
+            /* FLAT FLASHCARD MODE */
+            <div className="space-y-4">
               {/* Progress & Counter Bar */}
-              <div className="w-full flex items-center justify-between gap-4 text-xs font-extrabold text-muted-foreground px-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-foreground">Thẻ {currentIndex + 1} / {filteredVocab.length}</span>
-                  <span className="text-indigo-600 dark:text-indigo-400 font-mono">({progressPercent}%)</span>
-                </div>
-                <span className="text-[11px] font-normal text-muted-foreground hidden sm:inline">
-                  💡 Mẹo: Dùng phím <kbd className="px-1.5 py-0.5 bg-secondary rounded border border-border/60 font-mono">Space</kbd> lật thẻ, <kbd className="px-1.5 py-0.5 bg-secondary rounded border border-border/60 font-mono">←</kbd> <kbd className="px-1.5 py-0.5 bg-secondary rounded border border-border/60 font-mono">→</kbd> chuyển từ
+              <div className="flex items-center justify-between text-xs font-bold text-muted-foreground">
+                <span>Từ {currentIndex + 1} / {filteredVocab.length} ({progressPercent}%)</span>
+                <span className="text-[11px] font-normal hidden sm:inline">
+                  💡 Mẹo: Dùng phím <kbd className="px-1 bg-secondary rounded border">Space</kbd> lật thẻ, <kbd className="px-1 bg-secondary rounded">←</kbd> <kbd className="px-1 bg-secondary rounded">→</kbd> chuyển từ
                 </span>
               </div>
 
-              {/* Progress Bar */}
-              <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
+              <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-indigo-600 dark:bg-indigo-500 rounded-full transition-all duration-300"
+                  className="h-full bg-indigo-600 rounded-full transition-all duration-300"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
 
-              {/* STABLE & BEAUTIFUL FLASHCARD CONTAINER */}
-              <Card
+              {/* FLAT FLASHCARD CONTAINER */}
+              <div
                 onClick={() => setIsFlipped(!isFlipped)}
-                className="w-full max-w-2xl min-h-[360px] sm:min-h-[400px] p-6 sm:p-8 cursor-pointer select-none border-2 border-indigo-500/30 dark:border-indigo-500/50 shadow-2xl rounded-3xl bg-card hover:border-indigo-500/60 transition-all duration-300 flex flex-col justify-between my-3 relative overflow-hidden group"
+                className="w-full min-h-[340px] p-6 sm:p-8 cursor-pointer select-none border border-border rounded-xl bg-card hover:border-indigo-500/50 transition-all flex flex-col justify-between relative overflow-hidden"
               >
                 {!isFlipped ? (
-                  /* FRONT CONTENT (ENGLISH WORD + POS + PHONETIC + AUDIO) */
+                  /* FRONT CONTENT */
                   <div className="flex flex-col justify-between h-full space-y-6 animate-fade-in">
                     <div className="flex items-center justify-between">
-                      <span className="px-3.5 py-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-black rounded-xl uppercase tracking-wider border border-indigo-500/20 flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                        <span>{currentCard?.pos}</span>
+                      <span className="px-3 py-1 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-black rounded-md uppercase tracking-wider border border-indigo-500/20">
+                        {currentCard?.pos}
                       </span>
                       <button
                         onClick={(e) => currentCard && handlePlayAudio(currentCard.word, e)}
-                        className="p-3 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 active:scale-95 shadow-md shadow-indigo-500/20 transition-all cursor-pointer flex items-center gap-2 text-xs font-bold"
+                        className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold shadow-sm"
                         title="Phát âm tiếng Anh"
                       >
-                        <Volume2 className="w-5 h-5" />
-                        <span className="hidden sm:inline">Phát âm</span>
+                        <Volume2 className="w-4 h-4" />
+                        <span>Phát âm</span>
                       </button>
                     </div>
 
-                    <div className="text-center space-y-3 my-auto py-4">
-                      <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-foreground bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 dark:from-white dark:via-indigo-100 dark:to-white bg-clip-text text-transparent">
+                    <div className="text-center space-y-2 my-auto py-4">
+                      <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-foreground">
                         {currentCard?.word}
                       </h2>
-                      <p className="text-lg sm:text-xl font-mono text-indigo-600 dark:text-indigo-400 font-extrabold">
+                      <p className="text-base sm:text-xl font-mono text-indigo-600 dark:text-indigo-400 font-bold">
                         {currentCard?.phonetic}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-muted-foreground/70 group-hover:text-muted-foreground transition-colors pt-3 border-t border-border/40">
-                      <RotateCw className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                      <span>Bấm vào thẻ để xem nghĩa Tiếng Việt & Ví dụ</span>
+                    <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-muted-foreground pt-3 border-t border-border/40">
+                      <RotateCw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                      <span>Bấm vào để xem nghĩa Tiếng Việt & Ví dụ</span>
                     </div>
                   </div>
                 ) : (
-                  /* BACK CONTENT (VIETNAMESE MEANING + EXAMPLE + DICTIONARY) */
+                  /* BACK CONTENT */
                   <div className="flex flex-col justify-between h-full space-y-6 animate-fade-in">
-                    <div className="flex items-center justify-between border-b border-border/40 pb-3">
-                      <span className="px-3 py-1 bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-black rounded-xl uppercase tracking-wider border border-amber-500/20 flex items-center gap-1.5">
-                        <Sparkles className="w-4 h-4 text-amber-500" />
-                        <span>Nghĩa & Ví dụ minh họa</span>
+                    <div className="flex items-center justify-between border-b border-border/40 pb-2.5">
+                      <span className="px-2.5 py-0.5 bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-extrabold rounded-md uppercase border border-amber-500/20 flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                        <span>Nghĩa & Ví dụ</span>
                       </span>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           if (currentCard) searchAndOpenModal(currentCard.word);
                         }}
-                        className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer bg-indigo-500/10 px-3 py-1.5 rounded-xl transition-all border border-indigo-500/20"
+                        className="flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer bg-indigo-500/10 px-2.5 py-1 rounded-md border border-indigo-500/20"
                       >
                         <span>Từ điển chi tiết</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
+                        <ExternalLink className="w-3 h-3" />
                       </button>
                     </div>
 
-                    <div className="space-y-4 my-auto text-center py-4">
+                    <div className="space-y-3 my-auto text-center py-2">
                       <h3 className="text-3xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">
                         {currentCard?.meaning}
                       </h3>
-                      <div className="p-4 sm:p-5 rounded-2xl bg-indigo-500/5 dark:bg-indigo-950/40 border border-indigo-500/15 text-xs sm:text-sm text-foreground text-left leading-relaxed space-y-2">
-                        <p className="italic font-extrabold text-foreground sm:text-base">"{currentCard?.example}"</p>
-                        <p className="text-indigo-600 dark:text-indigo-300 font-bold flex items-start gap-1">👉 {currentCard?.exampleTranslation}</p>
+                      <div className="p-4 rounded-xl bg-indigo-500/5 dark:bg-indigo-950/30 border border-indigo-500/15 text-xs sm:text-sm text-foreground text-left space-y-1.5">
+                        <p className="italic font-bold">"{currentCard?.example}"</p>
+                        <p className="text-indigo-600 dark:text-indigo-300 font-semibold flex items-start gap-1">👉 {currentCard?.exampleTranslation}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-muted-foreground pt-3 border-t border-border/40">
-                      <RotateCw className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                      <span>Bấm vào thẻ để quay lại từ tiếng Anh</span>
+                    <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-muted-foreground pt-3 border-t border-border/40">
+                      <RotateCw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                      <span>Bấm vào để quay lại mặt trước</span>
                     </div>
                   </div>
                 )}
-              </Card>
+              </div>
 
-              {/* Navigation Action Buttons */}
-              <div className="flex items-center gap-3 pt-2">
+              {/* Navigation Action Buttons Bar */}
+              <div className="flex items-center justify-between gap-2 pt-1">
                 <Button
                   variant="outline"
-                  size="lg"
+                  size="sm"
                   onClick={handlePrevCard}
-                  className="rounded-2xl gap-2 font-extrabold text-xs cursor-pointer border-border/50 h-11 px-5"
+                  className="rounded-lg gap-1 font-bold text-xs cursor-pointer border-border h-9 px-4"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Từ trước</span>
@@ -543,19 +513,19 @@ export const VocabularyPage: React.FC = () => {
 
                 <Button
                   variant="outline"
-                  size="lg"
+                  size="sm"
                   onClick={() => setIsFlipped(!isFlipped)}
-                  className="rounded-2xl gap-2 font-extrabold text-xs cursor-pointer border-border/50 h-11 px-5"
+                  className="rounded-lg gap-1 font-bold text-xs cursor-pointer border-border h-9 px-4"
                 >
-                  <RotateCw className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <RotateCw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                   <span>Lật thẻ</span>
                 </Button>
 
                 <Button
                   variant="primary"
-                  size="lg"
+                  size="sm"
                   onClick={handleNextCard}
-                  className="rounded-2xl gap-2 font-extrabold text-xs bg-indigo-600 hover:bg-indigo-700 text-white shadow-md h-11 px-6 cursor-pointer"
+                  className="rounded-lg gap-1 font-bold text-xs bg-indigo-600 hover:bg-indigo-700 text-white h-9 px-4 cursor-pointer"
                 >
                   <span>Từ tiếp theo</span>
                   <ChevronRight className="w-4 h-4" />
@@ -563,137 +533,123 @@ export const VocabularyPage: React.FC = () => {
               </div>
             </div>
           ) : mode === 'quiz' ? (
-            /* MULTIPLE CHOICE QUIZ MODE MATCHING USER MOCKUP DESIGN */
-            <div className="max-w-3xl mx-auto py-2 space-y-5">
-              {/* Quiz Configuration Controls Header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-card border border-border/50 p-3.5 rounded-2xl text-xs font-semibold shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground font-bold">Chế độ hỏi:</span>
-                  <div className="flex items-center bg-secondary/60 p-1 rounded-xl border border-border/40">
+            /* FLAT MULTIPLE CHOICE QUIZ MODE */
+            <div className="space-y-4">
+              {/* Quiz Settings Bar */}
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center gap-2 text-xs font-bold">
+                  <span className="text-muted-foreground">Chế độ:</span>
+                  <div className="flex items-center bg-secondary/60 p-0.5 rounded-md border border-border">
                     <button
                       onClick={() => { setQuizDirection('en-vi'); handleRestartQuiz(); }}
                       className={cn(
-                        "px-3 py-1 rounded-lg text-xs font-extrabold transition-all cursor-pointer",
+                        "px-2.5 py-0.5 rounded text-xs font-bold transition-all cursor-pointer",
                         quizDirection === 'en-vi'
-                          ? "bg-indigo-600 text-white shadow-sm"
+                          ? "bg-indigo-600 text-white"
                           : "text-muted-foreground hover:text-foreground"
                       )}
                     >
-                      🇬🇧 ➔ 🇻🇳 Anh - Việt
+                      Anh ➔ Việt
                     </button>
                     <button
                       onClick={() => { setQuizDirection('vi-en'); handleRestartQuiz(); }}
                       className={cn(
-                        "px-3 py-1 rounded-lg text-xs font-extrabold transition-all cursor-pointer",
+                        "px-2.5 py-0.5 rounded text-xs font-bold transition-all cursor-pointer",
                         quizDirection === 'vi-en'
-                          ? "bg-indigo-600 text-white shadow-sm"
+                          ? "bg-indigo-600 text-white"
                           : "text-muted-foreground hover:text-foreground"
                       )}
                     >
-                      🇻🇳 ➔ 🇬🇧 Việt - Anh
+                      Việt ➔ Anh
                     </button>
                   </div>
                 </div>
+
+                <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  Điểm: {quizScore}/{totalQuizInRound}
+                </span>
               </div>
 
               {quizCompleted ? (
-                /* QUIZ COMPLETED SUMMARY CARD */
-                <Card className="p-8 sm:p-10 text-center space-y-6 shadow-xl border-indigo-500/20 rounded-3xl bg-card">
-                  <div className="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto ring-8 ring-amber-500/5">
-                    <Award className="w-8 h-8" />
+                /* QUIZ COMPLETED SUMMARY */
+                <div className="p-8 text-center space-y-4 border border-border rounded-xl bg-card">
+                  <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto">
+                    <Award className="w-6 h-6" />
                   </div>
 
-                  <div className="space-y-2">
-                    <h2 className="text-2xl font-black text-foreground">Hoàn thành bài Trắc Nghiệm! 🎉</h2>
+                  <div className="space-y-1">
+                    <h2 className="text-xl font-black text-foreground">Hoàn thành bài Trắc Nghiệm! 🎉</h2>
                     <p className="text-xs text-muted-foreground">
-                      Bạn đã hoàn thành lượt trắc nghiệm từ vựng cho <span className="font-bold text-foreground">{selectedUnit === 'all' ? 'Tất cả Unit' : `Unit ${currentUnitSpec?.unit}`}</span>.
+                      Bạn đã hoàn thành lượt trắc nghiệm từ vựng.
                     </p>
                   </div>
 
-                  <div className="p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 max-w-sm mx-auto space-y-2">
-                    <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
+                  <div className="p-4 rounded-lg bg-indigo-500/5 border border-indigo-500/10 max-w-xs mx-auto text-center space-y-1">
+                    <div className="text-3xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
                       {quizScore} / {totalQuizInRound}
                     </div>
                     <p className="text-xs font-bold text-muted-foreground">
-                      Tỷ lệ chính xác: <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">{Math.round((quizScore / totalQuizInRound) * 100)}%</span>
+                      Chính xác: <span className="text-emerald-600 font-extrabold">{Math.round((quizScore / totalQuizInRound) * 100)}%</span>
                     </p>
                   </div>
 
-                  <div className="pt-2 flex justify-center gap-3">
-                    <Button
-                      variant="primary"
-                      onClick={handleRestartQuiz}
-                      className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl cursor-pointer shadow-lg shadow-indigo-500/20"
-                    >
-                      Làm bài trắc nghiệm mới 🔄
-                    </Button>
-                  </div>
-                </Card>
+                  <Button
+                    variant="primary"
+                    onClick={handleRestartQuiz}
+                    className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg cursor-pointer"
+                  >
+                    Làm bài trắc nghiệm mới 🔄
+                  </Button>
+                </div>
               ) : currentQuizItem ? (
-                /* QUIZ CARD MATCHING MOCKUP DESIGN EXACTLY */
-                <Card className="p-6 sm:p-10 space-y-6 shadow-xl border-border/60 rounded-3xl bg-card relative overflow-hidden">
-                  {/* Top Progress Bar & Counter */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between gap-4">
-                      {/* Smooth Progress Bar Line */}
-                      <div className="flex-1 h-2 bg-secondary/80 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-indigo-600 dark:bg-indigo-500 rounded-full transition-all duration-300"
-                          style={{
-                            width: `${((quizIndex + (selectedQuizOption !== null ? 1 : 0)) / totalQuizInRound) * 100}%`
-                          }}
-                        />
-                      </div>
-
-                      {/* Counter Badge matching mockup (e.g. 0/10) */}
-                      <span className="text-sm font-extrabold font-mono text-emerald-600 dark:text-emerald-400 shrink-0">
-                        {quizScore}/{totalQuizInRound}
-                      </span>
-                    </div>
+                /* FLAT QUIZ CONTENT */
+                <div className="space-y-5 border border-border rounded-xl p-5 sm:p-6 bg-card">
+                  {/* Progress Line */}
+                  <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-600 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${((quizIndex + (selectedQuizOption !== null ? 1 : 0)) / totalQuizInRound) * 100}%`
+                      }}
+                    />
                   </div>
 
-                  {/* Question Prompt & Main Word */}
-                  <div className="text-center space-y-3 py-2">
-                    <p className="text-xs sm:text-sm font-extrabold text-muted-foreground">
+                  {/* Question Prompt */}
+                  <div className="text-center space-y-2 py-2">
+                    <p className="text-xs font-bold text-muted-foreground">
                       {quizDirection === 'en-vi' ? 'Nghĩa của từ này là gì?' : 'Từ tiếng Anh của nghĩa này là gì?'}
                     </p>
 
-                    <div className="flex items-center justify-center gap-3">
-                      <h2 className="text-3xl sm:text-5xl font-black text-foreground tracking-tight">
+                    <div className="flex items-center justify-center gap-2">
+                      <h2 className="text-2xl sm:text-4xl font-black text-foreground">
                         {quizDirection === 'en-vi' ? currentQuizItem.word : currentQuizItem.meaning}
                       </h2>
                       {quizDirection === 'en-vi' && (
                         <button
                           onClick={() => handlePlayAudio(currentQuizItem.word)}
-                          className="p-2.5 bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer shadow-sm"
+                          className="p-1.5 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
                           title="Nghe phát âm"
                         >
-                          <Volume2 className="w-5 h-5" />
+                          <Volume2 className="w-4 h-4" />
                         </button>
                       )}
                     </div>
-
-                    {quizDirection === 'en-vi' && (
-                      <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold">
-                        {currentQuizItem.phonetic} • ({currentQuizItem.pos})
-                      </p>
-                    )}
                   </div>
 
-                  {/* 6 Choice Buttons Grid (2 columns x 3 rows matching user image) */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                  {/* 6 Choice Buttons Grid (2 columns x 3 rows) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {quizOptions.map((opt, idx) => {
                       const isSelected = selectedQuizOption === opt;
                       const correctValue = quizDirection === 'en-vi' ? currentQuizItem.meaning : currentQuizItem.word;
                       const isCorrect = opt === correctValue;
 
-                      let btnStyle = "bg-card border-border/60 hover:border-indigo-500/50 hover:bg-secondary/40 text-foreground shadow-sm";
+                      let btnStyle = "bg-card border-border hover:border-indigo-500 hover:bg-secondary/40 text-foreground";
 
                       if (selectedQuizOption !== null) {
                         if (isCorrect) {
-                          btnStyle = "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-300 font-bold shadow-md shadow-emerald-500/10";
+                          btnStyle = "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-300 font-bold";
                         } else if (isSelected) {
-                          btnStyle = "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-300 font-bold shadow-md shadow-rose-500/10";
+                          btnStyle = "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-300 font-bold";
                         } else {
                           btnStyle = "opacity-40 border-border/30 bg-card text-muted-foreground";
                         }
@@ -705,16 +661,16 @@ export const VocabularyPage: React.FC = () => {
                           onClick={() => handleQuizAnswer(opt)}
                           disabled={selectedQuizOption !== null}
                           className={cn(
-                            "w-full p-4 sm:p-5 rounded-2xl border text-center text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 transition-all cursor-pointer min-h-[64px]",
+                            "w-full p-3.5 rounded-lg border text-center text-xs sm:text-sm font-bold flex items-center justify-between gap-2 transition-all cursor-pointer min-h-[52px]",
                             btnStyle
                           )}
                         >
-                          <span className="leading-snug">{opt}</span>
+                          <span className="leading-snug text-left">{opt}</span>
                           {selectedQuizOption !== null && isCorrect && (
-                            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 ml-auto" />
+                            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                           )}
                           {selectedQuizOption !== null && isSelected && !isCorrect && (
-                            <XCircle className="w-5 h-5 text-rose-500 shrink-0 ml-auto" />
+                            <XCircle className="w-4 h-4 text-rose-500 shrink-0" />
                           )}
                         </button>
                       );
@@ -723,81 +679,81 @@ export const VocabularyPage: React.FC = () => {
 
                   {/* Next Question Action Button */}
                   {selectedQuizOption !== null && (
-                    <div className="pt-2 animate-fade-in">
+                    <div className="pt-2">
                       <Button
                         variant="primary"
                         onClick={handleNextQuiz}
-                        className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs sm:text-sm rounded-2xl cursor-pointer shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2"
+                        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg cursor-pointer flex items-center justify-center gap-1.5"
                       >
                         <span>
-                          {quizIndex + 1 < totalQuizInRound ? 'Câu tiếp theo →' : 'Xem kết quả bài trắc nghiệm 🎉'}
+                          {quizIndex + 1 < totalQuizInRound ? 'Câu tiếp theo →' : 'Xem kết quả trắc nghiệm 🎉'}
                         </span>
                       </Button>
                     </div>
                   )}
-                </Card>
+                </div>
               ) : null}
             </div>
           ) : (
-            /* LUYỆN VIẾT TỪ VỰNG MODE MATCHING MOCKUP DESIGN EXACTLY */
-            <div className="max-w-3xl mx-auto py-2 space-y-6">
+            /* FLAT LUYỆN VIẾT TỪ VỰNG MODE */
+            <div className="space-y-4">
               {spellingCompleted ? (
-                /* SPELLING COMPLETED SUMMARY CARD */
-                <Card className="p-8 sm:p-10 text-center space-y-6 shadow-xl border-indigo-500/20 rounded-3xl bg-card">
-                  <div className="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto ring-8 ring-amber-500/5">
-                    <Award className="w-8 h-8" />
+                /* SPELLING COMPLETED SUMMARY */
+                <div className="p-8 text-center space-y-4 border border-border rounded-xl bg-card">
+                  <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto">
+                    <Award className="w-6 h-6" />
                   </div>
 
-                  <div className="space-y-2">
-                    <h2 className="text-2xl font-black text-foreground">Hoàn thành Luyện Viết Từ Vựng! 🎉</h2>
+                  <div className="space-y-1">
+                    <h2 className="text-xl font-black text-foreground">Hoàn thành Luyện Viết Từ Vựng! 🎉</h2>
                     <p className="text-xs text-muted-foreground">
-                      Bạn đã hoàn thành lượt luyện viết chính tả từ vựng cho <span className="font-bold text-foreground">{selectedUnit === 'all' ? 'Tất cả Unit' : `Unit ${currentUnitSpec?.unit}`}</span>.
+                      Bạn đã hoàn thành lượt luyện viết từ vựng.
                     </p>
                   </div>
 
-                  <div className="p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 max-w-sm mx-auto space-y-2">
-                    <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
+                  <div className="p-4 rounded-lg bg-indigo-500/5 border border-indigo-500/10 max-w-xs mx-auto text-center space-y-1">
+                    <div className="text-3xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
                       {spellingScore} / {totalSpellingInRound}
                     </div>
                     <p className="text-xs font-bold text-muted-foreground">
-                      Tỷ lệ chính xác: <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">{Math.round((spellingScore / totalSpellingInRound) * 100)}%</span>
+                      Chính xác: <span className="text-emerald-600 font-extrabold">{Math.round((spellingScore / totalSpellingInRound) * 100)}%</span>
                     </p>
                   </div>
 
-                  <div className="pt-2 flex justify-center gap-3">
-                    <Button
-                      variant="primary"
-                      onClick={handleRestartSpelling}
-                      className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl cursor-pointer shadow-lg shadow-indigo-500/20"
-                    >
-                      Luyện viết lượt mới 🔄
-                    </Button>
-                  </div>
-                </Card>
+                  <Button
+                    variant="primary"
+                    onClick={handleRestartSpelling}
+                    className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg cursor-pointer"
+                  >
+                    Luyện viết lượt mới 🔄
+                  </Button>
+                </div>
               ) : currentSpellingItem ? (
-                <Card className="p-6 sm:p-8 space-y-6 shadow-xl border-border/60 rounded-3xl bg-card">
-                  {/* Top Banner inside Card matching user mockup */}
-                  <div className="flex items-center gap-4 pb-4 border-b border-border/40">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm">
-                      <Pencil className="w-6 h-6" />
+                <div className="space-y-5 border border-border rounded-xl p-5 sm:p-6 bg-card">
+                  {/* Top Banner inside Section */}
+                  <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                        <Pencil className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h2 className="text-sm sm:text-base font-black text-foreground">
+                          Luyện Viết Từ Vựng
+                        </h2>
+                        <p className="text-xs text-muted-foreground">
+                          Đọc hiểu nghĩa và viết chính xác từng ký tự
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
-                        Luyện Viết Từ Vựng
-                      </h2>
-                      <p className="text-xs text-muted-foreground font-semibold">
-                        Đọc hiểu nghĩa và lắp ghép chính xác từng ký tự
-                      </p>
-                    </div>
-                    <span className="ml-auto text-xs font-extrabold font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20">
+                    <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
                       {spellingIndex + 1}/{totalSpellingInRound}
                     </span>
                   </div>
 
-                  {/* Main Practice Inner Card */}
+                  {/* Main Practice Inner Area */}
                   <div
                     onClick={() => spellingInputRef.current?.focus()}
-                    className="bg-secondary/30 dark:bg-secondary/20 border border-border/50 rounded-3xl p-6 sm:p-8 text-center space-y-6 cursor-text relative"
+                    className="bg-secondary/30 border border-border rounded-xl p-5 text-center space-y-5 cursor-text relative"
                   >
                     {/* Hidden Input for Keyboard Typing */}
                     <input
@@ -825,43 +781,43 @@ export const VocabularyPage: React.FC = () => {
                     />
 
                     {/* Target Meaning Header */}
-                    <div className="space-y-2">
-                      <span className="inline-block px-3 py-1 bg-secondary text-muted-foreground text-[11px] font-black uppercase tracking-wider rounded-full border border-border/40">
+                    <div className="space-y-1">
+                      <span className="inline-block px-2.5 py-0.5 bg-secondary text-muted-foreground text-[10px] font-bold uppercase rounded border border-border">
                         Nghĩa của từ
                       </span>
-                      <h3 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">
+                      <h3 className="text-xl sm:text-3xl font-black text-foreground">
                         {currentSpellingItem.meaning}
                       </h3>
-                      <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold">
-                        ({currentSpellingItem.pos}) • {currentSpellingItem.phonetic}
+                      <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                        Từ loại: <span className="uppercase font-extrabold">{currentSpellingItem.pos}</span>
                       </p>
                     </div>
 
-                    {/* Interactive Character Letter Boxes Grid */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 py-2">
+                    {/* Character Letter Boxes Grid */}
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 py-2">
                       {currentSpellingItem.word.split('').map((char, idx) => {
                         const isSpace = char === ' ' || char === '-';
                         if (isSpace) {
-                          return <div key={idx} className="w-4" />;
+                          return <div key={idx} className="w-3" />;
                         }
 
                         const userChar = spellingInput[idx] || '';
                         const displayChar = showSpellingAnswer ? char : userChar;
 
-                        let borderStyle = "border-border/60 bg-card text-foreground";
+                        let borderStyle = "border-border bg-card text-foreground";
                         if (spellingFeedback === 'correct') {
-                          borderStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-black shadow-md shadow-emerald-500/10 animate-bounce-subtle";
+                          borderStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-black";
                         } else if (spellingFeedback === 'wrong') {
-                          borderStyle = "border-rose-500 bg-rose-500/10 text-rose-600 dark:text-rose-300 font-black shadow-md shadow-rose-500/10";
+                          borderStyle = "border-rose-500 bg-rose-500/10 text-rose-600 dark:text-rose-300 font-black";
                         } else if (userChar || showSpellingAnswer) {
-                          borderStyle = "border-indigo-600 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black shadow-sm";
+                          borderStyle = "border-indigo-600 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black";
                         }
 
                         return (
                           <div
                             key={idx}
                             className={cn(
-                              "w-10 h-12 sm:w-12 sm:h-14 rounded-2xl border-2 text-center text-lg sm:text-2xl font-black flex items-center justify-center transition-all uppercase select-none",
+                              "w-9 h-11 sm:w-11 sm:h-13 rounded-lg border text-center text-base sm:text-xl font-bold flex items-center justify-center uppercase select-none",
                               borderStyle
                             )}
                           >
@@ -873,55 +829,58 @@ export const VocabularyPage: React.FC = () => {
 
                     {/* Feedback message */}
                     {spellingFeedback === 'correct' && (
-                      <div className="text-emerald-600 dark:text-emerald-400 text-xs font-extrabold flex items-center justify-center gap-1.5 animate-fade-in">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Chính xác! Nhấn Enter hoặc bấm "Chuyển từ" để tiếp tục 🎉</span>
+                      <div className="text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center justify-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Chính xác! Bấm "Enter" hoặc "Chuyển từ" để tiếp tục 🎉</span>
                       </div>
                     )}
                     {spellingFeedback === 'wrong' && (
-                      <div className="text-rose-600 dark:text-rose-400 text-xs font-extrabold flex items-center justify-center gap-1.5 animate-fade-in">
-                        <XCircle className="w-4 h-4" />
+                      <div className="text-rose-600 dark:text-rose-400 text-xs font-bold flex items-center justify-center gap-1">
+                        <XCircle className="w-3.5 h-3.5" />
                         <span>Chưa chính xác, hãy thử lại hoặc bấm "Xem KQ"!</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Action Buttons Bar matching user mockup */}
-                  <div className="flex items-center justify-between gap-3 pt-2">
+                  {/* Action Buttons Bar */}
+                  <div className="flex items-center justify-between gap-2 pt-1">
                     <Button
                       variant="outline"
+                      size="sm"
                       onClick={() => setShowSpellingAnswer(!showSpellingAnswer)}
-                      className="rounded-2xl gap-2 text-xs font-extrabold cursor-pointer border-border/60 hover:bg-secondary px-4 py-2.5"
+                      className="rounded-lg gap-1 text-xs font-bold cursor-pointer border-border px-3.5 h-9"
                     >
-                      <Eye className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <Eye className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                       <span>{showSpellingAnswer ? 'Ẩn KQ' : 'Xem KQ'}</span>
                     </Button>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
+                        size="sm"
                         onClick={handleCheckSpelling}
                         className={cn(
-                          "rounded-2xl gap-2 text-xs font-extrabold cursor-pointer px-5 py-2.5 transition-all",
+                          "rounded-lg gap-1 text-xs font-bold cursor-pointer px-4 h-9 transition-all",
                           spellingFeedback === 'correct'
-                            ? "bg-emerald-500 text-white border-emerald-500 shadow-md"
-                            : "border-border/60 hover:bg-secondary"
+                            ? "bg-emerald-500 text-white border-emerald-500"
+                            : "border-border"
                         )}
                       >
-                        <CheckCircle2 className="w-4 h-4" />
+                        <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Kiểm tra</span>
                       </Button>
 
                       <Button
                         variant="primary"
+                        size="sm"
                         onClick={handleNextSpelling}
-                        className="rounded-2xl gap-2 text-xs font-extrabold bg-indigo-900 hover:bg-indigo-950 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white shadow-lg cursor-pointer px-6 py-2.5"
+                        className="rounded-lg gap-1 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white h-9 px-4 cursor-pointer"
                       >
                         <span>Chuyển từ →</span>
                       </Button>
                     </div>
                   </div>
-                </Card>
+                </div>
               ) : null}
             </div>
           )}

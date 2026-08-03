@@ -26,11 +26,16 @@ export const authService = {
     } catch (err: any) {
       console.error("Lỗi đăng nhập bằng Google:", err);
       const errorCode = err?.code || '';
+      const errorMessage = err?.message || '';
 
-      // Bỏ qua lỗi người dùng hoặc trình duyệt đóng / hủy popup đăng nhập
+      // Bỏ qua lỗi người dùng hoặc trình duyệt đóng / hủy popup / ẩn tab đăng nhập / đóng database
       if (
         errorCode === 'auth/popup-closed-by-user' ||
-        errorCode === 'auth/cancelled-popup-request'
+        errorCode === 'auth/cancelled-popup-request' ||
+        errorCode === 'auth/user-cancelled' ||
+        errorMessage.includes('Database is closing') ||
+        errorMessage.includes('popup-closed-by-user') ||
+        errorMessage.includes('cancelled-popup-request')
       ) {
         return;
       }

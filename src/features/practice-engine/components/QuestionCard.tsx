@@ -1,15 +1,14 @@
 import React, { useRef } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
-import { Button } from '../../../components/ui/button';
-import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
-import { ProofImageUploader } from '../../../components/common/ProofImageUploader';
-import { MathKeyboard } from '../../../components/common/MathKeyboard';
-import { Question, QuestionType, Solution, StructuredAnswer, SubjectCode } from '../../../types';
-import { AnswerFormRenderer } from '../../../components/common/AnswerFormRenderer';
-import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
-import { cn } from '../../../utils/cn';
-import { getSubjectTheme } from '../../../utils/theme';
+import { Button } from '@/components/ui/button';
+import { LatexRenderer } from '@/components/common/LatexRenderer';
+import { QuestionStimulusRenderer } from '@/components/common/QuestionStimulusRenderer';
+import { ProofImageUploader } from '@/components/common/ProofImageUploader';
+import { MathKeyboard } from '@/components/common/MathKeyboard';
+import { Question, QuestionType, Solution, StructuredAnswer, SubjectCode } from '@/types';
+import { AnswerFormRenderer } from '@/components/common/AnswerFormRenderer';
+import { LocalProofImage, revokeLocalProofImages } from '@/utils/proofImages';
+import { cn } from '@/utils/cn';
+import { getSubjectTheme } from '@/utils/theme';
 import { BookOpen, Lightbulb, ArrowLeft, ArrowRight, ChevronUp, ShieldCheck, Lock } from 'lucide-react';
 import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
@@ -123,19 +122,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             : 'set';
 
   return (
-    <Card className="glass border-border/40 shadow-lg rounded-3xl overflow-hidden">
-      <CardHeader className="bg-secondary/20 border-b border-border/20 p-5">
-        <CardTitle className="text-foreground text-sm font-black flex flex-wrap items-center gap-2 font-sans">
-          <BookOpen size={17} className={cn("animate-float shrink-0", theme.iconColor)} />
-          <span>Luyện tập: {currentQuestionType?.name ?? 'Câu hỏi'}</span>
-          {disableHints && (
-            <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[9px] font-black text-cyan-700 dark:text-cyan-300">
-              <ShieldCheck size={11} aria-hidden="true" /> Kiểm tra làm chủ
-            </span>
-          )}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6 space-y-6">
+    <div className="space-y-5">
+      <div className="border-b border-border pb-3 flex flex-wrap items-center gap-2 font-sans">
+        <BookOpen size={16} className={cn("shrink-0", theme.iconColor)} />
+        <span className="text-foreground text-xs sm:text-sm font-black">Luyện tập: {currentQuestionType?.name ?? 'Câu hỏi'}</span>
+        {disableHints && (
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5 text-[9px] font-bold text-cyan-700 dark:text-cyan-300">
+            <ShieldCheck size={11} aria-hidden="true" /> Kiểm tra làm chủ
+          </span>
+        )}
+      </div>
+      <div className="space-y-5">
         <QuestionStimulusRenderer question={currentQuestion} />
 
         {/* Đề bài */}
@@ -617,17 +614,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </p>
           )}
 
-          {/* Bấm nộp bài & Điều hướng chuyển câu */}
-          <div className="space-y-3.5 mt-5">
+          {/* Bấm nộp bài & Điều hướng chuyển câu - Cấu trúc 2 hàng chuẩn không bị nhảy layout */}
+          <div className="space-y-3 mt-4">
             <Button
               onClick={handleSubmit}
               disabled={submitDisabled || isSubmitting}
-              className="w-full font-black py-3.5 text-xs active:scale-[0.98] rounded-2xl shadow-md hover:shadow-lg transition-all animate-pulse-glow cursor-pointer"
+              className="w-full font-black py-3.5 text-xs active:scale-[0.98] rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-1.5 h-11"
             >
               {isSubmitting ? (proofImages && proofImages.length > 0 ? 'Giáo viên đang chấm bài...' : 'Đang gửi bài làm...') : 'Nộp bài tập'}
             </Button>
 
-            <div className="flex gap-3 w-full">
+            <div className="flex gap-2.5 w-full">
               <Button
                 type="button"
                 disabled={currentIdx === 0}
@@ -637,7 +634,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   resetQuestionState();
                 }}
                 variant="outline"
-                className="flex-1 font-black py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-2xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex-1 font-bold py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 <ArrowLeft size={14} /> Câu trước
               </Button>
@@ -650,14 +647,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   resetQuestionState();
                 }}
                 variant="outline"
-                className="flex-1 font-black py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-2xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex-1 font-bold py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 Câu sau <ArrowRight size={14} />
               </Button>
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

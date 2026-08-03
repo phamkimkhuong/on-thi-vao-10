@@ -1,13 +1,12 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
-import { Button } from '../../../components/ui/button';
-import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
-import { Question, Solution, SubjectCode } from '../../../types';
-import { validateAnswer } from '../../../utils/answerValidator';
-import { cn } from '../../../utils/cn';
-import { getSubjectTheme } from '../../../utils/theme';
-import { BookOpen, CheckCircle, XCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { LatexRenderer } from '@/components/common/LatexRenderer';
+import { QuestionStimulusRenderer } from '@/components/common/QuestionStimulusRenderer';
+import { Question, Solution, SubjectCode } from '@/types';
+import { validateAnswer } from '@/utils/answerValidator';
+import { cn } from '@/utils/cn';
+import { getSubjectTheme } from '@/utils/theme';
+import { CheckCircle, XCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface ExamPracticeViewProps {
   questions: Question[];
@@ -93,10 +92,10 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
   };
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto pb-12 animate-fade-in">
+    <div className="w-full max-w-4xl mx-auto space-y-5 px-3 sm:px-6 py-3 animate-fade-in pb-12 font-sans">
       {/* Header: Timer / Results summary */}
       {!isExamSubmitted ? (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border p-3.5 sm:p-4 rounded-xl shadow-xs">
           <button
             onClick={() => {
               const confirmQuit = window.confirm('Bạn có chắc chắn muốn thoát chế độ luyện thi và hủy bỏ bài làm này?');
@@ -106,14 +105,14 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
                 setSelectedSubTense(null);
               }
             }}
-            className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all"
+            className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-1.5 rounded-xl transition-all"
           >
             ← Thoát luyện thi
           </button>
 
           {/* Timer banner */}
           <div className={cn(
-            "px-4 py-2 rounded-xl border flex items-center gap-2 text-xs font-extrabold shadow-sm select-none",
+            "px-3.5 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-extrabold shadow-2xs select-none",
             examTimeLimit === 0
               ? "bg-slate-50 dark:bg-slate-900 border-border text-muted-foreground"
               : examTimeLeft < 60
@@ -142,15 +141,15 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
 
           <Button
             onClick={() => handleExamSubmit(false)}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl cursor-pointer"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl cursor-pointer h-9"
           >
             Nộp bài thi
           </Button>
         </div>
       ) : (
         /* Results Dashboard after submission */
-        <Card className="border-indigo-500/10 shadow-lg bg-card overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-600 to-violet-700 p-6 text-white text-center space-y-4">
+        <div className="border border-indigo-500/20 shadow-md bg-card rounded-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-indigo-600 to-violet-700 p-5 sm:p-6 text-white text-center space-y-4">
             <h2 className="text-lg font-black tracking-tight flex items-center justify-center gap-2">
               🏆 Kết quả bài thi trắc nghiệm
             </h2>
@@ -198,6 +197,7 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
               >
                 {selectedSubTense === 'tenses_review' ? '🔄 Thi lại bài test' : '🔄 Thi đề khác'}
               </Button>
+
               <Button
                 onClick={() => {
                   setIsExamMode(false);
@@ -213,250 +213,263 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
               </Button>
             </div>
           </div>
-        </Card>
+        </div>
       )}
 
-      {/* Question Selector Bubbles */}
-      <div className="flex flex-wrap items-center gap-2 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
-        <span className="text-xs font-bold text-muted-foreground mr-1">Câu hỏi thi:</span>
-        {questions.map((q, idx) => {
-          const isActive = idx === currentIdx;
-          const hasAnswer = examAnswers[q.id] !== undefined;
-          const isCorrect = isExamSubmitted && validateAnswer(q, examAnswers[q.id] || '');
+      {/* Question Stepper Header Grid */}
+      <div className="space-y-2 border-b border-border pb-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-black text-foreground">
+            Câu {currentIdx + 1} / {questions.length}
+          </span>
+          {isExamSubmitted && (
+            <span className="text-[10px] font-bold text-muted-foreground">
+              Đúng {correctAnswersCount}/{questions.length} câu ({percentage}%)
+            </span>
+          )}
+        </div>
 
-          return (
-            <button
-              key={q.id}
-              onClick={() => {
-                setCurrentIdx(idx);
-              }}
-              className={cn(
-                "w-8 h-8 rounded-xl flex items-center justify-center text-xs font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
-                isActive
-                  ? "bg-primary border-primary text-white shadow-sm shadow-primary/20 scale-105"
-                  : isExamSubmitted
-                    ? isCorrect
-                      ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
-                      : "bg-rose-500/10 dark:bg-rose-500/20 border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20"
-                    : hasAnswer
-                      ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20"
-                      : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"
-              )}
-              title={`Câu ${idx + 1}`}
-            >
-              {idx + 1}
-            </button>
-          );
-        })}
+        <div className="flex flex-wrap gap-1.5 justify-start">
+          {questions.map((q, idx) => {
+            const isActive = idx === currentIdx;
+            const hasAnswer = examAnswers[q.id] !== undefined;
+            const isCorrect = isExamSubmitted && validateAnswer(q, examAnswers[q.id] || '');
+
+            return (
+              <button
+                key={q.id}
+                onClick={() => {
+                  setCurrentIdx(idx);
+                }}
+                className={cn(
+                  "w-7 h-7 rounded-lg flex items-center justify-center text-xs font-extrabold transition-all duration-150 cursor-pointer border shrink-0",
+                  isActive
+                    ? "bg-primary border-primary text-white shadow-xs scale-105"
+                    : isExamSubmitted
+                      ? isCorrect
+                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                        : "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
+                      : hasAnswer
+                        ? "bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400"
+                        : "bg-background border-border/60 text-muted-foreground hover:text-foreground"
+                )}
+                title={`Câu ${idx + 1}`}
+              >
+                {idx + 1}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Main Question Card */}
-      <Card className="border-indigo-500/10 shadow-md">
-        <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 border-b border-border/30">
-          <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2">
-            <BookOpen size={16} className="text-primary" />
-            Câu hỏi {currentIdx + 1} / {questions.length}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-6 space-y-6">
-          <QuestionStimulusRenderer question={currentQuestion} />
+      {/* Main Question Body - Pure Flat Canvas */}
+      <div className="space-y-5">
+        <QuestionStimulusRenderer question={currentQuestion} />
 
-          {/* Content */}
-          <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
-            <LatexRenderer text={cleanContent} />
-          </div>
+        {/* Content */}
+        <div className="text-sm font-bold leading-relaxed text-foreground bg-secondary/30 dark:bg-slate-950/20 p-4 sm:p-5 rounded-2xl border border-border/20 shadow-inner font-sans">
+          <LatexRenderer text={cleanContent} />
+        </div>
 
-          {/* Answer Options list or text input for fill-in-the-blank */}
-          <div className="grid grid-cols-1 gap-3">
-            {displayOptions && displayOptions.length > 0 ? (
-              displayOptions.map((opt: string, i: number) => {
-                const letters = ['A', 'B', 'C', 'D'];
-                const hasPrefix = /^[A-D]\.\s*/i.test(opt);
-                const optLetter = hasPrefix ? opt.charAt(0).toUpperCase() : (letters[i] || String.fromCharCode(65 + i));
-                const isSelected = examAnswers[currentQuestion.id] === optLetter;
-                const isCorrectAnswer = currentQuestion.correctAnswer === optLetter;
+        {/* Answer Options list or text input for fill-in-the-blank */}
+        <div className="grid grid-cols-1 gap-3">
+          {displayOptions && displayOptions.length > 0 ? (
+            displayOptions.map((opt: string, i: number) => {
+              const letters = ['A', 'B', 'C', 'D'];
+              const hasPrefix = /^[A-D]\.\s*/i.test(opt);
+              const optLetter = hasPrefix ? opt.charAt(0).toUpperCase() : (letters[i] || String.fromCharCode(65 + i));
+              const isSelected = examAnswers[currentQuestion.id] === optLetter;
+              const isCorrectAnswer = currentQuestion.correctAnswer === optLetter;
 
-                // Color styles based on active exam vs submitted review states
-                const buttonStyle = isExamSubmitted
-                  ? isCorrectAnswer
-                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-sm"
-                    : isSelected
-                      ? "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-400 shadow-sm"
-                      : "bg-card border-border opacity-70 text-foreground"
+              const buttonStyle = isExamSubmitted
+                ? isCorrectAnswer
+                  ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-xs"
                   : isSelected
-                    ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 shadow-sm"
-                    : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground";
+                    ? "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-400 shadow-xs"
+                    : "bg-card border-border opacity-70 text-foreground"
+                : isSelected
+                  ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 shadow-xs"
+                  : "bg-card border-border hover:bg-slate-50/50 dark:hover:bg-slate-900/10 text-foreground";
 
-                return (
-                  <button
-                    key={i}
-                    disabled={isExamSubmitted}
-                    onClick={() => handleOptionSelect(optLetter)}
-                    className={cn(
-                      "w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 cursor-pointer",
-                      !isExamSubmitted && "active:scale-[0.99] cursor-pointer",
-                      buttonStyle
-                    )}
-                  >
-                    <LatexRenderer text={opt} />
-                  </button>
-                );
-              })
-            ) : (
-              // Điền từ tự do trong Exam Mode
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground">
-                  {isExamSubmitted ? "Đáp án của bạn:" : "Nhập đáp án của bạn:"}
-                </label>
-                <input
-                  type="text"
+              return (
+                <button
+                  key={i}
                   disabled={isExamSubmitted}
-                  value={examAnswers[currentQuestion.id] || ''}
-                  onChange={(e) => {
-                    const typedVal = e.target.value;
-                    setExamAnswers(prev => ({ ...prev, [currentQuestion.id]: typedVal }));
-                  }}
-                  placeholder={isExamSubmitted ? "Không có câu trả lời" : "Nhập từ cần điền (ví dụ: inventions)..."}
+                  onClick={() => handleOptionSelect(optLetter)}
                   className={cn(
-                    "w-full p-4 rounded-xl text-xs font-semibold border focus:outline-none transition-all duration-150 bg-card text-foreground",
-                    isExamSubmitted
-                      ? validateAnswer(currentQuestion, examAnswers[currentQuestion.id] || '')
-                        ? "border-emerald-500 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400"
-                        : "border-rose-500 bg-rose-500/5 text-rose-700 dark:text-rose-400"
-                      : "border-border focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    "w-full text-left p-4 rounded-xl text-xs font-semibold border transition-all duration-150 cursor-pointer",
+                    !isExamSubmitted && "active:scale-[0.99] cursor-pointer",
+                    buttonStyle
                   )}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !isExamSubmitted) {
-                      handleNext();
-                    }
-                  }}
-                />
-              </div>
+                >
+                  <LatexRenderer text={opt} />
+                </button>
+              );
+            })
+          ) : (
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-muted-foreground">
+                {isExamSubmitted ? "Đáp án của bạn:" : "Nhập đáp án của bạn:"}
+              </label>
+              <input
+                type="text"
+                disabled={isExamSubmitted}
+                value={examAnswers[currentQuestion.id] || ''}
+                onChange={(e) => {
+                  const typedVal = e.target.value;
+                  setExamAnswers(prev => ({ ...prev, [currentQuestion.id]: typedVal }));
+                }}
+                placeholder={isExamSubmitted ? "Không có câu trả lời" : "Nhập từ cần điền (ví dụ: inventions)..."}
+                className={cn(
+                  "w-full p-4 rounded-xl text-xs font-semibold border focus:outline-none transition-all duration-150 bg-card text-foreground",
+                  isExamSubmitted
+                    ? validateAnswer(currentQuestion, examAnswers[currentQuestion.id] || '')
+                      ? "border-emerald-500 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400"
+                      : "border-rose-500 bg-rose-500/5 text-rose-700 dark:text-rose-400"
+                    : "border-border focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                )}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !isExamSubmitted) {
+                    handleNext();
+                  }
+                }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Review Status Banner after submission */}
+        {isExamSubmitted && (
+          <div className={cn(
+            "p-4 rounded-xl border flex items-center gap-3",
+            validateAnswer(currentQuestion, examAnswers[currentQuestion.id] || '')
+              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400"
+              : "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400"
+          )}>
+            {validateAnswer(currentQuestion, examAnswers[currentQuestion.id] || '') ? (
+              <>
+                <CheckCircle size={24} className="text-emerald-500 shrink-0" />
+                <div>
+                  <h4 className="font-extrabold text-sm">Chính xác!</h4>
+                  <p className="text-xs font-semibold opacity-90">
+                    {displayOptions && displayOptions.length > 0 ? (
+                      `Bạn đã chọn đáp án đúng.`
+                    ) : (
+                      `Bạn đã nhập đúng đáp án: "${examAnswers[currentQuestion.id]}".`
+                    )}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <XCircle size={24} className="text-rose-500 shrink-0" />
+                <div>
+                  <h4 className="font-extrabold text-sm">Chưa chính xác!</h4>
+                  <p className="text-xs font-semibold opacity-90">
+                    {displayOptions && displayOptions.length > 0 ? (
+                      examAnswers[currentQuestion.id]
+                        ? `Bạn đã chọn đáp án ${examAnswers[currentQuestion.id]}. Đáp án đúng là ${currentQuestion.correctAnswer}.`
+                        : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là ${currentQuestion.correctAnswer}.`
+                    ) : (
+                      examAnswers[currentQuestion.id]
+                        ? `Bạn đã nhập: "${examAnswers[currentQuestion.id]}". Đáp án đúng là "${currentQuestion.correctAnswer}".`
+                        : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là "${currentQuestion.correctAnswer}".`
+                    )}
+                  </p>
+                </div>
+              </>
             )}
           </div>
+        )}
 
-          {/* Review Status Banner after submission */}
-          {isExamSubmitted && (
+        {/* Solution view after submission */}
+        {isExamSubmitted && solutionDetail && (
+          <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
+            <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
+
             <div className={cn(
-              "p-4 rounded-xl border flex items-center gap-3",
-              validateAnswer(currentQuestion, examAnswers[currentQuestion.id] || '')
-                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400"
-                : "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400"
+              "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
+              getSubjectTheme(routeSubject).bg,
+              getSubjectTheme(routeSubject).border
             )}>
-              {validateAnswer(currentQuestion, examAnswers[currentQuestion.id] || '') ? (
-                <>
-                  <CheckCircle size={24} className="text-emerald-500 shrink-0" />
-                  <div>
-                    <h4 className="font-extrabold text-sm">Chính xác!</h4>
-                    <p className="text-xs font-semibold opacity-90">
-                      {displayOptions && displayOptions.length > 0 ? (
-                        `Bạn đã chọn đáp án đúng.`
-                      ) : (
-                        `Bạn đã nhập đúng đáp án: "${examAnswers[currentQuestion.id]}".`
-                      )}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <XCircle size={24} className="text-rose-500 shrink-0" />
-                  <div>
-                    <h4 className="font-extrabold text-sm">Chưa chính xác!</h4>
-                    <p className="text-xs font-semibold opacity-90">
-                      {displayOptions && displayOptions.length > 0 ? (
-                        examAnswers[currentQuestion.id]
-                          ? `Bạn đã chọn đáp án ${examAnswers[currentQuestion.id]}. Đáp án đúng là ${currentQuestion.correctAnswer}.`
-                          : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là ${currentQuestion.correctAnswer}.`
-                      ) : (
-                        examAnswers[currentQuestion.id]
-                          ? `Bạn đã nhập: "${examAnswers[currentQuestion.id]}". Đáp án đúng là "${currentQuestion.correctAnswer}".`
-                          : `Bạn đã bỏ qua câu hỏi này. Đáp án đúng là "${currentQuestion.correctAnswer}".`
-                      )}
-                    </p>
-                  </div>
-                </>
-              )}
+              <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
+              <LatexRenderer text={solutionDetail.recognition} />
             </div>
-          )}
 
-          {/* Solution view after submission */}
-          {isExamSubmitted && solutionDetail && (
-            <div className="space-y-4 border-t border-border/30 pt-6 animate-fade-in">
-              <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
-
-              <div className={cn(
-                "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
-                getSubjectTheme(routeSubject).bg,
-                getSubjectTheme(routeSubject).border
-              )}>
-                <span className="font-extrabold text-foreground block mb-1">💡 Tư duy nhận dạng:</span>
-                <LatexRenderer text={solutionDetail.recognition} />
+            {solutionDetail.translation && (
+              <div className="text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/10 border-border/30">
+                <span className="font-extrabold text-foreground block mb-1">🇬🇧 Dịch nghĩa / yêu cầu câu hỏi:</span>
+                <p className="italic">"{solutionDetail.translation}"</p>
               </div>
+            )}
 
-              {solutionDetail.translation && (
-                <div className="text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/10 border-border/30">
-                  <span className="font-extrabold text-foreground block mb-1">🇬🇧 Dịch nghĩa / yêu cầu câu hỏi:</span>
-                  <p className="italic">"{solutionDetail.translation}"</p>
+            <div className="space-y-5 pl-1.5">
+              {solutionDetail.detailedSteps.map((step: any, idx: number) => (
+                <div key={idx} className="space-y-1">
+                  <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] shrink-0 font-bold">
+                      {step.order}
+                    </span>
+                    {step.title}
+                  </h5>
+                  <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed whitespace-pre-line">
+                    <LatexRenderer text={step.explanation} />
+                    {step.formula && (
+                      <div className="my-2 p-2 bg-secondary/50 rounded-lg text-foreground border border-border/5 overflow-x-auto">
+                        <LatexRenderer text={step.formula} block={true} />
+                      </div>
+                    )}
+                    {step.result && (
+                      <p className="text-primary font-bold mt-1">
+                        👉 Kết quả bước: <LatexRenderer text={step.result} />
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2">
+              <div className="font-extrabold text-foreground">
+                Đáp án đúng:{' '}
+                <span className="text-emerald-500 font-black">
+                  <LatexRenderer
+                    text={`${currentQuestion.correctAnswer}${correctOptionText ? `. ${correctOptionText}` : ''}`}
+                  />
+                </span>
+              </div>
+              {solutionDetail.commonMistakes.length > 0 && (
+                <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
+                  <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
+                  {solutionDetail.commonMistakes.map((m: string, i: number) => (
+                    <p key={i}>• <LatexRenderer text={m} /></p>
+                  ))}
                 </div>
               )}
-
-              <div className="space-y-5 pl-1.5">
-                {solutionDetail.detailedSteps.map((step: any, idx: number) => (
-                  <div key={idx} className="space-y-1">
-                    <h5 className="font-extrabold text-xs text-foreground flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px] shrink-0 font-bold">
-                        {step.order}
-                      </span>
-                      {step.title}
-                    </h5>
-                    <div className="pl-6.5 text-xs font-semibold text-muted-foreground leading-relaxed whitespace-pre-line">
-                      <LatexRenderer text={step.explanation} />
-                      {step.formula && (
-                        <div className="my-2 p-2 bg-secondary/50 rounded-lg text-foreground border border-border/5 overflow-x-auto">
-                          <LatexRenderer text={step.formula} block={true} />
-                        </div>
-                      )}
-                      {step.result && (
-                        <p className="text-primary font-bold mt-1">
-                          👉 Kết quả bước: <LatexRenderer text={step.result} />
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2">
-                <div className="font-extrabold text-foreground">
-                  Đáp án đúng:{' '}
-                  <span className="text-emerald-500 font-black">
-                    <LatexRenderer
-                      text={`${currentQuestion.correctAnswer}${correctOptionText ? `. ${correctOptionText}` : ''}`}
-                    />
-                  </span>
+              {solutionDetail.reviewSuggestions.length > 0 && (
+                <div className="pt-2 border-t border-border/20 text-indigo-600 dark:text-indigo-400 font-semibold leading-relaxed">
+                  <span className="font-extrabold block text-foreground mb-1">📚 Cần ôn lại:</span>
+                  {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => (
+                    <p key={index}>• <LatexRenderer text={suggestion} /></p>
+                  ))}
                 </div>
-                {solutionDetail.commonMistakes.length > 0 && (
-                  <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
-                    <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
-                    {solutionDetail.commonMistakes.map((m: string, i: number) => (
-                      <p key={i}>• <LatexRenderer text={m} /></p>
-                    ))}
-                  </div>
-                )}
-                {solutionDetail.reviewSuggestions.length > 0 && (
-                  <div className="pt-2 border-t border-border/20 text-indigo-600 dark:text-indigo-400 font-semibold leading-relaxed">
-                    <span className="font-extrabold block text-foreground mb-1">📚 Cần ôn lại:</span>
-                    {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => (
-                      <p key={index}>• <LatexRenderer text={suggestion} /></p>
-                    ))}
-                  </div>
-                )}
-              </div>
+              )}
             </div>
+          </div>
+        )}
+
+        {/* Navigation controls - Bố cục 2 hàng cố định chuẩn */}
+        <div className="space-y-3 mt-4">
+          {!isExamSubmitted && (
+            <Button
+              onClick={() => handleExamSubmit(false)}
+              className="w-full font-black py-3.5 text-xs active:scale-[0.98] rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-1.5 h-11 bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              Nộp bài thi
+            </Button>
           )}
 
-          {/* Navigation controls */}
-          <div className="flex gap-3 w-full pt-4">
+          <div className="flex gap-2.5 w-full">
             <Button
               type="button"
               disabled={currentIdx === 0}
@@ -464,22 +477,22 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
                 setCurrentIdx(currentIdx - 1);
               }}
               variant="outline"
-              className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-10 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex-1 font-bold py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               <ArrowLeft size={14} /> Câu trước
             </Button>
             <Button
               type="button"
               onClick={handleNext}
+              disabled={currentIdx === questions.length - 1}
               variant="outline"
-              className="flex-1 font-bold py-2 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1 h-10 cursor-pointer"
+              className="flex-1 font-bold py-2.5 text-xs border border-border/50 text-muted-foreground hover:text-foreground active:scale-[0.98] flex items-center justify-center gap-1.5 h-10.5 rounded-xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
-              {currentIdx === questions.length - 1 && isExamSubmitted ? "Thoát xem" : "Câu tiếp"} <ArrowRight size={14} />
+              Câu sau <ArrowRight size={14} />
             </Button>
           </div>
-
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

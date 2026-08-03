@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Button } from '../../../components/ui/button';
-import { LatexRenderer } from '../../../components/common/LatexRenderer';
-import { QuestionStimulusRenderer } from '../../../components/common/QuestionStimulusRenderer';
-import { Question, QuestionType, Solution, UserAttempt, SubjectCode } from '../../../types';
-import { LocalProofImage, revokeLocalProofImages } from '../../../utils/proofImages';
-import { cn } from '../../../utils/cn';
-import { getSubjectTheme } from '../../../utils/theme';
+import { Button } from '@/components/ui/button';
+import { LatexRenderer } from '@/components/common/LatexRenderer';
+import { QuestionStimulusRenderer } from '@/components/common/QuestionStimulusRenderer';
+import { Question, QuestionType, Solution, UserAttempt, SubjectCode } from '@/types';
+import { LocalProofImage, revokeLocalProofImages } from '@/utils/proofImages';
+import { cn } from '@/utils/cn';
+import { getSubjectTheme } from '@/utils/theme';
 import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight, Languages } from 'lucide-react';
-import { logCustomEvent } from '../../../services/firebase';
+import { logCustomEvent } from '@/services/firebase';
 import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
 interface ResultCardProps {
@@ -115,10 +115,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-fade-in">
-      <div className="lg:col-span-7 space-y-6">
+      <div className="lg:col-span-7 space-y-5">
         {/* Đề bài (Xem lại câu hỏi) */}
-        <div className="bg-card border border-border/40 shadow-sm rounded-2xl overflow-hidden text-left">
-          <div className="bg-secondary/15 border-b border-border/20 px-5 py-3 flex items-center justify-between">
+        <div className="space-y-3 text-left">
+          <div className="border-b border-border pb-3 flex items-center justify-between">
             <h4 className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wider">
               📖 Đề bài:
             </h4>
@@ -515,48 +515,52 @@ export const ResultCard: React.FC<ResultCardProps> = ({
           </div>
         )}
 
-        {/* Tiếp tục / Làm lại / Đổi câu */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-4">
-          <Button
-            disabled={currentIdx === 0}
-            onClick={() => {
-              revokeLocalProofImages(proofImages);
-              setCurrentIdx(currentIdx - 1);
-              resetQuestionState();
-            }}
-            variant="outline"
-            className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-muted-foreground hover:bg-secondary/40 cursor-pointer h-10 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <ArrowLeft size={16} /> Câu trước
-          </Button>
-          {existingAttempt && !retryStatus.canRetry ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-2.5 bg-slate-500/10 border border-slate-500/20 rounded-xl text-[10px] text-muted-foreground font-black text-center leading-relaxed">
-              <span>⏱️Làm lại sau {retryStatus.daysRemaining} ngày để ôn tập</span>
-              <span className="text-[9px] opacity-75 font-semibold">(Mở khóa vào ngày {retryStatus.unlockDateStr})</span>
-            </div>
-          ) : (
-            (!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
-              <Button
-                onClick={handleRetry}
-                variant="outline"
-                className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10"
-              >
-                🔄 Làm lại bài này
-              </Button>
-            )
-          )}
+        {/* Tiếp tục / Làm lại / Đổi câu - Cấu trúc 2 hàng chuẩn không bị nhảy layout */}
+        <div className="space-y-3 pt-4">
+          {/* Hàng 1: Nút hành động chính (Full-width Primary Button) */}
           <Button
             onClick={handleNext}
-            className="flex-1 font-bold py-3 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer h-10"
+            className="w-full font-black py-3.5 text-xs active:scale-[0.98] rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-1.5 h-11"
           >
-            {currentIdx === questionsLength - 1 ? 'Hoàn thành' : 'Câu tiếp theo'} <ArrowRight size={16} />
+            {currentIdx === questionsLength - 1 ? 'Hoàn thành bài tập 🎉' : 'Câu sau'} <ArrowRight size={16} />
           </Button>
+
+          {/* Hàng 2: Các nút phụ 50% - 50% nằm ngang hàng định dạng cố định */}
+          <div className="flex gap-2.5 w-full">
+            <Button
+              disabled={currentIdx === 0}
+              onClick={() => {
+                revokeLocalProofImages(proofImages);
+                setCurrentIdx(currentIdx - 1);
+                resetQuestionState();
+              }}
+              variant="outline"
+              className="flex-1 font-bold py-2.5 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-muted-foreground hover:bg-secondary/40 cursor-pointer h-10.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ArrowLeft size={14} /> Câu trước
+            </Button>
+            {existingAttempt && !retryStatus.canRetry ? (
+              <div className="flex-1 flex flex-col items-center justify-center p-2 bg-slate-500/10 border border-slate-500/20 rounded-xl text-[10px] text-muted-foreground font-extrabold text-center leading-tight">
+                <span>⏱️ Làm lại sau {retryStatus.daysRemaining} ngày</span>
+              </div>
+            ) : (
+              (!existingAttempt || existingAttempt.gradingMode !== 'manual') && (
+                <Button
+                  onClick={handleRetry}
+                  variant="outline"
+                  className="flex-1 font-bold py-2.5 text-xs active:scale-[0.98] flex items-center justify-center gap-1.5 border border-border/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 cursor-pointer h-10.5 rounded-xl"
+                >
+                  🔄 Làm lại
+                </Button>
+              )
+            )}
+          </div>
         </div>
       </div>
 
       {/* Lời giải chi tiết hiện lên ở cột bên phải */}
       {solutionDetail && (
-        <div className="lg:col-span-5 space-y-4 bg-card border border-border/40 p-5 rounded-2xl shadow-sm text-left animate-fade-in">
+        <div className="lg:col-span-5 space-y-4 text-left animate-fade-in">
           <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
 
           {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} />}

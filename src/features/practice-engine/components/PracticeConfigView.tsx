@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
@@ -57,9 +58,10 @@ export const PracticeConfigView: React.FC<PracticeConfigViewProps> = ({
     <div className="space-y-6 max-w-2xl mx-auto pb-12 animate-fade-in">
       <button
         onClick={() => setIsConfiguringAll(false)}
-        className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
+        className="p-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center justify-center cursor-pointer bg-secondary/50 hover:bg-secondary rounded-xl transition-all self-start animate-fade-in"
+        title="Quay lại"
       >
-        ← Quay lại
+        <ArrowLeft className="w-4 h-4" />
       </button>
 
       <Card className="border-indigo-500/10 shadow-md">

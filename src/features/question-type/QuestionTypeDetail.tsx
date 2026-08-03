@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getQuestionTypes, getQuestions, getSolutions, getLearningOutcomes } from '../../data';
-import { useAppStore } from '../../services/store';
-import { Tabs, TabItem } from '../../components/ui/tabs';
-import { authService } from '../../services/authService';
-import { TextbookDrawer } from '../../components/common/TextbookDrawer';
-import { QuestionType, Question, Solution } from '../../types';
-import { Card, CardHeader, CardContent } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { LatexRenderer } from '../../components/common/LatexRenderer';
+import { getQuestionTypes, getQuestions, getSolutions, getLearningOutcomes } from '@/data';
+import { useAppStore } from '@/services/store';
+import { Tabs, TabItem } from '@/components/ui/tabs';
+import { authService } from '@/services/authService';
+import { TextbookDrawer } from '@/components/common/TextbookDrawer';
+import { QuestionType, Question, Solution } from '@/types';
+import { Button } from '@/components/ui/button';
+import { LatexRenderer } from '@/components/common/LatexRenderer';
 import {
   AlertTriangle,
   Activity,
-  ChevronLeft,
+  ArrowLeft,
   PlayCircle,
   LockKeyhole,
   Lightbulb,
@@ -21,11 +20,11 @@ import {
   Volume2,
   VolumeX
 } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
-import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '../../utils/subject';
-import { storageService } from '../../services/storage';
-import { convertLatexToSpeechText } from '../../utils/speech';
+import { cn } from '@/utils/cn';
+import { getSubjectTheme, getStarsFromScore } from '@/utils/theme';
+import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '@/utils/subject';
+import { storageService } from '@/services/storage';
+import { convertLatexToSpeechText } from '@/utils/speech';
 
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
@@ -229,92 +228,90 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'theory',
       label: '📖 Định nghĩa & Lý thuyết',
       content: (
-        <Card className={cn("border bg-card", theme.border)}>
-          <CardContent className="p-5 md:p-6 space-y-4">
-            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
-              <BookOpen size={18} className={theme.iconColor} /> Khái niệm & Định nghĩa cơ bản cần nắm:
-            </h4>
-            <div className="space-y-4 text-xs md:text-sm font-medium text-foreground/90 leading-relaxed pl-1">
-              {detail.theory.map((para: string, idx: number) => (
-                <div key={idx} className="prose dark:prose-invert max-w-none leading-relaxed">
-                  <LatexRenderer text={para} />
-                </div>
-              ))}
-            </div>
-
-            {detail.theoryCheckpoints && detail.theoryCheckpoints.length > 0 && (
-              <div className="space-y-4 border-t border-border/40 pt-5">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300">
-                    Tự kiểm tra trước khi luyện tập
-                  </p>
-                  <p className="mt-1 text-xs font-semibold text-muted-foreground">
-                    Chọn đúng đáp án để xác nhận bạn đã nắm phần lý thuyết cốt lõi.
-                  </p>
-                </div>
-
-                {detail.theoryCheckpoints.map((checkpoint, checkpointIndex) => {
-                  const selectedAnswer = checkpointAnswers[checkpoint.id];
-                  const hasPassed = passedCheckpointIds.has(checkpoint.id);
-                  const optionLabels = ['A', 'B', 'C', 'D'];
-
-                  return (
-                    <div
-                      key={checkpoint.id}
-                      className="space-y-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4"
-                    >
-                      <p className="text-xs md:text-sm font-extrabold leading-relaxed text-foreground">
-                        Câu {checkpointIndex + 1}: <LatexRenderer text={checkpoint.question} />
-                      </p>
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                        {checkpoint.options.map((option, optionIndex) => {
-                          const answer = optionLabels[optionIndex];
-                          const isSelected = selectedAnswer === answer;
-                          const isCorrectOption = hasPassed && answer === checkpoint.correctAnswer;
-
-                          return (
-                            <button
-                              key={answer}
-                              type="button"
-                              disabled={hasPassed}
-                              onClick={() => handleCheckpointAnswer(checkpoint.id, answer)}
-                              className={cn(
-                                "rounded-xl border px-3 py-2.5 text-left text-xs font-semibold leading-relaxed transition-colors",
-                                isCorrectOption
-                                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                                  : isSelected
-                                    ? "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300"
-                                    : "border-border/60 bg-background hover:border-cyan-500/40 hover:bg-cyan-500/5"
-                              )}
-                            >
-                              <span className="mr-1.5 font-black">{answer}.</span>
-                              <LatexRenderer text={option} />
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {selectedAnswer && (
-                        <div
-                          className={cn(
-                            "rounded-xl px-3 py-2.5 text-xs font-semibold leading-relaxed",
-                            hasPassed
-                              ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                              : "bg-rose-500/10 text-rose-700 dark:text-rose-300"
-                          )}
-                        >
-                          {hasPassed
-                            ? <>✓ Chính xác. <LatexRenderer text={checkpoint.explanation} /></>
-                            : 'Chưa đúng. Hãy đọc lại phần lý thuyết phía trên và chọn lại.'}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+        <div className={cn("border bg-card p-4 sm:p-6 rounded-xl space-y-4 shadow-sm", theme.border)}>
+          <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+            <BookOpen size={18} className={theme.iconColor} /> Khái niệm & Định nghĩa cơ bản cần nắm:
+          </h4>
+          <div className="space-y-4 text-xs md:text-sm font-medium text-foreground/90 leading-relaxed pl-1">
+            {detail.theory.map((para: string, idx: number) => (
+              <div key={idx} className="prose dark:prose-invert max-w-none leading-relaxed">
+                <LatexRenderer text={para} />
               </div>
-            )}
-          </CardContent>
-        </Card>
+            ))}
+          </div>
+
+          {detail.theoryCheckpoints && detail.theoryCheckpoints.length > 0 && (
+            <div className="space-y-4 border-t border-border/40 pt-5">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300">
+                  Tự kiểm tra trước khi luyện tập
+                </p>
+                <p className="mt-1 text-xs font-semibold text-muted-foreground">
+                  Chọn đúng đáp án để xác nhận bạn đã nắm phần lý thuyết cốt lõi.
+                </p>
+              </div>
+
+              {detail.theoryCheckpoints.map((checkpoint, checkpointIndex) => {
+                const selectedAnswer = checkpointAnswers[checkpoint.id];
+                const hasPassed = passedCheckpointIds.has(checkpoint.id);
+                const optionLabels = ['A', 'B', 'C', 'D'];
+
+                return (
+                  <div
+                    key={checkpoint.id}
+                    className="space-y-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4"
+                  >
+                    <p className="text-xs md:text-sm font-extrabold leading-relaxed text-foreground">
+                      Câu {checkpointIndex + 1}: <LatexRenderer text={checkpoint.question} />
+                    </p>
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      {checkpoint.options.map((option, optionIndex) => {
+                        const answer = optionLabels[optionIndex];
+                        const isSelected = selectedAnswer === answer;
+                        const isCorrectOption = hasPassed && answer === checkpoint.correctAnswer;
+
+                        return (
+                          <button
+                            key={answer}
+                            type="button"
+                            disabled={hasPassed}
+                            onClick={() => handleCheckpointAnswer(checkpoint.id, answer)}
+                            className={cn(
+                              "rounded-xl border px-3 py-2.5 text-left text-xs font-semibold leading-relaxed transition-colors",
+                              isCorrectOption
+                                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                : isSelected
+                                  ? "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300"
+                                  : "border-border/60 bg-background hover:border-cyan-500/40 hover:bg-cyan-500/5"
+                            )}
+                          >
+                            <span className="mr-1.5 font-black">{answer}.</span>
+                            <LatexRenderer text={option} />
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {selectedAnswer && (
+                      <div
+                        className={cn(
+                          "rounded-xl px-3 py-2.5 text-xs font-semibold leading-relaxed",
+                          hasPassed
+                            ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                            : "bg-rose-500/10 text-rose-700 dark:text-rose-300"
+                        )}
+                      >
+                        {hasPassed
+                          ? <>✓ Chính xác. <LatexRenderer text={checkpoint.explanation} /></>
+                          : 'Chưa đúng. Hãy đọc lại phần lý thuyết phía trên và chọn lại.'}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       )
     });
   }
@@ -324,41 +321,39 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'subtypes',
       label: '🎯 Các dạng toán con',
       content: (
-        <Card className={cn("border bg-card", theme.border)}>
-          <CardContent className="p-5 md:p-6 space-y-4">
-            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
-              <PlayCircle size={18} className={cn(theme.iconColor, "animate-pulse")} /> Phân dạng chi tiết thường gặp trong đề thi:
-            </h4>
-            <div className="grid grid-cols-1 gap-5">
-              {detail.subTypes.map((sub, idx: number) => (
-                <div key={idx} className="flex flex-col bg-secondary/30 dark:bg-slate-900/20 p-4.5 rounded-2xl border border-border/10 hover:border-border/30 transition-colors">
-                  <div className="flex gap-3 items-start">
-                    <div className={cn("w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm", theme.badge)}>
-                      {idx + 1}
-                    </div>
-                    <div className="text-sm font-bold text-foreground pt-0.5">
-                      <LatexRenderer text={sub.name} />
-                    </div>
+        <div className={cn("border bg-card p-4 sm:p-6 rounded-xl space-y-4 shadow-sm", theme.border)}>
+          <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+            <PlayCircle size={18} className={cn(theme.iconColor, "animate-pulse")} /> Phân dạng chi tiết thường gặp trong đề thi:
+          </h4>
+          <div className="grid grid-cols-1 gap-5">
+            {detail.subTypes.map((sub, idx: number) => (
+              <div key={idx} className="flex flex-col bg-secondary/30 dark:bg-slate-900/20 p-4.5 rounded-2xl border border-border/10 hover:border-border/30 transition-colors">
+                <div className="flex gap-3 items-start">
+                  <div className={cn("w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm", theme.badge)}>
+                    {idx + 1}
                   </div>
-
-                  <div className="mt-3.5 pl-9 space-y-3">
-                    <div className="p-4 bg-card border border-border/40 rounded-2xl text-xs md:text-sm font-medium text-foreground shadow-sm leading-relaxed">
-                      <span className="text-amber-500 font-extrabold block mb-2 text-xs">
-                        🔬 Ví dụ đề minh họa:
-                      </span>
-                      <LatexRenderer text={sub.example} />
-                    </div>
-                    {sub.note && (
-                      <div className="text-xs text-muted-foreground leading-relaxed bg-background/50 p-3 rounded-xl border border-border/20">
-                        <span className="font-extrabold text-foreground">💡 Phương pháp giải:</span> <LatexRenderer text={sub.note} />
-                      </div>
-                    )}
+                  <div className="text-sm font-bold text-foreground pt-0.5">
+                    <LatexRenderer text={sub.name} />
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+
+                <div className="mt-3.5 pl-9 space-y-3">
+                  <div className="p-4 bg-card border border-border/40 rounded-2xl text-xs md:text-sm font-medium text-foreground shadow-sm leading-relaxed">
+                    <span className="text-amber-500 font-extrabold block mb-2 text-xs">
+                      🔬 Ví dụ đề minh họa:
+                    </span>
+                    <LatexRenderer text={sub.example} />
+                  </div>
+                  {sub.note && (
+                    <div className="text-xs text-muted-foreground leading-relaxed bg-background/50 p-3 rounded-xl border border-border/20">
+                      <span className="font-extrabold text-foreground">💡 Phương pháp giải:</span> <LatexRenderer text={sub.note} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )
     });
   }
@@ -369,38 +364,34 @@ export const QuestionTypeDetail: React.FC = () => {
       label: '💡 Nhận biết & Tránh lỗi',
       content: (
         <div className="space-y-5">
-          <Card className={cn("border bg-card", theme.border)}>
-            <CardContent className="p-5 md:p-6 space-y-4">
-              <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
-                <Lightbulb size={18} className="text-amber-500" /> Dấu hiệu nhận biết trong đề bài:
+          <div className={cn("border bg-card p-4 sm:p-6 rounded-xl space-y-4 shadow-sm", theme.border)}>
+            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+              <Lightbulb size={18} className="text-amber-500" /> Dấu hiệu nhận biết trong đề bài:
+            </h4>
+            <ul className="space-y-3.5 pl-1">
+              {detail.recognitionSigns.map((sign: string, idx: number) => (
+                <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
+                  <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", currentSubject === 'math' ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
+                  <LatexRenderer text={sign} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {detail.commonMistakes && detail.commonMistakes.length > 0 && (
+            <div className="border border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5 p-4 sm:p-6 rounded-xl space-y-4 shadow-sm">
+              <h4 className="font-extrabold text-sm md:text-base text-rose-600 dark:text-rose-400 flex items-center gap-2 pb-2 border-b border-rose-500/10">
+                <AlertTriangle size={18} className="text-rose-500 animate-pulse" /> Các bẫy học sinh hay mắc phải (Lỗi thường gặp):
               </h4>
               <ul className="space-y-3.5 pl-1">
-                {detail.recognitionSigns.map((sign: string, idx: number) => (
-                  <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
-                    <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", currentSubject === 'math' ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
-                    <LatexRenderer text={sign} />
+                {detail.commonMistakes.map((mistake: string, idx: number) => (
+                  <li key={idx} className="text-xs md:text-sm font-medium text-rose-700 dark:text-rose-300 flex items-start gap-3 leading-relaxed bg-rose-100/30 dark:bg-rose-950/20 p-3 rounded-2xl border border-rose-500/10">
+                    <CornerDownRight size={15} className="shrink-0 mt-1 text-rose-500" />
+                    <LatexRenderer text={mistake} />
                   </li>
                 ))}
               </ul>
-            </CardContent>
-          </Card>
-
-          {detail.commonMistakes && detail.commonMistakes.length > 0 && (
-            <Card className="border-rose-500/10 bg-rose-50/5 dark:bg-rose-950/5">
-              <CardContent className="p-5 md:p-6 space-y-4">
-                <h4 className="font-extrabold text-sm md:text-base text-rose-600 dark:text-rose-400 flex items-center gap-2 pb-2 border-b border-rose-500/10">
-                  <AlertTriangle size={18} className="text-rose-500 animate-pulse" /> Các bẫy học sinh hay mắc phải (Lỗi thường gặp):
-                </h4>
-                <ul className="space-y-3.5 pl-1">
-                  {detail.commonMistakes.map((mistake: string, idx: number) => (
-                    <li key={idx} className="text-xs md:text-sm font-medium text-rose-700 dark:text-rose-300 flex items-start gap-3 leading-relaxed bg-rose-100/30 dark:bg-rose-950/20 p-3 rounded-2xl border border-rose-500/10">
-                      <CornerDownRight size={15} className="shrink-0 mt-1 text-rose-500" />
-                      <LatexRenderer text={mistake} />
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            </div>
           )}
         </div>
       )
@@ -409,25 +400,23 @@ export const QuestionTypeDetail: React.FC = () => {
       id: 'method',
       label: '📝 Quy trình giải',
       content: (
-        <Card className={cn("border bg-card", theme.border)}>
-          <CardContent className="p-5 md:p-6 space-y-4">
-            <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
-              <Activity size={18} className={theme.iconColor} /> Các bước thực hiện chuẩn chỉ:
-            </h4>
-            <div className="space-y-4 pl-1">
-              {detail.solvingSteps.map((step: string, idx: number) => (
-                <div key={idx} className="flex gap-3.5 items-start">
-                  <div className={cn("w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm", theme.badge)}>
-                    {idx + 1}
-                  </div>
-                  <div className="text-xs md:text-sm font-medium text-foreground/80 leading-relaxed pt-0.5">
-                    <LatexRenderer text={step} />
-                  </div>
+        <div className={cn("border bg-card p-4 sm:p-6 rounded-xl space-y-4 shadow-sm", theme.border)}>
+          <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
+            <Activity size={18} className={theme.iconColor} /> Các bước thực hiện chuẩn chỉ:
+          </h4>
+          <div className="space-y-4 pl-1">
+            {detail.solvingSteps.map((step: string, idx: number) => (
+              <div key={idx} className="flex gap-3.5 items-start">
+                <div className={cn("w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm", theme.badge)}>
+                  {idx + 1}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                <div className="text-xs md:text-sm font-medium text-foreground/80 leading-relaxed pt-0.5">
+                  <LatexRenderer text={step} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )
     },
     {
@@ -438,11 +427,11 @@ export const QuestionTypeDetail: React.FC = () => {
           {exampleQuestion ? (
             <>
               {/* Đề bài ví dụ */}
-              <Card className={cn("border bg-card overflow-hidden", theme.border)}>
-                <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-3.5 px-5 border-b border-border/30">
+              <div className={cn("border bg-card overflow-hidden rounded-xl shadow-sm", theme.border)}>
+                <div className="bg-slate-50/50 dark:bg-slate-900/10 py-3.5 px-5 border-b border-border/30">
                   <span className="text-[10px] md:text-xs font-black text-foreground/80 uppercase tracking-wider">Đề bài ví dụ</span>
-                </CardHeader>
-                <CardContent className="p-5 font-semibold text-xs md:text-sm leading-relaxed text-foreground">
+                </div>
+                <div className="p-5 font-semibold text-xs md:text-sm leading-relaxed text-foreground">
                   <LatexRenderer text={exampleQuestion.content} />
                   {exampleQuestion.options && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-5">
@@ -453,16 +442,16 @@ export const QuestionTypeDetail: React.FC = () => {
                       ))}
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Lời giải mẫu */}
               {exampleSolution && (
-                <Card className={cn("border bg-card overflow-hidden", theme.border)}>
-                  <CardHeader className="bg-slate-50/50 dark:bg-slate-900/10 py-3.5 px-5 border-b border-border/30">
+                <div className={cn("border bg-card overflow-hidden rounded-xl shadow-sm", theme.border)}>
+                  <div className="bg-slate-50/50 dark:bg-slate-900/10 py-3.5 px-5 border-b border-border/30">
                     <span className="text-[10px] md:text-xs font-black text-foreground/80 uppercase tracking-wider">Lời giải phân tích từng bước</span>
-                  </CardHeader>
-                  <CardContent className="p-5 space-y-6">
+                  </div>
+                  <div className="p-5 space-y-6">
                     <div className={cn(
                       "text-xs md:text-sm font-medium text-foreground/80 p-4 rounded-2xl border leading-relaxed",
                       theme.bg,
@@ -507,8 +496,8 @@ export const QuestionTypeDetail: React.FC = () => {
                         Đáp án cuối cùng: <span className={cn("font-black ml-1.5", theme.text)}><LatexRenderer text={exampleSolution.finalAnswer} /></span>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
             </>
           ) : (
@@ -604,42 +593,38 @@ export const QuestionTypeDetail: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 md:px-6 pb-20 md:pb-6">
+    <div className="w-full max-w-4xl mx-auto space-y-5 px-3 sm:px-6 py-3 animate-fade-in pb-20 md:pb-6">
 
-      {/* Nút Back về lộ trình */}
-      <button
-        onClick={() => navigate('/roadmap?view=roadmap')}
-        className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-      >
-        <ChevronLeft size={16} /> Quay lại Lộ trình học
-      </button>
+      {/* Header Dạng bài - Hero Section phẳng tràn viền mỏng nhẹ */}
+      <div className="py-1 space-y-3 font-sans">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Nút Back về lộ trình - Icon button inline gọn gàng */}
+          <button
+            onClick={() => navigate('/roadmap?view=roadmap')}
+            className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-border/50 bg-card hover:bg-secondary text-foreground cursor-pointer transition-colors shrink-0 mr-0.5"
+            aria-label="Quay về lộ trình học"
+          >
+            <ArrowLeft size={16} />
+          </button>
 
-      {/* Header Dạng bài - Bản nâng cấp Gradient mịn theo môn */}
-      <div className={cn("p-6 md:p-8 xl:p-10 rounded-3xl border shadow-sm relative overflow-hidden transition-all duration-300", theme.bg, theme.border)}>
-        {/* Subtle background decoration */}
-        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+          <span className={cn('text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-xs border border-border/40', theme.badge)}>
+            {subjectIcon} {subjectName} {selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : 'Lớp 11'}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs bg-secondary/60 text-muted-foreground border border-border/40 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
+              detail.difficulty === 'hard' ? 'bg-rose-500' :
+                detail.difficulty === 'medium' ? 'bg-amber-500' :
+                  'bg-emerald-500'
+            )} />
+            Độ khó: {detail.difficulty === 'hard' ? 'Nâng cao' : detail.difficulty === 'medium' ? 'Trung bình' : 'Cơ bản'}
+          </span>
+        </div>
 
-        <div className="space-y-3 relative z-10">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={cn('text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-border/40', theme.badge)}>
-              {subjectIcon} {subjectName} {selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : 'Lớp 11'}
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-[10px] md:text-xs bg-secondary/60 text-muted-foreground border border-border/40 font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-              <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
-                detail.difficulty === 'hard' ? 'bg-rose-500' :
-                  detail.difficulty === 'medium' ? 'bg-amber-500' :
-                    'bg-emerald-500'
-              )} />
-              Độ khó: {detail.difficulty === 'hard' ? 'Nâng cao' : detail.difficulty === 'medium' ? 'Trung bình' : 'Cơ bản'}
-            </span>
-          </div>
-
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-foreground tracking-tight leading-snug">
-            <LatexRenderer text={detail.name} />
-          </h2>
-          <div className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-3xl font-semibold">
-            <LatexRenderer text={detail.description} />
-          </div>
+        <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight leading-snug">
+          <LatexRenderer text={detail.name} />
+        </h2>
+        <div className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-3xl font-semibold">
+          <LatexRenderer text={detail.description} />
         </div>
       </div>
 
@@ -722,13 +707,13 @@ export const QuestionTypeDetail: React.FC = () => {
         <div className="md:col-span-1 space-y-6 md:sticky md:top-24 md:max-h-[calc(100vh-120px)] md:overflow-y-auto pr-1.5 scrollbar-thin">
 
           {/* Card Luyện tập & Mastery */}
-          <Card className={cn("border overflow-hidden bg-card shadow-sm", theme.border)}>
-            <div className={cn("p-4.5 border-b border-border/10", theme.bg)}>
+          <div className={cn("border overflow-hidden bg-card shadow-sm rounded-xl", theme.border)}>
+            <div className={cn("p-4 border-b border-border/10", theme.bg)}>
               <h4 className="font-extrabold text-xs md:text-sm text-foreground flex items-center gap-1.5">
                 🎯 Tiến độ học tập
               </h4>
             </div>
-            <CardContent className="p-5 space-y-5">
+            <div className="p-4 sm:p-5 space-y-4">
               {/* Mastery Progress Bar & Stars */}
               <div className="space-y-3.5">
                 <div className="flex justify-between items-center text-xs font-bold">
@@ -787,7 +772,7 @@ export const QuestionTypeDetail: React.FC = () => {
                       alert(err.message || 'Lỗi đăng nhập bằng Google.');
                     }
                   }}
-                  className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white"
+                  className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white rounded-xl cursor-pointer"
                 >
                   <LockKeyhole size={16} /> Đăng nhập để luyện tập
                 </Button>
@@ -797,7 +782,7 @@ export const QuestionTypeDetail: React.FC = () => {
                     disabled={isPracticeLockedByTheory}
                     onClick={() => navigate(`/practice/${detail.id}`)}
                     className={cn(
-                      "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg",
+                      "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg rounded-xl cursor-pointer",
                       currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
                         currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
                           'bg-purple-600 hover:bg-purple-700 text-white'
@@ -823,21 +808,19 @@ export const QuestionTypeDetail: React.FC = () => {
                   <span>Yêu cầu đăng nhập trước khi nộp bài thi/luyện tập môn học.</span>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
           {/* Card Thông tin chung */}
-          <Card className="border border-border/80 bg-card shadow-sm">
-            <CardContent className="p-4 space-y-3.5 text-xs font-semibold text-muted-foreground">
-              <div className="flex justify-between items-center border-b border-border/30 pb-2">
-                <span>⏱️ Thời gian ôn luyện:</span>
-                <span className="text-foreground font-bold">~15-20 phút</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>🎒 Khối lớp học tập:</span>
-                <span className="text-foreground font-bold">Lớp {selectedGrade === 'grade9' ? '9' : selectedGrade === 'grade10' ? '10' : '11'}</span>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="border border-border/80 bg-card p-4 rounded-xl shadow-sm space-y-3 text-xs font-semibold text-muted-foreground">
+            <div className="flex justify-between items-center border-b border-border/30 pb-2">
+              <span>⏱️ Thời gian ôn luyện:</span>
+              <span className="text-foreground font-bold">~15-20 phút</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>🎒 Khối lớp học tập:</span>
+              <span className="text-foreground font-bold">Lớp {selectedGrade === 'grade9' ? '9' : selectedGrade === 'grade10' ? '10' : '11'}</span>
+            </div>
+          </div>
 
         </div>
       </div>

@@ -248,20 +248,157 @@ export const AffiliateDashboard: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-4 text-center">
-        <div className="bg-card rounded-3xl p-8 border border-border shadow-lg max-w-lg mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-4">
-            <TrendingUp size={32} />
+      <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6">
+        {/* Navigation back */}
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground mb-6 transition-colors group cursor-pointer"
+        >
+          <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+          Quay lại Bảng điều khiển
+        </button>
+
+        {/* Hero Section */}
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 border border-indigo-500/20 text-white p-8 sm:p-12 shadow-2xl mb-10">
+          <div className="absolute -right-12 -top-12 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute right-8 bottom-4 opacity-10 pointer-events-none hidden md:block">
+            <TrendingUp size={260} />
           </div>
-          <h2 className="text-2xl font-black text-foreground mb-2">Chương Trình Đối Tác Affiliate</h2>
-          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-            Đăng nhập tài khoản để nhận mã giới thiệu riêng, chiết khấu 20% cho học sinh và tích lũy 20% hoa hồng thụ động trên mỗi đơn bán trọn đời.
+
+          <div className="relative z-10 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-wider mb-4 backdrop-blur-md">
+              <Sparkles size={14} className="animate-pulse" /> CHƯƠNG TRÌNH ĐỐI TÁC AFFILIATE EZONTHI
+            </div>
+            
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight mb-4">
+              Hợp Tác Cùng ezonthi <br />
+              <span className="bg-gradient-to-r from-amber-400 via-orange-300 to-amber-200 bg-clip-text text-transparent">
+                Hoa Hồng Lên Tới 75%
+              </span>
+            </h1>
+
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-medium mb-8">
+              Tham gia mạng lưới đối tác truyền thông & giáo viên. Giúp học sinh Lớp 9 - 12 tiếp cận phương pháp học tập bứt phá điểm số và tích lũy thu nhập thụ động bền vững trên mỗi đơn nâng cấp trọn đời.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <button
+                onClick={() => authService.signInWithGoogle()}
+                className="px-8 py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-base rounded-2xl shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-3"
+              >
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                </svg>
+                <span>Đăng Nhập Với Google Để Bắt Đầu</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Highlight Perks Grid */}
+        <div className="mb-12">
+          <div className="text-center max-w-xl mx-auto mb-8">
+            <h2 className="text-2xl font-black text-foreground mb-2">Đặc Quyền Dành Cho Đối Tác</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">Mô hình chia sẻ doanh thu linh hoạt, minh bạch và tối ưu lợi ích cho cả đối tác lẫn học sinh.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Tag size={24} />
+              </div>
+              <h3 className="font-black text-base text-foreground mb-1.5">Ngân Sách 75%</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Tự do tùy chỉnh tỷ lệ: giảm tối đa 75% cho học sinh hoặc nhận đến 75% hoa hồng thụ động.
+              </p>
+            </div>
+
+            <div className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Wallet size={24} />
+              </div>
+              <h3 className="font-black text-base text-foreground mb-1.5">Rút Tiền 24/7</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Hạn mức rút chỉ từ 100.000đ. Nhận tiền chuyển khoản trực tiếp về ngân hàng Việt Nam trong 24h.
+              </p>
+            </div>
+
+            <div className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Share2 size={24} />
+              </div>
+              <h3 className="font-black text-base text-foreground mb-1.5">Mã & Link Độc Quyền</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Tự đặt tên mã cá nhân hóa (VD: <strong className="text-amber-500">THAYNAM10</strong>) kèm đường link chia sẻ tự động.
+              </p>
+            </div>
+
+            <div className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <TrendingUp size={24} />
+              </div>
+              <h3 className="font-black text-base text-foreground mb-1.5">Thống Kê Realtime</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Dashboard minh bạch theo dõi chi tiết từng đơn nâng cấp, mã được dùng và lịch sử rút tiền.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 3 Steps Guide */}
+        <div className="bg-secondary/30 rounded-3xl p-6 sm:p-8 border border-border mb-10">
+          <div className="text-center max-w-xl mx-auto mb-8">
+            <h2 className="text-xl font-black text-foreground mb-1">3 Bước Đơn Giản Để Tạo Thu Nhập</h2>
+            <p className="text-xs text-muted-foreground">Bắt đầu kiếm hoa hồng thụ động cùng ezonthi chỉ trong 1 phút</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            <div className="bg-card p-5 rounded-2xl border border-border relative">
+              <div className="w-8 h-8 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center mb-3">
+                1
+              </div>
+              <h4 className="font-black text-sm text-foreground mb-1">Đăng Nhập Tài Khoản</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Bấm nút đăng nhập bằng tài khoản Google để kích hoạt ví Affiliate ngay lập tức.
+              </p>
+            </div>
+
+            <div className="bg-card p-5 rounded-2xl border border-border relative">
+              <div className="w-8 h-8 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center mb-3">
+                2
+              </div>
+              <h4 className="font-black text-sm text-foreground mb-1">Tạo Mã & Link Giới Thiệu</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Đặt tên mã riêng và chọn tỷ lệ hoa hồng bạn muốn giữ lại (VD: Giảm 20% cho HS, bạn nhận 55%).
+              </p>
+            </div>
+
+            <div className="bg-card p-5 rounded-2xl border border-border relative">
+              <div className="w-8 h-8 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center mb-3">
+                3
+              </div>
+              <h4 className="font-black text-sm text-foreground mb-1">Chia Sẻ & Nhận Tiền</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Gửi mã cho học sinh hoặc lớp học. Nhận hoa hồng tự động và rút tiền về tài khoản ngân hàng.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom CTA Card */}
+        <div className="bg-card rounded-3xl p-8 border border-amber-500/30 text-center shadow-lg max-w-2xl mx-auto relative overflow-hidden">
+          <div className="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-4">
+            <TrendingUp size={28} />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-foreground mb-2">Sẵn Sàng Trở Thành Đối Tác?</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
+            Đăng nhập ngay hôm nay để nhận mã giới thiệu riêng và bắt đầu tích lũy thu nhập thụ động cùng ezonthi!
           </p>
           <button
             onClick={() => authService.signInWithGoogle()}
-            className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all cursor-pointer inline-flex items-center justify-center gap-2"
           >
-            Đăng Nhập Với Google
+            Đăng Nhập Với Google Ngay
           </button>
         </div>
       </div>

@@ -16,7 +16,8 @@ import {
   XCircle,
   Calendar,
   AlertTriangle,
-  ArrowRight
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer, AiEvaluation } from '../../types';
@@ -299,9 +300,10 @@ export const MistakeNotebook: React.FC = () => {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setSelectedTypeId(null)}
-                className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
+                className="p-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center justify-center cursor-pointer bg-secondary/50 hover:bg-secondary rounded-xl transition-all"
+                title="Quay lại"
               >
-                ← Quay lại danh sách dạng bài
+                <ArrowLeft className="w-4 h-4" />
               </button>
               <span className="text-xs font-bold text-muted-foreground bg-secondary px-3 py-1.5 rounded-full border border-border/10">
                 Dạng bài: {mistakes.find(m => m.questionTypeId === selectedTypeId)?.typeName || ''}

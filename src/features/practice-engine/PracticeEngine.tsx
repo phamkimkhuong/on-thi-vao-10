@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useLayoutEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAppStore } from '../../services/store';
-import { storageService } from '../../services/storage';
-import { progressService } from '../../services/progressService';
-import { aiService } from '../../services/aiService';
-import { logCustomEvent } from '../../services/firebase';
-import { getPracticeQuestions, getQuestionTypes, getSolutions, getTopics } from '../../data';
-import { Button } from '../../components/ui/button';
-import { MathLoginRequired } from '../../components/common/MathLoginRequired';
+import { useAppStore } from '@/services/store';
+import { storageService } from '@/services/storage';
+import { progressService } from '@/services/progressService';
+import { aiService } from '@/services/aiService';
+import { logCustomEvent } from '@/services/firebase';
+import { getPracticeQuestions, getQuestionTypes, getSolutions, getTopics } from '@/data';
+import { Button } from '@/components/ui/button';
+import { MathLoginRequired } from '@/components/common/MathLoginRequired';
 
-import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '../../types';
-import { AlertTriangle, BookOpenCheck } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '../../utils/answerValidator';
-import { getSubjectFromQuestionTypeId, getSubjectName } from '../../utils/subject';
+import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '@/types';
+import { AlertTriangle, BookOpenCheck, ArrowLeft } from 'lucide-react';
+import { cn } from '@/utils/cn';
+import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '@/utils/answerValidator';
+import { getSubjectFromQuestionTypeId, getSubjectName } from '@/utils/subject';
 
 import confetti from 'canvas-confetti';
 
@@ -1154,7 +1154,7 @@ export const PracticeEngine: React.FC = () => {
       : !selectedOption;
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 px-4">
+    <div className="w-full max-w-4xl mx-auto space-y-4 px-3 sm:px-6 py-3 animate-fade-in pb-12">
       {adaptivePracticeStatus && adaptivePracticeStatus.holdoutQuestionCount > 0 && (
         <AdaptivePracticeStatus
           status={adaptivePracticeStatus}
@@ -1170,9 +1170,10 @@ export const PracticeEngine: React.FC = () => {
         />
       )}
 
-      {/* Header trạng thái luyện tập */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border/45 p-4 rounded-2xl shadow-sm">
-        <div className="flex gap-2">
+      {/* Header trạng thái luyện tập phẳng & Lưới câu hỏi 100% rõ ràng */}
+      <div className="space-y-2.5 border-b border-border pb-3">
+        {/* Hàng 1: Nút Quay lại & Tiến độ câu hỏi */}
+        <div className="flex items-center justify-between gap-3">
           <button
             onClick={() => {
               if (isGrade10CustomReviewActive) {
@@ -1186,14 +1187,19 @@ export const PracticeEngine: React.FC = () => {
                 navigate('/practice');
               }
             }}
-            className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all font-semibold"
+            className="p-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center justify-center cursor-pointer bg-secondary/50 hover:bg-secondary rounded-xl transition-all font-semibold"
+            title="Quay lại"
           >
-            ← Quay lại
+            <ArrowLeft className="w-4 h-4" />
           </button>
+
+          <span className="text-xs font-extrabold text-muted-foreground">
+            Câu <span className="text-foreground font-black">{currentIdx + 1}</span> / {questions.length}
+          </span>
         </div>
 
-        {/* Bong bóng tròn hiển thị số câu */}
-        <div className="flex flex-wrap items-center gap-1.5 flex-1 justify-end max-w-full overflow-x-auto py-1">
+        {/* Hàng 2: Lưới bong bóng câu hỏi hiển thị đầy đủ 100%, không cần cuộn, căn trái chuẩn đẹp */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
           {questions.map((q, idx) => {
             const isActive = idx === currentIdx;
             const isCompleted = completedQuestionIds.has(q.id);
@@ -1207,7 +1213,7 @@ export const PracticeEngine: React.FC = () => {
                   resetQuestionState();
                 }}
                 className={cn(
-                  "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
+                  "w-7.5 h-7.5 rounded-lg flex items-center justify-center text-[10px] font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
                   isActive
                     ? (routeSubject === 'math' ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20 scale-105" :
                       routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :

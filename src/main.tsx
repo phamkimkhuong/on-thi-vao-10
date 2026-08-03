@@ -26,6 +26,10 @@ Sentry.init({
     /is not a function or its return value is not iterable/i,
     'INTERNAL UNHANDLED ERROR',
     /INTERNAL UNHANDLED ERROR/i,
+    'Load failed',
+    /Load failed/i,
+    'Failed to fetch',
+    /Failed to fetch/i,
   ],
   integrations: [
     Sentry.browserTracingIntegration(),

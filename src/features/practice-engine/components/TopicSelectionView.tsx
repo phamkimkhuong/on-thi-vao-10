@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown } from 'lucide-react';
+import { Crown, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { cn } from '../../../utils/cn';
@@ -134,9 +134,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           onClick={() => {
             navigate('/practice');
           }}
-          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
+          className="p-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center justify-center cursor-pointer bg-secondary/50 hover:bg-secondary rounded-xl transition-all self-start animate-fade-in"
+          title="Quay lại"
         >
-          ← Quay lại chọn chuyên đề
+          <ArrowLeft className="w-4 h-4" />
         </button>
 
         <div className="text-center space-y-2">
@@ -430,9 +431,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
           onClick={() => {
             setGrammarSection(null);
           }}
-          className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer bg-secondary/50 hover:bg-secondary px-3 py-2 rounded-xl transition-all self-start animate-fade-in"
+          className="p-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center justify-center cursor-pointer bg-secondary/50 hover:bg-secondary rounded-xl transition-all self-start animate-fade-in"
+          title="Quay lại"
         >
-          ← Quay lại danh sách Dạng bài
+          <ArrowLeft className="w-4 h-4" />
         </button>
 
         <div className="text-center space-y-2">
@@ -543,7 +545,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const gradeTextLower = isG9 ? 'ôn thi vào 10' : isG11 ? 'lớp 11' : isG12 ? 'lớp 12' : 'lớp 10';
 
   return (
-    <div className="space-y-8 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6 animate-fade-in">
+    <div className="w-full max-w-4xl mx-auto space-y-6 px-3 sm:px-6 py-3 animate-fade-in pb-12">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-foreground tracking-tight">
           {isMath 
@@ -673,10 +675,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 })();
 
                 return (
-                  <Card
+                  <div
                     key={qType.id}
                     className={cn(
-                      "cursor-pointer transition-all duration-200 hover:translate-y-[-2px] border bg-card flex flex-col justify-between group shadow-sm hover:shadow-md",
+                      "cursor-pointer transition-all duration-200 border border-border bg-card p-4.5 sm:p-5 rounded-xl flex flex-col justify-between space-y-3.5 group shadow-sm hover:shadow-md",
                       routeSubject === 'math' ? 'hover:border-indigo-500/50' :
                         routeSubject === 'chemistry' ? 'hover:border-emerald-500/50' :
                           routeSubject === 'physics' ? 'hover:border-cyan-500/50' :
@@ -700,7 +702,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                       });
                     }}
                   >
-                    <CardContent className="p-6 flex flex-col justify-between h-full gap-5">
+                    <div className="space-y-3">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           {/* Badge đồng bộ màu môn học */}
@@ -762,13 +764,13 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                       </div>
 
                       {/* Text link đồng bộ màu môn học */}
-                      <div className={cn("flex items-center justify-between border-t border-border/20 pt-4 text-xs font-black", theme.text)}>
+                      <div className={cn("flex items-center justify-between border-t border-border/20 pt-3 text-xs font-black", theme.text)}>
                         <span>
                           {qType.id === 'eng-qt6' ? 'Khám phá 6 chuyên đề →' : 'Luyện tập ngay →'}
                         </span>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 );
               })}
             </div>

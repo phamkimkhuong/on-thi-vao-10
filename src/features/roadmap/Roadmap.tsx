@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAppStore } from '../../services/store';
-import { storageService } from '../../services/storage';
-import { getLearningOutcomes, getTopics, getQuestionTypes } from '../../data';
-import { Card, CardContent } from '../../components/ui/card';
+import { useAppStore } from '@/services/store';
+import { storageService } from '@/services/storage';
+import { getLearningOutcomes, getTopics, getQuestionTypes } from '@/data';
 import { ArrowRight, BookOpen } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { getDifficultyTheme, getTierTheme } from '../../utils/theme';
-import { getSubjectName, getSubjectIcon } from '../../utils/subject';
+import { cn } from '@/utils/cn';
+import { getDifficultyTheme, getTierTheme } from '@/utils/theme';
+import { getSubjectName, getSubjectIcon } from '@/utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 import { authService } from '../../services/authService';
@@ -254,7 +253,7 @@ export const Roadmap: React.FC = () => {
     ];
 
   return (
-    <div className="space-y-12 max-w-4xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto pb-12 px-4 md:px-6">
+    <div className="w-full max-w-4xl mx-auto space-y-8 px-3 sm:px-6 py-3 animate-fade-in pb-12">
       {/* Header Giới thiệu Lộ trình */}
       <div className="text-center space-y-4">
         <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
@@ -446,21 +445,20 @@ export const Roadmap: React.FC = () => {
                                 const unlocked = isUnlocked(type.id);
 
                                 return (
-                                  <Card
+                                  <div
                                     key={type.id}
                                     className={cn(
-                                      "transition-all duration-300 border bg-card hover:-translate-y-1 hover:shadow-md active:scale-[0.99] cursor-pointer rounded-2xl",
+                                      "transition-all duration-300 border bg-card hover:shadow-md cursor-pointer rounded-xl p-4.5 sm:p-5 flex flex-col justify-between space-y-3.5 shadow-sm",
                                       !unlocked
-                                        ? "opacity-60 grayscale-[40%] bg-secondary/10 dark:bg-slate-900/10 border-dashed border-border/80 hover:shadow-none hover:translate-y-0 cursor-not-allowed"
+                                        ? "opacity-60 grayscale-[40%] bg-secondary/10 dark:bg-slate-900/10 border-dashed border-border/80 hover:shadow-none cursor-not-allowed"
                                         : isRead
-                                          ? 'border-emerald-500/20 hover:border-emerald-500/40 shadow-sm shadow-emerald-500/2 bg-emerald-500/[0.01]'
-                                          : 'border-border/40 hover:border-primary/30'
+                                          ? 'border-emerald-500/20 hover:border-emerald-500/40 bg-emerald-500/[0.01]'
+                                          : 'border-border/60 hover:border-primary/50'
                                     )}
                                     onClick={() => handleSelectType(type.id)}
                                   >
-                                    <CardContent className="p-5.5 flex flex-col justify-between h-full gap-4">
-                                      <div className="space-y-2.5 flex-1">
-                                        <div className="flex items-center justify-between gap-2">
+                                    <div className="space-y-2.5 flex-1">
+                                      <div className="flex items-center justify-between gap-2">
                                           {/* Badge độ khó tối giản với chấm màu */}
                                           <span className="inline-flex items-center gap-1.5 text-[9px] font-extrabold px-2.5 py-0.75 rounded-lg border border-border/40 bg-secondary/50 text-muted-foreground">
                                             <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", diff.dotClass)} />
@@ -500,9 +498,8 @@ export const Roadmap: React.FC = () => {
                                           </span>
                                         )}
                                       </div>
-                                    </CardContent>
-                                  </Card>
-                                );
+                                    </div>
+                                  );
                               })}
                             </div>
                           </div>

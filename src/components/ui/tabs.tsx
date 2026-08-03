@@ -38,7 +38,7 @@ export const Tabs: React.FC<TabsProps> = ({
     <div className={cn('flex flex-col gap-5', className)}>
       <div
         className={cn(
-          'flex flex-wrap gap-2.5 pb-1',
+          'flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-1 justify-start scroll-smooth',
           tabHeaderClassName
         )}
       >
@@ -50,7 +50,7 @@ export const Tabs: React.FC<TabsProps> = ({
               onTabChange?.(item.id);
             }}
             className={cn(
-              'px-4 py-2.5 font-bold text-xs md:text-sm transition-all duration-200 rounded-xl cursor-pointer shadow-sm border border-transparent',
+              'px-3.5 py-2 font-extrabold text-xs transition-all duration-200 rounded-xl cursor-pointer shadow-xs border border-transparent shrink-0 whitespace-nowrap',
               activeTabId === item.id
                 ? cn('bg-primary text-primary-foreground border-primary/20', activeTabClassName)
                 : cn('bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary/80 border-border/10', inactiveTabClassName)
