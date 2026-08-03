@@ -229,7 +229,8 @@ export const PracticeEngine: React.FC = () => {
   const isChemistry = routeSubject === 'chemistry';
   const isPhysics = routeSubject === 'physics';
   const isBiology = routeSubject === 'biology';
-  const usesAdaptivePractice = isMath || isChemistry || isPhysics || isBiology;
+  const isHistory = routeSubject === 'history';
+  const usesAdaptivePractice = isMath || isChemistry || isPhysics || isBiology || isHistory;
   const qList = currentQuestions;
 
   const filteredQuestions = useEnglishQuestionFilter(

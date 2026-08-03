@@ -120,6 +120,7 @@ export const AppLayout: React.FC = () => {
         { code: 'physics', name: 'Vật lý', icon: '⚛️', isLocked: false },
         { code: 'chemistry', name: 'Hóa học', icon: '⚗️', isLocked: false },
         { code: 'biology', name: 'Sinh học', icon: '🧬', isLocked: false },
+        { code: 'history', name: 'Lịch sử', icon: '📜', isLocked: false },
       ]
     },
     {

@@ -1,4 +1,4 @@
-export type SubjectCode = 'math' | 'english' | 'physics' | 'chemistry' | 'biology';
+export type SubjectCode = 'math' | 'english' | 'physics' | 'chemistry' | 'biology' | 'history';
 export type GradeCode = 'grade9' | 'grade10' | 'grade11' | 'grade12';
 
 export type ValidatorType =

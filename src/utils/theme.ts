@@ -47,6 +47,15 @@ export const getSubjectTheme = (subject: SubjectCode): SubjectTheme => {
         iconBg: 'bg-green-500/10 dark:bg-green-500/20 shadow-inner',
         iconColor: 'text-green-500'
       };
+    case 'history':
+      return {
+        badge: 'bg-amber-100/80 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-200/50 dark:border-amber-500/20',
+        text: 'text-amber-600 dark:text-amber-400 font-extrabold',
+        bg: 'bg-gradient-to-br from-amber-50 to-yellow-50/50 dark:from-amber-950/20 dark:to-yellow-950/10',
+        border: 'border-amber-500/10 shadow-sm shadow-amber-500/2',
+        iconBg: 'bg-amber-500/10 dark:bg-amber-500/20 shadow-inner',
+        iconColor: 'text-amber-500'
+      };
     case 'english':
     default:
       return {

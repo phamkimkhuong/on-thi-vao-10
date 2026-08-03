@@ -91,6 +91,7 @@ export const Dashboard: React.FC = () => {
     if (selectedSubject === 'chemistry') return e.examId.startsWith('chem');
     if (selectedSubject === 'biology') return e.examId.startsWith('bio');
     if (selectedSubject === 'physics') return e.examId.startsWith('phy');
+    if (selectedSubject === 'history') return e.examId.startsWith('his');
     return true;
   });
   const examScore = subjectExams.length > 0 ? `${subjectExams[subjectExams.length - 1].score}/10` : 'Chưa thi';

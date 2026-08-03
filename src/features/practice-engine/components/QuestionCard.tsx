@@ -441,8 +441,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </div>
           )}
 
-          {/* Nút gợi ý thông minh */}
-          {solutionDetail && questionTypeId !== 'eng-qt6' && !disableHints && (() => {
+          {/* Nút gợi ý thông minh (ẩn đối với môn Lịch sử) */}
+          {solutionDetail && questionTypeId !== 'eng-qt6' && routeSubject !== 'history' && !disableHints && (() => {
             const hasTypeGuidance = Boolean(currentQuestionType);
             const maxAllowedSteps = Math.max(0, solutionDetail.detailedSteps.length - 1);
             const maxHintLevelBeforeSubmit = (hasTypeGuidance ? 1 : 0) + maxAllowedSteps;

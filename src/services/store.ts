@@ -6,7 +6,7 @@ type GradeCode = 'grade9' | 'grade10' | 'grade11' | 'grade12';
 
 const availableSubjectsByGrade: Record<GradeCode, SubjectCode[]> = {
   grade9: ['math', 'english'],
-  grade10: ['math', 'english', 'physics', 'chemistry', 'biology'],
+  grade10: ['math', 'english', 'physics', 'chemistry', 'biology', 'history'],
   grade11: ['chemistry', 'physics', 'math', 'english', 'biology'],
   grade12: []
 };

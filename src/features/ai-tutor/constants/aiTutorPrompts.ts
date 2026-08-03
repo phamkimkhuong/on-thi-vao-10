@@ -36,12 +36,20 @@ export const BIOLOGY_SUGGESTIONS = [
   "Cho em ví dụ về enzym và cơ chế hoạt động của enzym"
 ];
 
+export const HISTORY_SUGGESTIONS = [
+  "Phân biệt hiện thực lịch sử và nhận thức lịch sử",
+  "Nêu các thành tựu rực rỡ của văn minh phương Đông cổ đại",
+  "Tóm tắt các cuộc cách mạng công nghiệp cận đại và hiện đại",
+  "Phân tích cơ sở hình thành và thành tựu của Văn minh Đại Việt"
+];
+
 export const SUBJECT_SUGGESTIONS_MAP: Record<SubjectCode, string[]> = {
   math: MATH_SUGGESTIONS,
   english: ENGLISH_SUGGESTIONS,
   chemistry: CHEMISTRY_SUGGESTIONS,
   physics: PHYSICS_SUGGESTIONS,
   biology: BIOLOGY_SUGGESTIONS,
+  history: HISTORY_SUGGESTIONS,
 };
 
 export const SUBJECT_GUIDELINES: Record<SubjectCode, string> = {
@@ -75,6 +83,11 @@ export const SUBJECT_GUIDELINES: Record<SubjectCode, string> = {
 - Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra đáp án ngay lập tức. Hãy gợi ý các quá trình sinh học liên quan, so sánh cấu trúc, hoặc đặt câu hỏi gợi mở để học sinh tự tư duy.
 - QUY TẮC LATEX BẮT BUỘC: Sử dụng LaTeX inline đơn cho các công thức sinh hóa (ví dụ: $C_6H_{12}O_6 + 6O_2 \\rightarrow 6CO_2 + 6H_2O$). Tuyệt đối KHÔNG sử dụng định dạng khối dạng $$ ... $$.
 - Khi giải thích các quá trình sinh học phức tạp (phân bào, quang hợp, hô hấp tế bào), bạn được KHUYẾN KHÍCH vẽ sơ đồ minh họa bằng thẻ <svg> trực tiếp trong nội dung câu trả lời.`,
+
+  history: `Hướng dẫn chuyên biệt cho môn Lịch sử:
+- Hướng dẫn học sinh hiểu rõ bản chất hiện thực lịch sử, phân tích nguồn sử liệu, các nền văn minh lớn thế giới & Việt Nam và các cuộc cách mạng công nghiệp.
+- Tuyệt đối tuân thủ phương pháp Socratic: KHÔNG đưa ra kết luận hoặc đáp án ngay lập tức. Hãy gợi ý bối cảnh lịch sử, nguyên nhân - kết quả, bài học kinh nghiệm để học sinh tự phân tích tư duy.
+- Hướng dẫn học sinh liên hệ bài học lịch sử với thực tiễn bảo tồn di sản văn hóa và khối đại đoàn kết dân tộc.`
 };
 
 export const GRADE_LABEL_MAP: Record<string, string> = {

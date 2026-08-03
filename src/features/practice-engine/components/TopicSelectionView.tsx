@@ -12,6 +12,7 @@ import { storageService } from '@/services/storage';
 import { LatexRenderer } from '@/components/common/LatexRenderer';
 import { ConfirmationModal } from '@/components/common/ConfirmationModal';
 import { authService } from '@/services/authService';
+import { ROUTES } from '@/constants/routes';
 import { buildAdaptivePracticeSequence } from '../utils/adaptivePracticeSequence';
 
 interface TopicSelectionViewProps {
@@ -564,7 +565,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 ? `⚛️ Luyện tập Vật lí ${gradeText}`
                 : routeSubject === 'biology'
                   ? `🧬 Luyện tập Sinh học ${gradeText}`
-                  : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : `🗣️ Học tốt Tiếng Anh ${gradeText}`)}
+                  : routeSubject === 'history'
+                    ? `📜 Luyện tập Lịch sử ${gradeText}`
+                    : (isG9 ? '🗣️ Luyện tập Tiếng Anh vào 10' : `🗣️ Học tốt Tiếng Anh ${gradeText}`)}
         </h2>
         <p className="text-xs text-muted-foreground font-semibold">
           {isMath
@@ -575,7 +578,9 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 ? 'Học tăng dần từ nền tảng đến vận dụng; kiểm tra làm chủ chỉ mở khi em đã sẵn sàng.'
                 : routeSubject === 'biology'
                   ? `Luyện tập các dạng bài Sinh học ${gradeTextLower} bám sát chương trình GDPT 2018 mới.`
-                  : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
+                  : routeSubject === 'history'
+                    ? `Luyện tập các dạng bài Lịch sử ${gradeTextLower} bám sát chương trình GDPT 2018 mới.`
+                    : (isG9 ? 'Tổng hợp các câu hỏi trắc nghiệm & điền từ bám sát đề thi chính thức tỉnh Bình Định.' : 'Học tốt các chuyên đề từ vựng & ngữ pháp bám sát sách giáo khoa mới.')}
         </p>
       </div>
 
@@ -702,7 +707,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                       if (qType.id === 'eng-qt6') {
                         setGrammarSection('dang1');
                       } else {
-                        navigate(`/question-type/${qType.id}`);
+                        navigate(ROUTES.PRACTICE_DETAIL(qType.id));
                       }
                     });
                   };

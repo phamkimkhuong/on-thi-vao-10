@@ -9,6 +9,7 @@ export const getSubjectFromQuestionTypeId = (questionTypeId?: string): SubjectCo
   if (id.startsWith('chem')) return 'chemistry';
   if (id.startsWith('bio')) return 'biology';
   if (id.startsWith('phy')) return 'physics';
+  if (id.startsWith('his')) return 'history';
   return null;
 };
 
@@ -21,8 +22,8 @@ export const getGradeFromQuestionTypeId = (questionTypeId?: string): string => {
     return `Lớp ${prefixMatch[1]}`;
   }
 
-  // 2. Kiểm tra các ID có gắn số khối như math10-, eng10-, chem10-, phy10-, bio10-, math11-, ...
-  const typeMatch = questionTypeId.match(/^(?:math|eng|chem|phy|bio|physics|chemistry|biology)(\d+)[-_]/i);
+  // 2. Kiểm tra các ID có gắn số khối như math10-, eng10-, chem10-, phy10-, bio10-, his10-, math11-, ...
+  const typeMatch = questionTypeId.match(/^(?:math|eng|chem|phy|bio|his|physics|chemistry|biology|history)(\d+)[-_]/i);
   if (typeMatch) {
     return `Lớp ${typeMatch[1]}`;
   }
@@ -37,6 +38,7 @@ export const getSubjectName = (subject: SubjectCode): string => {
     case 'chemistry': return 'Hóa học';
     case 'physics': return 'Vật lý';
     case 'biology': return 'Sinh học';
+    case 'history': return 'Lịch sử';
     default: return 'Môn học';
   }
 };
@@ -48,6 +50,8 @@ export const getSubjectIcon = (subject: SubjectCode): string => {
     case 'chemistry': return '⚗️';
     case 'physics': return '⚛️';
     case 'biology': return '🧬';
+    case 'history': return '📜';
     default: return '📚';
   }
 };
+

@@ -563,16 +563,18 @@ export const ResultCard: React.FC<ResultCardProps> = ({
         <div className="lg:col-span-5 space-y-4 text-left animate-fade-in">
           <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
 
-          {currentQuestionType && <QuestionTypeGuidance questionType={currentQuestionType} />}
+          {currentQuestionType && routeSubject !== 'history' && <QuestionTypeGuidance questionType={currentQuestionType} />}
 
-          <div className={cn(
-            "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
-            getSubjectTheme(routeSubject).bg,
-            getSubjectTheme(routeSubject).border
-          )}>
-            <span className="font-extrabold text-foreground block mb-1">💡 Áp dụng vào câu hỏi này:</span>
-            <LatexRenderer text={solutionDetail.recognition} />
-          </div>
+          {solutionDetail.recognition && routeSubject !== 'history' && (
+            <div className={cn(
+              "text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border",
+              getSubjectTheme(routeSubject).bg,
+              getSubjectTheme(routeSubject).border
+            )}>
+              <span className="font-extrabold text-foreground block mb-1">💡 Áp dụng vào câu hỏi này:</span>
+              <LatexRenderer text={solutionDetail.recognition} />
+            </div>
+          )}
 
           {solutionDetail.translation && (
             <div className="text-xs font-semibold text-muted-foreground p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/10 border-border/30">

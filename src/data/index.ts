@@ -179,6 +179,25 @@ export const loadSubjectData = async (grade: GradeCode, subject: SubjectCode): P
           learningOutcomes: learningPathMod.g10PhysicsOutcomes,
           learningMisconceptions: learningPathMod.g10PhysicsMisconceptions
         };
+      } else if (subject === 'history') {
+        const [topicsMod, qtMod, qMod, sMod, learningPathMod, assessmentsMod] = await Promise.all([
+          import('./grade10/history/topics'),
+          import('./grade10/history/questionTypes'),
+          import('./grade10/history/questions'),
+          import('./grade10/history/solutions'),
+          import('./grade10/history/learningPath'),
+          import('./grade10/history/assessments')
+        ]);
+        data = {
+          topics: topicsMod.g10HistoryTopics,
+          questionTypes: qtMod.g10HistoryQuestionTypes,
+          questions: qMod.g10HistoryQuestions,
+          solutions: sMod.g10HistorySolutions,
+          mockExams: assessmentsMod.g10HistoryAssessmentExams,
+          assessmentBlueprints: assessmentsMod.g10HistoryAssessmentBlueprints,
+          learningOutcomes: learningPathMod.g10HistoryOutcomes,
+          learningMisconceptions: learningPathMod.g10HistoryMisconceptions
+        };
       } else {
         data = { topics: [], questionTypes: [], questions: [], solutions: [], mockExams: [] };
       }
@@ -294,9 +313,7 @@ export const getQuestions = (grade: GradeCode, subject: SubjectCode): Question[]
 /**
  * Ngân hàng chỉ dùng cho màn hình luyện tập.
  *
- * Toán 11, Toán 10 và Hóa 10 có câu luyện và câu kiểm tra cùng runtime nên câu luyện và câu kiểm tra vẫn
- * phải cùng tồn tại trong `questions` để ExamEngine tra cứu theo ID. Tách chúng
- * tại biên đọc của PracticeEngine để câu kiểm tra định kỳ không lọt vào lộ trình.
+ * Tách các câu hỏi bài kiểm tra định kỳ để không lọt vào lộ trình luyện tập thông thường.
  */
 export const getPracticeQuestions = (grade: GradeCode, subject: SubjectCode): Question[] => {
   const questions = getQuestions(grade, subject);

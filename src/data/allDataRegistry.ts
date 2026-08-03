@@ -17,6 +17,8 @@ import { g10PhysicsQuestionTypes } from './grade10/physics/questionTypes';
 import { g10PhysicsQuestions } from './grade10/physics/questions';
 import { g10BiologyQuestionTypes } from './grade10/biology/questionTypes';
 import { g10BiologyQuestions } from './grade10/biology/questions';
+import { g10HistoryQuestionTypes } from './grade10/history/questionTypes';
+import { g10HistoryQuestions } from './grade10/history/questions';
 import { g11MathQuestionTypes } from './grade11/math/questionTypes';
 import { g11MathQuestions } from './grade11/math/questions';
 import { g11BiologyQuestionTypes } from './grade11/biology/questionTypes';
@@ -59,6 +61,10 @@ const colorClasses: Record<string, { badge: string; text: string }> = {
   biology: {
     badge: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     text: 'text-rose-600 dark:text-rose-400'
+  },
+  history: {
+    badge: 'bg-amber-600/10 text-amber-700 dark:text-amber-400 border-amber-600/20',
+    text: 'text-amber-700 dark:text-amber-400'
   }
 };
 
@@ -73,13 +79,14 @@ export const getSubjectInfoByTypeId = (typeId: string): SubjectCategoryInfo => {
 
   const colors = colorClasses[subjectCode] || colorClasses.math;
 
-  // Thứ tự hiển thị môn học: Toán -> Anh -> Lý -> Hóa -> Sinh
+  // Thứ tự hiển thị môn học: Toán -> Anh -> Lý -> Hóa -> Sinh -> Sử
   let subjectOrder = 1;
   if (subjectCode === 'math') subjectOrder = 1;
   else if (subjectCode === 'english') subjectOrder = 2;
   else if (subjectCode === 'physics') subjectOrder = 3;
   else if (subjectCode === 'chemistry') subjectOrder = 4;
   else if (subjectCode === 'biology') subjectOrder = 5;
+  else if (subjectCode === 'history') subjectOrder = 6;
 
   // Sắp xếp theo: Khối lớp giảm dần (g11 -> g10 -> g9) + Môn học tăng dần
   const gradeVal = parseInt(gradeNum) || 9;
@@ -108,6 +115,7 @@ export const allQuestionTypesList: QuestionType[] = [
   ...g10EnglishQuestionTypes,
   ...g10PhysicsQuestionTypes,
   ...g10BiologyQuestionTypes,
+  ...g10HistoryQuestionTypes,
   ...mathQuestionTypes,
   ...englishQuestionTypes,
 ];
@@ -128,6 +136,7 @@ export const allQuestionsList: Question[] = [
   ...g10EnglishQuestions,
   ...g10PhysicsQuestions,
   ...g10BiologyQuestions,
+  ...g10HistoryQuestions,
   ...mathQuestions,
   ...englishQuestions,
 ];
