@@ -47,20 +47,20 @@ const getModelInfo = (log: any) => {
 };
 
 export const TeacherAiStatistics: React.FC = () => {
-  const [aiSummary, setAiSummary] = useState<any>(null);
   const [logs, setLogs] = useState<any[]>([]);
+  const [totalCallsCount, setTotalCallsCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
-    const summary = await adminService.getAiSummary();
-    if (summary) {
-      setAiSummary(summary);
-      setLogs(summary.recentLogs || []);
-    } else {
-      const data = await adminService.getAiUsageLogs(30);
-      setLogs(data);
-    }
+    // Tải nhật ký AI và đếm tổng số bản ghi trong 7 ngày gần nhất
+    const [data, totalCount] = await Promise.all([
+      adminService.getAiUsageLogsLast7Days(500),
+      adminService.getTotalAiCallsCount7Days()
+    ]);
+
+    setLogs(data || []);
+    setTotalCallsCount(totalCount || (data ? data.length : 0));
     setIsLoading(false);
   }, []);
 
@@ -68,27 +68,9 @@ export const TeacherAiStatistics: React.FC = () => {
     fetchLogs();
   }, [fetchLogs]);
 
-  // Calculations
+  // Calculations dựa trên dữ liệu thời gian thực
   const metrics = useMemo(() => {
-    if (aiSummary?.totals) {
-      const { totalCalls, totalPromptTokens, totalCandidatesTokens, totalTokens } = aiSummary.totals;
-      const rateInput = 0.075 / 1000000;
-      const rateOutput = 0.30 / 1000000;
-      const usdToVnd = 25400;
-      const costUSD = ((totalPromptTokens || 0) * rateInput) + ((totalCandidatesTokens || 0) * rateOutput);
-      const costVND = Math.round(costUSD * usdToVnd);
-      const avgTokens = totalCalls > 0 ? Math.round(totalTokens / totalCalls) : 0;
-      return {
-        totalCalls: totalCalls || 0,
-        totalPrompt: totalPromptTokens || 0,
-        totalCandidates: totalCandidatesTokens || 0,
-        totalAll: totalTokens || 0,
-        costVND,
-        avgTokens
-      };
-    }
-
-    const totalCalls = logs.length;
+    const totalCalls = Math.max(totalCallsCount, logs.length);
     let totalPrompt = 0;
     let totalCandidates = 0;
     let totalAll = 0;
@@ -99,7 +81,7 @@ export const TeacherAiStatistics: React.FC = () => {
       totalAll += log.totalTokens || 0;
     });
 
-    const avgTokens = totalCalls > 0 ? Math.round(totalAll / totalCalls) : 0;
+    const avgTokens = logs.length > 0 ? Math.round(totalAll / logs.length) : 0;
     const rateInput = 0.075 / 1000000;
     const rateOutput = 0.30 / 1000000;
     const usdToVnd = 25400;
@@ -114,24 +96,10 @@ export const TeacherAiStatistics: React.FC = () => {
       costVND,
       avgTokens
     };
-  }, [aiSummary, logs]);
+  }, [logs, totalCallsCount]);
 
-  // 1. Daily usage data (ComposedChart)
+  // 1. Daily usage data (ComposedChart) tính trực tiếp từ dữ liệu thời gian thực
   const dailyData = useMemo(() => {
-    if (aiSummary?.daily) {
-      const dates = Object.keys(aiSummary.daily).sort();
-      return dates.map(dateStr => {
-        const item = aiSummary.daily[dateStr];
-        const dateFormatted = dateStr.length >= 10 ? dateStr.substring(5, 10) : dateStr;
-        return {
-          date: dateFormatted,
-          inputTokens: item.promptTokens || 0,
-          outputTokens: item.candidatesTokens || 0,
-          calls: item.calls || 0
-        };
-      });
-    }
-
     const groups: Record<string, { date: string; inputTokens: number; outputTokens: number; calls: number }> = {};
     const sortedLogs = [...logs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
@@ -147,7 +115,7 @@ export const TeacherAiStatistics: React.FC = () => {
     });
 
     return Object.values(groups);
-  }, [aiSummary, logs]);
+  }, [logs]);
 
   // 2. Task Breakdown (PieChart)
   const taskData = useMemo(() => {
@@ -235,7 +203,7 @@ export const TeacherAiStatistics: React.FC = () => {
               <Activity size={20} />
             </div>
             <div>
-              <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tổng lượt gọi AI</p>
+              <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tổng lượt gọi AI (7 ngày)</p>
               <h4 className="text-sm font-black text-foreground">{metrics.totalCalls.toLocaleString()}</h4>
             </div>
           </CardContent>
@@ -247,7 +215,7 @@ export const TeacherAiStatistics: React.FC = () => {
               <Users size={20} />
             </div>
             <div>
-              <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tổng token gọi</p>
+              <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Tổng token gọi (7 ngày)</p>
               <h4 className="text-sm font-black text-foreground">{metrics.totalAll.toLocaleString()}</h4>
             </div>
           </CardContent>
@@ -271,7 +239,7 @@ export const TeacherAiStatistics: React.FC = () => {
               <Award size={20} />
             </div>
             <div>
-              <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Ước tính chi phí</p>
+              <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-1">Ước tính chi phí (7 ngày)</p>
               <h4 className="text-sm font-black text-foreground">{metrics.costVND.toLocaleString()} VNĐ</h4>
             </div>
           </CardContent>
@@ -283,11 +251,11 @@ export const TeacherAiStatistics: React.FC = () => {
         {/* Biểu đồ xu hướng */}
         <Card className="border-border/50 bg-card shadow-sm">
           <CardHeader className="p-4 border-b border-border/20">
-            <CardTitle className="text-foreground text-xs font-black">📈 Xu hướng Token & Lượt gọi hàng ngày</CardTitle>
+            <CardTitle className="text-foreground text-xs font-black">📈 Xu hướng Token & Lượt gọi (7 ngày qua)</CardTitle>
           </CardHeader>
           <CardContent className="p-4 h-64">
             {dailyData.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">Không có dữ liệu thời gian này.</div>
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">Không có dữ liệu trong 7 ngày qua.</div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={dailyData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
@@ -309,11 +277,11 @@ export const TeacherAiStatistics: React.FC = () => {
         {/* Biểu đồ phân bổ tác vụ */}
         <Card className="border-border/50 bg-card shadow-sm">
           <CardHeader className="p-4 border-b border-border/20">
-            <CardTitle className="text-foreground text-xs font-black">🍕 Phân bổ lượng gọi theo Tác vụ</CardTitle>
+            <CardTitle className="text-foreground text-xs font-black">🍕 Phân bổ lượng gọi theo Tác vụ (7 ngày qua)</CardTitle>
           </CardHeader>
           <CardContent className="p-4 flex flex-col sm:flex-row items-center justify-center gap-6">
             {taskData.length === 0 ? (
-              <div className="h-64 flex items-center justify-center text-xs text-muted-foreground">Không có dữ liệu.</div>
+              <div className="h-64 flex items-center justify-center text-xs text-muted-foreground">Không có dữ liệu trong 7 ngày qua.</div>
             ) : (
               <>
                 <div className="w-40 h-40 shrink-0">
@@ -358,7 +326,7 @@ export const TeacherAiStatistics: React.FC = () => {
           {/* Top 5 Users */}
           <Card className="border-border/50 bg-card shadow-sm">
             <CardHeader className="p-4 border-b border-border/20">
-              <CardTitle className="text-foreground text-xs font-black">🏆 Top 5 Học sinh dùng AI nhiều nhất</CardTitle>
+              <CardTitle className="text-foreground text-xs font-black">🏆 Top 5 Học sinh dùng AI nhiều nhất (7 ngày qua)</CardTitle>
             </CardHeader>
             <CardContent className="p-4 h-48">
               {topUsersData.length === 0 ? (
@@ -424,7 +392,7 @@ export const TeacherAiStatistics: React.FC = () => {
         {/* Cột phải: Bảng nhật ký */}
         <Card className="border-border/50 bg-card shadow-sm lg:col-span-2">
           <CardHeader className="p-4 border-b border-border/20 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-foreground text-xs font-black">📜 Nhật ký 10 lượt gọi gần nhất</CardTitle>
+            <CardTitle className="text-foreground text-xs font-black">📜 Nhật ký 10 lượt gọi Gia sư (Tutor) gần nhất</CardTitle>
             <Button
               onClick={fetchLogs}
               variant="ghost"
@@ -446,7 +414,7 @@ export const TeacherAiStatistics: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/20 font-semibold text-foreground/80">
-                {logs.slice(0, 10).map((log, idx) => {
+                {logs.filter(log => !log.type || log.type === 'tutor').slice(0, 10).map((log, idx) => {
                   const localTime = log.timestamp
                     ? new Date(log.timestamp).toLocaleString('vi-VN', {
                       day: '2-digit',
@@ -486,9 +454,9 @@ export const TeacherAiStatistics: React.FC = () => {
                     </tr>
                   );
                 })}
-                {logs.length === 0 && (
+                {logs.filter(log => !log.type || log.type === 'tutor').length === 0 && (
                   <tr>
-                    <td colSpan={5} className="p-8 text-center text-muted-foreground italic">Không có bản ghi nhật ký nào.</td>
+                    <td colSpan={5} className="p-8 text-center text-muted-foreground italic">Không có bản ghi lượt gọi Gia sư (Tutor) nào.</td>
                   </tr>
                 )}
               </tbody>

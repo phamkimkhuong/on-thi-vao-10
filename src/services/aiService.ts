@@ -2,6 +2,7 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import { Question, Solution, AiEvaluation } from '../types';
 import { getSubjectName } from '../utils/subject';
+import { logger } from '../utils/logger';
 
 interface CallGeminiParams {
   prompt?: string;
@@ -216,9 +217,9 @@ Bạn phải trả về kết quả dưới định dạng JSON chính xác theo
         'diagnoseSession'
       );
       await diagnoseSessionFn({ chatHistory, subjectId });
-      console.log(`[diagnoseSession] Session diagnosis triggered successfully for ${subjectId}`);
+      logger.debug(`[diagnoseSession] Session diagnosis triggered successfully for ${subjectId}`);
     } catch (err) {
-      console.error("[diagnoseSession] Error triggering session diagnosis:", err);
+      logger.error('Thực thi diagnoseSession', err);
     }
   }
 };

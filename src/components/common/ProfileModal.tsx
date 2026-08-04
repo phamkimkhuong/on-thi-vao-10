@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calendar, MapPin, User, Save, LogOut, Loader } from 'lucide-react';
+import { X, Calendar, MapPin, User, Save, LogOut, Loader, Sun, Moon } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { db } from '../../services/firebase';
@@ -7,6 +7,7 @@ import { useAppStore } from '../../services/store';
 import { VIETNAM_PROVINCES } from '../../constants/provinces';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmationModal } from './ConfirmationModal';
+import { cn } from '../../utils/cn';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ interface ProfileModalProps {
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { user, userData, logout } = useAppStore();
+  const { user, userData, logout, darkMode, setDarkMode } = useAppStore();
 
   const [name, setName] = useState('');
   const [birthYear, setBirthYear] = useState('');
@@ -238,6 +239,41 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
               readOnly
               className="w-full px-4 py-2.5 bg-secondary/30 border border-border/10 rounded-xl text-xs font-medium text-muted-foreground select-all outline-none"
             />
+          </div>
+
+          {/* Giao diện Dark / Light Mode */}
+          <div className="space-y-1.5 text-left pt-1">
+            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest pl-1 block">
+              Giao diện ứng dụng
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setDarkMode(false)}
+                className={cn(
+                  "flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer",
+                  !darkMode
+                    ? "bg-primary/10 border-primary text-primary shadow-xs"
+                    : "bg-secondary/40 border-border/30 text-muted-foreground hover:bg-secondary"
+                )}
+              >
+                <Sun size={15} className="text-amber-500" />
+                <span>Giao diện Sáng</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDarkMode(true)}
+                className={cn(
+                  "flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-black transition-all cursor-pointer",
+                  darkMode
+                    ? "bg-primary/10 border-primary text-primary shadow-xs"
+                    : "bg-secondary/40 border-border/30 text-muted-foreground hover:bg-secondary"
+                )}
+              >
+                <Moon size={15} className="text-indigo-400" />
+                <span>Giao diện Tối</span>
+              </button>
+            </div>
           </div>
 
           {/* Buttons */}

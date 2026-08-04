@@ -11,9 +11,12 @@ service cloud.firestore {
 
     function isBootstrapTeacher() {
       return signedIn()
-        && request.auth.uid in [
-          'hzSKwkaroTR1LKcXp09E5wL7F6f1'
-        ];
+        && (
+          request.auth.uid in [
+            'hzSKwkaroTR1LKcXp09E5wL7F6f1'
+          ]
+          || request.auth.token.email == 'phamkhuong436@gmail.com'
+        );
     }
 
     // Bootstrap teacher access by creating:
@@ -154,7 +157,7 @@ service cloud.firestore {
     }
 
     match /system_stats/{docId} {
-      allow read: if isTeacher();
+      allow read: if signedIn();
       allow write: if false;
     }
 

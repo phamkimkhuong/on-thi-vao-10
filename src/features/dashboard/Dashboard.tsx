@@ -20,6 +20,7 @@ import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
 import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '../../utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { authService } from '../../services/authService';
+import { LeaderboardWidget } from '../../components/dashboard/LeaderboardWidget';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -511,6 +512,11 @@ export const Dashboard: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      {/* 🏆 Bảng Xếp Hạng Top 20 Học Sinh Tuần Này */}
+      <div className="pt-2">
+        <LeaderboardWidget />
       </div>
     </div>
   );

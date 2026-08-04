@@ -30,6 +30,10 @@ Sentry.init({
     /Load failed/i,
     'Failed to fetch',
     /Failed to fetch/i,
+    'AbortError: Fetch is aborted',
+    'Fetch is aborted',
+    /Fetch is aborted/i,
+    /AbortError/i,
   ],
   integrations: [
     Sentry.browserTracingIntegration(),

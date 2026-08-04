@@ -65,14 +65,24 @@ interface AppState {
   setIsProfileModalOpen: (open: boolean) => void;
 }
 
-export const useAppStore = create<AppState>((set) => {
-  // Lấy cấu hình dark mode ban đầu (luôn mặc định là sáng)
-  const initialDarkMode = false;
+const getInitialDarkMode = (): boolean => {
+  if (typeof localStorage === 'undefined') return false;
+  const storedTheme = localStorage.getItem('otv10_theme');
+  if (storedTheme === 'dark') return true;
+  if (storedTheme === 'light') return false;
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+};
+
+export const useAppStore = create<AppState>((set, get) => {
+  const initialDarkMode = getInitialDarkMode();
   const initialCourseSelection = getInitialCourseSelection();
 
-  // Luôn đảm bảo không có class dark trên html
   if (typeof document !== 'undefined') {
-    document.documentElement.classList.remove('dark');
+    if (initialDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }
 
   return {
@@ -92,15 +102,32 @@ export const useAppStore = create<AppState>((set) => {
     isProfileModalOpen: false,
 
     toggleDarkMode: () => {
+      const nextDarkMode = !get().darkMode;
       if (typeof document !== 'undefined') {
-        document.documentElement.classList.remove('dark');
+        if (nextDarkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       }
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('otv10_theme', nextDarkMode ? 'dark' : 'light');
+      }
+      set({ darkMode: nextDarkMode });
     },
 
-    setDarkMode: () => {
+    setDarkMode: (dark: boolean) => {
       if (typeof document !== 'undefined') {
-        document.documentElement.classList.remove('dark');
+        if (dark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       }
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('otv10_theme', dark ? 'dark' : 'light');
+      }
+      set({ darkMode: dark });
     },
 
     setSubject: (subject) => {

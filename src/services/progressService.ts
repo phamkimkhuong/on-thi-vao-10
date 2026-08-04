@@ -79,12 +79,12 @@ export const progressService = {
 
       // 3. Nếu LocalStorage đã có dữ liệu và timestamp trùng/mới hơn server, ta bỏ qua (Tiết kiệm hàng trăm Reads!)
       if (localLastActive && localLastActive >= serverLastActive) {
-        console.log(`[Smart Sync] Dữ liệu Local của user ${userId} đã mới nhất. Bỏ qua tải chi tiết.`);
+        logger.debug(`[Smart Sync] Dữ liệu Local của user ${userId} đã mới nhất. Bỏ qua tải chi tiết.`);
         return;
       }
 
       // 4. Nếu LocalStorage trống hoặc cũ hơn server, tải toàn bộ dữ liệu mới nhất từ Firestore xuống Local
-      console.log(`[Smart Sync] Đồng bộ dữ liệu mới nhất từ Firestore cho user ${userId}...`);
+      logger.debug(`[Smart Sync] Đồng bộ dữ liệu mới nhất từ Firestore cho user ${userId}...`);
       const [
         remoteAttempts,
         remoteMistakes,
@@ -108,9 +108,9 @@ export const progressService = {
       storageService.saveProgressLocal(userId, userProgress);
       storageService.saveExamResultsLocal(userId, remoteExams);
 
-      console.log(`[Smart Sync] Hoàn tất đồng bộ dữ liệu Firestore xuống LocalStorage cho user: ${userId}`);
+      logger.debug(`[Smart Sync] Hoàn tất đồng bộ dữ liệu Firestore xuống LocalStorage cho user: ${userId}`);
     } catch (e) {
-      console.error('Lỗi đồng bộ dữ liệu người dùng:', e);
+      logger.error('Lỗi đồng bộ dữ liệu người dùng:', e);
     }
   },
 
@@ -202,7 +202,7 @@ export const progressService = {
       userProg.lastUpdatedAt = syncedAt;
       storageService.saveProgressLocal(userId, userProg);
 
-      console.log(`[Session Sync] Đã sync gộp ${pendingAttempts.length} câu làm phiên vừa rồi của user ${userId} lên Firestore thành công!`);
+      logger.debug(`[Session Sync] Đã sync gộp ${pendingAttempts.length} câu làm phiên vừa rồi của user ${userId} lên Firestore thành công!`);
     } catch (e) {
       logger.error('Lỗi khi sync gộp bài làm phiên', e);
     }

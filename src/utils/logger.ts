@@ -1,16 +1,13 @@
+import * as Sentry from '@sentry/react';
+
 const getCallerInfo = (): string => {
   try {
     const stack = new Error().stack;
     if (!stack) return '';
     const lines = stack.split('\n');
-    // lines[0] là "Error"
-    // lines[1] là getCallerInfo
-    // lines[2] là dbRead/dbWrite
-    // lines[3] là hàm gọi dbRead/dbWrite thực tế
     const callerLine = lines[3];
     if (!callerLine) return '';
     
-    // Regex bắt định dạng "at funcName (url:line:col)" hoặc "at url:line:col"
     const match = callerLine.match(/at\s+(.+?)\s+\((.+?)\)/) || callerLine.match(/at\s+(.+)/);
     if (match) {
       const funcName = match[2] ? match[1] : 'anonymous';
@@ -19,7 +16,6 @@ const getCallerInfo = (): string => {
       const parts = cleanUrl.split('/');
       const fileNameWithLine = parts[parts.length - 1] || cleanUrl;
       
-      // Lấy thêm số dòng nếu có
       const lineColMatch = callerLine.match(/:(\d+:\d+)/);
       const lineCol = lineColMatch ? `:${lineColMatch[1]}` : '';
       
@@ -42,8 +38,15 @@ export const logger = {
         'color: #10b981; font-weight: bold;',
         'color: #6b7280; font-size: 11px; font-style: italic; font-weight: normal;'
       );
+    } else {
+      Sentry.addBreadcrumb({
+        category: 'firestore-read',
+        message: `${actionName}: ${docCount} Reads`,
+        level: 'info'
+      });
     }
   },
+
   dbWrite(actionName: string, writeCount: number) {
     if (import.meta.env.DEV) {
       const caller = getCallerInfo();
@@ -54,18 +57,54 @@ export const logger = {
         'color: #ef4444; font-weight: bold;',
         'color: #6b7280; font-size: 11px; font-style: italic; font-weight: normal;'
       );
+    } else {
+      Sentry.addBreadcrumb({
+        category: 'firestore-write',
+        message: `${actionName}: ${writeCount} Writes`,
+        level: 'info'
+      });
     }
   },
+
   error(actionName: string, err: any) {
     if (import.meta.env.DEV) {
       const caller = getCallerInfo();
       console.error(
-        `%c[Firestore Error] %c${actionName} %c${caller}:`,
+        `%c[App Error] %c${actionName} %c${caller}:`,
         'color: #ef4444; font-weight: bold;',
         'color: #fff;',
         'color: #6b7280; font-size: 11px; font-style: italic; font-weight: normal;',
         err
       );
+    } else {
+      // 🚀 Trên Production: Gửi lỗi trực tiếp về Sentry Dashboard
+      Sentry.captureException(err || new Error(actionName), {
+        extra: { actionName }
+      });
+    }
+  },
+
+  debug(...args: any[]) {
+    if (import.meta.env.DEV) {
+      console.log('%c[Debug]', 'color: #8b5cf6; font-weight: bold;', ...args);
+    } else {
+      Sentry.addBreadcrumb({
+        category: 'debug',
+        message: args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '),
+        level: 'debug'
+      });
+    }
+  },
+
+  info(...args: any[]) {
+    if (import.meta.env.DEV) {
+      console.info('%c[Info]', 'color: #06b6d4; font-weight: bold;', ...args);
+    } else {
+      Sentry.addBreadcrumb({
+        category: 'info',
+        message: args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '),
+        level: 'info'
+      });
     }
   }
 };

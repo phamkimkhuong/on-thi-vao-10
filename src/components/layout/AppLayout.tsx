@@ -18,7 +18,9 @@ import {
   LifeBuoy,
   TrendingUp,
   BookMarked,
-  Loader
+  Loader,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
@@ -40,6 +42,8 @@ export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const {
+    darkMode,
+    toggleDarkMode,
     selectedSubject,
     setSubject,
     selectedGrade,
@@ -322,16 +326,31 @@ export const AppLayout: React.FC = () => {
     return 'Bảng điều khiển';
   };
 
+  const logoSrc = darkMode ? '/logo-removebg.png' : '/logo.png';
+
   return (
     <div className="min-h-screen md:min-h-0 md:h-screen md:overflow-hidden bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
 
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.ABOUT)}>
-          <img src="/logo.png" alt="ezonthi logo" width="150" height="40" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
+          <img src={logoSrc} alt="ezonthi logo" width="150" height="40" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={toggleDarkMode}
+            aria-label={darkMode ? "Chuyển sang giao diện Sáng" : "Chuyển sang giao diện Tối"}
+            className="p-2 rounded-xl bg-secondary/60 hover:bg-secondary text-foreground border border-border/30 transition-all cursor-pointer flex items-center justify-center active:scale-95"
+            title={darkMode ? "Chuyển sang Giao diện Sáng (Light Mode)" : "Chuyển sang Giao diện Tối (Dark Mode)"}
+          >
+            {darkMode ? (
+              <Sun size={16} className="text-amber-400" />
+            ) : (
+              <Moon size={16} className="text-indigo-500" />
+            )}
+          </button>
+
           <button
             onClick={() => navigate(ROUTES.SUPPORT)}
             aria-label="Trợ giúp"
@@ -379,9 +398,9 @@ export const AppLayout: React.FC = () => {
           isSidebarCollapsed ? "p-4 h-20" : "px-4 py-4"
         )} onClick={() => navigate(ROUTES.ABOUT)}>
           {isSidebarCollapsed ? (
-            <img src="/logo.png" alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            <img src={logoSrc} alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           ) : (
-            <img src="/logo.png" alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            <img src={logoSrc} alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           )}
         </div>
 
@@ -680,6 +699,25 @@ export const AppLayout: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={toggleDarkMode}
+              aria-label={darkMode ? "Chuyển sang giao diện Sáng" : "Chuyển sang giao diện Tối"}
+              className="px-3 py-1.5 text-xs font-extrabold rounded-2xl bg-secondary/50 hover:bg-secondary border border-border/40 text-foreground transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+              title={darkMode ? "Chuyển sang Giao diện Sáng (Light Mode)" : "Chuyển sang Giao diện Tối (Dark Mode)"}
+            >
+              {darkMode ? (
+                <>
+                  <Sun size={15} className="text-amber-400 fill-amber-400/20" />
+                  <span className="hidden lg:inline text-amber-500 font-bold">Giao diện Sáng</span>
+                </>
+              ) : (
+                <>
+                  <Moon size={15} className="text-indigo-500 fill-indigo-500/20" />
+                  <span className="hidden lg:inline text-indigo-500 font-bold">Giao diện Tối</span>
+                </>
+              )}
+            </button>
+
             <button
               onClick={() => navigate(ROUTES.SUPPORT)}
               aria-label="Trợ giúp"
