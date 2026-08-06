@@ -39,8 +39,10 @@ import { StudentSummary } from './components/StudentSummary';
 import { StudentMasteryTab } from './components/StudentMasteryTab';
 import { StudentExamsTab } from './components/StudentExamsTab';
 import { GradingPanel } from './components/GradingPanel';
+import { MessageSquareHeart } from 'lucide-react';
+import { TeacherSurveyReport } from './components/TeacherSurveyReport';
 
-type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast';
+type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast' | 'survey_report';
 
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
@@ -604,6 +606,18 @@ export const TeacherDashboard: React.FC = () => {
           <Mail size={15} />
           Thông báo Email
         </button>
+        <button
+          onClick={() => changeTab('survey_report')}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'survey_report'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <MessageSquareHeart size={15} />
+          Báo cáo Khảo sát
+        </button>
       </div>
 
       {/* Content Tabs */}
@@ -1022,6 +1036,8 @@ export const TeacherDashboard: React.FC = () => {
         <TeacherAffiliateManager />
       ) : activeTab === 'email_broadcast' ? (
         <EmailBroadcastManager />
+      ) : activeTab === 'survey_report' ? (
+        <TeacherSurveyReport />
       ) : null}
 
     </div>

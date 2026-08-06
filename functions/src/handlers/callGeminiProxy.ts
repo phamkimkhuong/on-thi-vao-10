@@ -10,7 +10,7 @@ import {
 } from "../services/gemini.js";
 import { createHash } from "crypto";
 import { callGroqAiApi, callMistralAiApi } from "../services/aiProviders.js";
-import { determineScaffoldingLevel, getScaffoldingInstruction } from "../services/scaffolding.js";
+import { determineScaffoldingLevel, getScaffoldingInstruction, detectUserIntent, getIntentOverrideInstruction } from "../services/scaffolding.js";
 import { isRelevantToTopic, shouldRewriteQuery } from "../services/relevance.js";
 
 export const callGeminiProxy = onCall({
@@ -58,7 +58,7 @@ export const callGeminiProxy = onCall({
       studentProfile = profileDoc.data();
       const cleanSubjectId = subjectId || "math";
       const subProfile = studentProfile[cleanSubjectId] || {};
-      
+
       let strengths: string[] = subProfile.strengths || [];
       let weaknesses: string[] = subProfile.weaknesses || [];
       let summary: string = subProfile.learningSummary || "";
@@ -306,12 +306,12 @@ export const callGeminiProxy = onCall({
 
               // 2. Khớp ý định của học sinh (Intent matching dựa trên query)
               const cleanQuery = rewrittenQuery.toLowerCase();
-              
+
               // Nếu hỏi về lỗi sai, cảnh báo -> Ưu tiên chunk 'mistakes'
               if (doc.chunkType === "mistakes" && (cleanQuery.includes("sai") || cleanQuery.includes("lỗi") || cleanQuery.includes("nhầm") || cleanQuery.includes("sửa") || cleanQuery.includes("cảnh báo"))) {
                 doc.score += 1.0;
               }
-              
+
               // Nếu hỏi về phương pháp/các bước -> Ưu tiên chunk 'method'
               if (doc.chunkType === "method" && (cleanQuery.includes("làm sao") || cleanQuery.includes("bước") || cleanQuery.includes("cách") || cleanQuery.includes("hướng dẫn") || cleanQuery.includes("phương pháp"))) {
                 doc.score += 1.0;
@@ -380,7 +380,7 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
         // Ta cần tóm tắt toàn bộ phần lịch sử cũ trừ 5 tin nhắn gần nhất
         const messagesToSummarize = fullHistory.slice(0, -5);
         let textToCompress = "";
-        
+
         if (existingSummary) {
           // Gộp tóm tắt cũ với các tin nhắn mới phát sinh từ checkpoint cũ đến nay
           const newMessagesText = messagesToSummarize.slice(5).map((m: any) => {
@@ -388,7 +388,7 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
             const text = m.text || "";
             return `${roleName}: ${text}`;
           }).join("\n");
-          
+
           textToCompress = `Tóm tắt hội thoại trước đó: ${existingSummary}\nCác lượt hội thoại mới:\n${newMessagesText}`;
         } else {
           // Nếu chưa có tóm tắt cũ, tóm tắt toàn bộ
@@ -400,7 +400,7 @@ Nội dung: ${d.content}`).join("\n") + "\n---";
         }
 
         console.log(`[Compression] Generating new batch summary at checkpoint length: ${fullHistory.length}`);
-        
+
         // Gọi LLM tóm tắt phần text này
         const prompt = `Bạn là một trợ lý AI hỗ trợ tóm tắt hội thoại học tập.
 Hãy đọc phần lịch sử và tóm tắt cũ dưới đây để tạo ra 1 câu tóm tắt mới duy nhất (dưới 30 từ), chỉ rõ học sinh hiện tại đã hiểu được kiến thức gì và đang thắc mắc ở chỗ nào.
@@ -522,10 +522,20 @@ Câu tóm tắt duy nhất:`;
   // Xác định và gắn cấp độ gợi ý động (Dynamic Scaffolding) dựa trên số lượt trao đổi
   const scaffoldingLevel = determineScaffoldingLevel(finalContents);
   const cleanSubjectForScaffolding = subjectId || "math";
-  if (scaffoldingLevel > 0) {
+
+  // Nhận diện ý định (Intent) của học sinh từ tin nhắn cuối
+  const userIntent = detectUserIntent(finalContents);
+  const intentOverride = getIntentOverrideInstruction(userIntent);
+
+  if (intentOverride) {
+    // Khi học sinh yêu cầu kiến thức tổng hợp → gắn instruction ghi đè Socratic
+    finalSystemInstruction += intentOverride;
+    // console.log(`[Intent Detection] Detected intent: "${userIntent}" → Applying knowledge-direct override (bypassing Socratic scaffolding level ${scaffoldingLevel})`);
+  } else if (scaffoldingLevel > 0) {
+    // Mặc định: giữ nguyên Scaffolding Socratic theo cấp độ
     const scaffoldingInstruction = getScaffoldingInstruction(scaffoldingLevel, cleanSubjectForScaffolding);
     finalSystemInstruction += scaffoldingInstruction;
-    console.log(`[Scaffolding] Subject: "${cleanSubjectForScaffolding}", Detected level: ${scaffoldingLevel}/3 (based on ${finalContents?.length || 0} messages)`);
+    // console.log(`[Scaffolding] Subject: "${cleanSubjectForScaffolding}", Detected level: ${scaffoldingLevel}/3, Intent: "${userIntent}" (based on ${finalContents?.length || 0} messages)`);
   }
 
   // Thêm chỉ thị định dạng JSON bắt buộc nếu đây là Chat Tutor
@@ -533,13 +543,13 @@ Câu tóm tắt duy nhất:`;
     finalSystemInstruction += `\n\n[ĐỊNH DẠNG ĐẦU RA BẮT BUỘC]
 Bạn phải trả về phản hồi dưới dạng JSON khớp hoàn toàn với cấu trúc sau:
 {
-  "tutorResponse": "Lời giảng gợi mở Socratic của thầy bằng tiếng Việt...",
+  "tutorResponse": "Lời giảng của thầy bằng tiếng Việt (Socratic gợi mở khi giải bài, hoặc cung cấp kiến thức trực tiếp khi học sinh yêu cầu tổng hợp)...",
   "newStrengths": ["...", "..."],
   "newWeaknesses": ["...", "..."],
   "learningSummary": "..."
 }
 Chú ý:
-- Lời giảng trong "tutorResponse" phải tuân thủ nghiêm ngặt phương pháp Socratic và định dạng LaTeX inline đô la đơn ($...$).
+- Lời giảng trong "tutorResponse" phải tuân thủ phương pháp Socratic khi hướng dẫn giải bài, hoặc cung cấp kiến thức trực tiếp có cấu trúc khi học sinh yêu cầu tổng hợp kiến thức. Luôn dùng định dạng LaTeX inline đô la đơn ($...$).
 - "newStrengths" và "newWeaknesses" chỉ ghi nhận các điểm mạnh/yếu mới bộc lộ trong lượt chat này của học sinh. Mỗi điểm từ 3-7 từ. Để trống mảng nếu không phát hiện điểm mới nào.
 - "learningSummary" là câu tóm tắt tiến trình học lực hiện tại của học sinh môn này sau lượt chat (dưới 30 từ).`;
   }
@@ -571,14 +581,14 @@ Chú ý:
           image
         );
         responseText = result.text;
-        
+
         successUsage = {
           promptTokenCount: result.usage?.promptTokens || 0,
           candidatesTokenCount: result.usage?.candidatesTokens || 0,
           cachedContentTokenCount: 0,
           totalTokenCount: result.usage?.totalTokens || 0
         };
-        
+
         selectedModel = gModel;
         selectedProvider = "groq";
         groqSuccess = true;
@@ -606,11 +616,11 @@ Chú ý:
         const cacheDocRef = db.collection("users").doc(uid).collection("cached_contexts").doc(cacheDocId);
         const cacheDoc = await cacheDocRef.get();
         const now = new Date();
-        
+
         if (cacheDoc.exists) {
           const cacheData = cacheDoc.data();
           const expiresAt = cacheData?.expiresAt ? new Date(cacheData.expiresAt.seconds ? cacheData.expiresAt.seconds * 1000 : cacheData.expiresAt) : new Date(0);
-          
+
           if (
             cacheData?.hash === instructionHash &&
             cacheData?.model === model &&
@@ -620,12 +630,12 @@ Chú ý:
             console.log(`[Cache Hit] Reusing context cache: ${cachedContentName} for model ${model}`);
           }
         }
-        
+
         if (!cachedContentName) {
           console.log(`[Cache Miss] Creating context cache for model ${model}...`);
           const fullModelName = model.startsWith("models/") ? model : `models/${model}`;
           const cacheCreateUrl = `https://generativelanguage.googleapis.com/v1beta/cachedContents?key=${apiKey}`;
-          
+
           const cacheResponse = await fetch(cacheCreateUrl, {
             method: "POST",
             headers: {
@@ -642,13 +652,13 @@ Chú ý:
               ttl: "600s" // 10 minutes cache
             }),
           });
-          
+
           if (cacheResponse.ok) {
             const cacheResult = await cacheResponse.json() as any;
             if (cacheResult?.name) {
               cachedContentName = cacheResult.name;
               const expiresAtDate = cacheResult.expireTime ? new Date(cacheResult.expireTime) : new Date(Date.now() + 600 * 1000);
-              
+
               await cacheDocRef.set({
                 cacheName: cachedContentName,
                 hash: instructionHash,
@@ -670,7 +680,7 @@ Chú ý:
       const reqPayload: any = {
         contents: finalContents,
       };
-      
+
       if (cachedContentName) {
         reqPayload.cachedContent = cachedContentName;
       } else if (finalSystemInstruction) {
@@ -776,14 +786,14 @@ Chú ý:
           image
         );
         responseText = result.text;
-        
+
         successUsage = {
           promptTokenCount: result.usage?.promptTokens || 0,
           candidatesTokenCount: result.usage?.candidatesTokens || 0,
           cachedContentTokenCount: 0,
           totalTokenCount: result.usage?.totalTokens || 0
         };
-        
+
         selectedModel = mModel;
         selectedProvider = "mistral";
         console.log(`[Mistral AI] Thành công sử dụng model: ${mModel}`);
@@ -822,28 +832,28 @@ Chú ý:
       });
       const parsed = JSON.parse(cleanJson);
       responseText = parsed.tutorResponse || responseText;
-      
+
       if (uid) {
-        const hasNewData = (parsed.newStrengths && parsed.newStrengths.length > 0) || 
-                          (parsed.newWeaknesses && parsed.newWeaknesses.length > 0) ||
-                          (parsed.learningSummary && parsed.learningSummary !== studentProfile?.[subjectId || "math"]?.learningSummary);
-        
+        const hasNewData = (parsed.newStrengths && parsed.newStrengths.length > 0) ||
+          (parsed.newWeaknesses && parsed.newWeaknesses.length > 0) ||
+          (parsed.learningSummary && parsed.learningSummary !== studentProfile?.[subjectId || "math"]?.learningSummary);
+
         if (hasNewData) {
           const cleanSubjectId = subjectId || "math";
           const subProfile = studentProfile?.[cleanSubjectId] || {};
           const oldStrengths = subProfile.strengths || [];
           const oldWeaknesses = subProfile.weaknesses || [];
           const oldSummary = subProfile.learningSummary || "";
-          
+
           const mergeAndUnique = (oldArr: string[], newArr: any[]) => {
             const combined = [...oldArr, ...newArr.map((s) => String(s).trim())].filter(Boolean);
             return [...new Set(combined)];
           };
-          
+
           const updatedStrengths = mergeAndUnique(oldStrengths, parsed.newStrengths || []);
           const updatedWeaknesses = mergeAndUnique(oldWeaknesses, parsed.newWeaknesses || []);
           const finalSummary = parsed.learningSummary || oldSummary;
-          
+
           await db.collection("student_profiles").doc(uid).set({
             [cleanSubjectId]: {
               strengths: updatedStrengths,
@@ -853,7 +863,7 @@ Chú ý:
             },
             lastUpdated: new Date()
           }, { merge: true });
-          
+
           console.log(`[Memory] Merged and updated student profile directly via Tutor Socratic response.`);
         }
       }

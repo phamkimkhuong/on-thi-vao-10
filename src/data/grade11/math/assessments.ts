@@ -1,4 +1,5 @@
-import type { AssessmentBlueprint, MockExam, Question, Solution } from '@/types';
+import type { AssessmentBlueprint, MockExam } from '@/types';
+import type { CourseQuestion, CourseSolution } from '@/data/schema';
 type AssessmentSpec = {
   id: string;
   blueprintId: string;
@@ -281,7 +282,7 @@ export const g11MathAssessmentExams: MockExam[] = assessmentSpecs.map(spec => ({
 }));
 
 // <generated-assessment-bank>
-export const g11MathAssessmentQuestions: Question[] = [
+export const g11MathAssessmentQuestions: CourseQuestion[] = [
   {
     "id": "math11-assess-q001",
     "courseId": "grade11:math",
@@ -4026,7 +4027,7 @@ export const g11MathAssessmentQuestions: Question[] = [
   }
 ];
 
-export const g11MathAssessmentSolutions: Solution[] = [
+export const g11MathAssessmentSolutions: CourseSolution[] = [
   {
     "id": "math11-assess-s001",
     "courseId": "grade11:math",

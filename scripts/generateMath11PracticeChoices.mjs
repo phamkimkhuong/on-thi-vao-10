@@ -421,9 +421,9 @@ try {
   }
   const generatedAssessmentBank = [
     '// <generated-assessment-bank>',
-    `export const g11MathAssessmentQuestions: Question[] = ${JSON.stringify(assessmentQuestions, null, 2)};`,
+    `export const g11MathAssessmentQuestions: CourseQuestion[] = ${JSON.stringify(assessmentQuestions, null, 2)};`,
     '',
-    `export const g11MathAssessmentSolutions: Solution[] = ${JSON.stringify(assessmentSolutions, null, 2)};`,
+    `export const g11MathAssessmentSolutions: CourseSolution[] = ${JSON.stringify(assessmentSolutions, null, 2)};`,
     '// </generated-assessment-bank>',
   ].join('\n');
   const assessmentSource = fs.readFileSync(assessmentOutputPath, 'utf8');

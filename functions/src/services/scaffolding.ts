@@ -1,6 +1,166 @@
 import { ChatContent } from "../types.js";
 
 /**
+ * Các loại ý định (Intent) của học sinh khi gửi tin nhắn.
+ * - "summarize": Học sinh muốn nhận kiến thức tổng hợp (tóm tắt, liệt kê, giải thích khái niệm, so sánh...)
+ * - "solve": Học sinh gửi bài tập cụ thể cần hướng dẫn giải
+ * - "general": Các trường hợp còn lại (trao đổi tự do)
+ */
+export type UserIntent = "summarize" | "solve" | "general";
+
+/**
+ * Danh sách từ khóa nhận diện ý định "summarize" (muốn nhận kiến thức trực tiếp).
+ * Được sắp xếp theo thứ tự ưu tiên: cụm từ dài trước (tránh match sai).
+ */
+const SUMMARIZE_KEYWORDS = [
+  // Cụm từ dài (ưu tiên match trước)
+  "kiến thức trọng tâm",
+  "kiến thức cơ bản",
+  "kiến thức cần nhớ",
+  "kiến thức quan trọng",
+  "tóm tắt kiến thức",
+  "tóm tắt lý thuyết",
+  "tóm tắt lí thuyết",
+  "tóm tắt nội dung",
+  "tóm tắt công thức",
+  "tổng hợp kiến thức",
+  "tổng hợp lý thuyết",
+  "tổng hợp công thức",
+  "cho em lý thuyết",
+  "cho em lí thuyết",
+  "cho em kiến thức",
+  "cần lý thuyết",
+  "cần lí thuyết",
+  "hệ thống kiến thức",
+  "hệ thống lại",
+  "ôn tập lý thuyết",
+  "ôn tập lí thuyết",
+  // Từ khóa đơn
+  "tóm tắt",
+  "tổng hợp",
+  "liệt kê",
+  "nêu các",
+  "nêu những",
+  "kể tên",
+  "so sánh",
+  "phân biệt",
+  "định nghĩa",
+  "khái niệm",
+  "giải thích",
+  "trình bày",
+  "phân tích",
+  "hãy nêu",
+  "hãy liệt kê",
+  "hãy trình bày",
+  "hãy giải thích",
+  "là gì",
+  "là gì?",
+  "như thế nào",
+  "các dạng",
+  "các loại",
+  "các bước",
+  "các công thức",
+  "công thức",
+  "quy tắc",
+  "tính chất",
+  "đặc điểm",
+  "phương pháp",
+];
+
+/**
+ * Danh sách từ khóa nhận diện ý định "solve" (muốn AI hướng dẫn giải bài).
+ */
+const SOLVE_KEYWORDS = [
+  "giải bài",
+  "giải giúp",
+  "giải hộ",
+  "làm bài",
+  "tìm x",
+  "tính giá trị",
+  "chứng minh",
+  "chứng minh rằng",
+  "tính diện tích",
+  "tính chu vi",
+  "tính thể tích",
+  "giải phương trình",
+  "giải hệ",
+  "giải bất phương trình",
+  "bài này",
+  "bài tập",
+  "câu này",
+  "em không biết làm",
+  "em chưa hiểu cách làm",
+  "hướng dẫn em giải",
+  "hướng dẫn em làm",
+];
+
+/**
+ * Nhận diện ý định (Intent) của học sinh dựa trên tin nhắn cuối cùng.
+ * Phân tích từ khóa trong text của tin nhắn user cuối để xác định:
+ * - "summarize": Muốn kiến thức tổng hợp → AI nên trả lời trực tiếp
+ * - "solve": Muốn giải bài → Giữ nguyên Socratic
+ * - "general": Mặc định → Giữ nguyên Socratic
+ */
+export function detectUserIntent(contents?: ChatContent[]): UserIntent {
+  if (!contents || contents.length === 0) return "general";
+
+  // Tìm tin nhắn user cuối cùng
+  let lastUserText = "";
+  for (let i = contents.length - 1; i >= 0; i--) {
+    if (contents[i].role === "user") {
+      const parts = contents[i].parts;
+      if (parts) {
+        for (const part of parts) {
+          if ("text" in part && part.text) {
+            lastUserText = part.text;
+          }
+        }
+      }
+      break;
+    }
+  }
+
+  if (!lastUserText) return "general";
+
+  const normalizedText = lastUserText.toLowerCase().trim();
+
+  // Kiểm tra intent "summarize" trước (ưu tiên cao hơn)
+  for (const keyword of SUMMARIZE_KEYWORDS) {
+    if (normalizedText.includes(keyword)) {
+      return "summarize";
+    }
+  }
+
+  // Kiểm tra intent "solve"
+  for (const keyword of SOLVE_KEYWORDS) {
+    if (normalizedText.includes(keyword)) {
+      return "solve";
+    }
+  }
+
+  return "general";
+}
+
+/**
+ * Trả về đoạn instruction ghi đè Scaffolding khi phát hiện intent "summarize".
+ * Cho phép AI cung cấp kiến thức trực tiếp, có cấu trúc, thay vì hỏi ngược Socratic.
+ */
+export function getIntentOverrideInstruction(intent: UserIntent): string | null {
+  if (intent !== "summarize") return null;
+
+  return `
+
+[GHI ĐÈ CHẾ ĐỘ GỢI Ý - INTENT: CUNG CẤP KIẾN THỨC TRỰC TIẾP]
+Học sinh đang yêu cầu rõ ràng được nhận kiến thức tổng hợp (tóm tắt, liệt kê, giải thích, so sánh...).
+TRONG TRƯỜNG HỢP NÀY, bạn PHẢI:
+1. **CÓ TRÁCH NHIỆM cung cấp nội dung kiến thức trực tiếp, đầy đủ và có cấu trúc rõ ràng** (dùng heading, danh sách, bảng so sánh nếu phù hợp).
+2. Trình bày kiến thức theo thứ tự logic: Định nghĩa → Tính chất/Công thức → Ví dụ minh họa ngắn gọn.
+3. KHÔNG hỏi ngược kiểu "Em hãy nhớ lại..." hay "Em có biết... không?" khi mới bắt đầu trả lời. Thay vào đó, hãy đưa kiến thức trước.
+4. Sau khi trình bày xong kiến thức, bạn CÓ THỂ đặt 1-2 câu hỏi gợi mở cuối cùng để kiểm tra sự hiểu biết của học sinh.
+5. Giữ nguyên các quy tắc LaTeX và SVG đã được quy định.`;
+}
+
+/**
  * Xác định cấp độ gợi ý động (Dynamic Scaffolding Level) dựa trên số lượt trao đổi trong lịch sử chat.
  * - Cấp 1 (Khơi gợi khái niệm): 0-2 lượt trao đổi (mặc định)
  * - Cấp 2 (Gợi ý cấu trúc): 3-4 lượt trao đổi

@@ -53,7 +53,7 @@ interface AppState {
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
   setSubject: (subject: SubjectCode) => void;
-  setGrade: (grade: 'grade9' | 'grade10' | 'grade11') => void;
+  setGrade: (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12') => void;
   refreshProgress: () => void;
   setIsLoadingData: (loading: boolean) => void;
 

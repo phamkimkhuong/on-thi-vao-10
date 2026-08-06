@@ -131,22 +131,27 @@ const readNodeValue = (node) => {
 const readQuestionTypesFromTs = (filePath) => {
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const source = ts.createSourceFile(filePath, fileContent, ts.ScriptTarget.Latest, true);
-  let result = null;
+  const items = [];
   
   source.forEachChild(node => {
     if (!ts.isVariableStatement(node)) return;
-    const isExported = node.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword);
-    if (!isExported) return;
     
     for (const declaration of node.declarationList.declarations) {
       const name = declaration.name.getText();
-      if (name.endsWith('QuestionTypes') && declaration.initializer) {
-        result = readNodeValue(declaration.initializer);
+      if ((name.toLowerCase().includes('questiontype') || name.endsWith('Types')) && declaration.initializer) {
+        const val = readNodeValue(declaration.initializer);
+        if (Array.isArray(val)) {
+          val.forEach(item => {
+            if (item && typeof item === 'object' && item.id && item.name) {
+              items.push(item);
+            }
+          });
+        }
       }
     }
   });
   
-  return result;
+  return items.length > 0 ? items : null;
 };
 
 async function run() {
@@ -160,14 +165,14 @@ async function run() {
     console.log(`[Emulator] Đang kết nối tới Firestore Emulator tại: ${process.env.FIRESTORE_EMULATOR_HOST}`);
     admin.initializeApp({ projectId });
   } else if (fs.existsSync(serviceAccountPath)) {
-    console.log("[Production] Đang kết nối tới Firestore Production bằng Service Account...");
+    console.log("[Production] Đang kết nối tới Firestore Production bằng Service Account (service-account.json)...");
     const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
       projectId
     });
   } else {
-    console.log("[Production] Đang kết nối tới Firestore Production bằng mặc định (ADC)...");
+    console.log("[Production] Đang kết nối tới Firestore Production bằng Mặc định (Application Default Credentials - ADC)...");
     admin.initializeApp({ projectId });
   }
 
@@ -176,7 +181,7 @@ async function run() {
 
   console.log("\n--- BẮT ĐẦU ĐỌC DỮ LIỆU TỪ SRC/DATA ---");
   
-  const allQuestionTypes = [];
+  const rawQuestionTypes = [];
 
   // 1. Grade 9
   const grade9Subjects = ['math', 'english'];
@@ -184,14 +189,14 @@ async function run() {
     const jsonPath = path.resolve(root, `src/data/grade9/${sub}/questionTypes.json`);
     if (fs.existsSync(jsonPath)) {
       const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-      allQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: 'grade9' })));
+      rawQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: 'grade9' })));
       console.log(`[Loaded] Grade 9 ${sub}: ${data.length} dạng bài`);
     }
   }
 
-  // 2. Grade 10 & 11
+  // 2. Grade 10 & 11 (Tất cả các môn: Toán, Anh, Hóa, Sinh, Lý, Sử)
   const grades = ['grade10', 'grade11'];
-  const subjects = ['math', 'english', 'chemistry', 'biology', 'physics'];
+  const subjects = ['math', 'english', 'chemistry', 'biology', 'physics', 'history'];
 
   for (const grade of grades) {
     for (const sub of subjects) {
@@ -207,22 +212,34 @@ async function run() {
           if (fs.existsSync(qTypesPath)) {
             const data = readQuestionTypesFromTs(qTypesPath);
             if (data && Array.isArray(data)) {
-              allQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: grade })));
+              rawQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: grade })));
               count += data.length;
             }
           }
         }
         console.log(`[Loaded] ${grade} ${sub} (từ các module): ${count} dạng bài`);
-      } else {
-        const qTypesPath = path.join(subDir, 'questionTypes.ts');
-        if (fs.existsSync(qTypesPath)) {
-          const data = readQuestionTypesFromTs(qTypesPath);
-          if (data && Array.isArray(data)) {
-            allQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: grade })));
-            console.log(`[Loaded] ${grade} ${sub} (tệp đơn): ${data.length} dạng bài`);
-          }
+      }
+      
+      // Quét thêm tệp đơn nếu có
+      const qTypesPath = path.join(subDir, 'questionTypes.ts');
+      if (fs.existsSync(qTypesPath)) {
+        const data = readQuestionTypesFromTs(qTypesPath);
+        if (data && Array.isArray(data)) {
+          rawQuestionTypes.push(...data.map(q => ({ ...q, subjectId: sub, grade: grade })));
+          console.log(`[Loaded] ${grade} ${sub} (tệp đơn): ${data.length} dạng bài`);
         }
       }
+    }
+  }
+
+  // Khử trùng lặp và loại bỏ hoàn toàn bất kỳ item không hợp lệ nào
+  const seenIds = new Set();
+  const allQuestionTypes = [];
+
+  for (const q of rawQuestionTypes) {
+    if (q && typeof q === 'object' && q.id && q.name && !seenIds.has(q.id)) {
+      seenIds.add(q.id);
+      allQuestionTypes.push(q);
     }
   }
 
@@ -231,7 +248,8 @@ async function run() {
     english: "Tiếng Anh",
     chemistry: "Hóa học",
     biology: "Sinh học",
-    physics: "Vật lý"
+    physics: "Vật lý",
+    history: "Lịch sử"
   };
 
   console.log(`\nTổng số dạng bài tìm thấy: ${allQuestionTypes.length}`);
@@ -257,6 +275,9 @@ async function run() {
           }
           console.log(`  - Cập nhật: Phát hiện thay đổi nội dung tại chunk [${chunkType}] (${chunkId}). Đang tạo lại embedding...`);
         }
+
+        // Thêm delay 150ms giữa các request tạo embedding để tránh bị chạm trần 429 Rate Limit
+        await new Promise(resolve => setTimeout(resolve, 150));
 
         const embedding = await getEmbedding(chunkContent, apiKey);
         if (!embedding || embedding.length === 0) {

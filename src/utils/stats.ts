@@ -20,7 +20,8 @@ export const calculateStudentStats = (attempts: UserAttempt[], completedLessonsC
     }
   });
 
-  const xpScore = (totalAttempts * 10) + (totalMinutes * 5) + (completedLessonsCount * 50);
+  const timeXp = Math.min(totalMinutes * 2, 100);
+  const xpScore = (correctAttempts * 15) + (completedLessonsCount * 100) + timeXp;
 
   return {
     totalStudySeconds,

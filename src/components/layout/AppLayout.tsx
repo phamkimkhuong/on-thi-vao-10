@@ -20,8 +20,13 @@ import {
   BookMarked,
   Loader,
   Sun,
-  Moon
+  Moon,
+  MessageSquareHeart
 } from 'lucide-react';
+import { SurveyModal } from '../../features/survey/SurveyModal';
+import { surveyService } from '../../services/surveyService';
+import { UNIFIED_SURVEY } from '../../data/surveyData';
+import type { SurveyConfig } from '../../types/surveyTypes';
 import { storageService } from '../../services/storage';
 import { progressService } from '../../services/progressService';
 import { teacherService } from '../../services/teacherService';
@@ -67,6 +72,16 @@ export const AppLayout: React.FC = () => {
   const [isContextDropdownOpen, setIsContextDropdownOpen] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
+  const [activeSurvey, setActiveSurvey] = useState<SurveyConfig | null>(null);
+
+  useEffect(() => {
+    if (user && surveyService.shouldShowSurvey()) {
+      const timer = setTimeout(() => {
+        setActiveSurvey(UNIFIED_SURVEY);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
 
   const handleDirectGoogleSignIn = async () => {
     setIsAuthLoading(true);
@@ -529,6 +544,44 @@ export const AppLayout: React.FC = () => {
               </button>
             </div>
           )}
+
+          {user && (
+            <div className={cn("pt-3 mt-3 border-t border-border/20", isSidebarCollapsed && "pt-2 mt-2")}>
+              {(() => {
+                const isSurveyCompleted = surveyService.getSurveyState().completed;
+                return (
+                  <button
+                    onClick={() => {
+                      setActiveSurvey(UNIFIED_SURVEY);
+                      setIsSidebarOpen(false);
+                    }}
+                    aria-label="Khảo sát & Góp ý"
+                    className={cn(
+                      "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98 text-indigo-600 hover:bg-indigo-500/10 dark:text-indigo-400 border-indigo-500/30",
+                      isSidebarCollapsed && "justify-center px-2 py-3.5 gap-0",
+                      !isSurveyCompleted && "ring-2 ring-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-950/30"
+                    )}
+                    title={isSidebarCollapsed ? "Khảo sát & Góp ý 💬" : undefined}
+                  >
+                    <MessageSquareHeart size={19} className="text-indigo-500 shrink-0" />
+                    {!isSidebarCollapsed && (
+                      <div className="flex items-center justify-between flex-1 min-w-0">
+                        <span className="truncate">Khảo sát & Góp ý 💬</span>
+                        {!isSurveyCompleted && (
+                          <span className="px-2 py-0.5 text-[9px] bg-gradient-to-r from-pink-500 to-indigo-600 text-white rounded-full font-black animate-pulse shadow-sm shrink-0 ml-1.5">
+                            Mới 🎁
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {isSidebarCollapsed && !isSurveyCompleted && (
+                      <span className="absolute top-1 right-1.5 w-2.5 h-2.5 rounded-full bg-pink-500 animate-ping" />
+                    )}
+                  </button>
+                );
+              })()}
+            </div>
+          )}
         </nav>
 
         {user && !isPremium && !isSidebarCollapsed && (
@@ -817,6 +870,15 @@ export const AppLayout: React.FC = () => {
           <QuickLookupPopover />
           <FloatingDictionaryWidget />
         </>
+      )}
+
+      {/* Popup Khảo sát người dùng (Onboarding & Feedback) */}
+      {activeSurvey && (
+        <SurveyModal
+          isOpen={!!activeSurvey}
+          config={activeSurvey}
+          onClose={() => setActiveSurvey(null)}
+        />
       )}
     </div>
   );

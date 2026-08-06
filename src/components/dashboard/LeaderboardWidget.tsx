@@ -43,9 +43,11 @@ export const LeaderboardWidget: React.FC = () => {
       totalStudySeconds += (a.timeSpent || 0);
     });
 
+    const correctAttempts = userAttempts.filter(a => a.isCorrect).length;
     const totalMinutes = Math.round(totalStudySeconds / 60);
     const masteredCount = userProgress.completedLessons.length;
-    const xpScore = (totalAttempts * 10) + (totalMinutes * 5) + (masteredCount * 50);
+    const timeXp = Math.min(totalMinutes * 2, 100);
+    const xpScore = (correctAttempts * 15) + (masteredCount * 100) + timeXp;
 
     // Tính khoảng cách XP tới vị trí #20
     const rank20 = rankings[rankings.length - 1];

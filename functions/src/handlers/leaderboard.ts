@@ -38,11 +38,13 @@ export const updateLeaderboardDaily = onSchedule({
       const data = docSnap.data();
       const stats = data.stats || {};
       const totalAttempts = stats.totalAttempts || 0;
+      const correctAttempts = typeof stats.correctAttempts === 'number' ? stats.correctAttempts : Math.round(totalAttempts * 0.7);
       const totalStudySeconds = stats.totalStudySeconds || 0;
       const totalMinutes = Math.round(totalStudySeconds / 60);
       const completedLessons = Array.isArray(data.completedLessons) ? data.completedLessons : [];
       const masteredCount = completedLessons.length;
-      const xpScore = stats.xpScore || ((totalAttempts * 10) + (totalMinutes * 5) + (masteredCount * 50));
+      const timeXp = Math.min(totalMinutes * 2, 100);
+      const xpScore = stats.xpScore || ((correctAttempts * 15) + (masteredCount * 100) + timeXp);
 
       if (totalAttempts > 0 || totalMinutes > 0 || masteredCount > 0 || xpScore > 0) {
         rawList.push({

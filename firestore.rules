@@ -232,6 +232,16 @@ service cloud.firestore {
       allow read, write: if isTeacher();
     }
 
+    match /survey_responses/{userId} {
+      allow read, write: if isOwner(userId) || isTeacher();
+      allow list: if isTeacher();
+    }
+
+    match /system_metrics/{docId} {
+      allow read: if signedIn();
+      allow write: if signedIn();
+    }
+
     match /manual_attempts/{attemptId} {
       allow read, delete: if isTeacher();
       allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
