@@ -208,7 +208,7 @@ export const AdminChatWidget: React.FC = () => {
                   >
                     {!isMe && (
                       <span className="text-[9px] font-extrabold text-indigo-600 dark:text-indigo-400 block mb-0.5">
-                        {msg.senderName} (Admin)
+                        ezonthi (Admin)
                       </span>
                     )}
                     <p>{msg.text}</p>

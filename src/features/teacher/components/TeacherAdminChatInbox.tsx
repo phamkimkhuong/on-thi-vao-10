@@ -129,7 +129,7 @@ export const TeacherAdminChatInbox: React.FC = () => {
         studentEmail: selectedRoom.studentEmail,
         studentGrade: selectedRoom.studentGrade,
         senderRole: 'admin',
-        senderName: user.displayName || 'ezonthi Admin',
+        senderName: 'ezonthi',
         senderId: user.uid,
         text,
       });
@@ -352,7 +352,7 @@ export const TeacherAdminChatInbox: React.FC = () => {
                           )}
                         >
                           <span className={cn('text-[9px] font-extrabold block mb-0.5', isAdmin ? 'text-indigo-200' : 'text-emerald-600 dark:text-emerald-400')}>
-                            {isAdmin ? `${msg.senderName} (Admin)` : selectedRoom.studentName}
+                            {isAdmin ? 'ezonthi (Admin)' : selectedRoom.studentName}
                           </span>
                           <p>{msg.text}</p>
                           <span className={cn('text-[9px] font-bold block text-right mt-1 opacity-70', isAdmin ? 'text-white/80' : 'text-muted-foreground')}>
