@@ -9,7 +9,12 @@ import {
   CheckCircle2,
   ArrowRight,
   XCircle,
-  ChevronRight
+  ChevronRight,
+  Phone,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Clock
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { cn } from '../../utils/cn';
@@ -20,7 +25,7 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-20 select-none">
-      
+
       {/* 1. HERO SECTION WITH ACADEMIC TITLE */}
       <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24 border-b border-border/40 bg-gradient-to-b from-slate-50 via-background to-background dark:from-slate-950/60 dark:via-background dark:to-background">
         <div className="absolute top-0 right-1/3 w-[500px] h-[500px] bg-primary/8 rounded-full blur-3xl pointer-events-none" />
@@ -63,7 +68,7 @@ export const AboutPage: React.FC = () => {
         {/* 2. INTERACTIVE PRODUCT PREVIEW MOCKUP */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 md:pt-16">
           <div className="rounded-3xl border border-border/80 bg-card shadow-2xl overflow-hidden">
-            
+
             {/* Window Topbar */}
             <div className="px-4 py-3 bg-slate-100 dark:bg-slate-900 border-b border-border flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
@@ -122,7 +127,7 @@ export const AboutPage: React.FC = () => {
 
             {/* Interactive Preview Canvas */}
             <div className="p-5 sm:p-8 bg-slate-50/50 dark:bg-slate-950/60 min-h-[340px] flex items-center justify-center">
-              
+
               {/* TAB 1: ROADMAP PREVIEW */}
               {activeDemoTab === 'roadmap' && (
                 <div className="w-full space-y-4 animate-fade-in">
@@ -489,6 +494,85 @@ export const AboutPage: React.FC = () => {
             >
               Luyện tập dạng bài
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. DIRECT CONTACT & SUPPORT SECTION */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 md:pt-16 space-y-8">
+        <div className="text-center space-y-2">
+          <span className="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            Thông Tin Liên Hệ
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-foreground font-sans tracking-tight">
+            Liên Hệ & Hỗ Trợ Trực Tiếp
+          </h2>
+          <p className="text-xs sm:text-sm text-muted-foreground font-medium max-w-xl mx-auto">
+            Mọi thắc mắc về nội dung học tập, kích hoạt tài khoản Premium VIP hoặc hợp tác đối tác, xin vui lòng liên hệ với chúng tôi.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Hotline & Zalo */}
+          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs hover:border-emerald-500/40 transition-all duration-300 space-y-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-black border border-emerald-500/20 group-hover:scale-105 transition-transform">
+              <Phone size={22} />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-wider">
+                Hotline & Zalo Hỗ Trợ
+              </h3>
+              <a
+                href="tel:09xxxxxxxx"
+                className="text-lg font-black text-foreground hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors block"
+              >
+                0329670310
+              </a>
+              <p className="text-[11px] text-muted-foreground font-semibold flex items-center gap-1 pt-1">
+                <Clock size={12} className="text-emerald-500" />
+                <span>Hỗ trợ từ 8:00 – 22:00 Hàng ngày</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2: Email */}
+          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs hover:border-indigo-500/40 transition-all duration-300 space-y-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black border border-indigo-500/20 group-hover:scale-105 transition-transform">
+              <Mail size={22} />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-wider">
+                Email Liên Hệ Chính Thức
+              </h3>
+              <a
+                href="mailto:hotro@onthivao10.com"
+                className="text-base font-black text-foreground hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors block truncate"
+              >
+                phamkhuong436@gmail.com
+              </a>
+              <p className="text-[11px] text-muted-foreground font-semibold flex items-center gap-1 pt-1">
+                <MessageCircle size={12} className="text-indigo-500" />
+                <span>Phản hồi trong vòng 24 giờ làm việc</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3: Address */}
+          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs hover:border-purple-500/40 transition-all duration-300 space-y-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-black border border-purple-500/20 group-hover:scale-105 transition-transform">
+              <MapPin size={22} />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-wider">
+                Văn Phòng & Địa Chỉ
+              </h3>
+              <p className="text-base font-black text-foreground">
+                Hồ Chí Minh, Việt Nam
+              </p>
+              <p className="text-[11px] text-muted-foreground font-semibold pt-1">
+                Phục vụ học sinh & đối tác trên toàn quốc
+              </p>
+            </div>
           </div>
         </div>
       </section>

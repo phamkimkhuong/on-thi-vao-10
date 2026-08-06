@@ -14,7 +14,10 @@ import {
   ChevronRight,
   Inbox,
   X,
-  Sparkles
+  Sparkles,
+  Phone,
+  Mail,
+  MapPin
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
@@ -218,6 +221,43 @@ export const SupportPage: React.FC = () => {
         </div>
         {/* Decor */}
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16" />
+      </div>
+
+      {/* Direct Contact Cards Bar */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-black shrink-0 border border-emerald-500/20">
+            <Phone size={18} />
+          </div>
+          <div className="space-y-0.5 truncate">
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider block">Hotline & Zalo Hỗ Trợ</span>
+            <a href="tel:09xxxxxxxx" className="text-sm font-black text-foreground hover:text-emerald-600 transition-colors">
+              0329670310
+            </a>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black shrink-0 border border-indigo-500/20">
+            <Mail size={18} />
+          </div>
+          <div className="space-y-0.5 truncate">
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider block">Email Liên Hệ</span>
+            <a href="mailto:hotro@onthivao10.com" className="text-xs font-black text-foreground hover:text-indigo-600 transition-colors truncate block">
+              phamkhuong436@gmail.com
+            </a>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-black shrink-0 border border-purple-500/20">
+            <MapPin size={18} />
+          </div>
+          <div className="space-y-0.5 truncate">
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider block">Địa Chỉ Văn Phòng</span>
+            <span className="text-xs font-black text-foreground">Hồ Chí Minh, Việt Nam</span>
+          </div>
+        </div>
       </div>
 
       {/* Main Grid: Form on the Left, History on the Right */}
@@ -503,7 +543,7 @@ export const SupportPage: React.FC = () => {
 
             {/* Modal Content */}
             <div className="p-6 overflow-y-auto space-y-5 flex-1">
-              
+
               {/* Badges, Date and Title */}
               <div className="space-y-3 pb-4 border-b border-border/40">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
