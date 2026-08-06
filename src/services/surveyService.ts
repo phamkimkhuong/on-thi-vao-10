@@ -104,44 +104,59 @@ class SurveyService {
 
       // 2. ⭐ TỐI ƯU O(1) READ CHO ADMIN: Cập nhật dồn vào 1-Read Aggregated Directory Document
       try {
+        const { getDoc, updateDoc } = await import('firebase/firestore');
         const summaryRef = doc(db, 'system_metrics', 'survey_directory');
         const uiRatingObj = typeof fullData.uiRating === 'object' && fullData.uiRating !== null
           ? (fullData.uiRating as { rating?: number; reason?: string })
           : null;
         const ratingVal = typeof fullData.uiRating === 'number' ? fullData.uiRating : uiRatingObj?.rating;
         const ratingReason = uiRatingObj?.reason || null;
+        const deviceVal = fullData.primaryDevice ? (fullData.primaryDevice.startsWith('other:') ? 'other' : fullData.primaryDevice) : null;
 
-        const summaryUpdate: Record<string, any> = {
-          totalResponses: increment(1),
-          updatedAt: serverTimestamp(),
-        };
+        const feedbackItem = sanitizeForFirestore({
+          userId: user.uid,
+          userEmail: user.email || 'Học sinh',
+          grade: fullData.grade || null,
+          goal: fullData.goal || null,
+          preferredSubject: fullData.preferredSubject || null,
+          primaryDevice: fullData.primaryDevice || null,
+          uiRating: fullData.uiRating || null,
+          wishedFeatures: fullData.wishedFeatures || [],
+          studyHurdles: fullData.studyHurdles || null,
+          npsScore: fullData.npsScore ?? null,
+          comments: fullData.additionalComments || ratingReason || null,
+          submittedAt: fullData.completedAt,
+          fullSurvey: fullData,
+        });
 
-        if (fullData.grade) {
-          summaryUpdate[`grades.${fullData.grade}`] = increment(1);
+        const snap = await getDoc(summaryRef);
+        if (snap.exists()) {
+          const updatePayload: Record<string, any> = {
+            totalResponses: increment(1),
+            updatedAt: serverTimestamp(),
+            latestFeedbacks: arrayUnion(feedbackItem),
+          };
+          if (fullData.grade) {
+            updatePayload[`grades.${fullData.grade}`] = increment(1);
+          }
+          if (ratingVal) {
+            updatePayload[`uiRatings.${ratingVal}`] = increment(1);
+          }
+          if (deviceVal) {
+            updatePayload[`devices.${deviceVal}`] = increment(1);
+          }
+          await updateDoc(summaryRef, updatePayload);
+        } else {
+          const initialPayload: Record<string, any> = {
+            totalResponses: 1,
+            updatedAt: serverTimestamp(),
+            grades: fullData.grade ? { [fullData.grade]: 1 } : {},
+            uiRatings: ratingVal ? { [ratingVal]: 1 } : {},
+            devices: deviceVal ? { [deviceVal]: 1 } : {},
+            latestFeedbacks: [feedbackItem],
+          };
+          await setDoc(summaryRef, initialPayload);
         }
-        if (ratingVal) {
-          summaryUpdate[`uiRatings.${ratingVal}`] = increment(1);
-        }
-
-        // Đẩy nhận xét mới vào danh sách feedbacks gần nhất để Admin đọc 1-Read xem được ngay
-        summaryUpdate['latestFeedbacks'] = arrayUnion(
-          sanitizeForFirestore({
-            userId: user.uid,
-            userEmail: user.email || 'Học sinh',
-            grade: fullData.grade || null,
-            goal: fullData.goal || null,
-            preferredSubject: fullData.preferredSubject || null,
-            uiRating: fullData.uiRating || null,
-            wishedFeatures: fullData.wishedFeatures || [],
-            studyHurdles: fullData.studyHurdles || null,
-            npsScore: fullData.npsScore ?? null,
-            comments: fullData.additionalComments || ratingReason || null,
-            submittedAt: fullData.completedAt,
-            fullSurvey: fullData,
-          })
-        );
-
-        await setDoc(summaryRef, summaryUpdate, { merge: true });
       } catch (summaryError) {
         logger.info('Không thể cập nhật system_metrics/survey_directory:', summaryError);
       }

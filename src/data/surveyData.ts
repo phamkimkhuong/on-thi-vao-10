@@ -76,6 +76,18 @@ export const UNIFIED_SURVEY: SurveyConfig = {
       },
     },
     {
+      id: 'primaryDevice',
+      title: 'Bạn thường học tập trên thiết bị nào nhiều nhất?',
+      description: 'Giúp chúng mình tối ưu giao diện chuẩn nhất cho thiết bị bạn dùng',
+      type: 'single_choice',
+      options: [
+        { id: 'mobile', label: 'Điện thoại di động (Smartphone)', subLabel: 'iOS / Android', value: 'mobile' },
+        { id: 'desktop', label: 'Máy tính / Laptop', subLabel: 'Windows / Mac / Chromebook', value: 'desktop' },
+        { id: 'tablet', label: 'Máy tính bảng (Tablet / iPad)', subLabel: 'Màn hình rộng di động', value: 'tablet' },
+        { id: 'other', label: 'Thiết bị khác...', value: 'other', hasInput: true, inputPlaceholder: 'Gõ thiết bị bạn hay dùng...' },
+      ],
+    },
+    {
       id: 'uiRating',
       title: 'Bạn cảm thấy màu sắc & giao diện ứng dụng như thế nào?',
       description: 'Đánh giá mức độ hài lòng về thiết kế, màu sắc và trải nghiệm xem bài',
@@ -101,7 +113,7 @@ export const UNIFIED_SURVEY: SurveyConfig = {
       type: 'single_choice',
       options: [
         { id: 'confused', label: 'Có, mình chưa biết bắt đầu từ chương nào', icon: '🌀', value: 'confused' },
-        { id: 'clear', label: 'Không, mình đã theo đúng Lộ trình Roadmap', icon: '🎯', value: 'clear' },
+        { id: 'clear', label: 'Không, mình đã theo đúng Lộ trình học', icon: '🎯', value: 'clear' },
         { id: 'need_ai', label: 'Mình muốn AI Gia sư lập lộ trình cá nhân hóa giúp mình', icon: '🤖', value: 'need_ai' },
         { id: 'other', label: 'Ý kiến / Lý do khác...', icon: '💡', value: 'other', hasInput: true, inputPlaceholder: 'Chia sẻ ngắn gọn vướng mắc của bạn...' },
       ],

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calendar, MapPin, User, Save, LogOut, Loader, Sun, Moon } from 'lucide-react';
+import { X, Calendar, MapPin, User, Save, LogOut, Loader, Sun, Moon, Crown, ArrowRight, Zap, Clock } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { db } from '../../services/firebase';
@@ -16,7 +16,7 @@ interface ProfileModalProps {
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { user, userData, logout, darkMode, setDarkMode } = useAppStore();
+  const { user, userData, logout, darkMode, setDarkMode, isPremium, premiumUntil, trialActivated, isAutoProfileModal } = useAppStore();
 
   const [name, setName] = useState('');
   const [birthYear, setBirthYear] = useState('');
@@ -102,6 +102,33 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     }
   };
 
+  // Tính toán thời gian hết hạn & số ngày còn lại
+  const formatExpiryDate = (dateStr: string | null) => {
+    if (!dateStr) return null;
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return null;
+      return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } catch {
+      return null;
+    }
+  };
+
+  const getRemainingDays = (dateStr: string | null) => {
+    if (!dateStr) return null;
+    try {
+      const expiry = new Date(dateStr).getTime();
+      const now = new Date().getTime();
+      const diff = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+      return diff > 0 ? diff : 0;
+    } catch {
+      return null;
+    }
+  };
+
+  const formattedDate = formatExpiryDate(premiumUntil);
+  const remainingDays = getRemainingDays(premiumUntil);
+
   return (
     <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
       <div
@@ -109,7 +136,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in p-6 space-y-6 relative max-h-[90vh] flex flex-col"
+        className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in p-6 space-y-5 relative max-h-[90vh] flex flex-col"
       >
         {/* Close Button */}
         <button
@@ -125,15 +152,76 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         {/* Header */}
         <div className="text-center space-y-1">
           <h3 id={titleId} className="font-black text-base text-foreground leading-snug">
-            Cài đặt tài khoản học sinh
+            {isAutoProfileModal ? 'Hoàn thiện thông tin học sinh 🎯' : 'Cài đặt tài khoản học sinh'}
           </h3>
           <p id={descriptionId} className="text-xs text-muted-foreground font-semibold">
-            Cập nhật thông tin để tối ưu hóa lộ trình & tham gia Bảng xếp hạng.
+            {isAutoProfileModal
+              ? 'Cập nhật năm sinh & tỉnh thành để hệ thống hiển thị đúng kiến thức & lộ trình của bạn.'
+              : 'Cập nhật thông tin & Quản lý gói tài khoản học tập của bạn.'}
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSave} className="space-y-4 flex-1 overflow-y-auto pr-1">
+          {/* ⭐ ẨN Card Gói Premium cho trường hợp TỰ ĐỘNG BẬT ONBOARDING; HIỂN THỊ khi mở thủ công */}
+          {!isAutoProfileModal && (
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-500/30 dark:border-amber-500/20 shadow-xs relative overflow-hidden">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className={cn(
+                    "p-2 rounded-xl flex items-center justify-center shrink-0",
+                    isPremium ? "bg-amber-500 text-white shadow-md shadow-amber-500/20" : "bg-secondary text-muted-foreground"
+                  )}>
+                    {isPremium ? <Crown size={18} className="animate-pulse" /> : <Zap size={18} />}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black uppercase tracking-wider text-foreground">
+                        {isPremium ? 'Gói PREMIUM VIP' : trialActivated ? 'Gói Dùng Thử (Trial)' : 'Gói Tự Học (Free)'}
+                      </span>
+                      {isPremium && (
+                        <span className="px-2 py-0.5 text-[8px] bg-gradient-to-r from-amber-500 to-orange-500 text-white font-black rounded-full uppercase tracking-wider shadow-xs">
+                          VIP
+                        </span>
+                      )}
+                    </div>
+
+                    {isPremium ? (
+                      <div className="text-[11px] font-semibold text-muted-foreground mt-0.5 flex items-center gap-1.5">
+                        <Clock size={12} className="text-amber-500 shrink-0" />
+                        <span>
+                          {formattedDate ? `Hạn sử dụng đến: ${formattedDate}` : 'Tài khoản vĩnh viễn ♾️'}
+                        </span>
+                        {remainingDays !== null && (
+                          <span className="font-extrabold text-amber-600 dark:text-amber-400">
+                            ({remainingDays > 0 ? `Còn ${remainingDays} ngày` : 'Hết hạn hôm nay'})
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-[11px] text-muted-foreground font-semibold mt-0.5">
+                        Chưa nâng cấp. Nâng cấp ngay để mở khóa toàn bộ đề thi & AI Tutor.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {!isPremium && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      navigate('/premium');
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-black text-[10px] hover:shadow-md transition-all active:scale-95 cursor-pointer shrink-0 flex items-center gap-1"
+                  >
+                    <span>Nâng cấp</span>
+                    <ArrowRight size={10} />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
           {error && (
             <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-semibold rounded-xl text-center">
               {error}
@@ -321,4 +409,5 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     </div>
   );
 };
+
 export default ProfileModal;

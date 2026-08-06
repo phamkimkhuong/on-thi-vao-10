@@ -39,10 +39,11 @@ import { StudentSummary } from './components/StudentSummary';
 import { StudentMasteryTab } from './components/StudentMasteryTab';
 import { StudentExamsTab } from './components/StudentExamsTab';
 import { GradingPanel } from './components/GradingPanel';
-import { MessageSquareHeart } from 'lucide-react';
+import { MessageSquareHeart, Bell } from 'lucide-react';
 import { TeacherSurveyReport } from './components/TeacherSurveyReport';
+import { TeacherNotificationManager } from './components/TeacherNotificationManager';
 
-type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast' | 'survey_report';
+type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast' | 'survey_report' | 'system_notification';
 
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
@@ -618,6 +619,18 @@ export const TeacherDashboard: React.FC = () => {
           <MessageSquareHeart size={15} />
           Báo cáo Khảo sát
         </button>
+        <button
+          onClick={() => changeTab('system_notification')}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'system_notification'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Bell size={15} />
+          Gửi Thông Báo 🔔
+        </button>
       </div>
 
       {/* Content Tabs */}
@@ -1038,6 +1051,8 @@ export const TeacherDashboard: React.FC = () => {
         <EmailBroadcastManager />
       ) : activeTab === 'survey_report' ? (
         <TeacherSurveyReport />
+      ) : activeTab === 'system_notification' ? (
+        <TeacherNotificationManager />
       ) : null}
 
     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { surveyService } from '../../../services/surveyService';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../components/ui/card';
-import { Loader, MessageSquareHeart, Users, Star, ThumbsUp, Layers, RefreshCw, X, Eye } from 'lucide-react';
+import { Loader, MessageSquareHeart, Users, Star, ThumbsUp, Layers, RefreshCw, X, Eye, Smartphone, Laptop } from 'lucide-react';
 
 const GRADE_LABELS: Record<string, string> = {
   grade9: 'Lớp 9 (Ôn thi vào 10)',
@@ -27,6 +27,13 @@ const SUBJECT_LABELS: Record<string, string> = {
   chemistry: 'Hóa học 🧪',
   physics: 'Vật lý ⚡',
   biology: 'Sinh học 🌱',
+};
+
+const DEVICE_LABELS: Record<string, string> = {
+  mobile: 'Điện thoại di động 📱',
+  desktop: 'Máy tính / Laptop 💻',
+  tablet: 'Máy tính bảng (iPad) 📱',
+  other: 'Thiết bị khác...',
 };
 
 const FEATURE_LABELS: Record<string, string> = {
@@ -73,20 +80,36 @@ export const TeacherSurveyReport: React.FC = () => {
     );
   }
 
+  const getGradeCount = (code: string): number => {
+    if (data?.grades && data.grades[code] !== undefined) return Number(data.grades[code]);
+    if (data && data[`grades.${code}`] !== undefined) return Number(data[`grades.${code}`]);
+    return 0;
+  };
+
+  const getRatingCount = (score: number): number => {
+    if (data?.uiRatings && data.uiRatings[score] !== undefined) return Number(data.uiRatings[score]);
+    if (data && data[`uiRatings.${score}`] !== undefined) return Number(data[`uiRatings.${score}`]);
+    return 0;
+  };
+
+  const getDeviceCount = (code: string): number => {
+    if (data?.devices && data.devices[code] !== undefined) return Number(data.devices[code]);
+    if (data && data[`devices.${code}`] !== undefined) return Number(data[`devices.${code}`]);
+    return 0;
+  };
+
   const total = data?.totalResponses || 0;
-  const grades = data?.grades || {};
-  const uiRatings = data?.uiRatings || {};
   const latestFeedbacks: any[] = data?.latestFeedbacks || [];
+  const activeGradesCount = ['grade9', 'grade10', 'grade11', 'grade12'].filter(code => getGradeCount(code) > 0).length;
 
   // Tính điểm đánh giá UI trung bình
   let totalRatingSum = 0;
   let totalRatingCount = 0;
-  Object.entries(uiRatings).forEach(([score, count]) => {
-    const numScore = parseInt(score, 10);
-    const numCount = Number(count);
-    if (!isNaN(numScore) && !isNaN(numCount)) {
-      totalRatingSum += numScore * numCount;
-      totalRatingCount += numCount;
+  [1, 2, 3, 4, 5].forEach((score) => {
+    const count = getRatingCount(score);
+    if (count > 0) {
+      totalRatingSum += score * count;
+      totalRatingCount += count;
     }
   });
   const avgRating = totalRatingCount > 0 ? (totalRatingSum / totalRatingCount).toFixed(1) : '5.0';
@@ -148,7 +171,7 @@ export const TeacherSurveyReport: React.FC = () => {
             <div>
               <p className="text-xs font-extrabold text-muted-foreground uppercase tracking-wider">Khối Lớp Tham Gia</p>
               <h3 className="text-2xl font-black text-foreground mt-0.5">
-                {Object.keys(grades).length} Khối lớp
+                {activeGradesCount} Khối lớp
               </h3>
             </div>
           </CardContent>
@@ -156,15 +179,15 @@ export const TeacherSurveyReport: React.FC = () => {
       </div>
 
       {/* Breakdown Grids */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Phân bố theo Khối Lớp */}
         <Card className="rounded-3xl border-border/40 bg-card">
           <CardHeader>
             <CardTitle className="text-base font-extrabold flex items-center gap-2">
               <Layers className="w-5 h-5 text-primary" />
-              Phân Bố Học Sinh Theo Khối Lớp
+              Phân Bố Theo Khối Lớp
             </CardTitle>
-            <CardDescription className="text-xs">Số lượng học sinh hoàn thành khảo sát theo từng lớp</CardDescription>
+            <CardDescription className="text-xs">Số lượng học sinh từng lớp</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {[
@@ -173,17 +196,53 @@ export const TeacherSurveyReport: React.FC = () => {
               { code: 'grade11', label: 'Lớp 11' },
               { code: 'grade12', label: 'Lớp 12 (Thi THPT)' },
             ].map((g) => {
-              const count = Number(grades[g.code] || 0);
+              const count = getGradeCount(g.code);
               const percent = total > 0 ? Math.round((count / total) * 100) : 0;
               return (
                 <div key={g.code} className="space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-extrabold">
                     <span className="text-foreground">{g.label}</span>
-                    <span className="text-primary">{count} học sinh ({percent}%)</span>
+                    <span className="text-primary">{count} ({percent}%)</span>
                   </div>
-                  <div className="w-full h-2.5 bg-secondary rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
                     <div
                       className="h-full bg-primary transition-all duration-500"
+                      style={{ width: `${percent}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+
+        {/* Thiết Bị Học Sinh Sử Dụng */}
+        <Card className="rounded-3xl border-border/40 bg-card">
+          <CardHeader>
+            <CardTitle className="text-base font-extrabold flex items-center gap-2">
+              <Smartphone className="w-5 h-5 text-indigo-500" />
+              Thiết Bị Sử Dụng Học Tập
+            </CardTitle>
+            <CardDescription className="text-xs">Tỉ lệ học trên Điện thoại / Máy tính / iPad</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[
+              { code: 'mobile', label: 'Điện thoại di động (Smartphone)', icon: Smartphone },
+              { code: 'desktop', label: 'Máy tính / Laptop', icon: Laptop },
+              { code: 'tablet', label: 'Máy tính bảng (Tablet / iPad)', icon: Smartphone },
+              { code: 'other', label: 'Thiết bị khác...', icon: Smartphone },
+            ].map((dev) => {
+              const count = getDeviceCount(dev.code);
+              const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+              return (
+                <div key={dev.code} className="space-y-1.5">
+                  <div className="flex justify-between items-center text-xs font-extrabold">
+                    <span className="text-foreground">{dev.label}</span>
+                    <span className="text-indigo-600 dark:text-indigo-400">{count} ({percent}%)</span>
+                  </div>
+                  <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-500 transition-all duration-500"
                       style={{ width: `${percent}%` }}
                     />
                   </div>
@@ -198,9 +257,9 @@ export const TeacherSurveyReport: React.FC = () => {
           <CardHeader>
             <CardTitle className="text-base font-extrabold flex items-center gap-2">
               <ThumbsUp className="w-5 h-5 text-amber-500" />
-              Mức Độ Hài Lòng Về Giao Diện & Màu Sắc
+              Mức Độ Hài Lòng Giao Diện
             </CardTitle>
-            <CardDescription className="text-xs">Tỉ lệ bình chọn từ 1 Star đến 5 Star</CardDescription>
+            <CardDescription className="text-xs">Tỉ lệ bình chọn 1 Star đến 5 Star</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {[
@@ -210,13 +269,13 @@ export const TeacherSurveyReport: React.FC = () => {
               { score: 2, label: '2 ⭐ — Cần cải thiện' },
               { score: 1, label: '1 ⭐ — Chưa tốt' },
             ].map((r) => {
-              const count = Number(uiRatings[r.score] || 0);
+              const count = getRatingCount(r.score);
               const percent = totalRatingCount > 0 ? Math.round((count / totalRatingCount) * 100) : 0;
               return (
                 <div key={r.score} className="space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-extrabold">
                     <span className="text-foreground">{r.label}</span>
-                    <span className="text-amber-600 dark:text-amber-400">{count} chọn ({percent}%)</span>
+                    <span className="text-amber-600 dark:text-amber-400">{count} ({percent}%)</span>
                   </div>
                   <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
                     <div
@@ -262,6 +321,11 @@ export const TeacherSurveyReport: React.FC = () => {
                       {item.grade && (
                         <span className="px-2 py-0.5 rounded-md bg-secondary text-foreground uppercase">
                           {item.grade}
+                        </span>
+                      )}
+                      {item.primaryDevice && (
+                        <span className="px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold">
+                          {DEVICE_LABELS[item.primaryDevice] || item.primaryDevice}
                         </span>
                       )}
                       <span>{item.submittedAt ? new Date(item.submittedAt).toLocaleDateString('vi-VN') : ''}</span>
@@ -336,6 +400,16 @@ export const TeacherSurveyReport: React.FC = () => {
                 </div>
               </div>
 
+              {/* Thiết Bị Sử Dụng */}
+              {(selectedFeedback.primaryDevice || selectedFeedback.fullSurvey?.primaryDevice) && (
+                <div className="p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900/40">
+                  <div className="text-[11px] font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider">Thiết Bị Sử Dụng Học Tập Nổi Bật</div>
+                  <div className="text-sm font-extrabold text-indigo-950 dark:text-indigo-100 mt-0.5">
+                    {DEVICE_LABELS[selectedFeedback.primaryDevice || selectedFeedback.fullSurvey?.primaryDevice] || (selectedFeedback.primaryDevice || selectedFeedback.fullSurvey?.primaryDevice)?.replace(/^other:?\s*/, 'Khác: ')}
+                  </div>
+                </div>
+              )}
+
               {/* Mục Tiêu Học Tập */}
               {(selectedFeedback.goal || selectedFeedback.fullSurvey?.goal) && (
                 <div className="p-3.5 rounded-2xl bg-secondary/40 border border-border/30">
@@ -386,7 +460,7 @@ export const TeacherSurveyReport: React.FC = () => {
                   <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Phân Vân Về Cách Bắt Đầu Học</div>
                   <div className="text-xs font-bold text-foreground mt-0.5">
                     {HURDLE_LABELS[selectedFeedback.studyHurdles || selectedFeedback.fullSurvey?.studyHurdles] ||
-                     (selectedFeedback.studyHurdles || selectedFeedback.fullSurvey?.studyHurdles)?.replace(/^other:?\s*/, 'Khác: ')}
+                      (selectedFeedback.studyHurdles || selectedFeedback.fullSurvey?.studyHurdles)?.replace(/^other:?\s*/, 'Khác: ')}
                   </div>
                 </div>
               )}

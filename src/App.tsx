@@ -38,6 +38,7 @@ const SupportPage = lazyWithRetry(() => import('./features/support/SupportPage')
 const AffiliateDashboard = lazyWithRetry(() => import('./features/affiliate/AffiliateDashboard').then(m => ({ default: m.AffiliateDashboard })));
 const AboutPage = lazyWithRetry(() => import('./features/about/AboutPage'));
 const VocabularyPage = lazyWithRetry(() => import('./features/vocabulary/VocabularyPage'));
+const NewsPage = lazyWithRetry(() => import('./features/news/NewsPage').then(m => ({ default: m.NewsPage })));
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
       { path: ROUTES.SUPPORT.substring(1), element: <SupportPage /> },
       { path: ROUTES.AFFILIATE.substring(1), element: <AffiliateDashboard /> },
       { path: ROUTES.VOCABULARY.substring(1), element: <VocabularyPage /> },
+      { path: ROUTES.NEWS.substring(1), element: <NewsPage /> },
       { path: ROUTES.ABOUT.substring(1), element: <AboutPage /> },
     ]
   },
@@ -142,7 +144,7 @@ export const App: React.FC = () => {
               const hasAutoOpened = sessionStorage.getItem('ezonthi_profile_auto_opened');
               if (!hasAutoOpened && (!data.birthYear || !data.gender || !data.province)) {
                 sessionStorage.setItem('ezonthi_profile_auto_opened', 'true');
-                useAppStore.setState({ isProfileModalOpen: true });
+                useAppStore.setState({ isProfileModalOpen: true, isAutoProfileModal: true });
               }
             }
           } else {

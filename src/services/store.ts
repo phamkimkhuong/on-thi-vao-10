@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import type { User } from 'firebase/auth';
 import type { SubjectCode } from '../types';
+import type { AppNotification } from '../types/notificationTypes';
+import { notificationService } from './notificationService';
 
 type GradeCode = 'grade9' | 'grade10' | 'grade11' | 'grade12';
 
@@ -42,6 +44,11 @@ interface AppState {
   trialActivated: boolean;
   premiumUntil: string | null;
   isProfileModalOpen: boolean;
+  isAutoProfileModal: boolean;
+
+  // Notifications state
+  notifications: AppNotification[];
+  unreadNotificationCount: number;
 
   // Reactivity trigger for LocalStorage progress changes
   progressVersion: number;
@@ -56,6 +63,9 @@ interface AppState {
   setGrade: (grade: 'grade9' | 'grade10' | 'grade11' | 'grade12') => void;
   refreshProgress: () => void;
   setIsLoadingData: (loading: boolean) => void;
+  setNotifications: (list: AppNotification[]) => void;
+  markNotificationAsRead: (id: string) => void;
+  markAllNotificationsAsRead: () => void;
 
   // Auth actions
   setUser: (user: User | null) => void;
@@ -100,6 +110,34 @@ export const useAppStore = create<AppState>((set, get) => {
     premiumUntil: null,
     isLoadingData: true,
     isProfileModalOpen: false,
+    isAutoProfileModal: false,
+    notifications: [],
+    unreadNotificationCount: 0,
+
+    setNotifications: (list: AppNotification[]) => {
+      const unreadCount = list.filter((n) => !n.read).length;
+      set({ notifications: list, unreadNotificationCount: unreadCount });
+    },
+
+    markNotificationAsRead: (id: string) => {
+      const user = get().user;
+      if (user) {
+        notificationService.markAsRead(user.uid, id);
+      }
+      const updated = get().notifications.map((n) => (n.id === id ? { ...n, read: true } : n));
+      const unreadCount = updated.filter((n) => !n.read).length;
+      set({ notifications: updated, unreadNotificationCount: unreadCount });
+    },
+
+    markAllNotificationsAsRead: () => {
+      const user = get().user;
+      const currentNotifs = get().notifications;
+      if (user && currentNotifs.length > 0) {
+        notificationService.markAllAsRead(user.uid, currentNotifs.map((n) => n.id));
+      }
+      const updated = currentNotifs.map((n) => ({ ...n, read: true }));
+      set({ notifications: updated, unreadNotificationCount: 0 });
+    },
 
     toggleDarkMode: () => {
       const nextDarkMode = !get().darkMode;

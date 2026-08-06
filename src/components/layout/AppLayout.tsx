@@ -21,8 +21,10 @@ import {
   Loader,
   Sun,
   Moon,
-  MessageSquareHeart
+  MessageSquareHeart,
+  Bell
 } from 'lucide-react';
+import { notificationService } from '../../services/notificationService';
 import { SurveyModal } from '../../features/survey/SurveyModal';
 import { surveyService } from '../../services/surveyService';
 import { UNIFIED_SURVEY } from '../../data/surveyData';
@@ -59,7 +61,9 @@ export const AppLayout: React.FC = () => {
     isLoadingData,
     setIsLoadingData,
     isProfileModalOpen,
-    setIsProfileModalOpen
+    setIsProfileModalOpen,
+    unreadNotificationCount,
+    setNotifications
   } = useAppStore();
   void progressVersion;
 
@@ -73,6 +77,16 @@ export const AppLayout: React.FC = () => {
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
   const [activeSurvey, setActiveSurvey] = useState<SurveyConfig | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      notificationService.fetchNotifications(user.uid, selectedGrade).then((list) => {
+        setNotifications(list);
+      });
+    } else {
+      setNotifications([]);
+    }
+  }, [user, selectedGrade, setNotifications]);
 
   useEffect(() => {
     if (user && surveyService.shouldShowSurvey()) {
@@ -334,6 +348,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';
     if (path.startsWith('/exam')) return selectedGrade === 'grade9' ? 'Thi thử vào 10' : 'Thi thử & Kiểm tra';
+    if (path.startsWith('/news')) return 'Bảng Tin Thông Báo & Diễn Đàn';
     if (path.startsWith('/about')) return 'Giới thiệu nền tảng';
     if (path.startsWith('/teacher')) return 'Góc Giáo viên';
     if (path.startsWith('/affiliate')) return 'Góc Đối Tác Affiliate';
@@ -353,6 +368,23 @@ export const AppLayout: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          {user && (
+            <button
+              type="button"
+              onClick={() => navigate(ROUTES.NEWS)}
+              aria-label="Bảng tin thông báo"
+              className="p-2 rounded-xl bg-secondary/60 hover:bg-secondary text-foreground border border-border/30 transition-all cursor-pointer flex items-center justify-center active:scale-95 relative"
+              title="Bảng tin thông báo"
+            >
+              <Bell size={16} className={cn(unreadNotificationCount > 0 ? "text-indigo-500 animate-bounce" : "text-muted-foreground")} />
+              {unreadNotificationCount > 0 && (
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] font-black bg-rose-500 text-white rounded-full leading-none shadow-sm animate-pulse">
+                  {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                </span>
+              )}
+            </button>
+          )}
+
           <button
             onClick={toggleDarkMode}
             aria-label={darkMode ? "Chuyển sang giao diện Sáng" : "Chuyển sang giao diện Tối"}
@@ -607,7 +639,10 @@ export const AppLayout: React.FC = () => {
               <>
                 <div
                   className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-xl transition-all"
-                  onClick={() => setIsProfileModalOpen(true)}
+                  onClick={() => {
+                    useAppStore.setState({ isAutoProfileModal: false });
+                    setIsProfileModalOpen(true);
+                  }}
                   title="Cài đặt tài khoản"
                 >
                   <div
@@ -625,7 +660,7 @@ export const AppLayout: React.FC = () => {
                       <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
                         {user.displayName || 'Học sinh'}
                         {isPremium && (
-                          <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PRO</span>
+                          <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PREMIUM</span>
                         )}
                       </span>
                       <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
@@ -752,6 +787,29 @@ export const AppLayout: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            {user && (
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.NEWS)}
+                aria-label="Thông báo học tập & Bảng tin"
+                className={cn(
+                  "px-3 py-1.5 text-xs font-extrabold rounded-2xl border transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 relative",
+                  location.pathname.startsWith(ROUTES.NEWS)
+                    ? "bg-primary/12 text-primary border-primary/40 shadow-sm shadow-primary/5 font-black"
+                    : "bg-secondary/50 hover:bg-secondary border-border/40 text-foreground"
+                )}
+                title="Bảng tin thông báo"
+              >
+                <Bell size={16} className={cn(unreadNotificationCount > 0 ? "text-indigo-500 animate-bounce" : "text-muted-foreground")} />
+                <span className="hidden lg:inline font-bold">Thông báo</span>
+                {unreadNotificationCount > 0 && (
+                  <span className="px-1.5 py-0.5 text-[9px] font-black bg-rose-500 text-white rounded-full leading-none shadow-sm animate-pulse ml-0.5">
+                    {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                  </span>
+                )}
+              </button>
+            )}
+
             <button
               onClick={toggleDarkMode}
               aria-label={darkMode ? "Chuyển sang giao diện Sáng" : "Chuyển sang giao diện Tối"}
