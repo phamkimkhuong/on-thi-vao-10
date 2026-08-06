@@ -39,11 +39,12 @@ import { StudentSummary } from './components/StudentSummary';
 import { StudentMasteryTab } from './components/StudentMasteryTab';
 import { StudentExamsTab } from './components/StudentExamsTab';
 import { GradingPanel } from './components/GradingPanel';
-import { MessageSquareHeart, Bell } from 'lucide-react';
+import { MessageSquareHeart, Bell, MessageCircleCode } from 'lucide-react';
 import { TeacherSurveyReport } from './components/TeacherSurveyReport';
 import { TeacherNotificationManager } from './components/TeacherNotificationManager';
+import { TeacherAdminChatInbox } from './components/TeacherAdminChatInbox';
 
-type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast' | 'survey_report' | 'system_notification';
+type TeacherTabKey = 'students' | 'grading' | 'premium' | 'ai_statistics' | 'support' | 'affiliate_admin' | 'email_broadcast' | 'survey_report' | 'system_notification' | 'admin_chat_inbox';
 
 export const TeacherDashboard: React.FC = () => {
   const { user } = useAppStore();
@@ -631,6 +632,18 @@ export const TeacherDashboard: React.FC = () => {
           <Bell size={15} />
           Gửi Thông Báo 🔔
         </button>
+        <button
+          onClick={() => changeTab('admin_chat_inbox')}
+          className={cn(
+            "px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer",
+            activeTab === 'admin_chat_inbox'
+              ? "border-emerald-600 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <MessageCircleCode size={15} />
+          Chat Học Sinh 💬
+        </button>
       </div>
 
       {/* Content Tabs */}
@@ -1053,6 +1066,8 @@ export const TeacherDashboard: React.FC = () => {
         <TeacherSurveyReport />
       ) : activeTab === 'system_notification' ? (
         <TeacherNotificationManager />
+      ) : activeTab === 'admin_chat_inbox' ? (
+        <TeacherAdminChatInbox />
       ) : null}
 
     </div>

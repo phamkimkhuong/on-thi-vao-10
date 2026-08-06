@@ -258,5 +258,13 @@ service cloud.firestore {
       allow create, update: if signedIn();
       allow delete: if isTeacher();
     }
+
+    match /admin_chat_rooms/{userId} {
+      allow read, write: if isOwner(userId) || isTeacher();
+
+      match /messages/{messageId} {
+        allow read, write: if isOwner(userId) || isTeacher();
+      }
+    }
   }
 }

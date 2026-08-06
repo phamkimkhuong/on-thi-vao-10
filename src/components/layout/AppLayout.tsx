@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { notificationService } from '../../services/notificationService';
 import { SurveyModal } from '../../features/survey/SurveyModal';
+import { AdminChatWidget } from '../chat/AdminChatWidget';
 import { surveyService } from '../../services/surveyService';
 import { UNIFIED_SURVEY } from '../../data/surveyData';
 import type { SurveyConfig } from '../../types/surveyTypes';
@@ -938,6 +939,9 @@ export const AppLayout: React.FC = () => {
           onClose={() => setActiveSurvey(null)}
         />
       )}
+
+      {/* Chat Widget Nổi Trực Tiếp Với Admin ezonthi */}
+      <AdminChatWidget />
     </div>
   );
 };
