@@ -179,6 +179,8 @@ export const PremiumPricing: React.FC = () => {
         isPremium: true,
         role: 'premium',
         trialActivated: true,
+        premiumPlan: 'Gói Dùng Thử (Trial 30 ngày)',
+        planName: 'Gói Dùng Thử (Trial 30 ngày)',
         premiumUntil: premiumUntilDate.toISOString(),
         trialStartDate: new Date().toISOString()
       }, { merge: true });

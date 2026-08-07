@@ -62,6 +62,7 @@ export const TeacherDashboard: React.FC = () => {
   const [hasMoreStudents, setHasMoreStudents] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [premiumEmail, setPremiumEmail] = useState('');
+  const [grantPackageType, setGrantPackageType] = useState<'trial_1m' | 'plan_3m' | 'plan_12m' | 'permanent'>('plan_12m');
   const [premiumSubmitting, setPremiumSubmitting] = useState(false);
   const [premiumSuccessMsg, setPremiumSuccessMsg] = useState<string | null>(null);
   const [premiumErrorMsg, setPremiumErrorMsg] = useState<string | null>(null);
@@ -469,11 +470,11 @@ export const TeacherDashboard: React.FC = () => {
     setPremiumErrorMsg(null);
 
     try {
-      const grantPremium = httpsCallable<{ studentEmail: string }, { success: boolean; message: string; studentName: string }>(
+      const grantPremium = httpsCallable<{ studentEmail: string; packageType?: string }, { success: boolean; message: string; studentName: string }>(
         functions,
         'grantPremiumByEmail'
       );
-      const res = await grantPremium({ studentEmail: premiumEmail });
+      const res = await grantPremium({ studentEmail: premiumEmail, packageType: grantPackageType });
 
       if (res.data.success) {
         setPremiumSuccessMsg(res.data.message);
@@ -679,10 +680,59 @@ export const TeacherDashboard: React.FC = () => {
                       alt={selectedStudent.name}
                       className="w-12 h-12 rounded-full border border-primary bg-slate-100 shrink-0"
                     />
-                    <div>
-                      <CardTitle className="text-foreground text-sm font-black">{selectedStudent.name}</CardTitle>
-                      <CardDescription className="text-[10px] font-semibold text-muted-foreground">
-                        Hồ sơ học tập toàn diện & Tiến trình Mastery thực tế
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <CardTitle className="text-foreground text-sm font-black">{selectedStudent.name}</CardTitle>
+                        {selectedStudent.isPremium && (() => {
+                          const planName = selectedStudent.premiumPlan || (selectedStudent.trialActivated ? 'Gói Dùng Thử (Trial)' : 'Gói Premium VIP');
+                          let expiryStr = 'Vĩnh viễn (VIP Trọn Đời)';
+                          let isExpired = false;
+                          if (selectedStudent.premiumUntil) {
+                            const expiry = new Date(selectedStudent.premiumUntil);
+                            const diffDays = Math.ceil((expiry.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                            const dateStr = expiry.toLocaleDateString('vi-VN');
+                            if (diffDays > 0) {
+                              expiryStr = `Còn ${diffDays} ngày (Hết hạn ${dateStr})`;
+                            } else {
+                              expiryStr = `Đã hết hạn ngày ${dateStr}`;
+                              isExpired = true;
+                            }
+                          }
+                          return (
+                            <span className={cn(
+                              "text-[10px] font-extrabold px-2 py-0.5 rounded-full border flex items-center gap-1 shadow-xs",
+                              isExpired
+                                ? "bg-rose-500/10 text-rose-600 border-rose-500/20 dark:bg-rose-500/20 dark:text-rose-400"
+                                : "bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30"
+                            )}>
+                              <Award size={12} className="shrink-0 text-amber-500" />
+                              <span>{planName}</span>
+                              <span className="opacity-40">•</span>
+                              <span className="font-semibold">{expiryStr}</span>
+                            </span>
+                          );
+                        })()}
+                      </div>
+                      <CardDescription className="text-[10px] font-semibold text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
+                        <span>{selectedStudent.email}</span>
+                        <span className="opacity-40">•</span>
+                        <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          Mở web lần cuối: {(() => {
+                            if (!selectedStudent.lastActiveAt) return 'Chưa ghi nhận';
+                            const date = new Date(selectedStudent.lastActiveAt);
+                            if (isNaN(date.getTime())) return 'Chưa ghi nhận';
+                            const diffMs = Date.now() - date.getTime();
+                            const diffMins = Math.floor(diffMs / (1000 * 60));
+                            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                            if (diffMins < 1) return 'Vừa mới truy cập';
+                            if (diffMins < 60) return `${diffMins} phút trước`;
+                            if (diffHours < 24) return `${diffHours} giờ trước`;
+                            if (diffDays < 30) return `${diffDays} ngày trước`;
+                            return date.toLocaleDateString('vi-VN');
+                          })()}
+                        </span>
                       </CardDescription>
                     </div>
                   </CardHeader>
@@ -1022,6 +1072,35 @@ export const TeacherDashboard: React.FC = () => {
                     className="w-full text-xs font-semibold bg-slate-50 dark:bg-slate-900 border border-border/60 focus:border-emerald-500 rounded-xl px-4 py-3 outline-none transition-all"
                     disabled={premiumSubmitting}
                   />
+                </div>
+
+                {/* Chọn loại gói Premium */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-muted-foreground tracking-wider block">
+                    Chọn Loại Gói Kích Hoạt
+                  </label>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {[
+                      { id: 'trial_1m', label: '🎁 Dùng Thử 1 Tháng', desc: '30 ngày trải nghiệm' },
+                      { id: 'plan_3m', label: '⚡ Gói 3 Tháng', desc: '90 ngày học tập' },
+                      { id: 'plan_12m', label: '👑 Gói 12 Tháng', desc: '365 ngày (1 năm)' },
+                      { id: 'permanent', label: '♾️ VIP Trọn Đời', desc: 'Không giới hạn hạn dùng' },
+                    ].map((pkg) => (
+                      <div
+                        key={pkg.id}
+                        onClick={() => setGrantPackageType(pkg.id as any)}
+                        className={cn(
+                          "p-3 rounded-xl border text-left cursor-pointer transition-all flex flex-col justify-between select-none",
+                          grantPackageType === pkg.id
+                            ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30"
+                            : "bg-slate-50 dark:bg-slate-900 border-border/60 text-muted-foreground hover:border-border"
+                        )}
+                      >
+                        <span className="text-xs font-black text-foreground">{pkg.label}</span>
+                        <span className="text-[9px] font-semibold text-muted-foreground mt-0.5">{pkg.desc}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {premiumErrorMsg && (

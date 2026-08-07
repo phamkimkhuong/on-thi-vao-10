@@ -563,6 +563,9 @@ export interface SimulatedStudent {
   avatar: string;
   email: string;
   isPremium?: boolean;
+  premiumUntil?: string | null;
+  premiumPlan?: string;
+  trialActivated?: boolean;
   completedCount?: number;
   lastActiveAt?: string;
   masteryLevels?: Record<string, number>;

@@ -229,9 +229,14 @@ export const payosWebhook = onRequest({
           const addedMs = durationMonths === 3 ? 90 * 24 * 60 * 60 * 1000 : 365 * 24 * 60 * 60 * 1000;
           const newExpiryDate = new Date(currentExpiry.getTime() + addedMs);
 
+          const planName = durationMonths === 12 ? "Gói 12 Tháng (VIP 1 Năm)" : "Gói 3 Tháng";
+
           batch.set(userRef, {
             isPremium: true,
             role: "premium",
+            trialActivated: false,
+            premiumPlan: planName,
+            planName: planName,
             premiumUntil: newExpiryDate.toISOString(),
             premiumUpdatedAt: new Date(),
           }, { merge: true });
@@ -305,7 +310,7 @@ export const grantPremiumByEmail = onCall({
     throw new HttpsError("permission-denied", "Chỉ giáo viên mới có quyền thực hiện tác vụ này.");
   }
 
-  const { studentEmail } = request.data;
+  const { studentEmail, packageType = "plan_12m" } = request.data;
   if (!studentEmail || typeof studentEmail !== "string") {
     throw new HttpsError("invalid-argument", "Thiếu hoặc sai định dạng email học sinh.");
   }
@@ -327,17 +332,46 @@ export const grantPremiumByEmail = onCall({
   const userRef = userDoc.ref;
   const userData = userDoc.data();
 
-  if (userData.isPremium === true || userData.role === "premium") {
-    return {
-      success: true,
-      message: `Học sinh với email ${studentEmail} đã là tài khoản Premium từ trước.`,
-      studentName: userData.name || "Học sinh",
-    };
+  // Xác định thời hạn & tên gói dựa vào packageType
+  let durationMs = 365 * 24 * 60 * 60 * 1000;
+  let planName = "Gói 12 Tháng (VIP 1 Năm)";
+  let isTrial = false;
+
+  if (packageType === "trial_1m") {
+    durationMs = 30 * 24 * 60 * 60 * 1000;
+    planName = "Gói Dùng Thử (Trial 30 ngày)";
+    isTrial = true;
+  } else if (packageType === "plan_3m") {
+    durationMs = 90 * 24 * 60 * 60 * 1000;
+    planName = "Gói 3 Tháng";
+    isTrial = false;
+  } else if (packageType === "permanent") {
+    durationMs = 100 * 365 * 24 * 60 * 60 * 1000; // 100 năm
+    planName = "Gói VIP Trọn Đời";
+    isTrial = false;
+  } else {
+    // plan_12m
+    durationMs = 365 * 24 * 60 * 60 * 1000;
+    planName = "Gói 12 Tháng (VIP 1 Năm)";
+    isTrial = false;
   }
+
+  let currentExpiry = new Date();
+  if (userData.premiumUntil && !isTrial) {
+    const existingExpiry = new Date(userData.premiumUntil);
+    if (existingExpiry > currentExpiry) {
+      currentExpiry = existingExpiry;
+    }
+  }
+  const newExpiryDate = new Date(currentExpiry.getTime() + durationMs);
 
   await userRef.set({
     isPremium: true,
     role: "premium",
+    trialActivated: isTrial,
+    premiumPlan: planName,
+    planName: planName,
+    premiumUntil: packageType === "permanent" ? null : newExpiryDate.toISOString(),
     premiumUpdatedAt: new Date(),
     grantedByTeacher: callerUid,
   }, { merge: true });

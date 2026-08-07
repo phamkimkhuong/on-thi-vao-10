@@ -54,17 +54,48 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-extrabold text-xs text-foreground truncate">{student.name}</h4>
-                  <p className="text-[10px] text-muted-foreground font-semibold truncate">{student.email}</p>
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-[10px] text-muted-foreground font-semibold truncate">{student.email}</p>
+                    {student.lastActiveAt && (
+                      <span
+                        className="text-[9px] text-emerald-600 dark:text-emerald-400 font-black shrink-0 bg-emerald-500/10 px-1 py-0.2 rounded"
+                        title={`Mở web lần cuối: ${new Date(student.lastActiveAt).toLocaleString('vi-VN')}`}
+                      >
+                        {(() => {
+                          const date = new Date(student.lastActiveAt);
+                          if (isNaN(date.getTime())) return '';
+                          const diffMins = Math.floor((Date.now() - date.getTime()) / (1000 * 60));
+                          if (diffMins < 1) return 'Online';
+                          if (diffMins < 60) return `${diffMins}m`;
+                          const diffHours = Math.floor(diffMins / 60);
+                          if (diffHours < 24) return `${diffHours}h`;
+                          const diffDays = Math.floor(diffHours / 24);
+                          if (diffDays < 30) return `${diffDays}d`;
+                          return date.toLocaleDateString('vi-VN');
+                        })()}
+                      </span>
+                    )}
+                  </div>
 
-                  <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex flex-wrap items-center gap-1.5 mt-1">
                     <span className="text-[9px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded">
                       Đã đạt: {completedCount} dạng bài
                     </span>
-                    {student.isPremium && (
-                      <span className="text-[9px] bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 font-black px-1.5 py-0.5 rounded border border-amber-500/20 animate-pulse flex items-center gap-0.5">
-                        ⭐ Premium
-                      </span>
-                    )}
+                    {student.isPremium && (() => {
+                      let statusText = 'Vĩnh viễn';
+                      if (student.premiumUntil) {
+                        const diffDays = Math.ceil((new Date(student.premiumUntil).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                        statusText = diffDays > 0 ? `Còn ${diffDays} ngày` : 'Hết hạn';
+                      }
+                      return (
+                        <span
+                          className="text-[9px] bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 font-black px-1.5 py-0.5 rounded border border-amber-500/20 flex items-center gap-0.5"
+                          title={`Hạn Premium: ${student.premiumUntil ? new Date(student.premiumUntil).toLocaleDateString('vi-VN') : 'Trọn đời'}`}
+                        >
+                          ⭐ Premium ({statusText})
+                        </span>
+                      );
+                    })()}
                   </div>
                 </div>
               </CardContent>
