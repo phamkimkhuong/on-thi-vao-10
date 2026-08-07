@@ -57,5 +57,13 @@ service firebase.storage {
         && request.resource.size < 5 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
     }
+
+    match /chat_images/{studentId}/{fileName} {
+      allow read: if signedIn();
+
+      allow write: if signedIn()
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
   }
 }

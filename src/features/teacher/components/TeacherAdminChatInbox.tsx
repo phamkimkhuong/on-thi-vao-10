@@ -11,7 +11,9 @@ import {
   User,
   Clock,
   Zap,
-  UserPlus
+  UserPlus,
+  Image as ImageIcon,
+  X
 } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
@@ -36,10 +38,60 @@ export const TeacherAdminChatInbox: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
 
+  // Image Upload state
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Dung lượng hình ảnh quá lớn (tối đa 10MB).');
+        return;
+      }
+      setSelectedImage(file);
+      setImagePreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.indexOf('image') !== -1) {
+        const file = item.getAsFile();
+        if (file) {
+          e.preventDefault();
+          if (file.size > 10 * 1024 * 1024) {
+            alert('Dung lượng hình ảnh quá lớn (tối đa 10MB).');
+            return;
+          }
+          setSelectedImage(file);
+          setImagePreviewUrl(URL.createObjectURL(file));
+          break;
+        }
+      }
+    }
+  };
+
+  const handleClearImage = () => {
+    setSelectedImage(null);
+    if (imagePreviewUrl) {
+      URL.revokeObjectURL(imagePreviewUrl);
+      setImagePreviewUrl(null);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   // 1. Real-time Listener danh sách tất cả các phòng chat của học sinh
@@ -117,12 +169,21 @@ export const TeacherAdminChatInbox: React.FC = () => {
 
   const handleSend = async (textToSend?: string) => {
     const text = textToSend || inputText;
-    if (!text.trim() || !selectedRoom || isSending || !user) return;
+    if ((!text.trim() && !selectedImage) || !selectedRoom || isSending || !user) return;
 
     setIsSending(true);
     if (!textToSend) setInputText('');
 
     try {
+      let uploadedImageUrl: string | undefined = undefined;
+      if (selectedImage) {
+        const url = await adminChatService.uploadChatImage(selectedImage, selectedRoom.studentId);
+        if (url) {
+          uploadedImageUrl = url;
+        }
+        handleClearImage();
+      }
+
       await adminChatService.sendMessage({
         studentId: selectedRoom.studentId,
         studentName: selectedRoom.studentName,
@@ -132,6 +193,7 @@ export const TeacherAdminChatInbox: React.FC = () => {
         senderName: 'ezonthi',
         senderId: user.uid,
         text,
+        imageUrl: uploadedImageUrl
       });
 
       setTimeout(scrollToBottom, 100);
@@ -354,7 +416,21 @@ export const TeacherAdminChatInbox: React.FC = () => {
                           <span className={cn('text-[9px] font-extrabold block mb-0.5', isAdmin ? 'text-indigo-200' : 'text-emerald-600 dark:text-emerald-400')}>
                             {isAdmin ? 'ezonthi (Admin)' : selectedRoom.studentName}
                           </span>
-                          <p>{msg.text}</p>
+                          {msg.imageUrl && (
+                            <a
+                              href={msg.imageUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="block my-1.5 overflow-hidden rounded-xl border border-white/20 hover:opacity-95 transition-opacity"
+                            >
+                              <img
+                                src={msg.imageUrl}
+                                alt="Chat Attachment"
+                                className="max-h-60 max-w-full object-contain rounded-xl cursor-zoom-in"
+                              />
+                            </a>
+                          )}
+                          {msg.text && <p>{msg.text}</p>}
                           <span className={cn('text-[9px] font-bold block text-right mt-1 opacity-70', isAdmin ? 'text-white/80' : 'text-muted-foreground')}>
                             {new Date(msg.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                           </span>
@@ -390,21 +466,60 @@ export const TeacherAdminChatInbox: React.FC = () => {
               </div>
 
               {/* Reply Input Box Footer */}
-              <div className="p-4 bg-card border-t border-border/40 shrink-0">
+              <div className="p-4 bg-card border-t border-border/40 shrink-0 space-y-2">
+                {/* Preview ảnh đính kèm */}
+                {imagePreviewUrl && (
+                  <div className="relative inline-block border border-indigo-500/30 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 p-1">
+                    <img src={imagePreviewUrl} alt="Preview" className="h-16 w-auto object-cover rounded-lg" />
+                    <button
+                      type="button"
+                      onClick={handleClearImage}
+                      className="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full p-0.5 shadow-md hover:bg-rose-600 cursor-pointer"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                )}
+
                 <div className="flex items-center gap-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleImageSelect}
+                    className="hidden"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isSending}
+                    className={cn(
+                      "p-2.5 rounded-2xl border transition-all cursor-pointer shrink-0",
+                      selectedImage
+                        ? "bg-indigo-500/10 border-indigo-500 text-indigo-600 dark:text-indigo-400"
+                        : "bg-secondary/50 border-border/40 text-muted-foreground hover:text-foreground"
+                    )}
+                    title="Đính kèm hình ảnh"
+                  >
+                    <ImageIcon size={16} />
+                  </button>
+
                   <input
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder={`Phản hồi cho ${selectedRoom.studentName}...`}
+                    onPaste={handlePaste}
+                    placeholder={`Phản hồi cho ${selectedRoom.studentName}... (dán Ctrl+V để gửi ảnh)`}
                     className="flex-1 px-4 py-2.5 bg-secondary/50 border border-border/40 rounded-2xl text-xs font-semibold focus:outline-none focus:border-indigo-500 text-foreground"
                     maxLength={500}
                   />
+
                   <button
                     type="button"
                     onClick={() => handleSend()}
-                    disabled={isSending || !inputText.trim()}
+                    disabled={isSending || (!inputText.trim() && !selectedImage)}
                     className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white font-black text-xs transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
                   >
                     {isSending ? <Loader size={15} className="animate-spin" /> : <Send size={15} />}

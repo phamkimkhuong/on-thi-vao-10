@@ -9,7 +9,8 @@ import {
   Loader,
   Sparkles,
   User,
-  ShieldCheck
+  ShieldCheck,
+  Image as ImageIcon
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -28,6 +29,11 @@ export const AdminChatWidget: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Image Upload state
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -71,14 +77,68 @@ export const AdminChatWidget: React.FC = () => {
     }
   }, [messages.length, isOpen]);
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Dung lượng hình ảnh quá lớn (tối đa 10MB).');
+        return;
+      }
+      setSelectedImage(file);
+      setImagePreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.indexOf('image') !== -1) {
+        const file = item.getAsFile();
+        if (file) {
+          e.preventDefault();
+          if (file.size > 10 * 1024 * 1024) {
+            alert('Dung lượng hình ảnh quá lớn (tối đa 10MB).');
+            return;
+          }
+          setSelectedImage(file);
+          setImagePreviewUrl(URL.createObjectURL(file));
+          break;
+        }
+      }
+    }
+  };
+
+  const handleClearImage = () => {
+    setSelectedImage(null);
+    if (imagePreviewUrl) {
+      URL.revokeObjectURL(imagePreviewUrl);
+      setImagePreviewUrl(null);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleSend = async (textToSend?: string) => {
     const text = textToSend || inputText;
-    if (!text.trim() || !user || isSending) return;
+    if ((!text.trim() && !selectedImage) || !user || isSending) return;
 
     setIsSending(true);
     if (!textToSend) setInputText('');
 
     try {
+      let uploadedImageUrl: string | undefined = undefined;
+      if (selectedImage) {
+        const url = await adminChatService.uploadChatImage(selectedImage, user.uid);
+        if (url) {
+          uploadedImageUrl = url;
+        }
+        handleClearImage();
+      }
+
       await adminChatService.sendMessage({
         studentId: user.uid,
         studentName: user.displayName || user.email?.split('@')[0] || 'Học sinh',
@@ -88,6 +148,7 @@ export const AdminChatWidget: React.FC = () => {
         senderName: user.displayName || 'Học sinh',
         senderId: user.uid,
         text,
+        imageUrl: uploadedImageUrl
       });
 
       setTimeout(scrollToBottom, 100);
@@ -211,7 +272,21 @@ export const AdminChatWidget: React.FC = () => {
                         ezonthi (Admin)
                       </span>
                     )}
-                    <p>{msg.text}</p>
+                    {msg.imageUrl && (
+                      <a
+                        href={msg.imageUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block my-1.5 overflow-hidden rounded-xl border border-white/20 hover:opacity-95 transition-opacity"
+                      >
+                        <img
+                          src={msg.imageUrl}
+                          alt="Chat Attachment"
+                          className="max-h-52 max-w-full object-contain rounded-xl cursor-zoom-in"
+                        />
+                      </a>
+                    )}
+                    {msg.text && <p>{msg.text}</p>}
                     <span
                       className={cn(
                         'text-[9px] font-bold block text-right mt-1 opacity-70',
@@ -251,22 +326,60 @@ export const AdminChatWidget: React.FC = () => {
           )}
 
           {/* Input Box Footer */}
-          <div className="p-3 bg-card border-t border-border/40 shrink-0">
+          <div className="p-3 bg-card border-t border-border/40 shrink-0 space-y-2">
+            {/* Preview ảnh đính kèm */}
+            {imagePreviewUrl && (
+              <div className="relative inline-block border border-emerald-500/30 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 p-1">
+                <img src={imagePreviewUrl} alt="Preview" className="h-14 w-auto object-cover rounded-lg" />
+                <button
+                  type="button"
+                  onClick={handleClearImage}
+                  className="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full p-0.5 shadow-md hover:bg-rose-600 cursor-pointer"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            )}
+
             <div className="flex items-center gap-2">
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleImageSelect}
+                className="hidden"
+              />
+
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isSending}
+                className={cn(
+                  "p-2.5 rounded-2xl border transition-all cursor-pointer shrink-0",
+                  selectedImage
+                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                    : "bg-secondary/60 border-border/40 text-muted-foreground hover:text-foreground"
+                )}
+                title="Đính kèm hình ảnh"
+              >
+                <ImageIcon size={16} />
+              </button>
+
               <input
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Nhập nội dung nhắn tin..."
+                onPaste={handlePaste}
+                placeholder="Nhập nội dung... (dán Ctrl+V để gửi ảnh)"
                 className="flex-1 px-3.5 py-2.5 bg-secondary/60 border border-border/40 rounded-2xl text-xs font-semibold focus:outline-none focus:border-emerald-500 text-foreground"
                 maxLength={500}
               />
               <button
                 type="button"
                 onClick={() => handleSend()}
-                disabled={isSending || !inputText.trim()}
-                className="p-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center"
+                disabled={isSending || (!inputText.trim() && !selectedImage)}
+                className="p-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center shrink-0"
                 title="Gửi tin nhắn"
               >
                 {isSending ? <Loader size={16} className="animate-spin" /> : <Send size={16} />}

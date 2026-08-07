@@ -1,4 +1,5 @@
-import { db } from './firebase';
+import { db, firebaseStorage } from './firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import {
   collection,
   doc,
@@ -66,6 +67,24 @@ class AdminChatService {
   }
 
   /**
+   * Upload hình ảnh chat lên Firebase Storage
+   */
+  public async uploadChatImage(file: File, studentId: string): Promise<string | null> {
+    if (!file || !studentId) return null;
+    try {
+      const cleanFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const storagePath = `chat_images/${studentId}/${Date.now()}_${cleanFileName}`;
+      const storageRef = ref(firebaseStorage, storagePath);
+      const uploadTask = await uploadBytesResumable(storageRef, file);
+      const downloadUrl = await getDownloadURL(uploadTask.ref);
+      return downloadUrl;
+    } catch (err) {
+      logger.error('Lỗi khi tải ảnh chat lên Firebase Storage:', err);
+      return null;
+    }
+  }
+
+  /**
    * Gửi tin nhắn mới (cho phía Học sinh hoặc Admin)
    */
   public async sendMessage(payload: {
@@ -77,27 +96,35 @@ class AdminChatService {
     senderName: string;
     senderId: string;
     text: string;
+    imageUrl?: string;
   }): Promise<boolean> {
-    const { studentId, studentName, studentEmail, studentGrade, senderRole, senderName, senderId, text } = payload;
+    const { studentId, studentName, studentEmail, studentGrade, senderRole, senderName, senderId, text, imageUrl } = payload;
     const cleanText = text.trim();
-    if (!studentId || !cleanText) return false;
+    if (!studentId || (!cleanText && !imageUrl)) return false;
 
     try {
       const roomRef = doc(db, 'admin_chat_rooms', studentId);
       const messagesRef = collection(db, 'admin_chat_rooms', studentId, 'messages');
 
-      // 1. Thêm tin nhắn mới vào subcollection
-      await addDoc(messagesRef, {
+      const messageDocData: Record<string, any> = {
         senderId,
         senderRole,
         senderName,
         text: cleanText,
         createdAt: serverTimestamp(),
         read: false,
-      });
+      };
+
+      if (imageUrl) {
+        messageDocData.imageUrl = imageUrl;
+      }
+
+      // 1. Thêm tin nhắn mới vào subcollection
+      await addDoc(messagesRef, messageDocData);
 
       // 2. Cập nhật thông tin phòng chat (UPSERT)
       const isFromStudent = senderRole === 'student';
+      const lastMsgText = cleanText || (imageUrl ? '📷 [Hình ảnh]' : '');
 
       await setDoc(
         roomRef,
@@ -107,7 +134,7 @@ class AdminChatService {
           studentName,
           studentEmail: studentEmail || null,
           studentGrade: studentGrade || null,
-          lastMessage: cleanText,
+          lastMessage: lastMsgText,
           lastSender: senderRole,
           updatedAt: serverTimestamp(),
           ...(isFromStudent
@@ -117,7 +144,7 @@ class AdminChatService {
         { merge: true }
       );
 
-      logger.info(`Đã gửi tin nhắn chat thành công từ ${senderRole}: ${cleanText.substring(0, 30)}`);
+      logger.info(`Đã gửi tin nhắn chat thành công từ ${senderRole}: ${lastMsgText.substring(0, 30)}`);
       return true;
     } catch (err) {
       logger.error('Lỗi khi gửi tin nhắn Admin chat:', err);

@@ -72,6 +72,17 @@ export const AppLayout: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
     return localStorage.getItem('otv10_sidebar_collapsed') === 'true';
   });
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const effectiveCollapsed = isMobile ? false : isSidebarCollapsed;
   const [isTeacher, setIsTeacher] = useState(false);
   const [realPendingCount, setRealPendingCount] = useState(0);
   const [isContextDropdownOpen, setIsContextDropdownOpen] = useState(false);
@@ -438,21 +449,21 @@ export const AppLayout: React.FC = () => {
         fixed md:sticky top-0 left-0 bottom-0 z-50 md:z-30
         glass flex flex-col h-screen overflow-y-auto
         transition-all duration-300 md:translate-x-0
-        ${isSidebarCollapsed ? 'w-64 md:w-22' : 'w-64 md:w-68'}
+        ${effectiveCollapsed ? 'w-64 md:w-22' : 'w-64 md:w-68'}
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className={cn(
           "border-b border-border/40 hidden md:flex items-center justify-center cursor-pointer group",
-          isSidebarCollapsed ? "p-4 h-20" : "px-4 py-4"
+          effectiveCollapsed ? "p-4 h-20" : "px-4 py-4"
         )} onClick={() => navigate(ROUTES.ABOUT)}>
-          {isSidebarCollapsed ? (
+          {effectiveCollapsed ? (
             <img src={logoSrc} alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           ) : (
             <img src={logoSrc} alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
           )}
         </div>
 
-        <div className={cn("px-4 py-3.5 border-b border-border/20 md:hidden", isSidebarCollapsed && "px-2.5 py-3")}>
+        <div className={cn("px-4 py-3.5 border-b border-border/20 md:hidden", effectiveCollapsed && "px-2.5 py-3")}>
           <div className="relative">
             <button
               onClick={() => setIsContextDropdownOpen(!isContextDropdownOpen)}
@@ -527,26 +538,26 @@ export const AppLayout: React.FC = () => {
                 aria-label={item.label}
                 className={cn(
                   "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-extrabold transition-all duration-300 cursor-pointer active:scale-98",
-                  isSidebarCollapsed && "justify-center px-2 py-3.5 gap-0",
+                  effectiveCollapsed && "justify-center px-2 py-3.5 gap-0",
                   isActive
                     ? 'bg-gradient-to-r from-primary/12 to-primary/3 text-primary border-l-4 border-primary pl-3.5 shadow-sm shadow-primary/5'
                     : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                 )}
-                title={isSidebarCollapsed ? item.label : undefined}
+                title={effectiveCollapsed ? item.label : undefined}
               >
                 <Icon size={19} className={cn("shrink-0", isActive ? 'text-primary' : 'text-muted-foreground')} />
-                {!isSidebarCollapsed && (
+                {!effectiveCollapsed && (
                   <span>
                     {item.label}
                   </span>
                 )}
-                {!isSidebarCollapsed && isActive && <ChevronRight size={14} className="ml-auto text-primary" />}
+                {!effectiveCollapsed && isActive && <ChevronRight size={14} className="ml-auto text-primary" />}
               </button>
             );
           })}
 
           {canShowTeacherMenu && (
-            <div className={cn("pt-4 border-t border-border/20 mt-4", isSidebarCollapsed && "pt-3 border-t border-border/10 mt-3")}>
+            <div className={cn("pt-4 border-t border-border/20 mt-4", effectiveCollapsed && "pt-3 border-t border-border/10 mt-3")}>
               <button
                 onClick={() => {
                   navigate('/teacher');
@@ -555,19 +566,19 @@ export const AppLayout: React.FC = () => {
                 aria-label="Góc Giáo viên"
                 className={cn(
                   "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98",
-                  isSidebarCollapsed && "justify-center px-2 py-3.5 gap-0",
+                  effectiveCollapsed && "justify-center px-2 py-3.5 gap-0",
                   location.pathname === '/teacher'
                     ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/40 dark:text-emerald-400"
                     : "text-emerald-600 hover:bg-emerald-500/5 hover:text-emerald-700 border-emerald-500/20 dark:text-emerald-400"
                 )}
-                title={isSidebarCollapsed ? "Góc Giáo viên 👩‍🏫" : undefined}
+                title={effectiveCollapsed ? "Góc Giáo viên 👩‍🏫" : undefined}
               >
                 <Users size={19} className="text-emerald-500 shrink-0" />
-                {!isSidebarCollapsed && <span>Góc Giáo viên 👩‍🏫</span>}
+                {!effectiveCollapsed && <span>Góc Giáo viên 👩‍🏫</span>}
                 {realPendingCount > 0 && (
                   <span className={cn(
                     "bg-rose-500 text-white font-black text-[9px] rounded-full flex items-center justify-center shrink-0",
-                    isSidebarCollapsed
+                    effectiveCollapsed
                       ? "absolute top-1 right-1.5 w-4 h-4 text-[8px]"
                       : "ml-auto w-5 h-5 shadow-md shadow-rose-500/20"
                   )}>
@@ -579,7 +590,7 @@ export const AppLayout: React.FC = () => {
           )}
 
           {user && (
-            <div className={cn("pt-3 mt-3 border-t border-border/20", isSidebarCollapsed && "pt-2 mt-2")}>
+            <div className={cn("pt-3 mt-3 border-t border-border/20", effectiveCollapsed && "pt-2 mt-2")}>
               {(() => {
                 const isSurveyCompleted = surveyService.getSurveyState().completed;
                 return (
@@ -591,13 +602,13 @@ export const AppLayout: React.FC = () => {
                     aria-label="Khảo sát & Góp ý"
                     className={cn(
                       "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98 text-indigo-600 hover:bg-indigo-500/10 dark:text-indigo-400 border-indigo-500/30",
-                      isSidebarCollapsed && "justify-center px-2 py-3.5 gap-0",
+                      effectiveCollapsed && "justify-center px-2 py-3.5 gap-0",
                       !isSurveyCompleted && "ring-2 ring-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-950/30"
                     )}
-                    title={isSidebarCollapsed ? "Khảo sát & Góp ý 💬" : undefined}
+                    title={effectiveCollapsed ? "Khảo sát & Góp ý 💬" : undefined}
                   >
                     <MessageSquareHeart size={19} className="text-indigo-500 shrink-0" />
-                    {!isSidebarCollapsed && (
+                    {!effectiveCollapsed && (
                       <div className="flex items-center justify-between flex-1 min-w-0">
                         <span className="truncate">Khảo sát & Góp ý 💬</span>
                         {!isSurveyCompleted && (
@@ -607,7 +618,7 @@ export const AppLayout: React.FC = () => {
                         )}
                       </div>
                     )}
-                    {isSidebarCollapsed && !isSurveyCompleted && (
+                    {effectiveCollapsed && !isSurveyCompleted && (
                       <span className="absolute top-1 right-1.5 w-2.5 h-2.5 rounded-full bg-pink-500 animate-ping" />
                     )}
                   </button>
@@ -617,7 +628,7 @@ export const AppLayout: React.FC = () => {
           )}
         </nav>
 
-        {user && !isPremium && !isSidebarCollapsed && (
+        {user && !isPremium && !effectiveCollapsed && (
           <div className="mx-4 my-3.5 p-4.5 rounded-2xl glass-premium text-center shrink-0 border border-amber-500/25 shadow-md shadow-amber-500/5 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-12 h-12 bg-amber-400/20 rounded-full blur-xl -mr-3 -mt-3 group-hover:scale-125 transition-transform duration-500" />
             <span className="text-[10px] font-black text-amber-600 dark:text-amber-400 block mb-1 tracking-wider uppercase flex items-center justify-center gap-1">
@@ -634,8 +645,8 @@ export const AppLayout: React.FC = () => {
           </div>
         )}
 
-        <div className={cn("p-4 border-t border-border/20 bg-slate-50/20 dark:bg-slate-900/5", isSidebarCollapsed && "p-3")}>
-          <div className={cn("flex items-center gap-3", isSidebarCollapsed && "flex-col gap-1.5 justify-center")}>
+        <div className={cn("p-4 border-t border-border/20 bg-slate-50/20 dark:bg-slate-900/5", effectiveCollapsed && "p-3")}>
+          <div className={cn("flex items-center gap-3", effectiveCollapsed && "flex-col gap-1.5 justify-center")}>
             {user ? (
               <>
                 <div
@@ -656,7 +667,7 @@ export const AppLayout: React.FC = () => {
                       {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
                     </span>
                   </div>
-                  {!isSidebarCollapsed && (
+                  {!effectiveCollapsed && (
                     <div className="flex flex-col min-w-0 flex-1 text-left">
                       <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
                         {user.displayName || 'Học sinh'}
@@ -691,9 +702,9 @@ export const AppLayout: React.FC = () => {
 
         <div className={cn(
           "pt-4 pb-6 px-4 border-t border-border/20 flex items-center justify-center text-center",
-          isSidebarCollapsed && "p-2"
+          effectiveCollapsed && "p-2"
         )}>
-          {!isSidebarCollapsed ? (
+          {!effectiveCollapsed ? (
             <div className="flex items-center justify-center gap-2 flex-wrap text-[9px] text-muted-foreground/50 font-bold">
               <span>VERSION PRO MAX V2</span>
               <span>•</span>
