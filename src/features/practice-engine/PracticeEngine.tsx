@@ -3,13 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/services/store';
 import { storageService } from '@/services/storage';
 import { progressService } from '@/services/progressService';
-import { aiService } from '@/services/aiService';
 import { logCustomEvent } from '@/services/firebase';
 import { getPracticeQuestions, getQuestionTypes, getSolutions, getTopics } from '@/data';
 import { Button } from '@/components/ui/button';
 import { MathLoginRequired } from '@/components/common/MathLoginRequired';
 
-import { Question, Solution, StructuredAnswer, UserAttempt, AiEvaluation, SubjectCode } from '@/types';
+import { Question, Solution, StructuredAnswer, UserAttempt, SubjectCode } from '@/types';
 import { AlertTriangle, BookOpenCheck, ArrowLeft } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '@/utils/answerValidator';
@@ -33,22 +32,6 @@ import {
 } from './utils/adaptivePracticeSequence';
 
 const getNow = () => Date.now();
-
-const convertFileToBase64 = (file: File): Promise<{ data: string; mimeType: string }> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const result = reader.result as string;
-      const base64Data = result.split(',')[1];
-      resolve({
-        data: base64Data,
-        mimeType: file.type
-      });
-    };
-    reader.onerror = (error) => reject(error);
-  });
-};
 
 export const PracticeEngine: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
@@ -756,25 +739,13 @@ export const PracticeEngine: React.FC = () => {
 
     const currentQ = questions[currentIdx];
     const isMath = routeSubject === 'math';
-    const hasOptions = Boolean(currentQ.options && currentQ.options.length > 0);
-    const isChoiceQuestion = currentQ.validatorType === 'choice' || hasOptions;
-    const isAutoCheckMath = isMath && !isChoiceQuestion && Boolean(currentQ.validatorType) && currentQ.validatorType !== 'manual';
-    const isManualMath = isMath && currentQ.validatorType === 'manual';
 
     const answerInput = currentQ.answerSchema
       ? structuredAnswer
-      : isAutoCheckMath
-        ? selectedOption || ''
-        : isMath
-          ? "(Đã nộp ảnh bài làm)"
-          : selectedOption || '';
+      : selectedOption || '';
     const finalAnswer = currentQ.answerSchema
       ? formatAnswerForDisplay(currentQ, answerInput)
-      : isAutoCheckMath
-        ? formatAnswerForDisplay(currentQ, answerInput)
-        : isMath
-          ? "(Đã nộp ảnh bài làm)"
-          : formatAnswerForDisplay(currentQ, answerInput);
+      : formatAnswerForDisplay(currentQ, answerInput);
     const attemptId = `attempt-${getNow()}`;
     let uploadedProofImages: UserAttempt['proofImages'] = [];
 
@@ -789,40 +760,8 @@ export const PracticeEngine: React.FC = () => {
       return;
     }
 
-    let aiEvaluation: AiEvaluation | undefined = undefined;
-    let correct = isManualMath ? true : validateAnswer(currentQ, answerInput);
-    // Tự động phân loại chế độ chấm điểm:
-    // Môn Toán hoặc các câu tự luận cần upload ảnh/chấm thủ công -> 'manual'
-    // Các câu hỏi trắc nghiệm (choice), điền số (number), điền từ (exact) -> 'auto'
-    let gradingMode: 'auto' | 'manual' = isManualMath ? 'manual' : 'auto';
-
-    if (isManualMath) {
-      gradingMode = 'manual';
-      if (proofImages.length > 0) {
-        try {
-          const base64Image = await convertFileToBase64(proofImages[0].file);
-          const evaluation = await aiService.gradeProofAttempt(
-            currentQ,
-            solutionDetail || undefined,
-            finalAnswer,
-            base64Image
-          );
-          aiEvaluation = evaluation;
-          correct = evaluation.isCorrect;
-          gradingMode = 'auto';
-        } catch (err) {
-          console.error("Lỗi khi gọi AI chấm bài tự luận:", err);
-          gradingMode = 'manual';
-          correct = true;
-        }
-      }
-    } else if (!isMath) {
-      const isManualQuestion =
-        currentQ.validatorType === 'manual' ||
-        currentQ.answerSchema?.autoCheckMode === 'manual' ||
-        currentQ.answerSchema?.type === 'proof-upload';
-      gradingMode = isManualQuestion ? 'manual' : 'auto';
-    }
+    const correct = validateAnswer(currentQ, answerInput);
+    const gradingMode: 'auto' | 'manual' = 'auto';
 
     setIsCorrect(correct);
     setIsSubmitted(true);
@@ -848,9 +787,7 @@ export const PracticeEngine: React.FC = () => {
       isCorrect: correct,
       timeSpent: Math.round((getNow() - questionStartAt) / 1000),
       createdAt: new Date().toISOString(),
-      ...(selectedSubTense ? { selectedSubTense } : {}),
-      ...(aiEvaluation ? { aiEvaluation } : {}),
-      ...(aiEvaluation ? { teacherFeedback: aiEvaluation.summaryFeedback || 'Đã chấm bài giải.' } : {})
+      ...(selectedSubTense ? { selectedSubTense } : {})
     };
 
     setExistingAttempt(attemptData);

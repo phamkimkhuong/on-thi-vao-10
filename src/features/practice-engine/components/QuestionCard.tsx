@@ -181,16 +181,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 />
               </div>
             )
-          ) : currentQuestion.validatorType === 'manual' ? (
-            // Trình bày hướng dẫn nộp ảnh giải cho môn Toán
-            <div className="bg-indigo-50/50 dark:bg-indigo-950/10 border border-indigo-500/10 p-4.5 rounded-2xl space-y-2">
-              <h4 className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
-                📝 Trình bày lời giải tự luận:
-              </h4>
-              <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
-                Hãy làm bài giải chi tiết ra giấy hoặc vở ghi của bạn. Sau đó, **chụp ảnh bài giải** và tải lên bên dưới để nộp bài làm.
-              </p>
-            </div>
           ) : currentQuestion.questionTypeId === 'eng-qt8' ? (
             // Custom selector for Gap Filling
             <div className="space-y-4">

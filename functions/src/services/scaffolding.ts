@@ -3,10 +3,11 @@ import { ChatContent } from "../types.js";
 /**
  * Các loại ý định (Intent) của học sinh khi gửi tin nhắn.
  * - "summarize": Học sinh muốn nhận kiến thức tổng hợp (tóm tắt, liệt kê, giải thích khái niệm, so sánh...)
+ * - "advice": Học sinh xin tư vấn lộ trình, phương pháp học, cách ôn thi (mất gốc, làm sao để học tốt...)
  * - "solve": Học sinh gửi bài tập cụ thể cần hướng dẫn giải
  * - "general": Các trường hợp còn lại (trao đổi tự do)
  */
-export type UserIntent = "summarize" | "solve" | "general";
+export type UserIntent = "summarize" | "advice" | "solve" | "general";
 
 /**
  * Danh sách từ khóa nhận diện ý định "summarize" (muốn nhận kiến thức trực tiếp).
@@ -68,6 +69,65 @@ const SUMMARIZE_KEYWORDS = [
 ];
 
 /**
+ * Danh sách từ khóa nhận diện ý định "advice" (xin tư vấn lộ trình, phương pháp học, cách ôn thi).
+ * Cụm từ dài được ưu tiên trước để tránh match sai.
+ */
+const ADVICE_KEYWORDS = [
+  // Cụm từ dài (ưu tiên match trước)
+  "làm sao để học",
+  "làm sao để đạt",
+  "làm sao để lên",
+  "làm sao để ôn",
+  "làm sao để cải thiện",
+  "làm sao để nâng",
+  "làm thế nào để học",
+  "làm thế nào để ôn",
+  "làm thế nào để đạt",
+  "phương pháp học",
+  "phương pháp ôn",
+  "cách học tốt",
+  "cách ôn thi",
+  "cách ôn tập",
+  "cách cải thiện",
+  "cách nâng cao",
+  "cách lấy lại gốc",
+  "lộ trình học",
+  "lộ trình ôn",
+  "kế hoạch học",
+  "kế hoạch ôn",
+  "bắt đầu từ đâu",
+  "bắt đầu học từ đâu",
+  "nên học gì trước",
+  "học gì trước",
+  "ôn gì trước",
+  "tư vấn cho em",
+  "tư vấn giúp em",
+  "khuyên em",
+  "gợi ý cho em",
+  // Từ khóa đơn/ngắn đặc trưng
+  "mất gốc",
+  "yếu quá",
+  "kém quá",
+  "dốt quá",
+  "không biết gì",
+  "chưa biết gì",
+  "từ con số 0",
+  "từ số 0",
+  "học tốt",
+  "đạt điểm",
+  "lên điểm",
+  "tăng điểm",
+  "lấy lại gốc",
+  "ôn thi",
+  "ôn luyện",
+  "chuẩn bị thi",
+  "lộ trình",
+  "bí quyết",
+  "mẹo học",
+  "tips",
+];
+
+/**
  * Danh sách từ khóa nhận diện ý định "solve" (muốn AI hướng dẫn giải bài).
  */
 const SOLVE_KEYWORDS = [
@@ -97,7 +157,8 @@ const SOLVE_KEYWORDS = [
 /**
  * Nhận diện ý định (Intent) của học sinh dựa trên tin nhắn cuối cùng.
  * Phân tích từ khóa trong text của tin nhắn user cuối để xác định:
- * - "summarize": Muốn kiến thức tổng hợp → AI nên trả lời trực tiếp
+ * - "summarize": Muốn kiến thức tổng hợp → AI cung cấp kiến thức trực tiếp
+ * - "advice": Xin tư vấn lộ trình/phương pháp học → AI đưa lời khuyên có cấu trúc
  * - "solve": Muốn giải bài → Giữ nguyên Socratic
  * - "general": Mặc định → Giữ nguyên Socratic
  */
@@ -124,10 +185,17 @@ export function detectUserIntent(contents?: ChatContent[]): UserIntent {
 
   const normalizedText = lastUserText.toLowerCase().trim();
 
-  // Kiểm tra intent "summarize" trước (ưu tiên cao hơn)
+  // Kiểm tra intent "summarize" trước (ưu tiên cao nhất)
   for (const keyword of SUMMARIZE_KEYWORDS) {
     if (normalizedText.includes(keyword)) {
       return "summarize";
+    }
+  }
+
+  // Kiểm tra intent "advice" (ưu tiên cao thứ 2)
+  for (const keyword of ADVICE_KEYWORDS) {
+    if (normalizedText.includes(keyword)) {
+      return "advice";
     }
   }
 
@@ -142,13 +210,13 @@ export function detectUserIntent(contents?: ChatContent[]): UserIntent {
 }
 
 /**
- * Trả về đoạn instruction ghi đè Scaffolding khi phát hiện intent "summarize".
- * Cho phép AI cung cấp kiến thức trực tiếp, có cấu trúc, thay vì hỏi ngược Socratic.
+ * Trả về đoạn instruction ghi đè Scaffolding khi phát hiện intent đặc biệt.
+ * - "summarize": Cung cấp kiến thức trực tiếp, có cấu trúc
+ * - "advice": Đưa lời khuyên lộ trình/phương pháp học thực tế, có cấu trúc
  */
 export function getIntentOverrideInstruction(intent: UserIntent): string | null {
-  if (intent !== "summarize") return null;
-
-  return `
+  if (intent === "summarize") {
+    return `
 
 [GHI ĐÈ CHẾ ĐỘ GỢI Ý - INTENT: CUNG CẤP KIẾN THỨC TRỰC TIẾP]
 Học sinh đang yêu cầu rõ ràng được nhận kiến thức tổng hợp (tóm tắt, liệt kê, giải thích, so sánh...).
@@ -158,6 +226,23 @@ TRONG TRƯỜNG HỢP NÀY, bạn PHẢI:
 3. KHÔNG hỏi ngược kiểu "Em hãy nhớ lại..." hay "Em có biết... không?" khi mới bắt đầu trả lời. Thay vào đó, hãy đưa kiến thức trước.
 4. Sau khi trình bày xong kiến thức, bạn CÓ THỂ đặt 1-2 câu hỏi gợi mở cuối cùng để kiểm tra sự hiểu biết của học sinh.
 5. Giữ nguyên các quy tắc LaTeX và SVG đã được quy định.`;
+  }
+
+  if (intent === "advice") {
+    return `
+
+[GHI ĐÈ CHẾ ĐỘ GỢI Ý - INTENT: TƯ VẤN LỘ TRÌNH & PHƯƠNG PHÁP HỌC]
+Học sinh đang xin tư vấn về cách học, lộ trình ôn tập, hoặc phương pháp cải thiện điểm số (có thể đang mất gốc hoặc muốn nâng cao).
+TRONG TRƯỜNG HỢP NÀY, bạn PHẢI:
+1. **Động viên, khích lệ học sinh** trước tiên — khẳng định rằng việc cải thiện hoàn toàn khả thi nếu có lộ trình đúng.
+2. **Đưa ra lộ trình học tập cụ thể, có cấu trúc rõ ràng** gồm các bước/giai đoạn mà học sinh có thể thực hiện ngay (ví dụ: Giai đoạn 1 → Giai đoạn 2 → Giai đoạn 3).
+3. **Gợi ý các chủ đề/dạng bài cần ưu tiên** trong chương trình môn học hiện tại, sắp xếp từ cơ bản đến nâng cao.
+4. **Kết thúc bằng cách đề xuất bắt đầu ngay** một chủ đề cụ thể — ví dụ: "Chúng ta hãy bắt đầu từ [chủ đề cơ bản nhất] nhé! Em sẵn sàng chưa?"
+5. KHÔNG hỏi ngược kiểu "Em đã biết gì chưa?" hay "Em hãy nhớ lại..." khi mới bắt đầu. Hãy đưa lời khuyên thực tế trước.
+6. Giữ nguyên các quy tắc LaTeX và SVG đã được quy định.`;
+  }
+
+  return null;
 }
 
 /**

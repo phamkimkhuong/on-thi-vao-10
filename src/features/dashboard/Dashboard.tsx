@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { storageService } from '../../services/storage';
@@ -13,7 +13,8 @@ import {
   Sparkles,
   Zap,
   BookOpen,
-  Loader
+  Loader,
+  Activity
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '../../utils/theme';
@@ -21,6 +22,7 @@ import { getSubjectName, getSubjectIcon, getSubjectFromQuestionTypeId } from '..
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { authService } from '../../services/authService';
 import { LeaderboardWidget } from '../../components/dashboard/LeaderboardWidget';
+import { calculateStudentStats } from '../../utils/stats';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -145,6 +147,39 @@ export const Dashboard: React.FC = () => {
     }
   }
 
+  // 5. Tính toán Tần suất học tập 7 ngày qua
+  const weeklyStats = useMemo(() => {
+    const stats = calculateStudentStats(attempts);
+    const dailyActivity = stats.dailyActivity || {};
+
+    const grid = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().substring(0, 10);
+      const count = dailyActivity[dateStr] || 0;
+
+      const weekdayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+      const label = `${weekdayNames[d.getDay()]} (${d.getDate()}/${d.getMonth() + 1})`;
+
+      grid.push({
+        dateStr,
+        label,
+        count,
+        active: count > 0
+      });
+    }
+
+    const activeDaysInLast7 = grid.filter(g => g.active).length;
+    const totalLast7Attempts = grid.reduce((acc, g) => acc + g.count, 0);
+
+    return {
+      activeDaysInLast7,
+      totalLast7Attempts,
+      grid
+    };
+  }, [attempts]);
+
   // Lấy câu trích dẫn ngẫu nhiên truyền động lực học
   const quotes = [
     "Hành trình vạn dặm bắt đầu từ những bước chân đầu tiên. Hãy giải quyết gọn gàng từng dạng bài hôm nay!",
@@ -256,6 +291,42 @@ export const Dashboard: React.FC = () => {
           )}
         </>
       )}
+
+      {/* ⚡ Tần suất học tập 7 ngày qua (7-Day Learning Activity Grid) */}
+      <Card className="bg-card border-border/40 shadow-md rounded-3xl overflow-hidden p-5 space-y-4">
+        <div className="flex items-center justify-between border-b border-border/20 pb-3 flex-wrap gap-2">
+          <h3 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-2 font-sans">
+            <Activity size={18} className="text-emerald-500 animate-pulse shrink-0" />
+            Tần suất học tập 7 ngày qua ({weeklyStats.activeDaysInLast7}/7 ngày hoạt động)
+          </h3>
+          <span className="text-xs font-extrabold text-muted-foreground bg-secondary/40 px-3 py-1 rounded-full border border-border/30">
+            Tổng cộng <strong className="text-emerald-500 font-black">{weeklyStats.totalLast7Attempts}</strong> câu đã làm
+          </span>
+        </div>
+
+        <div className="grid grid-cols-7 gap-2">
+          {weeklyStats.grid.map((day, dIdx) => (
+            <div
+              key={dIdx}
+              className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-secondary/15 border border-border/30 hover:border-emerald-500/30 transition-all"
+            >
+              <span className="text-[10px] font-extrabold text-muted-foreground">{day.label.split(' ')[0]}</span>
+              <div
+                className={cn(
+                  "w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black transition-all shadow-xs",
+                  day.active
+                    ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/20"
+                    : "bg-slate-100 dark:bg-slate-800 text-muted-foreground/40 border border-dashed border-border/40"
+                )}
+                title={day.active ? `Đã làm ${day.count} câu vào ngày ${day.dateStr}` : 'Không có hoạt động'}
+              >
+                {day.count > 0 ? day.count : '-'}
+              </div>
+              <span className="text-[8px] font-extrabold text-muted-foreground/60">{day.label.split(' ')[1]?.replace(/[()]/g, '')}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
 
       {/* 📐 Main Workspace Grid: 2 Columns (Left 2/3 - Core Study Actions, Right 1/3 - Stats & Weaknesses) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
