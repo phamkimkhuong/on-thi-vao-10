@@ -18,13 +18,32 @@ import {
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { cn } from '../../utils/cn';
+import { SeoHead } from '../../components/common/SeoHead';
+import { createWebPageSchema, createBreadcrumbSchema } from '../../utils/seoSchemas';
 
 export const AboutPage: React.FC = () => {
   const navigate = useNavigate();
   const [activeDemoTab, setActiveDemoTab] = useState<'roadmap' | 'textbook' | 'mistakes' | 'aitutor'>('roadmap');
 
+  const webPageSchema = createWebPageSchema({
+    name: 'Giới thiệu Nền tảng ezonthi | Ôn Thi Vào 10 & THPT',
+    description: 'Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT 2018 với dạng bài cốt lõi, Sổ lỗi sai và AI Gia sư.',
+    url: '/about'
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Trang chủ', item: '/' },
+    { name: 'Giới thiệu nền tảng', item: '/about' }
+  ]);
+
   return (
     <div className="min-h-screen bg-background text-foreground pb-20 select-none">
+      <SeoHead
+        title="Giới thiệu Nền tảng ezonthi | Học tốt & Luyện thi Lớp 9 - 12"
+        description="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12. Chuyên sâu luyện đề, giải dạng bài thực chiến các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát GDPT 2018."
+        canonicalUrl="/about"
+        jsonLd={[webPageSchema, breadcrumbSchema]}
+      />
 
       {/* 1. HERO SECTION WITH ACADEMIC TITLE */}
       <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24 border-b border-border/40 bg-gradient-to-b from-slate-50 via-background to-background dark:from-slate-950/60 dark:via-background dark:to-background">

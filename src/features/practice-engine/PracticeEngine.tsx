@@ -13,6 +13,8 @@ import { AlertTriangle, BookOpenCheck, ArrowLeft } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '@/utils/answerValidator';
 import { getSubjectFromQuestionTypeId, getSubjectName } from '@/utils/subject';
+import { SeoHead } from '@/components/common/SeoHead';
+import { createBreadcrumbSchema } from '@/utils/seoSchemas';
 
 import confetti from 'canvas-confetti';
 
@@ -1091,8 +1093,32 @@ export const PracticeEngine: React.FC = () => {
       ? proofImages.length === 0
       : !selectedOption;
 
+  const practiceSubjectName = getSubjectName(routeSubject);
+  const practiceGradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : selectedGrade === 'grade11' ? 'Lớp 11' : 'Phổ thông';
+  const practiceTitle = requestedQuestionType
+    ? `Luyện Tập: ${requestedQuestionType.name} - ${practiceSubjectName} ${practiceGradeLabel} | ezonthi`
+    : `Luyện Tập Thực Chiến ${practiceSubjectName} ${practiceGradeLabel} | ezonthi`;
+  const practiceDesc = requestedQuestionType
+    ? `Luyện tập thực chiến dạng bài ${requestedQuestionType.name} môn ${practiceSubjectName} ${practiceGradeLabel} có đáp án và giải thích chi tiết.`
+    : `Luyện tập trắc nghiệm & tự luận các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát chương trình GDPT 2018.`;
+
+  const practiceCanonical = questionTypeId ? `/practice/${questionTypeId}` : '/practice';
+
+  const practiceBreadcrumbs = createBreadcrumbSchema([
+    { name: 'Trang chủ', item: '/' },
+    { name: practiceGradeLabel, item: '/roadmap' },
+    { name: `Luyện tập ${practiceSubjectName}`, item: '/practice' },
+    ...(requestedQuestionType ? [{ name: requestedQuestionType.name, item: `/practice/${requestedQuestionType.id}` }] : [])
+  ]);
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-4 px-3 sm:px-6 py-3 animate-fade-in pb-12">
+      <SeoHead
+        title={practiceTitle}
+        description={practiceDesc}
+        canonicalUrl={practiceCanonical}
+        jsonLd={practiceBreadcrumbs}
+      />
       {adaptivePracticeStatus && adaptivePracticeStatus.holdoutQuestionCount > 0 && (
         <AdaptivePracticeStatus
           status={adaptivePracticeStatus}

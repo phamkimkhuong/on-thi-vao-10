@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { useAppStore } from './services/store';
 import AppLayout from './components/layout/AppLayout';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
@@ -184,7 +185,11 @@ export const App: React.FC = () => {
     );
   }
 
-  return <RouterProvider router={router} />;
+  return (
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
+  );
 };
 
 export default App;

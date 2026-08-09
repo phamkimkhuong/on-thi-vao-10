@@ -25,6 +25,8 @@ import { getSubjectTheme, getStarsFromScore } from '@/utils/theme';
 import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '@/utils/subject';
 import { storageService } from '@/services/storage';
 import { convertLatexToSpeechText } from '@/utils/speech';
+import { SeoHead } from '@/components/common/SeoHead';
+import { createBreadcrumbSchema, createFAQSchema, createQuizSchema } from '@/utils/seoSchemas';
 
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
@@ -592,8 +594,67 @@ export const QuestionTypeDetail: React.FC = () => {
     });
   };
 
+  const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : selectedGrade === 'grade11' ? 'Lớp 11' : 'Phổ thông';
+
+  const pageTitle = detail
+    ? `${detail.name} - ${subjectName} ${gradeLabel} | ezonthi`
+    : `Dạng Bài Học Tốt ${subjectName} ${gradeLabel} | ezonthi`;
+
+  const pageDescription = detail
+    ? `Hướng dẫn lý thuyết, phương pháp giải, bẫy thường gặp và bài tập mẫu dạng ${detail.name} môn ${subjectName} ${gradeLabel} bám sát chương trình GDPT mới.`
+    : `Hệ thống dạng bài học tập môn ${subjectName} ${gradeLabel} chuẩn hóa giúp học sinh bứt phá điểm số.`;
+
+  const canonicalPath = detail ? `/question-types/${detail.id}` : '/roadmap';
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Trang chủ', item: '/' },
+    { name: gradeLabel, item: '/roadmap' },
+    { name: `${subjectName} ${gradeLabel}`, item: '/roadmap' },
+    ...(detail ? [{ name: detail.name, item: `/question-types/${detail.id}` }] : [])
+  ]);
+
+  const faqItems = detail
+    ? [
+        ...(detail.recognitionSigns || []).map((sign, idx) => ({
+          question: `Dấu hiệu nhận biết dạng bài ${detail.name} (Ý ${idx + 1})?`,
+          answer: sign
+        })),
+        ...(detail.commonMistakes || []).map((mistake, idx) => ({
+          question: `Lỗi sai thường gặp khi làm dạng bài ${detail.name} (Bẫy ${idx + 1})?`,
+          answer: mistake
+        }))
+      ]
+    : [];
+  const faqSchema = createFAQSchema(faqItems);
+
+  const quizQuestions = detail?.theoryCheckpoints
+    ? detail.theoryCheckpoints.map(cp => ({
+        text: cp.question,
+        options: cp.options,
+        answer: cp.correctAnswer
+      }))
+    : [];
+  const quizSchema = detail && quizQuestions.length > 0 ? createQuizSchema({
+    name: `Tự kiểm tra lý thuyết: ${detail.name}`,
+    description: `Bài tự kiểm tra lý thuyết dạng ${detail.name} môn ${subjectName} ${gradeLabel}`,
+    url: `/question-types/${detail.id}`,
+    questions: quizQuestions
+  }) : null;
+
+  const jsonLdSchemas = [
+    breadcrumbSchema,
+    ...(faqSchema ? [faqSchema] : []),
+    ...(quizSchema ? [quizSchema] : [])
+  ];
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-5 px-3 sm:px-6 py-3 animate-fade-in pb-20 md:pb-6">
+      <SeoHead
+        title={pageTitle}
+        description={pageDescription}
+        canonicalUrl={canonicalPath}
+        jsonLd={jsonLdSchemas}
+      />
 
       {/* Header Dạng bài - Hero Section phẳng tràn viền mỏng nhẹ */}
       <div className="py-1 space-y-3 font-sans">

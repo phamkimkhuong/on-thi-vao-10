@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build:sitemap": "node scripts/generateSitemap.mjs",
-    "build": "node scripts/generateSitemap.mjs && tsc -b && vite build",
+    "build": "node scripts/generateSitemap.mjs && tsc -b && vite build && node scripts/generateSeoPages.mjs",
     "lint": "eslint .",
     "type-check": "tsc -b --noEmit",
     "validate:english10": "node scripts/validateEnglish10.mjs",
@@ -42,6 +42,7 @@
     "lucide-react": "^1.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-helmet-async": "^3.0.0",
     "react-is": "^19.2.8",
     "react-router-dom": "^7.18.1",
     "recharts": "^3.9.2",

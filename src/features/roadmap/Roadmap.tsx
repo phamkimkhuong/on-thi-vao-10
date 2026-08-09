@@ -16,6 +16,8 @@ import { BiologyVideoDashboard } from './components/BiologyVideoDashboard';
 import { PhysicsVideoDashboard } from './components/PhysicsVideoDashboard';
 import { TopicTextbookMappingModal } from './components/TopicTextbookMappingModal';
 import { TextbookDrawer } from '../../components/common/TextbookDrawer';
+import { SeoHead } from '../../components/common/SeoHead';
+import { createCourseSchema, createBreadcrumbSchema } from '../../utils/seoSchemas';
 
 export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
@@ -251,9 +253,32 @@ export const Roadmap: React.FC = () => {
                   : 'Rèn luyện các cấu trúc ngữ pháp học thuật, bài đọc hiểu và viết luận nâng cao.'
       }
     ];
+  const subjectName = getSubjectName(selectedSubject);
+  const gradeLabel = selectedGrade === 'grade9' ? 'Lớp 9' : selectedGrade === 'grade10' ? 'Lớp 10' : selectedGrade === 'grade11' ? 'Lớp 11' : 'Phổ thông';
+  const pageTitle = `Lộ Trình Học Tốt ${subjectName} ${gradeLabel} | ezonthi`;
+  const pageDescription = `Bản đồ lộ trình học 3 chặng môn ${subjectName} ${gradeLabel} chuẩn hóa giúp học sinh nắm chắc kiến thức và tự tin bứt phá điểm số.`;
+
+  const courseSchema = createCourseSchema({
+    name: `${subjectName} ${gradeLabel}`,
+    description: pageDescription,
+    url: '/roadmap',
+    courseCode: `${selectedGrade}-${selectedSubject}`
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Trang chủ', item: '/' },
+    { name: gradeLabel, item: '/roadmap' },
+    { name: `Lộ trình ${subjectName} ${gradeLabel}`, item: '/roadmap' }
+  ]);
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8 px-3 sm:px-6 py-3 animate-fade-in pb-12">
+      <SeoHead
+        title={pageTitle}
+        description={pageDescription}
+        canonicalUrl="/roadmap"
+        jsonLd={[courseSchema, breadcrumbSchema]}
+      />
       {/* Header Giới thiệu Lộ trình */}
       <div className="text-center space-y-4">
         <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
