@@ -12,6 +12,7 @@ interface AiTutorInputProps {
   placeholder: string;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPasteImage?: (file: File) => void;
   onRemoveImage: () => void;
   onSubmit: (e?: React.FormEvent) => void;
 }
@@ -27,14 +28,35 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
   placeholder,
   fileInputRef,
   onImageChange,
+  onPasteImage,
   onRemoveImage,
   onSubmit,
 }) => {
   const isLimitExhausted = errorMsg === "LIMIT_EXHAUSTED";
   const isDisabled = isLoading || isUploadingImage || isLimitExhausted;
 
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items || !onPasteImage) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          e.preventDefault();
+          onPasteImage(file);
+          break;
+        }
+      }
+    }
+  };
+
   return (
-    <div className="border-t border-border bg-slate-50/50 dark:bg-slate-900/20 p-3">
+    <div 
+      onPaste={handlePaste}
+      className="border-t border-border bg-slate-50/50 dark:bg-slate-900/20 p-3"
+    >
       {/* Preview Image Container */}
       {previewUrl && (
         <div className="relative inline-block mb-3 p-1 bg-background border border-border rounded-lg shadow-sm group">
@@ -70,7 +92,7 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
           onClick={() => fileInputRef.current?.click()}
           disabled={isDisabled}
           className="w-11 h-11 rounded-2xl border border-border bg-background hover:bg-secondary disabled:opacity-50 flex items-center justify-center shrink-0 cursor-pointer transition-all shadow-sm text-muted-foreground"
-          title="Đính kèm hình ảnh bài làm"
+          title="Đính kèm hình ảnh bài làm (hoặc dán Ctrl+V)"
         >
           <Paperclip size={16} />
         </button>

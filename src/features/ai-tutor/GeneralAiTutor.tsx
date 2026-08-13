@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/store';
 import { aiService } from '../../services/aiService';
 import { db, firebaseStorage } from '../../services/firebase';
-import { doc, onSnapshot, setDoc, deleteDoc, collection, query, orderBy, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc, deleteDoc, collection, query, orderBy, getDoc, getDocs } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 import { getSubjectName } from '../../utils/subject';
@@ -35,15 +35,16 @@ interface StudentProfile {
   lastUpdated?: any;
 }
 
-const generateChatStoragePath = (userId: string, subject: string, fileName: string) => {
+const generateChatStoragePath = (userId: string, chatPathKey: string, fileName: string) => {
   const fileExtension = fileName.split('.').pop() || 'jpg';
   const timestamp = Date.now();
-  return `users/${userId}/general_chats/${subject}/msg_img_${timestamp}.${fileExtension}`;
+  return `users/${userId}/general_chats/${chatPathKey}/msg_img_${timestamp}.${fileExtension}`;
 };
 
 export const GeneralAiTutor: React.FC = () => {
   const navigate = useNavigate();
   const { user, selectedGrade, selectedSubject: subject } = useAppStore();
+  const chatPathKey = selectedGrade ? `${selectedGrade}_${subject}` : subject;
 
   const [showDiagnostics, setShowDiagnostics] = useState(() => {
     return localStorage.getItem('otv10_ai_show_diagnostics') !== 'false';
@@ -125,10 +126,7 @@ export const GeneralAiTutor: React.FC = () => {
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processImageFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
       alert('Chỉ hỗ trợ gửi các file hình ảnh.');
       return;
@@ -142,6 +140,12 @@ export const GeneralAiTutor: React.FC = () => {
     setSelectedFile(file);
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+  }, []);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    processImageFile(file);
   };
 
   const handleRemoveImage = () => {
@@ -213,12 +217,12 @@ export const GeneralAiTutor: React.FC = () => {
     return () => unsubscribe();
   }, [user?.uid]);
 
-  // Tải danh sách cuộc trò chuyện cho môn học
+  // Tải danh sách cuộc trò chuyện cho môn học theo Lớp
   useEffect(() => {
     if (!user?.uid) return;
 
     setIsLoadingSessions(true);
-    const sessionsCollectionRef = collection(db, 'users', user.uid, 'general_chats', subject, 'sessions');
+    const sessionsCollectionRef = collection(db, 'users', user.uid, 'general_chats', chatPathKey, 'sessions');
     const q = query(sessionsCollectionRef, orderBy('updatedAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
@@ -233,6 +237,7 @@ export const GeneralAiTutor: React.FC = () => {
       // Di trú legacy
       if (loadedSessions.length === 0) {
         try {
+          // 1. Kiểm tra legacy single doc: general_chats/${subject}
           const legacyDocRef = doc(db, 'users', user.uid, 'general_chats', subject);
           const legacyDocSnap = await getDoc(legacyDocRef);
           if (legacyDocSnap.exists()) {
@@ -246,11 +251,31 @@ export const GeneralAiTutor: React.FC = () => {
                 title,
                 messages: legacyData.messages,
                 subjectId: subject,
+                gradeId: selectedGrade,
                 createdAt: legacyData.updatedAt || new Date().toISOString(),
                 updatedAt: legacyData.updatedAt || new Date().toISOString()
               });
 
               await deleteDoc(legacyDocRef);
+              return;
+            }
+          }
+
+          // 2. Kiểm tra legacy sessions cũ chưa phân lớp: general_chats/${subject}/sessions (di trú nếu là Lớp 9)
+          if ((!selectedGrade || selectedGrade === 'grade9') && chatPathKey !== subject) {
+            const legacySessionsRef = collection(db, 'users', user.uid, 'general_chats', subject, 'sessions');
+            const legacySnapshot = await getDocs(legacySessionsRef);
+            if (!legacySnapshot.empty) {
+              for (const legacySnap of legacySnapshot.docs) {
+                const legacySessionData = legacySnap.data();
+                const targetDocRef = doc(sessionsCollectionRef, legacySnap.id);
+                await setDoc(targetDocRef, {
+                  ...legacySessionData,
+                  gradeId: selectedGrade || 'grade9',
+                  subjectId: subject
+                });
+                await deleteDoc(doc(legacySessionsRef, legacySnap.id));
+              }
               return;
             }
           }
@@ -280,7 +305,7 @@ export const GeneralAiTutor: React.FC = () => {
     });
 
     return () => unsubscribe();
-  }, [user?.uid, subject]);
+  }, [user?.uid, subject, selectedGrade, chatPathKey]);
 
   // Nạp nội dung tin nhắn của session đang active
   useEffect(() => {
@@ -305,7 +330,7 @@ export const GeneralAiTutor: React.FC = () => {
     if (!user?.uid) return;
 
     try {
-      const sessionDocRef = doc(db, 'users', user.uid, 'general_chats', subject, 'sessions', sessionIdToSave);
+      const sessionDocRef = doc(db, 'users', user.uid, 'general_chats', chatPathKey, 'sessions', sessionIdToSave);
 
       const updateData: any = {
         messages: updatedMsgs,
@@ -315,6 +340,7 @@ export const GeneralAiTutor: React.FC = () => {
       if (newTitle) {
         updateData.title = newTitle;
         updateData.subjectId = subject;
+        updateData.gradeId = selectedGrade;
         updateData.createdAt = new Date().toISOString();
       }
 
@@ -333,7 +359,7 @@ export const GeneralAiTutor: React.FC = () => {
 
     if (window.confirm("Bạn có chắc chắn muốn xóa cuộc trò chuyện này không?")) {
       try {
-        const sessionDocRef = doc(db, 'users', user.uid, 'general_chats', subject, 'sessions', activeSessionId);
+        const sessionDocRef = doc(db, 'users', user.uid, 'general_chats', chatPathKey, 'sessions', activeSessionId);
         await deleteDoc(sessionDocRef);
         setMessages([]);
         setActiveSessionId(null);
@@ -351,7 +377,7 @@ export const GeneralAiTutor: React.FC = () => {
 
     if (window.confirm("Bạn có chắc chắn muốn xóa cuộc trò chuyện này không?")) {
       try {
-        const sessionDocRef = doc(db, 'users', user.uid, 'general_chats', subject, 'sessions', sessionIdToDelete);
+        const sessionDocRef = doc(db, 'users', user.uid, 'general_chats', chatPathKey, 'sessions', sessionIdToDelete);
         await deleteDoc(sessionDocRef);
         if (activeSessionId === sessionIdToDelete) {
           setActiveSessionId(null);
@@ -388,7 +414,7 @@ export const GeneralAiTutor: React.FC = () => {
 
     if (isNewSessionDraft || !currentSessionId) {
       if (user?.uid) {
-        const sessionsCollectionRef = collection(db, 'users', user.uid, 'general_chats', subject, 'sessions');
+        const sessionsCollectionRef = collection(db, 'users', user.uid, 'general_chats', chatPathKey, 'sessions');
         currentSessionId = doc(sessionsCollectionRef).id;
       } else {
         currentSessionId = `temp_${Date.now()}`;
@@ -404,7 +430,7 @@ export const GeneralAiTutor: React.FC = () => {
 
         if (user?.uid) {
           const userId = user.uid;
-          const storagePath = generateChatStoragePath(userId, subject, fileToSend.name);
+          const storagePath = generateChatStoragePath(userId, chatPathKey, fileToSend.name);
           const storageRef = ref(firebaseStorage, storagePath);
 
           const uploadTask = uploadBytesResumable(storageRef, fileToSend);
@@ -566,9 +592,10 @@ export const GeneralAiTutor: React.FC = () => {
             isLoading={isLoading}
             isUploadingImage={isUploadingImage}
             errorMsg={errorMsg}
-            placeholder={`Hỏi Gia sư ${getSubjectName(subject)} hoặc gửi hình ảnh bài làm...`}
+            placeholder={`Hỏi Gia sư ${getSubjectName(subject)} hoặc dán (Ctrl+V) ảnh bài làm...`}
             fileInputRef={fileInputRef}
             onImageChange={handleImageChange}
+            onPasteImage={processImageFile}
             onRemoveImage={handleRemoveImage}
             onSubmit={(e) => handleSend(e)}
           />

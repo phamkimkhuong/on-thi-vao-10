@@ -40,11 +40,11 @@
         ]
       },
       {
-        "source": "/(logo.png|logo-removebg.png|favicon.png|favicon.svg|apple-touch-icon.png)",
+        "source": "/*.+(png|svg|jpg|jpeg|webp|ico)",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public, max-age=2592000"
+            "value": "public, max-age=31536000, immutable"
           }
         ]
       },
