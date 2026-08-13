@@ -368,7 +368,8 @@ export const AppLayout: React.FC = () => {
     return 'Bảng điều khiển';
   };
 
-  const logoSrc = darkMode ? '/logo-removebg.png' : '/logo.png';
+  const logoPng = darkMode ? '/logo-removebg.png' : '/logo.png';
+  const logoWebp = darkMode ? '/logo-removebg.png' : '/logo.webp';
 
   return (
     <div className="min-h-screen md:min-h-0 md:h-screen md:overflow-hidden bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
@@ -376,7 +377,10 @@ export const AppLayout: React.FC = () => {
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.ABOUT)}>
-          <img src={logoSrc} alt="ezonthi logo" width="150" height="40" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
+          <picture>
+            <source srcSet={logoWebp} type="image/webp" />
+            <img src={logoPng} alt="ezonthi logo" width="150" height="40" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
+          </picture>
         </div>
 
         <div className="flex items-center gap-2">
@@ -457,9 +461,15 @@ export const AppLayout: React.FC = () => {
           effectiveCollapsed ? "p-4 h-20" : "px-4 py-4"
         )} onClick={() => navigate(ROUTES.ABOUT)}>
           {effectiveCollapsed ? (
-            <img src={logoSrc} alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            <picture>
+              <source srcSet={logoWebp} type="image/webp" />
+              <img src={logoPng} alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            </picture>
           ) : (
-            <img src={logoSrc} alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            <picture>
+              <source srcSet={logoWebp} type="image/webp" />
+              <img src={logoPng} alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+            </picture>
           )}
         </div>
 
