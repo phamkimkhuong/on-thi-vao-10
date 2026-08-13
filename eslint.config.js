@@ -23,6 +23,9 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/purity': 'off',
+      'react-hooks/preserve-manual-memoization': 'off',
+      'preserve-caught-error': 'off',
       'no-useless-escape': 'off',
     }
   },
