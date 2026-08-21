@@ -31,6 +31,8 @@ export const progressService = {
         userId,
         masteryLevels: data.masteryLevels || {},
         completedLessons: data.completedLessons || [],
+        readLessons: data.readLessons || [],
+        passedCheckpoints: data.passedCheckpoints || [],
         lastUpdatedAt: data.lastActiveAt || new Date().toISOString()
       };
     } catch (e) {
@@ -75,10 +77,19 @@ export const progressService = {
 
       // 2. Lấy dữ liệu LocalStorage hiện tại của user này
       const localProgress = storageService.getProgress(userId);
+      const localAttempts = storageService.getAttempts(userId);
+      const localReadLessons = storageService.getReadLessons(userId);
+      const localCheckpoints = storageService.getPassedTheoryCheckpoints(userId);
       const localLastActive = localProgress?.lastUpdatedAt || '';
 
-      // 3. Nếu LocalStorage đã có dữ liệu và timestamp trùng/mới hơn server, ta bỏ qua (Tiết kiệm hàng trăm Reads!)
-      if (localLastActive && localLastActive >= serverLastActive) {
+      const isLocalEmpty =
+        localAttempts.length === 0 &&
+        localReadLessons.length === 0 &&
+        localCheckpoints.length === 0 &&
+        Object.keys(localProgress.masteryLevels || {}).length === 0;
+
+      // 3. Nếu LocalStorage đã có dữ liệu thực và timestamp trùng/mới hơn server, ta bỏ qua (Tiết kiệm hàng trăm Reads!)
+      if (!isLocalEmpty && localLastActive && serverLastActive && localLastActive >= serverLastActive) {
         logger.debug(`[Smart Sync] Dữ liệu Local của user ${userId} đã mới nhất. Bỏ qua tải chi tiết.`);
         return;
       }
@@ -95,18 +106,65 @@ export const progressService = {
         this.getExamResults(userId)
       ]);
 
+      const guestReadLessons = storageService.getReadLessons('guest');
+      const guestCheckpoints = storageService.getPassedTheoryCheckpoints('guest');
+      const guestAttempts = storageService.getAttempts('guest');
+      const guestMistakes = storageService.getMistakes('guest');
+      const guestExams = storageService.getExamResults('guest');
+
+      const remoteReadLessons: string[] = Array.isArray(remoteData.readLessons) ? remoteData.readLessons : [];
+      const remotePassedCheckpoints: string[] = Array.isArray(remoteData.passedCheckpoints) ? remoteData.passedCheckpoints : [];
+
+      // Hợp nhất dữ liệu local (kèm guest nếu vừa đăng nhập) với remote
+      const mergedReadLessons = Array.from(new Set([...localReadLessons, ...guestReadLessons, ...remoteReadLessons]));
+      const mergedPassedCheckpoints = Array.from(new Set([...localCheckpoints, ...guestCheckpoints, ...remotePassedCheckpoints]));
+
+      // Hợp nhất attempts (deduplicate theo ID)
+      const attemptsMap = new Map<string, UserAttempt>();
+      remoteAttempts.forEach(a => attemptsMap.set(a.id, a));
+      localAttempts.forEach(a => attemptsMap.set(a.id, a));
+      guestAttempts.forEach(a => attemptsMap.set(a.id, { ...a, userId }));
+      const mergedAttempts = Array.from(attemptsMap.values());
+
+      // Hợp nhất mistakes
+      const mistakesMap = new Map<string, UserMistake>();
+      remoteMistakes.forEach(m => mistakesMap.set(m.id || m.questionId, m));
+      storageService.getMistakes(userId).forEach(m => mistakesMap.set(m.id || m.questionId, m));
+      guestMistakes.forEach(m => mistakesMap.set(m.id || m.questionId, { ...m, userId }));
+      const mergedMistakes = Array.from(mistakesMap.values());
+
+      // Hợp nhất exams
+      const examsMap = new Map<string, ExamResult>();
+      remoteExams.forEach(e => examsMap.set(e.examId, e));
+      storageService.getExamResults(userId).forEach(e => examsMap.set(e.examId, e));
+      guestExams.forEach(e => examsMap.set(e.examId, e));
+      const mergedExams = Array.from(examsMap.values());
+
       const userProgress: UserProgress = {
         userId,
-        masteryLevels: remoteData.masteryLevels || {},
-        completedLessons: remoteData.completedLessons || [],
+        masteryLevels: remoteData.masteryLevels || localProgress.masteryLevels || {},
+        completedLessons: remoteData.completedLessons || localProgress.completedLessons || [],
+        readLessons: mergedReadLessons,
+        passedCheckpoints: mergedPassedCheckpoints,
         lastUpdatedAt: serverLastActive || new Date().toISOString()
       };
 
       // Ghi đè vào LocalStorage
-      storageService.saveAttemptsLocal(userId, remoteAttempts);
-      storageService.saveMistakesLocal(userId, remoteMistakes);
+      storageService.saveAttemptsLocal(userId, mergedAttempts);
+      storageService.saveMistakesLocal(userId, mergedMistakes);
       storageService.saveProgressLocal(userId, userProgress);
-      storageService.saveExamResultsLocal(userId, remoteExams);
+      storageService.saveExamResultsLocal(userId, mergedExams);
+      storageService.saveReadLessonsLocal(userId, mergedReadLessons);
+      storageService.savePassedTheoryCheckpointsLocal(userId, mergedPassedCheckpoints);
+
+      // Xóa dữ liệu guest sau khi đã merge thành công
+      if (guestAttempts.length > 0 || guestReadLessons.length > 0 || guestMistakes.length > 0) {
+        storageService.clearGuestData();
+      }
+
+      // Kích hoạt cập nhật Store & re-render toàn bộ UI
+      useAppStore.setState({ userData: remoteData });
+      useAppStore.getState().refreshProgress();
 
       logger.debug(`[Smart Sync] Hoàn tất đồng bộ dữ liệu Firestore xuống LocalStorage cho user: ${userId}`);
     } catch (e) {
@@ -123,6 +181,8 @@ export const progressService = {
         userId,
         masteryLevels: {},
         completedLessons: [],
+        readLessons: [],
+        passedCheckpoints: [],
         lastUpdatedAt: new Date().toISOString()
       });
 
@@ -138,6 +198,14 @@ export const progressService = {
       const exams = await this.getExamResults(userId);
       storageService.saveExamResultsLocal(userId, exams);
 
+      if (progress?.readLessons) {
+        storageService.saveReadLessonsLocal(userId, progress.readLessons);
+      }
+      if (progress?.passedCheckpoints) {
+        storageService.savePassedTheoryCheckpointsLocal(userId, progress.passedCheckpoints);
+      }
+
+      useAppStore.getState().refreshProgress();
       console.log(`Đã hydrate thành công dữ liệu từ Firestore xuống LocalStorage cho user: ${userId}`);
     } catch (e) {
       console.error('Lỗi khi hydrate dữ liệu từ Firestore xuống local:', e);
@@ -183,12 +251,16 @@ export const progressService = {
       const userProg = storageService.getProgress(userId);
       const allAttempts = storageService.getAttempts(userId);
       const stats = calculateStudentStats(allAttempts);
+      const readLessons = storageService.getReadLessons(userId);
+      const passedCheckpoints = storageService.getPassedTheoryCheckpoints(userId);
       const userRef = doc(db, 'users', userId);
 
       await setDoc(userRef, {
         masteryLevels: userProg.masteryLevels || {},
         completedLessons: userProg.completedLessons || [],
         completedCount: (userProg.completedLessons || []).length,
+        readLessons,
+        passedCheckpoints,
         stats,
         lastActiveAt: syncedAt
       }, { merge: true });
@@ -456,6 +528,42 @@ export const progressService = {
       }
     } catch (e) {
       console.error('Lỗi khi lưu thông tin user lên Firestore:', e);
+    }
+  },
+
+  // Lưu tiến độ hoàn thành đọc lý thuyết tức thì lên Firestore
+  async saveLessonRead(userId: string, lessonId: string): Promise<void> {
+    try {
+      storageService.saveLessonRead(userId, lessonId);
+      if (userId && userId !== 'guest') {
+        const syncedAt = new Date().toISOString();
+        const userRef = doc(db, 'users', userId);
+        await setDoc(userRef, {
+          readLessons: arrayUnion(lessonId),
+          lastActiveAt: syncedAt
+        }, { merge: true });
+        logger.dbWrite(`Lưu hoàn thành bài học lý thuyết ${lessonId} lên Firestore`, 1);
+      }
+    } catch (e) {
+      logger.error('Lỗi khi lưu bài học lý thuyết lên Firestore:', e);
+    }
+  },
+
+  // Lưu tiến độ hoàn thành checkpoint lý thuyết tức thì lên Firestore
+  async saveTheoryCheckpointPassed(userId: string, checkpointId: string): Promise<void> {
+    try {
+      storageService.saveTheoryCheckpointPassed(userId, checkpointId);
+      if (userId && userId !== 'guest') {
+        const syncedAt = new Date().toISOString();
+        const userRef = doc(db, 'users', userId);
+        await setDoc(userRef, {
+          passedCheckpoints: arrayUnion(checkpointId),
+          lastActiveAt: syncedAt
+        }, { merge: true });
+        logger.dbWrite(`Lưu hoàn thành checkpoint lý thuyết ${checkpointId} lên Firestore`, 1);
+      }
+    } catch (e) {
+      logger.error('Lỗi khi lưu checkpoint lý thuyết lên Firestore:', e);
     }
   }
 };

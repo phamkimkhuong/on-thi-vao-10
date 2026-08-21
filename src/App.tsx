@@ -45,7 +45,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, setAnalyticsUser, db } from './services/firebase';
 import { progressService } from './services/progressService';
+import { storageService } from './services/storage';
 import { teacherAccessService } from './services/teacherAccessService';
+import { UserProgress } from './types';
 import { Loader } from 'lucide-react';
 
 const router = createBrowserRouter([
@@ -139,6 +141,40 @@ export const App: React.FC = () => {
               trialActivated: data.trialActivated === true,
               premiumUntil: data.premiumUntil || null
             });
+
+            // Tự động đồng bộ tiến độ học tập, bài học lý thuyết & điểm số realtime từ Server vào LocalStorage
+            let hasProgressChanges = false;
+            if (Array.isArray(data.readLessons)) {
+              const currentRead = storageService.getReadLessons(user.uid);
+              const mergedRead = Array.from(new Set([...currentRead, ...data.readLessons]));
+              if (mergedRead.length !== currentRead.length) {
+                storageService.saveReadLessonsLocal(user.uid, mergedRead);
+                hasProgressChanges = true;
+              }
+            }
+            if (Array.isArray(data.passedCheckpoints)) {
+              const currentCheckpoints = storageService.getPassedTheoryCheckpoints(user.uid);
+              const mergedCheckpoints = Array.from(new Set([...currentCheckpoints, ...data.passedCheckpoints]));
+              if (mergedCheckpoints.length !== currentCheckpoints.length) {
+                storageService.savePassedTheoryCheckpointsLocal(user.uid, mergedCheckpoints);
+                hasProgressChanges = true;
+              }
+            }
+            if (data.masteryLevels || data.completedLessons) {
+              const currentProg = storageService.getProgress(user.uid);
+              const updatedProg: UserProgress = {
+                ...currentProg,
+                masteryLevels: { ...(currentProg.masteryLevels || {}), ...(data.masteryLevels || {}) },
+                completedLessons: Array.from(new Set([...(currentProg.completedLessons || []), ...(data.completedLessons || [])])),
+                lastUpdatedAt: data.lastActiveAt || currentProg.lastUpdatedAt
+              };
+              storageService.saveProgressLocal(user.uid, updatedProg);
+              hasProgressChanges = true;
+            }
+
+            if (hasProgressChanges) {
+              refreshProgress();
+            }
 
             // Tự động mở Profile Modal nếu học sinh thiếu thông tin cá nhân (chỉ mở một lần duy nhất trong phiên làm việc)
             if (typeof sessionStorage !== 'undefined') {

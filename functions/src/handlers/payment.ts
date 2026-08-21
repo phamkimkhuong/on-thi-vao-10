@@ -333,9 +333,9 @@ export const grantPremiumByEmail = onCall({
   const userData = userDoc.data();
 
   // Xác định thời hạn & tên gói dựa vào packageType
-  let durationMs = 365 * 24 * 60 * 60 * 1000;
-  let planName = "Gói 12 Tháng (VIP 1 Năm)";
-  let isTrial = false;
+  let durationMs: number;
+  let planName: string;
+  let isTrial: boolean;
 
   if (packageType === "trial_1m") {
     durationMs = 30 * 24 * 60 * 60 * 1000;

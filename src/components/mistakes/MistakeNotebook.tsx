@@ -106,7 +106,7 @@ export const MistakeNotebook: React.FC = () => {
       .filter((m): m is EnrichedMistake => m.question !== undefined); // Loại bỏ các câu không tìm thấy câu hỏi gốc
 
     setMistakes(filtered);
-  }, [user, questions, questionTypes]);
+  }, [user, questions, questionTypes, progressVersion]);
 
   useEffect(() => {
     loadMistakes();

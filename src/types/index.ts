@@ -496,6 +496,8 @@ export interface UserProgress {
   userId: string;
   masteryLevels: Record<string, number>;
   completedLessons: string[]; // Danh sách các bài/dạng bài đã hoàn thành
+  readLessons?: string[]; // Danh sách các bài lý thuyết đã đọc
+  passedCheckpoints?: string[]; // Danh sách các checkpoint lý thuyết đã vượt qua
   lastUpdatedAt: string;
 }
 

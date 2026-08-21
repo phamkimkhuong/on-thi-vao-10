@@ -110,7 +110,6 @@ const readTheoryCheckpointMap = (): Record<string, string[]> => {
   }
 };
 
-
 // Helper để ghi vào localStorage an toàn
 const writeToStorage = <T>(key: string, value: T): void => {
   try {
@@ -279,7 +278,7 @@ export const storageService = {
         userId,
         masteryLevels: {},
         completedLessons: [],
-        lastUpdatedAt: new Date().toISOString()
+        lastUpdatedAt: ''
       };
       writeToStorage(KEYS.PROGRESS, progressMap);
     }
@@ -293,7 +292,7 @@ export const storageService = {
         userId,
         masteryLevels: {},
         completedLessons: [],
-        lastUpdatedAt: new Date().toISOString()
+        lastUpdatedAt: ''
       };
     }
 
@@ -410,6 +409,12 @@ export const storageService = {
       map[userId].push(checkpointId);
       writeToStorage(KEYS.THEORY_CHECKPOINTS, map);
     }
+  },
+
+  savePassedTheoryCheckpointsLocal(userId: string, checkpointIds: string[]): void {
+    const map = readTheoryCheckpointMap();
+    map[userId] = checkpointIds;
+    writeToStorage(KEYS.THEORY_CHECKPOINTS, map);
   },
 
   // RESET ALL DATA

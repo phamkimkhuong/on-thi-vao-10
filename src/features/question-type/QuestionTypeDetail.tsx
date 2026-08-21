@@ -24,6 +24,7 @@ import { cn } from '@/utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '@/utils/theme';
 import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '@/utils/subject';
 import { storageService } from '@/services/storage';
+import { progressService } from '@/services/progressService';
 import { convertLatexToSpeechText } from '@/utils/speech';
 import { SeoHead } from '@/components/common/SeoHead';
 import { createBreadcrumbSchema, createFAQSchema, createQuizSchema } from '@/utils/seoSchemas';
@@ -31,7 +32,7 @@ import { createBreadcrumbSchema, createFAQSchema, createQuizSchema } from '@/uti
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, selectedGrade, setSubject, user } = useAppStore();
+  const { selectedSubject, selectedGrade, setSubject, user, refreshProgress } = useAppStore();
 
   const [showFloatingBar, setShowFloatingBar] = useState(false);
 
@@ -134,11 +135,16 @@ export const QuestionTypeDetail: React.FC = () => {
       availableIds.push('example');
 
       if (availableIds.length === 1 && requiredCheckpointIds.length === 0) {
-        storageService.saveLessonRead(userId, detail.id);
+        if (user) {
+          progressService.saveLessonRead(user.uid, detail.id);
+        } else {
+          storageService.saveLessonRead(userId, detail.id);
+        }
+        refreshProgress();
         setShowLessonCompletedMsg(true);
       }
     }
-  }, [questionTypeId, detail, user]);
+  }, [questionTypeId, detail, user, refreshProgress]);
 
   // Hủy đọc thoại khi rời trang
   useEffect(() => {
@@ -562,7 +568,12 @@ export const QuestionTypeDetail: React.FC = () => {
       const userId = user?.uid || 'guest';
       const readLessons = storageService.getReadLessons(userId);
       if (!readLessons.includes(detail.id)) {
-        storageService.saveLessonRead(userId, detail.id);
+        if (user) {
+          progressService.saveLessonRead(user.uid, detail.id);
+        } else {
+          storageService.saveLessonRead(userId, detail.id);
+        }
+        refreshProgress();
       }
       setShowLessonCompletedMsg(true);
     }
@@ -574,7 +585,13 @@ export const QuestionTypeDetail: React.FC = () => {
     const checkpoint = detail.theoryCheckpoints?.find(item => item.id === checkpointId);
     if (!checkpoint || answer !== checkpoint.correctAnswer) return;
 
-    storageService.saveTheoryCheckpointPassed(user?.uid || 'guest', checkpointId);
+    if (user) {
+      progressService.saveTheoryCheckpointPassed(user.uid, checkpointId);
+    } else {
+      storageService.saveTheoryCheckpointPassed('guest', checkpointId);
+    }
+    refreshProgress();
+
     setPassedCheckpointIds(previous => {
       const next = new Set(previous);
       next.add(checkpointId);
