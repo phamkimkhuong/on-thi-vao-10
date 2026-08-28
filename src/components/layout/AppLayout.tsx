@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useAppStore } from '../../services/store';
 import {
   BookOpen,
@@ -230,6 +231,19 @@ export const AppLayout: React.FC = () => {
     const path = location.pathname;
     const brandName = 'ezonthi';
 
+    // Các trang có SeoHead riêng phải tự kiểm soát title, tránh layout ghi đè sau khi render.
+    if (
+      path === '/' ||
+      path.startsWith('/on-thi-vao-10') ||
+      path.startsWith('/lop-10') ||
+      path.startsWith(ROUTES.ABOUT) ||
+      path.startsWith(ROUTES.ROADMAP) ||
+      path.startsWith('/question-types') ||
+      path.startsWith(ROUTES.PRACTICE)
+    ) {
+      return;
+    }
+
     if (path.startsWith(ROUTES.TEACHER)) {
       document.title = `Góc Giáo Viên | ${brandName}`;
       return;
@@ -379,9 +393,27 @@ export const AppLayout: React.FC = () => {
 
   const logoPng = darkMode ? '/logo-removebg.png' : '/logo.png';
   const logoWebp = darkMode ? '/logo-removebg.png' : '/logo.webp';
+  const shouldNoIndex = [
+    ROUTES.DASHBOARD,
+    ROUTES.ROADMAP,
+    ROUTES.PRACTICE,
+    ROUTES.EXAM,
+    ROUTES.AI_TUTOR,
+    ROUTES.MISTAKES,
+    ROUTES.TEACHER,
+    ROUTES.AFFILIATE,
+    ROUTES.VOCABULARY,
+    ROUTES.GRAMMAR,
+    ROUTES.NEWS
+  ].some(route => location.pathname === route || location.pathname.startsWith(`${route}/`));
 
   return (
     <div className="min-h-screen md:min-h-0 md:h-screen md:overflow-hidden bg-background text-foreground flex flex-col md:flex-row font-sans transition-colors duration-200">
+      {shouldNoIndex && (
+        <Helmet>
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+      )}
 
       {/* 📱 Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-sm sticky top-0 z-40">

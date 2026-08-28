@@ -5,6 +5,7 @@ import { useAppStore } from './services/store';
 import AppLayout from './components/layout/AppLayout';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { ROUTES } from './constants/routes';
+import { seoLandingPages } from './seo/landingPages';
 
 function lazyWithRetry<T extends React.ComponentType<any>>(
   factory: () => Promise<{ default: T }>
@@ -41,6 +42,7 @@ const AboutPage = lazyWithRetry(() => import('./features/about/AboutPage'));
 const VocabularyPage = lazyWithRetry(() => import('./features/vocabulary/VocabularyPage'));
 const GrammarPage = lazyWithRetry(() => import('./features/grammar/GrammarPage'));
 const NewsPage = lazyWithRetry(() => import('./features/news/NewsPage').then(m => ({ default: m.NewsPage })));
+const SeoLandingPage = lazyWithRetry(() => import('./features/seo-landing/SeoLandingPage'));
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -65,7 +67,13 @@ const router = createBrowserRouter([
       </ErrorBoundary>
     ),
     children: [
-      { index: true, element: <Navigate to={ROUTES.ABOUT} replace /> },
+      { index: true, element: <SeoLandingPage /> },
+      ...seoLandingPages
+        .filter(page => page.route !== '/')
+        .map(page => ({
+          path: page.route.replace(/^\//, '').replace(/\/$/, ''),
+          element: <SeoLandingPage />
+        })),
       { path: ROUTES.DASHBOARD.substring(1), element: <Dashboard /> },
       { path: ROUTES.ROADMAP.substring(1), element: <Roadmap /> },
       { path: 'question-types/:questionTypeId', element: <QuestionTypeDetail /> },

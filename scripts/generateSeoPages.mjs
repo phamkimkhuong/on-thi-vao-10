@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { loadSeoCatalog } from './lib/loadSeoCatalog.mjs';
 
 const DOMAIN = 'https://ezonthi.com';
 const DIST_DIR = path.join(process.cwd(), 'dist');
@@ -10,190 +11,253 @@ if (!fs.existsSync(TEMPLATE_PATH)) {
   process.exit(1);
 }
 
-console.log('⚡ Đang tự động tạo các trang HTML tĩnh chuẩn SEO (Prerendering)...');
-
 const htmlTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+const { questionTypes, landingPages } = await loadSeoCatalog();
 
-// 1. Quét dữ liệu tất cả dạng bài từ src/data
-const dataDir = path.join(process.cwd(), 'src', 'data');
-const questionTypeDataMap = new Map();
+const escapeHtml = value => String(value ?? '')
+  .replaceAll('&', '&amp;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;')
+  .replaceAll('"', '&quot;')
+  .replaceAll("'", '&#039;');
 
-function walkDir(dir) {
-  const files = fs.readdirSync(dir);
-  for (const file of files) {
-    const fullPath = path.join(dir, file);
-    const stat = fs.statSync(fullPath);
-    if (stat.isDirectory()) {
-      walkDir(fullPath);
-    } else if (file.endsWith('.ts') || file.endsWith('.json')) {
-      const content = fs.readFileSync(fullPath, 'utf8');
-      
-      // Regex trích xuất id, name, description
-      const idMatches = content.matchAll(/(?:id)\s*:\s*['"]([a-zA-Z0-9_-]*qt\d+[a-zA-Z0-9_-]*)['"]/g);
-      for (const match of idMatches) {
-        const id = match[1];
-        if (id && !questionTypeDataMap.has(id)) {
-          // Trích xuất name nếu có
-          const nameMatch = content.slice(match.index).match(/name\s*:\s*['"]([^'"]+)['"]/);
-          const name = nameMatch ? nameMatch[1] : id;
+const safeJson = value => JSON.stringify(value).replaceAll('<', '\\u003c');
 
-          // Xác định môn học & lớp dựa trên ID
-          let subject = 'Toán';
-          let grade = 'Lớp 10';
-          if (id.startsWith('math9') || id.startsWith('math-qt')) { subject = 'Toán Học'; grade = 'Lớp 9'; }
-          else if (id.startsWith('eng9') || id.startsWith('eng-qt')) { subject = 'Tiếng Anh'; grade = 'Lớp 9'; }
-          else if (id.startsWith('g10-math') || id.startsWith('math10')) { subject = 'Toán Học'; grade = 'Lớp 10'; }
-          else if (id.startsWith('g10-eng') || id.startsWith('eng10')) { subject = 'Tiếng Anh'; grade = 'Lớp 10'; }
-          else if (id.startsWith('g10-chem') || id.startsWith('chem10')) { subject = 'Hóa Học'; grade = 'Lớp 10'; }
-          else if (id.startsWith('g10-phy') || id.startsWith('phy10')) { subject = 'Vật Lý'; grade = 'Lớp 10'; }
-          else if (id.startsWith('g10-bio') || id.startsWith('bio10')) { subject = 'Sinh Học'; grade = 'Lớp 10'; }
-          else if (id.startsWith('g11-math') || id.startsWith('math11')) { subject = 'Toán Học'; grade = 'Lớp 11'; }
-          else if (id.startsWith('g11-eng') || id.startsWith('eng11')) { subject = 'Tiếng Anh'; grade = 'Lớp 11'; }
-          else if (id.startsWith('g11-chem') || id.startsWith('chem11')) { subject = 'Hóa Học'; grade = 'Lớp 11'; }
-          else if (id.startsWith('g11-phy') || id.startsWith('phy11')) { subject = 'Vật Lý'; grade = 'Lớp 11'; }
-          else if (id.startsWith('g11-bio') || id.startsWith('bio11')) { subject = 'Sinh Học'; grade = 'Lớp 11'; }
-
-          questionTypeDataMap.set(id, { id, name, subject, grade });
-        }
-      }
-    }
-  }
+function normalizeRoute(route) {
+  if (route === '/') return '/';
+  return `/${route.replace(/^\/+|\/+$/g, '')}/`;
 }
 
-walkDir(dataDir);
+function canonical(route) {
+  return `${DOMAIN}${normalizeRoute(route)}`;
+}
 
-// 2. Danh sách trang tĩnh
-const staticPages = [
+function staticShell({ h1, intro, sections = [], links = [] }) {
+  const sectionHtml = sections.map(section => `
+      <section>
+        <h2>${escapeHtml(section.heading)}</h2>
+        ${(section.paragraphs || []).map(text => `<p>${escapeHtml(text)}</p>`).join('')}
+        ${section.bullets?.length ? `<ul>${section.bullets.map(text => `<li>${escapeHtml(text)}</li>`).join('')}</ul>` : ''}
+      </section>`).join('');
+  const linksHtml = links.length ? `
+      <nav aria-label="Nội dung liên quan">
+        <h2>Học tiếp trên ezonthi</h2>
+        <ul>${links.map(link => `<li><a href="${escapeHtml(normalizeRoute(link.href))}">${escapeHtml(link.label)}</a><span>${escapeHtml(link.description || '')}</span></li>`).join('')}</ul>
+      </nav>` : '';
+
+  return `<main data-seo-static>
+      <p class="seo-eyebrow">ezonthi · Học đúng trọng tâm</p>
+      <h1>${escapeHtml(h1)}</h1>
+      <p class="seo-intro">${escapeHtml(intro)}</p>
+      ${sectionHtml}
+      ${linksHtml}
+    </main>`;
+}
+
+const staticStyle = `<style id="seo-static-style">
+  [data-seo-static]{max-width:960px;margin:0 auto;padding:48px 24px 80px;font-family:Inter,system-ui,sans-serif;color:#172033;line-height:1.7}
+  [data-seo-static] h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.12;margin:12px 0 20px;letter-spacing:-.035em}
+  [data-seo-static] h2{font-size:1.35rem;margin:32px 0 10px}
+  [data-seo-static] section,[data-seo-static] nav{padding:20px 0;border-top:1px solid #e5e7eb}
+  [data-seo-static] p,[data-seo-static] li{font-size:1rem}
+  [data-seo-static] .seo-eyebrow{color:#4f46e5;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+  [data-seo-static] .seo-intro{font-size:1.15rem;color:#475569;max-width:760px}
+  [data-seo-static] ul{padding-left:22px}
+  [data-seo-static] nav li{margin:10px 0}
+  [data-seo-static] nav a{font-weight:800;color:#4338ca;margin-right:10px}
+  [data-seo-static] nav span{color:#64748b}
+</style>`;
+
+function injectSeo(html, { title, description, canonicalUrl, robots = 'index, follow', jsonLd, body }) {
+  const escapedTitle = escapeHtml(title);
+  const escapedDescription = escapeHtml(description);
+  const escapedCanonical = escapeHtml(canonicalUrl);
+  let result = html
+    .replace(/<title>.*?<\/title>/s, `<title>${escapedTitle}</title>`)
+    .replace(/<meta name="description"[\s\S]*?>/i, `<meta name="description" content="${escapedDescription}" />`)
+    .replace(/<meta name="robots"[\s\S]*?>/i, `<meta name="robots" content="${escapeHtml(robots)}" />`)
+    .replace(/<link rel="canonical"[\s\S]*?>/i, `<link rel="canonical" href="${escapedCanonical}" />`)
+    .replace(/<meta property="og:title"[\s\S]*?>/i, `<meta property="og:title" content="${escapedTitle}" />`)
+    .replace(/<meta property="og:description"[\s\S]*?>/i, `<meta property="og:description" content="${escapedDescription}" />`)
+    .replace(/<meta property="og:url"[\s\S]*?>/i, `<meta property="og:url" content="${escapedCanonical}" />`)
+    .replace(/<meta name="twitter:title"[\s\S]*?>/i, `<meta name="twitter:title" content="${escapedTitle}" />`)
+    .replace(/<meta name="twitter:description"[\s\S]*?>/i, `<meta name="twitter:description" content="${escapedDescription}" />`);
+
+  if (jsonLd) {
+    const schemas = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+    const tags = schemas.map(schema => `<script type="application/ld+json">${safeJson(schema)}</script>`).join('\n');
+    result = result.replace('</head>', `${tags}\n${staticStyle}\n</head>`);
+  } else {
+    result = result.replace('</head>', `${staticStyle}\n</head>`);
+  }
+
+  return result.replace('<div id="root"></div>', `<div id="root">${body}</div>`);
+}
+
+function writePage(route, html) {
+  const relative = normalizeRoute(route).replace(/^\/+|\/+$/g, '');
+  const targetDir = relative ? path.join(DIST_DIR, ...relative.split('/')) : DIST_DIR;
+  fs.mkdirSync(targetDir, { recursive: true });
+  fs.writeFileSync(path.join(targetDir, 'index.html'), html, 'utf8');
+}
+
+function breadcrumb(items) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: canonical(item.route)
+    }))
+  };
+}
+
+const publicPages = [
+  ...landingPages,
   {
-    route: '/about',
-    title: 'Giới Thiệu Nền Tảng ezonthi | Ôn Thi Vào 10 & THPT',
-    description: 'Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT 2018 với dạng bài cốt lõi, Sổ lỗi sai và AI Gia sư.'
+    route: '/about/',
+    title: 'Giới thiệu nền tảng học tập ezonthi',
+    description: 'Tìm hiểu cách ezonthi tổ chức lý thuyết, dạng bài, luyện tập, sổ lỗi sai và lộ trình học cho học sinh lớp 9 đến lớp 11.',
+    h1: 'Giới thiệu nền tảng ezonthi',
+    intro: 'ezonthi giúp học sinh học kiến thức và luyện tập theo từng dạng bài trong cùng một trải nghiệm.',
+    sections: [{ heading: 'Học theo tiến độ của chính em', paragraphs: ['Dữ liệu học tập được tổ chức theo lớp, môn, chương và dạng bài để học sinh biết mình cần học gì tiếp theo.'] }],
+    links: [{ label: 'Ôn thi vào 10', href: '/on-thi-vao-10/', description: 'Xem lộ trình dành cho học sinh lớp 9.' }, { label: 'Ôn tập lớp 10', href: '/lop-10/', description: 'Xem các môn học lớp 10.' }]
   },
   {
-    route: '/roadmap',
-    title: 'Lộ Trình Học Tốt Cá Nhân Hóa | ezonthi',
-    description: 'Bản đồ lộ trình học 3 chặng môn Toán, Tiếng Anh, Hóa học, Vật lý chuẩn hóa giúp học sinh nắm chắc kiến thức và bứt phá điểm số.'
+    route: '/premium/',
+    title: 'Gói học tập Premium | ezonthi',
+    description: 'Tìm hiểu quyền lợi gói Premium trên ezonthi dành cho học sinh muốn mở rộng lộ trình và nội dung luyện tập.',
+    h1: 'Gói học tập Premium trên ezonthi',
+    intro: 'So sánh quyền lợi trước khi lựa chọn gói học phù hợp với nhu cầu.',
+    sections: [{ heading: 'Chỉ nâng cấp khi em cần', paragraphs: ['Học sinh vẫn có thể tìm hiểu lộ trình và nội dung nền tảng trước khi quyết định nâng cấp.'] }],
+    links: [{ label: 'Xem lộ trình', href: '/roadmap/', description: 'Kiểm tra nội dung học hiện có.' }]
   },
   {
-    route: '/practice',
-    title: 'Luyện Tập Thực Chiến & Giải Dạng Bài | ezonthi',
-    description: 'Hệ thống luyện tập thực chiến trắc nghiệm và tự luận các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát cấu trúc đề thi GDPT 2018.'
-  },
-  {
-    route: '/exam',
-    title: 'Thi Thử & Kiểm Tra Đếm Giờ Thực Tế | ezonthi',
-    description: 'Hệ thống thi thử đếm giờ tự động bám sát ma trận đề thi tuyển sinh vào 10 và đề thi học kỳ THPT các môn Toán, Tiếng Anh, Hóa học.'
-  },
-  {
-    route: '/premium',
-    title: 'Nâng Cấp Gói Premium 🌟 | ezonthi',
-    description: 'Mở khóa toàn bộ lộ trình Chặng 3 nâng cao, ngân hàng đề thi chuyên sâu và đặc quyền hỏi đáp AI Gia sư không giới hạn.'
-  },
-  {
-    route: '/support',
-    title: 'Hỗ Trợ & Góp Ý Nền Tảng | ezonthi',
-    description: 'Trung tâm hỗ trợ học sinh và giáo viên giải đáp thắc mắc, tiếp nhận góp ý nâng cấp hệ thống ezonthi.'
+    route: '/support/',
+    title: 'Hỗ trợ và góp ý | ezonthi',
+    description: 'Liên hệ hỗ trợ, báo lỗi nội dung hoặc gửi góp ý cải thiện nền tảng học tập ezonthi.',
+    h1: 'Hỗ trợ và góp ý cho ezonthi',
+    intro: 'Gửi thông tin rõ ràng về môn, lớp và câu hỏi để đội ngũ có thể kiểm tra nhanh hơn.',
+    sections: [{ heading: 'Khi báo lỗi nội dung', paragraphs: ['Hãy cho biết tên dạng bài, nội dung câu hỏi và điểm em thấy chưa hợp lý.'] }],
+    links: [{ label: 'Về trang chủ', href: '/', description: 'Quay lại chọn lộ trình học.' }]
   }
 ];
 
-function injectSeoToHtml(html, { title, description, canonicalUrl, jsonLd }) {
-  let result = html;
-
-  // Thay title
-  result = result.replace(/<title>.*?<\/title>/s, `<title>${title}</title>`);
-
-  // Thay description
-  result = result.replace(/<meta name="description"\s+content=".*?"\s*\/?>/s, `<meta name="description" content="${description}" />`);
-
-  // Thay canonical
-  result = result.replace(/<link rel="canonical"\s+href=".*?"\s*\/?>/s, `<link rel="canonical" href="${canonicalUrl}" />`);
-
-  // Thay OG & Twitter
-  result = result.replace(/<meta property="og:title"\s+content=".*?"\s*\/?>/s, `<meta property="og:title" content="${title}" />`);
-  result = result.replace(/<meta property="og:description"\s+content=".*?"\s*\/?>/s, `<meta property="og:description" content="${description}" />`);
-  result = result.replace(/<meta property="og:url"\s+content=".*?"\s*\/?>/s, `<meta property="og:url" content="${canonicalUrl}" />`);
-
-  result = result.replace(/<meta name="twitter:title"\s+content=".*?"\s*\/?>/s, `<meta name="twitter:title" content="${title}" />`);
-  result = result.replace(/<meta name="twitter:description"\s+content=".*?"\s*\/?>/s, `<meta name="twitter:description" content="${description}" />`);
-
-  // Chèn JSON-LD Schema nếu có
-  if (jsonLd) {
-    const schemas = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
-    const scriptTags = schemas.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n  ');
-    result = result.replace('</head>', `  ${scriptTags}\n</head>`);
-  }
-
-  return result;
-}
-
-// Write file helper
-function writePrerenderedFile(routePath, htmlContent) {
-  const targetDir = path.join(DIST_DIR, routePath);
-  fs.mkdirSync(targetDir, { recursive: true });
-  fs.writeFileSync(path.join(targetDir, 'index.html'), htmlContent, 'utf8');
-}
-
-// 3. Tạo trang tĩnh
-for (const page of staticPages) {
-  const canonicalUrl = `${DOMAIN}${page.route}`;
-  const breadcrumb = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: `${DOMAIN}/` },
-      { '@type': 'ListItem', position: 2, name: page.title.split('|')[0].trim(), item: canonicalUrl }
-    ]
-  };
-
-  const pageHtml = injectSeoToHtml(htmlTemplate, {
+for (const page of publicPages) {
+  const route = normalizeRoute(page.route);
+  const body = staticShell({ h1: page.h1, intro: page.intro, sections: page.sections, links: page.links });
+  writePage(route, injectSeo(htmlTemplate, {
     title: page.title,
     description: page.description,
-    canonicalUrl,
-    jsonLd: breadcrumb
-  });
-
-  writePrerenderedFile(page.route, pageHtml);
+    canonicalUrl: canonical(route),
+    body,
+    jsonLd: breadcrumb([
+      { name: 'Trang chủ', route: '/' },
+      ...(route === '/' ? [] : [{ name: page.h1, route }])
+    ])
+  }));
 }
 
-// 4. Tạo trang tĩnh cho tất cả 1,700+ dạng bài học
-let generatedQtCount = 0;
-for (const [id, item] of questionTypeDataMap.entries()) {
-  const title = `${item.name} - ${item.subject} ${item.grade} | ezonthi`;
-  const description = `Hướng dẫn lý thuyết, phương pháp giải, bẫy thường gặp và bài tập thực chiến dạng ${item.name} môn ${item.subject} ${item.grade} bám sát GDPT mới.`;
-  const canonicalUrl = `${DOMAIN}/question-types/${id}`;
-
-  const breadcrumb = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: `${DOMAIN}/` },
-      { '@type': 'ListItem', position: 2, name: item.grade, item: `${DOMAIN}/roadmap` },
-      { '@type': 'ListItem', position: 3, name: `${item.subject} ${item.grade}`, item: `${DOMAIN}/roadmap` },
-      { '@type': 'ListItem', position: 4, name: item.name, item: canonicalUrl }
-    ]
+const subjectLanding = key => {
+  const map = {
+    'g9-math': '/on-thi-vao-10/toan/',
+    'g9-english': '/on-thi-vao-10/tieng-anh/',
+    'g10-math': '/lop-10/toan/',
+    'g10-english': '/lop-10/tieng-anh/',
+    'g10-physics': '/lop-10/vat-ly/',
+    'g10-chemistry': '/lop-10/hoa-hoc/',
+    'g10-biology': '/lop-10/sinh-hoc/',
+    'g10-history': '/lop-10/lich-su/'
   };
+  return map[key] || '/roadmap/';
+};
 
-  const qtHtml = injectSeoToHtml(htmlTemplate, {
-    title,
-    description,
-    canonicalUrl,
-    jsonLd: breadcrumb
+for (const item of questionTypes) {
+  const route = `/question-types/${item.id}/`;
+  const title = `${item.name} – ${item.subject} ${item.grade} | ezonthi`;
+  const description = `${item.description} Xem kiến thức cần nhớ, dấu hiệu nhận biết, lỗi thường gặp và luyện tập dạng ${item.name} trên ezonthi.`.slice(0, 300);
+  const sections = [
+    ...(item.theory.length ? [{ heading: 'Kiến thức cần nhớ', paragraphs: item.theory.slice(0, 8) }] : []),
+    ...(item.recognitionSigns.length ? [{ heading: 'Dấu hiệu nhận biết', paragraphs: [], bullets: item.recognitionSigns.slice(0, 8) }] : []),
+    ...(item.solvingSteps.length ? [{ heading: 'Các bước làm bài', paragraphs: [], bullets: item.solvingSteps.slice(0, 8) }] : []),
+    ...(item.commonMistakes.length ? [{ heading: 'Lỗi thường gặp', paragraphs: [], bullets: item.commonMistakes.slice(0, 8) }] : [])
+  ];
+  const body = staticShell({
+    h1: item.name,
+    intro: `${item.subject} ${item.grade}. ${item.description}`,
+    sections,
+    links: [
+      { label: `Xem nội dung ${item.subject} ${item.grade}`, href: subjectLanding(item.subjectKey), description: 'Quay lại trang môn học.' },
+      { label: 'Luyện dạng bài này', href: `/practice/${item.id}/`, description: 'Làm câu hỏi sau khi đã đọc lý thuyết.' }
+    ]
   });
+  const schemas = [
+    breadcrumb([
+      { name: 'Trang chủ', route: '/' },
+      { name: `${item.subject} ${item.grade}`, route: subjectLanding(item.subjectKey) },
+      { name: item.name, route }
+    ]),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'LearningResource',
+      name: item.name,
+      description: item.description,
+      educationalLevel: item.grade,
+      teaches: item.name,
+      inLanguage: 'vi',
+      url: canonical(route)
+    }
+  ];
+  writePage(route, injectSeo(htmlTemplate, { title, description, canonicalUrl: canonical(route), body, jsonLd: schemas }));
 
-  writePrerenderedFile(`/question-types/${id}`, qtHtml);
-  
-  // Đồng thời tạo cho route practice
-  const practiceCanonical = `${DOMAIN}/practice/${id}`;
-  const practiceTitle = `Luyện Tập: ${item.name} - ${item.subject} ${item.grade} | ezonthi`;
-  const practiceHtml = injectSeoToHtml(htmlTemplate, {
-    title: practiceTitle,
-    description,
-    canonicalUrl: practiceCanonical,
-    jsonLd: breadcrumb
+  const practiceRoute = `/practice/${item.id}/`;
+  const practiceBody = staticShell({
+    h1: `Luyện tập: ${item.name}`,
+    intro: `Phần làm bài tương tác cho dạng ${item.name}. Hãy đọc kiến thức và phương pháp trước khi luyện tập.`,
+    links: [{ label: 'Đọc lý thuyết dạng bài', href: route, description: 'Xem phần cần nhớ và lỗi thường gặp.' }]
   });
-  writePrerenderedFile(`/practice/${id}`, practiceHtml);
-
-  generatedQtCount++;
+  writePage(practiceRoute, injectSeo(htmlTemplate, {
+    title: `Luyện tập ${item.name} | ezonthi`,
+    description: `Luyện tập dạng ${item.name} ${item.subject} ${item.grade} trên ezonthi.`,
+    canonicalUrl: canonical(route),
+    robots: 'noindex, follow',
+    body: practiceBody
+  }));
 }
 
-console.log(`✅ Hoàn tất Prerendering SEO! Đã tạo ${staticPages.length + generatedQtCount * 2} file HTML tĩnh chuẩn SEO trong dist/`);
+const noIndexPages = [
+  ['/dashboard/', 'Bảng điều khiển học tập'],
+  ['/roadmap/', 'Lộ trình học cá nhân'],
+  ['/practice/', 'Luyện tập'],
+  ['/exam/', 'Thi thử và kiểm tra'],
+  ['/ai-tutor/', 'Gia sư học tập'],
+  ['/mistakes/', 'Sổ lỗi sai'],
+  ['/teacher/', 'Góc giáo viên'],
+  ['/affiliate/', 'Góc đối tác'],
+  ['/vocabulary/', 'Luyện từ vựng'],
+  ['/grammar/', 'Cẩm nang ngữ pháp'],
+  ['/news/', 'Bảng tin']
+];
+
+for (const [route, h1] of noIndexPages) {
+  writePage(route, injectSeo(htmlTemplate, {
+    title: `${h1} | ezonthi`,
+    description: `${h1} dành cho người dùng ezonthi.`,
+    canonicalUrl: canonical(route),
+    robots: 'noindex, follow',
+    body: staticShell({ h1, intro: 'Nội dung tương tác được tải khi em mở trang.', links: [{ label: 'Về trang chủ', href: '/', description: '' }] })
+  }));
+}
+
+const notFound = injectSeo(htmlTemplate, {
+  title: 'Không tìm thấy trang | ezonthi',
+  description: 'Địa chỉ này không tồn tại trên ezonthi.',
+  canonicalUrl: `${DOMAIN}/404/`,
+  robots: 'noindex, nofollow',
+  body: staticShell({ h1: 'Không tìm thấy trang', intro: 'Đường dẫn có thể đã thay đổi hoặc không tồn tại.', links: [{ label: 'Về trang chủ', href: '/', description: 'Chọn lại nội dung cần học.' }] })
+}).replace(/<script type="module"[\s\S]*?<\/script>/, '');
+fs.writeFileSync(path.join(DIST_DIR, '404.html'), notFound, 'utf8');
+
+console.log(`✅ Prerender: ${publicPages.length} trang công khai, ${questionTypes.length} dạng bài, ${questionTypes.length} trang luyện tập noindex và ${noIndexPages.length} trang ứng dụng.`);

@@ -291,13 +291,14 @@ export const Roadmap: React.FC = () => {
         title={pageTitle}
         description={pageDescription}
         canonicalUrl="/roadmap"
+        robots="noindex, follow"
         jsonLd={[courseSchema, breadcrumbSchema]}
       />
       {/* Header Giới thiệu Lộ trình */}
       <div className="text-center space-y-4">
-        <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
+        <h1 className="text-2xl md:text-4xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 font-sans">
           {selectedGrade === 'grade9' ? 'Lộ trình Ôn thi' : 'Lộ trình Học tốt'} môn {getSubjectIcon(selectedSubject)} {getSubjectName(selectedSubject)} {selectedGrade === 'grade9' ? 'vào 10' : selectedGrade === 'grade10' ? 'Lớp 10' : 'Lớp 11'}
-        </h2>
+        </h1>
         <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed font-bold">
           Lộ trình tinh gọn giúp bạn nắm chắc kiến thức {selectedGrade === 'grade9' ? 'ôn thi vào 10' : selectedGrade === 'grade10' ? 'chương trình lớp 10' : 'chương trình lớp 11'} toàn diện, tự do rèn luyện và mở khóa mọi dạng bài.
         </p>

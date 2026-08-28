@@ -26,8 +26,8 @@ export const AboutPage: React.FC = () => {
   const [activeDemoTab, setActiveDemoTab] = useState<'roadmap' | 'textbook' | 'mistakes' | 'aitutor'>('roadmap');
 
   const webPageSchema = createWebPageSchema({
-    name: 'Giới thiệu Nền tảng ezonthi | Ôn Thi Vào 10 & THPT',
-    description: 'Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12 bám sát chương trình GDPT 2018 với dạng bài cốt lõi, Sổ lỗi sai và AI Gia sư.',
+    name: 'Giới thiệu Nền tảng ezonthi | Ôn Thi Vào 10 & Học Tốt THPT',
+    description: 'Nền tảng ôn thi vào 10 và học tốt lớp 10, 11 theo dạng bài, kết hợp lý thuyết, luyện tập, Sổ lỗi sai và AI Gia sư.',
     url: '/about'
   });
 
@@ -39,8 +39,8 @@ export const AboutPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground pb-20 select-none">
       <SeoHead
-        title="Giới thiệu Nền tảng ezonthi | Học tốt & Luyện thi Lớp 9 - 12"
-        description="Nền tảng tự học trực tuyến hàng đầu dành cho học sinh Lớp 9, 10, 11, 12. Chuyên sâu luyện đề, giải dạng bài thực chiến các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát GDPT 2018."
+        title="Giới thiệu ezonthi | Ôn thi vào 10 & Học tốt lớp 10 - 11"
+        description="Nền tảng ôn thi vào 10 và học tốt lớp 10, 11 theo dạng bài, có lý thuyết, luyện tập, kiểm tra, Sổ lỗi sai và AI Gia sư."
         canonicalUrl="/about"
         jsonLd={[webPageSchema, breadcrumbSchema]}
       />

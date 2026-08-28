@@ -702,9 +702,9 @@ export const QuestionTypeDetail: React.FC = () => {
           </span>
         </div>
 
-        <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight leading-snug">
+        <h1 className="text-2xl md:text-3xl font-black text-foreground tracking-tight leading-snug">
           <LatexRenderer text={detail.name} />
-        </h2>
+        </h1>
         <div className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-4xl font-semibold">
           <LatexRenderer text={detail.description} />
         </div>

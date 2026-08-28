@@ -1137,7 +1137,7 @@ export const PracticeEngine: React.FC = () => {
     ? `Luyện tập thực chiến dạng bài ${requestedQuestionType.name} môn ${practiceSubjectName} ${practiceGradeLabel} có đáp án và giải thích chi tiết.`
     : `Luyện tập trắc nghiệm & tự luận các môn Toán, Tiếng Anh, Hóa học, Vật lý bám sát chương trình GDPT 2018.`;
 
-  const practiceCanonical = questionTypeId ? `/practice/${questionTypeId}` : '/practice';
+  const practiceCanonical = questionTypeId ? `/question-types/${questionTypeId}` : '/practice';
 
   const practiceBreadcrumbs = createBreadcrumbSchema([
     { name: 'Trang chủ', item: '/' },
@@ -1152,6 +1152,7 @@ export const PracticeEngine: React.FC = () => {
         title={practiceTitle}
         description={practiceDesc}
         canonicalUrl={practiceCanonical}
+        robots="noindex, follow"
         jsonLd={practiceBreadcrumbs}
       />
       {adaptivePracticeStatus && adaptivePracticeStatus.holdoutQuestionCount > 0 && (
