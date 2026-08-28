@@ -46,38 +46,33 @@ export const AboutPage: React.FC = () => {
       />
 
       {/* 1. HERO SECTION WITH ACADEMIC TITLE */}
-      <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24 border-b border-border/40 bg-gradient-to-b from-slate-50 via-background to-background dark:from-slate-950/60 dark:via-background dark:to-background">
-        <div className="absolute top-0 right-1/3 w-[500px] h-[500px] bg-primary/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 left-1/3 w-[400px] h-[400px] bg-emerald-500/8 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-black tracking-wide uppercase shadow-2xs">
-            <Sparkles size={14} className="animate-spin-slow text-emerald-500" />
+      <section className="academic-grid relative overflow-hidden pt-8 pb-14 md:pt-14 md:pb-20 border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 space-y-6">
+          <div className="inline-flex items-center gap-2 section-kicker">
+            <Sparkles size={14} className="text-brand-action" />
             Phương Pháp Học Dạng Bài Cốt Lõi & Ma Trận SGK Chuẩn GDPT 2018
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight font-sans leading-tight text-foreground max-w-4xl mx-auto">
-            Học Đúng Trọng Tâm Đề Thi <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-emerald-600 via-primary to-indigo-600 dark:from-emerald-400 dark:via-primary dark:to-indigo-400 bg-clip-text text-transparent">
-              Chống Bẫy Thi & Bứt Phá Điểm Số
-            </span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.75rem] font-black tracking-[-0.05em] font-sans leading-[1.08] text-foreground max-w-4xl">
+            Học đúng trọng tâm đề thi.<br className="hidden sm:inline" />
+            <span className="brand-marker text-brand-ink"> Hiểu bài trước, tăng điểm sau.</span>
           </h1>
 
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Hệ thống tự học bài bản cho học sinh lớp 9–12: Chẻ nhỏ SGK dài thành các dạng bài thi 15 phút, tích hợp đối chiếu trang Sách giáo khoa gốc và sổ tay sửa lỗi sai tự động.
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-medium max-w-3xl leading-8">
+            Hệ thống tự học cho học sinh lớp 9–11: chẻ nhỏ kiến thức thành các dạng bài 15 phút, nối liền lý thuyết, luyện tập và sổ sửa lỗi sai trong cùng một lộ trình.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               onClick={() => navigate(ROUTES.ROADMAP)}
-              className="px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-extrabold text-xs sm:text-sm transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3 rounded-lg bg-brand-action hover:bg-brand-action/90 text-white font-extrabold text-xs sm:text-sm transition-all shadow-md active:scale-95 flex items-center gap-2 cursor-pointer"
             >
               <span>Vào Lộ trình học ngay</span>
               <ArrowRight size={16} />
             </button>
             <button
               onClick={() => navigate(ROUTES.EXAM)}
-              className="px-6 py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-extrabold text-xs sm:text-sm transition-all border border-border cursor-pointer active:scale-95"
+              className="px-6 py-3 rounded-lg bg-card hover:bg-secondary/70 text-brand-ink font-extrabold text-xs sm:text-sm transition-all border border-brand-ink/25 cursor-pointer active:scale-95"
             >
               Luyện đề thi thử
             </button>
@@ -85,15 +80,15 @@ export const AboutPage: React.FC = () => {
         </div>
 
         {/* 2. INTERACTIVE PRODUCT PREVIEW MOCKUP */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 md:pt-16">
-          <div className="rounded-3xl border border-border/80 bg-card shadow-2xl overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 md:pt-12">
+          <div className="paper-panel rounded-xl overflow-hidden">
 
             {/* Window Topbar */}
-            <div className="px-4 py-3 bg-slate-100 dark:bg-slate-900 border-b border-border flex items-center justify-between flex-wrap gap-2">
+            <div className="px-4 py-3 bg-secondary/65 border-b border-border flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-rose-500/80" />
                 <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <div className="w-3 h-3 rounded-full bg-brand-learning/80" />
                 <span className="text-[11px] font-mono text-muted-foreground font-bold ml-2 hidden sm:inline">
                   ezonthi.vn — Xem trước trải nghiệm giao diện ứng dụng
                 </span>
@@ -145,7 +140,7 @@ export const AboutPage: React.FC = () => {
             </div>
 
             {/* Interactive Preview Canvas */}
-            <div className="p-5 sm:p-8 bg-slate-50/50 dark:bg-slate-950/60 min-h-[340px] flex items-center justify-center">
+            <div className="p-5 sm:p-8 bg-secondary/20 min-h-[340px] flex items-center justify-center">
 
               {/* TAB 1: ROADMAP PREVIEW */}
               {activeDemoTab === 'roadmap' && (
@@ -159,33 +154,33 @@ export const AboutPage: React.FC = () => {
                         SGK Sinh học 10 (Trang 23 – 43) • 8 Dạng bài thi cốt lõi
                       </p>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black border border-emerald-500/20">
+                    <span className="px-2.5 py-1 rounded-md bg-brand-learning/10 text-brand-learning text-[10px] font-black border border-brand-learning/20">
                       100% Hoàn thành
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="p-4 rounded-xl border border-emerald-500/30 bg-card shadow-2xs space-y-2">
+                    <div className="p-4 rounded-lg border border-brand-learning/30 bg-card shadow-2xs space-y-2">
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="font-extrabold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600">✓ Cơ bản</span>
+                        <span className="font-extrabold px-2 py-0.5 rounded-md bg-brand-learning/10 text-brand-learning">✓ Cơ bản</span>
                         <span className="font-bold text-muted-foreground">Trang 23–25</span>
                       </div>
                       <h5 className="text-xs font-black text-foreground">Dạng 1: Nguyên tố hóa học và vai trò carbon</h5>
                       <p className="text-[10px] text-muted-foreground line-clamp-2">Phân biệt nguyên tố đa lượng, vi lượng trong tế bào.</p>
                     </div>
 
-                    <div className="p-4 rounded-xl border border-indigo-500/30 bg-card shadow-2xs space-y-2">
+                    <div className="p-4 rounded-lg border border-amber-600/30 bg-card shadow-2xs space-y-2">
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="font-extrabold px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600">⚡ Trung bình</span>
+                        <span className="font-extrabold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300">⚡ Trung bình</span>
                         <span className="font-bold text-muted-foreground">Trang 34–36</span>
                       </div>
                       <h5 className="text-xs font-black text-foreground">Dạng 5: Protein và quan hệ cấu trúc–chức năng</h5>
                       <p className="text-[10px] text-muted-foreground line-clamp-2">Phân tích các bậc cấu trúc không gian của Protein.</p>
                     </div>
 
-                    <div className="p-4 rounded-xl border border-purple-500/30 bg-card shadow-2xs space-y-2">
+                    <div className="p-4 rounded-lg border border-brand-action/30 bg-card shadow-2xs space-y-2">
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="font-extrabold px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600">🔥 Vận dụng</span>
+                        <span className="font-extrabold px-2 py-0.5 rounded-md bg-brand-action/10 text-brand-action">🔥 Vận dụng</span>
                         <span className="font-bold text-muted-foreground">Trang 36–40</span>
                       </div>
                       <h5 className="text-xs font-black text-foreground">Dạng 6: Nucleic acid và thông tin di truyền</h5>
@@ -201,12 +196,12 @@ export const AboutPage: React.FC = () => {
                   <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
-                        <span className="font-black px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 text-[10px]">
+                        <span className="font-black px-2 py-0.5 rounded-md bg-brand-learning/10 text-brand-learning border border-brand-learning/20 text-[10px]">
                           Ma Trận Đối Chiếu SGK
                         </span>
                         <span className="font-extrabold text-foreground">SGK Sinh học 10</span>
                       </div>
-                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Xem ảnh nét cao tức thì</span>
+                      <span className="text-[10px] font-bold text-brand-learning">Xem ảnh nét cao tức thì</span>
                     </div>
 
                     <div className="border border-border/60 rounded-lg overflow-hidden text-[11px]">
@@ -220,13 +215,13 @@ export const AboutPage: React.FC = () => {
                         <span className="font-bold text-muted-foreground">Dạng 1</span>
                         <span className="font-bold text-foreground">Cấu tạo & vai trò của nước</span>
                         <span className="text-muted-foreground">Bài 4: Các nguyên tố & nước (Mục III)</span>
-                        <span className="text-center"><span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-extrabold">Trang 25, 26, 27</span></span>
+                        <span className="text-center"><span className="px-2 py-0.5 rounded bg-brand-learning/10 text-brand-learning font-extrabold">Trang 25, 26, 27</span></span>
                       </div>
                       <div className="grid grid-cols-4 p-2.5 items-center">
                         <span className="font-bold text-muted-foreground">Dạng 3</span>
                         <span className="font-bold text-foreground">Carbohydrate trong sinh học</span>
                         <span className="text-muted-foreground">Bài 5: Phân tử sinh học (Mục II.1)</span>
-                        <span className="text-center"><span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-extrabold">Trang 28, 29, 30</span></span>
+                        <span className="text-center"><span className="px-2 py-0.5 rounded bg-brand-learning/10 text-brand-learning font-extrabold">Trang 28, 29, 30</span></span>
                       </div>
                     </div>
                   </div>
@@ -247,7 +242,7 @@ export const AboutPage: React.FC = () => {
                     <div className="p-3 rounded-lg bg-rose-500/5 border border-rose-500/10 text-xs space-y-1">
                       <p className="font-extrabold text-foreground">❓ Câu hỏi: Phát biểu nào sau đây là KHÔNG đúng về tính phân cực của nước?</p>
                       <p className="text-[11px] text-rose-600 dark:text-rose-400 font-bold">❌ Đáp án bạn chọn: Nước hòa tan tất cả các hợp chất kị nước.</p>
-                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-extrabold">✓ Sửa lại chuẩn: Nước chỉ hòa tan các chất phân cực và chất điện li (ưa nước).</p>
+                      <p className="text-[11px] text-brand-learning font-extrabold">✓ Sửa lại chuẩn: Nước chỉ hòa tan các chất phân cực và chất điện li (ưa nước).</p>
                     </div>
                   </div>
                 </div>
@@ -281,7 +276,7 @@ export const AboutPage: React.FC = () => {
       {/* 3. PEDAGOGICAL COMPARISON SECTION (SO SÁNH PHƯƠNG PHÁP CŨ VS MỚI) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14 md:py-20 space-y-10">
         <div className="text-center space-y-3">
-          <span className="text-xs font-black uppercase tracking-wider text-primary px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+          <span className="section-kicker">
             Phương Pháp Học Cốt Lõi
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground font-sans tracking-tight">
@@ -294,7 +289,7 @@ export const AboutPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* TRUYỀN THỐNG */}
-          <div className="p-6 md:p-8 rounded-3xl bg-slate-100/70 dark:bg-slate-900/50 border border-border/80 space-y-5">
+          <div className="p-6 md:p-8 rounded-xl bg-secondary/45 border border-border space-y-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center font-black">
                 <XCircle size={22} />
@@ -328,34 +323,34 @@ export const AboutPage: React.FC = () => {
           </div>
 
           {/* PHƯƠNG PHÁP ỨNG DỤNG */}
-          <div className="p-6 md:p-8 rounded-3xl bg-emerald-500/5 dark:bg-emerald-950/20 border border-emerald-500/30 space-y-5">
+          <div className="p-6 md:p-8 rounded-xl bg-brand-learning/6 border border-brand-learning/30 space-y-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-black">
+              <div className="w-10 h-10 rounded-lg bg-brand-learning/10 text-brand-learning flex items-center justify-center font-black">
                 <CheckCircle2 size={22} />
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-black text-foreground font-sans">
                   Phương Pháp Trên Ứng Dụng
                 </h3>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold">Học đúng dạng bài • Đối chiếu SGK • Chống quên</p>
+                <p className="text-xs text-brand-learning font-bold">Học đúng dạng bài • Đối chiếu SGK • Chống quên</p>
               </div>
             </div>
 
             <ul className="space-y-3 text-xs text-foreground font-medium">
               <li className="flex items-start gap-2.5">
-                <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle2 size={16} className="text-brand-learning shrink-0 mt-0.5" />
                 <span><strong>Chẻ nhỏ SGK thành dạng bài 15 phút:</strong> Tiếp thu từng phần nhỏ cốt lõi, không lo bị ngợp.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle2 size={16} className="text-brand-learning shrink-0 mt-0.5" />
                 <span><strong>Ma trận ánh xạ trang SGK chuẩn:</strong> Bấm 1 click mở ngay hình ảnh trang sách gốc để đối chiếu.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle2 size={16} className="text-brand-learning shrink-0 mt-0.5" />
                 <span><strong>Rèn phản xạ chống bẫy thi:</strong> Nhận diện các bẫy khái niệm thường gặp trong đề thi thật.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle2 size={16} className="text-brand-learning shrink-0 mt-0.5" />
                 <span><strong>Sổ lỗi sai lặp lại ngắt quãng:</strong> Tự động gom câu làm sai và nhắc ôn tập sau 1 - 3 - 7 ngày.</span>
               </li>
             </ul>
@@ -364,10 +359,10 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* 4. BENTO GRID CORE PILLARS */}
-      <section className="bg-slate-50 dark:bg-slate-900/40 border-y border-border/60 py-14 md:py-20">
+      <section className="bg-secondary/25 border-y border-border py-14 md:py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
           <div className="text-center space-y-3">
-            <span className="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <span className="section-kicker">
               Công Nghệ & Tính Năng
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground font-sans tracking-tight">
@@ -378,9 +373,9 @@ export const AboutPage: React.FC = () => {
           {/* Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Bento Card 1 (Large) */}
-            <div className="md:col-span-2 p-6 md:p-8 rounded-3xl bg-card border border-border/80 shadow-xs space-y-4 flex flex-col justify-between">
+            <div className="md:col-span-2 p-6 md:p-8 rounded-xl paper-panel space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-brand-ink/10 text-brand-ink flex items-center justify-center">
                   <Map size={22} />
                 </div>
                 <h3 className="text-lg font-black text-foreground font-sans">
@@ -390,16 +385,16 @@ export const AboutPage: React.FC = () => {
                   Lộ trình được thiết kế chuẩn mực chia thành 3 Chặng rõ ràng: <strong>Chặng 1 (Nền tảng 5đ)</strong> giúp học sinh mất gốc lấy lại căn bản; <strong>Chặng 2 (Tăng tốc 7-8đ)</strong> làm chủ toàn bộ bài tập trung bình; <strong>Chặng 3 (Bứt phá 9-10đ)</strong> chinh phục các câu vận dụng cao.
                 </p>
               </div>
-              <div className="pt-2 flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+              <div className="pt-2 flex items-center gap-2 text-xs font-bold text-brand-ink">
                 <span>Chinh phục từng chặng bài bản</span>
                 <ChevronRight size={14} />
               </div>
             </div>
 
             {/* Bento Card 2 */}
-            <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs space-y-4 flex flex-col justify-between">
+            <div className="p-6 rounded-xl paper-panel space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-brand-learning/10 text-brand-learning flex items-center justify-center">
                   <BookOpen size={22} />
                 </div>
                 <h3 className="text-base font-black text-foreground font-sans">
@@ -412,7 +407,7 @@ export const AboutPage: React.FC = () => {
             </div>
 
             {/* Bento Card 3 */}
-            <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs space-y-4 flex flex-col justify-between">
+            <div className="p-6 rounded-xl paper-panel space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
                   <Bookmark size={22} />
@@ -427,7 +422,7 @@ export const AboutPage: React.FC = () => {
             </div>
 
             {/* Bento Card 4 (Large) */}
-            <div className="md:col-span-2 p-6 md:p-8 rounded-3xl bg-card border border-border/80 shadow-xs space-y-4 flex flex-col justify-between">
+            <div className="md:col-span-2 p-6 md:p-8 rounded-xl paper-panel space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                   <Bot size={22} />
@@ -451,7 +446,7 @@ export const AboutPage: React.FC = () => {
       {/* 5. STUDENT JOURNEY (HÀNH TRÌNH TIẾN BỘ CỦA HỌC SINH) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14 md:py-20 space-y-10">
         <div className="text-center space-y-3">
-          <span className="text-xs font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
+          <span className="section-kicker">
             Hành Trình Tiến Bộ
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground font-sans tracking-tight">
@@ -460,24 +455,24 @@ export const AboutPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs space-y-3 relative">
-            <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-xs">1</div>
+          <div className="p-6 rounded-xl paper-panel space-y-3 relative">
+            <div className="w-8 h-8 rounded-md bg-brand-ink text-primary-foreground flex items-center justify-center font-black text-xs">1</div>
             <h4 className="text-base font-black text-foreground font-sans">Bước 1: Chặn Đứng Mất Gốc (Chặng 1)</h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Luyện tập các dạng bài nhận biết, nắm chắc các định nghĩa cốt lõi và lấy trọn vẹn 5 điểm nền tảng.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs space-y-3 relative">
-            <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-xs">2</div>
+          <div className="p-6 rounded-xl paper-panel space-y-3 relative">
+            <div className="w-8 h-8 rounded-md bg-brand-learning text-white flex items-center justify-center font-black text-xs">2</div>
             <h4 className="text-base font-black text-foreground font-sans">Bước 2: Tăng Tốc & Chống Bẫy Thi (Chặng 2)</h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Rèn phản xạ nhận biết câu hỏi gài bẫy, hoàn thành dạng bài thông hiểu và vươn tới mốc 7 – 8 điểm.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs space-y-3 relative">
-            <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-black text-xs">3</div>
+          <div className="p-6 rounded-xl paper-panel space-y-3 relative">
+            <div className="w-8 h-8 rounded-md bg-brand-action text-white flex items-center justify-center font-black text-xs">3</div>
             <h4 className="text-base font-black text-foreground font-sans">Bước 3: Bứt Phá Điểm 9+ & Thi Thử (Chặng 3)</h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Chinh phục dạng bài vận dụng cao, luyện bộ đề thi thử chuẩn định dạng Bộ GD&ĐT và tự tin bước vào kỳ thi thật.
@@ -488,8 +483,7 @@ export const AboutPage: React.FC = () => {
 
       {/* 6. CTA BOTTOM BANNER */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-emerald-600 via-primary to-indigo-700 text-white shadow-2xl text-center space-y-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="p-8 sm:p-12 rounded-xl bg-brand-ink text-primary-foreground shadow-lg text-center space-y-6 relative overflow-hidden border-l-8 border-brand-action">
 
           <div className="space-y-2 relative z-10 max-w-2xl mx-auto">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight font-sans">
@@ -503,7 +497,7 @@ export const AboutPage: React.FC = () => {
           <div className="pt-2 relative z-10 flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => navigate(ROUTES.ROADMAP)}
-              className="px-6 py-3 rounded-xl bg-white text-primary hover:bg-slate-100 font-black text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
+              className="px-6 py-3 rounded-lg bg-brand-action text-white hover:bg-brand-action/90 font-black text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
             >
               Vào Lộ trình học ngay
             </button>
@@ -520,7 +514,7 @@ export const AboutPage: React.FC = () => {
       {/* 7. DIRECT CONTACT & SUPPORT SECTION */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 md:pt-16 space-y-8">
         <div className="text-center space-y-2">
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+          <span className="section-kicker">
             Thông Tin Liên Hệ
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-foreground font-sans tracking-tight">
@@ -533,8 +527,8 @@ export const AboutPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1: Hotline & Zalo */}
-          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs hover:border-emerald-500/40 transition-all duration-300 space-y-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-black border border-emerald-500/20 group-hover:scale-105 transition-transform">
+          <div className="p-6 rounded-xl paper-panel hover:border-brand-learning/50 transition-all duration-300 space-y-4 group">
+            <div className="w-12 h-12 rounded-lg bg-brand-learning/10 text-brand-learning flex items-center justify-center font-black border border-brand-learning/20 group-hover:scale-105 transition-transform">
               <Phone size={22} />
             </div>
             <div className="space-y-1">
@@ -543,20 +537,20 @@ export const AboutPage: React.FC = () => {
               </h3>
               <a
                 href="tel:09xxxxxxxx"
-                className="text-lg font-black text-foreground hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors block"
+                className="text-lg font-black text-foreground hover:text-brand-learning transition-colors block"
               >
                 0329670310
               </a>
               <p className="text-[11px] text-muted-foreground font-semibold flex items-center gap-1 pt-1">
-                <Clock size={12} className="text-emerald-500" />
+                <Clock size={12} className="text-brand-learning" />
                 <span>Hỗ trợ từ 8:00 – 22:00 Hàng ngày</span>
               </p>
             </div>
           </div>
 
           {/* Card 2: Email */}
-          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs hover:border-indigo-500/40 transition-all duration-300 space-y-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black border border-indigo-500/20 group-hover:scale-105 transition-transform">
+          <div className="p-6 rounded-xl paper-panel hover:border-brand-ink/50 transition-all duration-300 space-y-4 group">
+            <div className="w-12 h-12 rounded-lg bg-brand-ink/10 text-brand-ink flex items-center justify-center font-black border border-brand-ink/20 group-hover:scale-105 transition-transform">
               <Mail size={22} />
             </div>
             <div className="space-y-1">
@@ -565,20 +559,20 @@ export const AboutPage: React.FC = () => {
               </h3>
               <a
                 href="mailto:hotro@onthivao10.com"
-                className="text-base font-black text-foreground hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors block truncate"
+                className="text-base font-black text-foreground hover:text-brand-ink transition-colors block truncate"
               >
                 phamkhuong436@gmail.com
               </a>
               <p className="text-[11px] text-muted-foreground font-semibold flex items-center gap-1 pt-1">
-                <MessageCircle size={12} className="text-indigo-500" />
+                <MessageCircle size={12} className="text-brand-ink" />
                 <span>Phản hồi trong vòng 24 giờ làm việc</span>
               </p>
             </div>
           </div>
 
           {/* Card 3: Address */}
-          <div className="p-6 rounded-3xl bg-card border border-border/80 shadow-xs hover:border-purple-500/40 transition-all duration-300 space-y-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-black border border-purple-500/20 group-hover:scale-105 transition-transform">
+          <div className="p-6 rounded-xl paper-panel hover:border-brand-action/50 transition-all duration-300 space-y-4 group">
+            <div className="w-12 h-12 rounded-lg bg-brand-action/10 text-brand-action flex items-center justify-center font-black border border-brand-action/20 group-hover:scale-105 transition-transform">
               <MapPin size={22} />
             </div>
             <div className="space-y-1">

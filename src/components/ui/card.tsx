@@ -9,7 +9,7 @@ export const Card: React.FC<CardProps> = ({ children, className, ...props }) => 
   return (
     <div
       className={cn(
-        'bg-card text-card-foreground rounded-2xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden',
+        'bg-card text-card-foreground rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden',
         className
       )}
       {...props}
@@ -72,7 +72,7 @@ export const CardFooter: React.FC<CardProps> = ({ children, className, ...props 
   return (
     <div
       className={cn(
-        'p-6 pt-4 flex items-center justify-between border-t border-border/30 bg-slate-50/50 dark:bg-slate-900/10',
+        'p-6 pt-4 flex items-center justify-between border-t border-border/30 bg-secondary/25',
         className
       )}
       {...props}

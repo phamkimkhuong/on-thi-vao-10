@@ -5,7 +5,7 @@ import { storageService } from '@/services/storage';
 import { getLearningOutcomes, getTopics, getQuestionTypes } from '@/data';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { getDifficultyTheme, getTierTheme } from '@/utils/theme';
+import { getDifficultyTheme, getSubjectTheme, getTierTheme } from '@/utils/theme';
 import { getSubjectName, getSubjectIcon, isQuestionTypePremiumLocked } from '@/utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
@@ -23,6 +23,7 @@ export const Roadmap: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { selectedSubject, selectedGrade, progressVersion, isPremium, user } = useAppStore();
+  const subjectTheme = getSubjectTheme(selectedSubject);
   void progressVersion;
 
   const hasVideos = selectedSubject === 'chemistry' || (selectedSubject === 'biology' && selectedGrade === 'grade10') || (selectedSubject === 'physics' && selectedGrade === 'grade10');
@@ -355,7 +356,7 @@ export const Roadmap: React.FC = () => {
         <>
           {/* 🌟 Guest Mode Banner */}
           {!user && (
-            <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 w-full mx-auto mb-8">
+            <div className="bg-primary/7 border border-primary/20 border-l-4 border-l-primary rounded-xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 w-full mx-auto mb-8">
               <div className="space-y-1 text-left">
                 <h3 className="text-sm font-black text-foreground">Bạn đang xem lộ trình học ở chế độ xem thử</h3>
                 <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để lưu tiến trình học tập, mở khóa toàn bộ lộ trình và bắt đầu thực hành luyện tập.</p>
@@ -393,14 +394,14 @@ export const Roadmap: React.FC = () => {
                 <div key={tier.id} className="space-y-8">
                   {/* Tiêu đề Chặng - Thiết kế viền trái tối giản kiểu Notion */}
                   <div className={cn(
-                    'p-4 md:p-6 rounded-2xl border border-border/80 border-l-4 bg-card text-foreground transition-all duration-300 shadow-sm relative overflow-hidden group',
-                    tier.id === 1 ? 'border-l-emerald-500' : tier.id === 2 ? 'border-l-indigo-500' : 'border-l-violet-500'
+                    'p-4 md:p-6 rounded-xl border border-border/80 border-l-4 bg-card text-foreground transition-all duration-300 shadow-sm relative overflow-hidden group',
+                    tier.id === 1 ? 'border-l-brand-learning' : tier.id === 2 ? 'border-l-brand-ink' : 'border-l-brand-action'
                   )}>
                     <div className="absolute top-0 right-0 w-24 h-24 bg-current/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500" />
                     <div className="flex items-center justify-between gap-3 flex-wrap relative z-10">
                       <h3 className="text-base font-black tracking-tight uppercase tracking-wider font-sans">{tier.title}</h3>
                       {tier.id === 3 && !isPremium && visibleTopics.some(topic => !isOptionalEnglishListeningTopic(topic.id)) && (
-                        <span className="px-2.5 py-0.75 text-[8px] bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 text-white rounded-md font-black tracking-widest uppercase shadow-sm animate-pulse-glow">👑 Khóa Premium</span>
+                        <span className="px-2.5 py-0.75 text-[8px] bg-brand-action text-white rounded-md font-black tracking-widest uppercase shadow-sm animate-pulse-glow">👑 Khóa Premium</span>
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground font-bold mt-2 leading-relaxed relative z-10">
@@ -425,9 +426,7 @@ export const Roadmap: React.FC = () => {
                             "absolute -left-[31px] md:-left-[45px] top-0.5 w-7 h-7 md:w-8 md:h-8 rounded-full border-4 border-background flex items-center justify-center text-[10px] md:text-xs font-black shadow-md transition-all duration-300 group-hover/topic:scale-110",
                             !isTopicUnlocked
                               ? "bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-100 dark:border-slate-900 shadow-none"
-                              : selectedSubject === 'math' ? 'bg-indigo-600 text-white border-indigo-100 dark:border-indigo-950 shadow-indigo-600/20' :
-                                selectedSubject === 'chemistry' ? 'bg-emerald-600 text-white border-emerald-100 dark:border-emerald-950 shadow-emerald-600/20' :
-                                  'bg-purple-600 text-white border-purple-100 dark:border-purple-950 shadow-purple-600/20'
+                              : subjectTheme.solid
                           )}>
                             {topicIdx + 1}
                           </div>

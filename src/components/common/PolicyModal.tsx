@@ -12,7 +12,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose }) => 
 
   return (
     <div className="fixed inset-0 bg-slate-950/45 backdrop-blur-xs flex items-center justify-center p-4 z-55 animate-fade-in">
-      <div className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-scale-in max-h-[85vh] flex flex-col glass">
+      <div className="bg-card border border-border rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl animate-scale-in max-h-[85vh] flex flex-col glass">
 
         {/* Modal Header */}
         <div className="px-6 py-4.5 border-b border-border/40 flex items-center justify-between bg-secondary/15">

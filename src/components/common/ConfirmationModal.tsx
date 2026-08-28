@@ -54,7 +54,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-      <div role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl animate-scale-in p-6 space-y-5 text-center relative max-h-[90vh] flex flex-col">
+      <div role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} className="bg-card border border-border rounded-xl w-full max-w-sm overflow-hidden shadow-2xl animate-scale-in p-6 space-y-5 text-center relative max-h-[90vh] flex flex-col">
         {/* Close Button */}
         <button
           ref={closeButtonRef}

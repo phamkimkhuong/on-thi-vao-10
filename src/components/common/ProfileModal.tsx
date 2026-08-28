@@ -136,7 +136,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="bg-card/95 border border-border/50 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in p-6 space-y-5 relative max-h-[90vh] flex flex-col"
+        className="bg-card border border-border rounded-xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in p-6 space-y-5 relative max-h-[90vh] flex flex-col"
       >
         {/* Close Button */}
         <button

@@ -27,6 +27,7 @@ import { calculateStudentStats } from '../../utils/stats';
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { selectedSubject, selectedGrade, user, progressVersion, isPremium, trialActivated, premiumUntil } = useAppStore();
+  const subjectTheme = getSubjectTheme(selectedSubject);
   void progressVersion;
 
   const [remainingDays, setRemainingDays] = useState(0);
@@ -208,7 +209,7 @@ export const Dashboard: React.FC = () => {
 
       {/* 🌟 Guest Mode Banner */}
       {!user && (
-        <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="bg-primary/7 border border-primary/20 border-l-4 border-l-primary rounded-xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-left">
             <h3 className="text-sm font-black text-foreground">Bạn đang học ở chế độ xem thử (Guest Mode)</h3>
             <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản Google để nhận ngay 30 ngày dùng thử Premium miễn phí, học lý thuyết đầy đủ và lưu trữ toàn bộ tiến trình học.</p>
@@ -232,7 +233,7 @@ export const Dashboard: React.FC = () => {
         <>
           {/* Chưa Premium & Chưa dùng thử */}
           {!isPremium && !trialActivated && (
-            <div className="bg-gradient-to-r from-indigo-500/10 via-primary/5 to-transparent border border-indigo-500/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-brand-action/7 border border-brand-action/20 border-l-4 border-l-brand-action rounded-xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="space-y-1 text-left">
                 <h3 className="text-sm font-black text-foreground flex items-center gap-1.5">
                   🎁 Quà tặng bứt phá: Trải nghiệm Premium 30 ngày hoàn toàn miễn phí!
@@ -243,7 +244,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <button
                 onClick={() => navigate('/premium')}
-                className="px-6 py-2.5 font-bold text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
+                className="px-6 py-2.5 font-bold text-xs bg-brand-action hover:bg-brand-action/90 text-white rounded-lg transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
               >
                 Nhận dùng thử ngay
               </button>
@@ -252,7 +253,7 @@ export const Dashboard: React.FC = () => {
 
           {/* Đang dùng thử */}
           {isPremium && trialActivated && (
-            <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-amber-500/7 border border-amber-600/20 border-l-4 border-l-amber-600 rounded-xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="space-y-1 text-left">
                 <h3 className="text-sm font-black text-foreground flex items-center gap-1.5">
                   👑 Bạn đang trong thời gian trải nghiệm Premium miễn phí (Còn lại {remainingDays} ngày)
@@ -263,7 +264,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <button
                 onClick={() => navigate('/premium')}
-                className="px-6 py-2.5 font-bold text-xs bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
+                className="px-6 py-2.5 font-bold text-xs bg-brand-action hover:bg-brand-action/90 text-white rounded-lg transition-all cursor-pointer shadow-md active:scale-95 shrink-0 flex items-center justify-center gap-1.5 min-w-[150px]"
               >
                 Nâng cấp trọn đời 99k
               </button>
@@ -272,7 +273,7 @@ export const Dashboard: React.FC = () => {
 
           {/* Hết hạn dùng thử */}
           {!isPremium && trialActivated && (
-            <div className="bg-gradient-to-r from-rose-500/10 via-red-500/5 to-transparent border border-rose-500/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-rose-500/7 border border-rose-500/20 border-l-4 border-l-rose-600 rounded-xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="space-y-1 text-left">
                 <h3 className="text-sm font-black text-foreground flex items-center gap-1.5">
                   ⚠️ Thời gian dùng thử Premium 30 ngày của bạn đã kết thúc
@@ -293,7 +294,7 @@ export const Dashboard: React.FC = () => {
       )}
 
       {/* ⚡ Tần suất học tập 7 ngày qua (7-Day Learning Activity Grid) */}
-      <Card className="bg-card border-border/40 shadow-md rounded-3xl overflow-hidden p-5 space-y-4">
+      <Card className="paper-panel rounded-xl overflow-hidden p-5 space-y-4">
         <div className="flex items-center justify-between border-b border-border/20 pb-3 flex-wrap gap-2">
           <h3 className="text-xs font-black uppercase text-foreground tracking-wider flex items-center gap-2 font-sans">
             <Activity size={18} className="text-emerald-500 animate-pulse shrink-0" />
@@ -389,11 +390,7 @@ export const Dashboard: React.FC = () => {
                     onClick={() => navigate(`/question-types/${activeTheoryType.id}`)}
                     className={cn(
                       "w-fit px-8 font-black py-3 text-xs text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start",
-                      selectedSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
-                        selectedSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-                          selectedSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700' :
-                            selectedSubject === 'biology' ? 'bg-green-600 hover:bg-green-700' :
-                              'bg-purple-600 hover:bg-purple-700'
+                      subjectTheme.solid
                     )}
                   >
                     {activeTheoryStatus === 'inprogress' ? "Tiếp tục học ngay" : "Bắt đầu học ngay"} <ArrowRight size={13} />
@@ -468,11 +465,7 @@ export const Dashboard: React.FC = () => {
                       <div
                         className={cn(
                           "h-full rounded-full transition-all duration-500",
-                          selectedSubject === 'math' ? 'bg-indigo-600' :
-                            selectedSubject === 'chemistry' ? 'bg-emerald-600' :
-                              selectedSubject === 'physics' ? 'bg-cyan-600' :
-                                selectedSubject === 'biology' ? 'bg-green-600' :
-                                  'bg-purple-600'
+                          subjectTheme.dot
                         )}
                         style={{ width: `${activePracticeScore}%` }}
                       />
@@ -483,11 +476,7 @@ export const Dashboard: React.FC = () => {
                     onClick={() => navigate(`/practice/${activePracticeType.id}`)}
                     className={cn(
                       "w-fit px-8 font-black py-3 text-xs text-white rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start",
-                      selectedSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
-                        selectedSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-                          selectedSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700' :
-                            selectedSubject === 'biology' ? 'bg-green-600 hover:bg-green-700' :
-                              'bg-purple-600 hover:bg-purple-700'
+                      subjectTheme.solid
                     )}
                   >
                     {activePracticeStatus === 'inprogress' ? "Tiếp tục luyện tập" : "Bắt đầu luyện tập"} <ArrowRight size={13} />
@@ -548,11 +537,7 @@ export const Dashboard: React.FC = () => {
                   <div
                     className={cn(
                       "h-full rounded-full transition-all duration-500",
-                      selectedSubject === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
-                        selectedSubject === 'chemistry' ? "bg-linear-to-r from-emerald-500 to-teal-500" :
-                          selectedSubject === 'physics' ? "bg-linear-to-r from-cyan-500 to-sky-500" :
-                            selectedSubject === 'biology' ? "bg-linear-to-r from-green-500 to-emerald-500" :
-                              "bg-linear-to-r from-purple-500 to-pink-500"
+                      subjectTheme.dot
                     )}
                     style={{ width: `${roadmapPercent}%` }}
                   />
@@ -569,11 +554,7 @@ export const Dashboard: React.FC = () => {
                   <div
                     className={cn(
                       "h-full rounded-full transition-all duration-500",
-                      selectedSubject === 'math' ? "bg-linear-to-r from-indigo-500 to-blue-500" :
-                        selectedSubject === 'chemistry' ? "bg-linear-to-r from-emerald-500 to-teal-500" :
-                          selectedSubject === 'physics' ? "bg-linear-to-r from-cyan-500 to-sky-500" :
-                            selectedSubject === 'biology' ? "bg-linear-to-r from-green-500 to-emerald-500" :
-                              "bg-linear-to-r from-purple-500 to-pink-500"
+                      subjectTheme.dot
                     )}
                     style={{ width: `${practicePercent}%` }}
                   />

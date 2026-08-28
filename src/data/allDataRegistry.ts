@@ -43,24 +43,24 @@ export interface SubjectCategoryInfo {
 // Bảng màu sắc tĩnh để tránh Tailwind bị prune class động khi build production
 const colorClasses: Record<string, { badge: string; text: string }> = {
   math: {
-    badge: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
-    text: 'text-indigo-600 dark:text-indigo-400'
+    badge: 'bg-blue-500/10 text-blue-800 dark:text-blue-300 border-blue-500/20',
+    text: 'text-blue-800 dark:text-blue-300'
   },
   english: {
-    badge: 'bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20',
-    text: 'text-violet-600 dark:text-violet-400'
+    badge: 'bg-orange-500/10 text-orange-800 dark:text-orange-300 border-orange-500/20',
+    text: 'text-orange-800 dark:text-orange-300'
   },
   chemistry: {
-    badge: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    text: 'text-emerald-600 dark:text-emerald-400'
+    badge: 'bg-teal-500/10 text-teal-800 dark:text-teal-300 border-teal-500/20',
+    text: 'text-teal-800 dark:text-teal-300'
   },
   physics: {
-    badge: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-    text: 'text-amber-600 dark:text-amber-400'
+    badge: 'bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 border-cyan-500/20',
+    text: 'text-cyan-800 dark:text-cyan-300'
   },
   biology: {
-    badge: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    text: 'text-rose-600 dark:text-rose-400'
+    badge: 'bg-green-500/10 text-green-800 dark:text-green-300 border-green-500/20',
+    text: 'text-green-800 dark:text-green-300'
   },
   history: {
     badge: 'bg-amber-600/10 text-amber-700 dark:text-amber-400 border-amber-600/20',

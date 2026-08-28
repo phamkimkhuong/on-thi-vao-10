@@ -244,7 +244,7 @@ export const QuestionTypeDetail: React.FC = () => {
           <h4 className="font-extrabold text-sm md:text-base text-foreground flex items-center gap-2 pb-2 border-b border-border/30">
             <BookOpen size={18} className={theme.iconColor} /> Khái niệm & Định nghĩa cơ bản cần nắm:
           </h4>
-          <div className="space-y-4 text-xs md:text-sm font-medium text-foreground/90 leading-relaxed pl-1">
+          <div className="space-y-4 text-sm md:text-base font-reading text-foreground/90 leading-8 pl-1">
             {detail.theory.map((para: string, idx: number) => (
               <div key={idx} className="prose dark:prose-invert max-w-none leading-relaxed">
                 <LatexRenderer text={para} />
@@ -383,7 +383,7 @@ export const QuestionTypeDetail: React.FC = () => {
             <ul className="space-y-3.5 pl-1">
               {detail.recognitionSigns.map((sign: string, idx: number) => (
                 <li key={idx} className="text-xs md:text-sm font-medium text-foreground/80 flex items-start gap-2.5 leading-relaxed">
-                  <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", currentSubject === 'math' ? "bg-indigo-500" : currentSubject === 'chemistry' ? "bg-emerald-500" : "bg-purple-500")} />
+                  <span className={cn("w-1.5 h-1.5 rounded-full mt-2 shrink-0", theme.dot)} />
                   <LatexRenderer text={sign} />
                 </li>
               ))}
@@ -477,11 +477,7 @@ export const QuestionTypeDetail: React.FC = () => {
                       {exampleSolution.detailedSteps.map((step: any, idx: number) => (
                         <div key={idx} className="space-y-2">
                           <h5 className="font-extrabold text-xs md:text-sm text-foreground flex items-center gap-2">
-                            <span className={cn("w-5.5 h-5.5 rounded-full flex items-center justify-center text-[10px] text-white shrink-0 shadow-sm",
-                              currentSubject === 'math' ? 'bg-indigo-600' :
-                                currentSubject === 'chemistry' ? 'bg-emerald-600' :
-                                  'bg-purple-600'
-                            )}>
+                            <span className={cn("w-5.5 h-5.5 rounded-md flex items-center justify-center text-[10px] text-white shrink-0 shadow-sm", theme.dot)}>
                               {step.order}
                             </span>
                             <LatexRenderer text={step.title} />
@@ -720,11 +716,7 @@ export const QuestionTypeDetail: React.FC = () => {
             className="w-full"
             tabHeaderClassName="gap-2"
             tabContentClassName="mt-2"
-            activeTabClassName={cn(
-              currentSubject === 'math' ? 'bg-indigo-600 border-indigo-700 text-white hover:bg-indigo-700' :
-                currentSubject === 'chemistry' ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700' :
-                  'bg-purple-600 border-purple-700 text-white hover:bg-purple-700'
-            )}
+            activeTabClassName={theme.solid}
             onTabChange={handleTabChange}
             afterHeader={
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 py-1 select-none">
@@ -747,9 +739,7 @@ export const QuestionTypeDetail: React.FC = () => {
                       onClick={() => setIsTextbookOpen(true)}
                       className={cn(
                         "inline-flex items-center gap-1.5 text-[10px] font-extrabold px-3 py-1.5 rounded-xl border shadow-xs transition-all active:scale-95 cursor-pointer h-7",
-                        currentSubject === 'chemistry'
-                          ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50 bg-emerald-500/5"
-                          : "text-indigo-600 border-indigo-200 hover:bg-indigo-50 bg-indigo-500/5"
+                        "text-brand-ink border-brand-ink/25 hover:bg-brand-ink/7 bg-brand-ink/5"
                       )}
                     >
                       <BookOpen size={12} /> Tương ứng với SGK (Trang {textbookData.pages[0]} - {textbookData.pages[textbookData.pages.length - 1]})
@@ -762,11 +752,7 @@ export const QuestionTypeDetail: React.FC = () => {
                       "inline-flex items-center gap-1 text-[10px] font-extrabold px-3 py-1.5 rounded-xl border shadow-xs transition-all active:scale-95 cursor-pointer h-7",
                       isPlayingSpeech
                         ? "bg-rose-500 border-rose-600 text-white hover:bg-rose-600 animate-pulse"
-                        : (currentSubject === 'math'
-                          ? "text-indigo-600 border-indigo-200 hover:bg-indigo-50"
-                          : currentSubject === 'chemistry'
-                            ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50"
-                            : "text-purple-600 border-purple-200 hover:bg-purple-50")
+                        : "text-brand-learning border-brand-learning/25 hover:bg-brand-learning/7"
                     )}
                   >
                     {isPlayingSpeech ? (
@@ -806,11 +792,7 @@ export const QuestionTypeDetail: React.FC = () => {
                 {/* Thanh Progress */}
                 <div className="w-full h-3 bg-secondary rounded-full overflow-hidden border border-border/40 p-0.5">
                   <div
-                    className={cn("h-full transition-all duration-500 rounded-full",
-                      currentSubject === 'math' ? 'bg-indigo-500' :
-                        currentSubject === 'chemistry' ? 'bg-emerald-500' :
-                          'bg-purple-500'
-                    )}
+                    className={cn("h-full transition-all duration-500 rounded-full", theme.dot)}
                     style={{ width: `${masteryScore}%` }}
                   />
                 </div>
@@ -861,7 +843,7 @@ export const QuestionTypeDetail: React.FC = () => {
               ) : isTypeLockedByPremium ? (
                 <Button
                   onClick={() => navigate('/premium')}
-                  className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-white rounded-xl cursor-pointer"
+                  className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-brand-action hover:bg-brand-action/90 text-white rounded-xl cursor-pointer"
                 >
                   <Crown size={16} /> Mở khóa Luyện tập (Gói Premium)
                 </Button>
@@ -872,10 +854,7 @@ export const QuestionTypeDetail: React.FC = () => {
                     onClick={() => navigate(`/practice/${detail.id}`)}
                     className={cn(
                       "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg rounded-xl cursor-pointer",
-                      currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
-                        currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
-                          currentSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700 text-white' :
-                            'bg-purple-600 hover:bg-purple-700 text-white'
+                      theme.solid
                     )}
                   >
                     {isPracticeLockedByTheory ? (
@@ -941,7 +920,7 @@ export const QuestionTypeDetail: React.FC = () => {
         ) : isTypeLockedByPremium ? (
           <Button
             onClick={() => navigate('/premium')}
-            className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-gradient-to-r from-amber-500 to-orange-500 text-white"
+            className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-brand-action hover:bg-brand-action/90 text-white"
           >
             <Crown size={14} /> Mở khóa Premium
           </Button>
@@ -951,10 +930,7 @@ export const QuestionTypeDetail: React.FC = () => {
             onClick={() => navigate(`/practice/${detail.id}`)}
             className={cn(
               "font-bold text-xs py-2.5 px-4 shrink-0 shadow-md text-white active:scale-95 transition-transform",
-              currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
-                currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-                  currentSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700' :
-                    'bg-purple-600 hover:bg-purple-700'
+              theme.solid
             )}
           >
             {isPracticeLockedByTheory ? 'Học xong để mở khóa' : 'Luyện tập ngay'}

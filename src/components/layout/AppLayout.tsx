@@ -433,7 +433,7 @@ export const AppLayout: React.FC = () => {
               className="p-2 rounded-xl bg-secondary/60 hover:bg-secondary text-foreground border border-border/30 transition-all cursor-pointer flex items-center justify-center active:scale-95 relative"
               title="Bảng tin thông báo"
             >
-              <Bell size={16} className={cn(unreadNotificationCount > 0 ? "text-indigo-500 animate-bounce" : "text-muted-foreground")} />
+              <Bell size={16} className={cn(unreadNotificationCount > 0 ? "text-brand-action animate-bounce" : "text-muted-foreground")} />
               {unreadNotificationCount > 0 && (
                 <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] font-black bg-rose-500 text-white rounded-full leading-none shadow-sm animate-pulse">
                   {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
@@ -451,7 +451,7 @@ export const AppLayout: React.FC = () => {
             {darkMode ? (
               <Sun size={16} className="text-amber-400" />
             ) : (
-              <Moon size={16} className="text-indigo-500" />
+              <Moon size={16} className="text-brand-ink" />
             )}
           </button>
 
@@ -474,7 +474,7 @@ export const AppLayout: React.FC = () => {
             aria-label={isSidebarOpen ? "Đóng menu điều hướng" : "Mở menu điều hướng"}
             aria-expanded={isSidebarOpen}
             aria-controls="sidebar-navigation"
-            className="p-2 rounded-lg bg-secondary text-foreground hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-lg bg-secondary text-foreground hover:bg-secondary/75 transition-colors"
           >
             {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -591,7 +591,7 @@ export const AppLayout: React.FC = () => {
                   "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-extrabold transition-all duration-300 cursor-pointer active:scale-98",
                   effectiveCollapsed && "justify-center px-2 py-3.5 gap-0",
                   isActive
-                    ? 'bg-gradient-to-r from-primary/12 to-primary/3 text-primary border-l-4 border-primary pl-3.5 shadow-sm shadow-primary/5'
+                    ? 'bg-primary/10 text-primary border-l-[3px] border-primary pl-3.5 shadow-sm shadow-primary/5'
                     : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                 )}
                 title={effectiveCollapsed ? item.label : undefined}
@@ -619,12 +619,12 @@ export const AppLayout: React.FC = () => {
                   "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98",
                   effectiveCollapsed && "justify-center px-2 py-3.5 gap-0",
                   location.pathname === '/teacher'
-                    ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/40 dark:text-emerald-400"
-                    : "text-emerald-600 hover:bg-emerald-500/5 hover:text-emerald-700 border-emerald-500/20 dark:text-emerald-400"
+                    ? "bg-brand-learning/10 text-brand-learning border-brand-learning/40"
+                    : "text-brand-learning hover:bg-brand-learning/7 border-brand-learning/25"
                 )}
                 title={effectiveCollapsed ? "Góc Giáo viên 👩‍🏫" : undefined}
               >
-                <Users size={19} className="text-emerald-500 shrink-0" />
+                <Users size={19} className="text-brand-learning shrink-0" />
                 {!effectiveCollapsed && <span>Góc Giáo viên 👩‍🏫</span>}
                 {realPendingCount > 0 && (
                   <span className={cn(
@@ -652,25 +652,25 @@ export const AppLayout: React.FC = () => {
                     }}
                     aria-label="Khảo sát & Góp ý"
                     className={cn(
-                      "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98 text-indigo-600 hover:bg-indigo-500/10 dark:text-indigo-400 border-indigo-500/30",
+                      "w-full flex items-center gap-3.5 px-4.5 py-3 rounded-xl text-sm font-black transition-all duration-300 cursor-pointer border border-dashed relative active:scale-98 text-brand-action hover:bg-brand-action/8 border-brand-action/30",
                       effectiveCollapsed && "justify-center px-2 py-3.5 gap-0",
-                      !isSurveyCompleted && "ring-2 ring-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-950/30"
+                      !isSurveyCompleted && "ring-2 ring-brand-action/20 bg-brand-action/7"
                     )}
                     title={effectiveCollapsed ? "Khảo sát & Góp ý 💬" : undefined}
                   >
-                    <MessageSquareHeart size={19} className="text-indigo-500 shrink-0" />
+                    <MessageSquareHeart size={19} className="text-brand-action shrink-0" />
                     {!effectiveCollapsed && (
                       <div className="flex items-center justify-between flex-1 min-w-0">
                         <span className="truncate">Khảo sát & Góp ý 💬</span>
                         {!isSurveyCompleted && (
-                          <span className="px-2 py-0.5 text-[9px] bg-gradient-to-r from-pink-500 to-indigo-600 text-white rounded-full font-black animate-pulse shadow-sm shrink-0 ml-1.5">
+                          <span className="px-2 py-0.5 text-[9px] bg-brand-action text-white rounded-md font-black animate-pulse shadow-sm shrink-0 ml-1.5">
                             Mới 🎁
                           </span>
                         )}
                       </div>
                     )}
                     {effectiveCollapsed && !isSurveyCompleted && (
-                      <span className="absolute top-1 right-1.5 w-2.5 h-2.5 rounded-full bg-pink-500 animate-ping" />
+                      <span className="absolute top-1 right-1.5 w-2.5 h-2.5 rounded-full bg-brand-action animate-ping" />
                     )}
                   </button>
                 );
@@ -689,19 +689,19 @@ export const AppLayout: React.FC = () => {
             <button
               onClick={() => { setIsSidebarOpen(false); navigate('/premium'); }}
               aria-label="Kích hoạt Premium"
-              className="w-full py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-[11px] rounded-xl shadow-md hover:shadow-lg hover:shadow-amber-500/10 active:scale-95 transition-all cursor-pointer animate-pulse-glow"
+              className="w-full py-2 bg-brand-action hover:bg-brand-action/90 text-white font-black text-[11px] rounded-lg shadow-md hover:shadow-lg hover:shadow-brand-action/10 active:scale-95 transition-all cursor-pointer animate-pulse-glow"
             >
               Kích hoạt ngay
             </button>
           </div>
         )}
 
-        <div className={cn("p-4 border-t border-border/20 bg-slate-50/20 dark:bg-slate-900/5", effectiveCollapsed && "p-3")}>
+        <div className={cn("p-4 border-t border-border/50 bg-secondary/20", effectiveCollapsed && "p-3")}>
           <div className={cn("flex items-center gap-3", effectiveCollapsed && "flex-col gap-1.5 justify-center")}>
             {user ? (
               <>
                 <div
-                  className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-xl transition-all"
+                  className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer hover:bg-secondary/60 p-1.5 rounded-xl transition-all"
                   onClick={() => {
                     useAppStore.setState({ isAutoProfileModal: false });
                     setIsProfileModalOpen(true);
@@ -723,7 +723,7 @@ export const AppLayout: React.FC = () => {
                       <span className="text-xs font-extrabold truncate text-foreground leading-none flex items-center gap-1.5">
                         {user.displayName || 'Học sinh'}
                         {isPremium && (
-                          <span className="px-1.5 py-0.5 text-[7px] bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md font-black tracking-widest shrink-0 leading-none">PREMIUM</span>
+                          <span className="px-1.5 py-0.5 text-[7px] bg-brand-action text-white rounded-sm font-black tracking-widest shrink-0 leading-none">PREMIUM</span>
                         )}
                       </span>
                       <span className="text-[9px] text-muted-foreground font-semibold truncate leading-none mt-2">{user.email}</span>
@@ -781,7 +781,7 @@ export const AppLayout: React.FC = () => {
               onClick={toggleSidebarCollapse}
               aria-label={isSidebarCollapsed ? "Mở rộng menu bên" : "Thu gọn menu bên"}
               aria-expanded={!isSidebarCollapsed}
-              className="p-2.5 rounded-xl bg-secondary/50 text-muted-foreground hover:text-foreground border border-border/20 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all cursor-pointer hidden md:flex items-center justify-center shrink-0 active:scale-95"
+              className="p-2.5 rounded-xl bg-secondary/50 text-muted-foreground hover:text-foreground border border-border/50 hover:bg-secondary transition-all cursor-pointer hidden md:flex items-center justify-center shrink-0 active:scale-95"
               title={isSidebarCollapsed ? "Mở rộng menu" : "Thu gọn menu"}
             >
               {isSidebarCollapsed ? <Menu size={18} /> : <X size={18} />}
@@ -863,7 +863,7 @@ export const AppLayout: React.FC = () => {
                 )}
                 title="Bảng tin thông báo"
               >
-                <Bell size={16} className={cn(unreadNotificationCount > 0 ? "text-indigo-500 animate-bounce" : "text-muted-foreground")} />
+                <Bell size={16} className={cn(unreadNotificationCount > 0 ? "text-brand-action animate-bounce" : "text-muted-foreground")} />
                 <span className="hidden lg:inline font-bold">Thông báo</span>
                 {unreadNotificationCount > 0 && (
                   <span className="px-1.5 py-0.5 text-[9px] font-black bg-rose-500 text-white rounded-full leading-none shadow-sm animate-pulse ml-0.5">
@@ -886,8 +886,8 @@ export const AppLayout: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <Moon size={15} className="text-indigo-500 fill-indigo-500/20" />
-                  <span className="hidden lg:inline text-indigo-500 font-bold">Giao diện Tối</span>
+                  <Moon size={15} className="text-brand-ink fill-brand-ink/15" />
+                  <span className="hidden lg:inline text-brand-ink font-bold">Giao diện Tối</span>
                 </>
               )}
             </button>
@@ -939,7 +939,7 @@ export const AppLayout: React.FC = () => {
               <button
                 onClick={() => navigate(ROUTES.PREMIUM)}
                 aria-label="Nâng cấp tài khoản Premium"
-                className="px-3.5 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-xs rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                className="px-3.5 py-2 bg-brand-action hover:bg-brand-action/90 text-white font-black text-xs rounded-lg shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer flex items-center gap-1 shrink-0"
               >
                 👑 Lên Premium
               </button>

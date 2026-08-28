@@ -7,64 +7,78 @@ export interface SubjectTheme {
   border: string;
   iconBg: string;
   iconColor: string;
+  solid: string;
+  dot: string;
 }
 
 export const getSubjectTheme = (subject: SubjectCode): SubjectTheme => {
   switch (subject) {
     case 'math':
       return {
-        badge: 'bg-indigo-100/80 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-500/20',
-        text: 'text-indigo-600 dark:text-indigo-400 font-extrabold',
-        bg: 'bg-gradient-to-br from-indigo-50 to-blue-50/50 dark:from-indigo-950/20 dark:to-blue-950/10',
-        border: 'border-indigo-500/10 shadow-sm shadow-indigo-500/2',
-        iconBg: 'bg-indigo-500/10 dark:bg-indigo-500/20 shadow-inner',
-        iconColor: 'text-indigo-500'
+        badge: 'bg-blue-100/70 dark:bg-blue-950/35 text-blue-800 dark:text-blue-300 border border-blue-300/50 dark:border-blue-500/25',
+        text: 'text-blue-800 dark:text-blue-300 font-extrabold',
+        bg: 'bg-blue-50/55 dark:bg-blue-950/12',
+        border: 'border-blue-500/15 shadow-sm',
+        iconBg: 'bg-blue-500/10 dark:bg-blue-500/16',
+        iconColor: 'text-blue-700 dark:text-blue-300',
+        solid: 'bg-blue-700 hover:bg-blue-800 border-blue-700 text-white',
+        dot: 'bg-blue-700'
       };
     case 'chemistry':
       return {
-        badge: 'bg-emerald-100/80 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-500/20',
-        text: 'text-emerald-600 dark:text-emerald-400 font-extrabold',
-        bg: 'bg-gradient-to-br from-emerald-50 to-teal-50/50 dark:from-emerald-950/20 dark:to-teal-950/10',
-        border: 'border-emerald-500/10 shadow-sm shadow-emerald-500/2',
-        iconBg: 'bg-emerald-500/10 dark:bg-emerald-500/20 shadow-inner',
-        iconColor: 'text-emerald-500'
+        badge: 'bg-teal-100/70 dark:bg-teal-950/35 text-teal-800 dark:text-teal-300 border border-teal-300/50 dark:border-teal-500/25',
+        text: 'text-teal-800 dark:text-teal-300 font-extrabold',
+        bg: 'bg-teal-50/55 dark:bg-teal-950/12',
+        border: 'border-teal-500/15 shadow-sm',
+        iconBg: 'bg-teal-500/10 dark:bg-teal-500/16',
+        iconColor: 'text-teal-700 dark:text-teal-300',
+        solid: 'bg-teal-700 hover:bg-teal-800 border-teal-700 text-white',
+        dot: 'bg-teal-700'
       };
     case 'physics':
       return {
-        badge: 'bg-cyan-100/80 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400 border border-cyan-200/50 dark:border-cyan-500/20',
-        text: 'text-cyan-600 dark:text-cyan-400 font-extrabold',
-        bg: 'bg-gradient-to-br from-cyan-50 to-sky-50/50 dark:from-cyan-950/20 dark:to-sky-950/10',
-        border: 'border-cyan-500/10 shadow-sm shadow-cyan-500/2',
-        iconBg: 'bg-cyan-500/10 dark:bg-cyan-500/20 shadow-inner',
-        iconColor: 'text-cyan-500'
+        badge: 'bg-cyan-100/70 dark:bg-cyan-950/35 text-cyan-800 dark:text-cyan-300 border border-cyan-300/50 dark:border-cyan-500/25',
+        text: 'text-cyan-800 dark:text-cyan-300 font-extrabold',
+        bg: 'bg-cyan-50/55 dark:bg-cyan-950/12',
+        border: 'border-cyan-500/15 shadow-sm',
+        iconBg: 'bg-cyan-500/10 dark:bg-cyan-500/16',
+        iconColor: 'text-cyan-700 dark:text-cyan-300',
+        solid: 'bg-cyan-700 hover:bg-cyan-800 border-cyan-700 text-white',
+        dot: 'bg-cyan-700'
       };
     case 'biology':
       return {
-        badge: 'bg-green-100/80 dark:bg-green-950/50 text-green-600 dark:text-green-400 border border-green-200/50 dark:border-green-500/20',
-        text: 'text-green-600 dark:text-green-400 font-extrabold',
-        bg: 'bg-gradient-to-br from-green-50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/10',
-        border: 'border-green-500/10 shadow-sm shadow-green-500/2',
-        iconBg: 'bg-green-500/10 dark:bg-green-500/20 shadow-inner',
-        iconColor: 'text-green-500'
+        badge: 'bg-green-100/70 dark:bg-green-950/35 text-green-800 dark:text-green-300 border border-green-300/50 dark:border-green-500/25',
+        text: 'text-green-800 dark:text-green-300 font-extrabold',
+        bg: 'bg-green-50/55 dark:bg-green-950/12',
+        border: 'border-green-500/15 shadow-sm',
+        iconBg: 'bg-green-500/10 dark:bg-green-500/16',
+        iconColor: 'text-green-700 dark:text-green-300',
+        solid: 'bg-green-700 hover:bg-green-800 border-green-700 text-white',
+        dot: 'bg-green-700'
       };
     case 'history':
       return {
-        badge: 'bg-amber-100/80 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-200/50 dark:border-amber-500/20',
-        text: 'text-amber-600 dark:text-amber-400 font-extrabold',
-        bg: 'bg-gradient-to-br from-amber-50 to-yellow-50/50 dark:from-amber-950/20 dark:to-yellow-950/10',
-        border: 'border-amber-500/10 shadow-sm shadow-amber-500/2',
-        iconBg: 'bg-amber-500/10 dark:bg-amber-500/20 shadow-inner',
-        iconColor: 'text-amber-500'
+        badge: 'bg-amber-100/70 dark:bg-amber-950/35 text-amber-800 dark:text-amber-300 border border-amber-300/50 dark:border-amber-500/25',
+        text: 'text-amber-800 dark:text-amber-300 font-extrabold',
+        bg: 'bg-amber-50/55 dark:bg-amber-950/12',
+        border: 'border-amber-500/15 shadow-sm',
+        iconBg: 'bg-amber-500/10 dark:bg-amber-500/16',
+        iconColor: 'text-amber-700 dark:text-amber-300',
+        solid: 'bg-amber-700 hover:bg-amber-800 border-amber-700 text-white',
+        dot: 'bg-amber-700'
       };
     case 'english':
     default:
       return {
-        badge: 'bg-purple-100/80 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-500/20',
-        text: 'text-purple-600 dark:text-purple-400 font-extrabold',
-        bg: 'bg-gradient-to-br from-purple-50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/10',
-        border: 'border-purple-500/10 shadow-sm shadow-purple-500/2',
-        iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 shadow-inner',
-        iconColor: 'text-purple-500'
+        badge: 'bg-orange-100/70 dark:bg-orange-950/35 text-orange-800 dark:text-orange-300 border border-orange-300/50 dark:border-orange-500/25',
+        text: 'text-orange-800 dark:text-orange-300 font-extrabold',
+        bg: 'bg-orange-50/55 dark:bg-orange-950/12',
+        border: 'border-orange-500/15 shadow-sm',
+        iconBg: 'bg-orange-500/10 dark:bg-orange-500/16',
+        iconColor: 'text-orange-700 dark:text-orange-300',
+        solid: 'bg-orange-700 hover:bg-orange-800 border-orange-700 text-white',
+        dot: 'bg-orange-700'
       };
   }
 };
@@ -103,19 +117,19 @@ export const getTierTheme = (tierId: number): TierTheme => {
   switch (tierId) {
     case 1:
       return {
-        badgeStyle: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400',
-        lineStyle: 'border-emerald-200 dark:border-emerald-950'
+        badgeStyle: 'bg-brand-learning/10 border-brand-learning/25 text-brand-learning',
+        lineStyle: 'border-brand-learning/25'
       };
     case 2:
       return {
-        badgeStyle: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400',
-        lineStyle: 'border-indigo-200 dark:border-indigo-950'
+        badgeStyle: 'bg-brand-ink/10 border-brand-ink/25 text-brand-ink',
+        lineStyle: 'border-brand-ink/25'
       };
     case 3:
     default:
       return {
-        badgeStyle: 'bg-violet-500/10 border-violet-500/20 text-violet-600 dark:text-violet-400',
-        lineStyle: 'border-violet-200 dark:border-violet-950'
+        badgeStyle: 'bg-brand-action/10 border-brand-action/25 text-brand-action',
+        lineStyle: 'border-brand-action/25'
       };
   }
 };

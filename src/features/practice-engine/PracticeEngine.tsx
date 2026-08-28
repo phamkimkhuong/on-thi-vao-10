@@ -11,6 +11,7 @@ import { MathLoginRequired } from '@/components/common/MathLoginRequired';
 import { Question, Solution, StructuredAnswer, UserAttempt, SubjectCode } from '@/types';
 import { AlertTriangle, BookOpenCheck, ArrowLeft, Crown } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { getSubjectTheme } from '@/utils/theme';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '@/utils/answerValidator';
 import { getSubjectFromQuestionTypeId, getSubjectName, isQuestionTypePremiumLocked } from '@/utils/subject';
 import { SeoHead } from '@/components/common/SeoHead';
@@ -42,6 +43,7 @@ export const PracticeEngine: React.FC = () => {
   void progressVersion;
 
   const routeSubject = (getSubjectFromQuestionTypeId(questionTypeId) ?? selectedSubject) as SubjectCode;
+  const routeSubjectTheme = getSubjectTheme(routeSubject);
 
   const currentQuestionTypes = useMemo(() => getQuestionTypes(selectedGrade, routeSubject), [selectedGrade, routeSubject]);
   const currentQuestions = useMemo(
@@ -1074,7 +1076,7 @@ export const PracticeEngine: React.FC = () => {
           </Button>
           <Button
             onClick={() => navigate('/premium')}
-            className="bg-gradient-to-r from-amber-500 to-orange-500 text-xs font-bold text-white shadow-md hover:opacity-90"
+            className="bg-brand-action hover:bg-brand-action/90 text-xs font-bold text-white shadow-md"
           >
             <Crown size={14} /> Nâng cấp Premium
           </Button>
@@ -1215,11 +1217,7 @@ export const PracticeEngine: React.FC = () => {
                 className={cn(
                   "w-7.5 h-7.5 rounded-lg flex items-center justify-center text-[10px] font-extrabold transition-all duration-150 cursor-pointer border active:scale-95 shrink-0",
                   isActive
-                    ? (routeSubject === 'math' ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20 scale-105" :
-                      routeSubject === 'chemistry' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
-                        routeSubject === 'physics' ? "bg-cyan-600 border-cyan-600 text-white shadow-sm shadow-cyan-600/20 scale-105" :
-                          routeSubject === 'biology' ? "bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-600/20 scale-105" :
-                          "bg-purple-600 border-purple-600 text-white shadow-sm shadow-purple-600/20 scale-105")
+                    ? cn(routeSubjectTheme.solid, "shadow-sm scale-105")
                     : isCompleted
                       ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
                       : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"
