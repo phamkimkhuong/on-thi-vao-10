@@ -161,14 +161,29 @@ export const NewsPage: React.FC = () => {
                 <div className="p-5 space-y-2">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center shrink-0 border border-emerald-500/20">
-                        HW
+                      <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 p-1 flex items-center justify-center shrink-0 shadow-xs overflow-hidden">
+                        <img
+                          src="/favicon.png"
+                          alt="ezonthi logo"
+                          className="w-full h-full object-contain rounded-full"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            if (e.currentTarget.parentElement) {
+                              e.currentTarget.parentElement.innerText = 'EZ';
+                            }
+                          }}
+                        />
                       </div>
                       <div>
-                        <span className="text-xs font-black text-foreground block">
-                          {post.authorName}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-black text-foreground block tracking-tight">
+                            ezonthi
+                          </span>
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[9px] font-black border border-emerald-500/20">
+                            Official
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1 mt-0.5">
                           <Clock size={10} />
                           <span>{timeAgo(post.createdAt)}</span>
                         </span>

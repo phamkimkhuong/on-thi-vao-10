@@ -193,7 +193,17 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
       containerRef.current.innerHTML = '';
 
       // Chuẩn hóa các ký tự xuống dòng dạng chữ \n thành ký tự xuống dòng thực tế (trừ các lệnh LaTeX bắt đầu bằng \n như \neq, \nexists, \notin, \nu, \nabla, \neg, ...)
-      const normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|otin|geq|leq|parallel|cong|sim|approx|u|abla|eg)/g, '\n');
+      let normalizedText = text.replace(/\\n(?!eq|e|exists|subseteq|in|otin|geq|leq|parallel|cong|sim|approx|u|abla|eg)/g, '\n');
+
+      // Tự động phân đoạn và tách dòng thông minh nếu AI trả về văn bản dính liền một khối
+      // 1. Tách các mục đánh số 1. 2. 3. dính liền sau dấu câu hoặc cụm từ
+      normalizedText = normalizedText.replace(/([:;.!?\)]|\bnhư sau:?)\s+(\d+\.\s+)/gi, '$1\n\n$2');
+      // 2. Tách các cụm ghi chú chuyển đoạn (Ngoài ra, Đặc biệt, Lưu ý...)
+      normalizedText = normalizedText.replace(/([.!?])\s+(Ngoài ra,|Đặc biệt,|Lưu ý:|Chú ý:|Hơn nữa,|Tóm lại,)/g, '$1\n\n$2');
+      // 3. Tách câu hỏi gợi mở Socratic ở cuối bài
+      normalizedText = normalizedText.replace(/([.!?])\s+(Em có thể|Bây giờ em hãy|Em hãy|Theo em|Vậy theo em|Thầy đố em)\s+/g, '$1\n\n💡 $2 ');
+      // 4. Tách gạch đầu dòng nếu dính vào câu trước
+      normalizedText = normalizedText.replace(/([.!?])\s+[-*•]\s+/g, '$1\n\n- ');
 
       // Tách riêng các khối hình ảnh SVG (nếu có) để render đồ họa vector trực tiếp
       const SVG_REGEX = /(<svg[\s\S]*?<\/svg>)/g;
@@ -276,23 +286,50 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
               }
             }
 
-            // Xử lý dòng thông thường
-            if (i > 0) {
+            // Kiểm tra các định dạng đặc biệt của dòng
+            const bulletMatch = line.match(/^(\s*)[-*•]\s+(.*)/);
+            const numberedMatch = line.match(/^(\s*)(\d+)\.\s+(.*)/);
+            const tipMatch = line.match(/^(\s*)💡\s+(.*)/);
+            const noteMatch = line.match(/^(\s*)(Ngoài ra|Lưu ý|Chú ý|Đặc biệt)[:\s,]+(.*)/i);
+
+            const isBlockElement = bulletMatch || numberedMatch || tipMatch || noteMatch;
+
+            // Xử lý dòng thông thường: Thêm xuống dòng nếu không phải block element tự xuống hàng
+            if (i > 0 && !isBlockElement) {
               containerRef.current?.appendChild(document.createElement('br'));
             }
 
-            if (line) {
+            if (line.trim()) {
               let lineContainer: HTMLElement = containerRef.current!;
               let contentToRender = line;
 
-              // Kiểm tra danh sách bullet point: bắt đầu bằng "- " hoặc "* " hoặc "• " ở đầu dòng
-              const bulletMatch = line.match(/^(\s*)[-*•]\s+(.*)/);
               if (bulletMatch) {
-                const li = document.createElement('li');
-                li.className = 'list-disc ml-5 my-1 pl-1 text-muted-foreground';
+                const li = document.createElement('div');
+                li.className = 'flex items-start gap-2 my-1 pl-2 text-foreground/90 leading-relaxed';
+                li.innerHTML = '<span class="text-amber-500 font-bold select-none">•</span><div class="flex-1"></div>';
                 containerRef.current?.appendChild(li);
-                lineContainer = li;
+                lineContainer = li.lastElementChild as HTMLElement;
                 contentToRender = bulletMatch[2];
+              } else if (numberedMatch) {
+                const numDiv = document.createElement('div');
+                numDiv.className = 'my-2 p-2.5 pl-3 bg-secondary/35 border-l-3 border-amber-500 rounded-r-xl text-foreground font-medium shadow-2xs flex items-start gap-2';
+                numDiv.innerHTML = `<span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 text-[10px] font-black bg-amber-500/20 text-amber-700 dark:text-amber-300 rounded-md select-none shrink-0 mt-0.5">${numberedMatch[2]}</span><div class="flex-1"></div>`;
+                containerRef.current?.appendChild(numDiv);
+                lineContainer = numDiv.lastElementChild as HTMLElement;
+                contentToRender = numberedMatch[3];
+              } else if (tipMatch) {
+                const tipDiv = document.createElement('div');
+                tipDiv.className = 'my-2.5 p-3 bg-gradient-to-r from-amber-500/15 to-orange-500/10 border border-amber-500/30 rounded-xl text-foreground font-semibold shadow-2xs flex items-start gap-2.5';
+                tipDiv.innerHTML = '<span class="text-base select-none shrink-0 mt-0.5">💡</span><div class="flex-1 text-amber-900 dark:text-amber-200"></div>';
+                containerRef.current?.appendChild(tipDiv);
+                lineContainer = tipDiv.lastElementChild as HTMLElement;
+                contentToRender = tipMatch[2];
+              } else if (noteMatch) {
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'my-2 p-2.5 bg-blue-500/10 border-l-3 border-blue-500 rounded-r-xl text-foreground text-[11.5px] leading-relaxed';
+                containerRef.current?.appendChild(noteDiv);
+                lineContainer = noteDiv;
+                contentToRender = `**${noteMatch[2]}:** ${noteMatch[3]}`;
               }
 
               // Render nội dung của dòng vào lineContainer tương ứng

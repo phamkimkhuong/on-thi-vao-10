@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { newsService } from '../../../services/newsService';
-import { useAppStore } from '../../../services/store';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../components/ui/card';
 import { Newspaper, Send, Loader, CheckCircle2, Eye } from 'lucide-react';
 import { AnnouncementCategory } from '../../../types/newsTypes';
@@ -14,7 +13,6 @@ const CATEGORY_OPTIONS: { value: AnnouncementCategory; label: string }[] = [
 ];
 
 export const TeacherNewsManager: React.FC = () => {
-  const { user } = useAppStore();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -43,7 +41,7 @@ export const TeacherNewsManager: React.FC = () => {
         content: content.trim(),
         category,
         targetGrade,
-        authorName: user?.displayName || 'OnThiVao10 Official',
+        authorName: 'Ezonthi',
       });
 
       if (postId) {

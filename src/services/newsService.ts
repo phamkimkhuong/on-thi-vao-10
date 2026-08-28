@@ -32,7 +32,7 @@ class NewsService {
             id: docSnap.id,
             title: d.title || 'Thông báo mới',
             content: d.content || '',
-            authorName: d.authorName || 'OnThiVao10 Official',
+            authorName: d.authorName || 'Ezonthi',
             authorBadge: d.authorBadge || 'Official',
             category: (d.category as AnnouncementCategory) || 'general',
             targetGrade: d.targetGrade || 'all',
@@ -66,7 +66,7 @@ class NewsService {
         content: payload.content.trim(),
         category: payload.category || 'general',
         targetGrade: payload.targetGrade || 'all',
-        authorName: payload.authorName || 'OnThiVao10 Official',
+        authorName: payload.authorName || 'ezonthi',
         authorBadge: 'Official',
         createdAt: serverTimestamp(),
       });
@@ -80,7 +80,7 @@ class NewsService {
         type: payload.category === 'feature' ? 'system' : 'system',
         targetGrade: payload.targetGrade || 'all',
         actionUrl: `/news?id=${postId}`,
-        createdByEmail: payload.authorName || 'Ban Biên Tập',
+        createdByEmail: payload.authorName || 'Ezonthi',
       });
 
       return postId;

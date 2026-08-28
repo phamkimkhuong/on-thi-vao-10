@@ -126,7 +126,7 @@ class NotificationService {
         type: payload.type || 'system',
         targetGrade: payload.targetGrade || 'all',
         actionUrl: payload.actionUrl?.trim() || null,
-        createdByEmail: payload.createdByEmail || 'Giáo viên',
+        createdByEmail: payload.createdByEmail || 'Ezonthi',
         createdAt: new Date().toISOString(),
       };
 

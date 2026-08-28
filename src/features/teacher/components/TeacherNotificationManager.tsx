@@ -91,7 +91,7 @@ export const TeacherNotificationManager: React.FC = () => {
         content: content.trim(),
         category: (category as AnnouncementCategory) || 'general',
         targetGrade,
-        authorName: user?.displayName || 'OnThiVao10 Official',
+        authorName: 'ezonthi',
       });
 
       if (postId) {

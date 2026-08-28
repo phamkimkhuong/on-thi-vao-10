@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { cn } from '../../utils/cn';
+import { GrammarQuizView } from './components/GrammarQuizView';
+import { GrammarSentenceBuildingView } from './components/GrammarSentenceBuildingView';
 
 type SubTab = 'theory' | 'quiz' | 'sentence_building';
 
@@ -705,56 +707,22 @@ export const GrammarPage: React.FC = () => {
               </div>
             )}
 
-            {/* TAB: TRẮC NGHIỆM (QUIZ PRACTICE PREVIEW) */}
+            {/* TAB: TRẮC NGHIỆM (QUIZ PRACTICE ENGINE) */}
             {activeTab === 'quiz' && (
-              <div className="bg-card border border-border/80 rounded-2xl p-8 sm:p-10 text-center space-y-4 shadow-xs animate-in fade-in duration-300">
-                <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 mx-auto flex items-center justify-center">
-                  <CheckCircle2 size={28} />
-                </div>
-                <div className="space-y-1.5 max-w-md mx-auto">
-                  <h3 className="text-base sm:text-lg font-bold text-foreground">
-                    Trắc nghiệm Ngữ pháp: {currentLesson.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Hệ thống câu hỏi trắc nghiệm phản xạ giúp bạn kiểm tra khả năng áp dụng công thức vừa học vào các đề thi thực tế.
-                  </p>
-                </div>
-                <div className="pt-2 flex justify-center gap-3">
-                  <Button
-                    onClick={() => setActiveTab('theory')}
-                    variant="outline"
-                    className="font-bold text-xs py-2.5 px-4 rounded-xl border-border cursor-pointer"
-                  >
-                    <BookOpen size={14} /> Ôn lại lý thuyết
-                  </Button>
-                </div>
-              </div>
+              <GrammarQuizView
+                lesson={currentLesson}
+                onBackToTheory={() => setActiveTab('theory')}
+                onNextLesson={nextLessonItem ? handleNextLesson : undefined}
+              />
             )}
 
-            {/* TAB: GHÉP CÂU (SENTENCE BUILDING PREVIEW) */}
+            {/* TAB: GHÉP CÂU (SENTENCE BUILDING ENGINE) */}
             {activeTab === 'sentence_building' && (
-              <div className="bg-card border border-border/80 rounded-2xl p-8 sm:p-10 text-center space-y-4 shadow-xs animate-in fade-in duration-300">
-                <div className="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 mx-auto flex items-center justify-center">
-                  <Puzzle size={28} />
-                </div>
-                <div className="space-y-1.5 max-w-md mx-auto">
-                  <h3 className="text-base sm:text-lg font-bold text-foreground">
-                    Luyện Ghép Câu: {currentLesson.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Sắp xếp và ghép các từ thành câu hoàn chỉnh để rèn luyện phản xạ ngữ pháp tự nhiên.
-                  </p>
-                </div>
-                <div className="pt-2 flex justify-center gap-3">
-                  <Button
-                    onClick={() => setActiveTab('theory')}
-                    variant="outline"
-                    className="font-bold text-xs py-2.5 px-4 rounded-xl border-border cursor-pointer"
-                  >
-                    <BookOpen size={14} /> Ôn lại lý thuyết
-                  </Button>
-                </div>
-              </div>
+              <GrammarSentenceBuildingView
+                lesson={currentLesson}
+                onBackToTheory={() => setActiveTab('theory')}
+                onNextLesson={nextLessonItem ? handleNextLesson : undefined}
+              />
             )}
 
           </main>

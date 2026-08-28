@@ -549,6 +549,12 @@ Bạn phải trả về phản hồi dưới dạng JSON khớp hoàn toàn vớ
   "learningSummary": "..."
 }
 Chú ý:
+- [QUY TẮC TRÌNH BÀY & XUỐNG DÒNG BẮT BUỘC TRONG tutorResponse]:
+  + TUYỆT ĐỐI KHÔNG viết thành một khối văn bản dài dính liền từ đầu đến cuối.
+  + BẮT BUỘC xuống dòng rõ ràng (\\n\\n) giữa các đoạn văn để học sinh dễ đọc.
+  + Khi giải thích nhiều ý, quy tắc hoặc phân tích: BẮT BUỘC tách thành danh sách đánh số (1., 2.) hoặc gạch đầu dòng (- ), MỖI Ý NẰM TRÊN MỘT DÒNG RIÊNG.
+  + Dùng chữ in đậm **...** cho các từ khóa cốt lõi, công thức hoặc ví dụ quan trọng.
+  + Câu hỏi gợi mở Socratic ở cuối BẮT BUỘC nằm ở một đoạn riêng biệt (bắt đầu bằng \\n\\n).
 - Lời giảng trong "tutorResponse" phải tuân thủ phương pháp Socratic khi hướng dẫn giải bài, hoặc cung cấp kiến thức trực tiếp có cấu trúc khi học sinh yêu cầu tổng hợp kiến thức. Luôn dùng định dạng LaTeX inline đô la đơn ($...$).
 - "newStrengths" và "newWeaknesses" chỉ ghi nhận các điểm mạnh/yếu mới bộc lộ trong lượt chat này của học sinh. Mỗi điểm từ 3-7 từ. Để trống mảng nếu không phát hiện điểm mới nào.
 - "learningSummary" là câu tóm tắt tiến trình học lực hiện tại của học sinh môn này sau lượt chat (dưới 30 từ).`;
