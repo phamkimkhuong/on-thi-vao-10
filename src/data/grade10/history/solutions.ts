@@ -1,6 +1,8 @@
 import type { Solution } from '@/types';
+import { g10HistoryExpansionSolutions } from './questionExpansion';
+import { g10HistoryQuestions } from './questions';
 
-export const g10HistorySolutions: Solution[] = [
+const legacyHistorySolutions: Solution[] = [
   {
     id: 'g10-his-s1',
     questionId: 'g10-his-q1',
@@ -99,7 +101,7 @@ export const g10HistorySolutions: Solution[] = [
       {
         order: 1,
         title: 'Đánh giá độ tin cậy của sử liệu',
-        explanation: 'Văn bia và hiện vật khảo cổ được khai quật trực tiếp là sử liệu gốc (trực tiếp), mang độ tin cậy cao nhất.'
+        explanation: 'Văn bia và hiện vật khảo cổ tại di tích có thể là sử liệu gốc, cung cấp thông tin trực tiếp nhưng vẫn cần được khảo chứng.'
       }
     ],
     finalAnswer: 'C',
@@ -159,7 +161,7 @@ export const g10HistorySolutions: Solution[] = [
       {
         order: 1,
         title: 'Phân loại và đánh giá giá trị hiện vật',
-        explanation: 'Trống đồng Đông Sơn là hiện vật vật thể được khai quật từ quá khứ, là loại hình sử liệu hiện vật (sử liệu gốc) mang giá trị khoa học cao nhất.'
+        explanation: 'Trống đồng Đông Sơn là sử liệu hiện vật, cung cấp bằng chứng trực tiếp về đời sống cư dân cổ và vẫn cần được nghiên cứu, đối chiếu.'
       }
     ],
     finalAnswer: 'B',
@@ -1201,4 +1203,17 @@ export const g10HistorySolutions: Solution[] = [
     commonMistakes: ['Nhầm 3 nguyên tắc dân tộc với Tự do - Bình đẳng - Bác ái của Pháp'],
     reviewSuggestions: ['Bài 14: Chính sách dân tộc của Đảng và Nhà nước']
   }
+];
+
+const finalAnswerByQuestionId = new Map(
+  g10HistoryQuestions.map(question => [question.id, question.correctAnswer])
+);
+
+export const g10HistorySolutions: Solution[] = [
+  ...legacyHistorySolutions.map(solution => ({
+    ...solution,
+    courseId: 'grade10:history',
+    finalAnswer: finalAnswerByQuestionId.get(solution.questionId) ?? solution.finalAnswer
+  })),
+  ...g10HistoryExpansionSolutions
 ];

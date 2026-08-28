@@ -16,6 +16,7 @@
     "validate:biology10": "node scripts/validateBiology10.mjs",
     "validate:chemistry10": "node scripts/validateChemistry10.mjs",
     "validate:physics10": "node scripts/validatePhysics10.mjs",
+    "validate:history10": "node scripts/validateHistory10.mjs",
     "validate:chemistry11": "node scripts/validateChemistry11.mjs",
     "validate:physics11": "node scripts/validatePhysics11.mjs",
     "validate:math11": "node scripts/validateMath11.mjs",

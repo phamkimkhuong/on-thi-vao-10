@@ -1,6 +1,7 @@
 import type { QuestionType } from '@/types';
+import { g10HistoryKnowledgeSeeds } from './contentBank';
 
-export const g10HistoryQuestionTypes: QuestionType[] = [
+const legacyHistoryQuestionTypes: QuestionType[] = [
   {
     id: 'g10-his-type-1',
     topicId: 'g10-his-topic-1',
@@ -346,3 +347,74 @@ export const g10HistoryQuestionTypes: QuestionType[] = [
     ]
   }
 ];
+
+export const g10HistoryQuestionTypes: QuestionType[] = legacyHistoryQuestionTypes.map(
+  (questionType, index) => {
+    const typeNumber = index + 1;
+    const seeds = g10HistoryKnowledgeSeeds.filter(item => item.type === typeNumber);
+    const first = seeds[0];
+    const second = seeds[1];
+    const prefix = `g10-his-type-${typeNumber}`;
+
+    return {
+      ...questionType,
+      solvingSteps: [
+        'Bước 1: Xác định từ khóa về thời gian, địa điểm, nhân vật hoặc thành tựu.',
+        'Bước 2: Nhớ lại thẻ kiến thức tương ứng trong bài học.',
+        'Bước 3: Loại phương án ghép sai sự kiện, thời kì hoặc địa điểm.'
+      ],
+      commonMistakes: [
+        ...questionType.commonMistakes,
+        `Ghi nhớ nhầm: “${first.wrong[0]}”`
+      ],
+      theory: seeds.map(item => `${item.correct} ${item.explanation}`),
+      exampleQuestionId: `${first.id}-q1`,
+      subTypes: [
+        {
+          id: `${prefix}-foundation`,
+          name: 'Kiến thức nền tảng',
+          example: `Nhận biết kiến thức chính về ${first.focus}.`,
+          recognitionSigns: ['Hỏi trực tiếp khái niệm, sự kiện, nhân vật, thời gian hoặc địa điểm.'],
+          targetQuestionCount: 8
+        },
+        {
+          id: `${prefix}-association`,
+          name: 'Ghép sự kiện và đặc điểm',
+          example: `Chọn cách ghép đúng đối với ${second.focus}.`,
+          recognitionSigns: ['Yêu cầu nối đúng sự kiện với thời kì, địa điểm, thành tựu hoặc ý nghĩa.'],
+          targetQuestionCount: 8
+        },
+        {
+          id: `${prefix}-misconception`,
+          name: 'Sửa nhận định dễ nhầm',
+          example: `Phát hiện và sửa một ghi chép sai về ${first.focus}.`,
+          recognitionSigns: ['Đề đưa ra một nhận định sai hoặc gần đúng và yêu cầu chọn cách sửa.'],
+          targetQuestionCount: 8
+        }
+      ],
+      theoryCheckpoints: [
+        {
+          id: `${prefix}-checkpoint-1`,
+          question: `Nhận định nào đúng về ${first.focus}?`,
+          options: [first.correct, ...first.wrong] as [string, string, string, string],
+          correctAnswer: 'A',
+          explanation: first.explanation
+        },
+        {
+          id: `${prefix}-checkpoint-2`,
+          question: `Khi ôn tập ${second.focus}, thẻ kiến thức nào chính xác?`,
+          options: [second.wrong[0], second.correct, second.wrong[1], second.wrong[2]],
+          correctAnswer: 'B',
+          explanation: second.explanation
+        }
+      ],
+      practiceCoverage: {
+        targetQuestionCount: 24,
+        minimumQuestionsPerSubType: 7,
+        requiredPracticeRoles: ['guided', 'near_transfer', 'misconception_check'],
+        requiredRepresentations: ['text'],
+        masteryHoldoutCount: 2
+      }
+    };
+  }
+);

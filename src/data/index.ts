@@ -191,8 +191,8 @@ export const loadSubjectData = async (grade: GradeCode, subject: SubjectCode): P
         data = {
           topics: topicsMod.g10HistoryTopics,
           questionTypes: qtMod.g10HistoryQuestionTypes,
-          questions: qMod.g10HistoryQuestions,
-          solutions: sMod.g10HistorySolutions,
+          questions: [...qMod.g10HistoryQuestions, ...assessmentsMod.g10HistoryAssessmentQuestions],
+          solutions: [...sMod.g10HistorySolutions, ...assessmentsMod.g10HistoryAssessmentSolutions],
           mockExams: assessmentsMod.g10HistoryAssessmentExams,
           assessmentBlueprints: assessmentsMod.g10HistoryAssessmentBlueprints,
           learningOutcomes: learningPathMod.g10HistoryOutcomes,

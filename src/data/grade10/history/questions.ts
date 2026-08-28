@@ -1,6 +1,7 @@
 import type { Question } from '@/types';
+import { g10HistoryExpansionQuestions } from './questionExpansion';
 
-export const g10HistoryQuestions: Question[] = [
+const legacyHistoryQuestions: Question[] = [
   // Type 1: Hiện thực lịch sử & Nhận thức lịch sử
   {
     id: 'g10-his-q1',
@@ -75,7 +76,7 @@ export const g10HistoryQuestions: Question[] = [
     options: [
       'A. Giáo dục lòng yêu nước và truyền thống đạo đức cho thế hệ trẻ',
       'B. Phục dựng hiện thực lịch sử chân thực, khách quan và phát hiện quy luật vận động của lịch sử',
-      'C. Đút kết bài học kinh nghiệm để ứng dụng vào quản lý xã hội hiện đại',
+      'C. Đúc kết bài học kinh nghiệm để ứng dụng vào quản lý xã hội hiện đại',
       'D. Dự báo chính xác tuyệt đối thời điểm xảy ra các sự kiện tương lai'
     ],
     correctAnswer: 'B',
@@ -105,7 +106,7 @@ export const g10HistoryQuestions: Question[] = [
     subjectId: 'history',
     topicId: 'g10-his-topic-1',
     questionTypeId: 'g10-his-type-2',
-    content: 'Nguồn sử liệu nào sau đây được coi là nguồn sử liệu trực tiếp (sử liệu gốc) có giá trị tin cậy cao nhất?',
+    content: 'Nguồn sử liệu nào sau đây là nguồn sử liệu trực tiếp (sử liệu gốc) của sự kiện được nghiên cứu?',
     options: [
       'A. Truyền thuyết dân gian truyền miệng qua nhiều thế hệ',
       'B. Bài báo phân tích lịch sử viết sau sự kiện 100 năm',
@@ -172,7 +173,7 @@ export const g10HistoryQuestions: Question[] = [
     content: 'Các hiện vật Trống đồng Đông Sơn được phát hiện qua khai quật khảo cổ thuộc loại hình sử liệu nào và có giá trị ra sao?',
     options: [
       'A. Sử liệu truyền miệng, mang tính chủ quan cao',
-      'B. Sử liệu hiện vật và là sử liệu gốc có độ tin cậy cao nhất',
+      'B. Sử liệu hiện vật, cung cấp bằng chứng trực tiếp và vẫn cần được khảo chứng',
       'C. Sử liệu thứ cấp được chép lại thời phong kiến',
       'D. Sử liệu chữ viết chưa được giải mã'
     ],
@@ -1308,4 +1309,47 @@ export const g10HistoryQuestions: Question[] = [
     difficulty: 'easy',
     sourceType: 'manual'
   }
+];
+
+const answerLetters = ['A', 'B', 'C', 'D'] as const;
+
+/** Chuẩn hóa ngân hàng cũ để không lộ quy luật đáp án B và bổ sung schema luyện tập V4. */
+const normalizedLegacyQuestions: Question[] = legacyHistoryQuestions.map((question, index) => {
+  const sourceOptions = question.options ?? [];
+  const originalCorrectIndex = answerLetters.indexOf(
+    question.correctAnswer.toUpperCase() as (typeof answerLetters)[number]
+  );
+  const cleanOptions = sourceOptions.map(option => option.replace(/^[A-D][.)]\s*/u, '').trim());
+  const correctText = cleanOptions[originalCorrectIndex];
+  const distractors = cleanOptions.filter((_, optionIndex) => optionIndex !== originalCorrectIndex);
+  const targetCorrectIndex = index % 4;
+  const normalizedOptions = [...distractors];
+  normalizedOptions.splice(targetCorrectIndex, 0, correctText);
+  const correctAnswer = answerLetters[targetCorrectIndex];
+  const typeNumber = Number(question.questionTypeId.replace('g10-his-type-', ''));
+
+  return {
+    ...question,
+    courseId: 'grade10:history',
+    options: normalizedOptions.map((option, optionIndex) => `${answerLetters[optionIndex]}. ${option}`),
+    correctAnswer,
+    acceptedAnswers: [correctAnswer, correctAnswer.toLowerCase()],
+    responseType: 'single_choice',
+    validatorType: 'choice',
+    outcomeIds: [`g10-his-out-${String(typeNumber).padStart(2, '0')}`],
+    cognitiveLevel: question.difficulty === 'easy' ? 'recognition' : 'understanding',
+    estimatedSeconds: question.difficulty === 'hard' ? 75 : 45,
+    subTypeId: `g10-his-type-${typeNumber}-${['foundation', 'association', 'misconception'][index % 3]}`,
+    practiceRole: ['guided', 'near_transfer', 'misconception_check'][index % 3] as NonNullable<Question['practiceRole']>,
+    representationType: 'text',
+    misconceptionId: index % 3 === 2
+      ? `g10-his-misc-${String(typeNumber).padStart(2, '0')}`
+      : undefined,
+    isMasteryHoldout: index % 11 === 10
+  };
+});
+
+export const g10HistoryQuestions: Question[] = [
+  ...normalizedLegacyQuestions,
+  ...g10HistoryExpansionQuestions
 ];
