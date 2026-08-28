@@ -151,6 +151,31 @@ class NotificationService {
       return false;
     }
   }
+
+  /**
+   * Xóa 1 thông báo hệ thống khỏi danh sách (Admin / Giáo viên)
+   */
+  public async deleteNotification(notificationId: string): Promise<boolean> {
+    try {
+      const notifRef = doc(db, 'system_metrics', 'notification_directory');
+      const snap = await getDoc(notifRef);
+      if (!snap.exists()) return false;
+
+      const rawList: any[] = snap.data().notificationsList || [];
+      const filtered = rawList.filter((item: any) => item.id !== notificationId);
+
+      await updateDoc(notifRef, {
+        notificationsList: filtered,
+        updatedAt: serverTimestamp(),
+      });
+
+      logger.info('Đã xóa thông báo hệ thống thành công:', notificationId);
+      return true;
+    } catch (err) {
+      logger.error('Lỗi khi xóa thông báo hệ thống:', err);
+      return false;
+    }
+  }
 }
 
 export const notificationService = new NotificationService();

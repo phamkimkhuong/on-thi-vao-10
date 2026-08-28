@@ -3,7 +3,7 @@ import { newsService } from '../../../services/newsService';
 import { notificationService } from '../../../services/notificationService';
 import { useAppStore } from '../../../services/store';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../components/ui/card';
-import { Bell, Send, Loader, CheckCircle2, Users, Eye } from 'lucide-react';
+import { Bell, Send, Loader, CheckCircle2, Users, Eye, Trash2 } from 'lucide-react';
 import { NotificationType, TargetGrade, AppNotification } from '../../../types/notificationTypes';
 import { AnnouncementCategory } from '../../../types/newsTypes';
 import { useNavigate } from 'react-router-dom';
@@ -56,6 +56,22 @@ export const TeacherNotificationManager: React.FC = () => {
     loadSentList();
   }, [user]);
 
+  const handleDeleteNotification = async (notifId: string) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa thông báo này khỏi hệ thống?')) {
+      return;
+    }
+    try {
+      const ok = await notificationService.deleteNotification(notifId);
+      if (ok) {
+        setRecentSent((prev) => prev.filter((item) => item.id !== notifId));
+      } else {
+        alert('Không thể xóa thông báo.');
+      }
+    } catch {
+      alert('Đã xảy ra lỗi khi xóa thông báo.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
@@ -68,7 +84,8 @@ export const TeacherNotificationManager: React.FC = () => {
     setSuccessMsg(null);
 
     try {
-      // 1. Tạo bài viết Bảng tin (/news)
+      // newsService.createPost tự động đăng bài lên Bảng Tin (/news)
+      // đồng thời đã phát hành ĐÚNG 1 thông báo hệ thống lên Chuông 🔔
       const postId = await newsService.createPost({
         title: title.trim(),
         content: content.trim(),
@@ -77,17 +94,7 @@ export const TeacherNotificationManager: React.FC = () => {
         authorName: user?.displayName || 'OnThiVao10 Official',
       });
 
-      // 2. Đồng thời phát hành thông báo hệ thống lên Chuông 🔔
-      const ok = await notificationService.sendBroadcastNotification({
-        title: `📰 ${title.trim()}`,
-        body: content.substring(0, 100).replace(/[#*`_]/g, '') + '...',
-        type: (category as NotificationType) || 'system',
-        targetGrade,
-        actionUrl: postId ? `/news?id=${postId}` : '/news',
-        createdByEmail: user?.email || 'Giáo viên',
-      });
-
-      if (ok || postId) {
+      if (postId) {
         setSuccessMsg('🎉 Đã phát hành thông báo và bài viết Bảng tin thành công tới học sinh!');
         setTitle('');
         setContent('');
@@ -246,7 +253,7 @@ Vì sao bạn sẽ thích tính năng này?
           ) : (
             <div className="divide-y divide-border/20 max-h-80 overflow-y-auto">
               {recentSent.map((item) => (
-                <div key={item.id} className="py-3 space-y-1 first:pt-0 last:pb-0 text-left">
+                <div key={item.id} className="py-3 space-y-1 first:pt-0 last:pb-0 text-left group">
                   <div className="flex items-center justify-between gap-2 flex-wrap text-xs">
                     <span className="font-extrabold text-foreground">{item.title}</span>
                     <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-bold">
@@ -254,6 +261,14 @@ Vì sao bạn sẽ thích tính năng này?
                         {item.targetGrade === 'all' ? 'Toàn trường' : item.targetGrade}
                       </span>
                       <span>{new Date(item.createdAt).toLocaleDateString('vi-VN')}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteNotification(item.id)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                        title="Xóa thông báo này"
+                      >
+                        <Trash2 size={13} />
+                      </button>
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground">{item.body}</p>
