@@ -18,6 +18,7 @@ import {
   LifeBuoy,
   TrendingUp,
   BookMarked,
+  BookText,
   Loader,
   Sun,
   Moon,
@@ -262,6 +263,10 @@ export const AppLayout: React.FC = () => {
       document.title = `Từ Vựng Tiếng Anh Lớp 10 | ${brandName}`;
       return;
     }
+    if (path.startsWith(ROUTES.GRAMMAR)) {
+      document.title = `Cẩm Nang Ngữ Pháp Tiếng Anh (Lớp 9 - 12) | ${brandName}`;
+      return;
+    }
 
     // Theo môn và lớp
     const subjectLabel = selectedSubject === 'math' ? 'Toán Học' : selectedSubject === 'english' ? 'Tiếng Anh' : selectedSubject === 'chemistry' ? 'Hóa Học' : '';
@@ -330,7 +335,10 @@ export const AppLayout: React.FC = () => {
     { path: ROUTES.ROADMAP, label: 'Lộ trình học', icon: Map },
     { path: ROUTES.PRACTICE, label: 'Luyện tập', icon: BookOpen },
     ...(selectedSubject === 'english'
-      ? [{ path: ROUTES.VOCABULARY, label: 'Từ vựng 10', icon: BookMarked }]
+      ? [
+          { path: ROUTES.GRAMMAR, label: 'Ngữ pháp', icon: BookText },
+          { path: ROUTES.VOCABULARY, label: 'Từ vựng 10', icon: BookMarked }
+        ]
       : []),
     { path: ROUTES.AI_TUTOR, label: 'Gia sư', icon: Sparkles },
     { path: ROUTES.MISTAKES, label: 'Sổ lỗi sai', icon: Bookmark },
@@ -356,6 +364,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/roadmap')) return 'Lộ trình học';
     if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
     if (path.startsWith('/practice')) return 'Luyện tập';
+    if (path.startsWith('/grammar')) return 'Ngữ pháp Tiếng Anh';
     if (path.startsWith('/vocabulary')) return 'Từ vựng Tiếng Anh 10';
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
     if (path.startsWith('/mistakes')) return 'Sổ lỗi sai';

@@ -1,4 +1,4 @@
-import type { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
+import type { UserAttempt, UserMistake, UserProgress, ExamResult, ActiveExamSession } from '../types';
 import { calculateMasteryScore } from '../utils/theme';
 
 const KEYS = {
@@ -7,7 +7,8 @@ const KEYS = {
   PROGRESS: 'otv10_progress',
   EXAM_RESULTS: 'otv10_exam_results',
   READ_THEORY: 'otv10_read_theory',
-  THEORY_CHECKPOINTS: 'otv10_theory_checkpoints'
+  THEORY_CHECKPOINTS: 'otv10_theory_checkpoints',
+  ACTIVE_EXAM: 'otv10_active_exam'
 };
 
 // Helper để đọc từ localStorage và tự động migrate dữ liệu cũ nếu là Array
@@ -106,6 +107,31 @@ const readTheoryCheckpointMap = (): Record<string, string[]> => {
     return parsed;
   } catch (e) {
     console.error('Lỗi khi đọc theory checkpoints từ localStorage', e);
+    return {};
+  }
+};
+
+const readActiveExamMap = (): Record<string, Record<string, ActiveExamSession>> => {
+  try {
+    const data = localStorage.getItem(KEYS.ACTIVE_EXAM);
+    if (!data) return {};
+    const parsed = JSON.parse(data);
+    // Migration: nếu dữ liệu cũ lưu dạng Record<string, ActiveExamSession> (userId -> single session)
+    // thì tự động migrate sang Record<string, Record<string, ActiveExamSession>> (userId -> sourceExamId -> session)
+    const result: Record<string, Record<string, ActiveExamSession>> = {};
+    for (const [userId, userVal] of Object.entries(parsed)) {
+      if (userVal && typeof userVal === 'object') {
+        if ('sourceExamId' in userVal) {
+          const single = userVal as ActiveExamSession;
+          result[userId] = { [single.sourceExamId]: single };
+        } else {
+          result[userId] = userVal as Record<string, ActiveExamSession>;
+        }
+      }
+    }
+    return result;
+  } catch (e) {
+    console.error('Lỗi khi đọc active exam từ localStorage', e);
     return {};
   }
 };
@@ -417,6 +443,47 @@ export const storageService = {
     writeToStorage(KEYS.THEORY_CHECKPOINTS, map);
   },
 
+  // ACTIVE EXAM SESSIONS (QUẢN LÝ ĐA PHIÊN THI DỞ DANG THEO TỪNG ĐỀ)
+  getActiveExamSessions(userId: string = 'guest'): ActiveExamSession[] {
+    const map = readActiveExamMap();
+    const userSessions = map[userId] || {};
+    return Object.values(userSessions);
+  },
+
+  getActiveExamSession(userId: string = 'guest', sourceExamId?: string): ActiveExamSession | null {
+    const map = readActiveExamMap();
+    const userSessions = map[userId] || {};
+    if (sourceExamId) {
+      return userSessions[sourceExamId] || null;
+    }
+    const sessions = Object.values(userSessions);
+    if (sessions.length === 0) return null;
+    return sessions.sort((a, b) => new Date(b.lastSavedAt).getTime() - new Date(a.lastSavedAt).getTime())[0];
+  },
+
+  saveActiveExamSession(userId: string = 'guest', session: ActiveExamSession): void {
+    const map = readActiveExamMap();
+    if (!map[userId]) {
+      map[userId] = {};
+    }
+    map[userId][session.sourceExamId] = session;
+    writeToStorage(KEYS.ACTIVE_EXAM, map);
+  },
+
+  clearActiveExamSession(userId: string = 'guest', sourceExamId?: string): void {
+    const map = readActiveExamMap();
+    if (!map[userId]) return;
+    if (sourceExamId) {
+      delete map[userId][sourceExamId];
+      if (Object.keys(map[userId]).length === 0) {
+        delete map[userId];
+      }
+    } else {
+      delete map[userId];
+    }
+    writeToStorage(KEYS.ACTIVE_EXAM, map);
+  },
+
   // RESET ALL DATA
   resetData(): void {
     localStorage.removeItem(KEYS.ATTEMPTS);
@@ -425,5 +492,6 @@ export const storageService = {
     localStorage.removeItem(KEYS.EXAM_RESULTS);
     localStorage.removeItem(KEYS.READ_THEORY);
     localStorage.removeItem(KEYS.THEORY_CHECKPOINTS);
+    localStorage.removeItem(KEYS.ACTIVE_EXAM);
   }
 };

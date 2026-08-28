@@ -12,6 +12,7 @@ export const ROUTES = {
   TEACHER: '/teacher',
   AFFILIATE: '/affiliate',
   VOCABULARY: '/vocabulary',
+  GRAMMAR: '/grammar',
   NEWS: '/news',
   QUESTION_TYPE_DETAIL: (questionTypeId: string) => `/question-types/${questionTypeId}`
 } as const;

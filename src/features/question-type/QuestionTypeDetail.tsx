@@ -665,7 +665,7 @@ export const QuestionTypeDetail: React.FC = () => {
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-5 px-3 sm:px-6 py-3 animate-fade-in pb-20 md:pb-6">
+    <div className="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto space-y-6 px-3 sm:px-6 py-3 animate-fade-in pb-20 md:pb-6">
       <SeoHead
         title={pageTitle}
         description={pageDescription}
@@ -701,15 +701,15 @@ export const QuestionTypeDetail: React.FC = () => {
         <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight leading-snug">
           <LatexRenderer text={detail.name} />
         </h2>
-        <div className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-3xl font-semibold">
+        <div className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-4xl font-semibold">
           <LatexRenderer text={detail.description} />
         </div>
       </div>
 
       {/* Bố cục 2 cột chính - Kích hoạt sớm từ breakpoint md */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8 items-start">
-        {/* Cột trái (70%): Tabs chi tiết học tập */}
-        <div className="md:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 xl:gap-8 items-start">
+        {/* Cột trái (70-75%): Tabs chi tiết học tập */}
+        <div className="md:col-span-2 xl:col-span-3 space-y-4">
           <Tabs
             items={tabItems}
             defaultTabId={detail.theory && detail.theory.length > 0 ? 'theory' : (detail.subTypes && detail.subTypes.length > 0 ? 'subtypes' : 'recognition_mistakes')}

@@ -15,7 +15,7 @@ import { QuestionStimulusRenderer } from '../../components/common/QuestionStimul
 import { aiService } from '../../services/aiService';
 
 import { ProofImageUploader } from '../../components/common/ProofImageUploader';
-import { AssessmentBlueprint, MockExam, Question, ExamResult, StructuredAnswer, UserAttempt } from '../../types';
+import { AssessmentBlueprint, MockExam, Question, ExamResult, StructuredAnswer, UserAttempt, ActiveExamSession } from '../../types';
 import { formatAnswerForDisplay, isAnswerComplete, scoreAnswer } from '../../utils/answerValidator';
 import { cn } from '../../utils/cn';
 import { LocalProofImage, revokeLocalProofImages } from '../../utils/proofImages';
@@ -27,6 +27,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Play,
+  Pause,
   CheckSquare,
   TrendingUp,
   Zap,
@@ -174,6 +175,51 @@ export const ExamEngine: React.FC = () => {
   const [proofImagesByQuestion, setProofImagesByQuestion] = useState<Record<string, LocalProofImage[]>>({});
 
   const [selectedExamId, setSelectedExamId] = useState<string>('');
+  const [activeSessions, setActiveSessions] = useState<ActiveExamSession[]>([]);
+
+  // Tự động kiểm tra danh sách các bài thi dở dang trong môn học hiện tại (kèm đồng bộ 1 Read từ Firestore)
+  useEffect(() => {
+    const currentUserId = user?.uid || 'guest';
+    const localSavedList = storageService.getActiveExamSessions(currentUserId);
+    const subjectSessions = localSavedList.filter(s => s.subjectId === selectedSubject && s.grade === selectedGrade);
+    setActiveSessions(subjectSessions);
+
+    // Đồng bộ 1 Read duy nhất từ Firestore nếu user đã đăng nhập
+    if (user && user.uid !== 'guest' && examState === 'intro') {
+      let isMounted = true;
+      progressService.getActiveExamSessionsFromFirestore(user.uid).then(remoteSessionsMap => {
+        if (!isMounted) return;
+        let hasChanges = false;
+        Object.values(remoteSessionsMap).forEach(remoteSession => {
+          if (remoteSession && remoteSession.sourceExamId) {
+            const local = storageService.getActiveExamSession(user.uid, remoteSession.sourceExamId);
+            if (!local || new Date(remoteSession.lastSavedAt).getTime() > new Date(local.lastSavedAt).getTime()) {
+              storageService.saveActiveExamSession(user.uid, remoteSession);
+              hasChanges = true;
+            }
+          }
+        });
+        if (hasChanges) {
+          const updatedList = storageService.getActiveExamSessions(user.uid);
+          const updatedSubjectSessions = updatedList.filter(s => s.subjectId === selectedSubject && s.grade === selectedGrade);
+          setActiveSessions(updatedSubjectSessions);
+        }
+      }).catch(err => console.error('Lỗi khi đồng bộ active exam từ Firestore:', err));
+
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [user, selectedSubject, selectedGrade, examState]);
+
+  const activeSessionsByExamId = React.useMemo(() => {
+    const map = new Map<string, ActiveExamSession>();
+    activeSessions.forEach(s => map.set(s.sourceExamId, s));
+    return map;
+  }, [activeSessions]);
+
+  const activeSessionForSelectedExam = selectedExamId ? activeSessionsByExamId.get(selectedExamId) : null;
+
   type ExamTab = 'all' | 'diagnostic' | 'theory' | 'checkpoint' | 'midterm' | 'final';
   const [activeTab, setActiveTab] = useState<ExamTab>('all');
 
@@ -508,6 +554,13 @@ export const ExamEngine: React.FC = () => {
     setExamState('result');
     setIsSubmittingExam(false);
     storageService.saveExamResult(currentUserId, result);
+    if (currentExam) {
+      storageService.clearActiveExamSession(currentUserId, currentExam.id);
+      setActiveSessions(prev => prev.filter(s => s.sourceExamId !== currentExam.id));
+      if (user && user.uid !== 'guest') {
+        void progressService.deleteActiveExamSessionFromFirestore(user.uid, currentExam.id);
+      }
+    }
 
     // Đồng bộ Firestore
     if (user) {
@@ -542,10 +595,38 @@ export const ExamEngine: React.FC = () => {
     return () => clearInterval(timer);
   }, [examState, timeLeft, handleSubmitExam]);
 
+  // Tự động lưu tiến trình bài thi và thời gian còn lại (Auto-Save Draft)
+  useEffect(() => {
+    if (examState !== 'testing' || !currentExam || examQuestions.length === 0) return;
+    const currentUserId = user?.uid || 'guest';
+    const session: ActiveExamSession = {
+      examId: `exam-${selectedSubject}-${Date.now()}`,
+      sourceExamId: currentExam.id,
+      examTitle: currentExam.title,
+      subjectId: selectedSubject,
+      grade: selectedGrade,
+      questionIds: examQuestions.map(q => q.id),
+      answers,
+      finalAnswers,
+      timeLeft,
+      timeSpent,
+      lastSavedAt: new Date().toISOString()
+    };
+    storageService.saveActiveExamSession(currentUserId, session);
+  }, [examState, currentExam, examQuestions, answers, finalAnswers, timeLeft, timeSpent, user, selectedSubject, selectedGrade]);
+
   const handleStartExam = () => {
     if (!user) {
       setShowLoginConfirm(true);
       return;
+    }
+    const currentUserId = user.uid;
+    if (currentExam) {
+      storageService.clearActiveExamSession(currentUserId, currentExam.id);
+      setActiveSessions(prev => prev.filter(s => s.sourceExamId !== currentExam.id));
+      if (user && user.uid !== 'guest') {
+        void progressService.deleteActiveExamSessionFromFirestore(user.uid, currentExam.id);
+      }
     }
     clearAllProofImages();
     // Bốc các câu hỏi thuộc đề thi thử được chọn
@@ -567,6 +648,66 @@ export const ExamEngine: React.FC = () => {
     setShowExitConfirm(false);
     setTimeSpent(0);
     setExamState('testing');
+  };
+
+  const handleResumeExam = (sessionToResume?: ActiveExamSession) => {
+    const targetSession = sessionToResume || activeSessionForSelectedExam;
+    if (!targetSession) return;
+
+    const allQuestions = getQuestions(targetSession.grade, targetSession.subjectId);
+    const questionsForExam = targetSession.questionIds
+      .map(id => allQuestions.find(q => q.id === id))
+      .filter((q): q is Question => q !== undefined);
+
+    clearAllProofImages();
+    setSelectedExamId(targetSession.sourceExamId);
+    setExamQuestions(questionsForExam);
+    setAnswers(targetSession.answers || {});
+    setFinalAnswers(targetSession.finalAnswers || {});
+    setTimeLeft(targetSession.timeLeft);
+    setTimeSpent(targetSession.timeSpent);
+    setIsSubmittingExam(false);
+    setExamSubmitError(null);
+    setShowSubmitConfirm(false);
+    setShowExitConfirm(false);
+    setExamState('testing');
+  };
+
+  const handleDiscardActiveSession = (sourceExamId?: string) => {
+    const targetExamId = sourceExamId || selectedExamId;
+    if (!targetExamId) return;
+    const currentUserId = user?.uid || 'guest';
+    storageService.clearActiveExamSession(currentUserId, targetExamId);
+    setActiveSessions(prev => prev.filter(s => s.sourceExamId !== targetExamId));
+    if (user && user.uid !== 'guest') {
+      void progressService.deleteActiveExamSessionFromFirestore(user.uid, targetExamId);
+    }
+  };
+
+  const handlePauseAndSave = () => {
+    if (examState === 'testing' && currentExam && examQuestions.length > 0) {
+      const currentUserId = user?.uid || 'guest';
+      const session: ActiveExamSession = {
+        examId: `exam-${selectedSubject}-${Date.now()}`,
+        sourceExamId: currentExam.id,
+        examTitle: currentExam.title,
+        subjectId: selectedSubject,
+        grade: selectedGrade,
+        questionIds: examQuestions.map(q => q.id),
+        answers,
+        finalAnswers,
+        timeLeft,
+        timeSpent,
+        lastSavedAt: new Date().toISOString()
+      };
+      storageService.saveActiveExamSession(currentUserId, session);
+      setActiveSessions(prev => [...prev.filter(s => s.sourceExamId !== currentExam.id), session]);
+      if (user && user.uid !== 'guest') {
+        void progressService.saveActiveExamSessionToFirestore(user.uid, session);
+      }
+    }
+    setExamState('intro');
+    setShowExitConfirm(false);
   };
 
   const handleInputChange = (questionId: string, val: string) => {
@@ -746,6 +887,70 @@ export const ExamEngine: React.FC = () => {
             </p>
           </div>
 
+          {/* Resume Hub: Danh sách các bài thi đang làm dở dang */}
+          {activeSessions.length > 0 && (
+            <div className="bg-gradient-to-r from-indigo-500/15 via-purple-500/10 to-amber-500/10 border-2 border-indigo-500/30 rounded-3xl p-5 md:p-6 shadow-lg shadow-indigo-500/5 relative overflow-hidden space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-[10px] font-black uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                  Bạn đang có {activeSessions.length} bài thi chưa hoàn thành
+                </div>
+                <span className="text-xs text-muted-foreground font-semibold">
+                  (Đã tự động đóng băng thời gian và lưu bài làm an toàn)
+                </span>
+              </div>
+
+              <div className={cn(
+                "grid gap-3.5",
+                activeSessions.length > 1 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
+              )}>
+                {activeSessions.map(session => {
+                  const answeredCount = Object.keys(session.answers || {}).length + Object.keys(session.finalAnswers || {}).length;
+                  const totalCount = session.questionIds.length;
+                  return (
+                    <div
+                      key={session.sourceExamId}
+                      className="bg-card/90 border border-indigo-500/25 rounded-2xl p-4 flex flex-col justify-between gap-3.5 shadow-sm hover:border-indigo-500/50 transition-all"
+                    >
+                      <div className="space-y-1 min-w-0">
+                        <h4 className="text-sm font-extrabold text-foreground truncate">
+                          {session.examTitle}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground font-semibold">
+                          <span className="flex items-center gap-1">
+                            <CheckSquare size={13} className="text-emerald-500" />
+                            Đã làm: <strong className="text-foreground">{answeredCount}/{totalCount}</strong> câu
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Timer size={13} className="text-amber-500" />
+                            Còn lại: <strong className="text-foreground">{formatTime(session.timeLeft)}</strong>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          onClick={() => handleResumeExam(session)}
+                          className="flex-1 font-black text-xs py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
+                        >
+                          <Play size={12} className="fill-white" /> Tiếp tục làm ({formatTime(session.timeLeft)})
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleDiscardActiveSession(session.sourceExamId)}
+                          className="font-bold text-xs py-2.5 px-3 border-border text-muted-foreground hover:text-rose-600 hover:border-rose-500/30 rounded-xl cursor-pointer"
+                          title="Hủy bỏ bài thi này"
+                        >
+                          <X size={13} />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Lọc đề thi theo Tab - Cuộn ngang 1 hàng mượt mà */}
           <div role="tablist" aria-label="Lọc loại bài kiểm tra" className="flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-1 justify-start scroll-smooth pt-1">
             {availableTabs.map(tab => {
@@ -794,6 +999,7 @@ export const ExamEngine: React.FC = () => {
                   const isGroupSelected = group.exams.some(e => e.id === selectedExamId);
                   const selectedExamInGroup = group.exams.find(e => e.id === selectedExamId) || group.exams[0];
                   const isSelected = selectedExamId === selectedExamInGroup.id;
+                  const groupActiveSession = group.exams.map(e => activeSessionsByExamId.get(e.id)).find(Boolean);
                   
                   return (
                     <div
@@ -834,6 +1040,12 @@ export const ExamEngine: React.FC = () => {
                                 getDifficultyBandClassName(selectedExamInGroup)
                               )}>
                                 {getDifficultyBandLabel(selectedExamInGroup)}
+                              </span>
+                            )}
+                            {groupActiveSession && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[9px] font-black uppercase tracking-wider border border-amber-500/25">
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                Đang làm dở
                               </span>
                             )}
                           </div>
@@ -1001,12 +1213,43 @@ export const ExamEngine: React.FC = () => {
                     </div>
                   </div>
 
-                  <Button
-                    onClick={handleStartExam}
-                    className="min-h-12 w-full font-black py-4.5 text-xs bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 hover:opacity-95 active:scale-[0.98] shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 rounded-2xl border-none cursor-pointer text-white"
-                  >
-                    <Play size={13} className="fill-white" /> {currentExam.focus === 'theory' ? 'Bắt đầu kiểm tra lý thuyết' : 'Bắt đầu tính giờ thi thử'}
-                  </Button>
+                  {activeSessionForSelectedExam ? (
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-2xl border-2 border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-amber-500/5 space-y-1.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-black uppercase text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                            Bài thi đang làm dở
+                          </span>
+                          <span className="text-xs font-black text-foreground">{formatTime(activeSessionForSelectedExam.timeLeft)}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground font-semibold leading-relaxed">
+                          Đã trả lời <strong className="text-foreground">{Object.keys(activeSessionForSelectedExam.answers || {}).length + Object.keys(activeSessionForSelectedExam.finalAnswers || {}).length}/{activeSessionForSelectedExam.questionIds.length}</strong> câu. Bạn có thể tiếp tục làm ngay hoặc hủy bỏ để thi lại từ đầu.
+                        </p>
+                      </div>
+
+                      <Button
+                        onClick={() => handleResumeExam(activeSessionForSelectedExam)}
+                        className="min-h-12 w-full font-black py-4.5 text-xs bg-gradient-to-r from-indigo-600 via-primary to-indigo-700 hover:opacity-95 active:scale-[0.98] shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 rounded-2xl border-none cursor-pointer text-white"
+                      >
+                        <Play size={13} className="fill-white" /> Tiếp tục làm bài ({formatTime(activeSessionForSelectedExam.timeLeft)})
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleStartExam}
+                        className="w-full font-extrabold text-xs py-3 rounded-xl border-border text-muted-foreground hover:text-rose-600 hover:border-rose-500/30 cursor-pointer"
+                      >
+                        <X size={13} /> Hủy bài cũ & Bắt đầu lại từ đầu
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={handleStartExam}
+                      className="min-h-12 w-full font-black py-4.5 text-xs bg-gradient-to-r from-primary via-indigo-600 to-indigo-700 hover:opacity-95 active:scale-[0.98] shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 rounded-2xl border-none cursor-pointer text-white"
+                    >
+                      <Play size={13} className="fill-white" /> {currentExam.focus === 'theory' ? 'Bắt đầu kiểm tra lý thuyết' : 'Bắt đầu tính giờ thi thử'}
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ) : (
@@ -1079,8 +1322,17 @@ export const ExamEngine: React.FC = () => {
             <Button
               type="button"
               variant="outline"
+              onClick={handlePauseAndSave}
+              className="min-h-11 px-3 text-xs font-black text-indigo-600 dark:text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/10 flex items-center gap-1.5 cursor-pointer rounded-xl"
+              title="Tạm dừng bài thi và đóng băng đồng hồ đếm ngược"
+            >
+              <Pause size={14} /> <span className="hidden sm:inline">Tạm dừng</span>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => setShowExitConfirm(true)}
-              className="min-h-11 min-w-11 px-3 text-xs font-bold"
+              className="min-h-11 min-w-11 px-3 text-xs font-bold rounded-xl cursor-pointer"
               aria-label="Thoát khỏi bài thi"
             >
               <X size={15} /> <span className="hidden sm:inline">Thoát</span>
@@ -1279,19 +1531,20 @@ export const ExamEngine: React.FC = () => {
         />
         <ConfirmationModal
           isOpen={showExitConfirm}
-          title="Thoát khỏi bài thi?"
-          description="Các câu trả lời của lượt làm hiện tại chưa được nộp và sẽ bị xóa nếu bạn thoát."
-          confirmLabel="Thoát và xóa lượt làm"
-          cancelLabel="Tiếp tục làm bài"
-          variant="danger"
-          onConfirm={() => {
+          title="Tạm dừng hoặc Thoát bài thi?"
+          description="Tiến trình làm bài và thời gian còn lại của bạn đã được tự động lưu. Bạn có thể chọn tạm dừng để tiếp tục làm sau hoặc hủy bỏ lượt thi này."
+          confirmLabel="Tạm dừng & Lưu làm sau"
+          cancelLabel="Hủy và xóa lượt thi"
+          variant="primary"
+          onConfirm={handlePauseAndSave}
+          onCancel={() => {
             setShowExitConfirm(false);
+            handleDiscardActiveSession();
             clearAllProofImages();
             setAnswers({});
             setFinalAnswers({});
             setExamState('intro');
           }}
-          onCancel={() => setShowExitConfirm(false)}
         />
       </div>
     );

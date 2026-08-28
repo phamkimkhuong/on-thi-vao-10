@@ -90,15 +90,14 @@ export const Roadmap: React.FC = () => {
   const readLessons = storageService.getReadLessons(userId);
   const readLessonsSet = new Set(readLessons);
 
-  // Tạo danh sách phẳng toàn bộ dạng bài theo đúng thứ tự chặng & chuyên đề render
-  const sequentialTypes: QuestionType[] = [];
-  [1, 2, 3].forEach(tierId => {
-    const tierTopics = topics.filter(t => t.tier === tierId);
-    tierTopics.forEach(topic => {
-      const filteredTypes = questionTypes.filter(type => type.topicId === topic.id);
-      sequentialTypes.push(...filteredTypes);
+  // Gom nhóm dạng bài theo từng Chuyên đề (Topic) để quản lý mở khóa độc lập theo chương
+  const typesByTopic = React.useMemo(() => {
+    const map = new Map<string, QuestionType[]>();
+    topics.forEach(t => {
+      map.set(t.id, questionTypes.filter(type => type.topicId === t.id));
     });
-  });
+    return map;
+  }, [topics, questionTypes]);
 
   const isOptionalEnglishListeningTopic = (topicId?: string) => (
     selectedGrade === 'grade10'
@@ -112,19 +111,30 @@ export const Roadmap: React.FC = () => {
 
   const isUnlocked = (typeId: string) => {
     if (isOptionalEnglishListeningType(typeId)) return true;
-    const idx = sequentialTypes.findIndex(t => t.id === typeId);
-    if (idx === -1) return false;
-    if (idx === 0) return true; // Dạng bài đầu tiên luôn luôn mở khóa
-    return readLessonsSet.has(sequentialTypes[idx - 1].id);
+    const qType = questionTypes.find(t => t.id === typeId);
+    if (!qType) return false;
+
+    const topicTypes = typesByTopic.get(qType.topicId) || [];
+    const idxInTopic = topicTypes.findIndex(t => t.id === typeId);
+    if (idxInTopic === -1) return false;
+    if (idxInTopic === 0) return true; // ⭐ Dạng bài đầu tiên của MỖI CHUYÊN ĐỀ luôn luôn mở khóa!
+
+    // Các bài tiếp theo trong chuyên đề mở khóa khi bài liền trước TRONG CÙNG CHUYÊN ĐỀ đã được đọc
+    return readLessonsSet.has(topicTypes[idxInTopic - 1].id);
   };
 
-  const firstLockedIdx = sequentialTypes.findIndex(t => !isUnlocked(t.id));
-
   const shouldShowType = (typeId: string) => {
-    const idx = sequentialTypes.findIndex(t => t.id === typeId);
-    if (idx === -1) return false;
+    const qType = questionTypes.find(t => t.id === typeId);
+    if (!qType) return false;
+
     if (isUnlocked(typeId)) return true; // Hiển thị các bài đã mở khóa
-    return idx === firstLockedIdx;       // Chỉ hiển thị thêm duy nhất 1 bài khóa tiếp theo
+
+    const topicTypes = typesByTopic.get(qType.topicId) || [];
+    const firstLockedInTopicIdx = topicTypes.findIndex(t => !isUnlocked(t.id));
+    const idxInTopic = topicTypes.findIndex(t => t.id === typeId);
+
+    // Trong mỗi chuyên đề, chỉ hiển thị thêm duy nhất 1 bài khóa tiếp theo
+    return idxInTopic === firstLockedInTopicIdx;
   };
 
   const handleSelectType = async (id: string) => {
@@ -139,13 +149,16 @@ export const Roadmap: React.FC = () => {
     }
 
     if (!isUnlocked(id)) {
-      const idx = sequentialTypes.findIndex(t => t.id === id);
-      const prevType = idx > 0 ? sequentialTypes[idx - 1] : null;
+      const qType = questionTypes.find(t => t.id === id);
+      const topicTypes = qType ? (typesByTopic.get(qType.topicId) || []) : [];
+      const idxInTopic = topicTypes.findIndex(t => t.id === id);
+      const prevType = idxInTopic > 0 ? topicTypes[idxInTopic - 1] : null;
+
       setModalConfig({
         isOpen: true,
         title: "Dạng bài đang khóa 🔒",
         description: prevType
-          ? `Dạng bài này đang khóa. Hãy hoàn thành lý thuyết dạng bài trước: "${prevType.name}" để mở khóa bài học này nhé!`
+          ? `Dạng bài này đang khóa. Hãy hoàn thành lý thuyết dạng bài trước: "${prevType.name}" trong cùng chuyên đề này để mở khóa bài học nhé!`
           : "Dạng bài này hiện đang khóa.",
         confirmLabel: "Tôi đã hiểu",
         cancelLabel: "Đóng",
@@ -272,7 +285,7 @@ export const Roadmap: React.FC = () => {
   ]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8 px-3 sm:px-6 py-3 animate-fade-in pb-12">
+    <div className="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto space-y-8 px-3 sm:px-6 py-3 animate-fade-in pb-12">
       <SeoHead
         title={pageTitle}
         description={pageDescription}
@@ -340,7 +353,7 @@ export const Roadmap: React.FC = () => {
         <>
           {/* 🌟 Guest Mode Banner */}
           {!user && (
-            <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 max-w-4xl mx-auto mb-8">
+            <div className="bg-gradient-to-r from-primary/10 via-indigo-500/5 to-transparent border border-primary/20 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 w-full mx-auto mb-8">
               <div className="space-y-1 text-left">
                 <h3 className="text-sm font-black text-foreground">Bạn đang xem lộ trình học ở chế độ xem thử</h3>
                 <p className="text-[11px] text-muted-foreground font-semibold">Đăng nhập tài khoản để lưu tiến trình học tập, mở khóa toàn bộ lộ trình và bắt đầu thực hành luyện tập.</p>

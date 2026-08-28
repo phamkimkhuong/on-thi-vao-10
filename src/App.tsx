@@ -39,6 +39,7 @@ const SupportPage = lazyWithRetry(() => import('./features/support/SupportPage')
 const AffiliateDashboard = lazyWithRetry(() => import('./features/affiliate/AffiliateDashboard').then(m => ({ default: m.AffiliateDashboard })));
 const AboutPage = lazyWithRetry(() => import('./features/about/AboutPage'));
 const VocabularyPage = lazyWithRetry(() => import('./features/vocabulary/VocabularyPage'));
+const GrammarPage = lazyWithRetry(() => import('./features/grammar/GrammarPage'));
 const NewsPage = lazyWithRetry(() => import('./features/news/NewsPage').then(m => ({ default: m.NewsPage })));
 
 import { onAuthStateChanged } from 'firebase/auth';
@@ -78,6 +79,7 @@ const router = createBrowserRouter([
       { path: ROUTES.SUPPORT.substring(1), element: <SupportPage /> },
       { path: ROUTES.AFFILIATE.substring(1), element: <AffiliateDashboard /> },
       { path: ROUTES.VOCABULARY.substring(1), element: <VocabularyPage /> },
+      { path: ROUTES.GRAMMAR.substring(1), element: <GrammarPage /> },
       { path: ROUTES.NEWS.substring(1), element: <NewsPage /> },
       { path: ROUTES.ABOUT.substring(1), element: <AboutPage /> },
     ]

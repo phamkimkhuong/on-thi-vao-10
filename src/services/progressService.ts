@@ -1,6 +1,6 @@
 import { db } from './firebase';
-import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc, arrayUnion } from 'firebase/firestore';
-import { UserAttempt, UserMistake, UserProgress, ExamResult } from '../types';
+import { doc, setDoc, collection, writeBatch, getDocs, query, getDoc, arrayUnion, updateDoc, deleteField } from 'firebase/firestore';
+import { UserAttempt, UserMistake, UserProgress, ExamResult, ActiveExamSession } from '../types';
 import { User } from 'firebase/auth';
 import { storageService } from './storage';
 import { useAppStore } from './store';
@@ -564,6 +564,51 @@ export const progressService = {
       }
     } catch (e) {
       logger.error('Lỗi khi lưu checkpoint lý thuyết lên Firestore:', e);
+    }
+  },
+
+  // ACTIVE EXAM SESSIONS CLOUD SYNC (LƯU TRONG 1 DOCUMENT DUY NHẤT users/{userId} - 1 READ TỐI ƯU)
+  async getActiveExamSessionsFromFirestore(userId: string): Promise<Record<string, ActiveExamSession>> {
+    try {
+      if (!userId || userId === 'guest') return {};
+      const userRef = doc(db, 'users', userId);
+      const userSnap = await getDoc(userRef);
+      logger.dbRead('Lấy danh sách bài thi dở dang từ Firestore (users/{userId})', 1);
+
+      if (!userSnap.exists()) return {};
+      const data = userSnap.data();
+      return (data.activeExamSessions as Record<string, ActiveExamSession>) || {};
+    } catch (e) {
+      logger.error('Lỗi khi lấy active exam sessions từ Firestore:', e);
+      return {};
+    }
+  },
+
+  async saveActiveExamSessionToFirestore(userId: string, session: ActiveExamSession): Promise<void> {
+    try {
+      if (!userId || userId === 'guest') return;
+      const userRef = doc(db, 'users', userId);
+      await setDoc(userRef, {
+        activeExamSessions: {
+          [session.sourceExamId]: session
+        }
+      }, { merge: true });
+      logger.dbWrite(`Lưu bản nháp bài thi ${session.sourceExamId} lên Firestore (users/{userId})`, 1);
+    } catch (e) {
+      logger.error('Lỗi khi lưu active exam session lên Firestore:', e);
+    }
+  },
+
+  async deleteActiveExamSessionFromFirestore(userId: string, sourceExamId: string): Promise<void> {
+    try {
+      if (!userId || userId === 'guest') return;
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        [`activeExamSessions.${sourceExamId}`]: deleteField()
+      });
+      logger.dbWrite(`Xóa bản nháp bài thi ${sourceExamId} trên Firestore (users/{userId})`, 1);
+    } catch (e) {
+      logger.error('Lỗi khi xóa active exam session trên Firestore:', e);
     }
   }
 };

@@ -559,6 +559,20 @@ export interface ExamResult {
   }>;
 }
 
+export interface ActiveExamSession {
+  examId: string;
+  sourceExamId: string;
+  examTitle: string;
+  subjectId: SubjectCode;
+  grade: GradeCode;
+  questionIds: string[];
+  answers: Record<string, string>;
+  finalAnswers: Record<string, StructuredAnswer>;
+  timeLeft: number;
+  timeSpent: number;
+  lastSavedAt: string;
+}
+
 export interface SimulatedStudent {
   id: string;
   name: string;
