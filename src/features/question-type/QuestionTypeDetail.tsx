@@ -18,11 +18,12 @@ import {
   CornerDownRight,
   BookOpen,
   Volume2,
-  VolumeX
+  VolumeX,
+  Crown
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { getSubjectTheme, getStarsFromScore } from '@/utils/theme';
-import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon } from '@/utils/subject';
+import { getSubjectFromQuestionTypeId, getSubjectName, getSubjectIcon, isQuestionTypePremiumLocked } from '@/utils/subject';
 import { storageService } from '@/services/storage';
 import { progressService } from '@/services/progressService';
 import { convertLatexToSpeechText } from '@/utils/speech';
@@ -32,7 +33,7 @@ import { createBreadcrumbSchema, createFAQSchema, createQuizSchema } from '@/uti
 export const QuestionTypeDetail: React.FC = () => {
   const { questionTypeId } = useParams<{ questionTypeId: string }>();
   const navigate = useNavigate();
-  const { selectedSubject, selectedGrade, setSubject, user, refreshProgress } = useAppStore();
+  const { selectedSubject, selectedGrade, setSubject, user, refreshProgress, isPremium } = useAppStore();
 
   const [showFloatingBar, setShowFloatingBar] = useState(false);
 
@@ -100,6 +101,9 @@ export const QuestionTypeDetail: React.FC = () => {
     routeSubject === 'physics' &&
     Boolean(detail?.theory?.length);
   const isPracticeLockedByTheory = requiresTheoryCompletion && !showLessonCompletedMsg;
+  const isTypeLockedByPremium = detail
+    ? isQuestionTypePremiumLocked(detail.id, 1, routeSubject, selectedGrade) && !isPremium
+    : false;
 
   useEffect(() => {
     if (!detail) return;
@@ -854,6 +858,13 @@ export const QuestionTypeDetail: React.FC = () => {
                 >
                   <LockKeyhole size={16} /> Đăng nhập để luyện tập
                 </Button>
+              ) : isTypeLockedByPremium ? (
+                <Button
+                  onClick={() => navigate('/premium')}
+                  className="w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-white rounded-xl cursor-pointer"
+                >
+                  <Crown size={16} /> Mở khóa Luyện tập (Gói Premium)
+                </Button>
               ) : (
                 <>
                   <Button
@@ -863,7 +874,8 @@ export const QuestionTypeDetail: React.FC = () => {
                       "w-full font-bold text-xs py-3.5 flex items-center justify-center gap-1.5 active:scale-[0.98] shadow-md transition-all hover:shadow-lg rounded-xl cursor-pointer",
                       currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700 text-white' :
                         currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' :
-                          'bg-purple-600 hover:bg-purple-700 text-white'
+                          currentSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700 text-white' :
+                            'bg-purple-600 hover:bg-purple-700 text-white'
                     )}
                   >
                     {isPracticeLockedByTheory ? (
@@ -926,6 +938,13 @@ export const QuestionTypeDetail: React.FC = () => {
           >
             Đăng nhập
           </Button>
+        ) : isTypeLockedByPremium ? (
+          <Button
+            onClick={() => navigate('/premium')}
+            className="font-bold text-xs py-2.5 px-4 shrink-0 shadow-md bg-gradient-to-r from-amber-500 to-orange-500 text-white"
+          >
+            <Crown size={14} /> Mở khóa Premium
+          </Button>
         ) : (
           <Button
             disabled={isPracticeLockedByTheory}
@@ -934,7 +953,8 @@ export const QuestionTypeDetail: React.FC = () => {
               "font-bold text-xs py-2.5 px-4 shrink-0 shadow-md text-white active:scale-95 transition-transform",
               currentSubject === 'math' ? 'bg-indigo-600 hover:bg-indigo-700' :
                 currentSubject === 'chemistry' ? 'bg-emerald-600 hover:bg-emerald-700' :
-                  'bg-purple-600 hover:bg-purple-700'
+                  currentSubject === 'physics' ? 'bg-cyan-600 hover:bg-cyan-700' :
+                    'bg-purple-600 hover:bg-purple-700'
             )}
           >
             {isPracticeLockedByTheory ? 'Học xong để mở khóa' : 'Luyện tập ngay'}

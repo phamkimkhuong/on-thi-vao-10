@@ -7,11 +7,36 @@ import { g10MathModule2PracticeBlueprints } from './practiceBlueprint';
 
 export const g10MathModule2QuestionTypes: QuestionType[] = [
   {
+    id: 'math10-qt22',
+    topicId: 'math10-t2',
+    name: 'Bất phương trình bậc nhất hai ẩn',
+    slug: 'bat-phuong-trinh-bac-nhat-hai-an',
+    description: 'Nhận biết, kiểm tra nghiệm, biểu diễn miền nghiệm và lập bất phương trình bậc nhất hai ẩn từ hình hoặc tình huống thực tế.',
+    exampleQuestionId: 'math10-m2x-q001',
+    recognitionSigns: [
+      'Biểu thức có dạng ax+by so sánh với một hằng số, trong đó a và b không đồng thời bằng 0.',
+      'Tập nghiệm được biểu diễn bởi một nửa mặt phẳng có bờ là đường thẳng ax+by=c.'
+    ],
+    solvingSteps: [
+      'Đưa bất phương trình về dạng ax+by≤c hoặc một trong ba dấu tương ứng.',
+      'Vẽ đường biên ax+by=c và xác định đường biên có thuộc miền nghiệm hay không.',
+      'Chọn một điểm thử không nằm trên đường biên để xác định đúng nửa mặt phẳng.',
+      'Đối chiếu điều kiện thực tế, dấu bất phương trình và đơn vị trước khi kết luận.'
+    ],
+    commonMistakes: [
+      'Coi biểu thức chứa x², xy hoặc 1/x là bậc nhất hai ẩn.',
+      'Dùng nét liền cho dấu <, > hoặc nét đứt cho dấu ≤, ≥.',
+      'Chọn gốc O làm điểm thử dù O nằm trên đường biên.'
+    ],
+    difficulty: 'easy',
+    examFrequency: 'high'
+  },
+  {
       id: 'math10-qt3',
       topicId: 'math10-t2',
-      name: 'Xác định miền nghiệm và Bài toán tối ưu thực tế (Quy hoạch tuyến tính)',
-      slug: 'mien-nghiem-bai-toan-toi-uu',
-      description: 'Xác định miền nghiệm của hệ bất phương trình bậc nhất hai ẩn trên mặt phẳng tọa độ và tìm giá trị lớn nhất, nhỏ nhất của biểu thức F(x; y) để giải quyết các bài toán tối ưu trong sản xuất, kinh doanh.',
+      name: 'Hệ bất phương trình bậc nhất hai ẩn và ứng dụng',
+      slug: 'he-bat-phuong-trinh-va-ung-dung',
+      description: 'Kiểm tra nghiệm, biểu diễn miền nghiệm của hệ, tìm giá trị lớn nhất hoặc nhỏ nhất của biểu thức tuyến tính và giải các bài toán thực tế.',
       exampleQuestionId: 'math10-q3',
       theory: [
         '**1. Bất phương trình và Hệ bất phương trình bậc nhất hai ẩn**:\n- Bất phương trình bậc nhất hai ẩn có dạng tổng quát là $ax + by < c$ (hoặc $\\le$, $>$, $\\ge$), trong đó $a, b, c$ là các số thực cho trước ($a^2 + b^2 \\neq 0$).\n- Hệ bất phương trình bậc nhất hai ẩn là một tổ hợp gồm từ hai bất phương trình bậc nhất hai ẩn trở lên.',

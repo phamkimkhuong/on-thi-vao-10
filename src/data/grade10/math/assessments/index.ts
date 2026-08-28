@@ -23,14 +23,17 @@ const legacyMidtermIds = new Set([
 
 const normalizeAutoGradedMidtermPoints = (question: Question): Question => {
   const isExpandedMidterm2 = question.id.startsWith('math10-assess-mid2-');
-  if (!legacyMidtermIds.has(question.id) && !isExpandedMidterm2) return question;
+  const topicNormalizedQuestion = question.questionTypeId === 'math10-qt13'
+    ? { ...question, topicId: 'math10-t9' }
+    : question;
+  if (!legacyMidtermIds.has(question.id) && !isExpandedMidterm2) return topicNormalizedQuestion;
 
   const points = question.responseType === 'single_choice'
     ? 0.25
     : question.responseType === 'true_false_cluster'
       ? 1
       : 0.5;
-  return { ...question, points };
+  return { ...topicNormalizedQuestion, points };
 };
 
 export const g10MathAssessmentQuestions = [

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" role="img" aria-labelledby="title desc">
+  <title id="title">Miền nghiệm x cộng y nhỏ hơn hoặc bằng 4</title>
+  <desc id="desc">Đường thẳng x cộng y bằng 4 và nửa mặt phẳng chứa gốc tọa độ được tô xanh.</desc>
+  <rect width="520" height="320" fill="#fff"/>
+  <polygon points="60,260 60,80 440,260" fill="#dbeafe"/>
+  <g stroke="#94a3b8" stroke-width="2"><path d="M40 260H480"/><path d="M60 290V30"/></g>
+  <path d="M60 80L440 260" stroke="#2563eb" stroke-width="4"/>
+  <g fill="#0f172a" font-family="Arial" font-size="17"><text x="466" y="282">x</text><text x="40" y="45">y</text><text x="447" y="282">4</text><text x="38" y="85">4</text><text x="70" y="282">O</text><text x="285" y="112">x + y = 4</text></g>
+</svg>

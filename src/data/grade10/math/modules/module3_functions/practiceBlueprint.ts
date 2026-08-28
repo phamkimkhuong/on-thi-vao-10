@@ -44,4 +44,12 @@ export const g10MathModule3PracticeBlueprints: QuestionTypePracticeBlueprint[] =
     { id: 'math10-qt21-st3', name: 'Tham số, số nghiệm và ứng dụng', example: 'Biến điều kiện về tập nghiệm thành điều kiện của Δ, a hoặc các nghiệm.', recognitionSigns: ['Đề hỏi tham số, số nghiệm hoặc khoảng nghiệm.', 'Tình huống thực tế dẫn đến một bất phương trình bậc hai.'], targetQuestionCount: 12 }
   ],
   coverage: { ...standardCoverage, targetQuestionCount: 36, requiredRepresentations: ['text', 'equation', 'table', 'graph'] }
+}, {
+  questionTypeId: 'math10-qt23',
+  subTypes: [
+    { id: 'math10-qt23-st1', name: 'Phương trình căn bằng căn', example: 'Bình phương hai vế của √P(x)=√Q(x), giải P(x)=Q(x) rồi thử lại.', recognitionSigns: ['Hai vế đều là căn bậc hai.', 'Biểu thức dưới căn thường là tam thức bậc hai hoặc bậc nhất.'], targetQuestionCount: 12 },
+    { id: 'math10-qt23-st2', name: 'Phương trình căn bằng biểu thức bậc nhất', example: 'Giải √P(x)=ax+b, chú ý điều kiện ax+b≥0 và thử lại nghiệm.', recognitionSigns: ['Chỉ một vế có căn bậc hai.', 'Vế còn lại là biểu thức bậc nhất hoặc hằng số.'], targetQuestionCount: 12 },
+    { id: 'math10-qt23-st3', name: 'Điều kiện, tham số và mô hình thực tế', example: 'Dùng điều kiện dấu, số nghiệm hoặc dữ kiện khoảng cách để lập và giải phương trình chứa căn.', recognitionSigns: ['Đề hỏi số nghiệm, tham số hoặc yêu cầu loại nghiệm ngoại lai.', 'Tình huống khoảng cách dẫn đến căn của tổng bình phương.'], targetQuestionCount: 12 }
+  ],
+  coverage: { ...standardCoverage, targetQuestionCount: 36, requiredRepresentations: ['text', 'equation', 'diagram'] }
 }];

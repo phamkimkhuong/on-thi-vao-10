@@ -136,6 +136,31 @@ export const g10MathModule3QuestionTypes: QuestionType[] = [
     ],
     difficulty: 'medium',
     examFrequency: 'high'
+  },
+  {
+    id: 'math10-qt23',
+    topicId: 'math10-t3',
+    name: 'Phương trình quy về phương trình bậc hai',
+    slug: 'phuong-trinh-quy-ve-phuong-trinh-bac-hai',
+    description: 'Giải phương trình căn bằng căn và căn bằng biểu thức bậc nhất bằng cách bình phương, giải phương trình bậc hai nhận được rồi thử lại nghiệm.',
+    exampleQuestionId: 'math10-m3x-q001',
+    recognitionSigns: [
+      'Hai vế là căn bậc hai của các tam thức hoặc một vế là căn thức, vế còn lại là biểu thức bậc nhất.',
+      'Sau khi bình phương hai vế và thu gọn, phương trình nhận được có bậc không quá hai.'
+    ],
+    solvingSteps: [
+      'Nhận dạng đúng dạng phương trình và ghi điều kiện cần, đặc biệt vế không chứa căn phải không âm.',
+      'Bình phương hai vế rồi thu gọn về phương trình bậc hai hoặc phương trình bậc nhất.',
+      'Giải phương trình nhận được để tìm các nghiệm ứng viên.',
+      'Thay từng ứng viên vào phương trình ban đầu, loại nghiệm không thỏa và kết luận.'
+    ],
+    commonMistakes: [
+      'Xem phép bình phương là biến đổi tương đương và nhận mọi nghiệm của phương trình sau bình phương.',
+      'Quên điều kiện vế bậc nhất phải không âm trong phương trình căn bằng biểu thức.',
+      'Chỉ kiểm tra biểu thức dưới căn mà không thử lại phương trình ban đầu.'
+    ],
+    difficulty: 'medium',
+    examFrequency: 'high'
   }
 ];
 

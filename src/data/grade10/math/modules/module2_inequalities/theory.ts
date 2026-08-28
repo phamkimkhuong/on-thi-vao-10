@@ -1,5 +1,13 @@
 import type { QuestionTypeTheoryCheckpoint } from '@/types';
 
+export const math10Qt22Theory: string[] = [
+  '**1. Nhận dạng bất phương trình bậc nhất hai ẩn**\nCó dạng $ax+by<c$, $ax+by\\le c$, $ax+by>c$ hoặc $ax+by\\ge c$, với $a,b$ không đồng thời bằng 0. Biểu thức chứa $x^2$, $xy$, $\\sqrt{x}$ hoặc ẩn ở mẫu không thuộc dạng này.',
+  '**2. Nghiệm của bất phương trình**\nCặp $(x_0;y_0)$ là một nghiệm khi thay vào làm mệnh đề bất đẳng thức đúng. Một bất phương trình bậc nhất hai ẩn có vô số nghiệm.',
+  '**3. Đường biên và miền nghiệm**\nĐường $ax+by=c$ chia mặt phẳng thành hai nửa. Dấu $\\le,\\ge$ lấy cả đường biên và vẽ nét liền; dấu $<,>$ loại đường biên và vẽ nét đứt.',
+  '**4. Chọn phía nghiệm**\nChọn một điểm không nằm trên đường biên, thường là $O(0;0)$. Nếu điểm thử thỏa bất phương trình thì lấy phía chứa điểm đó; nếu không thì lấy phía đối diện. Khi đường biên đi qua O, dùng $(1;0)$ hoặc $(0;1)$.',
+  '**5. Mô hình hóa**\nChọn hai đại lượng làm $x,y$, thống nhất đơn vị rồi dịch: “không quá” thành $\\le$, “ít nhất” thành $\\ge$, “nhỏ hơn” thành $<$ và “lớn hơn” thành $>$. Thêm $x,y\\ge0$ nếu đại lượng không âm.'
+];
+
 export const math10Qt3Theory: string[] = [
   '**1. Bất phương trình bậc nhất hai ẩn**\nCó dạng $ax+by\\le c$ hoặc với $<,>,\\ge$, trong đó $a^2+b^2>0$. Mỗi nghiệm là một cặp $(x;y)$, nên tập nghiệm được biểu diễn bằng một nửa mặt phẳng.',
   '**2. Đường biên và dấu bằng**\nĐường $ax+by=c$ chia mặt phẳng thành hai nửa. Với $\\le,\\ge$, đường biên thuộc miền nghiệm và vẽ nét liền; với $<,>$, đường biên bị loại và vẽ nét đứt.',
@@ -14,6 +22,7 @@ export const math10Qt3Theory: string[] = [
 ];
 
 export const g10MathModule2TheoryByQuestionTypeId: Record<string, string[]> = {
+  'math10-qt22': math10Qt22Theory,
   'math10-qt3': math10Qt3Theory
 };
 
@@ -21,6 +30,29 @@ export const g10MathModule2TheoryCheckpointsByQuestionTypeId: Record<
   string,
   QuestionTypeTheoryCheckpoint[]
 > = {
+  'math10-qt22': [
+    {
+      id: 'math10-check-qt22-1',
+      question: 'Biểu thức nào là bất phương trình bậc nhất hai ẩn?',
+      options: ['$x^2+y<3$', '$2x-3y\\ge5$', '$xy<1$', '$1/x+y>0$'],
+      correctAnswer: 'B',
+      explanation: '$2x-3y\\ge5$ có dạng $ax+by\\ge c$; các phương án còn lại chứa bậc hai, tích hai ẩn hoặc ẩn ở mẫu.'
+    },
+    {
+      id: 'math10-check-qt22-2',
+      question: 'Đường biên của $x-2y>4$ được vẽ thế nào?',
+      options: ['Nét liền', 'Nét đứt', 'Không cần vẽ', 'Chỉ vẽ trong góc phần tư I'],
+      correctAnswer: 'B',
+      explanation: 'Dấu > không lấy các điểm trên đường biên nên đường $x-2y=4$ phải vẽ nét đứt.'
+    },
+    {
+      id: 'math10-check-qt22-3',
+      question: 'Cụm “tổng chi phí không quá 5 triệu đồng” tương ứng với dấu nào?',
+      options: ['$<$', '$>$', '$\\le$', '$\\ge$'],
+      correctAnswer: 'C',
+      explanation: '“Không quá” nghĩa là có thể bằng hoặc nhỏ hơn giới hạn.'
+    }
+  ],
   'math10-qt3': [
     {
       id: 'math10-check-qt3-1',

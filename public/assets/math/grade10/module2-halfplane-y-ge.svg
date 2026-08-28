@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" role="img" aria-labelledby="title desc">
+  <title id="title">Miền nghiệm y lớn hơn hoặc bằng 2x trừ 1</title>
+  <desc id="desc">Đường y bằng 2x trừ 1 vẽ nét liền và nửa mặt phẳng phía trên được tô xanh.</desc>
+  <rect width="520" height="320" fill="#fff"/>
+  <polygon points="40,30 480,30 390,290 40,290" fill="#fef3c7"/>
+  <g stroke="#94a3b8" stroke-width="2"><path d="M40 180H480"/><path d="M260 290V30"/></g>
+  <path d="M190 290L330 30" stroke="#d97706" stroke-width="4"/>
+  <g fill="#0f172a" font-family="Arial" font-size="17"><text x="466" y="202">x</text><text x="240" y="45">y</text><text x="270" y="202">O</text><text x="335" y="65">y = 2x − 1</text></g>
+</svg>

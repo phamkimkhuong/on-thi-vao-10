@@ -7,6 +7,6 @@ export const g10BiologyModule7Topics: Topic[] = [
     name: "Chuyên đề 7: Virus và ứng dụng",
     slug: "virus-va-ung-dung",
     orderIndex: 8,
-    tier: 3
+    tier: 2
   }
 ];

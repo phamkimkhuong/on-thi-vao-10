@@ -54,11 +54,25 @@ export const math10Qt21Theory: string[] = [
   '**12. Lỗi cần tránh**\n- Không đưa về một vế.\n- Chọn trong/ngoài hai nghiệm mà không xét dấu $a$.\n- Lấy nghiệm mẫu.\n- Bỏ mất điểm loại sau rút gọn.\n- Quên nghiệm kép.\n- Quên giao miền thực tế.\n- Chia hai vế cho biểu thức chưa biết dấu.'
 ];
 
+export const math10Qt23Theory: string[] = [
+  '**1. Phạm vi Bài 18**\nBài học tập trung vào hai dạng:\n$$\\sqrt{P(x)}=\\sqrt{Q(x)},\\qquad \\sqrt{P(x)}=ax+b,$$\ntrong đó sau khi bình phương và thu gọn ta nhận được phương trình bậc hai hoặc bậc nhất. Không cần dùng các kĩ thuật căn thức nâng cao ngoài phạm vi này.',
+  '**2. Bình phương không phải lúc nào cũng tương đương**\nTừ $A=B$ suy ra $A^2=B^2$, nhưng chiều ngược lại có thể sai vì $A^2=B^2$ còn cho phép $A=-B$. Do đó nghiệm của phương trình sau bình phương chỉ là **nghiệm ứng viên** và phải thử lại.',
+  '**3. Dạng căn bằng căn**\nVới $\\sqrt{P(x)}=\\sqrt{Q(x)}$, bình phương cho $P(x)=Q(x)$. Giải phương trình nhận được, sau đó thay từng nghiệm vào phương trình ban đầu. Việc thử lại đồng thời kiểm tra hai biểu thức dưới căn có không âm hay không.',
+  '**4. Dạng căn bằng biểu thức bậc nhất**\nVới $\\sqrt{P(x)}=ax+b$, vế trái luôn không âm nên điều kiện cần là $ax+b\\ge0$. Bình phương, giải phương trình nhận được rồi chỉ giữ nghiệm thỏa điều kiện và phương trình ban đầu.',
+  '**5. Vì sao vẫn phải thử lại khi đã đặt điều kiện?**\nĐiều kiện $ax+b\\ge0$ thường giúp loại nghiệm ngoại lai, nhưng thao tác an toàn và phù hợp với bài học là thay trực tiếp từng nghiệm ứng viên vào phương trình ban đầu trước khi kết luận.',
+  '**6. Trường hợp phương trình sau bình phương suy biến**\nSau khi thu gọn có thể nhận phương trình bậc nhất, đẳng thức đúng với mọi x hoặc mệnh đề vô lí. Khi đó vẫn phải quay lại điều kiện ban đầu; chẳng hạn $\\sqrt{(x-2)^2}=x-2$ đúng khi và chỉ khi $x\\ge2$.',
+  '**7. Bài hỏi số nghiệm và tham số**\nTách hai lớp điều kiện: phương trình đại số sau bình phương phải có nghiệm thực, và các nghiệm ấy phải làm hai vế ban đầu bằng nhau. Không chỉ dựa vào biệt thức của phương trình sau bình phương.',
+  '**8. Mô hình khoảng cách**\nKhoảng cách trong tam giác vuông thường có dạng $\\sqrt{x^2+a^2}$. Sau khi lập phương trình từ dữ kiện bằng nhau hoặc hơn kém một độ dài, cần giữ điều kiện độ dài không âm và kiểm tra nghiệm có thuộc miền thực tế.',
+  '**9. Quy trình bốn bước**\n(1) Nhận dạng dạng và ghi điều kiện cần; (2) bình phương, thu gọn; (3) giải phương trình bậc hai/bậc nhất; (4) thử lại từng ứng viên và viết tập nghiệm. Nếu là bài thực tế, thêm đơn vị.',
+  '**10. Lỗi cần tránh**\n- Kết luận ngay sau khi giải phương trình bình phương.\n- Quên điều kiện vế không chứa căn không âm.\n- Cho rằng mọi nghiệm làm biểu thức dưới căn có nghĩa đều thỏa.\n- Bình phương sai $(ax+b)^2$.\n- Loại một nghiệm chỉ vì nó âm dù đề không cấm x âm.\n- Giữ nghiệm không phù hợp với độ dài hoặc thời gian trong bài thực tế.'
+];
+
 export const g10MathModule3TheoryByQuestionTypeId: Record<string, string[]> = {
   'math10-qt4': math10Qt4Theory,
   'math10-qt18': math10Qt18Theory,
   'math10-qt20': math10Qt20Theory,
-  'math10-qt21': math10Qt21Theory
+  'math10-qt21': math10Qt21Theory,
+  'math10-qt23': math10Qt23Theory
 };
 
 export const g10MathModule3TheoryCheckpointsByQuestionTypeId: Record<
@@ -170,6 +184,29 @@ export const g10MathModule3TheoryCheckpointsByQuestionTypeId: Record<
       ],
       correctAnswer: 'B',
       explanation: 'Chia cho số âm phải đổi chiều, còn chia cho 0 không hợp lệ; do đó cần biết dấu trước.'
+    }
+  ],
+  'math10-qt23': [
+    {
+      id: 'math10-check-qt23-1',
+      question: 'Sau khi bình phương hai vế của một phương trình chứa căn và tìm được các nghiệm ứng viên, bước tiếp theo là',
+      options: ['Nhận tất cả các nghiệm', 'Thử lại trong phương trình ban đầu', 'Chỉ giữ nghiệm dương', 'Bình phương thêm lần nữa'],
+      correctAnswer: 'B',
+      explanation: 'Phép bình phương có thể sinh nghiệm ngoại lai nên mọi ứng viên phải được thử lại.'
+    },
+    {
+      id: 'math10-check-qt23-2',
+      question: 'Điều kiện cần của phương trình $\\sqrt{P(x)}=2x-3$ là',
+      options: ['$x\\ge\\frac32$', '$x\\le\\frac32$', '$x\\ne\\frac32$', 'Mọi số thực'],
+      correctAnswer: 'A',
+      explanation: 'Vế căn không âm nên vế phải cũng phải không âm: $2x-3\\ge0$.'
+    },
+    {
+      id: 'math10-check-qt23-3',
+      question: 'Phương trình $\\sqrt{(x-1)^2}=x-1$ có tập nghiệm là',
+      options: ['$\\mathbb R$', '$(-\\infty;1]$', '$[1;+\\infty)$', '$\\{1\\}$'],
+      correctAnswer: 'C',
+      explanation: 'Vế trái là $|x-1|$, bằng $x-1$ đúng khi $x-1\\ge0$.'
     }
   ]
 };

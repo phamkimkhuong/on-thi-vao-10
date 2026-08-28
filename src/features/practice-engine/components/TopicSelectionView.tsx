@@ -14,6 +14,7 @@ import { ConfirmationModal } from '@/components/common/ConfirmationModal';
 import { authService } from '@/services/authService';
 import { ROUTES } from '@/constants/routes';
 import { buildAdaptivePracticeSequence } from '../utils/adaptivePracticeSequence';
+import { isQuestionTypePremiumLocked } from '@/utils/subject';
 
 interface TopicSelectionViewProps {
   routeSubject: SubjectCode;
@@ -648,9 +649,10 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                   const progressPercent = totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
                   const masteryScore = progress?.masteryLevels[qType.id] ?? 0;
                   const starsCount = getStarsFromScore(masteryScore);
+                  const isLockedByPremium = isQuestionTypePremiumLocked(qType.id, topic.tier, routeSubject, selectedGrade) && !isPremium;
 
                   const statusBadge = (() => {
-                    if (topic.tier === 3 && !isPremium) {
+                    if (isLockedByPremium) {
                       return (
                         <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 animate-pulse flex items-center gap-0.5">
                           👑 Khóa Premium
@@ -699,7 +701,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                   })();
 
                   const handleTypeClick = () => {
-                    if (topic.tier === 3 && !isPremium) {
+                    if (isLockedByPremium) {
                       setPremiumModalOpen(true);
                       return;
                     }
@@ -777,7 +779,11 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                         {/* Text link đồng bộ màu môn học */}
                         <div className={cn("flex items-center justify-between border-t border-border/20 pt-3 text-xs font-black", theme.text)}>
                           <span>
-                            {qType.id === 'eng-qt6' ? 'Khám phá 6 chuyên đề →' : 'Luyện tập ngay →'}
+                            {qType.id === 'eng-qt6'
+                              ? 'Khám phá 6 chuyên đề →'
+                              : isLockedByPremium
+                                ? 'Mở khóa Premium 👑'
+                                : 'Luyện tập ngay →'}
                           </span>
                         </div>
                       </div>

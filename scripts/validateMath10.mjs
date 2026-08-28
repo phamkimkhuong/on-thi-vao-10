@@ -129,6 +129,57 @@ for (const moduleName of moduleDirs) {
       });
     }
   }
+
+  const curriculumExpansionFile = path.join(modulePath, 'curriculumExpansion.ts');
+  if (fs.existsSync(curriculumExpansionFile)) {
+    const curriculumSeeds = readExportedArray(curriculumExpansionFile, 'specs');
+    const difficultyOverrides = new Map(
+      readExportedArray(curriculumExpansionFile, 'difficultyOverrides').map(item => [item.id, item.difficulty])
+    );
+    const subtypePositions = new Map();
+    const roleCycle = ['guided', 'near_transfer', 'representation_switch', 'misconception_check', 'far_transfer', 'retention'];
+    for (const seed of curriculumSeeds) {
+      seed.difficulty = difficultyOverrides.get(seed.id) ?? seed.difficulty;
+      const position = subtypePositions.get(seed.subTypeId) ?? 0;
+      subtypePositions.set(seed.subTypeId, position + 1);
+      const questionTypeId = seed.questionTypeId ?? seed.subTypeId.replace(/-st\d+$/, '');
+      const topicId = questionTypes.find(item => item.id === questionTypeId)?.topicId;
+      questions.push({
+        id: seed.id,
+        subjectId: 'math',
+        topicId,
+        questionTypeId,
+        content: seed.content,
+        responseType: 'single_choice',
+        options: seed.options,
+        correctAnswer: seed.correctAnswer,
+        acceptedAnswers: [seed.correctAnswer],
+        validatorType: 'choice',
+        difficulty: seed.difficulty,
+        sourceType: 'manual',
+        ...(seed.mediaSrc ? { media: [{ id: `${seed.id}-media`, src: seed.mediaSrc, alt: seed.mediaAlt, width: 720, height: 420 }] } : {})
+      });
+      solutions.push({
+        id: `${seed.id}-solution`,
+        questionId: seed.id,
+        recognition: questionTypeId,
+        detailedSteps: [seed.reasoning],
+        finalAnswer: `${seed.correctAnswer}. ${(seed.options ?? [])[seed.correctAnswer.charCodeAt(0) - 65]?.replace(/^[A-D]\.\s*/, '') ?? ''}`,
+        commonMistakes: [seed.mistake]
+      });
+      metadata.push({
+        questionId: seed.id,
+        subTypeId: seed.subTypeId,
+        practiceRole: position >= 10 ? 'mastery_holdout' : roleCycle[position % roleCycle.length],
+        representationType: seed.representationType,
+        ...(position >= 10 ? { isMasteryHoldout: true } : {})
+      });
+    }
+  }
+}
+
+for (const question of questions) {
+  if (question.questionTypeId === 'math10-qt13') question.topicId = 'math10-t9';
 }
 
 const assessmentQuestions = readExportedArray(path.join(dataDirectory, 'assessments', 'questions.ts'), 'g10MathAssessmentQuestions');
@@ -244,7 +295,7 @@ for (const content of duplicateKeys(questions, item => String(item.content).toLo
 }
 
 if (moduleDirs.length !== 8) errors.push(`Cần đúng 8 module cốt lõi, hiện có ${moduleDirs.length}.`);
-if (topics.length !== 8) errors.push(`Cần đúng 8 topic, hiện có ${topics.length}.`);
+if (topics.length !== 9) errors.push(`Cần đúng 9 topic theo hai tập SGK, hiện có ${topics.length}.`);
 if (practiceChoices.length !== legacyInputQuestionIds.size) {
   errors.push(`Choice overlay có ${practiceChoices.length} mục nhưng dữ liệu gốc có ${legacyInputQuestionIds.size} câu nhập đáp án.`);
 }

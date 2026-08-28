@@ -9,10 +9,10 @@ import { Button } from '@/components/ui/button';
 import { MathLoginRequired } from '@/components/common/MathLoginRequired';
 
 import { Question, Solution, StructuredAnswer, UserAttempt, SubjectCode } from '@/types';
-import { AlertTriangle, BookOpenCheck, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, BookOpenCheck, ArrowLeft, Crown } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { formatAnswerForDisplay, validateAnswer, isAnswerComplete } from '@/utils/answerValidator';
-import { getSubjectFromQuestionTypeId, getSubjectName } from '@/utils/subject';
+import { getSubjectFromQuestionTypeId, getSubjectName, isQuestionTypePremiumLocked } from '@/utils/subject';
 import { SeoHead } from '@/components/common/SeoHead';
 import { createBreadcrumbSchema } from '@/utils/seoSchemas';
 
@@ -1047,6 +1047,41 @@ export const PracticeEngine: React.FC = () => {
     ? storageService.getReadLessons(practiceUserId).includes(questionTypeId) &&
       hasPassedRequiredCheckpoints
     : true;
+
+  const isDirectPracticePremiumLocked = questionTypeId
+    ? isQuestionTypePremiumLocked(questionTypeId, 1, routeSubject, selectedGrade) && !isPremium
+    : false;
+
+  if (isDirectPracticePremiumLocked) {
+    return (
+      <div className="mx-auto max-w-lg space-y-4 px-4 py-12 text-center animate-fade-in">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <Crown size={28} className="animate-pulse" />
+        </div>
+        <h3 className="text-lg font-black text-foreground">
+          Dạng bài đặc quyền Premium 👑
+        </h3>
+        <p className="text-xs font-semibold leading-relaxed text-muted-foreground">
+          Dạng bài này là nội dung nâng cao & rèn luyện thực hành chuyên sâu dành riêng cho tài khoản Premium. Hãy nâng cấp để làm toàn bộ câu hỏi và xem giải thích chi tiết nhé!
+        </p>
+        <div className="flex items-center justify-center gap-3 pt-2">
+          <Button
+            onClick={() => navigate('/practice')}
+            variant="outline"
+            className="text-xs font-bold border border-border/50"
+          >
+            Quay lại danh sách
+          </Button>
+          <Button
+            onClick={() => navigate('/premium')}
+            className="bg-gradient-to-r from-amber-500 to-orange-500 text-xs font-bold text-white shadow-md hover:opacity-90"
+          >
+            <Crown size={14} /> Nâng cấp Premium
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (requiresPhysics11Theory && !hasCompletedTheory && questionTypeId) {
     return (

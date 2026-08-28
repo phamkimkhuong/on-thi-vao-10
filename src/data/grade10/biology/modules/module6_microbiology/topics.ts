@@ -7,6 +7,6 @@ export const g10BiologyModule6Topics: Topic[] = [
     name: "Chuyên đề 6: Sinh học vi sinh vật & Công nghệ vi sinh",
     slug: "sinh-hoc-vi-sinh-vat",
     orderIndex: 7,
-    tier: 3
+    tier: 2
   }
 ];

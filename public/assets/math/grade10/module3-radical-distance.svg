@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Mô hình khoảng cách dẫn đến phương trình chứa căn</title>
+  <desc id="desc">Tam giác ABC vuông tại B, cạnh AB dài 4 kilômét, BC dài x kilômét và cạnh huyền AC dài x cộng 2 kilômét.</desc>
+  <rect width="720" height="420" fill="#ffffff"/>
+  <path d="M150 320L150 90L570 320Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="5"/>
+  <path d="M150 280H190V320" fill="none" stroke="#0f172a" stroke-width="4"/>
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="600">
+    <text x="120" y="78">A</text><text x="116" y="354">B</text><text x="580" y="354">C</text>
+    <text x="92" y="215">4 km</text><text x="345" y="355">x km</text><text x="372" y="178">x + 2 km</text>
+  </g>
+</svg>

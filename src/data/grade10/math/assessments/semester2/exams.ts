@@ -23,28 +23,28 @@ const midtermIds = (prefix: string) => [
 export const g10MathSemester2AssessmentExams: MockExam[] = [
   {
     id: 'math10-midterm2-form-a', subjectId: 'math', title: 'Giữa học kỳ II – Toán 10 (Mã A)', duration: 90, kind: 'midterm', focus: 'mixed',
-    scopeTopicIds: ['math10-t6', 'math10-t7'], totalPoints: 10, formCode: 'A', instructions: midtermInstructions,
+    scopeTopicIds: ['math10-t6', 'math10-t7', 'math10-t9'], totalPoints: 10, formCode: 'A', instructions: midtermInstructions,
     questionIds: midtermIds('math10-assess-mid2-a-q'), blueprintId: 'math10-blueprint-midterm2-auto-v2', assessmentVersion: '2.0.0',
     parallelFormGroup: 'math10-midterm2-auto-v2',
     resultReleasePolicy: 'after_submit', createdAt: '2026-07-22T00:00:00.000Z'
   },
   {
     id: 'math10-midterm2-form-b', subjectId: 'math', title: 'Giữa học kỳ II – Toán 10 (Mã B)', duration: 90, kind: 'midterm', focus: 'mixed',
-    scopeTopicIds: ['math10-t6', 'math10-t7'], totalPoints: 10, formCode: 'B', instructions: midtermInstructions,
+    scopeTopicIds: ['math10-t6', 'math10-t7', 'math10-t9'], totalPoints: 10, formCode: 'B', instructions: midtermInstructions,
     questionIds: midtermIds('math10-assess-mid2-b-q'), blueprintId: 'math10-blueprint-midterm2-auto-v2', assessmentVersion: '2.0.0',
     parallelFormGroup: 'math10-midterm2-auto-v2',
     resultReleasePolicy: 'after_submit', createdAt: '2026-07-22T00:00:00.000Z'
   },
   {
     id: 'math10-final2-form-a', subjectId: 'math', title: 'Cuối học kỳ II – Toán 10 (Mã A)', duration: 90, kind: 'final', focus: 'mixed',
-    scopeTopicIds: ['math10-t6', 'math10-t7', 'math10-t8'], totalPoints: 10, formCode: 'A', instructions: finalInstructions,
+    scopeTopicIds: ['math10-t3', 'math10-t6', 'math10-t7', 'math10-t8', 'math10-t9'], totalPoints: 10, formCode: 'A', instructions: finalInstructions,
     questionIds: ids('math10-assess-final2-a-q', 22), blueprintId: 'math10-blueprint-final2-v1', assessmentVersion: '1.0.0',
     parallelFormGroup: 'math10-final2-auto-v1',
     resultReleasePolicy: 'after_submit', createdAt: '2026-07-22T00:00:00.000Z'
   },
   {
     id: 'math10-final2-form-b', subjectId: 'math', title: 'Cuối học kỳ II – Toán 10 (Mã B)', duration: 90, kind: 'final', focus: 'mixed',
-    scopeTopicIds: ['math10-t6', 'math10-t7', 'math10-t8'], totalPoints: 10, formCode: 'B', instructions: finalInstructions,
+    scopeTopicIds: ['math10-t3', 'math10-t6', 'math10-t7', 'math10-t8', 'math10-t9'], totalPoints: 10, formCode: 'B', instructions: finalInstructions,
     questionIds: ids('math10-assess-final2-b-q', 22), blueprintId: 'math10-blueprint-final2-v1', assessmentVersion: '1.0.0',
     parallelFormGroup: 'math10-final2-auto-v1',
     resultReleasePolicy: 'after_submit', createdAt: '2026-07-22T00:00:00.000Z'

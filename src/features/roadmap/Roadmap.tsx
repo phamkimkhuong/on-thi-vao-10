@@ -6,7 +6,7 @@ import { getLearningOutcomes, getTopics, getQuestionTypes } from '@/data';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { getDifficultyTheme, getTierTheme } from '@/utils/theme';
-import { getSubjectName, getSubjectIcon } from '@/utils/subject';
+import { getSubjectName, getSubjectIcon, isQuestionTypePremiumLocked } from '@/utils/subject';
 import { LatexRenderer } from '../../components/common/LatexRenderer';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 import { authService } from '../../services/authService';
@@ -170,12 +170,13 @@ export const Roadmap: React.FC = () => {
 
     const qType = questionTypes.find(t => t.id === id);
     const topic = topics.find(t => t.id === qType?.topicId);
+    const isLockedByPremium = isQuestionTypePremiumLocked(id, topic?.tier ?? 1, selectedSubject, selectedGrade) && !isPremium;
 
-    if (topic?.tier === 3 && !isPremium && !isOptionalEnglishListeningTopic(topic.id)) {
+    if (isLockedByPremium && !isOptionalEnglishListeningTopic(topic?.id || '')) {
       setModalConfig({
         isOpen: true,
         title: "Mở khóa đặc quyền Premium 🌟",
-        description: "Chặng 3 / Chuyên đề nâng cao là đặc quyền dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?",
+        description: "Dạng bài này là đặc quyền nâng cao dành riêng cho tài khoản Premium. Bạn có muốn nâng cấp lên Premium ngay để mở khóa toàn bộ lộ trình không?",
         confirmLabel: "Nâng cấp Premium",
         cancelLabel: "Để sau",
         variant: "warning",
@@ -481,6 +482,7 @@ export const Roadmap: React.FC = () => {
                                 const diff = getDifficultyTheme(type.difficulty);
                                 const isRead = readLessonsSet.has(type.id);
                                 const unlocked = isUnlocked(type.id);
+                                const isLockedByPremium = isQuestionTypePremiumLocked(type.id, topic.tier, selectedSubject, selectedGrade) && !isPremium && !isOptionalEnglishListeningTopic(topic.id);
 
                                 return (
                                   <div
@@ -505,6 +507,10 @@ export const Roadmap: React.FC = () => {
                                           {!unlocked ? (
                                             <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-slate-500/10 border border-slate-500/20 text-slate-500">
                                               🔒 Đang khóa
+                                            </span>
+                                          ) : isLockedByPremium ? (
+                                            <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">
+                                              👑 Khóa Premium
                                             </span>
                                           ) : isRead ? (
                                             <span className="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.75 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">

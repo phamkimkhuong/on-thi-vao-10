@@ -7,6 +7,6 @@ export const g10EnglishModule9Topics: Topic[] = [
     "name": "Chuyên đề 9: Protecting the Environment (Bảo vệ môi trường)",
     "slug": "protecting-the-environment",
     "orderIndex": 9,
-    "tier": 3
+    "tier": 2
   }
 ];

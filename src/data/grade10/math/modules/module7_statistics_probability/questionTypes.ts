@@ -68,7 +68,7 @@ export const g10MathModule7QuestionTypes: QuestionType[] = [
   },
   {
     "id": "math10-qt13",
-    "topicId": "math10-t7",
+    "topicId": "math10-t9",
     "name": "Không gian mẫu và xác suất cổ điển",
     "slug": "khong-gian-mau-xac-suat-co-dien",
     "description": "Mô tả kết quả sơ cấp, đếm biến cố và vận dụng xác suất cổ điển, biến cố đối, hợp biến cố.",

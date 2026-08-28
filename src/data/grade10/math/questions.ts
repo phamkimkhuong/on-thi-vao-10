@@ -4,7 +4,9 @@ import { g10MathPracticeChoices } from './practiceChoices';
 import { applyMath10PracticeChoice } from './practiceChoiceNormalizer';
 import { g10MathModule1Questions } from './modules/module1_logic_sets/questions';
 import { g10MathModule2Questions } from './modules/module2_inequalities/questions';
+import { g10MathModule2ExpansionQuestions } from './modules/module2_inequalities/curriculumExpansion';
 import { g10MathModule3Questions } from './modules/module3_functions/questions';
+import { g10MathModule3ExpansionQuestions } from './modules/module3_functions/curriculumExpansion';
 import { g10MathModule4Questions } from './modules/module4_trigonometry/questions';
 import { g10MathModule5Questions } from './modules/module5_vectors/questions';
 import { g10MathModule6Questions } from './modules/module6_combinatorics/questions';
@@ -14,7 +16,9 @@ import { g10MathModule8Questions } from './modules/module8_coordinate_geometry/q
 const rawQuestions: Question[] = [
   ...g10MathModule1Questions,
   ...g10MathModule2Questions,
+  ...g10MathModule2ExpansionQuestions,
   ...g10MathModule3Questions,
+  ...g10MathModule3ExpansionQuestions,
   ...g10MathModule4Questions,
   ...g10MathModule5Questions,
   ...g10MathModule6Questions,
@@ -31,8 +35,11 @@ const choiceByQuestionId = new Map(
 
 /** Aggregator: chuẩn hóa câu luyện tập về A–B–C–D rồi gắn metadata học tập. */
 export const g10MathQuestions: Question[] = rawQuestions.map(question => {
+  const topicNormalizedQuestion = question.questionTypeId === 'math10-qt13'
+    ? { ...question, topicId: 'math10-t9' }
+    : question;
   const normalizedQuestion = applyMath10PracticeChoice(
-    question,
+    topicNormalizedQuestion,
     choiceByQuestionId.get(question.id)
   );
   const metadata = metadataByQuestionId.get(question.id);

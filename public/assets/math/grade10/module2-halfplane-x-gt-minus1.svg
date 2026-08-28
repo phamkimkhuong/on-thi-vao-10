@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" role="img" aria-labelledby="title desc">
+  <title id="title">Miền nghiệm x lớn hơn âm 1</title>
+  <desc id="desc">Đường thẳng đứng x bằng âm 1 vẽ nét đứt và nửa mặt phẳng bên phải được tô xanh.</desc>
+  <rect width="520" height="320" fill="#fff"/>
+  <rect x="170" y="30" width="310" height="260" fill="#ede9fe"/>
+  <g stroke="#94a3b8" stroke-width="2"><path d="M40 160H480"/><path d="M260 290V30"/></g>
+  <path d="M170 30V290" stroke="#7c3aed" stroke-width="4" stroke-dasharray="10 8"/>
+  <g fill="#0f172a" font-family="Arial" font-size="17"><text x="466" y="182">x</text><text x="240" y="45">y</text><text x="145" y="182">−1</text><text x="268" y="182">O</text></g>
+</svg>

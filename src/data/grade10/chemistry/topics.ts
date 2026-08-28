@@ -8,6 +8,6 @@ export const g10ChemistryTopics: Topic[] = [
   { id: 'chem10-t4', subjectId: 'chemistry', name: 'Phản ứng oxi hóa – khử', slug: 'phan-ung-oxi-hoa-khu', orderIndex: 5, tier: 2 },
   { id: 'chem10-t5', subjectId: 'chemistry', name: 'Năng lượng hóa học', slug: 'nang-luong-hoa-hoc', orderIndex: 6, tier: 2 },
   { id: 'chem10-t6', subjectId: 'chemistry', name: 'Tốc độ phản ứng hóa học', slug: 'toc-do-phan-ung', orderIndex: 7, tier: 2 },
-  { id: 'chem10-t7', subjectId: 'chemistry', name: 'Nguyên tố nhóm VIIA (Halogen)', slug: 'nhom-halogen', orderIndex: 8, tier: 3 },
-  { id: 'chem10-t8', subjectId: 'chemistry', name: 'Tổng hợp và Đánh giá năng lực', slug: 'tong-hop-danh-gia', orderIndex: 9, tier: 3 }
+  { id: 'chem10-t7', subjectId: 'chemistry', name: 'Nguyên tố nhóm VIIA (Halogen)', slug: 'nhom-halogen', orderIndex: 8, tier: 2 },
+  { id: 'chem10-t8', subjectId: 'chemistry', name: 'Tổng hợp và Đánh giá năng lực', slug: 'tong-hop-danh-gia', orderIndex: 9, tier: 2 }
 ];

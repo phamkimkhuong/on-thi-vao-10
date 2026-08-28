@@ -7,6 +7,6 @@ export const g10EnglishModule10Topics: Topic[] = [
     "name": "Chuyên đề 10: Ecotourism (Du lịch sinh thái)",
     "slug": "ecotourism",
     "orderIndex": 10,
-    "tier": 3
+    "tier": 2
   }
 ];

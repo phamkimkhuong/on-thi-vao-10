@@ -7,6 +7,6 @@ export const g10EnglishModule8Topics: Topic[] = [
     "name": "Chuyên đề 8: New Ways to Learn (Những cách học mới)",
     "slug": "new-ways-to-learn",
     "orderIndex": 8,
-    "tier": 3
+    "tier": 2
   }
 ];
