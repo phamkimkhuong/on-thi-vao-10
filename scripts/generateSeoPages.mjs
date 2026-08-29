@@ -123,7 +123,11 @@ const publicPages = [
     h1: 'Giới thiệu nền tảng ezonthi',
     intro: 'ezonthi giúp học sinh học kiến thức và luyện tập theo từng dạng bài trong cùng một trải nghiệm.',
     sections: [{ heading: 'Học theo tiến độ của chính em', paragraphs: ['Dữ liệu học tập được tổ chức theo lớp, môn, chương và dạng bài để học sinh biết mình cần học gì tiếp theo.'] }],
-    links: [{ label: 'Ôn thi vào 10', href: '/on-thi-vao-10/', description: 'Xem lộ trình dành cho học sinh lớp 9.' }, { label: 'Ôn tập lớp 10', href: '/lop-10/', description: 'Xem các môn học lớp 10.' }]
+    links: [
+      { label: 'Ôn thi vào 10', href: '/on-thi-vao-10/', description: 'Xem lộ trình dành cho học sinh lớp 9.' },
+      { label: 'Ôn tập lớp 10', href: '/lop-10/', description: 'Xem các môn học lớp 10.' },
+      { label: 'Ôn tập lớp 11', href: '/lop-11/', description: 'Xem các môn học lớp 11.' }
+    ]
   },
   {
     route: '/premium/',
@@ -169,7 +173,12 @@ const subjectLanding = key => {
     'g10-physics': '/lop-10/vat-ly/',
     'g10-chemistry': '/lop-10/hoa-hoc/',
     'g10-biology': '/lop-10/sinh-hoc/',
-    'g10-history': '/lop-10/lich-su/'
+    'g10-history': '/lop-10/lich-su/',
+    'g11-math': '/lop-11/toan/',
+    'g11-english': '/lop-11/tieng-anh/',
+    'g11-physics': '/lop-11/vat-ly/',
+    'g11-chemistry': '/lop-11/hoa-hoc/',
+    'g11-biology': '/lop-11/sinh-hoc/'
   };
   return map[key] || '/roadmap/';
 };

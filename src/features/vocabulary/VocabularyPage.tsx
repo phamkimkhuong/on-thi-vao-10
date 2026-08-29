@@ -1,4 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../../services/store';
+import { ROUTES } from '../../constants/routes';
 import {
   ENGLISH_10_VOCABULARY,
   ENGLISH_10_UNITS,
@@ -27,6 +30,15 @@ import { cn } from '../../utils/cn';
 type Mode = 'flashcard' | 'quiz' | 'spelling';
 
 export const VocabularyPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { selectedGrade, selectedSubject } = useAppStore();
+
+  useEffect(() => {
+    if (selectedGrade !== 'grade10' || selectedSubject !== 'english') {
+      navigate(ROUTES.ROADMAP, { replace: true });
+    }
+  }, [selectedGrade, selectedSubject, navigate]);
+
   // Selected Unit ID: null = Unit Grid view, number = Specific Unit view, 'all' = All Units view
   const [selectedUnit, setSelectedUnit] = useState<number | 'all' | null>(null);
   const [searchQuery, setSearchQuery] = useState('');

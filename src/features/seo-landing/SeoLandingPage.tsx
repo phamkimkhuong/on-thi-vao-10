@@ -4,6 +4,7 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 import { SeoHead } from '@/components/common/SeoHead';
 import { createBreadcrumbSchema } from '@/utils/seoSchemas';
 import { getSeoLandingPage } from '@/seo/landingPages';
+import { cn } from '@/utils/cn';
 
 const SeoLandingPage: React.FC = () => {
   const location = useLocation();
@@ -100,7 +101,10 @@ const SeoLandingPage: React.FC = () => {
       <section aria-labelledby="seo-next-heading">
         <p className="section-kicker">Danh mục học tập</p>
         <h2 id="seo-next-heading" className="mt-2 text-2xl md:text-3xl font-black text-foreground tracking-tight">Chọn nội dung phù hợp</h2>
-        <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className={cn(
+          "mt-5 grid sm:grid-cols-2 gap-4",
+          page.links.length % 4 === 0 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+        )}>
           {page.links.map((link, index) => (
             <Link key={link.href + link.label} to={link.href} className="group rounded-xl border border-border bg-card p-5 hover:border-brand-action/60 hover:-translate-y-0.5 hover:shadow-md transition-all">
               <div className="flex items-center justify-between gap-3">

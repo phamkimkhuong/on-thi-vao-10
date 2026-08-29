@@ -36,6 +36,7 @@ const PublicLayout: React.FC = () => {
           <nav className="hidden items-center gap-6 text-sm font-bold text-muted-foreground md:flex" aria-label="Điều hướng công khai">
             <Link className="transition-colors hover:text-brand-ink" to="/on-thi-vao-10/">Ôn thi vào 10</Link>
             <Link className="transition-colors hover:text-brand-ink" to="/lop-10/">Học lớp 10</Link>
+            <Link className="transition-colors hover:text-brand-ink" to="/lop-11/">Học lớp 11</Link>
             <Link className="transition-colors hover:text-brand-ink" to="/about/">Giới thiệu</Link>
           </nav>
 
@@ -65,9 +66,11 @@ const PublicLayout: React.FC = () => {
       <footer className="border-t border-border bg-card">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-7 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p className="font-semibold">© 2026 ezonthi — Học đúng trọng tâm, luyện đúng dạng.</p>
-          <div className="flex gap-5 font-semibold">
+          <div className="flex flex-wrap gap-5 font-semibold">
             <Link className="hover:text-brand-ink" to="/about/">Về nền tảng</Link>
-            <Link className="hover:text-brand-ink" to="/on-thi-vao-10/">Lộ trình ôn thi</Link>
+            <Link className="hover:text-brand-ink" to="/on-thi-vao-10/">Lộ trình vào 10</Link>
+            <Link className="hover:text-brand-ink" to="/lop-10/">Lớp 10</Link>
+            <Link className="hover:text-brand-ink" to="/lop-11/">Lớp 11</Link>
           </div>
         </div>
       </footer>

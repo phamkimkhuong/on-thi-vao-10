@@ -24,17 +24,18 @@ export interface SeoLandingPageConfig {
 export const seoLandingPages: SeoLandingPageConfig[] = [
   {
     route: '/',
-    title: 'ezonthi | Ôn thi vào 10 và học tốt lớp 10',
-    description: 'Nền tảng ôn thi vào lớp 10 môn Toán, Tiếng Anh và học tốt lớp 10 theo từng dạng bài, có lý thuyết, luyện tập và lời giải.',
+    title: 'ezonthi | Ôn thi vào 10, học tốt lớp 10 và lớp 11',
+    description: 'Nền tảng ôn thi vào lớp 10 môn Toán, Tiếng Anh và học tốt lớp 10, lớp 11 theo từng dạng bài, có lý thuyết, luyện tập và lời giải.',
     eyebrow: 'Học đúng trọng tâm, luyện đúng dạng',
-    h1: 'Ôn thi vào 10 và học tốt lớp 10 cùng ezonthi',
+    h1: 'Ôn thi vào 10, học tốt lớp 10 và lớp 11 cùng ezonthi',
     intro: 'Chọn đúng mục tiêu của em để học lý thuyết, nhận dạng bài và luyện câu hỏi theo mức độ tăng dần ngay trên một nền tảng.',
     sections: [
       {
-        heading: 'Hai lộ trình, hai mục tiêu rõ ràng',
+        heading: 'Ba lộ trình, ba mục tiêu rõ ràng',
         paragraphs: [
           'Lộ trình ôn thi vào 10 dành cho học sinh lớp 9 đang chuẩn bị kỳ thi tuyển sinh, hiện tập trung vào Toán và Tiếng Anh.',
-          'Lộ trình lớp 10 dành cho học sinh đang học chương trình THPT, giúp ôn theo chương, dạng bài và kỳ kiểm tra.'
+          'Lộ trình lớp 10 dành cho học sinh THPT, giúp ôn theo chương, dạng bài và kỳ kiểm tra các môn Toán, Tiếng Anh, Vật lý, Hóa học, Sinh học, Lịch sử.',
+          'Lộ trình lớp 11 bám sát chương trình GDPT các môn Toán, Tiếng Anh, Vật lý, Hóa học, Sinh học giúp học sinh làm chủ kiến thức và dạng bài vận dụng.'
         ]
       },
       {
@@ -45,6 +46,7 @@ export const seoLandingPages: SeoLandingPageConfig[] = [
     links: [
       { label: 'Ôn thi vào 10', href: '/on-thi-vao-10/', description: 'Lộ trình tuyển sinh lớp 10 môn Toán và Tiếng Anh.' },
       { label: 'Ôn tập lớp 10', href: '/lop-10/', description: 'Học theo môn và dạng bài trong chương trình lớp 10.' },
+      { label: 'Ôn tập lớp 11', href: '/lop-11/', description: 'Học theo môn và dạng bài trong chương trình lớp 11.' },
       { label: 'Tìm hiểu ezonthi', href: '/about/', description: 'Cách nền tảng tổ chức lộ trình và dữ liệu học tập.' }
     ]
   },
@@ -173,6 +175,61 @@ export const seoLandingPages: SeoLandingPageConfig[] = [
     ],
     links: [
       { label: `Mở lộ trình ${subject}`, href: '/roadmap/', description: `Chọn lớp 10 và môn ${subject} để xem các chương.` },
+      { label: `Luyện tập ${subject}`, href: '/practice/', description: 'Luyện những dạng bài đã học và kiểm tra mức độ làm chủ.' },
+      { label: 'Thi thử và kiểm tra', href: '/exam/', description: 'Làm bài kiểm tra theo thời gian khi đã ôn đủ kiến thức.' }
+    ]
+  } satisfies SeoLandingPageConfig)),
+  {
+    route: '/lop-11/',
+    title: 'Ôn thi lớp 11 và học tốt các môn lớp 11 | ezonthi',
+    description: 'Ôn tập lớp 11 theo chương và dạng bài các môn Toán, Tiếng Anh, Vật lý, Hóa học, Sinh học với lý thuyết và bài tập.',
+    eyebrow: 'Dành cho học sinh đang học lớp 11',
+    h1: 'Ôn thi lớp 11 và học tốt từng môn',
+    intro: 'Lộ trình ôn tập và luyện dạng bài các môn THPT lớp 11 bám sát chương trình GDPT 2018, giúp học sinh nắm chắc kiến thức trọng tâm.',
+    sections: [
+      {
+        heading: 'Học đúng trọng tâm chương trình lớp 11',
+        paragraphs: ['Mỗi môn học được tổ chức theo chương và dạng bài chuẩn mực, từ lý thuyết cốt lõi, phương pháp nhận biết đến bài tập có lời giải từng bước.']
+      },
+      {
+        heading: 'Các môn hiện có',
+        paragraphs: ['Hệ thống hiện có dữ liệu lớp 11 cho Toán, Tiếng Anh, Vật lý, Hóa học và Sinh học. Mỗi môn được tổ chức theo đặc thù kiến thức và phương pháp giải chi tiết.']
+      }
+    ],
+    links: [
+      { label: 'Toán lớp 11', href: '/lop-11/toan/', description: 'Hàm số lượng giác, dãy số, giới hạn và hình học không gian.' },
+      { label: 'Tiếng Anh lớp 11', href: '/lop-11/tieng-anh/', description: 'Ngữ pháp chuyên sâu, từ vựng theo chủ đề và đọc hiểu.' },
+      { label: 'Vật lý lớp 11', href: '/lop-11/vat-ly/', description: 'Dao động điều hòa, sóng cơ, điện trường và dòng điện.' },
+      { label: 'Hóa học lớp 11', href: '/lop-11/hoa-hoc/', description: 'Cân bằng hóa học, nitrogen - sulfur và hóa học hữu cơ.' },
+      { label: 'Sinh học lớp 11', href: '/lop-11/sinh-hoc/', description: 'Trao đổi chất, chuyển hóa năng lượng, cảm ứng và sinh sản.' }
+    ]
+  },
+  ...[
+    ['toan', 'Toán', 'công thức lượng giác, dãy số, giới hạn, quan hệ vuông góc và bài tập từ cơ bản đến nâng cao'],
+    ['tieng-anh', 'Tiếng Anh', 'từ vựng theo chủ điểm, ngữ pháp nâng cao, đọc hiểu và kỹ năng làm bài thi'],
+    ['vat-ly', 'Vật lý', 'dao động, sóng, điện trường, từ trường và các bài tập tính toán vận dụng'],
+    ['hoa-hoc', 'Hóa học', 'cân bằng hóa học, hợp chất vô cơ, dẫn xuất hydrocarbon và phương pháp giải'],
+    ['sinh-hoc', 'Sinh học', 'trao đổi chất và năng lượng, cảm ứng, sinh trưởng và phát triển ở sinh vật']
+  ].map(([slug, subject, focus]) => ({
+    route: `/lop-11/${slug}/`,
+    title: `Ôn tập ${subject} lớp 11 theo chương và dạng bài | ezonthi`,
+    description: `Học và ôn tập ${subject} lớp 11 với ${focus}; có lộ trình, luyện tập và lời giải ngay trên ezonthi.`,
+    eyebrow: `${subject} lớp 11`,
+    h1: `Học tốt và ôn tập ${subject} lớp 11`,
+    intro: `Nội dung ${subject} lớp 11 được chia theo chương và dạng bài để em đọc phần cần nhớ trước khi luyện câu hỏi.`,
+    sections: [
+      {
+        heading: `Cách học ${subject} lớp 11 trên ezonthi`,
+        paragraphs: [`Mỗi dạng bài kết nối phần ${focus} với câu hỏi luyện tập. Học sinh có thể quay lại đúng phần còn yếu thay vì làm lại toàn bộ chương.`],
+        bullets: ['Đọc phần kiến thức nền tảng.', 'Hoàn thành câu kiểm tra làm chủ.', 'Luyện câu hỏi theo mức độ tăng dần.', 'Xem lời giải và lưu lỗi cần ôn lại.']
+      },
+      {
+        heading: 'Dùng lộ trình để theo dõi tiến độ',
+        paragraphs: ['Trang môn học giúp Google và học sinh hiểu phạm vi nội dung; phần học tương tác và tiến độ cá nhân được thực hiện trong lộ trình.']
+      }
+    ],
+    links: [
+      { label: `Mở lộ trình ${subject}`, href: '/roadmap/', description: `Chọn lớp 11 và môn ${subject} để xem các chương.` },
       { label: `Luyện tập ${subject}`, href: '/practice/', description: 'Luyện những dạng bài đã học và kiểm tra mức độ làm chủ.' },
       { label: 'Thi thử và kiểm tra', href: '/exam/', description: 'Làm bài kiểm tra theo thời gian khi đã ôn đủ kiến thức.' }
     ]

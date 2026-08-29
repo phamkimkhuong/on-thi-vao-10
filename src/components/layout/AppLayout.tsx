@@ -351,7 +351,9 @@ export const AppLayout: React.FC = () => {
     ...(selectedSubject === 'english'
       ? [
           { path: ROUTES.GRAMMAR, label: 'Ngữ pháp', icon: BookText },
-          { path: ROUTES.VOCABULARY, label: 'Từ vựng 10', icon: BookMarked }
+          ...(selectedGrade === 'grade10'
+            ? [{ path: ROUTES.VOCABULARY, label: 'Từ vựng 10', icon: BookMarked }]
+            : [])
         ]
       : []),
     { path: ROUTES.AI_TUTOR, label: 'Gia sư', icon: Sparkles },
