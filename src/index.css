@@ -19,7 +19,7 @@
   --secondary-foreground: #23333a;
 
   --muted: #efeadd;
-  --muted-foreground: #6e746f;
+  --muted-foreground: #5e6662;
 
   --accent: #f2dfd0;
   --accent-foreground: #a64216;
@@ -284,7 +284,7 @@ body {
 }
 
 .section-kicker {
-  color: var(--brand-action);
+  color: var(--accent-foreground);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;

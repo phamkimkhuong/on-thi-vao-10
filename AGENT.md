@@ -603,6 +603,15 @@ npm run deploy     # Build + Firebase deploy hosting
 - **Tải dữ liệu lười (Lazy Loading):** Tải danh sách 20 học sinh chỉ khi đang ở tab `students` hoặc `grading`. Ngăn chặn hoàn toàn 20 lượt Read dư thừa khi reload ở các tab khác.
 - **Đếm tổng số học sinh tối ưu (Aggregation Query):** Sử dụng `getCountFromServer(collection(db, 'users'))` để hiển thị chính xác tổng số học sinh toàn hệ thống với chi phí **chỉ 1 READ**.
 
+### 12.10 Tách Bootstrap Public SEO Khỏi Ứng Dụng Firebase
+
+- **Public shell:** `src/components/layout/PublicLayout.tsx` phục vụ trang chủ, các landing SEO và trang giới thiệu mà không import Firebase/Auth.
+- **Private shell:** `src/components/layout/PrivateAppShell.tsx` chỉ được lazy-load khi người dùng mở Dashboard, Roadmap, Practice, Exam hoặc các màn hình ứng dụng.
+- **Không chặn landing bằng Auth:** `authLoading` chỉ điều khiển nhánh ứng dụng; nội dung SEO hiển thị ngay và không còn đi qua màn hình “Đang thiết lập phòng học trực tuyến”.
+- **Telemetry trì hoãn:** Firebase Analytics, Firebase Performance và Sentry chỉ khởi tạo sau khi nhánh ứng dụng đã tải xong và trình duyệt rảnh. Trang public không tải các SDK này.
+- **Tài nguyên theo nhu cầu:** KaTeX CSS chỉ tải cùng `LatexRenderer`; Source Serif 4 chỉ tải ở trang lý thuyết; Be Vietnam Pro được tự lưu trữ qua Fontsource thay vì Google Fonts.
+- **Module preload:** Vite chỉ preload dependency của HTML entry, không nhúng bản đồ dependency của toàn bộ route lazy vào đường tải đầu.
+
 ---
 
 ## 13. Checklist Trước Khi Commit

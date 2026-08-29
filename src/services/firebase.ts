@@ -2,9 +2,9 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAnalytics, isSupported, Analytics, setUserId, setUserProperties, logEvent as firebaseLogEvent } from 'firebase/analytics';
 import { getFunctions } from 'firebase/functions';
-import { getPerformance, FirebasePerformance } from 'firebase/performance';
+import type { Analytics } from 'firebase/analytics';
+import type { FirebasePerformance } from 'firebase/performance';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC--Q8dDklMtRVrTkgczovpDPma28jq8xI",
@@ -35,38 +35,64 @@ export const db = initializeFirestore(app, {
   })
 });
 
-// Khởi tạo Analytics & Performance Monitoring an toàn cho môi trường Web
+// Telemetry được nạp sau khi giao diện đã tương tác được. Không đưa Analytics/
+// Performance vào đường tải quan trọng của trang public hoặc màn hình Auth.
 export let analytics: Analytics | null = null;
 export let performance: FirebasePerformance | null = null;
+let analyticsApi: typeof import('firebase/analytics') | null = null;
+let telemetryPromise: Promise<void> | null = null;
+let pendingAnalyticsUserId: string | null = null;
 
-if (typeof window !== 'undefined') {
-  try {
-    performance = getPerformance(app);
-  } catch (e) {
-    console.warn('Firebase Performance Monitoring chưa hỗ trợ hoặc bị chặn trên trình duyệt hiện tại:', e);
+const applyAnalyticsUser = () => {
+  if (!analytics || !analyticsApi) return;
+  analyticsApi.setUserId(analytics, pendingAnalyticsUserId);
+  if (pendingAnalyticsUserId) {
+    analyticsApi.setUserProperties(analytics, { role: 'student' });
   }
-}
+};
 
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
-  }
-});
+export const initializeFirebaseTelemetry = (): Promise<void> => {
+  if (telemetryPromise) return telemetryPromise;
+
+  telemetryPromise = (async () => {
+    if (typeof window === 'undefined') return;
+
+    const [analyticsModule, performanceModule] = await Promise.all([
+      import('firebase/analytics'),
+      import('firebase/performance')
+    ]);
+
+    analyticsApi = analyticsModule;
+
+    try {
+      if (await analyticsModule.isSupported()) {
+        analytics = analyticsModule.getAnalytics(app);
+        applyAnalyticsUser();
+      }
+    } catch (error) {
+      console.warn('Firebase Analytics chưa hỗ trợ hoặc bị chặn trên trình duyệt hiện tại:', error);
+    }
+
+    try {
+      performance = performanceModule.getPerformance(app);
+    } catch (error) {
+      console.warn('Firebase Performance Monitoring chưa hỗ trợ hoặc bị chặn trên trình duyệt hiện tại:', error);
+    }
+  })();
+
+  return telemetryPromise;
+};
 
 // Helper định danh học sinh
 export const setAnalyticsUser = (userId: string | null) => {
-  if (analytics) {
-    setUserId(analytics, userId);
-    if (userId) {
-      setUserProperties(analytics, { role: 'student' });
-    }
-  }
+  pendingAnalyticsUserId = userId;
+  applyAnalyticsUser();
 };
 
 // Helper ghi nhận sự kiện chuyển đổi tùy chỉnh
 export const logCustomEvent = (eventName: string, params?: Record<string, any>) => {
-  if (analytics) {
-    firebaseLogEvent(analytics, eventName, params);
+  if (analytics && analyticsApi) {
+    analyticsApi.logEvent(analytics, eventName, params);
   }
 };
 

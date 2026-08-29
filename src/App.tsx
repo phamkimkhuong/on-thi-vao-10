@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { useAppStore } from './services/store';
-import AppLayout from './components/layout/AppLayout';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { ROUTES } from './constants/routes';
 import { seoLandingPages } from './seo/landingPages';
+import PublicLayout from './components/layout/PublicLayout';
+import SeoLandingPage from './features/seo-landing/SeoLandingPage';
 
 function lazyWithRetry<T extends React.ComponentType<any>>(
   factory: () => Promise<{ default: T }>
@@ -42,25 +42,11 @@ const AboutPage = lazyWithRetry(() => import('./features/about/AboutPage'));
 const VocabularyPage = lazyWithRetry(() => import('./features/vocabulary/VocabularyPage'));
 const GrammarPage = lazyWithRetry(() => import('./features/grammar/GrammarPage'));
 const NewsPage = lazyWithRetry(() => import('./features/news/NewsPage').then(m => ({ default: m.NewsPage })));
-const SeoLandingPage = lazyWithRetry(() => import('./features/seo-landing/SeoLandingPage'));
-
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { auth, setAnalyticsUser, db } from './services/firebase';
-import { progressService } from './services/progressService';
-import { storageService } from './services/storage';
-import { teacherAccessService } from './services/teacherAccessService';
-import { UserProgress } from './types';
-import { Loader } from 'lucide-react';
+const PrivateAppShell = lazyWithRetry(() => import('./components/layout/PrivateAppShell'));
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: (
-      <ErrorBoundary>
-        <AppLayout />
-      </ErrorBoundary>
-    ),
+    element: <PublicLayout />,
     errorElement: (
       <ErrorBoundary>
         <div />
@@ -74,6 +60,19 @@ const router = createBrowserRouter([
           path: page.route.replace(/^\//, '').replace(/\/$/, ''),
           element: <SeoLandingPage />
         })),
+      { path: ROUTES.ABOUT.substring(1), element: <AboutPage /> },
+    ]
+  },
+  {
+    path: '/',
+    element: (
+      <ErrorBoundary>
+        <React.Suspense fallback={<div className="min-h-screen bg-background" />}>
+          <PrivateAppShell />
+        </React.Suspense>
+      </ErrorBoundary>
+    ),
+    children: [
       { path: ROUTES.DASHBOARD.substring(1), element: <Dashboard /> },
       { path: ROUTES.ROADMAP.substring(1), element: <Roadmap /> },
       { path: 'question-types/:questionTypeId', element: <QuestionTypeDetail /> },
@@ -89,7 +88,6 @@ const router = createBrowserRouter([
       { path: ROUTES.VOCABULARY.substring(1), element: <VocabularyPage /> },
       { path: ROUTES.GRAMMAR.substring(1), element: <GrammarPage /> },
       { path: ROUTES.NEWS.substring(1), element: <NewsPage /> },
-      { path: ROUTES.ABOUT.substring(1), element: <AboutPage /> },
     ]
   },
 
@@ -100,137 +98,6 @@ const router = createBrowserRouter([
 ]);
 
 export const App: React.FC = () => {
-  const { authLoading, setUser, setAuthLoading, refreshProgress, setPremium } = useAppStore();
-
-  useEffect(() => {
-    let unsubscribeUserDoc: (() => void) | null = null;
-
-    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      if (user) {
-        // Định danh người dùng trên Firebase Analytics
-        setAnalyticsUser(user.uid);
-
-        // Tự động merge Cloud + Guest rồi hydrate LocalStorage khi đăng nhập (chỉ áp dụng đối với học sinh, bỏ qua giáo viên/admin).
-        const isTeacher = await teacherAccessService.isTeacher(user);
-        if (!isTeacher) {
-          await progressService.syncUserData(user.uid);
-          progressService.flushPendingAttempts(user.uid);
-          refreshProgress();
-        }
-
-        // Lắng nghe real-time profile người dùng để cập nhật trạng thái Premium
-        unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            let premiumStatus = data.isPremium === true || data.role === 'premium';
-            
-            // Kiểm tra xem hạn dùng thử đã hết chưa
-            if (data.premiumUntil) {
-              const expiry = new Date(data.premiumUntil);
-              if (expiry < new Date()) {
-                premiumStatus = false;
-              }
-            }
-            
-            // Nếu người dùng vừa được nâng cấp lên Premium thành công, chúc mừng bằng hiệu ứng confetti!
-            const prevPremium = useAppStore.getState().isPremium;
-            if (premiumStatus && !prevPremium) {
-              import('canvas-confetti').then((confetti) => {
-                confetti.default({
-                  particleCount: 150,
-                  spread: 80,
-                  origin: { y: 0.6 }
-                });
-              });
-            }
-            
-            setPremium(premiumStatus);
-            useAppStore.setState({
-              userData: data,
-              trialActivated: data.trialActivated === true,
-              premiumUntil: data.premiumUntil || null
-            });
-
-            // Tự động đồng bộ tiến độ học tập, bài học lý thuyết & điểm số realtime từ Server vào LocalStorage
-            let hasProgressChanges = false;
-            if (Array.isArray(data.readLessons)) {
-              const currentRead = storageService.getReadLessons(user.uid);
-              const mergedRead = Array.from(new Set([...currentRead, ...data.readLessons]));
-              if (mergedRead.length !== currentRead.length) {
-                storageService.saveReadLessonsLocal(user.uid, mergedRead);
-                hasProgressChanges = true;
-              }
-            }
-            if (Array.isArray(data.passedCheckpoints)) {
-              const currentCheckpoints = storageService.getPassedTheoryCheckpoints(user.uid);
-              const mergedCheckpoints = Array.from(new Set([...currentCheckpoints, ...data.passedCheckpoints]));
-              if (mergedCheckpoints.length !== currentCheckpoints.length) {
-                storageService.savePassedTheoryCheckpointsLocal(user.uid, mergedCheckpoints);
-                hasProgressChanges = true;
-              }
-            }
-            if (data.masteryLevels || data.completedLessons) {
-              const currentProg = storageService.getProgress(user.uid);
-              const updatedProg: UserProgress = {
-                ...currentProg,
-                masteryLevels: { ...(currentProg.masteryLevels || {}), ...(data.masteryLevels || {}) },
-                completedLessons: Array.from(new Set([...(currentProg.completedLessons || []), ...(data.completedLessons || [])])),
-                lastUpdatedAt: data.lastActiveAt || currentProg.lastUpdatedAt
-              };
-              storageService.saveProgressLocal(user.uid, updatedProg);
-              hasProgressChanges = true;
-            }
-
-            if (hasProgressChanges) {
-              refreshProgress();
-            }
-
-            // Tự động mở Profile Modal nếu học sinh thiếu thông tin cá nhân (chỉ mở một lần duy nhất trong phiên làm việc)
-            if (typeof sessionStorage !== 'undefined') {
-              const hasAutoOpened = sessionStorage.getItem('ezonthi_profile_auto_opened');
-              if (!hasAutoOpened && (!data.birthYear || !data.gender || !data.province)) {
-                sessionStorage.setItem('ezonthi_profile_auto_opened', 'true');
-                useAppStore.setState({ isProfileModalOpen: true, isAutoProfileModal: true });
-              }
-            }
-          } else {
-            setPremium(false);
-            useAppStore.setState({
-              userData: null,
-              trialActivated: false,
-              premiumUntil: null
-            });
-          }
-        });
-      } else {
-        setAnalyticsUser(null);
-        setPremium(false);
-        if (unsubscribeUserDoc) {
-          unsubscribeUserDoc();
-          unsubscribeUserDoc = null;
-        }
-      }
-      setAuthLoading(false);
-    });
-
-    return () => {
-      unsubscribeAuth();
-      if (unsubscribeUserDoc) {
-        unsubscribeUserDoc();
-      }
-    };
-  }, [setUser, setAuthLoading, refreshProgress, setPremium]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 text-foreground gap-4">
-        <Loader size={48} className="animate-spin text-primary" />
-        <h2 className="text-xs font-bold animate-pulse text-muted-foreground">Đang thiết lập phòng học trực tuyến...</h2>
-      </div>
-    );
-  }
-
   return (
     <HelmetProvider>
       <RouterProvider router={router} />

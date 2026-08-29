@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import '@fontsource/source-serif-4/vietnamese-400.css';
+import '@fontsource/source-serif-4/vietnamese-600.css';
+import '@fontsource/source-serif-4/vietnamese-700.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionTypes, getQuestions, getSolutions, getLearningOutcomes } from '@/data';
 import { useAppStore } from '@/services/store';

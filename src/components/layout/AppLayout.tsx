@@ -420,7 +420,7 @@ export const AppLayout: React.FC = () => {
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.ABOUT)}>
           <picture>
             <source srcSet={logoWebp} type="image/webp" />
-            <img src={logoPng} alt="ezonthi logo" width="150" height="40" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
+            <img src={logoPng} alt="ezonthi logo" width="240" height="131" className="h-10 w-auto max-w-[150px] object-contain shrink-0" />
           </picture>
         </div>
 
@@ -504,12 +504,12 @@ export const AppLayout: React.FC = () => {
           {effectiveCollapsed ? (
             <picture>
               <source srcSet={logoWebp} type="image/webp" />
-              <img src={logoPng} alt="ezonthi logo" width="48" height="48" className="w-12 h-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+              <img src={logoPng} alt="ezonthi logo" width="240" height="131" className="w-12 h-auto object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
             </picture>
           ) : (
             <picture>
               <source srcSet={logoWebp} type="image/webp" />
-              <img src={logoPng} alt="ezonthi logo" width="240" height="112" className="h-28 w-auto max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
+              <img src={logoPng} alt="ezonthi logo" width="240" height="131" className="h-auto w-full max-w-[240px] object-contain shrink-0 group-hover:scale-105 transition-transform duration-300" />
             </picture>
           )}
         </div>
@@ -756,7 +756,7 @@ export const AppLayout: React.FC = () => {
           effectiveCollapsed && "p-2"
         )}>
           {!effectiveCollapsed ? (
-            <div className="flex items-center justify-center gap-2 flex-wrap text-[9px] text-muted-foreground/50 font-bold">
+            <div className="flex items-center justify-center gap-2 flex-wrap text-[9px] text-muted-foreground font-bold">
               <span>VERSION PRO MAX V2</span>
               <span>•</span>
               <button
@@ -768,7 +768,7 @@ export const AppLayout: React.FC = () => {
               </button>
             </div>
           ) : (
-            <span className="text-[9px] text-muted-foreground/50 font-bold">PRO</span>
+            <span className="text-[9px] text-muted-foreground font-bold">PRO</span>
           )}
         </div>
       </aside>

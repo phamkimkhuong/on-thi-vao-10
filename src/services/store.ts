@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import type { User } from 'firebase/auth';
 import type { SubjectCode } from '../types';
 import type { AppNotification } from '../types/notificationTypes';
-import { notificationService } from './notificationService';
 
 type GradeCode = 'grade9' | 'grade10' | 'grade11' | 'grade12';
 
@@ -122,7 +121,9 @@ export const useAppStore = create<AppState>((set, get) => {
     markNotificationAsRead: (id: string) => {
       const user = get().user;
       if (user) {
-        notificationService.markAsRead(user.uid, id);
+        void import('./notificationService').then(({ notificationService }) => {
+          notificationService.markAsRead(user.uid, id);
+        });
       }
       const updated = get().notifications.map((n) => (n.id === id ? { ...n, read: true } : n));
       const unreadCount = updated.filter((n) => !n.read).length;
@@ -133,7 +134,9 @@ export const useAppStore = create<AppState>((set, get) => {
       const user = get().user;
       const currentNotifs = get().notifications;
       if (user && currentNotifs.length > 0) {
-        notificationService.markAllAsRead(user.uid, currentNotifs.map((n) => n.id));
+        void import('./notificationService').then(({ notificationService }) => {
+          notificationService.markAllAsRead(user.uid, currentNotifs.map((n) => n.id));
+        });
       }
       const updated = currentNotifs.map((n) => ({ ...n, read: true }));
       set({ notifications: updated, unreadNotificationCount: 0 });

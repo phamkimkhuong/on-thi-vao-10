@@ -14,6 +14,13 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
+  build: {
+    modulePreload: {
+      // Không nhúng bản đồ hàng trăm dependency của các màn hình học tập vào
+      // bundle landing. Trình duyệt chỉ tải dependency khi route lazy được mở.
+      resolveDependencies: (_filename, deps, context) => context.hostType === 'html' ? deps : [],
+    },
+  },
   optimizeDeps: {
     include: ['recharts', 'react-is', 'lucide-react', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
   },

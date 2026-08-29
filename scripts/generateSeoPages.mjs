@@ -55,17 +55,17 @@ function staticShell({ h1, intro, sections = [], links = [] }) {
 }
 
 const staticStyle = `<style id="seo-static-style">
-  [data-seo-static]{max-width:960px;margin:0 auto;padding:48px 24px 80px;font-family:"Be Vietnam Pro",system-ui,sans-serif;color:#1f2a30;line-height:1.7}
+  [data-seo-static]{max-width:960px;margin:0 auto;padding:48px 24px 80px;font-family:"Be Vietnam Pro",Arial,sans-serif;color:#1f2a30;line-height:1.7}
   [data-seo-static] h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.12;margin:12px 0 20px;letter-spacing:-.035em}
   [data-seo-static] h2{font-size:1.35rem;margin:32px 0 10px}
   [data-seo-static] section,[data-seo-static] nav{padding:20px 0;border-top:1px solid #e5e7eb}
   [data-seo-static] p,[data-seo-static] li{font-size:1rem}
-  [data-seo-static] .seo-eyebrow{color:#c4511a;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
-  [data-seo-static] .seo-intro{font-size:1.15rem;color:#6e746f;max-width:760px}
+  [data-seo-static] .seo-eyebrow{color:#a64216;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+  [data-seo-static] .seo-intro{font-size:1.15rem;color:#5e6662;max-width:760px}
   [data-seo-static] ul{padding-left:22px}
   [data-seo-static] nav li{margin:10px 0}
   [data-seo-static] nav a{font-weight:800;color:#174a5b;margin-right:10px}
-  [data-seo-static] nav span{color:#6e746f}
+  [data-seo-static] nav span{color:#5e6662}
 </style>`;
 
 function injectSeo(html, { title, description, canonicalUrl, robots = 'index, follow', jsonLd, body }) {

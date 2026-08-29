@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/react';
-
 const getCallerInfo = (): string => {
   try {
     const stack = new Error().stack;
@@ -38,12 +36,6 @@ export const logger = {
         'color: #10b981; font-weight: bold;',
         'color: #6b7280; font-size: 11px; font-style: italic; font-weight: normal;'
       );
-    } else {
-      Sentry.addBreadcrumb({
-        category: 'firestore-read',
-        message: `${actionName}: ${docCount} Reads`,
-        level: 'info'
-      });
     }
   },
 
@@ -57,12 +49,6 @@ export const logger = {
         'color: #ef4444; font-weight: bold;',
         'color: #6b7280; font-size: 11px; font-style: italic; font-weight: normal;'
       );
-    } else {
-      Sentry.addBreadcrumb({
-        category: 'firestore-write',
-        message: `${actionName}: ${writeCount} Writes`,
-        level: 'info'
-      });
     }
   },
 
@@ -77,9 +63,10 @@ export const logger = {
         err
       );
     } else {
-      // 🚀 Trên Production: Gửi lỗi trực tiếp về Sentry Dashboard
-      Sentry.captureException(err || new Error(actionName), {
-        extra: { actionName }
+      // Chỉ tải Sentry khi thật sự có lỗi. Những log thường không còn kéo toàn bộ
+      // SDK giám sát vào bundle khởi động của người học.
+      void import('../sentry').then(({ captureException }) => {
+        captureException(err || new Error(actionName), { extra: { actionName } });
       });
     }
   },
@@ -87,24 +74,12 @@ export const logger = {
   debug(...args: any[]) {
     if (import.meta.env.DEV) {
       console.log('%c[Debug]', 'color: #8b5cf6; font-weight: bold;', ...args);
-    } else {
-      Sentry.addBreadcrumb({
-        category: 'debug',
-        message: args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '),
-        level: 'debug'
-      });
     }
   },
 
   info(...args: any[]) {
     if (import.meta.env.DEV) {
       console.info('%c[Info]', 'color: #06b6d4; font-weight: bold;', ...args);
-    } else {
-      Sentry.addBreadcrumb({
-        category: 'info',
-        message: args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '),
-        level: 'info'
-      });
     }
   }
 };

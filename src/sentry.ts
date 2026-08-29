@@ -41,3 +41,5 @@ Sentry.init({
   replaysSessionSampleRate: 0.1, // Tỷ lệ xem lại phiên học (10%)
   replaysOnErrorSampleRate: 1.0, // Tự động ghi lại video phiên làm việc khi xảy ra lỗi (100%)
 });
+
+export const captureException = Sentry.captureException;
