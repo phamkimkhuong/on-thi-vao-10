@@ -6,7 +6,7 @@ import { Question, QuestionType, Solution, UserAttempt, SubjectCode } from '@/ty
 import { LocalProofImage, revokeLocalProofImages } from '@/utils/proofImages';
 import { cn } from '@/utils/cn';
 import { getSubjectTheme } from '@/utils/theme';
-import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight, Languages } from 'lucide-react';
+import { CheckCircle, XCircle, HelpCircle, ArrowLeft, ArrowRight, ArrowDown, Languages } from 'lucide-react';
 import { logCustomEvent } from '@/services/firebase';
 import { QuestionTypeGuidance } from './QuestionTypeGuidance';
 
@@ -115,7 +115,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-fade-in">
-      <div className="lg:col-span-7 space-y-5">
+      <div className="lg:col-span-7 xl:col-span-6 space-y-5">
         {/* Đề bài (Xem lại câu hỏi) */}
         <div className="space-y-3 text-left">
           <div className="border-b border-border pb-3 flex items-center justify-between">
@@ -298,6 +298,20 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             </>
           )}
         </div>
+
+        {/* Nút xem nhanh lời giải cho thiết bị di động (Mobile Quick Jump) */}
+        {solutionDetail && (
+          <button
+            type="button"
+            onClick={() => {
+              document.getElementById('solution-detail-section')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="lg:hidden w-full py-3 px-4 bg-secondary/80 hover:bg-secondary active:scale-[0.99] rounded-2xl text-xs font-black text-foreground flex items-center justify-center gap-2 transition-all border border-border/60 shadow-sm cursor-pointer"
+          >
+            <span>📖 Xem ngay lời giải chi tiết bên dưới</span>
+            <ArrowDown size={15} className="text-primary animate-bounce" />
+          </button>
+        )}
 
         {/* Báo cáo chấm điểm tự luận từ AI */}
         {isMath && existingAttempt?.aiEvaluation && (
@@ -560,7 +574,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
 
       {/* Lời giải chi tiết hiện lên ở cột bên phải */}
       {solutionDetail && (
-        <div className="lg:col-span-5 space-y-4 text-left animate-fade-in">
+        <div id="solution-detail-section" className="lg:col-span-5 xl:col-span-6 space-y-4 text-left animate-fade-in scroll-mt-6">
           <h4 className="font-extrabold text-sm text-foreground">🔬 Lời giải chi tiết:</h4>
 
           {currentQuestionType && routeSubject !== 'history' && <QuestionTypeGuidance questionType={currentQuestionType} />}
@@ -642,6 +656,25 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 })}
               </div>
             )}
+          </div>
+
+          {/* Nút điều hướng phụ cho Mobile khi cuộn xuống hết lời giải */}
+          <div className="lg:hidden pt-4 border-t border-border flex gap-2.5 w-full">
+            <Button
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              variant="outline"
+              className="flex-1 text-xs font-bold py-2.5 h-10.5 rounded-xl border border-border/50"
+            >
+              ⬆ Lên đầu câu hỏi
+            </Button>
+            <Button
+              onClick={handleNext}
+              className="flex-1 text-xs font-black py-2.5 h-10.5 rounded-xl bg-primary text-white shadow-sm"
+            >
+              {currentIdx === questionsLength - 1 ? 'Hoàn thành 🎉' : 'Câu sau 👉'}
+            </Button>
           </div>
         </div>
       )}

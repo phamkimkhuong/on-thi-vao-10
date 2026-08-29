@@ -206,6 +206,16 @@ export const PracticeEngine: React.FC = () => {
   const [examTotalTimeSpent, setExamTotalTimeSpent] = useState<number>(0);
 
   const loadedQuestionIdRef = useRef<string | null>(null);
+  const bubbleContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (bubbleContainerRef.current) {
+      const activeEl = bubbleContainerRef.current.querySelector<HTMLElement>(`[data-bubble-index="${currentIdx}"]`);
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  }, [currentIdx]);
 
   // Quản lý mức độ gợi ý (0: không gợi ý, 1: hiện gợi ý bước 1, 2: hiện gợi ý bước 2,...)
   const [hintLevel, setHintLevel] = useState(0);
@@ -1149,7 +1159,7 @@ export const PracticeEngine: React.FC = () => {
   ]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-4 px-3 sm:px-6 py-3 animate-fade-in pb-12">
+    <div className="w-full max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto space-y-4 px-3 sm:px-6 py-3 animate-fade-in pb-12">
       <SeoHead
         title={practiceTitle}
         description={practiceDesc}
@@ -1200,8 +1210,11 @@ export const PracticeEngine: React.FC = () => {
           </span>
         </div>
 
-        {/* Hàng 2: Lưới bong bóng câu hỏi hiển thị đầy đủ 100%, không cần cuộn, căn trái chuẩn đẹp */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+        {/* Hàng 2: Dải số câu hỏi: Cuộn ngang 1 hàng mượt mà trên mobile, flex-wrap trên tablet/desktop */}
+        <div
+          ref={bubbleContainerRef}
+          className="flex items-center gap-1.5 pt-1 overflow-x-auto pb-1.5 no-scrollbar scroll-smooth sm:flex-wrap"
+        >
           {questions.map((q, idx) => {
             const isActive = idx === currentIdx;
             const isCompleted = completedQuestionIds.has(q.id);
@@ -1209,6 +1222,7 @@ export const PracticeEngine: React.FC = () => {
             return (
               <button
                 key={q.id}
+                data-bubble-index={idx}
                 onClick={() => {
                   clearUpload();
                   setCurrentIdx(idx);

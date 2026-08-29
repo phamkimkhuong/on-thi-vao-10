@@ -374,7 +374,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             />
           ) : (
             // Trắc nghiệm hoặc tự điền từ (fill-in-the-blank) cho môn Anh
-            <div className="grid grid-cols-1 gap-3.5">
+            <div className={cn(
+              "grid gap-3.5",
+              displayOptions && displayOptions.length > 0 && displayOptions.every(opt => opt.length < 80)
+                ? "grid-cols-1 sm:grid-cols-2"
+                : "grid-cols-1"
+            )}>
               {displayOptions && displayOptions.length > 0 ? (
                 displayOptions.map((opt: string, i: number) => {
                   const letters = ['A', 'B', 'C', 'D'];

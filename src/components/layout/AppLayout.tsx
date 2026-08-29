@@ -24,7 +24,8 @@ import {
   Sun,
   Moon,
   MessageSquareHeart,
-  Bell
+  Bell,
+  Target
 } from 'lucide-react';
 import { notificationService } from '../../services/notificationService';
 import { SurveyModal } from '../../features/survey/SurveyModal';
@@ -239,7 +240,8 @@ export const AppLayout: React.FC = () => {
       path.startsWith(ROUTES.ABOUT) ||
       path.startsWith(ROUTES.ROADMAP) ||
       path.startsWith('/question-types') ||
-      path.startsWith(ROUTES.PRACTICE)
+      path.startsWith(ROUTES.PRACTICE) ||
+      path.startsWith(ROUTES.ADVANCED_PHYSICS_10)
     ) {
       return;
     }
@@ -348,6 +350,9 @@ export const AppLayout: React.FC = () => {
     { path: ROUTES.DASHBOARD, label: 'Bảng điều khiển', icon: GraduationCap },
     { path: ROUTES.ROADMAP, label: 'Lộ trình học', icon: Map },
     { path: ROUTES.PRACTICE, label: 'Luyện tập', icon: BookOpen },
+    ...(selectedGrade === 'grade10' && selectedSubject === 'physics'
+      ? [{ path: ROUTES.ADVANCED_PHYSICS_10, label: 'Chuyên đề nâng cao', icon: Target }]
+      : []),
     ...(selectedSubject === 'english'
       ? [
           { path: ROUTES.GRAMMAR, label: 'Ngữ pháp', icon: BookText },
@@ -380,6 +385,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/roadmap')) return 'Lộ trình học';
     if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
     if (path.startsWith('/practice')) return 'Luyện tập';
+    if (path.startsWith(ROUTES.ADVANCED_PHYSICS_10)) return 'Chuyên đề nâng cao';
     if (path.startsWith('/grammar')) return 'Ngữ pháp Tiếng Anh';
     if (path.startsWith('/vocabulary')) return 'Từ vựng Tiếng Anh 10';
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
@@ -399,6 +405,7 @@ export const AppLayout: React.FC = () => {
     ROUTES.DASHBOARD,
     ROUTES.ROADMAP,
     ROUTES.PRACTICE,
+    ROUTES.ADVANCED_PHYSICS_10,
     ROUTES.EXAM,
     ROUTES.AI_TUTOR,
     ROUTES.MISTAKES,

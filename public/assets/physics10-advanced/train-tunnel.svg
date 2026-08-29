@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" role="img" aria-labelledby="t d">
+  <title id="t">Đoàn tàu qua hầm</title><desc id="d">Tàu dài 120 mét đi vào hầm dài 300 mét.</desc>
+  <rect width="900" height="300" fill="#f8fafc"/><path d="M500 220V80h330v140" fill="#dbeafe" stroke="#0f766e" stroke-width="8"/><path d="M520 220V105h290v115" fill="#334155"/>
+  <g fill="#f59e0b" stroke="#92400e" stroke-width="4"><rect x="80" y="145" width="360" height="70" rx="12"/><path d="M440 145l55 35v35h-55z"/></g>
+  <g fill="#0f172a"><circle cx="150" cy="225" r="20"/><circle cx="385" cy="225" r="20"/></g><path d="M75 260h420M500 260h330" stroke="#475569" stroke-width="7"/>
+  <path d="M80 115h360" stroke="#dc2626" stroke-width="3" marker-end="url(#a)"/><text x="210" y="105" font-family="Arial" font-size="24">120 m</text><text x="620" y="55" font-family="Arial" font-size="24">300 m</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6z" fill="#dc2626"/></marker></defs>
+</svg>

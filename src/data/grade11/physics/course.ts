@@ -12,6 +12,26 @@ import {
 } from './assessments';
 import { g11PhysicsVideos } from './videos';
 
+import {
+  normalizePhysics11PracticeModules,
+  normalizePhysics11Assessments
+} from './practiceChoiceNormalizer';
+
+const g11PhysicsPracticeModules = normalizePhysics11PracticeModules([
+  g11PhysicsModule1,
+  g11PhysicsModule2,
+  g11PhysicsModule3,
+  g11PhysicsModule4
+]);
+
+const g11PhysicsNormalizedAssessments = normalizePhysics11Assessments({
+  ...emptyAssessmentBundle(),
+  exams: g11PhysicsAssessmentExams,
+  questions: g11PhysicsAssessmentQuestions,
+  solutions: g11PhysicsAssessmentSolutions,
+  blueprints: g11PhysicsAssessmentBlueprints
+});
+
 export const g11PhysicsCourse = defineCourse({
   course: {
     id: 'grade11:physics',
@@ -25,18 +45,7 @@ export const g11PhysicsCourse = defineCourse({
     reviewStatus: 'draft'
   },
   curriculum: g11PhysicsCurriculum,
-  modules: [
-    g11PhysicsModule1,
-    g11PhysicsModule2,
-    g11PhysicsModule3,
-    g11PhysicsModule4
-  ],
-  assessments: {
-    ...emptyAssessmentBundle(),
-    exams: g11PhysicsAssessmentExams,
-    questions: g11PhysicsAssessmentQuestions,
-    solutions: g11PhysicsAssessmentSolutions,
-    blueprints: g11PhysicsAssessmentBlueprints
-  },
+  modules: g11PhysicsPracticeModules,
+  assessments: g11PhysicsNormalizedAssessments,
   media: g11PhysicsVideos
 });

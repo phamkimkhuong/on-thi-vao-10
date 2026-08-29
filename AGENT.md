@@ -612,6 +612,17 @@ npm run deploy     # Build + Firebase deploy hosting
 - **Tài nguyên theo nhu cầu:** KaTeX CSS chỉ tải cùng `LatexRenderer`; Source Serif 4 chỉ tải ở trang lý thuyết; Be Vietnam Pro được tự lưu trữ qua Fontsource thay vì Google Fonts.
 - **Module preload:** Vite chỉ preload dependency của HTML entry, không nhúng bản đồ dependency của toàn bộ route lazy vào đường tải đầu.
 
+### 12.11 Chuyên Đề Nâng Cao Vật Lí 10
+
+- **Route riêng:** `/advanced-physics-10`, chỉ hiện trong sidebar khi ngữ cảnh là `grade10/physics`.
+- **Dữ liệu riêng:** `src/data/grade10/physics/advanced/` chứa 7 mảng, 168 câu A–D độc lập và 168 lời giải trọn bài (24 câu/mảng). Không đưa câu nâng cao vào ngân hàng Luyện tập nền tảng.
+- **Mức thử thách:** `hard | very_hard | extreme`; trường `difficulty` lõi vẫn là `hard` để tương thích kiểu `Question` hiện có.
+- **Nguyên tắc nội dung:** không chia một bài thành chuỗi câu dẫn dắt; không dùng input tự luận; không lưu nguồn, năm hoặc đơn vị ra đề trong dữ liệu phát hành.
+- **Bài dài:** 28 bài cuối gồm 14 `extended` và 14 `olympiad`, lời giải tối thiểu 4 bước; ít nhất 12 bài có sơ đồ hoặc bảng và được render qua `QuestionStimulusRenderer`.
+- **Cân bằng đáp án:** vị trí đáp án hiển thị được xáo trộn ổn định theo mã câu, bảo đảm A/B/C/D cùng 42 câu trong ngân hàng 168 câu; lời giải dùng cùng quy tắc để luôn khớp.
+- **Tiến độ riêng:** lưu theo người dùng/khách tại key `ezonthi_phy10_advanced_progress_{userId}` và không tác động mastery của lộ trình nền tảng.
+- **Kiểm định:** `npm run validate:physics10-advanced`; lệnh `npm run validate:physics10` cũng tự chạy kiểm định ngân hàng nâng cao.
+
 ---
 
 ## 13. Checklist Trước Khi Commit

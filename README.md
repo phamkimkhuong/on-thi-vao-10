@@ -162,8 +162,10 @@ Grade (grade9 | grade10)
 | **Toán học** | ✅ Đầy đủ | Tập hợp, mệnh đề, hàm số, phương trình, bất phương trình, ... |
 | **Tiếng Anh** | ✅ Đầy đủ | Ngữ pháp nâng cao, từ vựng, kỹ năng đọc viết |
 | **Hóa học** | ✅ Hoàn thành Module 0-7 | Module 0 (Cầu nối THCS) + Module 1 đến 7 đã hoàn thành MVP; Module 8 đang phát triển |
-| **Vật lý** | 🔒 Sắp ra mắt | — |
+| **Vật lý** | ✅ Đầy đủ nền tảng + kho nâng cao | 7 module cốt lõi, kiểm tra định kỳ và 168 câu Chuyên đề nâng cao A–D độc lập, gồm 28 bài dài/Olympic |
 | **Sinh học** | 🔒 Sắp ra mắt | — |
+
+Riêng Vật lí 10 có route `/advanced-physics-10` dành cho học sinh khá giỏi: 7 mảng bài, ba mức Khó/Rất khó/Cực khó, lời giải chỉ mở sau khi nộp và tiến độ tách khỏi lộ trình nền tảng.
 
 ### Khóa Hóa Học 10 — "Làm Chủ Hóa Học 10"
 
