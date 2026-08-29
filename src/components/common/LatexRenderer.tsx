@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import { cn } from '@/utils/cn';
 
 interface LatexRendererProps {
   text: string;
@@ -352,7 +353,11 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({ text, block = fals
   return (
     <span
       ref={containerRef}
-      className={`inline-block max-w-full overflow-x-auto text-left notranslate ${className}`}
+      className={cn(
+        "max-w-full text-left notranslate",
+        block ? "block w-full overflow-x-auto my-1.5" : "inline align-baseline",
+        className
+      )}
       aria-label={text}
       title={text}
     />

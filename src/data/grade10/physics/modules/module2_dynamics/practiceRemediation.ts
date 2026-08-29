@@ -195,7 +195,7 @@ export const g10PhysicsModule2RemediationQuestions: Question[] = g10PhysicsModul
 export const g10PhysicsModule2RemediationSolutions: Solution[] = g10PhysicsModule2RemediationSeeds.map(seed => ({
   id: seed.id.replace('-q', '-s'),
   questionId: seed.id,
-  recognition: `Dạng bù coverage ${seed.subTypeId}: cô lập vật, chọn trục và xác định đúng lực trước khi lập phương trình.`,
+  recognition: 'Cô lập vật, chọn trục và xác định đúng lực trước khi lập phương trình.',
   detailedSteps: seed.reasoning.map((explanation, index) => ({
     order: index + 1,
     title: index === 0 ? 'Phân tích' : index === seed.reasoning.length - 1 ? 'Kết luận' : 'Tính toán',

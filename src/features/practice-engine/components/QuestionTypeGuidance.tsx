@@ -79,8 +79,8 @@ export const QuestionTypeGuidance: React.FC<QuestionTypeGuidanceProps> = ({ ques
     {!compact && questionType.commonMistakes.length > 0 && (
       <div className="mx-4 mb-4 px-3 py-2.5 rounded-xl bg-amber-500/5 border border-amber-500/15 flex items-start gap-2">
         <ShieldAlert size={14} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-        <div className="text-xs font-semibold text-muted-foreground leading-relaxed">
-          <span className="font-black text-foreground">Bẫy cần tránh: </span>
+        <div className="text-xs font-semibold text-muted-foreground leading-relaxed flex-1">
+          <span className="font-black text-foreground mr-1.5 inline">Bẫy cần tránh:</span>
           <LatexRenderer text={questionType.commonMistakes[0]} />
         </div>
       </div>

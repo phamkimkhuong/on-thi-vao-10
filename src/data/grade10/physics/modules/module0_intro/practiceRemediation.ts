@@ -379,7 +379,7 @@ export const g10PhysicsModule0RemediationSolutions: Solution[] =
   g10PhysicsModule0RemediationSeeds.map(seed => ({
     id: seed.id.replace('-q', '-s'),
     questionId: seed.id,
-    recognition: `Dạng bù coverage ${seed.subTypeId}: xác định đúng đại lượng, quy tắc hoặc bằng chứng trước khi kết luận.`,
+    recognition: 'Xác định đúng đại lượng, quy tắc hoặc bằng chứng trước khi kết luận.',
     detailedSteps: seed.reasoning.map((explanation, index) => ({
       order: index + 1,
       title: index === 0 ? 'Nhận dạng dữ kiện' : index === seed.reasoning.length - 1 ? 'Kết luận' : 'Lập luận',

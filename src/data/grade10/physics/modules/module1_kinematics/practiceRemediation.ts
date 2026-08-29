@@ -1115,7 +1115,7 @@ export const g10PhysicsModule1RemediationSolutions: Solution[] =
   g10PhysicsModule1RemediationSeeds.map(seed => ({
     id: seed.id.replace('-q', '-s'),
     questionId: seed.id,
-    recognition: `Dạng bù coverage ${seed.subTypeId}: đọc đúng dữ liệu động học, xác định đại lượng cần tính và kiểm tra dấu.`,
+    recognition: 'Đọc đúng dữ liệu động học, xác định đại lượng cần tính và kiểm tra dấu.',
     detailedSteps: seed.reasoning.map((explanation, index) => ({
       order: index + 1,
       title: index === 0 ? 'Nhận dạng dữ kiện' : index === seed.reasoning.length - 1 ? 'Kết luận' : 'Tính toán',

@@ -29,6 +29,15 @@ interface ResultCardProps {
   handleNext: () => void;
 }
 
+const cleanRecognitionText = (text: string): string => {
+  if (!text) return '';
+  const cleaned = text
+    .replace(/^(?:Dạng\s+bù\s+(?:coverage\s+)?[^:]+:\s*)/iu, '')
+    .replace(/^[a-z0-9]+-[a-z0-9]+(?:-[a-z0-9]+)*:\s*/iu, '')
+    .trim();
+  return cleaned ? cleaned.charAt(0).toUpperCase() + cleaned.slice(1) : text;
+};
+
 export const ResultCard: React.FC<ResultCardProps> = ({
   currentQuestion,
   currentQuestionType,
@@ -586,7 +595,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               getSubjectTheme(routeSubject).border
             )}>
               <span className="font-extrabold text-foreground block mb-1">💡 Áp dụng vào câu hỏi này:</span>
-              <LatexRenderer text={solutionDetail.recognition} />
+              <LatexRenderer text={cleanRecognitionText(solutionDetail.recognition)} />
             </div>
           )}
 
@@ -623,10 +632,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             ))}
           </div>
 
-          <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2">
-            <div className="font-extrabold text-foreground">
-              Đáp án đúng:{' '}
-              <span className="text-emerald-500 font-black">
+          <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2.5">
+            <div className="font-extrabold text-foreground flex items-baseline gap-1.5">
+              <span className="shrink-0">Đáp án đúng:</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-black">
                 <LatexRenderer
                   text={`${currentQuestion.correctAnswer}${correctOptionText ? `. ${correctOptionText}` : ''}`}
                 />
@@ -634,26 +643,36 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             </div>
             {solutionDetail.commonMistakes.length > 0 && (
               <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
-                <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
-                {solutionDetail.commonMistakes.map((m: string, i: number) => (
-                  <p key={i}>• <LatexRenderer text={m} /></p>
-                ))}
+                <span className="font-extrabold block text-foreground mb-1.5">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
+                <div className="space-y-1">
+                  {solutionDetail.commonMistakes.map((m: string, i: number) => (
+                    <div key={i} className="flex items-start gap-1.5">
+                      <span className="font-black shrink-0 select-none text-rose-500">•</span>
+                      <div className="flex-1"><LatexRenderer text={m} /></div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             {solutionDetail.reviewSuggestions.length > 0 && (
               <div className="pt-2 border-t border-border/20 text-indigo-600 dark:text-indigo-400 font-semibold leading-relaxed">
-                <span className="font-extrabold block text-foreground mb-1">📚 Cần ôn lại:</span>
-                {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => {
-                  let formattedSuggestion = suggestion;
-                  if (currentQuestionType?.name) {
-                    formattedSuggestion = formattedSuggestion.replace(/[a-z0-9]+-[a-z0-9]+/gi, `dạng bài "${currentQuestionType.name}"`);
-                  } else {
-                    formattedSuggestion = formattedSuggestion.replace(/[a-z0-9]+-[a-z0-9]+/gi, 'dạng bài tương ứng');
-                  }
-                  return (
-                    <p key={index}>• <LatexRenderer text={formattedSuggestion} /></p>
-                  );
-                })}
+                <span className="font-extrabold block text-foreground mb-1.5">📚 Cần ôn lại:</span>
+                <div className="space-y-1">
+                  {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => {
+                    let formattedSuggestion = suggestion;
+                    if (currentQuestionType?.name) {
+                      formattedSuggestion = formattedSuggestion.replace(/[a-z0-9]+-[a-z0-9]+/gi, `dạng bài "${currentQuestionType.name}"`);
+                    } else {
+                      formattedSuggestion = formattedSuggestion.replace(/[a-z0-9]+-[a-z0-9]+/gi, 'dạng bài tương ứng');
+                    }
+                    return (
+                      <div key={index} className="flex items-start gap-1.5">
+                        <span className="font-black shrink-0 select-none text-indigo-500">•</span>
+                        <div className="flex-1"><LatexRenderer text={formattedSuggestion} /></div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>

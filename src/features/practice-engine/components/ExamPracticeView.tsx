@@ -430,9 +430,9 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
             </div>
 
             <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-border/30 rounded-xl text-xs space-y-2">
-              <div className="font-extrabold text-foreground">
-                Đáp án đúng:{' '}
-                <span className="text-emerald-500 font-black">
+              <div className="font-extrabold text-foreground flex items-baseline gap-1.5">
+                <span className="shrink-0">Đáp án đúng:</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-black">
                   <LatexRenderer
                     text={`${currentQuestion.correctAnswer}${correctOptionText ? `. ${correctOptionText}` : ''}`}
                   />
@@ -440,18 +440,28 @@ export const ExamPracticeView: React.FC<ExamPracticeViewProps> = ({
               </div>
               {solutionDetail.commonMistakes.length > 0 && (
                 <div className="pt-2 border-t border-border/20 text-rose-600 dark:text-rose-400 font-semibold leading-relaxed">
-                  <span className="font-extrabold block text-foreground mb-1">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
-                  {solutionDetail.commonMistakes.map((m: string, i: number) => (
-                    <p key={i}>• <LatexRenderer text={m} /></p>
-                  ))}
+                  <span className="font-extrabold block text-foreground mb-1.5">⚠️ Lỗi dễ mắc (Tránh bẫy):</span>
+                  <div className="space-y-1">
+                    {solutionDetail.commonMistakes.map((m: string, i: number) => (
+                      <div key={i} className="flex items-start gap-1.5">
+                        <span className="font-black shrink-0 select-none text-rose-500">•</span>
+                        <div className="flex-1"><LatexRenderer text={m} /></div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
               {solutionDetail.reviewSuggestions.length > 0 && (
                 <div className="pt-2 border-t border-border/20 text-indigo-600 dark:text-indigo-400 font-semibold leading-relaxed">
-                  <span className="font-extrabold block text-foreground mb-1">📚 Cần ôn lại:</span>
-                  {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => (
-                    <p key={index}>• <LatexRenderer text={suggestion} /></p>
-                  ))}
+                  <span className="font-extrabold block text-foreground mb-1.5">📚 Cần ôn lại:</span>
+                  <div className="space-y-1">
+                    {solutionDetail.reviewSuggestions.map((suggestion: string, index: number) => (
+                      <div key={index} className="flex items-start gap-1.5">
+                        <span className="font-black shrink-0 select-none text-indigo-500">•</span>
+                        <div className="flex-1"><LatexRenderer text={suggestion} /></div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
