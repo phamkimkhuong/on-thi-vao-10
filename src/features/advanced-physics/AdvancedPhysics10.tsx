@@ -21,6 +21,8 @@ import { Button } from '@/components/ui/button';
 import { advancedPhysics10Questions, advancedPhysics10Solutions, advancedPhysics10Topics } from '@/data/grade10/physics/advanced';
 import type { AdvancedPhysicsLevel, AdvancedPhysicsProblemLength } from '@/data/grade10/physics/advanced';
 import { ROUTES } from '@/constants/routes';
+import { MathLoginRequired } from '@/components/common/MathLoginRequired';
+import { progressService } from '@/services/progressService';
 import { useAppStore } from '@/services/store';
 import { cn } from '@/utils/cn';
 
@@ -55,21 +57,83 @@ const optionLetters = ['A', 'B', 'C', 'D'];
 const AdvancedPhysics10: React.FC = () => {
   const navigate = useNavigate();
   const { selectedGrade, selectedSubject, user } = useAppStore();
-  const progressKey = `ezonthi_phy10_advanced_progress_${user?.uid || 'guest'}`;
-  const [progress, setProgress] = useState<StoredProgress>({});
+  const progressKey = user?.uid ? `ezonthi_phy10_advanced_progress_${user.uid}` : '';
+  const [progress, setProgress] = useState<StoredProgress>(() => {
+    if (!user?.uid) return {};
+    try {
+      const saved = localStorage.getItem(`ezonthi_phy10_advanced_progress_${user.uid}`);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
   const [activeTopicId, setActiveTopicId] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  // Tải và đồng bộ 2 chiều giữa LocalStorage và Firestore
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(progressKey);
-      setProgress(saved ? JSON.parse(saved) : {});
-    } catch {
+    if (!user?.uid) {
       setProgress({});
+      return;
     }
-  }, [progressKey]);
+
+    let isMounted = true;
+    const currentProgressKey = `ezonthi_phy10_advanced_progress_${user.uid}`;
+
+    const syncWithCloud = async () => {
+      try {
+        const cloudAttempts = await progressService.getAdvancedProgressFromFirestore(user.uid, 'phy10');
+        if (!isMounted) return;
+
+        let localAttempts: StoredProgress = {};
+        try {
+          const saved = localStorage.getItem(currentProgressKey);
+          localAttempts = saved ? JSON.parse(saved) : {};
+        } catch {
+          localAttempts = {};
+        }
+
+        // Smart merge: ưu tiên bản ghi có thời gian mới hơn
+        const merged: StoredProgress = { ...localAttempts };
+        let hasNewFromCloud = false;
+        let hasNewFromLocal = false;
+
+        for (const [qId, cloudAttempt] of Object.entries(cloudAttempts)) {
+          const localAttempt = merged[qId];
+          if (!localAttempt) {
+            merged[qId] = cloudAttempt;
+            hasNewFromCloud = true;
+          } else if (new Date(cloudAttempt.updatedAt).getTime() > new Date(localAttempt.updatedAt).getTime()) {
+            merged[qId] = cloudAttempt;
+            hasNewFromCloud = true;
+          }
+        }
+
+        // Nếu Local có bản ghi mà Cloud chưa có (hoặc mới hơn), đẩy ngược lên Cloud
+        for (const [qId, localAttempt] of Object.entries(localAttempts)) {
+          const cloudAttempt = cloudAttempts[qId];
+          if (!cloudAttempt || new Date(localAttempt.updatedAt).getTime() > new Date(cloudAttempt.updatedAt).getTime()) {
+            hasNewFromLocal = true;
+            void progressService.saveAdvancedAttemptToFirestore(user.uid, 'phy10', qId, localAttempt);
+          }
+        }
+
+        if (hasNewFromCloud || hasNewFromLocal) {
+          setProgress(merged);
+          localStorage.setItem(currentProgressKey, JSON.stringify(merged));
+        }
+      } catch (err) {
+        console.error('Lỗi đồng bộ tiến độ nâng cao từ Firestore:', err);
+      }
+    };
+
+    void syncWithCloud();
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.uid]);
 
   const topicQuestions = useMemo(
     () => activeTopicId
@@ -108,25 +172,37 @@ const AdvancedPhysics10: React.FC = () => {
   };
 
   const submitAnswer = () => {
-    if (!currentQuestion || !selectedAnswer || isSubmitted) return;
+    if (!currentQuestion || !selectedAnswer || isSubmitted || !user?.uid) return;
+    const attempt: StoredAttempt = {
+      answer: selectedAnswer,
+      isCorrect: selectedAnswer === currentQuestion.correctAnswer,
+      updatedAt: new Date().toISOString()
+    };
     const nextProgress: StoredProgress = {
       ...progress,
-      [currentQuestion.id]: {
-        answer: selectedAnswer,
-        isCorrect: selectedAnswer === currentQuestion.correctAnswer,
-        updatedAt: new Date().toISOString()
-      }
+      [currentQuestion.id]: attempt
     };
     setProgress(nextProgress);
-    localStorage.setItem(progressKey, JSON.stringify(nextProgress));
+    if (progressKey) {
+      localStorage.setItem(progressKey, JSON.stringify(nextProgress));
+    }
     setIsSubmitted(true);
+
+    // Đồng bộ ngay lên Firestore chạy ngầm
+    void progressService.saveAdvancedAttemptToFirestore(user.uid, 'phy10', currentQuestion.id, attempt);
   };
 
   const clearProgress = () => {
     if (!window.confirm('Xóa toàn bộ tiến độ Chuyên đề nâng cao Vật lí 10?')) return;
-    localStorage.removeItem(progressKey);
+    if (progressKey) {
+      localStorage.removeItem(progressKey);
+    }
     setProgress({});
     resetQuestionState();
+
+    if (user?.uid) {
+      void progressService.clearAdvancedProgressFromFirestore(user.uid, 'phy10');
+    }
   };
 
   if (selectedGrade !== 'grade10' || selectedSubject !== 'physics') {
@@ -138,6 +214,17 @@ const AdvancedPhysics10: React.FC = () => {
         <h1 className="text-2xl font-black">Chuyên đề này dành cho Vật lí lớp 10</h1>
         <p className="text-sm text-muted-foreground font-semibold">Hãy chọn “Vật lý - Lớp 10” trong thanh môn học để mở ngân hàng bài nâng cao.</p>
         <Button onClick={() => navigate(ROUTES.ROADMAP)}>Về lộ trình học</Button>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="max-w-xl mx-auto py-12 px-4">
+        <MathLoginRequired
+          title="Yêu cầu đăng nhập Chuyên đề nâng cao"
+          description="Chuyên đề nâng cao Vật lí 10 (HSG & Chuyên) yêu cầu lưu trữ lịch sử làm bài và đồng bộ tiến độ học tập trên Cloud nên bạn cần đăng nhập trước khi bắt đầu."
+        />
       </div>
     );
   }

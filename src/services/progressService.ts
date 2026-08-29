@@ -610,5 +610,63 @@ export const progressService = {
     } catch (e) {
       logger.error('Lỗi khi xóa active exam session trên Firestore:', e);
     }
+  },
+
+  // --- Chuyên đề nâng cao (Advanced Progress Sync) ---
+  async getAdvancedProgressFromFirestore(
+    userId: string,
+    subjectKey: string = 'phy10'
+  ): Promise<Record<string, { answer: string; isCorrect: boolean; updatedAt: string }>> {
+    try {
+      if (!userId || userId === 'guest') return {};
+      const docRef = doc(db, 'users', userId, 'advancedProgress', subjectKey);
+      const snap = await getDoc(docRef);
+      logger.dbRead(`Lấy tiến trình chuyên đề nâng cao ${subjectKey} (users/{userId}/advancedProgress/${subjectKey})`, 1);
+      if (!snap.exists()) return {};
+      return (snap.data().attempts as Record<string, { answer: string; isCorrect: boolean; updatedAt: string }>) || {};
+    } catch (e) {
+      logger.error(`Lỗi khi lấy tiến trình chuyên đề nâng cao ${subjectKey}:`, e);
+      return {};
+    }
+  },
+
+  async saveAdvancedAttemptToFirestore(
+    userId: string,
+    subjectKey: string,
+    questionId: string,
+    attempt: { answer: string; isCorrect: boolean; updatedAt: string }
+  ): Promise<void> {
+    try {
+      if (!userId || userId === 'guest') return;
+      const docRef = doc(db, 'users', userId, 'advancedProgress', subjectKey);
+      await setDoc(docRef, {
+        subjectKey,
+        lastUpdatedAt: attempt.updatedAt,
+        attempts: {
+          [questionId]: attempt
+        }
+      }, { merge: true });
+      logger.dbWrite(`Lưu câu làm ${questionId} chuyên đề nâng cao ${subjectKey} lên Firestore`, 1);
+    } catch (e) {
+      logger.error(`Lỗi khi lưu câu làm chuyên đề nâng cao ${subjectKey}:`, e);
+    }
+  },
+
+  async clearAdvancedProgressFromFirestore(
+    userId: string,
+    subjectKey: string = 'phy10'
+  ): Promise<void> {
+    try {
+      if (!userId || userId === 'guest') return;
+      const docRef = doc(db, 'users', userId, 'advancedProgress', subjectKey);
+      await setDoc(docRef, {
+        subjectKey,
+        lastUpdatedAt: new Date().toISOString(),
+        attempts: {}
+      });
+      logger.dbWrite(`Xóa tiến độ chuyên đề nâng cao ${subjectKey} trên Firestore`, 1);
+    } catch (e) {
+      logger.error(`Lỗi khi xóa tiến độ chuyên đề nâng cao ${subjectKey}:`, e);
+    }
   }
 };
