@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Tâm nội tiếp và ngoại tiếp</title><desc id="desc">Tam giác ABC với tâm ngoại tiếp O, tâm nội tiếp I và đoạn OI.</desc>
+  <rect width="960" height="520" rx="28" fill="#f8fafc"/><circle cx="480" cy="270" r="215" fill="#eff6ff" stroke="#0284c7" stroke-width="6"/><path d="M448 58 180 385 760 405Z" fill="none" stroke="#0f172a" stroke-width="8"/>
+  <circle cx="480" cy="270" r="10" fill="#0284c7"/><circle cx="462" cy="315" r="82" fill="none" stroke="#f97316" stroke-width="7"/><circle cx="462" cy="315" r="10" fill="#f97316"/><path d="M480 270 462 315" stroke="#be123c" stroke-width="7"/>
+  <g font-family="Arial" font-size="30" font-weight="700"><text x="493" y="262" fill="#0284c7">O</text><text x="430" y="352" fill="#f97316">I</text></g>
+</svg>

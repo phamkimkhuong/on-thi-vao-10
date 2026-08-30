@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Phản xạ đường gãy</title><desc id="desc">Hai điểm A và B phía trên trục Ox, ảnh A phẩy phía dưới và đường thẳng A phẩy B cắt Ox tại P.</desc>
+  <rect width="960" height="520" rx="28" fill="#f8fafc"/><path d="M70 285h820" stroke="#0f172a" stroke-width="7"/><path d="M80 285h780" stroke="#94a3b8" stroke-width="2" stroke-dasharray="12 10"/><path d="M250 110 505 285 760 145M250 430 505 285" fill="none" stroke="#0284c7" stroke-width="8"/><path d="M250 110v320" stroke="#f97316" stroke-width="5" stroke-dasharray="12 10"/>
+  <g font-family="Arial" font-size="32" font-weight="700"><text x="215" y="98">A</text><text x="770" y="140">B</text><text x="512" y="325" fill="#0284c7">P</text><text x="205" y="470" fill="#f97316">A'</text><text x="842" y="322">Ox</text></g>
+</svg>

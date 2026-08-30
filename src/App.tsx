@@ -31,7 +31,8 @@ const Dashboard = lazyWithRetry(() => import('./features/dashboard/Dashboard'));
 const Roadmap = lazyWithRetry(() => import('./features/roadmap/Roadmap'));
 const QuestionTypeDetail = lazyWithRetry(() => import('./features/question-type/QuestionTypeDetail'));
 const PracticeEngine = lazyWithRetry(() => import('./features/practice-engine/PracticeEngine'));
-const AdvancedPhysics10 = lazyWithRetry(() => import('./features/advanced-physics/AdvancedPhysics10'));
+const AdvancedPhysics10 = lazyWithRetry(() => import('./features/advanced-physics/AdvancedPhysics10Page'));
+const AdvancedMath10 = lazyWithRetry(() => import('./features/advanced-math/AdvancedMath10Page'));
 const MistakeNotebook = lazyWithRetry(() => import('./components/mistakes/MistakeNotebook'));
 const ExamEngine = lazyWithRetry(() => import('./features/exam-engine/ExamEngine'));
 const TeacherDashboard = lazyWithRetry(() => import('./features/teacher/TeacherDashboard'));
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
       { path: ROUTES.PRACTICE.substring(1), element: <PracticeEngine /> },
       { path: 'practice/:questionTypeId', element: <PracticeEngine /> },
       { path: ROUTES.ADVANCED_PHYSICS_10.substring(1), element: <AdvancedPhysics10 /> },
+      { path: ROUTES.ADVANCED_MATH_10.substring(1), element: <AdvancedMath10 /> },
       { path: ROUTES.MISTAKES.substring(1), element: <MistakeNotebook /> },
       { path: ROUTES.EXAM.substring(1), element: <ExamEngine /> },
       { path: ROUTES.TEACHER.substring(1), element: <TeacherDashboard /> },

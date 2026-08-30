@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
-  Atom,
   BrainCircuit,
   CheckCircle2,
   ChevronRight,
@@ -18,8 +17,7 @@ import {
 import LatexRenderer from '@/components/common/LatexRenderer';
 import QuestionStimulusRenderer from '@/components/common/QuestionStimulusRenderer';
 import { Button } from '@/components/ui/button';
-import { advancedPhysics10Questions, advancedPhysics10Solutions, advancedPhysics10Topics } from '@/data/grade10/physics/advanced';
-import type { AdvancedPhysicsLevel, AdvancedPhysicsProblemLength } from '@/data/grade10/physics/advanced';
+import type { Question, Solution, SubjectCode } from '@/types';
 import { ROUTES } from '@/constants/routes';
 import { MathLoginRequired } from '@/components/common/MathLoginRequired';
 import { progressService } from '@/services/progressService';
@@ -34,19 +32,56 @@ interface StoredAttempt {
 
 type StoredProgress = Record<string, StoredAttempt>;
 
-const levelLabel: Record<AdvancedPhysicsLevel, string> = {
+export type AdvancedLevel = 'hard' | 'very_hard' | 'extreme';
+export type AdvancedProblemStyle = 'compact' | 'extended' | 'olympiad';
+
+export interface AdvancedTopicView {
+  id: string;
+  title: string;
+  shortTitle: string;
+  description: string;
+  focus: string[];
+}
+
+export interface AdvancedQuestionView extends Question {
+  advancedLevel: AdvancedLevel;
+  problemLength: AdvancedProblemStyle;
+  estimatedMinutes: number;
+  tags: string[];
+  options: string[];
+}
+
+export interface AdvancedSolutionView extends Solution {
+  insight: string;
+}
+
+export interface AdvancedPracticeConfig {
+  subjectKey: string;
+  storageKeyPrefix: string;
+  selectedSubject: SubjectCode;
+  subjectLabel: string;
+  contextLabel: string;
+  title: string;
+  seoTitle: string;
+  heroDescription: string;
+  topics: AdvancedTopicView[];
+  questions: AdvancedQuestionView[];
+  solutions: AdvancedSolutionView[];
+}
+
+const levelLabel: Record<AdvancedLevel, string> = {
   hard: 'Khó',
   very_hard: 'Rất khó',
   extreme: 'Cực khó'
 };
 
-const levelStyle: Record<AdvancedPhysicsLevel, string> = {
+const levelStyle: Record<AdvancedLevel, string> = {
   hard: 'bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/20',
   very_hard: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20',
   extreme: 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20'
 };
 
-const problemLengthLabel: Record<AdvancedPhysicsProblemLength, string> = {
+const problemLengthLabel: Record<AdvancedProblemStyle, string> = {
   compact: 'Bài cô đọng',
   extended: 'Bài tổng hợp dài',
   olympiad: 'Bài Olympic'
@@ -54,14 +89,14 @@ const problemLengthLabel: Record<AdvancedPhysicsProblemLength, string> = {
 
 const optionLetters = ['A', 'B', 'C', 'D'];
 
-const AdvancedPhysics10: React.FC = () => {
+export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> = ({ config }) => {
   const navigate = useNavigate();
   const { selectedGrade, selectedSubject, user } = useAppStore();
-  const progressKey = user?.uid ? `ezonthi_phy10_advanced_progress_${user.uid}` : '';
+  const progressKey = user?.uid ? `${config.storageKeyPrefix}${user.uid}` : '';
   const [progress, setProgress] = useState<StoredProgress>(() => {
     if (!user?.uid) return {};
     try {
-      const saved = localStorage.getItem(`ezonthi_phy10_advanced_progress_${user.uid}`);
+      const saved = localStorage.getItem(`${config.storageKeyPrefix}${user.uid}`);
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -80,11 +115,11 @@ const AdvancedPhysics10: React.FC = () => {
     }
 
     let isMounted = true;
-    const currentProgressKey = `ezonthi_phy10_advanced_progress_${user.uid}`;
+    const currentProgressKey = `${config.storageKeyPrefix}${user.uid}`;
 
     const syncWithCloud = async () => {
       try {
-        const cloudAttempts = await progressService.getAdvancedProgressFromFirestore(user.uid, 'phy10');
+        const cloudAttempts = await progressService.getAdvancedProgressFromFirestore(user.uid, config.subjectKey);
         if (!isMounted) return;
 
         let localAttempts: StoredProgress = {};
@@ -116,7 +151,7 @@ const AdvancedPhysics10: React.FC = () => {
           const cloudAttempt = cloudAttempts[qId];
           if (!cloudAttempt || new Date(localAttempt.updatedAt).getTime() > new Date(cloudAttempt.updatedAt).getTime()) {
             hasNewFromLocal = true;
-            void progressService.saveAdvancedAttemptToFirestore(user.uid, 'phy10', qId, localAttempt);
+            void progressService.saveAdvancedAttemptToFirestore(user.uid, config.subjectKey, qId, localAttempt);
           }
         }
 
@@ -133,23 +168,23 @@ const AdvancedPhysics10: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [user?.uid]);
+  }, [config.storageKeyPrefix, config.subjectKey, user?.uid]);
 
   const topicQuestions = useMemo(
     () => activeTopicId
-      ? advancedPhysics10Questions.filter(question => question.topicId === activeTopicId)
+      ? config.questions.filter(question => question.topicId === activeTopicId)
       : [],
-    [activeTopicId]
+    [activeTopicId, config.questions]
   );
 
   const currentQuestion = topicQuestions[currentIndex];
   const currentSolution = currentQuestion
-    ? advancedPhysics10Solutions.find(solution => solution.questionId === currentQuestion.id)
+    ? config.solutions.find(solution => solution.questionId === currentQuestion.id)
     : undefined;
 
-  const totalCompleted = Object.keys(progress).filter(id => advancedPhysics10Questions.some(question => question.id === id)).length;
+  const totalCompleted = Object.keys(progress).filter(id => config.questions.some(question => question.id === id)).length;
   const totalCorrect = Object.entries(progress).filter(([id, attempt]) => (
-    attempt.isCorrect && advancedPhysics10Questions.some(question => question.id === id)
+    attempt.isCorrect && config.questions.some(question => question.id === id)
   )).length;
   const accuracy = totalCompleted ? Math.round(totalCorrect / totalCompleted * 100) : 0;
 
@@ -159,7 +194,7 @@ const AdvancedPhysics10: React.FC = () => {
   };
 
   const openTopic = (topicId: string) => {
-    const questions = advancedPhysics10Questions.filter(question => question.topicId === topicId);
+    const questions = config.questions.filter(question => question.topicId === topicId);
     const firstUnanswered = questions.findIndex(question => !progress[question.id]);
     setActiveTopicId(topicId);
     setCurrentIndex(firstUnanswered >= 0 ? firstUnanswered : 0);
@@ -189,11 +224,11 @@ const AdvancedPhysics10: React.FC = () => {
     setIsSubmitted(true);
 
     // Đồng bộ ngay lên Firestore chạy ngầm
-    void progressService.saveAdvancedAttemptToFirestore(user.uid, 'phy10', currentQuestion.id, attempt);
+    void progressService.saveAdvancedAttemptToFirestore(user.uid, config.subjectKey, currentQuestion.id, attempt);
   };
 
   const clearProgress = () => {
-    if (!window.confirm('Xóa toàn bộ tiến độ Chuyên đề nâng cao Vật lí 10?')) return;
+    if (!window.confirm(`Xóa toàn bộ tiến độ ${config.title}?`)) return;
     if (progressKey) {
       localStorage.removeItem(progressKey);
     }
@@ -201,31 +236,41 @@ const AdvancedPhysics10: React.FC = () => {
     resetQuestionState();
 
     if (user?.uid) {
-      void progressService.clearAdvancedProgressFromFirestore(user.uid, 'phy10');
+      void progressService.clearAdvancedProgressFromFirestore(user.uid, config.subjectKey);
     }
   };
 
-  if (selectedGrade !== 'grade10' || selectedSubject !== 'physics') {
+  if (selectedGrade !== 'grade10' || selectedSubject !== config.selectedSubject) {
     return (
-      <div className="max-w-2xl mx-auto py-16 px-4 text-center space-y-5">
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
-          <Atom size={34} />
+      <>
+        <Helmet>
+          <title>{config.seoTitle}</title>
+        </Helmet>
+        <div className="max-w-2xl mx-auto py-16 px-4 text-center space-y-5">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+            <Target size={34} />
+          </div>
+          <h1 className="text-2xl font-black">Chuyên đề này dành cho {config.subjectLabel}</h1>
+          <p className="text-sm text-muted-foreground font-semibold">Hãy chọn “{config.contextLabel}” trong thanh môn học để mở ngân hàng bài nâng cao.</p>
+          <Button onClick={() => navigate(ROUTES.ROADMAP)}>Về lộ trình học</Button>
         </div>
-        <h1 className="text-2xl font-black">Chuyên đề này dành cho Vật lí lớp 10</h1>
-        <p className="text-sm text-muted-foreground font-semibold">Hãy chọn “Vật lý - Lớp 10” trong thanh môn học để mở ngân hàng bài nâng cao.</p>
-        <Button onClick={() => navigate(ROUTES.ROADMAP)}>Về lộ trình học</Button>
-      </div>
+      </>
     );
   }
 
   if (!user) {
     return (
-      <div className="max-w-xl mx-auto py-12 px-4">
-        <MathLoginRequired
-          title="Yêu cầu đăng nhập Chuyên đề nâng cao"
-          description="Chuyên đề nâng cao Vật lí 10 (HSG & Chuyên) yêu cầu lưu trữ lịch sử làm bài và đồng bộ tiến độ học tập trên Cloud nên bạn cần đăng nhập trước khi bắt đầu."
-        />
-      </div>
+      <>
+        <Helmet>
+          <title>{config.seoTitle}</title>
+        </Helmet>
+        <div className="max-w-xl mx-auto py-12 px-4">
+          <MathLoginRequired
+            title="Yêu cầu đăng nhập Chuyên đề nâng cao"
+            description={`${config.title} (HSG & Chuyên) yêu cầu lưu trữ lịch sử làm bài và đồng bộ tiến độ học tập trên Cloud nên bạn cần đăng nhập trước khi bắt đầu.`}
+          />
+        </div>
+      </>
     );
   }
 
@@ -233,8 +278,7 @@ const AdvancedPhysics10: React.FC = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-7">
         <Helmet>
-          <title>Chuyên đề nâng cao Vật lí 10 | ezonthi</title>
-          <meta name="robots" content="noindex, follow" />
+          <title>{config.seoTitle}</title>
         </Helmet>
 
         <section className="relative overflow-hidden rounded-[28px] border border-slate-200/70 dark:border-slate-700/60 bg-[linear-gradient(135deg,rgba(8,145,178,0.12),rgba(255,255,255,0.92)_48%,rgba(249,115,22,0.10))] dark:bg-[linear-gradient(135deg,rgba(8,145,178,0.16),rgba(15,23,42,0.96)_48%,rgba(249,115,22,0.12))] p-6 sm:p-9 shadow-sm">
@@ -245,22 +289,22 @@ const AdvancedPhysics10: React.FC = () => {
                 <Trophy size={14} /> HSG · Olympic · Trường chuyên
               </div>
               <div>
-                <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white">Chuyên đề nâng cao Vật lí 10</h1>
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white">{config.title}</h1>
                 <p className="mt-3 max-w-3xl text-sm sm:text-base font-semibold leading-7 text-slate-600 dark:text-slate-300">
-                  Mỗi bài là một thử thách độc lập. Không chia nhỏ bước giải, không gợi ý trước khi nộp và không yêu cầu nhập đáp án tự luận.
+                  {config.heroDescription}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
-                {(['hard', 'very_hard', 'extreme'] as AdvancedPhysicsLevel[]).map(level => (
+                {(['hard', 'very_hard', 'extreme'] as AdvancedLevel[]).map(level => (
                   <span key={level} className={cn('px-3 py-1.5 rounded-full border text-xs font-black', levelStyle[level])}>
-                    {levelLabel[level]}: {advancedPhysics10Questions.filter(question => question.advancedLevel === level).length} câu
+                    {levelLabel[level]}: {config.questions.filter(question => question.advancedLevel === level).length} câu
                   </span>
                 ))}
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2 min-w-[290px]">
-              <StatBox label="Đã làm" value={`${totalCompleted}/${advancedPhysics10Questions.length}`} />
+              <StatBox label="Đã làm" value={`${totalCompleted}/${config.questions.length}`} />
               <StatBox label="Đúng" value={String(totalCorrect)} />
               <StatBox label="Chính xác" value={`${accuracy}%`} />
             </div>
@@ -271,7 +315,7 @@ const AdvancedPhysics10: React.FC = () => {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.14em] text-cyan-700 dark:text-cyan-300">Chọn chiến trường</p>
-              <h2 className="mt-1 text-2xl font-black">7 mảng bài tập nâng cao</h2>
+              <h2 className="mt-1 text-2xl font-black">{config.topics.length} mảng bài tập nâng cao</h2>
             </div>
             {totalCompleted > 0 && (
               <button onClick={clearProgress} className="text-xs font-bold text-muted-foreground hover:text-rose-600 flex items-center gap-1.5 cursor-pointer">
@@ -281,8 +325,8 @@ const AdvancedPhysics10: React.FC = () => {
           </div>
 
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {advancedPhysics10Topics.map((topic, index) => {
-              const questions = advancedPhysics10Questions.filter(question => question.topicId === topic.id);
+            {config.topics.map((topic, index) => {
+              const questions = config.questions.filter(question => question.topicId === topic.id);
               const completed = questions.filter(question => progress[question.id]).length;
               const correct = questions.filter(question => progress[question.id]?.isCorrect).length;
               return (
@@ -313,127 +357,201 @@ const AdvancedPhysics10: React.FC = () => {
     );
   }
 
-  const activeTopic = advancedPhysics10Topics.find(topic => topic.id === activeTopicId)!;
+  const activeTopic = config.topics.find(topic => topic.id === activeTopicId)!;
   const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+  const topicCompletedCount = topicQuestions.filter(q => progress[q.id]).length;
+  const topicCorrectCount = topicQuestions.filter(q => progress[q.id]?.isCorrect).length;
+  const isShortOptions = currentQuestion.options.every(opt => (opt || '').trim().length < 32);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-7 space-y-5">
       <Helmet>
-        <title>{activeTopic.shortTitle} nâng cao – Vật lí 10 | ezonthi</title>
-        <meta name="robots" content="noindex, follow" />
+        <title>{activeTopic.shortTitle} nâng cao – {config.subjectLabel} | ezonthi</title>
       </Helmet>
 
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-2xl border border-border/70 bg-card shadow-sm">
-        <div className="flex items-center gap-3 min-w-0">
-          <Button variant="outline" size="sm" onClick={() => { setActiveTopicId(null); resetQuestionState(); }} className="shrink-0">
-            <ArrowLeft size={14} /> Chuyên đề
-          </Button>
-          <div className="min-w-0">
-            <p className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300">Vật lí 10 nâng cao</p>
-            <h1 className="text-sm sm:text-base font-black truncate">{activeTopic.title}</h1>
+      {/* Header Chuyên đề: Phân 2 tầng rõ ràng, không bị truncate và không scrollbar */}
+      <div className="rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-sm space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-border/50">
+          <div className="flex items-center gap-3 min-w-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { setActiveTopicId(null); resetQuestionState(); }}
+              className="shrink-0 gap-1.5 rounded-xl font-bold hover:bg-cyan-500/10 hover:text-cyan-700 dark:hover:text-cyan-300 cursor-pointer"
+            >
+              <ArrowLeft size={15} /> Tất cả chuyên đề
+            </Button>
+            <div className="min-w-0">
+              <span className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300 block">
+                {config.subjectLabel} nâng cao
+              </span>
+              <h1 className="text-base sm:text-lg font-black text-foreground">
+                {activeTopic.title}
+              </h1>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 bg-secondary/50 px-3.5 py-1.5 rounded-xl border border-border/50 text-xs font-black">
+            <span className="text-muted-foreground font-semibold">Tiến độ:</span>
+            <span className="text-foreground">{topicCompletedCount}/{topicQuestions.length}</span>
+            <span className="text-emerald-700 dark:text-emerald-400">({topicCorrectCount} đúng)</span>
           </div>
         </div>
-        <div className="flex gap-1.5 overflow-x-auto pb-1 lg:pb-0">
-          {topicQuestions.map((question, index) => {
-            const attempt = progress[question.id];
-            return (
-              <button
-                key={question.id}
-                onClick={() => moveToQuestion(index)}
-                className={cn(
-                  'w-8 h-8 shrink-0 rounded-lg border text-[11px] font-black transition-all cursor-pointer',
-                  index === currentIndex
-                    ? 'bg-slate-950 text-white border-slate-950 dark:bg-cyan-300 dark:text-slate-950 dark:border-cyan-300'
-                    : attempt?.isCorrect
-                      ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/25'
-                      : attempt
-                        ? 'bg-rose-500/10 text-rose-700 border-rose-500/25'
-                        : 'bg-background text-muted-foreground border-border hover:border-cyan-500/40'
-                )}
-              >
-                {index + 1}
-              </button>
-            );
-          })}
+
+        <div>
+          <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-2">
+            <span className="uppercase tracking-wider">Danh sách câu hỏi (1 – {topicQuestions.length}):</span>
+            <div className="hidden sm:flex items-center gap-3 text-[10px]">
+              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Đúng</span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Sai</span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-slate-950 dark:bg-cyan-300" /> Đang làm</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-8 sm:grid-cols-12 md:grid-cols-24 gap-1.5">
+            {topicQuestions.map((question, index) => {
+              const attempt = progress[question.id];
+              const isCurrent = index === currentIndex;
+              return (
+                <button
+                  key={question.id}
+                  onClick={() => moveToQuestion(index)}
+                  className={cn(
+                    'h-8.5 rounded-lg border text-xs font-black transition-all flex items-center justify-center cursor-pointer',
+                    isCurrent
+                      ? 'bg-slate-950 text-white border-slate-950 dark:bg-cyan-300 dark:text-slate-950 dark:border-cyan-300 ring-2 ring-cyan-500/25 shadow-sm'
+                      : attempt?.isCorrect
+                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
+                        : attempt
+                          ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/30 hover:bg-rose-500/20'
+                          : 'bg-background text-muted-foreground border-border/70 hover:border-cyan-500/40 hover:text-foreground'
+                  )}
+                >
+                  {index + 1}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className={cn('grid gap-5', isSubmitted ? 'lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.75fr)]' : 'max-w-4xl mx-auto')}>
-        <section className="rounded-2xl border border-border/70 bg-card shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-border/60 bg-secondary/25 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className={cn('px-2.5 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider', levelStyle[currentQuestion.advancedLevel])}>
-                {levelLabel[currentQuestion.advancedLevel]}
-              </span>
-              {currentQuestion.problemLength !== 'compact' && (
-                <span className="px-2.5 py-1 rounded-full border border-violet-500/20 bg-violet-500/10 text-[10px] font-black uppercase tracking-wider text-violet-700 dark:text-violet-300">
-                  {problemLengthLabel[currentQuestion.problemLength]}
+      <div className={cn('grid gap-5', isSubmitted ? 'lg:grid-cols-[minmax(0,1.15fr)_minmax(380px,0.85fr)]' : 'max-w-5xl mx-auto')}>
+        <section className="rounded-2xl border border-border/70 bg-card shadow-sm overflow-hidden flex flex-col justify-between">
+          <div>
+            <div className="px-5 py-3.5 border-b border-border/60 bg-secondary/25 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className={cn('px-2.5 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider', levelStyle[currentQuestion.advancedLevel])}>
+                  {levelLabel[currentQuestion.advancedLevel]}
                 </span>
-              )}
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-muted-foreground"><Clock3 size={13} /> {currentQuestion.estimatedMinutes} phút</span>
+                {currentQuestion.problemLength !== 'compact' && (
+                  <span className="px-2.5 py-1 rounded-full border border-violet-500/20 bg-violet-500/10 text-[10px] font-black uppercase tracking-wider text-violet-700 dark:text-violet-300">
+                    {problemLengthLabel[currentQuestion.problemLength]}
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-muted-foreground"><Clock3 size={13} /> {currentQuestion.estimatedMinutes} phút</span>
+              </div>
+              <span className="text-xs font-black text-foreground bg-secondary/80 px-2.5 py-1 rounded-lg border border-border/40">
+                Câu {currentIndex + 1} / {topicQuestions.length}
+              </span>
             </div>
-            <span className="text-xs font-black text-muted-foreground">Câu {currentIndex + 1}/{topicQuestions.length}</span>
+
+            <div className="p-5 sm:p-7 space-y-6">
+              <QuestionStimulusRenderer question={currentQuestion} />
+              <div className="flex items-start gap-3">
+                <span className="w-9 h-9 shrink-0 rounded-xl bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 flex items-center justify-center mt-0.5"><BrainCircuit size={20} /></span>
+                <div className="text-base sm:text-lg font-bold leading-relaxed text-foreground"><LatexRenderer text={currentQuestion.content} /></div>
+              </div>
+
+              {/* Lưới lựa chọn: Tự động phân 2 cột nếu đáp án ngắn, 1 cột nếu đáp án dài */}
+              <div className={cn('grid gap-3.5', isShortOptions ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1')}>
+                {currentQuestion.options.map((option, index) => {
+                  const letter = optionLetters[index];
+                  const selected = selectedAnswer === letter;
+                  const correctOption = currentQuestion.correctAnswer === letter;
+                  return (
+                    <button
+                      key={letter}
+                      disabled={isSubmitted}
+                      onClick={() => setSelectedAnswer(letter)}
+                      className={cn(
+                        'min-h-13 px-4 py-3 rounded-xl border text-left flex items-center gap-3 transition-all cursor-pointer disabled:cursor-default',
+                        !isSubmitted && selected && 'border-cyan-600 bg-cyan-500/10 ring-2 ring-cyan-500/20 shadow-sm',
+                        !isSubmitted && !selected && 'border-border/70 hover:border-cyan-500/40 hover:bg-secondary/30',
+                        isSubmitted && correctOption && 'border-emerald-500/60 bg-emerald-500/10',
+                        isSubmitted && selected && !correctOption && 'border-rose-500/60 bg-rose-500/10'
+                      )}
+                    >
+                      <span className={cn(
+                        'w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 text-xs font-black transition-colors',
+                        !isSubmitted && selected ? 'bg-cyan-700 text-white border-cyan-700' :
+                          isSubmitted && correctOption ? 'bg-emerald-600 text-white border-emerald-600' :
+                            isSubmitted && selected ? 'bg-rose-600 text-white border-rose-600' : 'bg-secondary text-muted-foreground border-border/80'
+                      )}>{letter}</span>
+                      <span className="text-sm font-semibold flex-1 leading-snug"><LatexRenderer text={option} /></span>
+                      {isSubmitted && correctOption && <CheckCircle2 size={18} className="ml-auto text-emerald-600 shrink-0" />}
+                      {isSubmitted && selected && !correctOption && <XCircle size={18} className="ml-auto text-rose-600 shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          <div className="p-5 sm:p-7 space-y-6">
-            <QuestionStimulusRenderer question={currentQuestion} />
-            <div className="flex items-start gap-3">
-              <span className="w-9 h-9 shrink-0 rounded-xl bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 flex items-center justify-center"><BrainCircuit size={19} /></span>
-              <div className="text-sm sm:text-base font-bold leading-7 text-foreground"><LatexRenderer text={currentQuestion.content} /></div>
-            </div>
-
-            <div className="grid gap-3">
-              {currentQuestion.options.map((option, index) => {
-                const letter = optionLetters[index];
-                const selected = selectedAnswer === letter;
-                const correctOption = currentQuestion.correctAnswer === letter;
-                return (
-                  <button
-                    key={letter}
-                    disabled={isSubmitted}
-                    onClick={() => setSelectedAnswer(letter)}
-                    className={cn(
-                      'w-full min-h-14 px-4 py-3 rounded-xl border text-left flex items-center gap-3 transition-all cursor-pointer disabled:cursor-default',
-                      !isSubmitted && selected && 'border-cyan-600 bg-cyan-500/8 ring-2 ring-cyan-500/10',
-                      !isSubmitted && !selected && 'border-border/70 hover:border-cyan-500/35 hover:bg-secondary/30',
-                      isSubmitted && correctOption && 'border-emerald-500/50 bg-emerald-500/8',
-                      isSubmitted && selected && !correctOption && 'border-rose-500/50 bg-rose-500/8'
-                    )}
-                  >
-                    <span className={cn(
-                      'w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 text-xs font-black',
-                      !isSubmitted && selected ? 'bg-cyan-700 text-white border-cyan-700' :
-                        isSubmitted && correctOption ? 'bg-emerald-600 text-white border-emerald-600' :
-                          isSubmitted && selected ? 'bg-rose-600 text-white border-rose-600' : 'bg-secondary text-muted-foreground border-border'
-                    )}>{letter}</span>
-                    <span className="text-sm font-semibold"><LatexRenderer text={option} /></span>
-                    {isSubmitted && correctOption && <CheckCircle2 size={18} className="ml-auto text-emerald-600 shrink-0" />}
-                    {isSubmitted && selected && !correctOption && <XCircle size={18} className="ml-auto text-rose-600 shrink-0" />}
-                  </button>
-                );
-              })}
-            </div>
-
+          {/* Footer Card: Nút điều hướng trước/sau + Chốt đáp án cân đối */}
+          <div className="p-5 sm:px-7 border-t border-border/60 bg-secondary/15 space-y-3">
             {!isSubmitted ? (
-              <Button onClick={submitAnswer} disabled={!selectedAnswer} size="lg" className="w-full bg-slate-950 hover:bg-slate-800 dark:bg-cyan-300 dark:text-slate-950 dark:hover:bg-cyan-200 font-black">
-                Chốt đáp án <Target size={17} />
-              </Button>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => moveToQuestion(currentIndex - 1)}
+                  disabled={currentIndex === 0}
+                  className="rounded-xl font-bold gap-1 cursor-pointer"
+                >
+                  <ArrowLeft size={14} /> Câu trước
+                </Button>
+
+                <Button
+                  onClick={submitAnswer}
+                  disabled={!selectedAnswer}
+                  size="lg"
+                  className="flex-1 sm:max-w-xs mx-auto bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black shadow-md shadow-cyan-500/20 rounded-xl cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed transition-all"
+                >
+                  Chốt đáp án <Target size={17} className="ml-1" />
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => moveToQuestion(currentIndex + 1)}
+                  disabled={currentIndex === topicQuestions.length - 1}
+                  className="rounded-xl font-bold gap-1 cursor-pointer"
+                >
+                  Câu sau <ArrowRight size={14} />
+                </Button>
+              </div>
             ) : (
               <div className="space-y-3">
-                <div className={cn('p-4 rounded-xl border flex items-start gap-3', isCorrect ? 'bg-emerald-500/8 border-emerald-500/25' : 'bg-rose-500/8 border-rose-500/25')}>
-                  {isCorrect ? <CheckCircle2 className="text-emerald-600 shrink-0" /> : <XCircle className="text-rose-600 shrink-0" />}
+                <div className={cn('p-4 rounded-xl border flex items-start gap-3', isCorrect ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-rose-500/10 border-rose-500/30')}>
+                  {isCorrect ? <CheckCircle2 className="text-emerald-600 shrink-0 mt-0.5" /> : <XCircle className="text-rose-600 shrink-0 mt-0.5" />}
                   <div>
-                    <p className="font-black text-sm">{isCorrect ? 'Chính xác.' : 'Chưa đúng.'}</p>
-                    <p className="text-xs font-semibold text-muted-foreground mt-1">Đáp án đúng là {currentQuestion.correctAnswer}. Lời giải trọn bài đã được mở.</p>
+                    <p className="font-black text-sm">{isCorrect ? 'Chính xác! Làm rất tốt.' : 'Chưa chính xác.'}</p>
+                    <p className="text-xs font-semibold text-muted-foreground mt-1">Đáp án đúng là <strong>{currentQuestion.correctAnswer}</strong>. Lời giải chi tiết đã được mở bên cạnh.</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" onClick={resetQuestionState}><RotateCcw size={14} /> Làm lại</Button>
-                  <Button onClick={() => {
-                    if (currentIndex < topicQuestions.length - 1) moveToQuestion(currentIndex + 1);
-                    else { setActiveTopicId(null); resetQuestionState(); }
-                  }} className="bg-slate-950 hover:bg-slate-800 dark:bg-cyan-300 dark:text-slate-950">
-                    {currentIndex < topicQuestions.length - 1 ? 'Câu tiếp theo' : 'Hoàn thành'} <ArrowRight size={14} />
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <Button variant="outline" size="sm" onClick={resetQuestionState} className="rounded-xl font-bold gap-1 cursor-pointer">
+                    <RotateCcw size={14} /> Làm lại câu này
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (currentIndex < topicQuestions.length - 1) moveToQuestion(currentIndex + 1);
+                      else { setActiveTopicId(null); resetQuestionState(); }
+                    }}
+                    size="lg"
+                    className="flex-1 sm:max-w-xs mx-auto bg-slate-950 hover:bg-slate-800 dark:bg-cyan-300 dark:text-slate-950 font-black rounded-xl cursor-pointer"
+                  >
+                    {currentIndex < topicQuestions.length - 1 ? 'Câu tiếp theo' : 'Hoàn thành chuyên đề'} <ArrowRight size={15} className="ml-1" />
                   </Button>
                 </div>
               </div>
@@ -445,11 +563,24 @@ const AdvancedPhysics10: React.FC = () => {
           <aside className="rounded-2xl border border-border/70 bg-card shadow-sm overflow-hidden h-fit">
             <div className="px-5 py-4 border-b border-border/60 bg-amber-500/6">
               <p className="text-[10px] font-black uppercase tracking-[0.13em] text-amber-700 dark:text-amber-300">Lời giải sau khi nộp</p>
-              <h2 className="mt-1 font-black flex items-center gap-2"><Flame size={17} className="text-orange-600" /> Mấu chốt của bài</h2>
+              <h2 className="mt-1 font-black flex items-center gap-2"><Flame size={17} className="text-orange-600" /> Phân tích và lời giải từng bước</h2>
             </div>
             <div className="p-5 space-y-5">
-              <div className="p-4 rounded-xl bg-cyan-500/7 border border-cyan-500/15 text-sm font-semibold leading-6">
+              <div className="p-4 rounded-xl bg-amber-500/7 border border-amber-500/20 text-sm leading-6">
+                <h3 className="mb-1.5 text-[11px] font-black uppercase tracking-wide text-amber-800 dark:text-amber-200 flex items-center gap-1.5">
+                  <BrainCircuit size={14} /> Nhận dạng bài toán
+                </h3>
+                <div className="font-medium text-muted-foreground">
+                  <LatexRenderer text={currentSolution.recognition} />
+                </div>
+              </div>
+              <div className="p-4 rounded-xl bg-cyan-500/7 border border-cyan-500/15 text-sm leading-6">
+                <h3 className="mb-1.5 text-[11px] font-black uppercase tracking-wide text-cyan-800 dark:text-cyan-200 flex items-center gap-1.5">
+                  <Target size={14} /> Mấu chốt riêng của câu
+                </h3>
+                <div className="font-semibold">
                 <LatexRenderer text={currentSolution.insight} />
+                </div>
               </div>
               <div className="space-y-5">
                 {currentSolution.detailedSteps.map(step => (
@@ -470,6 +601,14 @@ const AdvancedPhysics10: React.FC = () => {
                   {currentSolution.commonMistakes.map(mistake => <li key={mistake}>• <LatexRenderer text={mistake} /></li>)}
                 </ul>
               </div>
+              {currentSolution.reviewSuggestions.length > 0 && (
+                <div className="pt-4 border-t border-border/60">
+                  <h3 className="text-xs font-black text-sky-700 dark:text-sky-300">Nếu em chưa theo kịp lời giải</h3>
+                  <ul className="mt-2 space-y-1.5 text-xs font-medium text-muted-foreground">
+                    {currentSolution.reviewSuggestions.map(suggestion => <li key={suggestion}>• <LatexRenderer text={suggestion} /></li>)}
+                  </ul>
+                </div>
+              )}
             </div>
           </aside>
         )}
@@ -485,4 +624,4 @@ const StatBox: React.FC<{ label: string; value: string }> = ({ label, value }) =
   </div>
 );
 
-export default AdvancedPhysics10;
+export default AdvancedPracticePage;

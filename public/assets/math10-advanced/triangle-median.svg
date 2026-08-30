@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Tam giác và trung tuyến</title><desc id="desc">Tam giác ABC có M là trung điểm BC và đoạn AM là trung tuyến.</desc>
+  <rect width="960" height="520" rx="28" fill="#f8fafc"/><path d="M480 70 145 430h670Z" fill="#e0f2fe" stroke="#0f172a" stroke-width="8"/><path d="M480 70v360" stroke="#ea580c" stroke-width="8" stroke-dasharray="16 12"/>
+  <circle cx="480" cy="70" r="10" fill="#0f172a"/><circle cx="145" cy="430" r="10" fill="#0f172a"/><circle cx="815" cy="430" r="10" fill="#0f172a"/><circle cx="480" cy="430" r="10" fill="#ea580c"/>
+  <g font-family="Arial" font-size="34" font-weight="700" fill="#0f172a"><text x="495" y="62">A</text><text x="105" y="472">B</text><text x="825" y="472">C</text><text x="492" y="472" fill="#ea580c">M</text></g>
+</svg>

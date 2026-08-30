@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Tam giác và đường phân giác</title><desc id="desc">Tam giác ABC có AD là đường phân giác góc A.</desc>
+  <rect width="960" height="520" rx="28" fill="#f8fafc"/><path d="M430 65 125 430h720Z" fill="#ecfccb" stroke="#0f172a" stroke-width="8"/><path d="M430 65 510 430" stroke="#0284c7" stroke-width="8"/>
+  <path d="M389 114a62 62 0 0 1 55 14M446 128a62 62 0 0 1 34 46" fill="none" stroke="#f97316" stroke-width="7"/>
+  <g font-family="Arial" font-size="34" font-weight="700" fill="#0f172a"><text x="445" y="58">A</text><text x="86" y="472">B</text><text x="854" y="472">C</text><text x="520" y="472" fill="#0284c7">D</text></g>
+</svg>

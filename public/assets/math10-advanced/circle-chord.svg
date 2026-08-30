@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Dây cung trong đường tròn</title><desc id="desc">Đường tròn tâm I có dây AB, H là trung điểm và IH vuông góc AB.</desc>
+  <rect width="960" height="520" rx="28" fill="#f8fafc"/><circle cx="480" cy="260" r="210" fill="#ecfeff" stroke="#0891b2" stroke-width="8"/><path d="M310 382h340" stroke="#0f172a" stroke-width="9"/><path d="M480 260v122" stroke="#ea580c" stroke-width="8" stroke-dasharray="13 10"/><path d="M480 354h28v28" fill="none" stroke="#ea580c" stroke-width="6"/>
+  <g font-family="Arial" font-size="32" font-weight="700"><text x="278" y="424">A</text><text x="658" y="424">B</text><text x="495" y="252" fill="#0891b2">I</text><text x="492" y="420" fill="#ea580c">H</text></g>
+</svg>

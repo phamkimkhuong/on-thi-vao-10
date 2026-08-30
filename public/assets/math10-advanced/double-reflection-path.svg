@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Đường gãy qua hai trục tọa độ</title>
+  <desc id="desc">Hai điểm A và B trong góc phần tư thứ nhất, đường gãy A-P-Q-B lần lượt chạm tia Ox và Oy; các ảnh A phẩy và B phẩy minh họa cách duỗi thẳng đường gãy.</desc>
+  <rect width="960" height="560" rx="28" fill="#f8fafc"/>
+  <path d="M105 470H900M105 470V55" fill="none" stroke="#0f172a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M105 470H900M105 470V55" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="12 10"/>
+  <path d="M325 175 535 470 105 305 735 215" fill="none" stroke="#0284c7" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M325 175V525M735 215H45" fill="none" stroke="#f97316" stroke-width="5" stroke-dasharray="12 10"/>
+  <path d="M325 525 535 470 105 305 45 215" fill="none" stroke="#f97316" stroke-width="5" stroke-dasharray="10 9" opacity=".8"/>
+  <g fill="#0284c7">
+    <circle cx="325" cy="175" r="11"/><circle cx="535" cy="470" r="11"/><circle cx="105" cy="305" r="11"/><circle cx="735" cy="215" r="11"/>
+  </g>
+  <g fill="#f97316"><circle cx="325" cy="525" r="9"/><circle cx="45" cy="215" r="9"/></g>
+  <g font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#0f172a">
+    <text x="295" y="155">A</text><text x="746" y="205">B</text><text x="545" y="510" fill="#0284c7">P</text><text x="125" y="295" fill="#0284c7">Q</text>
+    <text x="285" y="548" fill="#f97316">A'</text><text x="18" y="205" fill="#f97316">B'</text><text x="855" y="510">Ox</text><text x="62" y="85">Oy</text>
+  </g>
+</svg>

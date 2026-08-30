@@ -241,7 +241,8 @@ export const AppLayout: React.FC = () => {
       path.startsWith(ROUTES.ROADMAP) ||
       path.startsWith('/question-types') ||
       path.startsWith(ROUTES.PRACTICE) ||
-      path.startsWith(ROUTES.ADVANCED_PHYSICS_10)
+      path.startsWith(ROUTES.ADVANCED_PHYSICS_10) ||
+      path.startsWith(ROUTES.ADVANCED_MATH_10)
     ) {
       return;
     }
@@ -350,8 +351,12 @@ export const AppLayout: React.FC = () => {
     { path: ROUTES.DASHBOARD, label: 'Bảng điều khiển', icon: GraduationCap },
     { path: ROUTES.ROADMAP, label: 'Lộ trình học', icon: Map },
     { path: ROUTES.PRACTICE, label: 'Luyện tập', icon: BookOpen },
-    ...(selectedGrade === 'grade10' && selectedSubject === 'physics'
-      ? [{ path: ROUTES.ADVANCED_PHYSICS_10, label: 'Chuyên đề nâng cao', icon: Target }]
+    ...(selectedGrade === 'grade10' && (selectedSubject === 'physics' || selectedSubject === 'math')
+      ? [{
+          path: selectedSubject === 'physics' ? ROUTES.ADVANCED_PHYSICS_10 : ROUTES.ADVANCED_MATH_10,
+          label: 'Chuyên đề nâng cao',
+          icon: Target
+        }]
       : []),
     ...(selectedSubject === 'english'
       ? [
@@ -386,6 +391,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/question-types')) return 'Dạng bài chi tiết';
     if (path.startsWith('/practice')) return 'Luyện tập';
     if (path.startsWith(ROUTES.ADVANCED_PHYSICS_10)) return 'Chuyên đề nâng cao';
+    if (path.startsWith(ROUTES.ADVANCED_MATH_10)) return 'Chuyên đề nâng cao';
     if (path.startsWith('/grammar')) return 'Ngữ pháp Tiếng Anh';
     if (path.startsWith('/vocabulary')) return 'Từ vựng Tiếng Anh 10';
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
@@ -406,6 +412,7 @@ export const AppLayout: React.FC = () => {
     ROUTES.ROADMAP,
     ROUTES.PRACTICE,
     ROUTES.ADVANCED_PHYSICS_10,
+    ROUTES.ADVANCED_MATH_10,
     ROUTES.EXAM,
     ROUTES.AI_TUTOR,
     ROUTES.MISTAKES,

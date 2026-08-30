@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Tứ giác nội tiếp</title><desc id="desc">Tứ giác ABCD nội tiếp một đường tròn, có hai đường chéo AC và BD.</desc>
+  <rect width="960" height="520" rx="28" fill="#f8fafc"/><circle cx="480" cy="260" r="205" fill="#ede9fe" stroke="#7c3aed" stroke-width="8"/>
+  <path d="M350 102 677 176 625 408 278 340Z" fill="none" stroke="#0f172a" stroke-width="8"/><path d="M350 102 625 408M677 176 278 340" stroke="#ea580c" stroke-width="6" stroke-dasharray="14 10"/>
+  <g font-family="Arial" font-size="32" font-weight="700" fill="#0f172a"><text x="318" y="88">A</text><text x="690" y="168">B</text><text x="633" y="444">C</text><text x="238" y="370">D</text></g>
+</svg>

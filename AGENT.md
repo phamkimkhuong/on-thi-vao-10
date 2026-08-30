@@ -623,6 +623,19 @@ npm run deploy     # Build + Firebase deploy hosting
 - **Tiến độ riêng:** lưu theo người dùng/khách tại key `ezonthi_phy10_advanced_progress_{userId}` và không tác động mastery của lộ trình nền tảng.
 - **Kiểm định:** `npm run validate:physics10-advanced`; lệnh `npm run validate:physics10` cũng tự chạy kiểm định ngân hàng nâng cao.
 
+### 12.12 Chuyên Đề Nâng Cao Toán 10
+
+- **Route riêng:** `/advanced-math-10`, chỉ hiện trong sidebar khi ngữ cảnh là `grade10/math`.
+- **Dữ liệu riêng:** `src/data/grade10/math/advanced/authored/` chứa 8 mảng, 192 câu A–D được biên soạn theo từng cấu trúc độc lập và 192 lời giải trọn bài (24 câu/mảng). Ngân hàng này tách hoàn toàn khỏi Luyện tập nền tảng; không dùng một khuôn rồi nhân bản bằng cách thay số.
+- **Phân tầng:** 48 câu Khó, 80 câu Rất khó và 64 câu Cực khó; đồng thời gồm 96 bài cô đọng, 64 bài tổng hợp dài và 32 bài Olympic.
+- **Phạm vi:** đại số–đa thức; hàm số–tham số; bất đẳng thức; số học; tổ hợp; hình học Euclid; vectơ–tọa độ–lượng giác; xác suất–mô hình hóa.
+- **Nguyên tắc nội dung:** mỗi câu là một bài độc lập, không chia thành chuỗi dẫn dắt; chỉ chọn A/B/C/D; lời giải chỉ mở sau khi nộp và nêu mấu chốt, tối thiểu 3 bước cùng các bẫy sai thường gặp.
+- **Học liệu trực quan:** có 46 câu dùng sơ đồ hoặc bảng dữ kiện, render qua `QuestionStimulusRenderer`; tất cả hình đều có văn bản thay thế.
+- **Cân bằng đáp án:** A/B/C/D cùng 48 câu; vị trí đáp án và lời giải luôn khớp sau khi sắp phương án.
+- **Tiến độ riêng:** lưu tại `ezonthi_math10_advanced_progress_{userId}` và Firestore `advancedProgress/math10`, không tác động mastery nền tảng.
+- **Engine dùng chung:** `AdvancedPracticePage` nhận cấu hình môn học; các wrapper Toán và Vật lí cung cấp dữ liệu, nhãn, route và khóa tiến độ riêng.
+- **Kiểm định:** `npm run validate:math10-advanced`; validator chuẩn hóa đề bằng cách loại tham số số học và bắt buộc đạt 192/192 cấu trúc độc lập. Lệnh `npm run validate:math10` cũng tự chạy cả ngân hàng nền tảng và nâng cao.
+
 ---
 
 ## 13. Checklist Trước Khi Commit
