@@ -242,7 +242,8 @@ export const AppLayout: React.FC = () => {
       path.startsWith('/question-types') ||
       path.startsWith(ROUTES.PRACTICE) ||
       path.startsWith(ROUTES.ADVANCED_PHYSICS_10) ||
-      path.startsWith(ROUTES.ADVANCED_MATH_10)
+      path.startsWith(ROUTES.ADVANCED_MATH_10) ||
+      path.startsWith(ROUTES.ADVANCED_CHEMISTRY_10)
     ) {
       return;
     }
@@ -351,9 +352,13 @@ export const AppLayout: React.FC = () => {
     { path: ROUTES.DASHBOARD, label: 'Bảng điều khiển', icon: GraduationCap },
     { path: ROUTES.ROADMAP, label: 'Lộ trình học', icon: Map },
     { path: ROUTES.PRACTICE, label: 'Luyện tập', icon: BookOpen },
-    ...(selectedGrade === 'grade10' && (selectedSubject === 'physics' || selectedSubject === 'math')
+    ...(selectedGrade === 'grade10' && (selectedSubject === 'physics' || selectedSubject === 'math' || selectedSubject === 'chemistry')
       ? [{
-          path: selectedSubject === 'physics' ? ROUTES.ADVANCED_PHYSICS_10 : ROUTES.ADVANCED_MATH_10,
+          path: selectedSubject === 'physics'
+            ? ROUTES.ADVANCED_PHYSICS_10
+            : selectedSubject === 'chemistry'
+              ? ROUTES.ADVANCED_CHEMISTRY_10
+              : ROUTES.ADVANCED_MATH_10,
           label: 'Chuyên đề nâng cao',
           icon: Target
         }]
@@ -392,6 +397,7 @@ export const AppLayout: React.FC = () => {
     if (path.startsWith('/practice')) return 'Luyện tập';
     if (path.startsWith(ROUTES.ADVANCED_PHYSICS_10)) return 'Chuyên đề nâng cao';
     if (path.startsWith(ROUTES.ADVANCED_MATH_10)) return 'Chuyên đề nâng cao';
+    if (path.startsWith(ROUTES.ADVANCED_CHEMISTRY_10)) return 'Chuyên đề nâng cao';
     if (path.startsWith('/grammar')) return 'Ngữ pháp Tiếng Anh';
     if (path.startsWith('/vocabulary')) return 'Từ vựng Tiếng Anh 10';
     if (path.startsWith('/ai-tutor')) return 'Gia sư Socratic';
@@ -413,6 +419,7 @@ export const AppLayout: React.FC = () => {
     ROUTES.PRACTICE,
     ROUTES.ADVANCED_PHYSICS_10,
     ROUTES.ADVANCED_MATH_10,
+    ROUTES.ADVANCED_CHEMISTRY_10,
     ROUTES.EXAM,
     ROUTES.AI_TUTOR,
     ROUTES.MISTAKES,

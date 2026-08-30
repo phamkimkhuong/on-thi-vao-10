@@ -668,5 +668,57 @@ export const progressService = {
     } catch (e) {
       logger.error(`Lỗi khi xóa tiến độ chuyên đề nâng cao ${subjectKey}:`, e);
     }
+  },
+
+  async getAdvancedDataFromFirestore(
+    userId: string,
+    subjectKey: string = 'phy10'
+  ): Promise<{
+    attempts: Record<string, { answer: string; isCorrect: boolean; updatedAt: string }>;
+    bookmarks: Record<string, { savedAt: string }>;
+  }> {
+    try {
+      if (!userId || userId === 'guest') return { attempts: {}, bookmarks: {} };
+      const docRef = doc(db, 'users', userId, 'advancedProgress', subjectKey);
+      const snap = await getDoc(docRef);
+      logger.dbRead(`Lấy toàn bộ dữ liệu chuyên đề nâng cao ${subjectKey} (users/{userId}/advancedProgress/${subjectKey})`, 1);
+      if (!snap.exists()) return { attempts: {}, bookmarks: {} };
+      const data = snap.data();
+      return {
+        attempts: (data.attempts as Record<string, { answer: string; isCorrect: boolean; updatedAt: string }>) || {},
+        bookmarks: (data.bookmarks as Record<string, { savedAt: string }>) || {}
+      };
+    } catch (e) {
+      logger.error(`Lỗi khi lấy toàn bộ dữ liệu chuyên đề nâng cao ${subjectKey}:`, e);
+      return { attempts: {}, bookmarks: {} };
+    }
+  },
+
+  async saveAdvancedBookmarkToFirestore(
+    userId: string,
+    subjectKey: string,
+    questionId: string,
+    isBookmarked: boolean
+  ): Promise<void> {
+    try {
+      if (!userId || userId === 'guest') return;
+      const docRef = doc(db, 'users', userId, 'advancedProgress', subjectKey);
+      if (isBookmarked) {
+        await setDoc(docRef, {
+          subjectKey,
+          bookmarks: {
+            [questionId]: { savedAt: new Date().toISOString() }
+          }
+        }, { merge: true });
+        logger.dbWrite(`Lưu bookmark câu ${questionId} chuyên đề ${subjectKey} lên Firestore`, 1);
+      } else {
+        await updateDoc(docRef, {
+          [`bookmarks.${questionId}`]: deleteField()
+        });
+        logger.dbWrite(`Xóa bookmark câu ${questionId} chuyên đề ${subjectKey} trên Firestore`, 1);
+      }
+    } catch (e) {
+      logger.error(`Lỗi khi cập nhật bookmark chuyên đề ${subjectKey}:`, e);
+    }
   }
 };

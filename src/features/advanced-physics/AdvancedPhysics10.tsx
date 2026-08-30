@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
+  Bookmark,
   BrainCircuit,
   CheckCircle2,
   ChevronRight,
@@ -31,6 +32,12 @@ interface StoredAttempt {
 }
 
 type StoredProgress = Record<string, StoredAttempt>;
+
+interface StoredBookmark {
+  savedAt: string;
+}
+
+type StoredBookmarks = Record<string, StoredBookmark>;
 
 export type AdvancedLevel = 'hard' | 'very_hard' | 'extreme';
 export type AdvancedProblemStyle = 'compact' | 'extended' | 'olympiad';
@@ -93,6 +100,8 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
   const navigate = useNavigate();
   const { selectedGrade, selectedSubject, user } = useAppStore();
   const progressKey = user?.uid ? `${config.storageKeyPrefix}${user.uid}` : '';
+  const bookmarksKey = user?.uid ? `${config.storageKeyPrefix}bookmarks_${user.uid}` : '';
+
   const [progress, setProgress] = useState<StoredProgress>(() => {
     if (!user?.uid) return {};
     try {
@@ -102,24 +111,39 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
       return {};
     }
   });
+
+  const [bookmarks, setBookmarks] = useState<StoredBookmarks>(() => {
+    if (!user?.uid) return {};
+    try {
+      const saved = localStorage.getItem(`${config.storageKeyPrefix}bookmarks_${user.uid}`);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
   const [activeTopicId, setActiveTopicId] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isBookmarkOnlyFilter, setIsBookmarkOnlyFilter] = useState(false);
 
-  // Tải và đồng bộ 2 chiều giữa LocalStorage và Firestore
+  // Tải và đồng bộ 2 chiều giữa LocalStorage và Firestore (cả tiến độ làm bài & bài tâm đắc)
   useEffect(() => {
     if (!user?.uid) {
       setProgress({});
+      setBookmarks({});
       return;
     }
 
     let isMounted = true;
     const currentProgressKey = `${config.storageKeyPrefix}${user.uid}`;
+    const currentBookmarksKey = `${config.storageKeyPrefix}bookmarks_${user.uid}`;
 
     const syncWithCloud = async () => {
       try {
-        const cloudAttempts = await progressService.getAdvancedProgressFromFirestore(user.uid, config.subjectKey);
+        const { attempts: cloudAttempts, bookmarks: cloudBookmarks } =
+          await progressService.getAdvancedDataFromFirestore(user.uid, config.subjectKey);
         if (!isMounted) return;
 
         let localAttempts: StoredProgress = {};
@@ -130,37 +154,68 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
           localAttempts = {};
         }
 
-        // Smart merge: ưu tiên bản ghi có thời gian mới hơn
-        const merged: StoredProgress = { ...localAttempts };
-        let hasNewFromCloud = false;
-        let hasNewFromLocal = false;
+        let localBookmarks: StoredBookmarks = {};
+        try {
+          const savedB = localStorage.getItem(currentBookmarksKey);
+          localBookmarks = savedB ? JSON.parse(savedB) : {};
+        } catch {
+          localBookmarks = {};
+        }
+
+        // Smart merge attempts: ưu tiên bản ghi có thời gian mới hơn
+        const mergedAttempts: StoredProgress = { ...localAttempts };
+        let hasNewAttemptsFromCloud = false;
+        let hasNewAttemptsFromLocal = false;
 
         for (const [qId, cloudAttempt] of Object.entries(cloudAttempts)) {
-          const localAttempt = merged[qId];
+          const localAttempt = mergedAttempts[qId];
           if (!localAttempt) {
-            merged[qId] = cloudAttempt;
-            hasNewFromCloud = true;
+            mergedAttempts[qId] = cloudAttempt;
+            hasNewAttemptsFromCloud = true;
           } else if (new Date(cloudAttempt.updatedAt).getTime() > new Date(localAttempt.updatedAt).getTime()) {
-            merged[qId] = cloudAttempt;
-            hasNewFromCloud = true;
+            mergedAttempts[qId] = cloudAttempt;
+            hasNewAttemptsFromCloud = true;
           }
         }
 
-        // Nếu Local có bản ghi mà Cloud chưa có (hoặc mới hơn), đẩy ngược lên Cloud
         for (const [qId, localAttempt] of Object.entries(localAttempts)) {
           const cloudAttempt = cloudAttempts[qId];
           if (!cloudAttempt || new Date(localAttempt.updatedAt).getTime() > new Date(cloudAttempt.updatedAt).getTime()) {
-            hasNewFromLocal = true;
+            hasNewAttemptsFromLocal = true;
             void progressService.saveAdvancedAttemptToFirestore(user.uid, config.subjectKey, qId, localAttempt);
           }
         }
 
-        if (hasNewFromCloud || hasNewFromLocal) {
-          setProgress(merged);
-          localStorage.setItem(currentProgressKey, JSON.stringify(merged));
+        if (hasNewAttemptsFromCloud || hasNewAttemptsFromLocal) {
+          setProgress(mergedAttempts);
+          localStorage.setItem(currentProgressKey, JSON.stringify(mergedAttempts));
+        }
+
+        // Smart merge bookmarks: hợp nhất danh sách bài tâm đắc 2 chiều
+        const mergedBookmarks: StoredBookmarks = { ...localBookmarks };
+        let hasNewBookmarksFromCloud = false;
+        let hasNewBookmarksFromLocal = false;
+
+        for (const [qId, cloudBookmark] of Object.entries(cloudBookmarks)) {
+          if (!mergedBookmarks[qId]) {
+            mergedBookmarks[qId] = cloudBookmark;
+            hasNewBookmarksFromCloud = true;
+          }
+        }
+
+        for (const qId of Object.keys(localBookmarks)) {
+          if (!cloudBookmarks[qId]) {
+            hasNewBookmarksFromLocal = true;
+            void progressService.saveAdvancedBookmarkToFirestore(user.uid, config.subjectKey, qId, true);
+          }
+        }
+
+        if (hasNewBookmarksFromCloud || hasNewBookmarksFromLocal) {
+          setBookmarks(mergedBookmarks);
+          localStorage.setItem(currentBookmarksKey, JSON.stringify(mergedBookmarks));
         }
       } catch (err) {
-        console.error('Lỗi đồng bộ tiến độ nâng cao từ Firestore:', err);
+        console.error('Lỗi đồng bộ dữ liệu nâng cao từ Firestore:', err);
       }
     };
 
@@ -169,6 +224,22 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
       isMounted = false;
     };
   }, [config.storageKeyPrefix, config.subjectKey, user?.uid]);
+
+  const toggleBookmark = (questionId: string) => {
+    if (!user?.uid) return;
+    const willBookmark = !bookmarks[questionId];
+    const nextBookmarks: StoredBookmarks = { ...bookmarks };
+    if (willBookmark) {
+      nextBookmarks[questionId] = { savedAt: new Date().toISOString() };
+    } else {
+      delete nextBookmarks[questionId];
+    }
+    setBookmarks(nextBookmarks);
+    if (bookmarksKey) {
+      localStorage.setItem(bookmarksKey, JSON.stringify(nextBookmarks));
+    }
+    void progressService.saveAdvancedBookmarkToFirestore(user.uid, config.subjectKey, questionId, willBookmark);
+  };
 
   const topicQuestions = useMemo(
     () => activeTopicId
@@ -188,6 +259,8 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
   )).length;
   const accuracy = totalCompleted ? Math.round(totalCorrect / totalCompleted * 100) : 0;
 
+  const totalBookmarks = Object.keys(bookmarks).filter(id => config.questions.some(question => question.id === id)).length;
+
   const resetQuestionState = () => {
     setSelectedAnswer(null);
     setIsSubmitted(false);
@@ -198,6 +271,7 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
     const firstUnanswered = questions.findIndex(question => !progress[question.id]);
     setActiveTopicId(topicId);
     setCurrentIndex(firstUnanswered >= 0 ? firstUnanswered : 0);
+    setIsBookmarkOnlyFilter(false);
     resetQuestionState();
   };
 
@@ -228,7 +302,7 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
   };
 
   const clearProgress = () => {
-    if (!window.confirm(`Xóa toàn bộ tiến độ ${config.title}?`)) return;
+    if (!window.confirm(`Xóa toàn bộ tiến độ làm bài ${config.title}? (Danh sách bài tâm đắc vẫn được giữ lại)`)) return;
     if (progressKey) {
       localStorage.removeItem(progressKey);
     }
@@ -303,10 +377,11 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 min-w-[290px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 min-w-[290px]">
               <StatBox label="Đã làm" value={`${totalCompleted}/${config.questions.length}`} />
               <StatBox label="Đúng" value={String(totalCorrect)} />
               <StatBox label="Chính xác" value={`${accuracy}%`} />
+              <StatBox label="Tâm đắc" value={String(totalBookmarks)} />
             </div>
           </div>
         </section>
@@ -319,7 +394,7 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
             </div>
             {totalCompleted > 0 && (
               <button onClick={clearProgress} className="text-xs font-bold text-muted-foreground hover:text-rose-600 flex items-center gap-1.5 cursor-pointer">
-                <RotateCcw size={13} /> Xóa tiến độ
+                <RotateCcw size={13} /> Xóa tiến độ làm bài
               </button>
             )}
           </div>
@@ -329,6 +404,7 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
               const questions = config.questions.filter(question => question.topicId === topic.id);
               const completed = questions.filter(question => progress[question.id]).length;
               const correct = questions.filter(question => progress[question.id]?.isCorrect).length;
+              const topicBookmarkCount = questions.filter(question => bookmarks[question.id]).length;
               return (
                 <button
                   key={topic.id}
@@ -345,7 +421,14 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
                     {topic.focus.map(item => <span key={item} className="px-2 py-1 bg-secondary/70 rounded-md text-[10px] font-bold text-muted-foreground">{item}</span>)}
                   </div>
                   <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
-                    <span className="text-xs font-black text-emerald-700 dark:text-emerald-300">{correct} câu đúng</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black text-emerald-700 dark:text-emerald-300">{correct} đúng</span>
+                      {topicBookmarkCount > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-black text-amber-700 dark:text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/25">
+                          <Bookmark size={11} className="fill-amber-500 text-amber-500" /> {topicBookmarkCount}
+                        </span>
+                      )}
+                    </div>
                     <span className="inline-flex items-center gap-1 text-xs font-black text-cyan-700 dark:text-cyan-300">Vào làm <ChevronRight size={14} /></span>
                   </div>
                 </button>
@@ -361,7 +444,12 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
   const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
   const topicCompletedCount = topicQuestions.filter(q => progress[q.id]).length;
   const topicCorrectCount = topicQuestions.filter(q => progress[q.id]?.isCorrect).length;
+  const bookmarkedInTopicCount = topicQuestions.filter(q => bookmarks[q.id]).length;
   const isShortOptions = currentQuestion.options.every(opt => (opt || '').trim().length < 32);
+
+  const displayedQuestions = isBookmarkOnlyFilter
+    ? topicQuestions.filter(q => bookmarks[q.id])
+    : topicQuestions;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-7 space-y-5">
@@ -391,47 +479,94 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-secondary/50 px-3.5 py-1.5 rounded-xl border border-border/50 text-xs font-black">
-            <span className="text-muted-foreground font-semibold">Tiến độ:</span>
-            <span className="text-foreground">{topicCompletedCount}/{topicQuestions.length}</span>
-            <span className="text-emerald-700 dark:text-emerald-400">({topicCorrectCount} đúng)</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-xl border border-border/50 text-xs font-black">
+              <span className="text-muted-foreground font-semibold">Tiến độ:</span>
+              <span className="text-foreground">{topicCompletedCount}/{topicQuestions.length}</span>
+              <span className="text-emerald-700 dark:text-emerald-400">({topicCorrectCount} đúng)</span>
+            </div>
+            {bookmarkedInTopicCount > 0 && (
+              <div className="flex items-center gap-1.5 bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 px-3 py-1.5 rounded-xl text-xs font-black">
+                <Bookmark size={13} className="fill-amber-500 text-amber-500" />
+                <span>{bookmarkedInTopicCount} tâm đắc</span>
+              </div>
+            )}
           </div>
         </div>
 
         <div>
-          <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-2">
-            <span className="uppercase tracking-wider">Danh sách câu hỏi (1 – {topicQuestions.length}):</span>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-muted-foreground mb-2.5">
+            <div className="flex items-center gap-1.5 bg-secondary/40 p-1 rounded-xl border border-border/50">
+              <button
+                type="button"
+                onClick={() => setIsBookmarkOnlyFilter(false)}
+                className={cn(
+                  'px-3 py-1 rounded-lg text-xs font-black transition-all cursor-pointer',
+                  !isBookmarkOnlyFilter
+                    ? 'bg-slate-950 text-white dark:bg-cyan-300 dark:text-slate-950 shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                Tất cả ({topicQuestions.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsBookmarkOnlyFilter(true)}
+                className={cn(
+                  'px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer',
+                  isBookmarkOnlyFilter
+                    ? 'bg-amber-500 text-slate-950 shadow-xs'
+                    : 'text-muted-foreground hover:text-amber-600 dark:hover:text-amber-400'
+                )}
+              >
+                <Bookmark size={12} className={cn(bookmarkedInTopicCount > 0 && 'fill-amber-500')} />
+                Bài tâm đắc ({bookmarkedInTopicCount})
+              </button>
+            </div>
+
             <div className="hidden sm:flex items-center gap-3 text-[10px]">
               <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Đúng</span>
               <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Sai</span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Tâm đắc</span>
               <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-slate-950 dark:bg-cyan-300" /> Đang làm</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-8 sm:grid-cols-12 md:grid-cols-24 gap-1.5">
-            {topicQuestions.map((question, index) => {
-              const attempt = progress[question.id];
-              const isCurrent = index === currentIndex;
-              return (
-                <button
-                  key={question.id}
-                  onClick={() => moveToQuestion(index)}
-                  className={cn(
-                    'h-8.5 rounded-lg border text-xs font-black transition-all flex items-center justify-center cursor-pointer',
-                    isCurrent
-                      ? 'bg-slate-950 text-white border-slate-950 dark:bg-cyan-300 dark:text-slate-950 dark:border-cyan-300 ring-2 ring-cyan-500/25 shadow-sm'
-                      : attempt?.isCorrect
-                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
-                        : attempt
-                          ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/30 hover:bg-rose-500/20'
-                          : 'bg-background text-muted-foreground border-border/70 hover:border-cyan-500/40 hover:text-foreground'
-                  )}
-                >
-                  {index + 1}
-                </button>
-              );
-            })}
-          </div>
+          {displayedQuestions.length > 0 ? (
+            <div className="grid grid-cols-8 sm:grid-cols-12 md:grid-cols-24 gap-1.5">
+              {displayedQuestions.map((question) => {
+                const originalIndex = topicQuestions.findIndex(q => q.id === question.id);
+                const attempt = progress[question.id];
+                const isCurrent = originalIndex === currentIndex;
+                const isSaved = Boolean(bookmarks[question.id]);
+                return (
+                  <button
+                    key={question.id}
+                    onClick={() => moveToQuestion(originalIndex)}
+                    className={cn(
+                      'relative h-8.5 rounded-lg border text-xs font-black transition-all flex items-center justify-center cursor-pointer',
+                      isCurrent
+                        ? 'bg-slate-950 text-white border-slate-950 dark:bg-cyan-300 dark:text-slate-950 dark:border-cyan-300 ring-2 ring-cyan-500/25 shadow-sm'
+                        : attempt?.isCorrect
+                          ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
+                          : attempt
+                            ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/30 hover:bg-rose-500/20'
+                            : 'bg-background text-muted-foreground border-border/70 hover:border-cyan-500/40 hover:text-foreground'
+                    )}
+                  >
+                    {originalIndex + 1}
+                    {isSaved && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-card" title="Đã lưu tâm đắc" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="py-4 px-3 rounded-xl bg-secondary/30 border border-border/50 text-center text-xs font-semibold text-muted-foreground">
+              Chưa có bài nào được lưu tâm đắc trong chuyên đề này. Bấm vào nút <span className="font-black text-foreground">"Lưu bài hay"</span> ở câu hỏi bạn thích để lưu lại nhé!
+            </div>
+          )}
         </div>
       </div>
 
@@ -450,9 +585,33 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
                 )}
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-muted-foreground"><Clock3 size={13} /> {currentQuestion.estimatedMinutes} phút</span>
               </div>
-              <span className="text-xs font-black text-foreground bg-secondary/80 px-2.5 py-1 rounded-lg border border-border/40">
-                Câu {currentIndex + 1} / {topicQuestions.length}
-              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleBookmark(currentQuestion.id)}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-black transition-all cursor-pointer select-none',
+                    bookmarks[currentQuestion.id]
+                      ? 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/40 shadow-xs'
+                      : 'bg-secondary/70 text-muted-foreground border-border/70 hover:border-amber-500/40 hover:text-foreground'
+                  )}
+                  title={bookmarks[currentQuestion.id] ? 'Bỏ lưu bài tâm đắc này' : 'Lưu bài này vào danh sách tâm đắc'}
+                >
+                  <Bookmark
+                    size={13}
+                    className={cn(
+                      'transition-all',
+                      bookmarks[currentQuestion.id] ? 'fill-amber-500 text-amber-500 scale-110' : 'text-muted-foreground'
+                    )}
+                  />
+                  <span>{bookmarks[currentQuestion.id] ? 'Đã lưu tâm đắc' : 'Lưu bài hay'}</span>
+                </button>
+
+                <span className="text-xs font-black text-foreground bg-secondary/80 px-2.5 py-1 rounded-lg border border-border/40">
+                  Câu {currentIndex + 1} / {topicQuestions.length}
+                </span>
+              </div>
             </div>
 
             <div className="p-5 sm:p-7 space-y-6">

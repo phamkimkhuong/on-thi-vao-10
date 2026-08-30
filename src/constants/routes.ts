@@ -5,6 +5,7 @@ export const ROUTES = {
   PRACTICE_DETAIL: (questionTypeId: string) => `/practice/${questionTypeId}`,
   ADVANCED_PHYSICS_10: '/advanced-physics-10',
   ADVANCED_MATH_10: '/advanced-math-10',
+  ADVANCED_CHEMISTRY_10: '/advanced-chemistry-10',
   AI_TUTOR: '/ai-tutor',
   MISTAKES: '/mistakes',
   EXAM: '/exam',
