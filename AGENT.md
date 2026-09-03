@@ -636,6 +636,18 @@ npm run deploy     # Build + Firebase deploy hosting
 - **Engine dùng chung:** `AdvancedPracticePage` nhận cấu hình môn học; các wrapper Toán và Vật lí cung cấp dữ liệu, nhãn, route và khóa tiến độ riêng.
 - **Kiểm định:** `npm run validate:math10-advanced`; validator chuẩn hóa đề bằng cách loại tham số số học và bắt buộc đạt 192/192 cấu trúc độc lập. Lệnh `npm run validate:math10` cũng tự chạy cả ngân hàng nền tảng và nâng cao.
 
+### 12.13 Chuyên Đề Nâng Cao Sinh học 10
+
+- **Route riêng:** `/advanced-biology-10`, chỉ hiện trong sidebar khi ngữ cảnh là `grade10/biology`.
+- **Dữ liệu riêng:** `src/data/grade10/biology/advanced/` chứa 8 mảng, 144 câu A–D độc lập và 144 lời giải theo bằng chứng–cơ chế–loại phương án nhiễu; không đưa câu nâng cao vào ngân hàng Luyện tập nền tảng.
+- **Phân tầng:** 48 câu Khó, 64 câu Rất khó và 32 câu Cực khó; đồng thời gồm 48 bài cô đọng, 64 bài tổng hợp và 32 bài kiểu Olympic.
+- **Phạm vi:** phương pháp nghiên cứu; phân tử sinh học; tế bào–kính hiển vi; vận chuyển–truyền tin; enzyme–chuyển hóa; phân bào–công nghệ tế bào; vi sinh; virus.
+- **Nguyên tắc nội dung:** câu hỏi được biên soạn mới theo cấu trúc dữ liệu/thí nghiệm/cơ chế, không sao chép hoặc gắn nhãn “câu của Bộ”; không nhân bản bằng cách đổi số; không chia bài thành chuỗi dẫn dắt; chỉ chọn A/B/C/D.
+- **Học liệu trực quan:** 36 câu có bảng dữ liệu, hiển thị bằng `QuestionStimulusRenderer`; mọi bảng nằm ngay trong câu nên học sinh không cần mở tài liệu ngoài.
+- **Cân bằng đáp án:** A/B/C/D cùng 36 câu; vị trí đáp án và lời giải luôn khớp sau khi sắp phương án.
+- **Tiến độ riêng:** lưu tại `ezonthi_bio10_advanced_progress_{userId}` và Firestore `advancedProgress/bio10`, không tác động mastery nền tảng.
+- **Kiểm định:** `npm run validate:biology10-advanced`; validator kiểm tra đủ 144 câu, cấu trúc chuẩn, dấu vân tay chuyên môn, đáp án, lời giải, bảng dữ liệu và LaTeX. `npm run validate:biology10` chạy cả nền tảng và nâng cao.
+
 ---
 
 ## 13. Checklist Trước Khi Commit

@@ -6,6 +6,7 @@ export const ROUTES = {
   ADVANCED_PHYSICS_10: '/advanced-physics-10',
   ADVANCED_MATH_10: '/advanced-math-10',
   ADVANCED_CHEMISTRY_10: '/advanced-chemistry-10',
+  ADVANCED_BIOLOGY_10: '/advanced-biology-10',
   AI_TUTOR: '/ai-tutor',
   MISTAKES: '/mistakes',
   EXAM: '/exam',

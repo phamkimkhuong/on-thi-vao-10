@@ -2,8 +2,9 @@ import { g10BiologyModule0Topics } from './topics';
 import { g10BiologyModule0QuestionTypes } from './questionTypes';
 import { g10BiologyModule0Questions } from './questions';
 import { g10BiologyModule0Solutions } from './solutions';
+import { g10BiologyModule0Adaptive } from './adaptiveBank';
 
 export const topics = g10BiologyModule0Topics;
 export const questionTypes = g10BiologyModule0QuestionTypes;
-export const questions = g10BiologyModule0Questions;
-export const solutions = g10BiologyModule0Solutions;
+export const questions = [...g10BiologyModule0Questions, ...g10BiologyModule0Adaptive.questions];
+export const solutions = [...g10BiologyModule0Solutions, ...g10BiologyModule0Adaptive.solutions];

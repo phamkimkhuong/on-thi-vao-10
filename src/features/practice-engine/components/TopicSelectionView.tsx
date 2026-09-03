@@ -78,6 +78,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
   const isEnglish = routeSubject === 'english';
   const isChemistry = routeSubject === 'chemistry';
   const isPhysics = routeSubject === 'physics';
+  const isBiology = routeSubject === 'biology';
 
   const allQuestions = useMemo(
     () => getPracticeQuestions(selectedGrade, routeSubject),
@@ -633,7 +634,7 @@ export const TopicSelectionView: React.FC<TopicSelectionViewProps> = ({
                 {topicQTypes.map((qType) => {
                   const qTypeAttempts = attempts.filter(a => a.questionTypeId === qType.id);
                   const qTypeQuestions = allQuestions.filter(q => q.questionTypeId === qType.id);
-                  const adaptiveStatus = (isChemistry || isPhysics)
+                  const adaptiveStatus = (isChemistry || isPhysics || isBiology)
                     ? buildAdaptivePracticeSequence(qTypeQuestions, qTypeAttempts)
                     : null;
                   const totalQuestions = adaptiveStatus?.learningQuestionCount ?? qTypeQuestions.length;

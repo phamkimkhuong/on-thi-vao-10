@@ -336,6 +336,10 @@ export const getPracticeQuestions = (grade: GradeCode, subject: SubjectCode): Qu
     ));
   }
 
+  if (grade === 'grade10' && subject === 'biology') {
+    return questions.filter(question => !question.id.startsWith('bio10-assess-'));
+  }
+
   return questions;
 };
 

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { createServer } from 'vite';
 
 const root = process.cwd();
 const dataDirectory = path.join(root, 'src', 'data', 'grade10', 'biology');
@@ -79,6 +80,27 @@ for (const moduleName of moduleDirs) {
   if (fs.existsSync(metadataPath)) practiceMetadata.push(...readFirstMatchingArray(metadataPath, 'PracticeMetadata'));
 }
 
+// Các module đã chuẩn hóa có thể tạo câu hỏi/metadata từ seed đã biên soạn.
+// Nạp đúng dữ liệu runtime thay vì chỉ đọc array literal để validator nhìn thấy
+// toàn bộ ngân hàng mà ứng dụng thực sự sử dụng.
+const vite = await createServer({
+  server: { middlewareMode: true },
+  appType: 'custom',
+  optimizeDeps: { noDiscovery: true }
+});
+try {
+  const [questionModule, solutionModule, metadataModule] = await Promise.all([
+    vite.ssrLoadModule('/src/data/grade10/biology/questions.ts'),
+    vite.ssrLoadModule('/src/data/grade10/biology/solutions.ts'),
+    vite.ssrLoadModule('/src/data/grade10/biology/practiceMetadata.ts')
+  ]);
+  questions.splice(0, questions.length, ...questionModule.g10BiologyQuestions);
+  solutions.splice(0, solutions.length, ...solutionModule.g10BiologySolutions);
+  practiceMetadata.splice(0, practiceMetadata.length, ...metadataModule.g10BiologyPracticeMetadata);
+} finally {
+  await vite.close();
+}
+
 const errors = [];
 const warnings = [];
 const topicById = new Map(topics.map(item => [item.id, item]));
@@ -117,6 +139,14 @@ const normalizeQuestionContent = content => String(content)
   .replace(/\s+/g, ' ')
   .trim();
 
+// Chặn kiểu mở rộng ngân hàng bằng cách giữ nguyên câu và chỉ thay số.
+// Chỉ áp dụng cứng cho phần ngân hàng thích ứng mới để không làm hỏng dữ liệu
+// lịch sử trước khi có thể biên tập lại từng câu một cách có chủ đích.
+const normalizeNumericTemplate = content => normalizeQuestionContent(content)
+  .replace(/\d+(?:[.,]\d+)?/g, '#')
+  .replace(/\s+/g, ' ')
+  .trim();
+
 for (const [label, items, keyOf] of [
   ['Topic', topics, item => item.id],
   ['Question type', questionTypes, item => item.id],
@@ -132,6 +162,16 @@ for (const [label, items, keyOf] of [
 
 for (const content of duplicateKeys(questions, question => normalizeQuestionContent(question.content))) {
   errors.push(`Nội dung câu hỏi bị trùng: "${content.slice(0, 80)}".`);
+}
+
+const adaptiveQuestions = questions.filter(question => question.id.startsWith('bio10-adapt-'));
+for (const template of duplicateKeys(adaptiveQuestions, question => normalizeNumericTemplate(question.content))) {
+  errors.push(`Câu mở rộng chỉ khác dữ kiện số hoặc trùng khuôn: "${template.slice(0, 100)}".`);
+}
+
+const adaptiveVariantGroups = new Set(adaptiveQuestions.map(question => question.variantGroupId));
+if (adaptiveVariantGroups.size !== adaptiveQuestions.length) {
+  errors.push('Ngân hàng mở rộng có variantGroupId bị dùng lại; không thể xác nhận các câu là biến thể độc lập.');
 }
 
 let cyclicAnswerTypeCount = 0;
