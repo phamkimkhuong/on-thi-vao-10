@@ -37,8 +37,10 @@ import { supportService } from '../../services/supportService';
 import { StudentSidebar } from './components/StudentSidebar';
 import { StudentSummary } from './components/StudentSummary';
 import { StudentMasteryTab } from './components/StudentMasteryTab';
+import { StudentAdvancedTab } from './components/StudentAdvancedTab';
 import { StudentExamsTab } from './components/StudentExamsTab';
 import { GradingPanel } from './components/GradingPanel';
+import type { StudentAdvancedSubjectData } from '../../services/teacherService';
 import { MessageSquareHeart, Bell, MessageCircleCode } from 'lucide-react';
 import { TeacherSurveyReport } from './components/TeacherSurveyReport';
 import { TeacherNotificationManager } from './components/TeacherNotificationManager';
@@ -132,7 +134,9 @@ export const TeacherDashboard: React.FC = () => {
   const [selectedStudent, setSelectedStudent] = useState<SimulatedStudent | null>(null);
   const [studentProgress, setStudentProgress] = useState<UserProgress | null>(null);
   const [studentExams, setStudentExams] = useState<ExamResult[]>([]);
-  const [selectedStudentTab, setSelectedStudentTab] = useState<'mastery' | 'exams'>('mastery');
+  const [studentAdvancedData, setStudentAdvancedData] = useState<StudentAdvancedSubjectData[]>([]);
+  const [isAdvancedLoading, setIsAdvancedLoading] = useState(false);
+  const [selectedStudentTab, setSelectedStudentTab] = useState<'mastery' | 'advanced' | 'exams'>('mastery');
   const [selectedExamForDetail, setSelectedExamForDetail] = useState<ExamResult | null>(null);
   const [selectedSubjectKey, setSelectedSubjectKey] = useState<string>('');
 
@@ -443,8 +447,12 @@ export const TeacherDashboard: React.FC = () => {
     setSelectedExamForDetail(null);
     setSelectedSubjectKey('');
     setIsLoading(true);
+    setIsAdvancedLoading(true);
     try {
-      const exams = await progressService.getExamResults(student.id);
+      const [exams, advData] = await Promise.all([
+        progressService.getExamResults(student.id),
+        teacherService.getStudentAdvancedProgress(student.id)
+      ]);
       setStudentProgress({
         userId: student.id,
         masteryLevels: student.masteryLevels || {},
@@ -452,10 +460,12 @@ export const TeacherDashboard: React.FC = () => {
         lastUpdatedAt: student.lastActiveAt || new Date().toISOString()
       });
       setStudentExams(exams || []);
+      setStudentAdvancedData(advData || []);
     } catch (err) {
       console.error("Lỗi khi lấy thông tin chi tiết học sinh:", err);
     } finally {
       setIsLoading(false);
+      setIsAdvancedLoading(false);
     }
   };
 
@@ -747,7 +757,7 @@ export const TeacherDashboard: React.FC = () => {
 
                     {/* Danh sách tiến độ chi tiết từng môn hoặc Lịch sử thi */}
                     <div className="space-y-4">
-                      <div className="flex border-b border-border/20 pb-2 gap-4 items-center">
+                      <div className="flex border-b border-border/20 pb-2 gap-4 items-center flex-wrap">
                         <button
                           onClick={() => setSelectedStudentTab('mastery')}
                           className={cn(
@@ -758,6 +768,20 @@ export const TeacherDashboard: React.FC = () => {
                           )}
                         >
                           🎯 Điểm số Mastery ({groupedMasteryData.length} môn)
+                        </button>
+                        <button
+                          onClick={() => setSelectedStudentTab('advanced')}
+                          className={cn(
+                            "text-xs font-black pb-2 px-1 relative -mb-2 border-b-2 transition-all cursor-pointer flex items-center gap-1.5",
+                            selectedStudentTab === 'advanced'
+                              ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                              : "border-transparent text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          <span>🏆 Chuyên đề Nâng cao (4 môn)</span>
+                          {studentAdvancedData.some(d => d.completedCount > 0) && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          )}
                         </button>
                         <button
                           onClick={() => setSelectedStudentTab('exams')}
@@ -777,6 +801,13 @@ export const TeacherDashboard: React.FC = () => {
                           groupedMasteryData={groupedMasteryData}
                           selectedSubjectKey={selectedSubjectKey}
                           onSelectSubjectKey={setSelectedSubjectKey}
+                        />
+                      )}
+
+                      {selectedStudentTab === 'advanced' && (
+                        <StudentAdvancedTab
+                          advancedData={studentAdvancedData}
+                          isLoading={isAdvancedLoading}
                         />
                       )}
 
