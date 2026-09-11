@@ -157,7 +157,7 @@ service cloud.firestore {
     }
 
     match /system_stats/{docId} {
-      allow read: if signedIn();
+      allow read: if docId == 'leaderboard' || signedIn();
       allow write: if false;
     }
 

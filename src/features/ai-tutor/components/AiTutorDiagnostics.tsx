@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, Loader, CheckCircle, AlertTriangle, X } from 'lucide-react';
+import { Brain, Loader, CheckCircle, AlertTriangle, X, Sparkles } from 'lucide-react';
 
 interface AiTutorDiagnosticsProps {
   isLoadingProfile: boolean;
@@ -10,6 +10,8 @@ interface AiTutorDiagnosticsProps {
   lastUpdated?: any;
   isMobile?: boolean;
   onCloseMobile?: () => void;
+  isLoggedIn?: boolean;
+  onRequireLogin?: () => void;
 }
 
 export const AiTutorDiagnostics: React.FC<AiTutorDiagnosticsProps> = ({
@@ -21,6 +23,8 @@ export const AiTutorDiagnostics: React.FC<AiTutorDiagnosticsProps> = ({
   lastUpdated,
   isMobile = false,
   onCloseMobile,
+  isLoggedIn = true,
+  onRequireLogin,
 }) => {
   const formattedLastUpdated = lastUpdated
     ? new Date(lastUpdated.seconds ? lastUpdated.seconds * 1000 : new Date(lastUpdated).getTime()).toLocaleString("vi-VN")
@@ -101,6 +105,26 @@ export const AiTutorDiagnostics: React.FC<AiTutorDiagnosticsProps> = ({
                   )}
                 </div>
               </>
+            ) : !isLoggedIn ? (
+              <div className="p-4 bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent rounded-2xl border border-amber-500/20 text-center space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-sm">
+                  <Sparkles size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-xs font-black text-foreground">Hồ Sơ Năng Lực Socratic</h4>
+                  <p className="text-[11px] font-semibold text-muted-foreground leading-relaxed">
+                    AI tự động theo dõi tư duy giải bài, thống kê điểm mạnh và các lỗi sai thường gặp để tối ưu hoá lộ trình ôn thi cho riêng bạn.
+                  </p>
+                </div>
+                {onRequireLogin && (
+                  <button
+                    onClick={onRequireLogin}
+                    className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    Đăng nhập để mở khóa
+                  </button>
+                )}
+              </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
                 <Brain className="text-slate-300 dark:text-slate-700" size={40} />
@@ -180,6 +204,26 @@ export const AiTutorDiagnostics: React.FC<AiTutorDiagnosticsProps> = ({
                 )}
               </div>
             </>
+          ) : !isLoggedIn ? (
+            <div className="p-3.5 bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent rounded-2xl border border-amber-500/20 text-center space-y-2.5">
+              <div className="w-9 h-9 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-sm">
+                <Sparkles size={18} />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-[11px] font-black text-foreground">Hồ Sơ Năng Lực Socratic</h4>
+                <p className="text-[10px] font-semibold text-muted-foreground leading-relaxed">
+                  AI tự động phân tích điểm mạnh & lỗi sai thường gặp sau mỗi câu hỏi để tối ưu hóa lộ trình ôn thi cho bạn.
+                </p>
+              </div>
+              {onRequireLogin && (
+                <button
+                  onClick={onRequireLogin}
+                  className="w-full py-2 px-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[11px] rounded-xl shadow-xs transition-colors cursor-pointer"
+                >
+                  Đăng nhập để mở khóa
+                </button>
+              )}
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-40 text-center gap-3">
               <Brain className="text-slate-300 dark:text-slate-700" size={32} />

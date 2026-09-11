@@ -35,8 +35,10 @@ export const leaderboardService = {
       }
 
       return { lastUpdated: '', period: 'daily', rankings: [] };
-    } catch (e) {
-      logger.error('Lỗi khi lấy Bảng Xếp Hạng', e);
+    } catch (e: any) {
+      if (e?.code !== 'permission-denied') {
+        logger.error('Lỗi khi lấy Bảng Xếp Hạng', e);
+      }
       return { lastUpdated: '', period: 'daily', rankings: [] };
     }
   }

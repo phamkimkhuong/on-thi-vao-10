@@ -17,7 +17,12 @@ import {
   Calendar,
   AlertTriangle,
   ArrowRight,
-  ArrowLeft
+  ArrowLeft,
+  Sparkles,
+  RotateCcw,
+  Layers,
+  Brain,
+  X
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { UserMistake, Question, Solution, SolutionStep, UserAttempt, StructuredAnswer, AiEvaluation } from '../../types';
@@ -50,6 +55,83 @@ interface EnrichedMistake extends UserMistake {
   typeName: string;
 }
 
+const createDemoMistakes = (
+  questionsList: Question[],
+  typesList: { id: string; name: string }[]
+): EnrichedMistake[] => {
+  const now = new Date();
+  const pastDay = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString();
+  const futureDay = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString();
+
+  let selectedQuestions: Question[] = [];
+  if (questionsList && questionsList.length > 0) {
+    const seenTypes = new Set<string>();
+    for (const q of questionsList) {
+      if (!seenTypes.has(q.questionTypeId)) {
+        seenTypes.add(q.questionTypeId);
+        selectedQuestions.push(q);
+      }
+      if (selectedQuestions.length >= 3) break;
+    }
+    if (selectedQuestions.length < 2) {
+      selectedQuestions = questionsList.slice(0, 3);
+    }
+  }
+
+  if (selectedQuestions.length === 0) {
+    selectedQuestions = [
+      {
+        id: 'demo-fallback-1',
+        subjectId: 'math',
+        topicId: 'algebra',
+        questionTypeId: 'demo-type-1',
+        content: 'Cho phương trình bậc hai $x^2 - 2(m-1)x + m^2 - 3 = 0$. Tìm tất cả các giá trị của $m$ để phương trình có hai nghiệm phân biệt $x_1, x_2$ thỏa mãn $x_1^2 + x_2^2 = 10$.',
+        correctAnswer: 'm = 2',
+        options: ['m = 2', 'm = -2', 'm = 1', 'm = 3'],
+        difficulty: 'medium',
+        sourceType: 'manual'
+      },
+      {
+        id: 'demo-fallback-2',
+        subjectId: 'math',
+        topicId: 'algebra',
+        questionTypeId: 'demo-type-2',
+        content: 'Rút gọn biểu thức $P = \\left(\\frac{\\sqrt{x}}{\\sqrt{x}-1} - \\frac{1}{x-\\sqrt{x}}\\right) : \\frac{\\sqrt{x}+1}{\\sqrt{x}-1}$ với $x > 0, x \\ne 1$.',
+        correctAnswer: 'P = 1',
+        options: ['P = 1', 'P = \\sqrt{x}', 'P = \\frac{1}{\\sqrt{x}}', 'P = x'],
+        difficulty: 'easy',
+        sourceType: 'manual'
+      }
+    ];
+  }
+
+  return selectedQuestions.map((q, idx) => {
+    const type = typesList.find(t => t.id === q.questionTypeId);
+    let wrongAnswerText = 'Chưa điền đáp án';
+    if (q.options && q.options.length > 1) {
+      const wrongOpt = q.options.find(opt => opt !== q.correctAnswer);
+      if (wrongOpt) wrongAnswerText = wrongOpt;
+    } else if (q.correctAnswer) {
+      wrongAnswerText = `Sai dấu hoặc thiếu điều kiện xác định`;
+    }
+
+    return {
+      id: `demo-mistake-${idx + 1}`,
+      userId: 'guest-demo',
+      questionId: q.id,
+      questionTypeId: q.questionTypeId || 'demo-type',
+      typeName: type?.name || (idx === 0 ? 'Phương trình & Hệ thức Vi-ét' : 'Rút gọn biểu thức chứa căn'),
+      wrongAnswer: wrongAnswerText,
+      reviewStatus: 'reviewing',
+      reviewCount: idx === 0 ? 2 : 1,
+      nextReviewAt: idx === 0 ? now.toISOString() : futureDay,
+      lastAttemptedAt: pastDay,
+      teacherFeedback: idx === 0 ? 'Chú ý điều kiện có 2 nghiệm phân biệt (Delta > 0) trước khi áp dụng Vi-ét!' : undefined,
+      question: q
+    };
+  });
+};
+
 export const MistakeNotebook: React.FC = () => {
   const { selectedSubject, selectedGrade, user, progressVersion, refreshProgress } = useAppStore();
   void progressVersion;
@@ -69,13 +151,18 @@ export const MistakeNotebook: React.FC = () => {
   const [isReSubmitting, setIsReSubmitting] = useState(false);
   const [reSubmitError, setReSubmitError] = useState<string | null>(null);
   const [latestAttempt, setLatestAttempt] = useState<UserAttempt | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const questionTypes = getQuestionTypes(selectedGrade, selectedSubject);
   const questions = getQuestions(selectedGrade, selectedSubject);
   const solutions = getSolutions(selectedGrade, selectedSubject);
 
   const loadMistakes = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      const demoList = createDemoMistakes(questions, questionTypes);
+      setMistakes(demoList);
+      return;
+    }
     const currentUserId = user.uid;
     let list = storageService.getMistakes(currentUserId);
 
@@ -128,11 +215,35 @@ export const MistakeNotebook: React.FC = () => {
 
     // Tìm giải pháp
     const sol = solutions.find(s => s.questionId === mistake.questionId);
-    setReSolution(sol || null);
+    if (!sol && mistake.id.startsWith('demo-')) {
+      setReSolution({
+        questionId: mistake.questionId,
+        detailedSteps: [
+          {
+            stepOrder: 1,
+            title: 'Phân tích yêu cầu & thiết lập công thức',
+            description: 'Xác định các điều kiện xác định và hướng giải tối ưu cho bài toán.'
+          },
+          {
+            stepOrder: 2,
+            title: 'Thực hiện biến đổi đại số',
+            description: 'Biến đổi cẩn thận, tránh nhầm lẫn dấu và kiểm tra lại điều kiện nghiệm.'
+          }
+        ],
+        finalAnswer: mistake.question.correctAnswer || 'Xem lại lý thuyết và phương pháp giải'
+      } as any);
+    } else {
+      setReSolution(sol || null);
+    }
   };
 
   const handleReSubmit = async () => {
     if (!activeMistake || reSubmitted || isReSubmitting) return;
+
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
 
     setIsReSubmitting(true);
     setReSubmitError(null);
@@ -261,15 +372,6 @@ export const MistakeNotebook: React.FC = () => {
     );
   };
 
-  if (!user) {
-    return (
-      <MathLoginRequired
-        title="Sổ tay sửa lỗi sai thông minh"
-        description="Tính năng Sổ tay sửa lỗi sai giúp lưu trữ tự động các câu hỏi làm sai từ các bài luyện tập và thi thử để bạn ôn luyện lại. Đăng nhập để sử dụng tính năng này."
-      />
-    );
-  }
-
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-12">
 
@@ -280,6 +382,67 @@ export const MistakeNotebook: React.FC = () => {
           Sổ lỗi sai cá nhân (Mistake Notebook)
         </h2>
       </div>
+
+      {/* Banner Giới thiệu Chế độ Xem trước khi chưa đăng nhập */}
+      {!user && (
+        <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4 animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                <Sparkles size={20} />
+              </div>
+              <div className="space-y-0.5">
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-200 text-[10px] font-black uppercase tracking-wide">
+                  ✨ Chế độ xem trước tính năng
+                </div>
+                <h3 className="text-sm font-black text-foreground">
+                  Khám phá Sổ tay sửa lỗi sai thông minh — {getSubjectName(selectedSubject)}
+                </h3>
+                <p className="text-xs font-semibold text-muted-foreground leading-relaxed">
+                  Dưới đây là các câu sai mẫu minh họa. Khi đăng nhập, hệ thống sẽ <strong>tự động lưu lại mọi câu làm sai</strong> từ các bài luyện tập và đề thi để bạn ôn luyện lại đúng thời điểm vàng!
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={() => setShowAuthModal(true)}
+              className="font-black text-xs px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl shadow-md shrink-0 cursor-pointer"
+            >
+              Đăng nhập để sử dụng
+            </Button>
+          </div>
+
+          {/* 3 Thẻ Tính Năng Nổi Bật */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-amber-500/15">
+            <div className="p-2.5 rounded-xl bg-card/80 border border-border/50 space-y-1">
+              <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold text-[11px]">
+                <RotateCcw size={13} />
+                <span>Lặp lại ngắt quãng</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
+                Tự động lên lịch ôn lại vào các mốc 1 ngày, 3 ngày, 7 ngày giúp nhớ lâu.
+              </p>
+            </div>
+            <div className="p-2.5 rounded-xl bg-card/80 border border-border/50 space-y-1">
+              <div className="flex items-center gap-1.5 text-primary font-bold text-[11px]">
+                <Layers size={13} />
+                <span>Gom nhóm dạng bài</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
+                Thống kê số lần sai theo từng chuyên đề để bạn tập trung khắc phục lỗ hổng.
+              </p>
+            </div>
+            <div className="p-2.5 rounded-xl bg-card/80 border border-border/50 space-y-1">
+              <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">
+                <Brain size={13} />
+                <span>AI Socratic hướng dẫn</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
+                Chấm bài tự luận qua ảnh chụp và chỉ ra từng bước giải chưa chính xác.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Giao diện chính */}
       {!activeMistake ? (
@@ -450,6 +613,19 @@ export const MistakeNotebook: React.FC = () => {
           </CardHeader>
 
           <CardContent className="p-6 space-y-6">
+            {!user && (
+              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs font-semibold text-amber-800 dark:text-amber-200 flex items-center justify-between gap-3">
+                <span>💡 Bạn đang trải nghiệm giải lại câu sai minh họa. Đăng nhập để AI chấm bài và lưu kết quả vào tiến trình của bạn!</span>
+                <Button 
+                  size="sm" 
+                  onClick={() => setShowAuthModal(true)} 
+                  className="text-[10px] h-7 px-3 bg-amber-500 hover:bg-amber-600 text-white font-bold shrink-0 cursor-pointer"
+                >
+                  Đăng nhập
+                </Button>
+              </div>
+            )}
+
             {/* Đề bài */}
             <div className="text-sm font-semibold leading-relaxed text-foreground bg-slate-50/20 dark:bg-slate-900/5 p-4 rounded-xl border border-border/10">
               <LatexRenderer text={activeMistake.question.content} />
@@ -685,6 +861,33 @@ export const MistakeNotebook: React.FC = () => {
             )}
           </CardContent>
         </Card>
+      )}
+
+      {/* Modal Popup Yêu Cầu Đăng Nhập */}
+      {showAuthModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in"
+          onClick={() => setShowAuthModal(false)}
+        >
+          <div 
+            className="relative w-full max-w-lg animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowAuthModal(false)}
+              className="absolute top-10 right-2 sm:right-4 z-20 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors cursor-pointer"
+              title="Đóng"
+            >
+              <X size={18} />
+            </button>
+            <MathLoginRequired
+              title="Kích hoạt Sổ lỗi sai thông minh"
+              description="Đăng nhập miễn phí bằng Google để tự động lưu câu làm sai, theo dõi chu kỳ nhắc nhở ôn tập (Spaced Repetition) và đồng hành cải thiện điểm số cùng AI!"
+              onBack={() => setShowAuthModal(false)}
+              backText="Tiếp tục xem trước"
+            />
+          </div>
+        </div>
       )}
     </div>
   );

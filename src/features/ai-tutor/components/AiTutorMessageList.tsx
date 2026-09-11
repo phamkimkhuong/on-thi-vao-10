@@ -19,6 +19,9 @@ interface AiTutorMessageListProps {
   onImageClick: (url: string) => void;
   onUpgradeClick: () => void;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  isLoggedIn?: boolean;
+  onRequireLogin?: () => void;
+  subjectName?: string;
 }
 
 export const AiTutorMessageList: React.FC<AiTutorMessageListProps> = ({
@@ -31,11 +34,83 @@ export const AiTutorMessageList: React.FC<AiTutorMessageListProps> = ({
   onImageClick,
   onUpgradeClick,
   messagesEndRef,
+  isLoggedIn = true,
+  onRequireLogin,
+  subjectName = 'môn học'
 }) => {
   return (
     <>
       {/* Chat Messages Container */}
       <div className="flex-grow overflow-y-auto p-3 space-y-3 bg-slate-50/20 dark:bg-slate-900/5">
+        {messages.length === 0 && !isLoading && (
+          <div className="max-w-2xl mx-auto py-6 sm:py-10 px-4 text-center space-y-6 animate-fade-in">
+            <div className="mx-auto w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-500/20 via-orange-500/15 to-amber-500/5 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/10 ring-4 ring-amber-500/10">
+              <Bot size={32} />
+            </div>
+
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-[10px] font-black uppercase tracking-wider">
+                ✨ Trợ Lý Học Tập 24/7 · Phương Pháp Socratic
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
+                Gia Sư Socratic AI — {subjectName}
+              </h2>
+              <p className="text-xs font-semibold text-muted-foreground leading-relaxed max-w-lg mx-auto">
+                Khác với các công cụ giải bài thông thường, Thầy Socratic sẽ <strong>đặt câu hỏi gợi mở và dẫn dắt từng bước</strong> giúp bạn tự tìm ra lời giải, hiểu sâu bản chất và không lo học vẹt.
+              </p>
+            </div>
+
+            {/* 3 Thẻ Tính Năng Nổi Bật */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+              <div className="p-3.5 bg-card border border-border/70 rounded-2xl shadow-xs space-y-1 hover:border-amber-500/40 transition-all">
+                <div className="text-base mb-1">⚡</div>
+                <h4 className="text-[11px] font-black text-foreground">Gợi mở từng bước</h4>
+                <p className="text-[10px] font-semibold text-muted-foreground leading-relaxed">
+                  Hướng dẫn bạn từng bước tư duy, chỉ can thiệp khi bạn gặp bế tắc.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-card border border-border/70 rounded-2xl shadow-xs space-y-1 hover:border-amber-500/40 transition-all">
+                <div className="text-base mb-1">📐</div>
+                <h4 className="text-[11px] font-black text-foreground">Công thức KaTeX</h4>
+                <p className="text-[10px] font-semibold text-muted-foreground leading-relaxed">
+                  Trình bày công thức Toán, Lý, Hóa chuẩn xác, rõ ràng và trực quan.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-card border border-border/70 rounded-2xl shadow-xs space-y-1 hover:border-amber-500/40 transition-all">
+                <div className="text-base mb-1">📸</div>
+                <h4 className="text-[11px] font-black text-foreground">Hỏi bài qua hình ảnh</h4>
+                <p className="text-[10px] font-semibold text-muted-foreground leading-relaxed">
+                  Chụp ảnh bài tập trên vở hoặc sách giáo khoa để AI phân tích trực tiếp.
+                </p>
+              </div>
+            </div>
+
+            {/* Nút Kêu Gọi Đăng Nhập Nếu Chưa Đăng Nhập */}
+            {!isLoggedIn && (
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+                <div>
+                  <h4 className="text-xs font-black text-foreground">Bắt đầu trò chuyện cùng Gia sư AI ngay</h4>
+                  <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">
+                    Đăng nhập miễn phí bằng Google để gửi câu hỏi và lưu lại toàn bộ lịch sử học tập.
+                  </p>
+                </div>
+                <button
+                  onClick={onRequireLogin}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 hover:opacity-95 text-white text-xs font-black shadow-md shadow-orange-500/20 transition-all cursor-pointer shrink-0"
+                >
+                  Đăng nhập với Google
+                </button>
+              </div>
+            )}
+
+            <p className="text-[10px] font-extrabold text-muted-foreground/70 uppercase tracking-wider">
+              👇 Chọn một câu hỏi mẫu bên dưới hoặc gõ câu hỏi để bắt đầu:
+            </p>
+          </div>
+        )}
+
         {messages.map((m, idx) => {
           const isBot = m.role === 'model';
           return (

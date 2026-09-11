@@ -15,6 +15,8 @@ interface AiTutorInputProps {
   onPasteImage?: (file: File) => void;
   onRemoveImage: () => void;
   onSubmit: (e?: React.FormEvent) => void;
+  isLoggedIn?: boolean;
+  onRequireLogin?: () => void;
 }
 
 export const AiTutorInput: React.FC<AiTutorInputProps> = ({
@@ -31,6 +33,8 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
   onPasteImage,
   onRemoveImage,
   onSubmit,
+  isLoggedIn = true,
+  onRequireLogin,
 }) => {
   const isLimitExhausted = errorMsg === "LIMIT_EXHAUSTED";
   const isDisabled = isLoading || isUploadingImage || isLimitExhausted;
@@ -52,11 +56,36 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isLoggedIn && onRequireLogin) {
+      onRequireLogin();
+      return;
+    }
+    onSubmit(e);
+  };
+
   return (
     <div 
       onPaste={handlePaste}
       className="border-t border-border bg-slate-50/50 dark:bg-slate-900/20 p-3"
     >
+      {/* Banner Chế độ xem trước khi chưa đăng nhập */}
+      {!isLoggedIn && (
+        <div className="mb-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between gap-2">
+          <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 truncate">
+            🔒 Chế độ xem trước: Đăng nhập miễn phí để gửi câu hỏi và nhận hướng dẫn từ Gia sư AI.
+          </span>
+          <button
+            type="button"
+            onClick={onRequireLogin}
+            className="text-[9px] font-black text-amber-600 dark:text-amber-400 hover:underline shrink-0 cursor-pointer"
+          >
+            Đăng nhập ngay →
+          </button>
+        </div>
+      )}
+
       {/* Preview Image Container */}
       {previewUrl && (
         <div className="relative inline-block mb-3 p-1 bg-background border border-border rounded-lg shadow-sm group">
@@ -76,7 +105,7 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
         </div>
       )}
 
-      <form onSubmit={onSubmit} className="flex gap-2 items-center">
+      <form onSubmit={handleFormSubmit} className="flex gap-2 items-center">
         {/* Hidden File Input */}
         <input
           type="file"
@@ -89,7 +118,7 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
         {/* Attachment Button */}
         <button
           type="button"
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => (!isLoggedIn && onRequireLogin ? onRequireLogin() : fileInputRef.current?.click())}
           disabled={isDisabled}
           className="w-11 h-11 rounded-2xl border border-border bg-background hover:bg-secondary disabled:opacity-50 flex items-center justify-center shrink-0 cursor-pointer transition-all shadow-sm text-muted-foreground"
           title="Đính kèm hình ảnh bài làm (hoặc dán Ctrl+V)"
@@ -102,12 +131,18 @@ export const AiTutorInput: React.FC<AiTutorInputProps> = ({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={isDisabled}
-          placeholder={isLimitExhausted ? "Bạn đã hết lượt hỏi hôm nay. Vui lòng nâng cấp..." : placeholder}
+          placeholder={
+            !isLoggedIn
+              ? "Nhập câu hỏi để trò chuyện cùng Gia sư AI..."
+              : isLimitExhausted
+              ? "Bạn đã hết lượt hỏi hôm nay. Vui lòng nâng cấp..."
+              : placeholder
+          }
           className="flex-1 bg-background border border-border rounded-2xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 text-foreground font-semibold disabled:bg-secondary/40 placeholder:text-muted-foreground"
         />
         <button
           type="submit"
-          disabled={(!input.trim() && !selectedFile) || isDisabled}
+          disabled={isLoggedIn && (!input.trim() && !selectedFile) || isDisabled}
           className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white hover:opacity-95 disabled:opacity-40 flex items-center justify-center shrink-0 cursor-pointer shadow-md shadow-orange-500/10 transition-all"
         >
           <Send size={16} />

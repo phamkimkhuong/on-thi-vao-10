@@ -10,12 +10,16 @@ interface MathLoginRequiredProps {
   title?: string;
   description?: string;
   className?: string;
+  onBack?: () => void;
+  backText?: string;
 }
 
 export const MathLoginRequired: React.FC<MathLoginRequiredProps> = ({
   title = 'Cần đăng nhập để học Toán',
   description = 'Các bài Toán yêu cầu lưu ảnh bài giải, lịch sử làm bài và tiến độ cá nhân nên bạn cần đăng nhập trước khi luyện tập.',
-  className
+  className,
+  onBack,
+  backText = 'Về bảng điều khiển'
 }) => {
   const navigate = useNavigate();
   const [isAuthLoading, setIsAuthLoading] = useState(false);
@@ -62,10 +66,10 @@ export const MathLoginRequired: React.FC<MathLoginRequiredProps> = ({
             </Button>
             <Button
               variant="outline"
-              onClick={() => navigate('/dashboard')}
+              onClick={onBack ? onBack : () => navigate('/dashboard')}
               className="font-bold text-xs border border-border/50"
             >
-              <ArrowLeft size={14} /> Về bảng điều khiển
+              <ArrowLeft size={14} /> {backText}
             </Button>
           </div>
         </CardContent>

@@ -332,22 +332,6 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
     );
   }
 
-  if (!user) {
-    return (
-      <>
-        <Helmet>
-          <title>{config.seoTitle}</title>
-        </Helmet>
-        <div className="max-w-xl mx-auto py-12 px-4">
-          <MathLoginRequired
-            title="Yêu cầu đăng nhập Chuyên đề nâng cao"
-            description={`${config.title} (HSG & Chuyên) yêu cầu lưu trữ lịch sử làm bài và đồng bộ tiến độ học tập trên Cloud nên bạn cần đăng nhập trước khi bắt đầu.`}
-          />
-        </div>
-      </>
-    );
-  }
-
   if (!activeTopicId || !currentQuestion) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-7">
@@ -441,6 +425,31 @@ export const AdvancedPracticePage: React.FC<{ config: AdvancedPracticeConfig }> 
   }
 
   const activeTopic = config.topics.find(topic => topic.id === activeTopicId)!;
+
+  if (!user) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+        <Helmet>
+          <title>{activeTopic?.shortTitle ? `${activeTopic.shortTitle} nâng cao – ${config.subjectLabel} | ezonthi` : config.seoTitle}</title>
+        </Helmet>
+        <button
+          onClick={() => setActiveTopicId(null)}
+          className="inline-flex items-center gap-1.5 text-xs font-black text-cyan-700 dark:text-cyan-400 hover:underline cursor-pointer"
+        >
+          <ArrowLeft size={14} /> Danh sách chuyên đề
+        </button>
+        <div className="max-w-xl mx-auto py-6">
+          <MathLoginRequired
+            title="Yêu cầu đăng nhập luyện tập"
+            description={`Mảng "${activeTopic?.title || config.title}" (HSG & Chuyên) yêu cầu lưu trữ lịch sử làm bài và đồng bộ tiến độ học tập trên Cloud nên bạn cần đăng nhập để bắt đầu làm bài.`}
+            onBack={() => setActiveTopicId(null)}
+            backText="Quay lại danh sách chuyên đề"
+          />
+        </div>
+      </div>
+    );
+  }
+
   const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
   const topicCompletedCount = topicQuestions.filter(q => progress[q.id]).length;
   const topicCorrectCount = topicQuestions.filter(q => progress[q.id]?.isCorrect).length;

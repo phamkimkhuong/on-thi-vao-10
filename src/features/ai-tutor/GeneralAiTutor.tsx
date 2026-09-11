@@ -7,6 +7,7 @@ import { doc, onSnapshot, setDoc, deleteDoc, collection, query, orderBy, getDoc,
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { MathLoginRequired } from '../../components/common/MathLoginRequired';
 import { getSubjectName } from '../../utils/subject';
+import { X } from 'lucide-react';
 
 import { SUBJECT_SUGGESTIONS_MAP, buildAiTutorSystemInstruction } from './constants/aiTutorPrompts';
 import { AiTutorHeader } from './components/AiTutorHeader';
@@ -91,6 +92,7 @@ export const GeneralAiTutor: React.FC = () => {
   const [isMobileDiagOpen, setIsMobileDiagOpen] = useState(false);
   const [isLoadingSessions, setIsLoadingSessions] = useState(false);
   const [activeLightboxUrl, setActiveLightboxUrl] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<Message[]>([]);
@@ -393,6 +395,10 @@ export const GeneralAiTutor: React.FC = () => {
 
   const handleSend = async (e?: React.FormEvent, customText?: string) => {
     if (e) e.preventDefault();
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
     const textToSend = customText !== undefined ? customText : input;
     if ((!textToSend.trim() && !selectedFile) || isLoading || errorMsg === "LIMIT_EXHAUSTED") return;
 
@@ -533,15 +539,6 @@ export const GeneralAiTutor: React.FC = () => {
   const hasProfileData = strengths.length > 0 || weaknesses.length > 0 || !!learningSummary;
   const suggestions = SUBJECT_SUGGESTIONS_MAP[subject] || SUBJECT_SUGGESTIONS_MAP.math;
 
-  if (!user) {
-    return (
-      <MathLoginRequired
-        title="Gia sư Socratic"
-        description="Gia sư Socratic giúp bạn giải thích chi tiết, gợi ý phương pháp giải và đồng hành cùng bạn học tập 24/7. Đăng nhập để bắt đầu trò chuyện cùng AI."
-      />
-    );
-  }
-
   return (
     <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-110px)] lg:h-[calc(100vh-100px)] overflow-hidden p-0 gap-3 bg-slate-50/50 dark:bg-slate-950/20 relative">
       {/* Cột trái: Khung Chat */}
@@ -554,11 +551,17 @@ export const GeneralAiTutor: React.FC = () => {
           setActiveSessionId={setActiveSessionId}
           isLoadingSessions={isLoadingSessions}
           onNewSession={() => {
+            if (!user) {
+              setShowAuthModal(true);
+              return;
+            }
             setIsNewSessionDraft(true);
             setActiveSessionId(null);
             if (window.innerWidth < 1024) setIsSidebarOpen(false);
           }}
           onDeleteSession={handleDeleteSession}
+          isLoggedIn={!!user}
+          onRequireLogin={() => setShowAuthModal(true)}
         />
 
         <div className="flex-1 flex flex-col h-full overflow-hidden">
@@ -582,6 +585,9 @@ export const GeneralAiTutor: React.FC = () => {
             onImageClick={(url) => setActiveLightboxUrl(url)}
             onUpgradeClick={() => navigate('/premium')}
             messagesEndRef={messagesEndRef}
+            isLoggedIn={!!user}
+            onRequireLogin={() => setShowAuthModal(true)}
+            subjectName={getSubjectName(subject)}
           />
 
           <AiTutorInput
@@ -598,6 +604,8 @@ export const GeneralAiTutor: React.FC = () => {
             onPasteImage={processImageFile}
             onRemoveImage={handleRemoveImage}
             onSubmit={(e) => handleSend(e)}
+            isLoggedIn={!!user}
+            onRequireLogin={() => setShowAuthModal(true)}
           />
         </div>
       </div>
@@ -611,6 +619,8 @@ export const GeneralAiTutor: React.FC = () => {
           strengths={strengths}
           weaknesses={weaknesses}
           lastUpdated={lastUpdated}
+          isLoggedIn={!!user}
+          onRequireLogin={() => setShowAuthModal(true)}
         />
       )}
 
@@ -625,6 +635,8 @@ export const GeneralAiTutor: React.FC = () => {
           strengths={strengths}
           weaknesses={weaknesses}
           lastUpdated={lastUpdated}
+          isLoggedIn={!!user}
+          onRequireLogin={() => setShowAuthModal(true)}
         />
       )}
 
@@ -632,6 +644,33 @@ export const GeneralAiTutor: React.FC = () => {
         activeLightboxUrl={activeLightboxUrl}
         onClose={() => setActiveLightboxUrl(null)}
       />
+
+      {/* Modal Popup Yêu Cầu Đăng Nhập khi khách bấm tương tác */}
+      {showAuthModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in"
+          onClick={() => setShowAuthModal(false)}
+        >
+          <div 
+            className="relative w-full max-w-lg animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowAuthModal(false)}
+              className="absolute top-10 right-2 sm:right-4 z-20 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors cursor-pointer"
+              title="Đóng"
+            >
+              <X size={18} />
+            </button>
+            <MathLoginRequired
+              title="Trò chuyện cùng Gia sư AI"
+              description="Đăng nhập bằng tài khoản Google để gửi câu hỏi, giải bài tập qua hình ảnh và lưu lại toàn bộ tiến độ học tập cùng Gia sư Socratic!"
+              onBack={() => setShowAuthModal(false)}
+              backText="Tiếp tục xem trước"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

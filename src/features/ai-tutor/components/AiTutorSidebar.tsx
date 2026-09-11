@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader, Trash2, X } from 'lucide-react';
+import { Loader, Trash2, X, Lock } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
 export interface ChatSession {
@@ -20,6 +20,8 @@ interface AiTutorSidebarProps {
   isLoadingSessions: boolean;
   onNewSession: () => void;
   onDeleteSession: (sessionId: string, e: React.MouseEvent) => void;
+  isLoggedIn?: boolean;
+  onRequireLogin?: () => void;
 }
 
 export const AiTutorSidebar: React.FC<AiTutorSidebarProps> = ({
@@ -31,6 +33,8 @@ export const AiTutorSidebar: React.FC<AiTutorSidebarProps> = ({
   isLoadingSessions,
   onNewSession,
   onDeleteSession,
+  isLoggedIn = true,
+  onRequireLogin,
 }) => {
   if (!isSidebarOpen) return null;
 
@@ -69,6 +73,23 @@ export const AiTutorSidebar: React.FC<AiTutorSidebarProps> = ({
             <div className="flex items-center justify-center p-4 text-muted-foreground gap-2 text-[10px] font-semibold animate-pulse">
               <Loader size={12} className="animate-spin text-amber-500" />
               Đang tải...
+            </div>
+          ) : !isLoggedIn ? (
+            <div className="text-center p-4 space-y-2.5">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
+                <Lock size={14} />
+              </div>
+              <p className="text-muted-foreground text-[10px] font-semibold leading-relaxed">
+                Đăng nhập để lưu và xem lại các phiên trò chuyện cùng Gia sư.
+              </p>
+              {onRequireLogin && (
+                <button
+                  onClick={onRequireLogin}
+                  className="w-full py-1.5 px-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] rounded-lg shadow-xs transition-colors cursor-pointer"
+                >
+                  Đăng nhập ngay
+                </button>
+              )}
             </div>
           ) : sessions.length === 0 ? (
             <div className="text-center p-4 text-muted-foreground text-[10px] italic">
